@@ -17,7 +17,7 @@
  */
 
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
-import { clearVigor, postCombatHeal } from "./damage.mjs";
+import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -666,6 +666,17 @@ export function registerCombatHooks() {
           const actor = game.actors.get(data.actorId);
           if (actor) await IconCombat.awardPersonalResolve(actor, data.amount ?? 1);
         }
+      } else if (data?.type === "applyDamage") {
+        /* A player pressed "Apply Damage" on an actor they don't own —
+         * the active GM applies it through the same shared code path. */
+        const actor = await fromUuid(data.actorUuid ?? "");
+        if (!actor) return;
+        const { applyArmor = false, half = false } = data.options ?? {};
+        await applyDamageToActor(actor, data.amount, {
+          applyArmor, half,
+          chatConfirm: true,
+          allowRelay:  false,
+        });
       }
     } catch (err) {
       console.error("ICON 1.5 | combat socket handler failed:", err);

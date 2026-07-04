@@ -56,7 +56,7 @@ import { narrativeRoll, combatRoll, saveRoll, damageRoll } from "./module/dice/r
 /* -------------------------------------------------- */
 /*  Combat utilities (damage, status, vigor, wounds)  */
 /* -------------------------------------------------- */
-import { applyDamagePipeline, addVigor, clearVigor,
+import { applyDamagePipeline, applyDamageToActor, addVigor, clearVigor,
          applyWound, recoverAction, postCombatHeal } from "./module/combat/damage.mjs";
 import { registerStatuses, applyStatus, removeStatus,
          toggleOngoing, hasStatus }                 from "./module/combat/statuses.mjs";
@@ -175,6 +175,7 @@ Hooks.once("init", () => {
     saveRoll,
     damageRoll,
     applyDamagePipeline,
+    applyDamageToActor,
     addVigor,
     clearVigor,
     applyWound,
@@ -551,103 +552,28 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
         return;
       }
 
-      // ICON pipeline: subtract the DEFENDER's own Armor before any halving.
-      // PCs store armor at system.combat.armor; foes/legends/summons at system.armor.
-      const armor = actor.type === "icon"
-        ? (actor.system?.combat?.armor ?? 0)
-        : (actor.system?.armor ?? 0);
-      const afterArmor = Math.max(0, amount - armor);
-      const armorBlocked = amount - afterArmor;        // how much armor actually absorbed
-      // Armor applies before the ½ (Resistance/Cover) split, per the manual.
-      const apply  = half ? Math.floor(afterArmor / 2) : afterArmor;
-
-      // Permission check — only owners (or GM) can update the actor
-      if (!actor.isOwner) {
-        ui.notifications.warn(`You don't have permission to apply damage to "${actor.name}".`);
+      // All deduction rules (armor before ½, mob hits, vigor before HP, wound
+      // on a PC reaching 0) live in applyDamageToActor — the same code path
+      // used by applyDamagePipeline and the GM socket relay.
+      let result;
+      try {
+        result = await applyDamageToActor(actor, amount, {
+          applyArmor:  true,
+          half,
+          chatConfirm: true,
+        });
+      } catch (err) {
+        console.error("ICON 1.5 | Apply Damage failed:", err);
+        ui.notifications.error(`Failed to apply damage to "${actor.name}".`);
         return;
       }
-
-      // ICON stores HP in different places per actor type:
-      //   • icon (PCs) — system.combat.hp.{value,max} + system.combat.vigor
-      //   • foe / legend — system.hp.{value,max} + system.vigor
-      //   • mob (foeClass === "mob") — system.mob.hitsRemaining (damage instance
-      //       removes exactly 1 hit regardless of amount, per manual p.291)
-      //   • summon — system.hp.{value,max} (no vigor)
-      // Pick the right path so damage lands on the real HP/hits field.
-      const type        = actor.type;
-      const isMob       = type === "foe" && actor.system?.foeClass === "mob";
-      const useCombatPath = type === "icon";
-
-      /* --- MOB path: decrement 1 hit per damage instance --- */
-      if (isMob) {
-        const mob = actor.system?.mob ?? { members: 0, hitsRemaining: 0 };
-        const hitsBefore = mob.hitsRemaining ?? 0;
-        const hitsAfter  = Math.max(0, hitsBefore - 1);
-        const membersAfter = Math.ceil(hitsAfter / 2);   // 2 hits per member
-        await actor.update({
-          "system.mob.hitsRemaining": hitsAfter,
-          "system.mob.members":       membersAfter,
-        });
-
-        await ChatMessage.create({
-          speaker: { alias: "Damage Applied" },
-          content: `<div class="icon-chat-card icon-chat-card--apply">
-                      <strong>${actor.name}</strong>: 1 hit removed
-                      <br><small>hits ${hitsBefore} → ${hitsAfter} (${membersAfter} members remaining)</small>
-                      ${hitsAfter === 0 ? "<br><strong>Mob defeated!</strong>" : ""}
-                    </div>`,
-        });
-
-        btn.disabled = true;
-        btn.textContent = `✓ −1 hit`;
-        btn.style.opacity = "0.5";
-        return;
-      }
-
-      const hpPath      = useCombatPath ? "system.combat.hp.value"    : "system.hp.value";
-      const vigorPath   = useCombatPath ? "system.combat.vigor.value" : "system.vigor.value";
-      const hpContainer = useCombatPath ? actor.system?.combat?.hp    : actor.system?.hp;
-      const vgContainer = useCombatPath ? actor.system?.combat?.vigor : actor.system?.vigor;
-      const currentHp   = hpContainer?.value ?? 0;
-      const currentVigor = vgContainer?.value ?? 0;
-
-      // Vigor absorbs damage before HP (ICON rule: "damage hits vigor before HP").
-      // Applies to any actor that has a vigor field — PCs, foes, legends.
-      let vigorAbsorbed = 0;
-      let remaining     = apply;
-      if (currentVigor > 0) {
-        vigorAbsorbed = Math.min(currentVigor, remaining);
-        remaining    -= vigorAbsorbed;
-      }
-
-      const effectiveHp = Math.max(0, currentHp - remaining);
-
-      const updates = { [hpPath]: effectiveHp };
-      if (vigorAbsorbed > 0) {
-        updates[vigorPath] = Math.max(0, currentVigor - vigorAbsorbed);
-      }
-
-      await actor.update(updates);
-
-      // Brief chat confirmation
-      const parts = [];
-      if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor`);
-      if (half)              parts.push(`halved`);
-      if (vigorAbsorbed > 0) parts.push(`${vigorAbsorbed} absorbed by Vigor`);
-      parts.push(`${remaining} → HP`);
-      const note = parts.join(", ");
-
-      await ChatMessage.create({
-        speaker: { alias: "Damage Applied" },
-        content: `<div class="icon-chat-card icon-chat-card--apply">
-                    <strong>${actor.name}</strong>: <strong>${apply}</strong> damage applied
-                    <br><small>${note} — HP ${currentHp} → ${effectiveHp}</small>
-                  </div>`,
-      });
+      if (!result?.ok) return;
 
       // Visual feedback on the button
       btn.disabled = true;
-      btn.textContent = `✓ Applied ${apply}`;
+      btn.textContent = result.relayed ? "→ Sent to GM"
+                      : result.isMob   ? "✓ −1 hit"
+                      : `✓ Applied ${result.applied}`;
       btn.style.opacity = "0.5";
     });
   });

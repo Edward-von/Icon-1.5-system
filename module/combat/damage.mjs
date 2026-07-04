@@ -18,6 +18,9 @@ import { getStatusCharges, setStatusCharges } from "./statuses.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
+/** Socket channel shared with IconCombat.mjs — GM-relay for actions players can't perform. */
+const SOCKET = "system.icon-system";
+
 /**
  * renderTemplate shim — the bare global `renderTemplate` is deprecated in v13
  * and slated for removal in v14. Resolve the namespaced version at call time,
@@ -44,6 +47,11 @@ function paths(actor) {
     vigor:     isPC ? "system.combat.vigor.value" : "system.vigor.value",
     container: isPC ? actor?.system?.combat        : actor?.system,
   };
+}
+
+/** Normalized armor read for any actor type (PCs: system.combat.armor; others: system.armor). */
+export function getActorArmor(actor) {
+  return Number(paths(actor).container?.armor ?? 0) || 0;
 }
 
 /* ================================================== */
@@ -87,6 +95,14 @@ export async function applyDamagePipeline(attacker, target, {
 } = {}) {
   if (!target?.system?.combat && !target?.system?.hp) return null;
 
+  // This path rolls locally and reports vigor/wound results in its own card,
+  // so it can't be relayed to the GM — require ownership up front instead of
+  // failing halfway through with a cryptic core permission error.
+  if (!target.isOwner && !game.user.isGM) {
+    ui.notifications.warn(`You don't have permission to apply damage to "${target.name}". Use the damage card's Apply button instead.`);
+    return null;
+  }
+
   const ac  = attacker?.system?.combat ?? {};
   const tc  = target?.system?.combat   ?? target?.system ?? {};
 
@@ -113,8 +129,9 @@ export async function applyDamagePipeline(attacker, target, {
 
   const { rolls, steps, net } = result;
 
-  /* --- Apply damage to target --- */
-  const { woundApplied, fallen, vigorAbsorbed, hpLost } = await _applyToActor(target, net);
+  /* --- Apply damage to target (armor already subtracted in the roll) --- */
+  const { woundApplied, fallen, vigorAbsorbed, hpLost } =
+    await applyDamageToActor(target, net, { allowRelay: false }) ?? {};
 
   /* --- Chat card --- */
   const content = await renderTemplate(`${TPLPATH}/damage-card.hbs`, {
@@ -146,67 +163,142 @@ export async function applyDamagePipeline(attacker, target, {
 /* ================================================== */
 
 /**
- * Deduct `amount` from an actor, hitting Vigor before HP.
- * Works for PCs, foes, and legends; the hp/vigor update paths are resolved
- * from the actor type. Mobs (foeClass === "mob") take exactly 1 hit per call
- * instead of an amount-based deduction.
- * @returns {Promise<{vigorAbsorbed, hpLost, woundApplied, fallen}>}
+ * SINGLE entry point for deducting damage from an actor. Used by
+ * applyDamagePipeline (armor already handled in the roll), by the damage-card
+ * "Apply Damage" button in icon.mjs (applyArmor + half options), and by the
+ * GM socket relay in IconCombat.mjs. Keep ALL deduction rules here.
+ *
+ * Order: − Armor (optional) → ½ (optional, Resistance/Cover) → Vigor → HP →
+ * Wound if a PC drops to 0. Mobs (foeClass === "mob") lose exactly 1 hit per
+ * call regardless of amount (manual p.291).
+ *
+ * Players without ownership of `actor` relay the request to the active GM via
+ * socket (unless allowRelay is false, in which case they get a warning).
+ *
+ * @param {Actor}  actor
+ * @param {number} amount                    Damage before the options below.
+ * @param {object}  [opts]
+ * @param {boolean} [opts.applyArmor=false]  Subtract the DEFENDER's armor first.
+ * @param {boolean} [opts.half=false]        Halve after armor (Resistance/Cover).
+ * @param {boolean} [opts.chatConfirm=false] Post a "Damage Applied" chat note.
+ * @param {boolean} [opts.allowRelay=true]   Relay to GM when caller lacks ownership.
+ * @returns {Promise<object|null>} Breakdown, or null for no-ops/denied calls:
+ *   { ok, relayed, isMob, applied, armorBlocked, vigorAbsorbed,
+ *     hpBefore, hpAfter, hpLost, woundApplied, fallen, mob }
  */
-async function _applyToActor(actor, amount) {
-  if (amount <= 0) return { vigorAbsorbed: 0, hpLost: 0, woundApplied: false, fallen: false };
+export async function applyDamageToActor(actor, amount, {
+  applyArmor  = false,
+  half        = false,
+  chatConfirm = false,
+  allowRelay  = true,
+} = {}) {
+  amount = Math.max(0, Number(amount) || 0);
+  if (!actor) return null;
+
+  const zero = {
+    ok: true, relayed: false, isMob: false, applied: 0, armorBlocked: 0,
+    vigorAbsorbed: 0, hpBefore: 0, hpAfter: 0, hpLost: 0,
+    woundApplied: false, fallen: false, mob: null,
+  };
+  if (amount <= 0) return zero;
+
+  /* --- Permission: relay to the active GM if we can't update this actor --- */
+  if (!actor.isOwner && !game.user.isGM) {
+    if (!allowRelay) {
+      ui.notifications.warn(`You don't have permission to apply damage to "${actor.name}".`);
+      return null;
+    }
+    if (!game.users.activeGM) {
+      ui.notifications.warn("No GM is connected — damage can't be applied right now.");
+      return null;
+    }
+    game.socket.emit(SOCKET, {
+      type:      "applyDamage",
+      actorUuid: actor.uuid,
+      amount,
+      options:   { applyArmor, half },
+    });
+    ui.notifications.info(`Damage sent to the GM to apply to "${actor.name}".`);
+    return { ...zero, relayed: true };
+  }
 
   /* --- MOB path: 1 hit per damage instance (manual p.291) --- */
-  if (actor?.type === "foe" && actor.system?.foeClass === "mob") {
+  if (actor.type === "foe" && actor.system?.foeClass === "mob") {
     const hitsBefore = actor.system.mob?.hitsRemaining ?? 0;
-    if (hitsBefore <= 0) {
-      return { vigorAbsorbed: 0, hpLost: 0, woundApplied: false, fallen: false };
-    }
+    if (hitsBefore <= 0) return { ...zero, isMob: true };
     const hitsAfter    = Math.max(0, hitsBefore - 1);
-    const membersAfter = Math.ceil(hitsAfter / 2);
+    const membersAfter = Math.ceil(hitsAfter / 2);   // 2 hits per member
     await actor.update({
       "system.mob.hitsRemaining": hitsAfter,
       "system.mob.members":       membersAfter,
     });
+    if (chatConfirm) {
+      await ChatMessage.create({
+        speaker: { alias: "Damage Applied" },
+        content: `<div class="icon-chat-card icon-chat-card--apply">
+                    <strong>${escapeHTML(actor.name)}</strong>: 1 hit removed
+                    <br><small>hits ${hitsBefore} → ${hitsAfter} (${membersAfter} members remaining)</small>
+                    ${hitsAfter === 0 ? "<br><strong>Mob defeated!</strong>" : ""}
+                  </div>`,
+      });
+    }
     return {
-      vigorAbsorbed: 0,
-      hpLost:        1,         // 1 hit — not real HP
-      woundApplied:  false,
-      fallen:        hitsAfter === 0,
+      ...zero, isMob: true, applied: 1, hpLost: 1,
+      fallen: hitsAfter === 0,
+      mob: { hitsBefore, hitsAfter, membersAfter },
     };
   }
 
-  const p      = paths(actor);
-  const cont   = p.container ?? {};
-  let remaining = amount;
-  let vigorAbsorbed = 0;
-  let hpLost = 0;
+  const p    = paths(actor);
+  const cont = p.container ?? {};
+
+  /* --- Armor, then halving (armor applies before the ½, per the manual) --- */
+  const armor        = applyArmor ? getActorArmor(actor) : 0;
+  const afterArmor   = Math.max(0, amount - armor);
+  const armorBlocked = amount - afterArmor;
+  const applied      = half ? Math.floor(afterArmor / 2) : afterArmor;
+
+  /* --- Vigor absorbs first, then HP — one atomic update --- */
+  const curVigor      = cont.vigor?.value ?? 0;
+  const vigorAbsorbed = Math.min(Math.max(0, curVigor), applied);
+  const remaining     = applied - vigorAbsorbed;
+  const hpBefore      = cont.hp?.value ?? 0;
+  const hpAfter       = Math.max(0, hpBefore - remaining);
+
+  const updates = {};
+  if (vigorAbsorbed > 0)     updates[p.vigor] = curVigor - vigorAbsorbed;
+  if (hpAfter !== hpBefore)  updates[p.hp]    = hpAfter;
+  if (Object.keys(updates).length) await actor.update(updates);
+
   let woundApplied = false;
-  let fallen = false;
-
-  /* --- Vigor absorbs first --- */
-  const curVigor = cont.vigor?.value ?? 0;
-  if (curVigor > 0) {
-    const take     = Math.min(curVigor, remaining);
-    vigorAbsorbed  = take;
-    remaining     -= take;
-    await actor.update({ [p.vigor]: curVigor - take });
+  let fallen       = false;
+  if (remaining > 0 && hpAfter === 0 && actor.type === "icon") {
+    const result = await _applyWound(actor);
+    woundApplied = true;
+    fallen       = result.fallen;
   }
 
-  /* --- HP damage --- */
-  if (remaining > 0) {
-    const hpNow  = cont.hp?.value ?? 0;
-    const newHp  = Math.max(0, hpNow - remaining);
-    hpLost       = hpNow - newHp;
-    await actor.update({ [p.hp]: newHp });
-
-    if (newHp === 0 && actor.type === "icon") {
-      const result = await _applyWound(actor);
-      woundApplied = true;
-      fallen       = result.fallen;
-    }
+  if (chatConfirm) {
+    const parts = [];
+    if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor`);
+    if (half)              parts.push("halved");
+    if (vigorAbsorbed > 0) parts.push(`${vigorAbsorbed} absorbed by Vigor`);
+    parts.push(`${hpBefore - hpAfter} → HP`);
+    await ChatMessage.create({
+      speaker: { alias: "Damage Applied" },
+      content: `<div class="icon-chat-card icon-chat-card--apply">
+                  <strong>${escapeHTML(actor.name)}</strong>: <strong>${applied}</strong> damage applied
+                  <br><small>${parts.join(", ")} — HP ${hpBefore} → ${hpAfter}</small>
+                </div>`,
+    });
   }
 
-  return { vigorAbsorbed, hpLost, woundApplied, fallen };
+  return {
+    ok: true, relayed: false, isMob: false,
+    applied, armorBlocked, vigorAbsorbed,
+    hpBefore, hpAfter, hpLost: hpBefore - hpAfter,
+    woundApplied, fallen, mob: null,
+  };
 }
 
 /* ================================================== */
