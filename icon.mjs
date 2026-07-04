@@ -67,6 +67,11 @@ import { registerStatuses, applyStatus, removeStatus,
 import { registerHandlebarsHelpers } from "./module/helpers/handlebars.mjs";
 
 /* -------------------------------------------------- */
+/*  Data migrations                                    */
+/* -------------------------------------------------- */
+import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
+
+/* -------------------------------------------------- */
 /*  Onboarding                                         */
 /* -------------------------------------------------- */
 import { showWelcomeGuide } from "./module/apps/welcome.mjs";
@@ -111,6 +116,9 @@ Hooks.once("init", () => {
     type: Boolean,
     default: false,
   });
+
+  // World data schema version — drives the migration framework (migrations.mjs).
+  registerMigrationSettings();
 
   // First-launch onboarding guide — shown once per user (client-scoped flag).
   game.settings.register("icon-system", "welcomeShown", {
@@ -226,6 +234,13 @@ Hooks.on("preCreateToken", (doc, data /*, options, userId */) => {
 
 Hooks.once("ready", async () => {
   console.log("ICON 1.5 | Ready");
+
+  /* Migrate world data first, before anything else touches documents. */
+  try {
+    await runMigrations();
+  } catch (err) {
+    console.error("ICON 1.5 | Data migration failed:", err);
+  }
 
   /* Selected-token status panel (top-right, PF2e-style). */
   try {
