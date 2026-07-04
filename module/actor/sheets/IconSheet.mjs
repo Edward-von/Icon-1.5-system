@@ -13,11 +13,9 @@ import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc } from "../../help
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, getStatusCharges,
-         setStatusCharges, adjustStatusCharges,
-         cycleOngoingStatus } from "../../combat/statuses.mjs";
+         setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
-
-const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
+import { BaseActorSheet } from "./BaseActorSheet.mjs";
 
 const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
 
@@ -26,7 +24,7 @@ const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 export { _parseAbilityDamage };
 
-export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+export class IconSheet extends BaseActorSheet {
 
   /* -------------------------------------------------- */
   /*  Static config                                      */
@@ -562,24 +560,11 @@ export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
 
   _onRender(context, options) {
     _log(`_onRender — actor: "${this.document.name}" | activeTab: ${this.tabGroups.primary}`);
+    // Tabs, drop binding, portrait picker and status right-click handlers
+    // come from BaseActorSheet.
     super._onRender(context, options);
 
-    for (const [group, tabId] of Object.entries(this.tabGroups)) {
-      _log(`_onRender — changeTab("${tabId}", "${group}")`);
-      this.changeTab(tabId, group, { initial: true });
-    }
-
     const html = this.element;
-
-    // Global drop handler — bind ONCE per element. `this.element` persists
-    // across re-renders in ApplicationV2, so without this guard every render
-    // would stack another listener on top, causing a single drop to fire N
-    // times after N renders (observed as duplicate items embedded).
-    if (!html.dataset.iconDropBound) {
-      html.dataset.iconDropBound = "true";
-      html.addEventListener("dragover", ev => ev.preventDefault());
-      html.addEventListener("drop",     ev => this.#onDrop(ev));
-    }
 
     // Ability slots — guarded per slot element.
     // - dragover/drop: assign ability to the slot (existing behavior)
@@ -618,81 +603,6 @@ export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
         const item = this.document.items.get(el.dataset.itemId);
         _log(`dblclick item — id: "${el.dataset.itemId}" | found: ${!!item}`);
         item?.sheet.render(true);
-      });
-    });
-
-    // Portrait img picker — V2 sheets don't auto-bind data-edit="img" the way
-    // V1 did, so wire a click handler that opens FilePicker on the IMG element.
-    html.querySelectorAll('img[data-edit="img"]').forEach(img => {
-      if (img.dataset.iconImgBound) return;
-      img.dataset.iconImgBound = "true";
-      img.style.cursor = "pointer";
-      img.addEventListener("click", ev => {
-        if (!this.isEditable) return;
-        ev.preventDefault();
-        const current = this.document.img;
-        new foundry.applications.apps.FilePicker.implementation({
-          type: "image",
-          current,
-          callback: path => {
-            _log(`portrait — picked: "${path}"`);
-            this.document.update({ img: path });
-          },
-          top: this.position.top + 40,
-          left: this.position.left + 10,
-        }).browse();
-      });
-    });
-
-    // Elevation button (Conditions tab) — V2 actions only fire on click,
-    // so wire the contextmenu (right-click) handler manually to decrement.
-    html.querySelectorAll('button[data-action="adjustElevation"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const actor = this.document;
-        const current = actor.getFlag("icon-system", "elevation") ?? 0;
-        const next = current - 1;
-        _log(`adjustElevation (right-click) — actor: "${actor.name}" | ${current} → ${next}`);
-        await actor.setFlag("icon-system", "elevation", next);
-        if (next !== 0 && !hasStatus(actor, "elevation")) {
-          await applyStatus(actor, "elevation");
-        } else if (next === 0 && hasStatus(actor, "elevation")) {
-          await removeStatus(actor, "elevation");
-        }
-      });
-    });
-
-    // Stackable-status buttons (Blessed, Power Die, Vigilance) — right-click decrements.
-    html.querySelectorAll('button[data-action="adjustStatusCharges"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const statusId = btn.dataset.statusId;
-        if (!statusId) return;
-        const next = await adjustStatusCharges(this.document, statusId, -1);
-        _log(`adjustStatusCharges (right-click) — "${statusId}" → ${next}`);
-      });
-    });
-
-    // Regular status toggles — right-click applies the + (ongoing) version.
-    html.querySelectorAll('button[data-action="toggleStatus"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const statusId = btn.dataset.statusId;
-        if (!statusId) return;
-        const state = await cycleOngoingStatus(this.document, statusId);
-        _log(`cycleOngoingStatus (right-click) — "${statusId}" → ${state}`);
       });
     });
 
@@ -2535,11 +2445,11 @@ export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   /*  Drag-drop                                          */
   /* -------------------------------------------------- */
 
-  async #onDrop(event) {
+  async _onDropSheet(event) {
     // Re-entry guard: if a previous drop is still mid-processing (compendium
     // lookup, DialogV2 confirm, actor update), silently ignore any additional
     // drop events. Belt-and-suspenders alongside the listener-binding guard
-    // in _onRender.
+    // in BaseActorSheet.
     if (this._dropInProgress) {
       _log(`drop — IGNORED (another drop is already in progress)`);
       return;

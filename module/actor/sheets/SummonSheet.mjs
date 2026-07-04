@@ -8,8 +8,7 @@ import { getActorStatusMods } from "../../combat/status-modifiers.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
-
-const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
+import { BaseActorSheet } from "./BaseActorSheet.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -22,7 +21,7 @@ function _resolveDamageStats(actor) {
   };
 }
 
-export class SummonSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+export class SummonSheet extends BaseActorSheet {
 
   static DEFAULT_OPTIONS = {
     classes: ["icon", "sheet", "actor", "summon-sheet"],
@@ -79,37 +78,7 @@ export class SummonSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     return context;
   }
 
-  _onRender(context, options) {
-    _log(`_onRender — actor: "${this.document.name}"`);
-    super._onRender(context, options);
-    // Bind drop listener once per element to avoid N-fold duplication.
-    if (!this.element.dataset.iconDropBound) {
-      this.element.dataset.iconDropBound = "true";
-      this.element.addEventListener("dragover", ev => ev.preventDefault());
-      this.element.addEventListener("drop",     ev => this.#onDrop(ev));
-    }
-
-    // Portrait img picker — V2 sheets don't auto-bind data-edit="img".
-    this.element.querySelectorAll('img[data-edit="img"]').forEach(img => {
-      if (img.dataset.iconImgBound) return;
-      img.dataset.iconImgBound = "true";
-      img.style.cursor = "pointer";
-      img.addEventListener("click", ev => {
-        if (!this.isEditable) return;
-        ev.preventDefault();
-        new foundry.applications.apps.FilePicker.implementation({
-          type: "image",
-          current: this.document.img,
-          callback: path => {
-            _log(`portrait — picked: "${path}"`);
-            this.document.update({ img: path });
-          },
-          top:  this.position.top + 40,
-          left: this.position.left + 10,
-        }).browse();
-      });
-    });
-  }
+  // Drop binding, portrait picker and tab handling come from BaseActorSheet.
 
   static async #onToggleIntangible(event, target) {
     const current = this.document.system.intangible;
@@ -279,7 +248,7 @@ export class SummonSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
    *   • Item   → populate sourceAbilityName + summonAction from the ability
    *              text. Accepts ability / foe-ability / limit-break / trait.
    */
-  async #onDrop(event) {
+  async _onDropSheet(event) {
     if (this._dropInProgress) return;
     this._dropInProgress = true;
     try {

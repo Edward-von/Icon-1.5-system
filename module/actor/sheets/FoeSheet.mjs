@@ -10,20 +10,17 @@ import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
-         STACKABLE_STATUSES, getStatusCharges,
-         setStatusCharges, adjustStatusCharges,
-         cycleOngoingStatus } from "../../combat/statuses.mjs";
+         STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
 import { enrichHTML } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
-
-const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
+import { BaseActorSheet } from "./BaseActorSheet.mjs";
 
 const _log = (...args) => console.debug("[ICON | FoeSheet]", ...args);
 
-export class FoeSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+export class FoeSheet extends BaseActorSheet {
 
   static DEFAULT_OPTIONS = {
     classes: ["icon", "sheet", "actor", "foe-sheet"],
@@ -163,93 +160,8 @@ export class FoeSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     };
   }
 
-  _onRender(context, options) {
-    _log(`_onRender — actor: "${this.document.name}" | activeTab: ${this.tabGroups.primary}`);
-    super._onRender(context, options);
-    for (const [group, tabId] of Object.entries(this.tabGroups)) {
-      _log(`_onRender — changeTab("${tabId}", "${group}")`);
-      this.changeTab(tabId, group, { initial: true });
-    }
-    // Bind drop listener ONCE per element (persists across re-renders); without
-    // this guard, every render would stack another listener causing N-fold duplicates.
-    if (!this.element.dataset.iconDropBound) {
-      this.element.dataset.iconDropBound = "true";
-      this.element.addEventListener("dragover", ev => ev.preventDefault());
-      this.element.addEventListener("drop",     ev => this.#onDrop(ev));
-    }
-
-    // Elevation button (Conditions tab) — right-click decrements.
-    this.element.querySelectorAll('button[data-action="adjustElevation"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const actor = this.document;
-        const current = actor.getFlag("icon-system", "elevation") ?? 0;
-        const next = current - 1;
-        _log(`adjustElevation (right-click) — actor: "${actor.name}" | ${current} → ${next}`);
-        await actor.setFlag("icon-system", "elevation", next);
-        if (next !== 0 && !hasStatus(actor, "elevation")) {
-          await applyStatus(actor, "elevation");
-        } else if (next === 0 && hasStatus(actor, "elevation")) {
-          await removeStatus(actor, "elevation");
-        }
-      });
-    });
-
-    // Stackable-status buttons (Blessed, Power Die, Vigilance) — right-click decrements.
-    this.element.querySelectorAll('button[data-action="adjustStatusCharges"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const statusId = btn.dataset.statusId;
-        if (!statusId) return;
-        const next = await adjustStatusCharges(this.document, statusId, -1);
-        _log(`adjustStatusCharges (right-click) — "${statusId}" → ${next}`);
-      });
-    });
-
-    // Regular status toggles — right-click applies the + (ongoing) version.
-    this.element.querySelectorAll('button[data-action="toggleStatus"]').forEach(btn => {
-      if (btn.dataset.iconCtxBound) return;
-      btn.dataset.iconCtxBound = "true";
-      btn.addEventListener("contextmenu", async ev => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        if (!this.isEditable) return;
-        const statusId = btn.dataset.statusId;
-        if (!statusId) return;
-        const state = await cycleOngoingStatus(this.document, statusId);
-        _log(`cycleOngoingStatus (right-click) — "${statusId}" → ${state}`);
-      });
-    });
-
-    // Portrait img picker — V2 sheets don't auto-bind data-edit="img".
-    this.element.querySelectorAll('img[data-edit="img"]').forEach(img => {
-      if (img.dataset.iconImgBound) return;
-      img.dataset.iconImgBound = "true";
-      img.style.cursor = "pointer";
-      img.addEventListener("click", ev => {
-        if (!this.isEditable) return;
-        ev.preventDefault();
-        new foundry.applications.apps.FilePicker.implementation({
-          type: "image",
-          current: this.document.img,
-          callback: path => {
-            _log(`portrait — picked: "${path}"`);
-            this.document.update({ img: path });
-          },
-          top:  this.position.top + 40,
-          left: this.position.left + 10,
-        }).browse();
-      });
-    });
-  }
+  // Tabs, drop binding, portrait picker and status right-click handlers
+  // all come from BaseActorSheet._onRender.
 
   /**
    * Form submit hook — when the GM changes foeClass or toggles isElite via
@@ -654,7 +566,7 @@ export class FoeSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   /*  Drag-drop                                          */
   /* -------------------------------------------------- */
 
-  async #onDrop(event) {
+  async _onDropSheet(event) {
     if (this._dropInProgress) {
       _log(`drop — IGNORED (another drop is already in progress)`);
       return;
