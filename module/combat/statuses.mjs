@@ -235,13 +235,38 @@ export function hasStatus(actor, statusId) {
     );
 }
 
+/* --------------------------------------------------
+ * Per-actor mutation lock.
+ *
+ * Status mutations read state (hasStatus / charge flags) and then write it
+ * in a separate await. Two rapid calls — double-click, or two automation
+ * hooks firing in the same tick — both pass the read before either write
+ * lands, producing duplicate effects or lost charge increments. Serialize
+ * every status mutation per actor so read+write is atomic.
+ * -------------------------------------------------- */
+const _statusLocks = new Map();
+
+function _withStatusLock(actor, fn) {
+  const key  = actor?.uuid ?? actor?.id ?? "unknown";
+  const prev = _statusLocks.get(key) ?? Promise.resolve();
+  const run  = prev.then(fn);
+  const tail = run.catch(() => {});      // keep the chain alive after failures
+  _statusLocks.set(key, tail);
+  tail.then(() => { if (_statusLocks.get(key) === tail) _statusLocks.delete(key); });
+  return run;
+}
+
 /**
  * Apply an ICON status to an actor.
  * @param {Actor}   actor
  * @param {string}  statusId
  * @param {boolean} [ongoing=false]  Mark as ongoing+ (can't save)
  */
-export async function applyStatus(actor, statusId, ongoing = false) {
+export function applyStatus(actor, statusId, ongoing = false) {
+  return _withStatusLock(actor, () => _applyStatus(actor, statusId, ongoing));
+}
+
+async function _applyStatus(actor, statusId, ongoing = false) {
   const def = ICON_STATUSES.find(s => s.id === statusId);
   if (!def) return ui.notifications.warn(`Unknown status: ${statusId}`);
 
@@ -266,7 +291,11 @@ export async function applyStatus(actor, statusId, ongoing = false) {
 }
 
 /** Remove an ICON status from an actor. */
-export async function removeStatus(actor, statusId) {
+export function removeStatus(actor, statusId) {
+  return _withStatusLock(actor, () => _removeStatus(actor, statusId));
+}
+
+async function _removeStatus(actor, statusId) {
   const effect = actor.effects.find(e =>
     e.statuses?.has(statusId) || e.getFlag("core", "statusId") === statusId
   );
@@ -294,24 +323,32 @@ export function getStatusCharges(actor, statusId) {
  * ActiveEffect: created when count goes 0 → 1+, removed when 1+ → 0.
  * Negative counts are clamped to 0.
  */
-export async function setStatusCharges(actor, statusId, count) {
+export function setStatusCharges(actor, statusId, count) {
+  return _withStatusLock(actor, () => _setStatusCharges(actor, statusId, count));
+}
+
+async function _setStatusCharges(actor, statusId, count) {
   const next = Math.max(0, count);
   const charges = foundry.utils.deepClone(actor.getFlag("icon-system", "statusCharges") ?? {});
   charges[statusId] = next;
   await actor.setFlag("icon-system", "statusCharges", charges);
 
   if (next > 0 && !hasStatus(actor, statusId)) {
-    await applyStatus(actor, statusId);
+    await _applyStatus(actor, statusId);
   } else if (next === 0 && hasStatus(actor, statusId)) {
-    await removeStatus(actor, statusId);
+    await _removeStatus(actor, statusId);
   }
   return next;
 }
 
-/** Adjust charges by ±delta. Returns the new count. */
-export async function adjustStatusCharges(actor, statusId, delta) {
-  const current = getStatusCharges(actor, statusId);
-  return setStatusCharges(actor, statusId, current + delta);
+/**
+ * Adjust charges by ±delta. Returns the new count.
+ * The current count is read inside the per-actor lock, so concurrent
+ * adjustments can't read the same base value and lose an increment.
+ */
+export function adjustStatusCharges(actor, statusId, delta) {
+  return _withStatusLock(actor, () =>
+    _setStatusCharges(actor, statusId, getStatusCharges(actor, statusId) + delta));
 }
 
 /**
@@ -321,12 +358,16 @@ export async function adjustStatusCharges(actor, statusId, delta) {
  * If a NORMAL version is already present, upgrade it to ongoing+.
  * @returns {Promise<"applied-ongoing"|"upgraded-ongoing"|"removed">}
  */
-export async function cycleOngoingStatus(actor, statusId) {
+export function cycleOngoingStatus(actor, statusId) {
+  return _withStatusLock(actor, () => _cycleOngoingStatus(actor, statusId));
+}
+
+async function _cycleOngoingStatus(actor, statusId) {
   const effect = actor.effects.find(e =>
     e.statuses?.has(statusId) || e.getFlag("core", "statusId") === statusId
   );
   if (!effect) {
-    await applyStatus(actor, statusId, true);
+    await _applyStatus(actor, statusId, true);
     return "applied-ongoing";
   }
   const ongoing = effect.getFlag("icon-system", "ongoing") ?? false;

@@ -640,6 +640,10 @@ function _byInitiative(a, b) {
  * Called once from icon.mjs after init.
  */
 export function registerCombatHooks() {
+  // Guard against double registration (hot-reload, accidental second call) —
+  // duplicated hooks mean duplicated end-of-turn saves and socket handling.
+  if (registerCombatHooks._registered) return;
+  registerCombatHooks._registered = true;
 
   /**
    * Relay channel: a player who ends/changes the turn emits a request here;
