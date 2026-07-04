@@ -1,0 +1,138 @@
+{{!-- icon-relics.hbs --}}
+<section class="tab icon-tab icon-tab--relics {{tab.cssClass}}" data-tab="relics" data-group="primary">
+  <div class="icon-relics-grid">
+
+    {{!-- Legacy rank/dust entries stored inline on the actor --}}
+    {{#each system.relics as |relic i|}}
+      <div class="icon-relic-card">
+        <div class="icon-relic-card__header">
+          <input type="text" name="system.relics.{{i}}.name"
+                 value="{{relic.name}}" placeholder="Relic name"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          {{!-- Rank pips (4 = Aspect) --}}
+          <div class="icon-relic-card__ranks">
+            {{#icon-range 1 4}}
+              <span class="icon-rank-pip {{#icon-lte this ../relic.rank}}icon-rank-pip--active{{/icon-lte}}">
+                {{this}}
+              </span>
+            {{/icon-range}}
+          </div>
+        </div>
+        <div class="icon-relic-card__rank-select">
+          <label>Rank</label>
+          <input type="number" name="system.relics.{{i}}.rank"
+                 value="{{relic.rank}}" min="1" max="4"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          <label>Dust</label>
+          <input type="number" name="system.relics.{{i}}.dust"
+                 value="{{relic.dust}}" min="0"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+        </div>
+      </div>
+    {{/each}}
+
+    {{!-- Embedded relic items (dropped from compendium or gained via level-up) --}}
+    {{#each relicItems as |relic|}}
+      <div class="icon-relic-card icon-relic-card--item" data-item-id="{{relic.id}}">
+        <div class="icon-relic-card__header">
+          <strong>{{relic.name}}</strong>
+          <span class="icon-badge icon-badge--rank">Rank {{relic.currentRank}}{{#if relic.aspectUnlocked}} (Aspected){{/if}}</span>
+          {{#if relic.invokeType}}
+            <span class="icon-badge icon-badge--invoke">{{relic.invokeType}}</span>
+          {{/if}}
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                  data-action="relicShowInChat" data-item-id="{{relic.id}}"
+                  title="Post relic to chat">💬</button>
+          {{#if ../isEditable}}
+            <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                    data-action="removeItem" data-item-id="{{relic.id}}"
+                    title="Remove relic">×</button>
+          {{/if}}
+        </div>
+        {{#if relic.invokeCondition}}
+          <div class="icon-relic-card__invoke">
+            <em>{{relic.invokeCondition}}</em>
+          </div>
+        {{/if}}
+        {{#if relic.invokeEffect}}
+          <div class="icon-relic-card__invoke-effect icon-editor-wrap">{{{relic.invokeEffect}}}</div>
+        {{/if}}
+        <div class="icon-relic-card__ranks-list">
+          <div class="icon-relic-card__rank-row {{#unless relic.rank1Unlocked}}icon-relic-card__rank-row--locked{{/unless}}">
+            <span class="icon-rank-label">Rank I</span>
+            <div class="icon-editor-wrap">{{{relic.rank1}}}</div>
+          </div>
+          <div class="icon-relic-card__rank-row {{#unless relic.rank2Unlocked}}icon-relic-card__rank-row--locked{{/unless}}">
+            <span class="icon-rank-label">Rank II <small>({{relic.rank2DustCost}} Dust)</small></span>
+            <div class="icon-editor-wrap">{{{relic.rank2}}}</div>
+            {{#if ../isEditable}}{{#unless relic.rank2Unlocked}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
+                      data-action="upgradeRelic" data-item-id="{{relic.id}}" data-target-rank="2"
+                      {{#unless relic.canUpgradeRank2}}disabled title="Need {{relic.rank2DustCost}} Dust (infused + pool)"{{/unless}}>
+                ↑ Upgrade ({{relic.rank2DustCost}} Dust)
+              </button>
+              {{#if relic.rank2IsNext}}
+                <span class="icon-relic-infuse" title="Dust gradually infused toward this rank">
+                  <span class="icon-relic-infuse__progress">Infused {{relic.investedDust}}/{{relic.nextRankCost}}</span>
+                  <button type="button" class="icon-btn icon-btn--sm"
+                          data-action="infuseRelic" data-item-id="{{relic.id}}"
+                          {{#unless relic.canInfuse}}disabled{{/unless}}
+                          title="Infuse 1 Dust into this relic">+1 Dust</button>
+                </span>
+              {{/if}}
+            {{/unless}}{{/if}}
+          </div>
+          <div class="icon-relic-card__rank-row {{#unless relic.rank3Unlocked}}icon-relic-card__rank-row--locked{{/unless}}">
+            <span class="icon-rank-label">Rank III <small>({{relic.rank3DustCost}} Dust)</small></span>
+            <div class="icon-editor-wrap">{{{relic.rank3}}}</div>
+            {{#if ../isEditable}}{{#unless relic.rank3Unlocked}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
+                      data-action="upgradeRelic" data-item-id="{{relic.id}}" data-target-rank="3"
+                      {{#unless relic.canUpgradeRank3}}disabled title="Need {{relic.rank3DustCost}} Dust (infused + pool) and Rank II first"{{/unless}}>
+                ↑ Upgrade ({{relic.rank3DustCost}} Dust)
+              </button>
+              {{#if relic.rank3IsNext}}
+                <span class="icon-relic-infuse" title="Dust gradually infused toward this rank">
+                  <span class="icon-relic-infuse__progress">Infused {{relic.investedDust}}/{{relic.nextRankCost}}</span>
+                  <button type="button" class="icon-btn icon-btn--sm"
+                          data-action="infuseRelic" data-item-id="{{relic.id}}"
+                          {{#unless relic.canInfuse}}disabled{{/unless}}
+                          title="Infuse 1 Dust into this relic">+1 Dust</button>
+                </span>
+              {{/if}}
+            {{/unless}}{{/if}}
+          </div>
+          <div class="icon-relic-card__rank-row icon-relic-card__rank-row--aspect {{#unless relic.aspectUnlocked}}icon-relic-card__rank-row--locked{{/unless}}">
+            <span class="icon-rank-label">Aspect <small>({{relic.aspectDustCost}} Dust)</small></span>
+            <div class="icon-editor-wrap">{{{relic.aspect}}}</div>
+            {{#if relic.aspectQuest}}
+              <p><em>Quest:</em> <span class="icon-editor-wrap">{{{relic.aspectQuest}}}</span></p>
+            {{/if}}
+            {{#if ../isEditable}}{{#unless relic.aspectUnlocked}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
+                      data-action="upgradeRelic" data-item-id="{{relic.id}}" data-target-rank="4"
+                      {{#unless relic.canUpgradeAspect}}disabled title="Need {{relic.aspectDustCost}} Dust (infused + pool) and Rank III first"{{/unless}}>
+                ✦ Aspect ({{relic.aspectDustCost}} Dust)
+              </button>
+              {{#if relic.aspectIsNext}}
+                <span class="icon-relic-infuse" title="Dust gradually infused toward Aspect">
+                  <span class="icon-relic-infuse__progress">Infused {{relic.investedDust}}/{{relic.nextRankCost}}</span>
+                  <button type="button" class="icon-btn icon-btn--sm"
+                          data-action="infuseRelic" data-item-id="{{relic.id}}"
+                          {{#unless relic.canInfuse}}disabled{{/unless}}
+                          title="Infuse 1 Dust into this relic">+1 Dust</button>
+                </span>
+              {{/if}}
+            {{/unless}}{{/if}}
+          </div>
+        </div>
+      </div>
+    {{/each}}
+
+    {{#unless relicItems.length}}
+      {{#unless system.relics.length}}
+        <p class="icon-empty">No relics. Drop one from the Relics compendium, or level up (levels 2, 6, 9) to pick one.</p>
+      {{/unless}}
+    {{/unless}}
+  </div>
+</section>

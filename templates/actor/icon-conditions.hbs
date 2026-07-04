@@ -1,0 +1,95 @@
+{{!-- icon-conditions.hbs — shared status/condition picker tab.
+     Renders 3 grouped lists of toggleable status buttons. Clicking a button
+     applies/removes the ICON status as an ActiveEffect on the actor (which
+     also drives token effect icons + the auto-modifier reads in attack rolls).
+     The "auto" badge marks statuses that have a roll-time modifier (e.g.
+     Dazed → +1 curse on attacks). Stackable statuses (blessed, power-die)
+     show a count and respond to left/right-click like the elevation entry. --}}
+<section class="tab icon-tab icon-tab--conditions {{tab.cssClass}}" data-tab="conditions" data-group="primary">
+
+  <div class="icon-section">
+    <p class="notes" style="margin:4px 0 12px;font-size:.9em;color:#c0b898">
+      Click a condition to apply or remove it. <strong>Right-click</strong> a debuff
+      to apply its <strong>+</strong> (ongoing) version — it can't be saved against
+      and stays until the source is removed (right-click again to clear). Stackable
+      conditions (Blessed, Power Die, Vigilance, Bonus Damage, Elevation) use <strong>left-click</strong>
+      to add a charge and <strong>right-click</strong> to remove one. The
+      <span class="icon-badge icon-badge--primary" style="font-size:.75em">auto</span>
+      badge marks conditions that pre-fill boons/curses on attack rolls.
+    </p>
+  </div>
+
+  {{#*inline "conditionBtn"}}
+    {{#if s.stackable}}
+      {{!-- Stackable: shows count, left=+1 right=-1 --}}
+      <button type="button"
+              class="icon-condition-btn {{#if s.active}}icon-condition-btn--active{{/if}}"
+              data-action="adjustStatusCharges"
+              data-status-id="{{s.id}}"
+              data-delta="1"
+              {{#unless isEditable}}disabled{{/unless}}
+              title="Left-click: +1 {{s.name}}. Right-click: −1 {{s.name}}.">
+        <img src="{{s.img}}" alt="{{s.name}}">
+        <span class="icon-condition-btn__name">{{s.name}}: {{s.charges}}</span>
+        {{#if s.hasModifier}}
+          <span class="icon-badge icon-badge--primary" style="font-size:.7em">auto</span>
+        {{/if}}
+      </button>
+    {{else}}{{#if (icon-eq s.id "elevation")}}
+      {{!-- Elevation: same click pattern, count from a separate flag --}}
+      <button type="button"
+              class="icon-condition-btn {{#if s.active}}icon-condition-btn--active{{/if}}"
+              data-action="adjustElevation"
+              data-delta="1"
+              {{#unless isEditable}}disabled{{/unless}}
+              title="Left-click: +1 elevation. Right-click: −1 elevation.">
+        <img src="{{s.img}}" alt="{{s.name}}">
+        <span class="icon-condition-btn__name">Elev: {{elevationLevel}}</span>
+      </button>
+    {{else}}
+      {{!-- Regular toggle. Left-click = normal; right-click = + (ongoing) version. --}}
+      <button type="button"
+              class="icon-condition-btn {{#if s.active}}icon-condition-btn--active{{/if}} {{#if s.ongoing}}icon-condition-btn--ongoing{{/if}}"
+              data-action="toggleStatus"
+              data-status-id="{{s.id}}"
+              {{#unless isEditable}}disabled{{/unless}}
+              title="Left-click to {{#if s.active}}remove{{else}}apply{{/if}} {{s.name}}. Right-click for the + (ongoing, can't be saved) version.">
+        <img src="{{s.img}}" alt="{{s.name}}">
+        <span class="icon-condition-btn__name">{{s.name}}{{#if s.ongoing}} <strong>+</strong>{{/if}}</span>
+        {{#if s.ongoing}}
+          <span class="icon-badge icon-badge--ongoing" style="font-size:.7em" title="Ongoing — cannot be saved against">+</span>
+        {{/if}}
+        {{#if s.hasModifier}}
+          <span class="icon-badge icon-badge--primary" style="font-size:.7em">auto</span>
+        {{/if}}
+      </button>
+    {{/if}}{{/if}}
+  {{/inline}}
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Negative</h3>
+    <div class="icon-conditions-grid">
+      {{#each conditions.negative as |s|}}
+        {{> conditionBtn s=s isEditable=../isEditable elevationLevel=../elevationLevel}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Positive</h3>
+    <div class="icon-conditions-grid">
+      {{#each conditions.positive as |s|}}
+        {{> conditionBtn s=s isEditable=../isEditable elevationLevel=../elevationLevel}}
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Special States</h3>
+    <div class="icon-conditions-grid">
+      {{#each conditions.special as |s|}}
+        {{> conditionBtn s=s isEditable=../isEditable elevationLevel=../elevationLevel}}
+      {{/each}}
+    </div>
+  </div>
+</section>

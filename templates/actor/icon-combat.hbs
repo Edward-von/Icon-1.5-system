@@ -1,0 +1,556 @@
+{{!-- icon-combat.hbs --}}
+<section class="tab icon-tab icon-tab--combat {{tab.cssClass}}" data-tab="combat" data-group="primary">
+
+  {{!-- HP Bar with wound markers --}}
+  <div class="icon-section icon-section--hp">
+    <div class="icon-hp-bar-wrap">
+      <div class="icon-hp-labels">
+        <span class="icon-hp-label">HP {{system.combat.hp.value}} / {{system.combat.hp.max}}</span>
+        {{#if actor.isBloodied}}<span class="icon-badge icon-badge--bloodied">BLOODIED</span>{{/if}}
+      </div>
+      <div class="icon-hp-bar">
+        <div class="icon-hp-bar__fill" style="width:{{icon-pct system.combat.hp.value system.combat.hp.max}}"></div>
+        {{!-- Wound threshold markers at 25%, 50%, 75% --}}
+        <span class="icon-hp-marker" style="left:25%"  title="Wound 3"></span>
+        <span class="icon-hp-marker" style="left:50%"  title="Wound 2 / Bloodied"></span>
+        <span class="icon-hp-marker" style="left:75%"  title="Wound 1"></span>
+      </div>
+      {{#if isEditable}}
+        <div class="icon-hp-controls">
+          <label>Current HP</label>
+          <input type="number" name="system.combat.hp.value"
+                 value="{{system.combat.hp.value}}" min="0" max="{{system.combat.hp.max}}">
+        </div>
+      {{/if}}
+    </div>
+
+    {{!-- Wounds: 4 pips; filled only for wounds actually suffered --}}
+    <div class="icon-wounds">
+      <label>Wounds</label>
+      <div class="icon-boxes">
+        {{#each (iconRange 4) as |i|}}
+          <span class="icon-wound {{#icon-lte i ../system.combat.wounds.value}}icon-wound--filled{{/icon-lte}}"
+                data-action="setWounds" data-value="{{i}}"
+                title="Set wounds to {{i}} (click the last filled pip to clear one)"></span>
+        {{/each}}
+      </div>
+      <input type="number" name="system.combat.wounds.value"
+             value="{{system.combat.wounds.value}}" min="0" max="4"
+             {{#unless isEditable}}disabled{{/unless}}>
+    </div>
+
+    {{!-- Vigor — full bar treatment matching HP --}}
+    <div class="icon-vigor-wrap">
+      <div class="icon-vigor-labels">
+        <span class="icon-vigor-label">Vigor {{system.combat.vigor.value}} / {{system.combat.vigor.max}}</span>
+      </div>
+      <div class="icon-vigor-bar">
+        <div class="icon-vigor-bar__fill"
+             style="width:{{icon-pct system.combat.vigor.value system.combat.vigor.max}}"></div>
+      </div>
+      {{#if isEditable}}
+        <div class="icon-vigor-controls">
+          <label>Current Vigor</label>
+          <input type="number" name="system.combat.vigor.value"
+                 value="{{system.combat.vigor.value}}" min="0" max="{{system.combat.vigor.max}}">
+        </div>
+      {{/if}}
+    </div>
+
+    {{!-- Class Resources — displayed inline with HP/Vigor for all classes.
+         Stalwart=Vigilance, Vagabond=Combo, Mendicant=Blessings, Wright=Aether+Power Dice. --}}
+    {{#if primaryJobClass}}
+      <div class="icon-resource-section icon-resource-section--inline icon-resource-section--{{primaryJobClass}}">
+
+        {{!-- Stalwart — Vigilance --}}
+        {{#if (icon-eq primaryJobClass "stalwart")}}
+          <div class="icon-resource-block icon-resource-block--vigilance icon-resource-block--inline">
+            <div class="icon-resource-block__header">
+              <h4>Vigilance <small>({{system.combat.classResources.vigilance.value}}/{{system.combat.classResources.vigilance.max}})</small></h4>
+              {{#if isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm" data-action="spendVigilance"
+                        title="Spend charges: roll 1d6 each, total reduces damage, charges are deducted">Spend</button>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="clearVigilance">Clear</button>
+              {{/if}}
+            </div>
+            <div class="icon-vigilance-track">
+              {{#each (iconRange 6) as |i|}}
+                <span class="icon-vigilance-pip {{#if (icon-lte i ../system.combat.classResources.vigilance.value)}}icon-vigilance-pip--active{{/if}}"
+                      data-action="setVigilance"
+                      data-value="{{i}}"
+                      title="Set vigilance to {{i}}">⚡</span>
+              {{/each}}
+            </div>
+          </div>
+        {{/if}}
+
+        {{!-- Mendicant — Blessing Tokens --}}
+        {{#if (icon-eq primaryJobClass "mendicant")}}
+          <div class="icon-resource-block icon-resource-block--blessings icon-resource-block--inline">
+            <div class="icon-resource-block__header">
+              <h4>Blessing Tokens</h4>
+              {{#if isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm" data-action="clearBlessings">Clear</button>
+              {{/if}}
+            </div>
+            <div class="icon-counter-row">
+              <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="-1"
+                      {{#unless isEditable}}disabled{{/unless}}>−</button>
+              <span class="icon-counter-value">{{system.combat.classResources.blessingTokens.value}}</span>
+              <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="1"
+                      {{#unless isEditable}}disabled{{/unless}}>+</button>
+            </div>
+          </div>
+        {{/if}}
+
+        {{!-- Wright — Aether + Power Dice --}}
+        {{#if (icon-eq primaryJobClass "wright")}}
+          <div class="icon-resource-block icon-resource-block--wright icon-resource-block--inline">
+            <h4>Aether <small>(persists across combats)</small></h4>
+            <div class="icon-counter-row">
+              <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="-1"
+                      {{#unless isEditable}}disabled{{/unless}}>−</button>
+              <span class="icon-counter-value">{{system.combat.classResources.aether.value}}</span>
+              <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="1"
+                      {{#unless isEditable}}disabled{{/unless}}>+</button>
+            </div>
+            <div class="icon-resource-block__header">
+              <h4>Power Dice</h4>
+              {{#if isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm" data-action="addPowerDie">+ Die</button>
+              {{/if}}
+            </div>
+            <div class="icon-power-dice">
+              {{#each system.combat.classResources.powerDice as |die|}}
+                <div class="icon-power-die" data-die-id="{{die.id}}">
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
+                          data-id="{{die.id}}" data-delta="-1"
+                          {{#unless ../isEditable}}disabled{{/unless}}>−</button>
+                  <span class="icon-power-die__value">{{die.ticks}}</span>
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
+                          data-id="{{die.id}}" data-delta="1"
+                          {{#unless ../isEditable}}disabled{{/unless}}>+</button>
+                  {{#if ../isEditable}}
+                    <button type="button" class="icon-btn icon-btn--remove icon-btn--sm" data-action="removePowerDie"
+                            data-id="{{die.id}}" title="Remove die">✕</button>
+                  {{/if}}
+                </div>
+              {{/each}}
+              {{#unless system.combat.classResources.powerDice.length}}
+                <p class="icon-empty">No active power dice.</p>
+              {{/unless}}
+            </div>
+          </div>
+        {{/if}}
+
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- Stance — ICON allows one active stance at a time. The name is synced to
+       a marker effect on the token (IconActor._syncStanceMarker). --}}
+  <div class="icon-section icon-stance-section">
+    <div class="icon-stance-row">
+      <label class="icon-resource__title">Stance
+        {{#if system.combat.stance}}<span class="icon-badge icon-badge--primary">active</span>{{/if}}
+      </label>
+      <input type="text" class="icon-stance-input" name="system.combat.stance"
+             value="{{system.combat.stance}}" placeholder="No stance active"
+             {{#unless isEditable}}disabled{{/unless}}>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--sm" data-action="clearStance"
+                {{#unless system.combat.stance}}disabled{{/unless}}
+                title="Drop the active stance (free action at the start of your turn)">Clear</button>
+      {{/if}}
+    </div>
+  </div>
+
+  {{!-- Core stats row --}}
+  <div class="icon-section">
+    <div class="icon-stats-grid">
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">VIT</span>
+        <input class="icon-stat__value" type="number" name="system.combat.vit"
+               value="{{system.combat.vit}}" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">DEF</span>
+        <input class="icon-stat__value" type="number" name="system.combat.defense"
+               value="{{system.combat.defense}}" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">SPD</span>
+        <input class="icon-stat__value" type="number" name="system.combat.speed"
+               value="{{system.combat.speed}}" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">ARM</span>
+        <input class="icon-stat__value" type="number" name="system.combat.armor"
+               value="{{system.combat.armor}}" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">FRAY</span>
+        <input class="icon-stat__value" type="number" name="system.combat.fray"
+               value="{{system.combat.fray}}" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">[D]</span>
+        <select name="system.combat.damagedie" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each config.damageDice as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.combat.damagedie}}selected{{/icon-eq}}>{{key}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">Level</span>
+        <input class="icon-stat__value" type="number" name="system.combat.level"
+               value="{{system.combat.level}}" min="0" max="12"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-stat-block">
+        <span class="icon-stat__label">Chapter</span>
+        <select name="system.combat.chapter" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="1" {{#icon-eq system.combat.chapter 1}}selected{{/icon-eq}}>1</option>
+          <option value="2" {{#icon-eq system.combat.chapter 2}}selected{{/icon-eq}}>2</option>
+          <option value="3" {{#icon-eq system.combat.chapter 3}}selected{{/icon-eq}}>3</option>
+        </select>
+      </div>
+    </div>
+    {{#if canLevelUp}}
+      <div class="icon-level-up-bar">
+        <span class="icon-level-up-available">⬆ LEVEL UP AVAILABLE</span>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--primary icon-btn--pulse"
+                  data-action="levelUp">⬆ Level Up Now</button>
+        {{/if}}
+      </div>
+    {{/if}}
+    {{#if isEditable}}
+      <div class="icon-save-bar">
+        <button type="button" class="icon-btn icon-btn--sm" data-action="rollSave"
+                title="Roll a save vs a status effect (1d20, 10+ = success). Mendicants can spend a blessing for +1 boon.">
+          🛡 Save Roll
+        </button>
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- Jobs --}}
+  <div class="icon-section">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Jobs</h3>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--add" data-action="addJob">+ Job</button>
+      {{/if}}
+    </div>
+    <div class="icon-jobs-list">
+      {{#each system.combat.jobs as |job i|}}
+        <div class="icon-job icon-class--{{job.class}} {{#if job.primary}}icon-job--primary{{/if}}">
+          <input type="text" name="system.combat.jobs.{{i}}.name"
+                 value="{{job.name}}" placeholder="Job name"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          <select name="system.combat.jobs.{{i}}.class" {{#unless ../isEditable}}disabled{{/unless}}>
+            <option value="stalwart"  {{#icon-eq job.class "stalwart"}}selected{{/icon-eq}}>Stalwart</option>
+            <option value="vagabond"  {{#icon-eq job.class "vagabond"}}selected{{/icon-eq}}>Vagabond</option>
+            <option value="mendicant" {{#icon-eq job.class "mendicant"}}selected{{/icon-eq}}>Mendicant</option>
+            <option value="wright"    {{#icon-eq job.class "wright"}}selected{{/icon-eq}}>Wright</option>
+          </select>
+          {{#if job.primary}}
+            <span class="icon-badge icon-badge--primary">★ Primary</span>
+          {{else}}
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--sm"
+                      data-action="setPrimaryJob" data-index="{{i}}"
+                      title="Switch primary to this job. Traits and Limit Break will be swapped.">
+                Set as Primary
+              </button>
+            {{/if}}
+          {{/if}}
+          {{#if ../isEditable}}
+            <button type="button" class="icon-btn icon-btn--remove"
+                    data-action="removeJob" data-index="{{i}}">✕</button>
+          {{/if}}
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  {{!-- Class Rules — collapsible reference for the primary class.
+       Shows the keyword/rule definitions relevant to this class's abilities,
+       plus the class's special mechanic (Heroics / Combo / Blessings / Aether). --}}
+  {{#if classInfo}}
+    <div class="icon-section">
+      <details class="icon-class-rules-collapsible">
+        <summary class="icon-class-rules__summary">
+          <strong>{{classInfo.label}}</strong> — Relevant Rules &amp; {{classInfo.specialMechanic.name}}
+        </summary>
+        <div class="icon-class-rules__body">
+          {{#if classInfo.relevantRules.length}}
+            <h4>Relevant Rules</h4>
+            <ul>
+              {{#each classInfo.relevantRules as |r|}}
+                <li><strong>{{r.name}}.</strong> {{r.description}}</li>
+              {{/each}}
+            </ul>
+          {{/if}}
+          <h4>Special Mechanic — {{classInfo.specialMechanic.name}}</h4>
+          <p>{{classInfo.specialMechanic.description}}</p>
+          {{#if classInfo.gambit}}
+            <p class="notes"><em>{{classInfo.gambit}}</em></p>
+          {{/if}}
+        </div>
+      </details>
+    </div>
+  {{/if}}
+
+  {{!-- Traits — created from dropped Job Templates / Job items --}}
+  <div class="icon-section">
+    <h3 class="icon-section__title">Traits</h3>
+    {{#if traitItems.length}}
+      {{#each traitItems as |trait|}}
+        <div class="icon-trait icon-class--{{trait.class}} {{#if trait.isLocked}}icon-trait--locked{{/if}}"
+             data-item-id="{{trait.id}}">
+          <div class="icon-trait__header">
+            <strong>{{trait.name}}</strong>
+            {{#if trait.jobName}}
+              <span class="icon-badge">{{trait.jobName}}</span>
+            {{/if}}
+            <span class="icon-badge icon-badge--chapter">Ch {{trait.chapter}}</span>
+            {{#if trait.isLocked}}
+              <span class="icon-badge icon-badge--locked">🔒 Locked</span>
+            {{/if}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                    data-action="traitShowInChat" data-item-id="{{trait.id}}"
+                    title="Post trait to chat">💬</button>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                      data-action="removeItem" data-item-id="{{trait.id}}"
+                      title="Remove trait">×</button>
+            {{/if}}
+          </div>
+          {{#if trait.enrichedDescription}}
+            <div class="icon-trait__body icon-editor-wrap">{{{trait.enrichedDescription}}}</div>
+          {{/if}}
+          {{#if trait.isLocked}}
+            <p class="icon-trait__lock-hint">Unlocks at Chapter {{trait.chapter}}.</p>
+          {{/if}}
+        </div>
+      {{/each}}
+    {{else}}
+      <p class="icon-empty">No traits. Drop a Job Template from the Jobs compendium, or drag a trait item directly onto the sheet.</p>
+    {{/if}}
+  </div>
+
+  {{!-- Equipped Abilities (6 slots, drag-drop) --}}
+  <div class="icon-section">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Equipped Abilities <small>(click for details, double-click to open)</small></h3>
+      <label class="icon-combo-checkbox {{#if comboActive}}icon-combo-checkbox--active{{/if}}"
+             title="{{#if comboActive}}COMBO active — next Show in Chat on a combo ability uses the combo version{{else}}Activate combo token{{/if}}">
+        <input type="checkbox" data-action="toggleComboToken" {{#if comboActive}}checked{{/if}}>
+        COMBO {{#if comboActive}}ON{{else}}OFF{{/if}}
+      </label>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--sm" data-action="toggleAbilitiesLock"
+                title="{{#if abilitiesLocked}}Click to unlock — talent/mastery edits and remove buttons are disabled{{else}}Click to lock — protect equipped abilities from accidental edits{{/if}}">
+          {{#if abilitiesLocked}}🔒 Locked{{else}}🔓 Unlocked{{/if}}
+        </button>
+      {{/if}}
+    </div>
+    <div class="icon-ability-slots">
+      {{#icon-range 0 5}}
+        {{#with (lookup ../abilityItems this) as |item|}}
+          <div class="icon-ability-slot icon-ability-slot--filled {{icon-class-color item.system.class}}"
+               data-slot="{{@index}}" data-item-id="{{item.id}}">
+            <span class="icon-ability-slot__name">{{item.name}}</span>
+            <span class="icon-ability-slot__cost">{{item.system.cost}}</span>
+            {{#if (icon-or (icon-or (icon-gt item.system.talentSelected 0) item.system.masteryUnlocked) item.system.isCombo)}}
+              <div class="icon-ability-slot__badges">
+                {{#if item.system.isCombo}}
+                  <span class="icon-ability-slot__badge icon-ability-slot__badge--combo {{#if ../comboActive}}icon-ability-slot__badge--combo-active{{/if}}"
+                        title="Combo ability">⚡</span>
+                {{/if}}
+                {{#icon-gt item.system.talentSelected 0}}
+                  <span class="icon-ability-slot__badge icon-ability-slot__badge--talent"
+                        title="Talent {{#icon-eq item.system.talentSelected 1}}I{{else}}II{{/icon-eq}} unlocked">
+                    T{{#icon-eq item.system.talentSelected 1}}I{{else}}II{{/icon-eq}}
+                  </span>
+                {{/icon-gt}}
+                {{#if item.system.masteryUnlocked}}
+                  <span class="icon-ability-slot__badge icon-ability-slot__badge--mastery"
+                        title="Mastery unlocked">★</span>
+                {{/if}}
+              </div>
+            {{/if}}
+            {{#if ../isEditable}}{{#unless ../abilitiesLocked}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                      data-action="removeItem" data-item-id="{{item.id}}"
+                      title="Remove ability">×</button>
+            {{/unless}}{{/if}}
+          </div>
+        {{else}}
+          <div class="icon-ability-slot icon-ability-slot--empty" data-slot="{{this}}">
+            <span class="icon-ability-slot__hint">Drop ability here</span>
+          </div>
+        {{/with}}
+      {{/icon-range}}
+    </div>
+
+    {{!-- Preview panels — one per equipped ability, hidden by default.
+         Clicking a slot above toggles the matching panel. --}}
+    {{#each abilityDetails as |ab|}}
+      <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ../comboActive ab.hasCombo)}}icon-ability-preview--combo-active{{/if}}"
+           data-ability-id="{{ab.id}}" hidden>
+        {{#if ../isEditable}}{{#unless ../abilitiesLocked}}
+          <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner icon-btn--corner-lg"
+                  data-action="removeItem" data-item-id="{{ab.id}}"
+                  title="Remove ability from sheet">×</button>
+        {{/unless}}{{/if}}
+        <div class="icon-ability-preview__header">
+          <strong>{{ab.name}}</strong>
+          <span class="icon-badge icon-class--{{ab.class}}">{{ab.jobName}}</span>
+          <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
+          <span class="icon-badge">{{ab.cost}}</span>
+          {{#icon-gt ab.talentSelected 0}}
+            <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
+          {{/icon-gt}}
+          {{#if ab.masteryUnlocked}}
+            <span class="icon-badge icon-badge--primary">★ Mastered</span>
+          {{/if}}
+          {{#each ab.tags as |tag|}}
+            <span class="icon-tag icon-tag--small icon-tag--rule"
+                  {{#if tag.tooltip}}data-tooltip="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>
+          {{/each}}
+        </div>
+
+        {{!-- Action bar: buttons adapt to ability type (attack/auto-hit/no damage) --}}
+        <div class="icon-ability-preview__actions">
+          <button type="button" class="icon-btn icon-btn--sm"
+                  data-action="abilityShowInChat" data-item-id="{{ab.id}}"
+                  title="Post the ability to chat for everyone to see">
+            💬 Show in Chat
+          </button>
+          {{#if ab.isAttack}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
+                    data-action="abilityAttackRoll" data-item-id="{{ab.id}}"
+                    title="{{#if ab.isAutoHit}}Auto-hit — skips the d20 and goes to damage{{else}}Roll 1d20 + boons/curses vs defense{{/if}}">
+              {{#if ab.isAutoHit}}✦ Auto-Hit{{else}}⚔ Attack Roll{{/if}}
+            </button>
+          {{/if}}
+          {{#if ab.dealsDamage}}
+            <button type="button" class="icon-btn icon-btn--sm"
+                    data-action="abilityDamageRoll" data-item-id="{{ab.id}}"
+                    title="Roll damage using the ability's parsed formula">
+              💥 Damage Roll
+            </button>
+          {{/if}}
+        </div>
+
+        {{!-- Talent / Mastery editor — costs 1 AP per talent, 1 mastery per
+             mastery unlock. Disabled when the equipped-abilities lock is on
+             so a stray click during play can't change the build. --}}
+        {{#if ../isEditable}}
+          <div class="icon-ability-preview__editor">
+            {{#if (icon-or ab.hasTalent1Raw ab.hasTalent2Raw)}}
+              <label class="icon-editor-label">Talent</label>
+              <select class="icon-editor-select" data-action="setAbilityTalent"
+                      data-item-id="{{ab.id}}"
+                      {{#if ../abilitiesLocked}}disabled{{/if}}>
+                <option value="0" {{#icon-eq ab.talentSelected 0}}selected{{/icon-eq}}>— none —</option>
+                {{#if ab.hasTalent1Raw}}
+                  <option value="1" {{#icon-eq ab.talentSelected 1}}selected{{/icon-eq}}>Talent I</option>
+                {{/if}}
+                {{#if ab.hasTalent2Raw}}
+                  <option value="2" {{#icon-eq ab.talentSelected 2}}selected{{/icon-eq}}>Talent II</option>
+                {{/if}}
+              </select>
+            {{/if}}
+            {{#if ab.hasMasteryRaw}}
+              <label class="icon-editor-label">
+                <input type="checkbox" data-action="toggleAbilityMastery"
+                       data-item-id="{{ab.id}}"
+                       {{#if ab.masteryUnlocked}}checked{{/if}}
+                       {{#if ../abilitiesLocked}}disabled{{/if}}>
+                Mastery unlocked
+              </label>
+            {{/if}}
+            {{#if ../abilitiesLocked}}
+              <p class="icon-empty"><em>Locked. Click 🔒 above to unlock.</em></p>
+            {{/if}}
+          </div>
+        {{/if}}
+
+        {{#if ab.hasDesc}}
+          <div class="icon-ability-preview__desc">{{{ab.description}}}</div>
+        {{/if}}
+        {{#if ab.hasHit}}<p><strong>Hit:</strong> <span class="icon-ability-preview__effect">{{{ab.hitEffect}}}</span></p>{{/if}}
+        {{#if ab.hasMiss}}<p><strong>Miss:</strong> <span class="icon-ability-preview__effect">{{{ab.missEffect}}}</span></p>{{/if}}
+        {{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}
+        {{#if ab.hasCharge}}<p><strong>Charge:</strong> <span class="icon-ability-preview__effect">{{{ab.chargeEffect}}}</span></p>{{/if}}
+        {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> <span class="icon-ability-preview__effect">{{{ab.heroicEffect}}}</span></p>{{/if}}
+        {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> <span class="icon-ability-preview__effect">{{{ab.exceedEffect}}}</span></p>{{/if}}
+        {{#if ab.hasCollide}}<p><strong>Collide:</strong> <span class="icon-ability-preview__effect">{{{ab.collideEffect}}}</span></p>{{/if}}
+        {{#if ab.hasSlay}}<p><strong>Slay:</strong> <span class="icon-ability-preview__effect">{{{ab.slayEffect}}}</span></p>{{/if}}
+        {{#if ab.hasCrit}}<p><strong>Crit:</strong> <span class="icon-ability-preview__effect">{{{ab.critEffect}}}</span></p>{{/if}}
+        {{#if ab.hasFinish}}<p><strong>Finishing Blow:</strong> <span class="icon-ability-preview__effect">{{{ab.finishingBlowEffect}}}</span></p>{{/if}}
+        {{#if ab.hasComeback}}<p><strong>Comeback:</strong> <span class="icon-ability-preview__effect">{{{ab.comebackEffect}}}</span></p>{{/if}}
+        {{#if ab.hasTalent1}}<p><strong>Talent 1:</strong> <span class="icon-ability-preview__effect">{{{ab.talent1}}}</span></p>{{/if}}
+        {{#if ab.hasTalent2}}<p><strong>Talent 2:</strong> <span class="icon-ability-preview__effect">{{{ab.talent2}}}</span></p>{{/if}}
+        {{#if ab.hasMastery}}<p><strong>Mastery:</strong> <span class="icon-ability-preview__effect">{{{ab.mastery}}}</span></p>{{/if}}
+
+        {{!-- Combo block — shown when ability has combo content --}}
+        {{#if ab.hasCombo}}
+          <div class="icon-ability-preview__combo {{#if ../comboActive}}icon-ability-preview__combo--active{{/if}}">
+            <p class="icon-ability-preview__combo-label">⚡ COMBO:</p>
+            <div class="icon-ability-preview__combo-text">{{{ab.comboEffect}}}</div>
+          </div>
+        {{/if}}
+      </div>
+    {{/each}}
+  </div>
+
+  {{!-- Limit Break --}}
+  <div class="icon-section">
+    <h3 class="icon-section__title">Limit Break</h3>
+    {{#if limitBreakItem}}
+      <div class="icon-limit-break icon-class--{{limitBreakItem.system.class}}"
+           data-item-id="{{limitBreakItem.id}}">
+        <div class="icon-limit-break__header">
+          <strong>{{limitBreakItem.name}}</strong>
+          <span class="icon-badge">{{limitBreakItem.system.cost}}</span>
+          <span class="icon-badge icon-badge--resolve">{{limitBreakItem.system.resolveCost}} Resolve</span>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                    data-action="removeItem" data-item-id="{{limitBreakItem.id}}"
+                    title="Remove Limit Break">×</button>
+          {{/if}}
+        </div>
+        <div class="icon-limit-break__effect">{{{limitBreakItem.system.effect}}}</div>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--use" data-action="useLimitBreak">
+            Use Limit Break
+          </button>
+        {{/if}}
+      </div>
+    {{else}}
+      <p class="icon-empty">No Limit Break equipped. Drag a limit-break item here.</p>
+    {{/if}}
+  </div>
+
+  {{!-- Resolve --}}
+  <div class="icon-section icon-section--row">
+    <div class="icon-resource-block">
+      <label class="icon-resource__title">Personal Resolve</label>
+      <input type="number" name="system.combat.resolve.personal"
+             value="{{system.combat.resolve.personal}}" min="0"
+             {{#unless isEditable}}disabled{{/unless}}>
+    </div>
+    <div class="icon-resource-block">
+      <label class="icon-resource__title">Party Resolve</label>
+      <input type="number" name="system.combat.resolve.party"
+             value="{{system.combat.resolve.party}}" min="0"
+             {{#unless isEditable}}disabled{{/unless}}>
+    </div>
+  </div>
+
+</section>

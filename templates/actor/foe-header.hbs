@@ -1,0 +1,105 @@
+{{!-- foe-header.hbs --}}
+<header class="icon-sheet__header foe-header" data-foe-class="{{system.foeClass}}">
+  <img class="icon-sheet__portrait foe-portrait"
+       src="{{actor.img}}" alt="{{actor.name}}"
+       data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+
+  <div class="icon-sheet__identity">
+    <input class="icon-sheet__name" type="text" name="name" value="{{actor.name}}"
+           {{#unless isEditable}}disabled{{/unless}}>
+
+    <div class="icon-sheet__badges foe-builder-row">
+      <label class="foe-builder-field">
+        <span class="foe-builder-field__label">Class</span>
+        <select class="icon-badge-select" name="system.foeClass"
+                {{#unless isEditable}}disabled{{/unless}}>
+          <option value="heavy"      {{#icon-eq system.foeClass "heavy"}}selected{{/icon-eq}}>Heavy</option>
+          <option value="skirmisher" {{#icon-eq system.foeClass "skirmisher"}}selected{{/icon-eq}}>Skirmisher</option>
+          <option value="leader"     {{#icon-eq system.foeClass "leader"}}selected{{/icon-eq}}>Leader</option>
+          <option value="artillery"  {{#icon-eq system.foeClass "artillery"}}selected{{/icon-eq}}>Artillery</option>
+          <option value="mob"        {{#icon-eq system.foeClass "mob"}}selected{{/icon-eq}}>Mob</option>
+        </select>
+      </label>
+
+      {{#unless (icon-eq system.foeClass "mob")}}
+      <label class="foe-builder-field foe-builder-field--elite" title="Elite template (p.299): 2 turns per round + double HP.">
+        <span class="foe-builder-field__label">Elite</span>
+        <input type="checkbox" name="system.isElite"
+               {{#if system.isElite}}checked{{/if}}
+               {{#unless isEditable}}disabled{{/unless}}>
+      </label>
+      {{/unless}}
+
+      <label class="foe-builder-field">
+        <span class="foe-builder-field__label">Chapter</span>
+        <select class="icon-badge-select" name="system.chapter"
+                {{#unless isEditable}}disabled{{/unless}}>
+          <option value="1" {{#icon-eq system.chapter 1}}selected{{/icon-eq}}>1</option>
+          <option value="2" {{#icon-eq system.chapter 2}}selected{{/icon-eq}}>2</option>
+          <option value="3" {{#icon-eq system.chapter 3}}selected{{/icon-eq}}>3</option>
+        </select>
+      </label>
+
+      <label class="foe-builder-field">
+        <span class="foe-builder-field__label">Faction</span>
+        <select class="icon-badge-select" name="system.faction"
+                {{#unless isEditable}}disabled{{/unless}}>
+          <option value="">—</option>
+          {{#each config.factions as |labelKey key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.faction}}selected{{/icon-eq}}>
+              {{localize labelKey}}
+            </option>
+          {{/each}}
+        </select>
+      </label>
+
+      <label class="foe-builder-field">
+        <span class="foe-builder-field__label">Size</span>
+        <input type="number" class="foe-builder-field__size"
+               name="system.size" value="{{system.size}}" min="1" max="3"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </label>
+    </div>
+  </div>
+
+  {{!-- HP bar / Mob tracker — mobs use hits instead of HP --}}
+  {{#if (icon-eq system.foeClass "mob")}}
+    <div class="foe-header__mob">
+      <div class="foe-header__mob-label">MOB</div>
+      <div class="foe-header__mob-stats">
+        <label>
+          Members
+          <input type="number" name="system.mob.members"
+                 value="{{system.mob.members}}" min="0"
+                 {{#unless isEditable}}disabled{{/unless}}>
+        </label>
+        <label>
+          Hits remaining
+          <input type="number" name="system.mob.hitsRemaining"
+                 value="{{system.mob.hitsRemaining}}" min="0"
+                 {{#unless isEditable}}disabled{{/unless}}>
+        </label>
+      </div>
+    </div>
+  {{else}}
+    <div class="foe-header__hp">
+      <div class="icon-hp-bar">
+        <div class="icon-hp-bar__fill" style="width:{{icon-pct system.hp.value system.hp.max}}"></div>
+      </div>
+      <div class="foe-header__hp-inputs">
+        <input type="number" name="system.hp.value" value="{{system.hp.value}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        /
+        <input type="number" name="system.hp.max" value="{{system.hp.max}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      {{!-- Vigor — set directly without needing the Vigor status (cap = VIT). --}}
+      <div class="foe-header__vigor" title="Vigor absorbs damage before HP (max = VIT). Lost at end of combat.">
+        <span class="foe-header__vigor-label">Vigor</span>
+        <input type="number" name="system.vigor.value" value="{{system.vigor.value}}" min="0" max="{{system.vigor.max}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <span class="foe-header__vigor-max">/ {{system.vigor.max}}</span>
+      </div>
+    </div>
+  {{/if}}
+</header>

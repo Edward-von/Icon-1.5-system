@@ -1,0 +1,33 @@
+{{!-- foe-sheet.hbs — Foe sheet (Phase 2 full implementation) --}}
+<div class="icon-sheet foe-sheet">
+  <header class="icon-sheet__header">
+    <img src="{{actor.img}}" alt="{{actor.name}}" data-edit="img">
+    <div class="icon-sheet__identity">
+      <input type="text" name="name" value="{{actor.name}}">
+      <span class="icon-badge">{{system.foeClass}}{{#if system.isElite}} (Elite){{/if}}</span>
+      <span class="icon-badge">{{system.faction}}</span>
+      <span class="icon-badge">Ch {{system.chapter}}</span>
+      <span class="icon-badge">Size {{system.size}}</span>
+    </div>
+  </header>
+  <section class="icon-sheet__body">
+    <div class="icon-stat-row">
+      <div class="icon-stat"><label>HP</label>
+        <input type="number" name="system.hp.value" value="{{system.hp.value}}"> / {{system.hp.max}}
+      </div>
+      <div class="icon-stat"><label>VIT</label><input type="number" name="system.vit" value="{{system.vit}}"></div>
+      <div class="icon-stat"><label>Defense</label><input type="number" name="system.defense" value="{{system.defense}}"></div>
+      <div class="icon-stat"><label>Speed</label><input type="number" name="system.speed" value="{{system.speed}}"></div>
+      <div class="icon-stat"><label>Armor</label><input type="number" name="system.armor" value="{{system.armor}}"></div>
+      <div class="icon-stat"><label>Fray</label><input type="number" name="system.fray" value="{{system.fray}}"></div>
+      <div class="icon-stat"><label>[D]</label><input type="text" name="system.damagedie" value="{{system.damagedie}}"></div>
+    </div>
+    <p class="icon-stub-notice">Actions / Interrupts / Round Actions — Phase 2</p>
+    <div class="icon-field">
+      <label>Tactics</label>{{editor system.tactics target="system.tactics" button=true editable=true}}
+    </div>
+    <div class="icon-field">
+      <label>Defeat</label>{{editor system.defeat target="system.defeat" button=true editable=true}}
+    </div>
+  </section>
+</div>

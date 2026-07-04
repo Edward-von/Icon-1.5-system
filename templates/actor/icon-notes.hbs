@@ -1,0 +1,123 @@
+{{!-- icon-notes.hbs --}}
+<section class="tab icon-tab icon-tab--notes {{tab.cssClass}}" data-tab="notes" data-group="primary">
+  <section class="icon-notes-section">
+    <div class="icon-section-header">
+      <h3>IDEALS</h3>
+    </div>
+    <div class="icon-ideals">
+      <div class="icon-ideal-row">
+        <span class="icon-ideal-num">1</span>
+        <input type="text"
+               name="system.biography.ideals.0"
+               value="{{system.biography.ideals.[0]}}"
+               placeholder="First ideal"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-ideal-row">
+        <span class="icon-ideal-num">2</span>
+        <input type="text"
+               name="system.biography.ideals.1"
+               value="{{system.biography.ideals.[1]}}"
+               placeholder="Second ideal"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+
+    <div class="icon-section-header">
+      <h3>NOTES</h3>
+    </div>
+    <textarea name="system.biography.notes"
+              class="icon-notes-textarea"
+              placeholder="Notes..."
+              {{#unless isEditable}}disabled{{/unless}}>{{system.biography.notes}}</textarea>
+  </section>
+
+  {{#if isEditable}}
+    <section class="icon-notes-section icon-notes-section--danger">
+      <div class="icon-section-header">
+        <h3>CHARACTER MANAGEMENT</h3>
+      </div>
+
+      <p class="notes" style="margin:2px 0 10px;font-size:.85em;color:#c0b898">
+        Your <strong>build budget</strong>. Each box shows how much of a resource you've
+        <em>spent</em> vs. your <em>total</em> (granted by levelling up):
+        <strong>AP</strong> buys abilities &amp; talents,
+        <strong>Masteries</strong> unlock ability masteries, and
+        <strong>Skill Ranks</strong> raise narrative actions. The
+        <span class="icon-resource-counter__flag">⚠ OVER</span> flag warns if you've spent
+        more than you have. <strong>Refocus</strong> refunds everything so you can rebuild.
+      </p>
+
+      <div class="icon-management-grid">
+        {{!-- AP Total --}}
+        <div class="icon-management-block">
+          <label class="icon-management__title">AP Total</label>
+          <input type="number" name="system.combat.apTotal"
+                 value="{{system.combat.apTotal}}" min="0">
+          <div class="icon-resource-counter {{#if apOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq apFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
+            Spent <strong>{{apSpent}}</strong> / {{apTotal}}
+            {{#if apOverspent}}
+              <span class="icon-resource-counter__flag">⚠ OVER</span>
+            {{else}}{{#icon-eq apFree 0}}
+              <span class="icon-resource-counter__flag">✓ all spent</span>
+            {{else}}
+              <small>({{apFree}} free)</small>
+            {{/icon-eq}}{{/if}}
+            <small title="Abilities: {{apSpentAbilities}} + Talents: {{apSpentTalents}}">
+              ({{apSpentAbilities}}a + {{apSpentTalents}}t)
+            </small>
+          </div>
+        </div>
+
+        {{!-- Masteries --}}
+        <div class="icon-management-block">
+          <label class="icon-management__title">Masteries</label>
+          <input type="number" name="system.combat.masteries"
+                 value="{{system.combat.masteries}}" min="0">
+          <div class="icon-resource-counter {{#if masteryOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq masteryFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
+            Spent <strong>{{masterySpent}}</strong> / {{masteryTotal}}
+            {{#if masteryOverspent}}
+              <span class="icon-resource-counter__flag">⚠ OVER</span>
+            {{else}}{{#icon-eq masteryFree 0}}
+              <span class="icon-resource-counter__flag">✓ all spent</span>
+            {{else}}
+              <small>({{masteryFree}} free)</small>
+            {{/icon-eq}}{{/if}}
+          </div>
+        </div>
+
+        {{!-- Skill Ranks --}}
+        <div class="icon-management-block">
+          <label class="icon-management__title">Skill Ranks</label>
+          <input type="number" name="system.combat.skillRanksTotal"
+                 value="{{system.combat.skillRanksTotal}}" min="0">
+          <div class="icon-resource-counter {{#if skillRanksOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq skillRanksFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
+            Spent <strong>{{skillRanksSpent}}</strong> / {{skillRanksTotal}}
+            {{#if skillRanksOverspent}}
+              <span class="icon-resource-counter__flag">⚠ OVER</span>
+            {{else}}{{#icon-eq skillRanksFree 0}}
+              <span class="icon-resource-counter__flag">✓ all spent</span>
+            {{else}}
+              <small>({{skillRanksFree}} free)</small>
+            {{/icon-eq}}{{/if}}
+          </div>
+        </div>
+      </div>
+
+      <div class="icon-management-actions">
+        <button type="button" class="icon-btn" data-action="showHelp"
+                title="Reopen the 'How to build your character' guide">
+          ❔ Guide
+        </button>
+        <button type="button" class="icon-btn" data-action="showReference"
+                title="Open the rules reference: turn structure and glossary (triggers, statuses, keywords)">
+          📖 Reference
+        </button>
+        <button type="button" class="icon-btn icon-btn--refocus" data-action="refocus"
+                title="Refocus: refund AP, Mastery and Skill Ranks, re-pick abilities">
+          ↻ Refocus
+        </button>
+      </div>
+    </section>
+  {{/if}}
+</section>

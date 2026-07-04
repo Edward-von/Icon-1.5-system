@@ -1,0 +1,175 @@
+{{!-- legend-actions.hbs --}}
+<section class="tab icon-tab icon-tab--legend-actions {{tab.cssClass}}" data-tab="actions" data-group="primary">
+
+  {{!-- Actions --}}
+  <div class="icon-section">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Actions</h3>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--add" data-action="addAction">+ Action</button>
+      {{/if}}
+    </div>
+    {{#each enrichedActions as |action|}}
+      <div class="icon-foe-action {{#unless action.isActive}}icon-foe-action--locked{{/unless}}">
+        <div class="icon-foe-action__header">
+          <input type="text" name="system.actions.{{action.i}}.name"
+                 value="{{action.name}}"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          <select name="system.actions.{{action.i}}.cost"
+                  {{#unless ../isEditable}}disabled{{/unless}}>
+            <option value="1action"  {{#icon-eq action.cost "1action"}}selected{{/icon-eq}}>1 Action</option>
+            <option value="2actions" {{#icon-eq action.cost "2actions"}}selected{{/icon-eq}}>2 Actions</option>
+            <option value="free"     {{#icon-eq action.cost "free"}}selected{{/icon-eq}}>Free</option>
+          </select>
+          <label>Phase</label>
+          <input type="number" name="system.actions.{{action.i}}.phaseIndex"
+                 value="{{action.phaseIndex}}" placeholder="All"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          {{#if ../isEditable}}
+            <button type="button" class="icon-btn icon-btn--roll"
+                    data-action="rollAction" data-action-index="{{action.i}}"
+                    title="Roll attack">⚔ Attack</button>
+            {{#if action.dealsDamage}}
+              <button type="button" class="icon-btn icon-btn--roll"
+                      data-action="rollLegendDamage" data-action-index="{{action.i}}"
+                      title="Roll damage">💥 Damage</button>
+            {{/if}}
+            <button type="button" class="icon-btn icon-btn--remove"
+                    data-action="removeAction" data-index="{{action.i}}">✕</button>
+          {{/if}}
+        </div>
+        {{#if action.enrichedHit}}
+          <div class="icon-foe-action__effect"><strong>Hit:</strong> {{{action.enrichedHit}}}</div>
+        {{/if}}
+        {{#if action.enrichedMiss}}
+          <div class="icon-foe-action__effect"><strong>Miss:</strong> {{{action.enrichedMiss}}}</div>
+        {{/if}}
+        {{#if action.enrichedArea}}
+          <div class="icon-foe-action__effect"><strong>Area:</strong> {{{action.enrichedArea}}}</div>
+        {{/if}}
+        {{#if ../isEditable}}
+          <details class="icon-foe-action__edit">
+            <summary>Edit Effects</summary>
+            <label>Hit</label>
+            <textarea name="system.actions.{{action.i}}.hitEffect" class="icon-editor">{{action.hitEffect}}</textarea>
+            <label>Miss</label>
+            <textarea name="system.actions.{{action.i}}.missEffect" class="icon-editor">{{action.missEffect}}</textarea>
+            <label>Area</label>
+            <textarea name="system.actions.{{action.i}}.areaEffect" class="icon-editor">{{action.areaEffect}}</textarea>
+
+            <fieldset class="icon-damage-config">
+              <legend>Damage</legend>
+              <label>Deals damage
+                <select name="system.actions.{{action.i}}.damageMode">
+                  <option value="none"     {{#icon-eq action.damageMode "none"}}selected{{/icon-eq}}>No</option>
+                  <option value="hit"      {{#icon-eq action.damageMode "hit"}}selected{{/icon-eq}}>On hit</option>
+                  <option value="hit-miss" {{#icon-eq action.damageMode "hit-miss"}}selected{{/icon-eq}}>On hit and miss</option>
+                </select>
+              </label>
+              {{#unless (icon-eq action.damageMode "none")}}
+                <div class="icon-damage-config__row">
+                  <strong>Hit:</strong>
+                  <label>Dice ([D])
+                    <input type="number" min="0" style="width:60px"
+                           name="system.actions.{{action.i}}.damageHitDice"
+                           value="{{action.damageHitDice}}">
+                  </label>
+                  <label>
+                    <input type="checkbox" name="system.actions.{{action.i}}.damageHitFray"
+                           {{#if action.damageHitFray}}checked{{/if}}>
+                    + fray
+                  </label>
+                </div>
+              {{/unless}}
+              {{#if (icon-eq action.damageMode "hit-miss")}}
+                <div class="icon-damage-config__row">
+                  <strong>Miss:</strong>
+                  <label>Dice ([D])
+                    <input type="number" min="0" style="width:60px"
+                           name="system.actions.{{action.i}}.damageMissDice"
+                           value="{{action.damageMissDice}}">
+                  </label>
+                  <label>
+                    <input type="checkbox" name="system.actions.{{action.i}}.damageMissFray"
+                           {{#if action.damageMissFray}}checked{{/if}}>
+                    + fray
+                  </label>
+                </div>
+              {{/if}}
+            </fieldset>
+          </details>
+        {{/if}}
+      </div>
+    {{/each}}
+  </div>
+
+  {{!-- Interrupts --}}
+  <div class="icon-section">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Interrupts</h3>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--add" data-action="addInterrupt">+ Interrupt</button>
+      {{/if}}
+    </div>
+    {{#each enrichedInterrupts as |interrupt|}}
+      <div class="icon-interrupt">
+        <div class="icon-interrupt__header">
+          <input type="text" name="system.interrupts.{{interrupt.i}}.name"
+                 value="{{interrupt.name}}"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          <span class="icon-badge">
+            <input type="number" name="system.interrupts.{{interrupt.i}}.limit"
+                   value="{{interrupt.limit}}" min="0"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            / turn
+          </span>
+          {{#if ../isEditable}}
+            <button type="button" class="icon-btn icon-btn--remove"
+                    data-action="removeInterrupt" data-index="{{interrupt.i}}">✕</button>
+          {{/if}}
+        </div>
+        <div class="icon-interrupt__trigger">
+          <strong>Trigger:</strong>
+          <input type="text" name="system.interrupts.{{interrupt.i}}.trigger"
+                 value="{{interrupt.trigger}}"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+        </div>
+        <div class="icon-interrupt__effect">{{{interrupt.enrichedEffect}}}</div>
+        {{#if ../isEditable}}
+          <textarea name="system.interrupts.{{interrupt.i}}.effect" class="icon-editor">{{interrupt.effect}}</textarea>
+        {{/if}}
+      </div>
+    {{/each}}
+  </div>
+
+  {{!-- Round Actions — timeline strip --}}
+  <div class="icon-section">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Round Actions</h3>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--add" data-action="addRoundAction">+ Round Action</button>
+      {{/if}}
+    </div>
+    <div class="icon-round-timeline">
+      {{#each enrichedRoundActions as |ra|}}
+        <div class="icon-round-timeline__entry">
+          <span class="icon-round-timeline__round">R{{ra.roundNumber}}</span>
+          <div class="icon-round-timeline__body">
+            <input type="text" name="system.roundActions.{{ra.i}}.name"
+                   value="{{ra.name}}"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            <div class="icon-round-timeline__effect">{{{ra.enrichedEffect}}}</div>
+            {{#if ../isEditable}}
+              <input type="number" name="system.roundActions.{{ra.i}}.roundNumber"
+                     value="{{ra.roundNumber}}" min="1">
+              <textarea name="system.roundActions.{{ra.i}}.effect" class="icon-editor">{{ra.effect}}</textarea>
+              <button type="button" class="icon-btn icon-btn--remove"
+                      data-action="removeRoundAction" data-index="{{ra.i}}">✕</button>
+            {{/if}}
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+</section>

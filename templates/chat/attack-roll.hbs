@@ -1,0 +1,71 @@
+{{!-- templates/chat/attack-roll.hbs --}}
+<div class="icon-chat-card icon-chat-card--attack
+            {{#if isCrit}}icon-chat-card--crit
+            {{else}}{{#if isHit}}icon-chat-card--hit{{else}}{{#if (icon-eq isHit false)}}icon-chat-card--miss{{/if}}{{/if}}{{/if}}">
+
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__ability">{{abilityName}}</strong>
+    {{#if costLabel}}<span class="icon-badge">{{costLabel}}</span>{{/if}}
+    {{#if tagsHtml}}<span class="icon-chat-card__tags">{{{tagsHtml}}}</span>{{/if}}
+  </div>
+
+  {{!-- Dice row --}}
+  <div class="icon-chat-card__dice">
+    <span class="icon-chat-die icon-chat-die--d20 {{#if isCrit}}icon-chat-die--crit{{/if}}">{{d20}}</span>
+    {{#if modifierStr}}
+      <span class="icon-chat-card__operator">{{#if isPositive}}+{{else}}−{{/if}}</span>
+      <span class="icon-chat-die icon-chat-die--boon {{#unless isPositive}}icon-chat-die--curse{{/unless}}">
+        {{absModifier}}
+      </span>
+      <small class="icon-chat-card__boon-label">{{boonCurseLabel}}</small>
+    {{/if}}
+    <span class="icon-chat-card__operator">=</span>
+    <span class="icon-chat-card__total">{{total}}</span>
+    {{#if defense}}
+      <span class="icon-chat-card__vs">vs DEF {{defense}}</span>
+    {{/if}}
+  </div>
+
+  {{!-- Result --}}
+  <div class="icon-chat-card__result">
+    {{#if isCrit}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--crit">CRITICAL HIT</strong>
+    {{else if isHit}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--hit">HIT</strong>
+    {{else if (icon-eq isHit false)}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">MISS</strong>
+    {{else}}
+      <strong class="icon-chat-card__result-label">Total: {{total}}</strong>
+    {{/if}}
+  </div>
+
+  {{!-- Ability effects (shown inline for quick reference) --}}
+  {{#if hitEffect}}
+    <div class="icon-chat-card__effect-block {{#unless isHit}}icon-chat-card__effect-block--dim{{/unless}}">
+      <span class="icon-chat-card__effect-label">Hit</span>
+      <span class="icon-chat-card__effect-text">{{{hitEffect}}}</span>
+    </div>
+  {{/if}}
+  {{#if missEffect}}
+    <div class="icon-chat-card__effect-block {{#if isHit}}icon-chat-card__effect-block--dim{{/if}}">
+      <span class="icon-chat-card__effect-label">Miss</span>
+      <span class="icon-chat-card__effect-text">{{{missEffect}}}</span>
+    </div>
+  {{/if}}
+  {{#if exceedEffect}}
+    {{#if isExceed}}
+      <div class="icon-chat-card__effect-block icon-chat-card__effect-block--exceed">
+        <span class="icon-chat-card__effect-label">Exceed (15+)</span>
+        <span class="icon-chat-card__effect-text">{{{exceedEffect}}}</span>
+      </div>
+    {{/if}}
+  {{/if}}
+  {{#if critEffect}}
+    {{#if isCrit}}
+      <div class="icon-chat-card__effect-block icon-chat-card__effect-block--crit">
+        <span class="icon-chat-card__effect-label">Crit</span>
+        <span class="icon-chat-card__effect-text">{{{critEffect}}}</span>
+      </div>
+    {{/if}}
+  {{/if}}
+</div>

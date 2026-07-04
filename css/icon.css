@@ -1,0 +1,4376 @@
+/* ============================================================
+   ICON 1.5 — System Stylesheet  (Phase 5 — Full Polish)
+   Dark fantasy aesthetic: ink, parchment, gold, stone.
+   ============================================================ */
+
+/* ============================================================
+   1. CSS Custom Properties
+   ============================================================ */
+:root {
+  /* --- Background layers --- */
+  --ic-bg-deep:   #0e1117;
+  --ic-bg-dark:   #141922;
+  --ic-bg-mid:    #1c2330;
+  --ic-bg-light:  #232d3d;
+  --ic-bg-panel:  #2a3549;
+  --ic-bg-field:  #19212e;
+  --ic-bg-hover:  #303d52;
+
+  /* --- Borders --- */
+  --ic-border-faint:   rgba(180,160,100,.08);
+  --ic-border-subtle:  rgba(180,160,100,.16);
+  --ic-border-vis:     rgba(180,160,100,.28);
+  --ic-border-strong:  rgba(180,160,100,.45);
+
+  /* --- Text --- */
+  --ic-text-bright:  #f0e4c0;
+  --ic-text-normal:  #c0b090;
+  --ic-text-dim:     #7a7060;
+  --ic-text-ghost:   #4a4640;
+
+  /* --- Gold / amber --- */
+  --ic-gold:        #c8961c;
+  --ic-gold-bright: #e8b828;
+  --ic-gold-dim:    #8a6814;
+
+  /* --- Crimson (HP / damage / wounds) --- */
+  --ic-red:        #b02020;
+  --ic-red-bright: #d83030;
+  --ic-red-dim:    #6a1414;
+
+  /* --- Purple (magic / resolve) --- */
+  --ic-purple:        #7030a0;
+  --ic-purple-bright: #9840c8;
+
+  /* --- Blue (knowledge / saves) --- */
+  --ic-blue:        #1f5fa0;
+  --ic-blue-bright: #2e84d8;
+
+  /* --- Green (life / healing) --- */
+  --ic-green:        #246838;
+  --ic-green-bright: #34a058;
+
+  /* --- Orange (warn / Vigor) --- */
+  --ic-orange:       #c06020;
+  --ic-orange-bright:#e08040;
+
+  /* --- Class palette --- */
+  --stalwart:  #c0392b;
+  --vagabond:  #d4a017;
+  --mendicant: #2980b9;
+  --wright:    #27ae60;
+
+  /* --- Sheet geometry --- */
+  --ic-radius-sm: 3px;
+  --ic-radius:    6px;
+  --ic-radius-lg: 10px;
+  --ic-pad:       10px;
+}
+
+/* ============================================================
+   2. Base Sheet Reset
+   ============================================================ */
+.icon.sheet,
+.icon.sheet * {
+  box-sizing: border-box;
+}
+
+.icon.sheet {
+  font-family: "Signika", "IM Fell English", "Palatino Linotype", serif;
+  color: var(--ic-text-normal);
+  background: var(--ic-bg-dark);
+}
+
+/* ============================================================
+   Window layout — scroll + resize
+   ============================================================
+
+   Strategy: let .window-content scroll directly. Each sheet's content
+   (header + parts) stacks vertically inside window-content, and when
+   it exceeds the available height, window-content handles the scroll.
+   Simple and robust, no fragile flex chains.
+
+   Tradeoff: on tabbed actor sheets, the tab nav scrolls with content
+   (non-sticky). This is acceptable UX and can be revisited if needed. */
+
+.icon.sheet .window-content,
+.icon.character-creation-dialog .window-content,
+.icon.level-up-dialog .window-content {
+  padding: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  display: block;
+}
+
+/* Reset any conflicting flex declarations on part wrappers — let them flow
+   as normal block elements inside window-content so content determines their
+   height and window-content handles scrolling. */
+.icon.sheet [data-application-part] {
+  display: block;
+  overflow: visible;
+  min-height: 0;
+  flex: 0 0 auto;
+}
+
+/* Item / summon body sections don't need internal overflow — their parent
+   window-content handles scrolling. */
+.icon-item-sheet__body {
+  padding: 10px 12px;
+  display: block;
+}
+
+.summon-sheet__body {
+  padding: 9px;
+}
+
+.icon.sheet input,
+.icon.sheet select,
+.icon.sheet textarea {
+  background: var(--ic-bg-field);
+  color: var(--ic-text-bright);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 5px;
+  font-family: inherit;
+  font-size: 0.87em;
+}
+.icon.sheet input:focus,
+.icon.sheet select:focus,
+.icon.sheet textarea:focus {
+  border-color: var(--ic-gold);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(200,150,28,.2);
+}
+
+.icon.sheet select option { background: var(--ic-bg-mid); }
+
+.icon.sheet a { color: var(--ic-gold); }
+.icon.sheet a:hover { color: var(--ic-gold-bright); }
+
+/* ============================================================
+   3. Class Color Accents
+   ============================================================ */
+.icon-class--stalwart  { --class-color: var(--stalwart);  }
+.icon-class--vagabond  { --class-color: var(--vagabond);  }
+.icon-class--mendicant { --class-color: var(--mendicant); }
+.icon-class--wright    { --class-color: var(--wright);    }
+
+/* ============================================================
+   4. Sheet Header
+   ============================================================ */
+.icon-sheet__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, var(--ic-bg-deep) 0%, #1a1028 50%, var(--ic-bg-deep) 100%);
+  border-bottom: 2px solid var(--ic-gold-dim);
+  flex-shrink: 0;
+}
+
+.icon-sheet__portrait {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: var(--ic-radius-sm);
+  border: 2px solid var(--ic-border-vis);
+  cursor: pointer;
+  transition: border-color .2s;
+}
+.icon-sheet__portrait:hover { border-color: var(--ic-gold); }
+.icon-sheet__portrait--sm { width: 52px; height: 52px; }
+.icon-sheet__portrait--lg { width: 100px; height: 100px; border-width: 3px; }
+
+.icon-sheet__identity {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.icon-sheet__name {
+  font-size: 1.25em;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ic-border-vis);
+  color: var(--ic-text-bright);
+  width: 100%;
+  letter-spacing: .03em;
+}
+.icon-sheet__name--legend {
+  font-size: 1.45em;
+  color: var(--ic-gold-bright);
+  border-color: var(--ic-gold-dim);
+}
+.icon-sheet__name:focus {
+  outline: none;
+  border-color: var(--ic-gold);
+}
+
+.icon-sheet__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.icon-sheet__meta {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.icon-sheet__meta select {
+  background: transparent;
+  color: var(--ic-text-normal);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 4px;
+  font-size: 0.8em;
+}
+
+/* ============================================================
+   5. Badges
+   ============================================================ */
+.icon-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.73em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  border: 1px solid var(--ic-border-subtle);
+  background: rgba(255,255,255,.06);
+  color: var(--ic-text-normal);
+}
+.icon-badge--primary   { background: var(--ic-gold-dim);    color: var(--ic-gold-bright);  border-color: var(--ic-gold-dim); }
+.icon-badge--bloodied  { background: var(--ic-red-dim);     color: #ff8080;                border-color: var(--ic-red);     }
+.icon-badge--resolve   { background: rgba(112,48,160,.3);   color: #c080ff;                border-color: var(--ic-purple);  }
+.icon-badge--intangible{ background: rgba(31,95,160,.3);    color: #80c0ff;                border-color: var(--ic-blue);    }
+.icon-badge--phase-active { background: var(--ic-red-dim);  color: var(--ic-red-bright);   border-color: var(--ic-red);     }
+.icon-badge--ongoing   { background: var(--ic-red-dim);     color: #ff8080;                border-color: var(--ic-red);     font-size: 0.68em; padding: 1px 4px; }
+.icon-badge--chapter   { background: rgba(200,150,28,.2);   color: var(--ic-gold);         border-color: var(--ic-gold-dim);}
+.icon-badge--xp        { background: rgba(200,150,28,.2);   color: var(--ic-gold-bright);  border-color: var(--ic-gold); font-weight: bold; }
+.icon-badge--healed    { background: rgba(39,174,96,.22);   color: #6fe89a;                border-color: #27ae60; font-weight: bold; }
+
+.icon-badge-select {
+  background: transparent;
+  color: var(--ic-text-normal);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 5px;
+  font-size: 0.73em;
+}
+
+/* Foe Builder — compact labeled-dropdown row in the foe header */
+.foe-builder-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-top: 4px;
+}
+.foe-builder-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.foe-builder-field__label {
+  font-size: 0.62em;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ic-text-dim);
+}
+.foe-builder-field select,
+.foe-builder-field__size {
+  background: var(--ic-bg-deep);
+  color: var(--ic-text-normal);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 3px 6px;
+  font-size: 0.82em;
+  min-width: 64px;
+}
+.foe-builder-field__size { width: 54px; text-align: center; }
+.foe-builder-field select:hover,
+.foe-builder-field__size:hover {
+  border-color: var(--ic-gold-dim);
+}
+.foe-builder-field--elite {
+  align-items: center;
+  padding: 2px 8px;
+  border: 1px solid #8a6030;
+  border-radius: var(--ic-radius-sm);
+  background: rgba(138, 96, 48, .15);
+}
+.foe-builder-field--elite input[type="checkbox"] {
+  width: 16px; height: 16px;
+  margin: 0;
+  accent-color: #d09040;
+}
+
+/* Summon sheet — drop hint */
+.summon-sheet__drop-hint {
+  margin: 4px 0 8px;
+  padding: 6px 10px;
+  border: 1px dashed #5a4830;
+  border-radius: var(--ic-radius-sm);
+  background: rgba(90, 72, 48, .12);
+  color: #b0a080;
+  font-size: 0.82em;
+  line-height: 1.4;
+}
+
+/* Foe header — Mob tracker (replaces HP bar when foeClass === "mob") */
+.foe-header__mob {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  background: rgba(200,96,32,.08);
+  border: 1px solid rgba(200,96,32,.4);
+  border-radius: var(--ic-radius-sm);
+}
+.foe-header__mob-label {
+  font-weight: bold;
+  color: #ffaa60;
+  font-size: 0.78em;
+  letter-spacing: .08em;
+}
+.foe-header__mob-stats {
+  display: flex;
+  gap: 12px;
+}
+.foe-header__mob-stats label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.68em;
+  color: var(--ic-text-dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.foe-header__mob-stats input {
+  width: 56px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #ffcc80;
+  background: var(--ic-bg-deep);
+  border: 1px solid rgba(200,96,32,.3);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 4px;
+}
+
+/* Foe Builder hint block inside the main tab */
+.icon-foe-builder { background: var(--ic-bg-light); }
+.icon-foe-builder__hint {
+  margin: 4px 0 0;
+  font-size: 0.74em;
+  color: var(--ic-text-dim);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   6. Tab Navigation
+   ============================================================ */
+.icon.sheet .tabs {
+  background: var(--ic-bg-deep);
+  border-bottom: 1px solid var(--ic-gold-dim);
+  display: flex;
+  flex-shrink: 0;
+}
+.icon.sheet .tabs .item {
+  padding: 7px 14px;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ic-text-dim);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  user-select: none;
+}
+.icon.sheet .tabs .item:hover { color: var(--ic-text-normal); }
+.icon.sheet .tabs .item.active {
+  color: var(--ic-gold);
+  border-bottom-color: var(--ic-gold);
+}
+
+/* ============================================================
+   7. Tab Content
+   ============================================================ */
+.icon-tab {
+  padding: var(--ic-pad) 12px;
+}
+.icon-tab[data-tab]:not(.active) { display: none; }
+
+/* ============================================================
+   8. Sections
+   ============================================================ */
+.icon-section {
+  margin-bottom: 10px;
+  padding: 9px 10px;
+  background: var(--ic-bg-light);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+}
+.icon-section--row  { display: flex; gap: 12px; flex-wrap: wrap; }
+.icon-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.icon-section__title {
+  margin: 0 0 7px;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ic-gold);
+  border-bottom: 1px solid var(--ic-border-faint);
+  padding-bottom: 3px;
+}
+
+/* ============================================================
+   9. Stats Grid
+   ============================================================ */
+.icon-stats-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.icon-stat-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 52px;
+}
+.icon-stat__label {
+  font-size: 0.68em;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ic-text-dim);
+  margin-bottom: 2px;
+}
+.icon-stat__value {
+  width: 48px;
+  text-align: center;
+  font-size: 1.15em;
+  font-weight: bold;
+  color: var(--ic-text-bright);
+  background: var(--ic-bg-field);
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+}
+.icon-stat__value--sm { width: 36px; }
+
+/* ============================================================
+   10. HP Bar
+   ============================================================ */
+.icon-hp-bar-wrap { margin-bottom: 8px; }
+.icon-hp-labels   { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.icon-hp-label    { font-size: 0.9em; font-weight: bold; color: var(--ic-text-bright); }
+
+.icon-hp-bar {
+  position: relative;
+  height: 16px;
+  background: var(--ic-bg-deep);
+  border-radius: 8px;
+  border: 1px solid var(--ic-border-vis);
+  overflow: hidden;
+}
+.icon-hp-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ic-red-dim), var(--ic-red-bright));
+  border-radius: 8px;
+  transition: width .3s ease;
+  box-shadow: 0 0 6px rgba(216,48,48,.4);
+}
+.icon-hp-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(0,0,0,.6);
+}
+
+/* Vigor bar — same shape as HP, blue-cyan gradient */
+.icon-vigor-wrap   { margin-top: 8px; margin-bottom: 8px; }
+.icon-vigor-labels { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+.icon-vigor-label  { font-size: 0.9em; font-weight: bold; color: #7fc4ff; }
+.icon-vigor-bar {
+  position: relative;
+  height: 12px;
+  background: var(--ic-bg-deep);
+  border-radius: 6px;
+  border: 1px solid var(--ic-border-vis);
+  overflow: hidden;
+}
+.icon-vigor-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2c628c, #7fc4ff);
+  border-radius: 6px;
+  transition: width .3s ease;
+  box-shadow: 0 0 6px rgba(127,196,255,.35);
+}
+.icon-vigor-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 0.85em;
+}
+
+.icon-hp-controls {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  font-size: 0.85em;
+  color: var(--ic-text-dim);
+}
+.icon-hp-controls input { width: 52px; }
+
+/* ============================================================
+   11. Resource Bars (Vigor, XP)
+   ============================================================ */
+.icon-bar {
+  display: flex;
+  height: 10px;
+  background: var(--ic-bg-deep);
+  border-radius: 5px;
+  border: 1px solid var(--ic-border-subtle);
+  overflow: hidden;
+}
+.icon-bar__fill         { background: linear-gradient(90deg, var(--ic-red-dim), var(--ic-red-bright)); transition: width .2s; }
+.icon-bar__fill--vigor  { background: linear-gradient(90deg, var(--ic-blue), var(--ic-blue-bright)); box-shadow: 0 0 4px rgba(46,132,216,.35); }
+.icon-bar__fill--effort { background: linear-gradient(90deg, var(--ic-gold-dim), var(--ic-gold)); }
+.icon-bar__fill--green  { background: linear-gradient(90deg, var(--ic-green), var(--ic-green-bright)); }
+
+/* ============================================================
+   12. Wounds
+   ============================================================ */
+.icon-wounds { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+.icon-wound {
+  display: inline-block;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--ic-red-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: background .15s, box-shadow .15s, transform .1s;
+}
+.icon-wound:hover { transform: scale(1.1); }
+.icon-wound--filled {
+  background: var(--ic-red);
+  border-color: var(--ic-red-bright);
+  box-shadow: 0 0 6px rgba(216,48,48,.5);
+}
+
+/* ============================================================
+   13. Boxes (Effort / Strain)
+   ============================================================ */
+.icon-boxes { display: flex; gap: 4px; }
+
+.icon-box {
+  width: 22px; height: 22px;
+  border: 2px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-field);
+  cursor: pointer;
+  padding: 0;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+.icon-box:hover { border-color: var(--ic-text-normal); }
+.icon-box--filled {
+  background: var(--ic-text-dim);
+  border-color: var(--ic-text-normal);
+}
+.icon-box--strain              { border-color: var(--ic-red-dim); }
+.icon-box--strain:hover        { border-color: var(--ic-red); }
+.icon-box--strain.icon-box--filled {
+  background: var(--ic-red);
+  border-color: var(--ic-red-bright);
+  box-shadow: 0 0 4px rgba(216,48,48,.35);
+}
+
+/* Strain boxes — click to set value (starts unfilled at 0) */
+.icon-strain-box {
+  width: 28px; height: 28px;
+  border: 2px solid #c0392b;
+  background: transparent;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 3px;
+  border-radius: 3px;
+  transition: background .12s, box-shadow .12s, border-color .12s;
+}
+.icon-strain-box:hover { border-color: #e74c3c; }
+.icon-strain-box.strained {
+  background: #c0392b;
+  box-shadow: 0 0 6px #c0392b;
+}
+
+/* ============================================================
+   14. Pip Dots
+   ============================================================ */
+.icon-pip {
+  display: inline-block;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  border: 1px solid var(--ic-border-vis);
+  background: transparent;
+  margin-right: 2px;
+  transition: background .12s;
+}
+.icon-pip--filled { background: var(--ic-gold); border-color: var(--ic-gold); }
+
+/* ============================================================
+   15. Clock Segments
+   ============================================================ */
+.icon-clock-seg {
+  display: inline-block;
+  width: 22px; height: 22px;
+  border: 2px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-field);
+  margin-right: 4px;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, box-shadow .12s;
+}
+.icon-clock-seg:hover {
+  border-color: var(--ic-gold);
+  background: rgba(200,150,28,.15);
+}
+.icon-clock-seg--filled {
+  background: var(--ic-gold-dim);
+  border-color: var(--ic-gold);
+  box-shadow: 0 0 3px rgba(200,150,28,.4);
+}
+.icon-clock-seg--filled:hover {
+  background: var(--ic-gold);
+}
+
+/* ============================================================
+   16. XP Bar
+   ============================================================ */
+.icon-xp-section {
+  padding: 9px 10px;
+  background: var(--ic-bg-light);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+}
+.icon-xp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+.icon-xp-label {
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ic-gold);
+  font-weight: bold;
+}
+.icon-levelup-badge {
+  background: var(--ic-gold);
+  color: #000;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 2px 8px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  animation: pulse-gold 1.5s infinite;
+}
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+.icon-xp-track {
+  display: flex;
+  gap: 3px;
+  margin-bottom: 6px;
+  flex-wrap: nowrap;
+}
+.icon-xp-pip {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ic-gold-dim);
+  background: transparent;
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.icon-xp-pip:hover {
+  border-color: var(--ic-gold);
+}
+.icon-xp-pip.filled {
+  background: var(--ic-gold);
+  border-color: var(--ic-gold);
+}
+.icon-xp-pip.milestone {
+  border-color: var(--ic-border-strong);
+}
+.icon-xp-pip.milestone.filled {
+  background: var(--ic-green-bright);
+  border-color: var(--ic-green-bright);
+}
+.icon-xp-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.icon-xp-btn {
+  width: 24px; height: 24px;
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-border-vis);
+  color: var(--ic-gold);
+  cursor: pointer;
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.8em;
+  transition: background .13s, color .13s, border-color .13s;
+}
+.icon-xp-btn:hover {
+  background: var(--ic-bg-hover);
+  border-color: var(--ic-gold);
+  color: var(--ic-gold-bright);
+}
+.icon-levelup-btn {
+  flex: 1;
+  height: 24px;
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-gold);
+  color: var(--ic-gold);
+  cursor: pointer;
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.8em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background .13s, color .13s;
+}
+.icon-levelup-btn:hover {
+  background: var(--ic-gold);
+  color: var(--ic-bg-deep);
+}
+
+/* ============================================================
+   17. Vigor
+   ============================================================ */
+.icon-vigor { display: flex; align-items: center; gap: 6px; margin: 4px 0; }
+.icon-vigor label { font-size: 0.85em; color: var(--ic-text-dim); min-width: 80px; }
+
+/* ============================================================
+   18. Resource Block
+   ============================================================ */
+.icon-resource-block   { display: flex; flex-direction: column; gap: 4px; }
+.icon-resource__title  { margin: 0; font-size: 0.8em; font-weight: bold; color: var(--ic-gold); letter-spacing: .04em; }
+.icon-resource__controls { display: flex; align-items: center; gap: 5px; font-size: 0.82em; }
+.icon-resource__controls input { width: 38px; }
+
+/* ============================================================
+   19. Actions Grid (Narrative)
+   ============================================================ */
+.icon-actions-grid { display: flex; flex-direction: column; gap: 3px; }
+.icon-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-border-faint);
+  border-radius: var(--ic-radius-sm);
+  transition: background .12s;
+}
+.icon-action-row:hover { background: var(--ic-bg-hover); }
+.icon-action__label {
+  min-width: 74px;
+  font-size: 0.85em;
+  font-weight: bold;
+  color: var(--ic-text-bright);
+}
+.icon-action__pips { display: flex; }
+
+/* --- new Actions section (icon-actions-section / icon-action-row) --- */
+.icon-actions-section {
+  margin-bottom: 10px;
+  padding: 9px 10px;
+  background: var(--ic-bg-light);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+}
+.icon-section-title {
+  margin: 0 0 8px;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ic-gold);
+}
+.icon-actions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.icon-action-dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.icon-action-value {
+  width: 38px;
+  text-align: center;
+  font-weight: bold;
+  background: var(--ic-bg-deep);
+  color: var(--ic-text-bright);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 4px;
+}
+.icon-action-label {
+  min-width: 74px;
+  font-size: 0.88em;
+  font-weight: bold;
+  color: var(--ic-text-bright);
+  text-transform: capitalize;
+}
+.icon-actions-list .icon-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px;
+  background: var(--ic-bg-panel);
+  border: 1px solid transparent;
+  border-radius: var(--ic-radius-sm);
+}
+.icon-actions-list .icon-action-row:hover { background: var(--ic-bg-hover); }
+
+/* ============================================================
+   Class Resources (Combat tab) — per primary job class
+   ============================================================ */
+.icon-resource-section {
+  border-left: 3px solid var(--ic-border-subtle);
+  padding-left: 10px;
+}
+.icon-resource-section--stalwart  { border-left-color: #c04848; }
+.icon-resource-section--vagabond  { border-left-color: #c8a028; }
+.icon-resource-section--mendicant { border-left-color: #4088d0; }
+.icon-resource-section--wright    { border-left-color: #50a060; }
+
+.icon-resource-block {
+  margin-top: 6px;
+}
+.icon-resource-block__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.icon-resource-block h4 {
+  margin: 4px 0;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ic-gold);
+}
+.icon-resource-block h4 small {
+  text-transform: none;
+  color: var(--ic-text-dim);
+  font-weight: normal;
+  margin-left: 4px;
+}
+
+/* --- Vigilance pips (Stalwart) --- */
+.icon-vigilance-track {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.icon-vigilance-pip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(200,150,28,.4);
+  background: rgba(40,30,10,.6);
+  color: rgba(200,150,28,.35);
+  font-size: 0.95em;
+  cursor: pointer;
+  user-select: none;
+  transition: background .12s, color .12s, box-shadow .12s;
+}
+.icon-vigilance-pip:hover {
+  background: rgba(200,150,28,.2);
+  color: rgba(255,220,100,.8);
+}
+.icon-vigilance-pip--active {
+  background: radial-gradient(circle, #e0b040 0%, #a07820 80%);
+  color: #ffffd0;
+  border-color: #ffcc40;
+  box-shadow: 0 0 8px rgba(255,200,60,.8);
+}
+
+/* --- Combo Token (Vagabond) --- */
+.icon-combo-token {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  font-size: 0.95em;
+  font-weight: bold;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  border-radius: var(--ic-radius);
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--ic-bg-deep);
+  color: var(--ic-text-dim);
+  border: 2px solid var(--ic-border-subtle);
+}
+.icon-combo-token:hover {
+  background: var(--ic-bg-hover);
+  color: var(--ic-text-bright);
+}
+.icon-combo-token--active {
+  background: linear-gradient(135deg, #c8a028, #8a7020);
+  color: #fff8d0;
+  border-color: #ffd860;
+  box-shadow: 0 0 12px rgba(200,150,28,.6);
+  text-shadow: 0 0 4px rgba(255,220,100,.8);
+}
+
+/* --- Counter rows (Blessings / Aether) --- */
+.icon-counter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-counter-row .icon-btn--sm {
+  width: 28px;
+  height: 28px;
+  font-size: 1.1em;
+  font-weight: bold;
+  padding: 0;
+}
+.icon-counter-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  height: 32px;
+  padding: 0 10px;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--ic-gold-bright);
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+}
+
+/* --- Power Dice (Wright) --- */
+.icon-power-dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.icon-power-die {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 5px;
+  background: rgba(80,160,96,.12);
+  border: 1px solid rgba(80,160,96,.5);
+  border-radius: var(--ic-radius-sm);
+}
+.icon-power-die__value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 6px;
+  font-size: 1em;
+  font-weight: bold;
+  color: #b0e8b8;
+  background: rgba(30,50,30,.8);
+  border: 1px solid rgba(80,160,96,.4);
+  border-radius: var(--ic-radius-sm);
+}
+.icon-power-die .icon-btn--sm {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font-size: 0.85em;
+}
+
+/* ============================================================
+   Narrative tab — 2-column compact layout
+   ============================================================ */
+.icon-narrative-grid {
+  display: grid;
+  grid-template-columns: 55% 45%;
+  gap: 10px;
+  padding: 4px;
+}
+.icon-narrative-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;          /* allow children to shrink below content width */
+}
+
+/* Scope styling to the narrative tab only, so other tabs stay as-is. */
+.icon-tab--narrative { font-size: 15px; }
+.icon-tab--narrative input[type="text"],
+.icon-tab--narrative input[type="number"],
+.icon-tab--narrative select {
+  font-size: 0.95em;
+}
+.icon-tab--narrative .icon-section {
+  padding: 10px 11px;
+  margin-bottom: 0;      /* grid gap handles spacing */
+}
+.icon-tab--narrative .icon-section__header {
+  margin-bottom: 7px;
+}
+.icon-tab--narrative .icon-section__title {
+  font-size: 0.95em;
+  margin: 0 0 6px;
+}
+.icon-tab--narrative .icon-section-title {
+  font-size: 1em;
+}
+.icon-tab--narrative .icon-subtitle {
+  margin: 8px 0 4px;
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ic-gold);
+}
+.icon-tab--narrative .icon-resource__title {
+  font-size: 0.95em;
+}
+.icon-tab--narrative .icon-resource__title small {
+  font-size: 0.85em;
+  color: var(--ic-text-dim);
+}
+
+/* --- Action rows --- */
+.icon-tab--narrative .icon-actions-section {
+  padding: 10px 11px;
+}
+.icon-actions-list--compact { gap: 4px; }
+.icon-actions-list--compact .icon-action-row {
+  min-height: 34px;
+  padding: 4px 7px;
+  gap: 8px;
+  font-size: 0.98em;
+}
+.icon-actions-list--compact .icon-dot {
+  width: 14px; height: 14px; border-width: 2px;
+}
+.icon-actions-list--compact .icon-action-value {
+  width: 38px; padding: 2px 4px; font-size: 1em;
+}
+.icon-actions-list--compact .icon-action-roll {
+  width: 28px; height: 28px;
+}
+.icon-actions-list--compact .icon-action-roll i.fas { font-size: 0.95em; }
+.icon-actions-list--compact .icon-action-label {
+  min-width: 0;
+  font-size: 1em;
+  flex: 1;
+}
+
+/* --- Effort / Strain boxes in a single horizontal row --- */
+.icon-boxes--row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.icon-resource__max-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  font-size: 0.72em;
+  color: var(--ic-text-dim);
+}
+.icon-resource__max-inline input[type="number"] {
+  width: 34px;
+  padding: 1px 3px;
+  text-align: center;
+}
+
+/* --- Collapsible Bond Powers --- */
+.icon-bond-powers {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.icon-bond-power-collapsible {
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 0;
+}
+.icon-bond-power-collapsible[open] {
+  background: var(--ic-bg-light);
+  border-color: var(--ic-gold-dim);
+}
+.icon-bond-power__summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88em;
+  color: var(--ic-text-bright);
+}
+.icon-bond-power__summary::-webkit-details-marker { display: none; }
+.icon-bond-power__summary::before {
+  content: "▶";
+  font-size: 0.7em;
+  color: var(--ic-gold-dim);
+  transition: transform .12s;
+}
+.icon-bond-power-collapsible[open] .icon-bond-power__summary::before {
+  transform: rotate(90deg);
+}
+.icon-bond-power__summary:hover { color: var(--ic-gold-bright); }
+.icon-bond-power__name {
+  font-weight: bold;
+  flex: 1;
+}
+
+/* Powers subtitle row — title + New Session reset button */
+.icon-subtitle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* Per-session use pips on a bond power summary */
+.icon-session-uses {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.icon-use-pip {
+  width: 11px; height: 11px;
+  padding: 0;
+  border: 1.5px solid var(--ic-gold-dim);
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: background .12s, border-color .12s, box-shadow .12s;
+}
+.icon-use-pip:hover { border-color: var(--ic-gold-bright); }
+.icon-use-pip--used {
+  background: var(--ic-gold);
+  border-color: var(--ic-gold-bright);
+  box-shadow: 0 0 4px rgba(212,175,55,.4);
+}
+.icon-use-pip:disabled { cursor: default; opacity: .7; }
+.icon-bond-power-collapsible .icon-bond-power__body {
+  padding: 4px 10px 8px;
+  font-size: 0.88em;
+  color: var(--ic-text-normal);
+  border-top: 1px dashed var(--ic-border-subtle);
+}
+
+/* --- Burdens / Ambitions: compact in the left column --- */
+.icon-tab--narrative .icon-burden,
+.icon-tab--narrative .icon-ambition {
+  padding: 5px 6px;
+  margin-top: 5px;
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+}
+.icon-tab--narrative .icon-burden__header,
+.icon-tab--narrative .icon-ambition__header {
+  display: flex; align-items: center; gap: 4px; margin-bottom: 4px;
+}
+.icon-tab--narrative .icon-burden__header input,
+.icon-tab--narrative .icon-ambition__header input {
+  flex: 1;
+  font-size: 1em;
+}
+.icon-tab--narrative .icon-burden__clock,
+.icon-tab--narrative .icon-ambition__clock {
+  display: flex; align-items: center; gap: 3px; flex-wrap: wrap;
+}
+.icon-tab--narrative .icon-burden__actions {
+  display: flex; gap: 4px; margin-top: 4px;
+}
+.icon-tab--narrative .icon-burden__actions input { flex: 1; font-size: 0.92em; }
+.icon-tab--narrative .icon-ambition__max {
+  font-size: 0.75em;
+  color: var(--ic-text-dim);
+}
+
+/* Burden/Ambition inline clock-size select */
+.icon-tab--narrative .icon-clock-size {
+  width: 50px;
+  padding: 2px 4px;
+  font-size: 0.85em;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  color: var(--ic-text-normal);
+  border-radius: var(--ic-radius-sm);
+}
+
+/* Action slot badges on burdens */
+.icon-tab--narrative .icon-action-badge {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: rgba(192,57,43,.12);
+  border: 1px solid rgba(192,57,43,.4);
+  border-radius: var(--ic-radius-sm);
+  padding: 0 4px;
+}
+.icon-tab--narrative .icon-action-badge input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #ffb0a0;
+  font-size: 0.9em;
+  padding: 3px 4px;
+}
+.icon-tab--narrative .icon-action-badge input:focus {
+  outline: 1px solid rgba(192,57,43,.6);
+}
+
+.icon-action__dots {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+.icon-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  border: 2px solid var(--ic-gold);
+  background: transparent;
+  cursor: pointer;
+  display: inline-block;
+  transition: background .12s, box-shadow .12s, transform .08s;
+}
+.icon-dot:hover {
+  background: rgba(200,150,28,.35);
+  box-shadow: 0 0 4px rgba(200,150,28,.6);
+}
+.icon-dot:active { transform: scale(0.9); }
+.icon-dot.filled { background: var(--ic-gold); }
+
+.icon-action__input {
+  width: 38px;
+  text-align: center;
+  font-weight: bold;
+}
+.icon-action-roll {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-light);
+  color: var(--ic-gold);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .12s, color .12s, border-color .12s;
+}
+.icon-action-roll:hover {
+  background: rgba(200,150,28,.2);
+  color: var(--ic-gold-bright);
+  border-color: var(--ic-gold);
+}
+.icon-action-roll i.fas { font-size: 0.95em; }
+
+/* === Narrative roll dialog === */
+.icon-roll-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px;
+  color: var(--ic-text-normal);
+}
+.icon-roll-dialog p {
+  margin: 0 0 4px;
+  color: var(--ic-text-bright);
+}
+.icon-roll-dialog__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-roll-dialog__row label {
+  flex: 1;
+  font-size: 0.85em;
+}
+.icon-roll-dialog__row label small {
+  display: block;
+  color: var(--ic-text-dim);
+  font-size: 0.8em;
+  font-weight: normal;
+}
+.icon-roll-dialog__row input[type="number"] {
+  width: 50px;
+  text-align: center;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  color: var(--ic-text-bright);
+  padding: 3px 5px;
+  border-radius: var(--ic-radius-sm);
+}
+.icon-roll-dialog__row select {
+  flex: 1;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  color: var(--ic-text-bright);
+  padding: 3px 5px;
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.82em;
+}
+.icon-roll-dialog__thresholds {
+  margin-top: 4px;
+  font-size: 0.78em;
+  color: var(--ic-text-dim);
+}
+.icon-roll-dialog__thresholds strong {
+  color: var(--ic-gold);
+}
+.icon-roll-dialog__row--check label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.icon-roll-dialog__row--check input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+}
+.icon-roll-dialog__preview {
+  margin-top: 4px;
+  padding: 8px 10px;
+  background: rgba(200,150,28,.08);
+  border: 1px solid rgba(200,150,28,.3);
+  border-radius: var(--ic-radius-sm);
+}
+.icon-roll-dialog__pool {
+  font-size: 0.9em;
+  color: var(--ic-gold-bright);
+}
+.icon-roll-dialog__pool em {
+  color: var(--ic-text-dim);
+  font-style: normal;
+  font-size: 0.85em;
+  margin-left: 4px;
+}
+.icon-roll-dialog__push {
+  color: #c080ff;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: .05em;
+}
+.icon-roll-dialog__warn {
+  font-size: 0.82em;
+  color: #ff9060;
+  margin-top: 4px;
+}
+.icon-roll-dialog__warn div { margin-top: 2px; }
+.icon-roll-dialog__note {
+  margin-top: 6px;
+  color: var(--ic-text-dim);
+  font-size: 0.78em;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   20. Bond Row
+   ============================================================ */
+.icon-bond-row { display: flex; align-items: center; gap: 8px; }
+.icon-bond-row input {
+  flex: 1;
+  font-size: 1.05em;
+  font-weight: bold;
+  color: var(--ic-text-bright);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ic-border-subtle);
+}
+.icon-bond-row input:focus { border-color: var(--ic-gold); outline: none; }
+
+/* ============================================================
+   21. Burden / Ambition
+   ============================================================ */
+.icon-burden,
+.icon-ambition {
+  background: rgba(176,32,32,.06);
+  border: 1px solid rgba(176,32,32,.22);
+  border-radius: var(--ic-radius);
+  padding: 8px;
+  margin-bottom: 7px;
+}
+.icon-ambition {
+  background: rgba(200,150,28,.04);
+  border-color: rgba(200,150,28,.18);
+}
+.icon-burden__header,
+.icon-ambition__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 5px;
+}
+.icon-burden__clock,
+.icon-ambition__clock {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.icon-burden__actions { display: flex; align-items: center; gap: 4px; font-size: 0.8em; color: var(--ic-text-dim); }
+.icon-ambition__max { font-size: 0.73em; color: var(--ic-text-ghost); }
+
+/* ============================================================
+   22. Jobs
+   ============================================================ */
+.icon-jobs-list { display: flex; flex-direction: column; gap: 5px; }
+.icon-job {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  border-radius: var(--ic-radius-sm);
+  border-left: 4px solid var(--class-color, var(--ic-border-vis));
+  background: var(--ic-bg-panel);
+  color: var(--ic-text-bright);
+  font-size: 0.88em;
+}
+.icon-job--primary {
+  background: rgba(200,150,28,.08);
+  border-color: var(--ic-gold);
+}
+
+/* ============================================================
+   23. Ability Slots
+   ============================================================ */
+.icon-ability-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+
+.icon-ability-slot {
+  padding: 7px 9px;
+  border: 2px dashed var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+  min-height: 54px;
+  cursor: pointer;
+  background: var(--ic-bg-panel);
+  transition: border-color .15s, background .15s;
+}
+.icon-ability-slot:hover { background: var(--ic-bg-hover); }
+.icon-ability-slot--filled {
+  border-style: solid;
+  border-color: var(--class-color, var(--ic-border-vis));
+}
+.icon-ability-slot--empty { opacity: .6; }
+.icon-ability-slot__name {
+  display: block;
+  font-weight: bold;
+  font-size: 0.85em;
+  color: var(--ic-text-bright);
+  margin-bottom: 2px;
+}
+.icon-ability-slot__cost  { display: block; font-size: 0.7em; color: var(--ic-text-dim); }
+.icon-ability-slot__hint  { font-size: 0.73em; color: var(--ic-text-ghost); font-style: italic; }
+.icon-ability-slot__badges {
+  display: flex;
+  gap: 3px;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.icon-ability-slot__badge {
+  display: inline-block;
+  font-size: 0.68em;
+  font-weight: bold;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 3px;
+  border: 1px solid var(--ic-gold-dim);
+}
+.icon-ability-slot__badge--talent {
+  background: rgba(200,150,28,0.22);
+  color: var(--ic-gold-bright);
+  border-color: var(--ic-gold-dim);
+}
+.icon-ability-slot__badge--mastery {
+  background: rgba(200,150,28,0.4);
+  color: #fff;
+  border-color: var(--ic-gold);
+  text-shadow: 0 0 4px rgba(255,200,60,0.6);
+}
+
+/* ============================================================
+   AP / Mastery resource counter (Combat tab bottom)
+   ============================================================ */
+.icon-resource-counter {
+  margin-top: 4px;
+  padding: 3px 6px;
+  font-size: 0.75em;
+  color: var(--ic-text-dim);
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.icon-resource-counter strong { color: var(--ic-text-bright); }
+.icon-resource-counter small  { color: var(--ic-text-ghost); font-size: 0.9em; }
+.icon-resource-counter--full {
+  background: rgba(200,150,28,0.12);
+  border-color: var(--ic-gold-dim);
+  color: var(--ic-gold);
+}
+.icon-resource-counter--full strong { color: var(--ic-gold-bright); }
+.icon-resource-counter--warn {
+  background: rgba(216,48,48,0.15);
+  border-color: rgba(216,48,48,0.5);
+  color: #ffb0b0;
+}
+.icon-resource-counter--warn strong { color: #ff8080; }
+.icon-resource-counter__flag {
+  font-weight: bold;
+  font-size: 0.95em;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+.icon-resource-counter--full .icon-resource-counter__flag {
+  color: var(--ic-gold-bright);
+  background: rgba(200,150,28,0.18);
+}
+.icon-resource-counter--warn .icon-resource-counter__flag {
+  color: #ff8080;
+  background: rgba(216,48,48,0.2);
+}
+
+/* ============================================================
+   24. Limit Break Card
+   ============================================================ */
+.icon-limit-break {
+  border: 2px solid var(--class-color, var(--ic-border-vis));
+  border-radius: var(--ic-radius);
+  padding: 9px;
+  background: rgba(112,48,160,.06);
+}
+.icon-limit-break__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 7px;
+}
+.icon-limit-break__effect { font-size: 0.85em; color: var(--ic-text-normal); }
+
+/* ============================================================
+   25. Relics
+   ============================================================ */
+.icon-relics-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+
+.icon-relic-card {
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius);
+  padding: 9px;
+  background: var(--ic-bg-panel);
+}
+.icon-relic-card__header { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; }
+
+.icon-rank-pip {
+  display: inline-block;
+  width: 22px; height: 22px;
+  border: 2px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  text-align: center;
+  font-size: 0.7em;
+  line-height: 20px;
+  color: var(--ic-text-dim);
+  background: var(--ic-bg-field);
+}
+.icon-rank-pip--active {
+  background: var(--ic-gold-dim);
+  border-color: var(--ic-gold);
+  color: var(--ic-gold-bright);
+  box-shadow: 0 0 6px rgba(200,150,28,.4);
+}
+
+.icon-relic-card__rank-row { margin-bottom: 6px; font-size: 0.82em; color: var(--ic-text-normal); }
+.icon-rank-label { font-weight: bold; color: var(--ic-gold); }
+.icon-relic-card__rank-row--aspect { border-top: 1px solid var(--ic-border-subtle); padding-top: 5px; }
+
+.icon-relic-ranks   { display: flex; flex-direction: column; gap: 6px; }
+.icon-relic-rank    { padding: 6px; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); }
+.icon-relic-rank--aspect { border-color: var(--ic-gold-dim); background: rgba(200,150,28,.04); }
+
+/* ============================================================
+   26. Ideals
+   ============================================================ */
+.icon-ideals { display: flex; flex-direction: column; gap: 7px; }
+.icon-ideal-row  { display: flex; align-items: center; gap: 7px; }
+.icon-ideal__num { font-size: 1.2em; color: var(--ic-gold); }
+
+/* ============================================================
+   27. Foe / Legend Action Cards
+   ============================================================ */
+.icon-foe-action {
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+  padding: 9px;
+  margin-bottom: 8px;
+  background: var(--ic-bg-panel);
+  transition: border-color .15s;
+}
+.icon-foe-action:hover { border-color: var(--ic-border-vis); }
+.icon-foe-action--locked { opacity: 0.4; pointer-events: none; }
+.icon-foe-action__header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+.icon-foe-action__tags  { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 4px; }
+.icon-foe-action__desc {
+  font-size: 0.85em;
+  color: var(--ic-text-dim);
+  font-style: italic;
+  margin: 4px 0 6px;
+  padding: 4px 8px;
+  border-left: 2px solid var(--ic-gold-dim);
+}
+.icon-foe-action__effect { font-size: 0.85em; color: var(--ic-text-normal); margin-bottom: 4px; }
+.icon-foe-action__edit  { margin-top: 7px; font-size: 0.8em; }
+
+.icon-foe-action__effect strong { color: var(--ic-text-bright); }
+.icon-foe-action__effect em     { color: var(--ic-text-dim); font-style: italic; }
+
+/* ============================================================
+   28. Interrupts
+   ============================================================ */
+.icon-interrupt {
+  border: 1px solid rgba(31,95,160,.35);
+  background: rgba(31,95,160,.07);
+  border-radius: var(--ic-radius);
+  padding: 9px;
+  margin-bottom: 8px;
+}
+.icon-interrupt__header  { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
+.icon-interrupt__trigger {
+  font-size: 0.85em;
+  color: var(--ic-text-dim);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.icon-interrupt__effect  { font-size: 0.85em; color: var(--ic-text-normal); }
+
+/* ============================================================
+   29. Round Actions
+   ============================================================ */
+.icon-round-actions { display: flex; flex-direction: column; gap: 6px; }
+.icon-round-action {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 7px 9px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+  background: var(--ic-bg-panel);
+}
+.icon-round-action__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-round-action__round {
+  min-width: 60px;
+  font-weight: bold;
+  font-size: 0.8em;
+  background: var(--ic-bg-deep);
+  color: var(--ic-text-dim);
+  border-radius: var(--ic-radius-sm);
+  padding: 3px 7px;
+  text-align: center;
+  letter-spacing: .04em;
+}
+.icon-round-action__name {
+  flex: 1;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--ic-border-subtle);
+  color: var(--ic-text-bright);
+}
+.icon-round-action__round-input {
+  width: 48px;
+  text-align: center;
+}
+.icon-round-action__body {
+  padding-left: 4px;
+  border-left: 2px solid var(--ic-gold-dim);
+  margin-left: 2px;
+}
+.icon-round-action__effect {
+  font-size: 0.9em;
+  color: var(--ic-text-normal);
+  line-height: 1.4;
+}
+.icon-round-action__edit { margin-top: 4px; }
+.icon-round-action__edit summary {
+  cursor: pointer;
+  font-size: 0.8em;
+  color: var(--ic-text-dim);
+}
+
+/* ============================================================
+   30. Legend — Phase Bar & Timeline
+   ============================================================ */
+.icon-phase-bar { display: flex; gap: 4px; }
+.icon-phase-bar__segment {
+  flex: 1;
+  height: 8px;
+  background: var(--ic-bg-deep);
+  border-radius: 2px;
+  border: 1px solid var(--ic-border-subtle);
+}
+.icon-phase-bar__segment--active {
+  background: var(--ic-red);
+  border-color: var(--ic-red-bright);
+  box-shadow: 0 0 5px rgba(216,48,48,.4);
+}
+
+.legend-phase-bar { position: relative; margin-bottom: 8px; }
+.icon-phase-bar__marker {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(200,150,28,.6);
+  transform: translateX(-50%);
+}
+
+.icon-round-timeline { display: flex; flex-direction: column; gap: 4px; }
+.icon-round-timeline__entry { display: flex; align-items: flex-start; gap: 8px; }
+.icon-round-timeline__round {
+  min-width: 30px;
+  font-weight: bold;
+  font-size: 0.78em;
+  background: rgba(112,48,160,.25);
+  color: #c080ff;
+  border: 1px solid var(--ic-purple);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 5px;
+  text-align: center;
+}
+.icon-round-timeline__body  { flex: 1; }
+.icon-round-timeline__effect { font-size: 0.85em; color: var(--ic-text-normal); }
+
+/* ============================================================
+   31. Phases
+   ============================================================ */
+.icon-phase {
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+  padding: 8px;
+  margin-bottom: 8px;
+  background: var(--ic-bg-panel);
+}
+.icon-phase--current {
+  border-color: var(--ic-red);
+  background: rgba(176,32,32,.07);
+  box-shadow: 0 0 8px rgba(176,32,32,.2);
+}
+.icon-phase__header { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+
+/* ============================================================
+   32. Traits
+   ============================================================ */
+.icon-trait {
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
+  padding: 8px;
+  margin-bottom: 6px;
+  background: var(--ic-bg-panel);
+}
+.icon-trait--locked { opacity: 0.45; filter: grayscale(0.6); }
+.icon-trait--locked .icon-trait__body { font-style: italic; }
+.icon-trait__header { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; flex-wrap: wrap; }
+.icon-trait__body   { font-size: 0.85em; color: var(--ic-text-normal); }
+.icon-trait__lock-hint { font-size: 0.75em; color: var(--ic-text-dim); margin: 4px 0 0; font-style: italic; }
+.icon-badge--locked { background: rgba(90,90,90,.35); color: #d0d0d0; border-color: var(--ic-border-strong); }
+
+/* ============================================================
+   Level Up — pulse button and "available" banner
+   ============================================================ */
+@keyframes icon-pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(200,150,28,0.55), 0 0 8px rgba(200,150,28,0.25);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(200,150,28,0), 0 0 14px rgba(255,200,60,0.55);
+    transform: scale(1.035);
+  }
+}
+.icon-btn--pulse {
+  animation: icon-pulse-glow 1.6s ease-in-out infinite;
+  background: linear-gradient(180deg, var(--ic-gold-dim), var(--ic-gold-bright, #e8c158));
+  color: var(--ic-bg-deep, #111);
+  font-weight: bold;
+  border-color: var(--ic-gold-bright, #e8c158);
+}
+
+@keyframes icon-shimmer {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+}
+.icon-level-up-available {
+  display: inline-block;
+  margin: 4px 0;
+  padding: 3px 10px;
+  font-size: 0.82em;
+  font-weight: bold;
+  letter-spacing: 0.08em;
+  color: var(--ic-gold-bright, #e8c158);
+  text-shadow: 0 0 6px rgba(200,150,28,0.4);
+  background: rgba(200,150,28,0.12);
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius-sm);
+  animation: icon-shimmer 1.8s ease-in-out infinite;
+}
+.icon-level-up-bar {
+  margin-top: 8px;
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: linear-gradient(90deg, rgba(200,150,28,0.05), rgba(200,150,28,0.15), rgba(200,150,28,0.05));
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius);
+}
+
+.icon-refocus-bar {
+  margin-top: 6px;
+  padding: 4px 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ============================================================
+   Character Management — AP / Mastery / Skill Ranks + Refocus
+   (Notes tab, replaces the old Combat-tab resource row)
+   ============================================================ */
+.icon-management-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+.icon-management-block {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius);
+}
+.icon-management__title {
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ic-gold);
+}
+.icon-management-block input[type="number"] {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-align: center;
+  padding: 4px 6px;
+}
+.icon-management-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.icon-btn--refocus {
+  padding: 8px 18px;
+  font-size: 0.95em;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-color: var(--ic-gold);
+  color: var(--ic-gold-bright);
+  background: rgba(200,150,28,0.1);
+}
+.icon-btn--refocus:hover {
+  background: rgba(200,150,28,0.25);
+  color: #fff;
+}
+
+/* ============================================================
+   Bond drop slot (Narrative tab)
+   ============================================================ */
+.icon-bond-slot {
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius);
+  background: var(--ic-bg-deep);
+}
+.icon-bond-slot--empty {
+  border-style: dashed;
+  text-align: center;
+  padding: 16px 12px;
+}
+.icon-bond-slot--filled {
+  border-color: var(--ic-gold-dim);
+  background: rgba(200,150,28,0.06);
+}
+.icon-bond-slot__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.icon-bond-slot__img {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius-sm);
+  object-fit: cover;
+}
+.icon-bond-slot__name {
+  font-weight: 600;
+  color: var(--ic-text-bright);
+  font-size: 1.05em;
+  flex: 1;
+}
+.icon-bond-slot__primary,
+.icon-bond-slot__trigger {
+  margin-top: 6px;
+  font-size: 0.85em;
+  color: var(--ic-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.icon-bond-slot__details {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--ic-gold-dim);
+}
+.icon-bond-slot__details summary {
+  cursor: pointer;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--ic-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.icon-bond-slot__details[open] summary {
+  margin-bottom: 6px;
+}
+
+.icon-class-rules-collapsible {
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius);
+  padding: 6px 10px;
+  background: rgba(200,150,28,0.04);
+}
+.icon-class-rules__summary {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.icon-class-rules__body {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--ic-gold-dim);
+}
+.icon-class-rules__body h4 {
+  margin: 8px 0 4px;
+}
+.icon-class-rules__body ul {
+  margin: 0 0 8px 18px;
+}
+
+/* ==================================================
+   Conditions tab — status toggle buttons
+   ================================================== */
+.icon-conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 6px;
+  padding: 4px 0;
+}
+.icon-condition-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  padding: 7px 3px;
+  min-height: 84px;
+  background: rgba(0,0,0,0.18);
+  border: 1px solid var(--ic-gold-dim, #6a5a30);
+  border-radius: var(--ic-radius, 4px);
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 120ms, border-color 120ms;
+}
+.icon-condition-btn:hover {
+  background: rgba(200,150,28,0.12);
+}
+.icon-condition-btn--active {
+  background: rgba(200,150,28,0.25);
+  border-color: var(--ic-gold, #c8961c);
+  box-shadow: inset 0 0 0 1px var(--ic-gold, #c8961c);
+}
+/* Ongoing (+) debuff — can't be saved against. Red emphasis over the active state. */
+.icon-condition-btn--ongoing {
+  background: rgba(160,31,31,0.28);
+  border-color: var(--ic-red, #a01f1f);
+  box-shadow: inset 0 0 0 1px var(--ic-red, #a01f1f);
+}
+.icon-condition-btn img {
+  width: 40px;
+  height: 40px;
+  max-width: 100%;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.6));
+}
+.icon-condition-btn__name {
+  font-size: 0.78em;
+  text-align: center;
+  line-height: 1.1;
+  max-width: 100%;
+  overflow-wrap: break-word;
+}
+.icon-condition-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Chat message styling */
+.icon-chat-levelup {
+  padding: 6px 10px;
+  background: rgba(200,150,28,0.08);
+  border-left: 3px solid var(--ic-gold);
+  font-size: 1em;
+}
+
+/* Level-up ability picker rows */
+.icon-level-up__ability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-deep);
+}
+.icon-level-up__ability-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+}
+.icon-level-up__ability-row:hover { background: rgba(255,255,255,0.03); }
+.icon-level-up__ability-row--match { background: rgba(200,150,28,0.08); }
+.icon-level-up__ability-name { flex: 1; font-weight: 500; }
+
+/* ============================================================
+   Character Creation — ability picker
+   ============================================================ */
+.icon-cc__ability-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-deep);
+}
+.icon-cc__ability-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+}
+.icon-cc__ability-row:hover { background: rgba(255,255,255,0.03); }
+.icon-cc__ability-name { flex: 1; font-weight: 500; }
+
+/* ============================================================
+   Ability preview panel — click on an equipped slot to expand
+   ============================================================ */
+.icon-ability-preview {
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ic-gold-dim);
+  border-left-width: 4px;
+  border-radius: var(--ic-radius);
+  background: var(--ic-bg-panel);
+  animation: icon-preview-in 0.18s ease-out;
+}
+@keyframes icon-preview-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.icon-ability-preview__header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+  padding-bottom: 5px;
+  padding-right: 34px; /* leave room for the top-right × button */
+  border-bottom: 1px solid var(--ic-border-subtle);
+}
+.icon-ability-preview__header strong { font-size: 1.05em; color: var(--ic-gold-bright); }
+.icon-ability-preview__desc  { margin: 4px 0 8px; font-size: 0.9em; line-height: 1.4; }
+.icon-ability-preview__effect { font-size: 0.85em; }
+.icon-ability-preview p { margin: 4px 0; }
+
+.icon-ability-preview__actions {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0 8px;
+  padding: 4px 0 6px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--ic-border-subtle);
+}
+.icon-ability-preview__actions .icon-btn {
+  flex: 0 1 auto;
+  font-size: 0.82em;
+  padding: 4px 10px;
+}
+
+/* Color-code the left border by class */
+.icon-ability-preview.icon-class--stalwart  { border-left-color: #e74c3c; }
+.icon-ability-preview.icon-class--vagabond  { border-left-color: #f1c40f; }
+.icon-ability-preview.icon-class--mendicant { border-left-color: #3498db; }
+.icon-ability-preview.icon-class--wright    { border-left-color: #27ae60; }
+
+/* ============================================================
+   Bond Power cards (Narrative tab)
+   ============================================================ */
+.icon-bond-power {
+  position: relative;
+  border: 1px solid var(--ic-border-subtle);
+  border-left: 3px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius);
+  padding: 8px 10px;
+  margin-bottom: 6px;
+  background: var(--ic-bg-panel);
+}
+.icon-bond-power__header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.icon-bond-power__body {
+  font-size: 0.85em;
+  color: var(--ic-text-normal);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   Relic card — richer display
+   ============================================================ */
+.icon-relic-card--item {
+  position: relative;
+  padding: 10px 12px;
+}
+.icon-relic-card__ranks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+.icon-relic-card__rank-row {
+  padding: 4px 6px;
+  border-left: 2px solid var(--ic-border-subtle);
+  font-size: 0.88em;
+}
+.icon-relic-card__rank-row--aspect {
+  border-left-color: var(--ic-gold);
+  background: rgba(200,150,28,0.05);
+}
+/* Partial dust infusion controls (progress + "+1 Dust" button). */
+.icon-relic-infuse {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+}
+.icon-relic-infuse__progress {
+  font-size: 0.82em;
+  color: var(--ic-text-dim);
+  white-space: nowrap;
+}
+/* Active-stance tracker (Combat tab). */
+.icon-stance-section { padding: 6px 10px; }
+.icon-stance-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-stance-row .icon-resource__title { margin: 0; white-space: nowrap; }
+.icon-stance-input {
+  flex: 1;
+  background: var(--ic-bg-field, var(--ic-bg-deep));
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-bright);
+  padding: 3px 6px;
+}
+.icon-rank-label {
+  display: block;
+  font-weight: bold;
+  color: var(--ic-gold-bright);
+  margin-bottom: 2px;
+}
+
+/* ============================================================
+   Remove button — small × in corner
+   ============================================================ */
+.icon-btn--corner {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  padding: 0;
+  font-size: 0.95em;
+  line-height: 1;
+  border-radius: 50%;
+  background: rgba(216,48,48,0.3);
+  border: 1px solid rgba(216,48,48,0.6);
+  color: #ffb0b0;
+  opacity: 0.85;
+  transition: opacity 0.15s, background 0.15s, transform 0.1s;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+.icon-btn--corner:hover {
+  opacity: 1;
+  background: rgba(216,48,48,0.55);
+  color: #fff;
+  transform: scale(1.15);
+}
+
+/* Larger variant for preview cards where there's more room */
+.icon-btn--corner-lg {
+  top: 6px;
+  right: 6px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  font-size: 1.15em;
+}
+
+/* ============================================================
+   Level Up — talent and mastery pickers
+   ============================================================ */
+.icon-level-up__talent-list,
+.icon-level-up__mastery-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-deep);
+}
+
+.icon-level-up__talent-row {
+  padding: 8px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-panel);
+}
+.icon-level-up__talent-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+  font-size: 0.95em;
+}
+.icon-level-up__talent-options {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-left: 12px;
+}
+.icon-level-up__talent-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 3px 4px;
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+  font-size: 0.85em;
+  line-height: 1.3;
+}
+.icon-level-up__talent-option:hover { background: rgba(255,255,255,0.03); }
+.icon-level-up__talent-option input { margin-top: 3px; flex-shrink: 0; }
+.icon-level-up__talent-label { flex: 1; }
+
+.icon-level-up__mastery-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-panel);
+  cursor: pointer;
+}
+.icon-level-up__mastery-row:hover { background: rgba(255,255,255,0.03); }
+.icon-level-up__mastery-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.icon-level-up__mastery-desc {
+  font-size: 0.82em;
+  color: var(--ic-text-normal);
+  margin-left: 22px;
+  font-style: italic;
+  line-height: 1.3;
+}
+
+/* ============================================================
+   Level Up Wizard — stage recap, grant list
+   ============================================================ */
+.icon-level-up__grant-list,
+.icon-level-up__recap-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.icon-level-up__grant-list li,
+.icon-level-up__recap-list li {
+  padding: 5px 10px;
+  background: rgba(200,150,28,0.06);
+  border-left: 3px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.9em;
+}
+.icon-level-up__recap {
+  background: rgba(200,150,28,0.04);
+  border-left: 4px solid var(--ic-gold);
+}
+.icon-level-up__recap h3 {
+  color: var(--ic-gold-bright);
+  margin-top: 0;
+}
+.icon-level-up__recap-list li {
+  border-left-color: var(--ic-gold);
+  background: rgba(200,150,28,0.08);
+}
+
+.icon-btn--sm {
+  padding: 3px 8px;
+  font-size: 0.82em;
+}
+
+/* Ability slots need position:relative for the corner button to anchor */
+.icon-ability-slot,
+.icon-bond-power,
+.icon-limit-break,
+.icon-ability-preview,
+.icon-trait {
+  position: relative;
+}
+
+/* ============================================================
+   33. Buttons
+   ============================================================ */
+.icon-btn {
+  padding: 3px 9px;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-light);
+  color: var(--ic-text-normal);
+  cursor: pointer;
+  font-size: 0.82em;
+  font-family: inherit;
+  transition: background .13s, color .13s, border-color .13s;
+}
+.icon-btn:hover { background: var(--ic-bg-hover); color: var(--ic-text-bright); }
+
+.icon-btn--add   { border-color: var(--ic-green-bright); color: var(--ic-green-bright); }
+.icon-btn--add:hover { background: var(--ic-green); color: #fff; border-color: var(--ic-green-bright); }
+
+.icon-btn--remove { border-color: var(--ic-red); color: var(--ic-red-bright); background: transparent; }
+.icon-btn--remove:hover { background: var(--ic-red-dim); color: #ff8080; }
+
+.icon-btn--roll  { border-color: var(--ic-blue-bright); color: var(--ic-blue-bright); }
+.icon-btn--roll:hover { background: var(--ic-blue); color: #fff; }
+
+.icon-btn--use   { border-color: var(--ic-purple-bright); color: var(--ic-purple-bright); }
+.icon-btn--use:hover { background: var(--ic-purple); color: #fff; }
+
+.icon-btn--camp     { border-color: var(--ic-green-bright); color: var(--ic-green-bright); }
+.icon-btn--camp:hover { background: var(--ic-green); color: #fff; }
+
+.icon-btn--sm     { padding: 1px 5px; font-size: 0.74em; }
+.icon-btn--inline { padding: 0 4px; font-size: 0.7em; }
+
+/* ============================================================
+   34. Tags
+   ============================================================ */
+.icon-tag {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255,255,255,.07);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  padding: 2px 6px;
+  font-size: 0.73em;
+  color: var(--ic-text-dim);
+  margin-right: 3px;
+}
+.icon-tags-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+
+/* Rule tags — hoverable with Foundry tooltip, interactive feel */
+.icon-tag--rule[data-tooltip] {
+  cursor: help;
+  border-color: var(--ic-gold-dim);
+  background: rgba(200,150,28,0.08);
+  color: var(--ic-gold-bright);
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+}
+.icon-tag--rule[data-tooltip]:hover {
+  background: rgba(200,150,28,0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(200,150,28,0.3);
+}
+.icon-tag--rule:not([data-tooltip]) {
+  color: var(--ic-text-dim);
+  opacity: 0.75;
+}
+
+/* ============================================================
+   35. Field Helpers
+   ============================================================ */
+.icon-field-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; margin-bottom: 4px; }
+.icon-field     { margin-bottom: 8px; }
+.icon-editor-wrap { font-size: 0.9em; color: var(--ic-text-normal); min-height: 24px; }
+.icon-empty     { color: var(--ic-text-ghost); font-style: italic; font-size: 0.85em; }
+
+/* ============================================================
+   36. Item Sheet
+   ============================================================ */
+.icon-item-header     { min-height: 60px; }
+.icon-item-section    { margin-bottom: 10px; padding: 9px; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius); background: var(--ic-bg-panel); }
+.icon-item-section--meta { background: var(--ic-bg-light); }
+
+/* ============================================================
+   37. Summon Sheet
+   ============================================================ */
+.summon-header       { background: linear-gradient(135deg, #0a1220 0%, #0e1830 100%); border-color: rgba(31,95,160,.4); }
+.summon-sheet__body  { padding: 9px; background: var(--ic-bg-mid); }
+
+/* ============================================================
+   38. Phase Indicator (header badge)
+   ============================================================ */
+.icon-phase-indicator {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px;
+  background: var(--ic-bg-deep);
+  border-radius: var(--ic-radius-sm);
+  border: 1px solid var(--ic-border-subtle);
+}
+.icon-phase-indicator__dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--ic-bg-light);
+  border: 1px solid var(--ic-border-vis);
+}
+.icon-phase-indicator__dot--active {
+  background: var(--ic-red-bright);
+  border-color: var(--ic-red-bright);
+  box-shadow: 0 0 4px rgba(216,48,48,.6);
+}
+
+/* ============================================================
+   39. Combat Tracker UI
+   ============================================================ */
+/* Controls container we inject for owning players (so their Slow button shows). */
+.combatant-controls.icon-injected-controls {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+  opacity: 1;
+}
+
+.icon-slow-btn {
+  padding: 2px 6px;
+  font-size: 0.72em;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  background: var(--ic-bg-light);
+  color: var(--ic-text-dim);
+  cursor: pointer;
+  margin-right: 3px;
+  transition: background .12s, color .12s;
+}
+.icon-slow-btn:hover { color: var(--ic-text-bright); background: var(--ic-bg-hover); }
+.icon-slow-btn--active {
+  background: rgba(192,96,32,.25);
+  color: var(--ic-orange-bright);
+  border-color: var(--ic-orange);
+}
+
+.icon-resolve-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72em;
+  color: #c080ff;
+  padding: 0 5px;
+  font-weight: bold;
+}
+.icon-resolve-display__value { white-space: nowrap; }
+.icon-resolve-plus {
+  padding: 0 5px;
+  font-size: 0.72em;
+  line-height: 1.3;
+  background: rgba(112,48,160,.3);
+  color: #c080ff;
+  border: 1px solid rgba(112,48,160,.6);
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+  min-width: 0;
+}
+.icon-resolve-plus:hover {
+  background: rgba(112,48,160,.55);
+  color: #e0b0ff;
+  border-color: #c080ff;
+}
+
+/* === Consumed turn: struck-through, dimmed, sunk to the bottom === */
+li.combatant.icon-turn-consumed,
+.combat-tracker .combatant.icon-turn-consumed,
+.combatant.icon-turn-consumed {
+  opacity: 0.4 !important;
+  filter: grayscale(0.75);
+  background: rgba(120, 20, 20, 0.12) !important;
+}
+/* Strike every bit of text inside the consumed row. */
+li.combatant.icon-turn-consumed,
+li.combatant.icon-turn-consumed .token-name,
+li.combatant.icon-turn-consumed .token-name *,
+li.combatant.icon-turn-consumed .combatant-name,
+li.combatant.icon-turn-consumed .name,
+.combatant.icon-turn-consumed .token-name,
+.combatant.icon-turn-consumed .token-name *,
+.combatant.icon-turn-consumed .combatant-name,
+.combatant.icon-turn-consumed .name {
+  text-decoration: line-through !important;
+  text-decoration-thickness: 2px !important;
+  text-decoration-color: #e0602c !important;
+}
+.combatant.icon-turn-consumed:hover { opacity: 0.7 !important; }
+
+/* === Combat banner: round + PC/NPC turn indicator + party resolve === */
+.icon-combat-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px 10px;
+  background: linear-gradient(180deg, rgba(20,20,28,0) 0%, rgba(112,48,160,.08) 100%);
+  border-top: 1px solid rgba(112,48,160,.3);
+  border-bottom: 1px solid rgba(112,48,160,.3);
+}
+.icon-combat-banner__round {
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--ic-gold);
+  text-align: center;
+}
+.icon-combat-banner__round strong {
+  font-size: 1.4em;
+  color: var(--ic-gold-bright);
+  margin-left: 4px;
+}
+
+.icon-turn-indicator {
+  padding: 6px 10px;
+  text-align: center;
+  font-size: 1em;
+  font-weight: bold;
+  letter-spacing: .12em;
+  border-radius: var(--ic-radius);
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  box-shadow: 0 0 8px rgba(0,0,0,.5) inset;
+}
+.icon-turn-indicator--pc {
+  background: linear-gradient(180deg, rgba(64,160,255,.25), rgba(64,160,255,.08));
+  border-color: rgba(64,160,255,.6);
+  color: #80c0ff;
+}
+.icon-turn-indicator--npc {
+  background: linear-gradient(180deg, rgba(216,48,48,.25), rgba(216,48,48,.08));
+  border-color: rgba(216,48,48,.6);
+  color: #ff8080;
+}
+
+.icon-party-resolve {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 9px;
+  font-size: 0.85em;
+  background: rgba(112,48,160,.12);
+  border-radius: var(--ic-radius-sm);
+  color: #c080ff;
+}
+.icon-party-resolve__label {
+  text-transform: uppercase;
+  font-size: 0.78em;
+  letter-spacing: .06em;
+}
+.icon-party-resolve__value { font-weight: bold; font-size: 1.05em; }
+
+/* === Legend round-action indicator === */
+.icon-legend-round-actions {
+  margin: 6px 8px;
+  padding: 6px 9px;
+  background: rgba(216,96,32,.1);
+  border: 1px solid rgba(216,96,32,.5);
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.78em;
+  color: #ffb880;
+}
+.icon-legend-round-actions__title {
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: 3px;
+}
+.icon-legend-round-actions ul {
+  margin: 0;
+  padding-left: 16px;
+  list-style: disc;
+}
+.icon-legend-round-actions li { line-height: 1.4; }
+
+/* ============================================================
+   39b. Chat message wrappers — dark theme for high contrast
+   ============================================================ */
+
+/* Foundry v13 ApplicationV2 chat log selectors + legacy .chat-log */
+#chat-log .chat-message,
+.chat-sidebar .chat-message,
+ol.chat-log .chat-message,
+.chat-message {
+  background: #151b26 !important;
+  color: #d8d0b8 !important;
+  border: 1px solid #3a3528 !important;
+  border-radius: 4px;
+  margin: 4px 0;
+  padding: 6px 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+#chat-log .chat-message .message-header,
+.chat-sidebar .chat-message .message-header,
+.chat-message .message-header {
+  background: linear-gradient(180deg, #1a1f2b, #12161e);
+  color: #e8b828;
+  border-bottom: 1px solid #3a3528;
+  padding: 4px 8px;
+  margin: -6px -10px 6px -10px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+#chat-log .chat-message .message-sender,
+.chat-message .message-sender {
+  color: #e8b828 !important;
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+
+#chat-log .chat-message .message-metadata,
+.chat-message .message-metadata {
+  color: #8a8070 !important;
+  font-size: 0.78em;
+}
+
+#chat-log .chat-message .message-content,
+.chat-message .message-content {
+  color: #d8d0b8;
+}
+
+#chat-log .chat-message .flavor-text,
+.chat-message .flavor-text {
+  color: #c0b898 !important;
+  font-style: italic;
+  font-size: 0.9em;
+  padding: 2px 0 4px;
+  border-bottom: 1px dashed #3a3528;
+  margin-bottom: 5px;
+}
+
+/* Links inside chat messages */
+#chat-log .chat-message a,
+.chat-message a {
+  color: #e8b828;
+}
+#chat-log .chat-message a:hover,
+.chat-message a:hover {
+  color: #ffc850;
+  text-shadow: 0 0 6px rgba(232,184,40,0.5);
+}
+
+/* Inline code and table elements */
+#chat-log .chat-message code,
+.chat-message code {
+  background: #0c1018;
+  color: #e0d0b0;
+  padding: 1px 5px;
+  border-radius: 2px;
+  border: 1px solid #3a3528;
+}
+
+#chat-log .chat-message strong,
+.chat-message strong {
+  color: #e8d8a0;
+}
+
+#chat-log .chat-message em,
+.chat-message em {
+  color: #b0a888;
+}
+
+#chat-log .chat-message hr,
+.chat-message hr {
+  border: none;
+  border-top: 1px solid #3a3528;
+  margin: 6px 0;
+}
+
+/* Foundry built-in dice roll summary (when not using our chat cards) */
+#chat-log .chat-message .dice-roll,
+.chat-message .dice-roll {
+  background: #0f1420;
+  border: 1px solid #3a3528;
+  border-radius: 3px;
+  padding: 4px 6px;
+  color: #d8d0b8;
+}
+#chat-log .chat-message .dice-formula,
+.chat-message .dice-formula {
+  color: #8a8070;
+  background: #0c1018;
+  border: 1px solid #3a3528;
+  padding: 2px 6px;
+  border-radius: 2px;
+}
+#chat-log .chat-message .dice-total,
+.chat-message .dice-total {
+  color: #e8b828 !important;
+  background: #12161e !important;
+  border: 1px solid #4a4028 !important;
+  font-weight: bold;
+  text-shadow: 0 0 4px rgba(232,184,40,0.4);
+}
+#chat-log .chat-message .dice-tooltip,
+.chat-message .dice-tooltip {
+  background: #0c1018 !important;
+  color: #d8d0b8 !important;
+  border: 1px solid #3a3528;
+}
+
+/* Chat whisper / OOC / other metadata labels */
+#chat-log .chat-message.whisper,
+.chat-message.whisper {
+  background: #1a1930 !important;
+  border-color: #4a3268 !important;
+}
+#chat-log .chat-message.whisper .whisper-to,
+.chat-message.whisper .whisper-to {
+  color: #c080ff;
+}
+
+/* ============================================================
+   40. Chat Cards — Shared
+   ============================================================ */
+.icon-chat-card {
+  border-radius: var(--ic-radius);
+  padding: 9px 11px;
+  margin: 2px 0;
+  font-size: 0.88em;
+  border: 1px solid #333;
+  background: #1a1f2b;
+  color: #c0b898;
+  font-family: "Signika", "Palatino Linotype", serif;
+}
+
+.icon-chat-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 7px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding-bottom: 5px;
+}
+.icon-chat-card__action { font-weight: bold; font-size: 1em; color: #e0d0b0; }
+.icon-chat-card__pool   { font-size: 0.78em; color: #7a7060; }
+.icon-chat-card__ability{ font-size: 1em; color: #e0d0b0; font-weight: bold; }
+.icon-chat-card__rolltype {
+  display: inline-block;
+  padding: 1px 6px;
+  margin: 0 4px;
+  font-size: 0.72em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  border-radius: var(--ic-radius-sm);
+  border: 1px solid;
+}
+.icon-chat-card__rolltype--heroic {
+  background: rgba(216,48,48,.18);
+  color: #ff8080;
+  border-color: rgba(216,48,48,.5);
+}
+.icon-chat-card__rolltype--routine {
+  background: rgba(64,160,96,.18);
+  color: #80c080;
+  border-color: rgba(64,160,96,.5);
+}
+
+.icon-chat-card__dice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 7px;
+  align-items: center;
+}
+
+/* ============================================================
+   41. Die Faces
+   ============================================================ */
+.icon-chat-die {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  border: 2px solid #3a3528;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.92em;
+  background: #12161e;
+  color: #8a8070;
+  transition: border-color .12s, background .12s;
+}
+.icon-chat-die--picked {
+  border-color: #38a058;
+  background: rgba(52,160,88,.12);
+  color: #60d080;
+}
+.icon-chat-die--six { border-color: #c8960c; color: #e8b828; }
+.icon-chat-die--picked.icon-chat-die--six {
+  border-color: #9040c8;
+  background: rgba(144,64,200,.14);
+  color: #c080ff;
+}
+.icon-chat-die--d20 {
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  font-size: 1.12em;
+  border-color: #4a4540;
+  color: #d0c8a8;
+}
+.icon-chat-die--crit {
+  border-color: #9040c8;
+  background: rgba(144,64,200,.15);
+  color: #c080ff;
+  box-shadow: 0 0 8px rgba(144,64,200,.4);
+}
+.icon-chat-die--boon  { border-color: #38a058; background: rgba(52,160,88,.1); color: #60d080; }
+.icon-chat-die--curse { border-color: #b02020; background: rgba(176,32,32,.1); color: #ff8080; }
+
+.icon-chat-card__operator  { font-size: 1.1em; color: #5a5040; }
+.icon-chat-card__total     { font-size: 1.35em; font-weight: bold; color: #e0d0b0; }
+.icon-chat-card__vs        { font-size: 0.82em; color: #6a6050; margin-left: 5px; }
+.icon-chat-card__boon-label{ font-size: 0.73em; color: #6a6050; }
+
+/* ============================================================
+   42. Narrative Roll Outcome Colors
+   ============================================================ */
+.icon-chat-card--narrative.icon-chat-card--fail    { border-color: #6a1414; }
+.icon-chat-card--narrative.icon-chat-card--partial { border-color: #8a6808; }
+.icon-chat-card--narrative.icon-chat-card--success { border-color: #246838; }
+.icon-chat-card--narrative.icon-chat-card--critical { border-color: #7030a0; background: rgba(112,48,160,.06); }
+
+.icon-chat-card__result { margin: 6px 0 2px; }
+.icon-chat-card__value  { font-size: 1.45em; margin-right: 5px; }
+.icon-chat-card__outcome-label { font-size: 0.9em; }
+
+.icon-chat-card--fail     .icon-chat-card__result { color: #ff6060; }
+.icon-chat-card--partial  .icon-chat-card__result { color: #e8b828; }
+.icon-chat-card--success  .icon-chat-card__result { color: #60d080; }
+.icon-chat-card--critical .icon-chat-card__result { color: #c080ff; }
+
+.icon-chat-card__effect-hint { font-size: 0.78em; color: #6a6050; font-style: italic; margin: 4px 0 0; }
+
+/* ============================================================
+   43. Attack Roll
+   ============================================================ */
+.icon-chat-card--attack.icon-chat-card--hit  { border-color: #246838; }
+.icon-chat-card--attack.icon-chat-card--miss { border-color: #6a1414; }
+.icon-chat-card--attack.icon-chat-card--crit {
+  border-color: #7030a0;
+  background: rgba(112,48,160,.07);
+  box-shadow: 0 0 10px rgba(112,48,160,.25);
+}
+
+.icon-chat-card__result-label--hit  { color: #60d080; }
+.icon-chat-card__result-label--miss { color: #ff6060; }
+.icon-chat-card__result-label--crit { color: #c080ff; font-size: 1.05em; letter-spacing: .06em; }
+
+.icon-chat-card__effect-block {
+  font-size: 0.83em;
+  padding: 4px 7px;
+  border-left: 3px solid #3a3528;
+  border-radius: 0 var(--ic-radius-sm) var(--ic-radius-sm) 0;
+  margin-top: 5px;
+  background: rgba(255,255,255,.03);
+}
+.icon-chat-card__effect-block--dim  { opacity: 0.38; }
+.icon-chat-card__effect-block--exceed { border-color: #c8960c; }
+.icon-chat-card__effect-block--crit   { border-color: #9040c8; }
+.icon-chat-card--hit  .icon-chat-card__effect-block:not(.icon-chat-card__effect-block--dim) { border-color: #38a058; }
+.icon-chat-card--miss .icon-chat-card__effect-block:not(.icon-chat-card__effect-block--dim) { border-color: #b02020; }
+.icon-chat-card--crit .icon-chat-card__effect-block:not(.icon-chat-card__effect-block--dim) { border-color: #9040c8; }
+
+.icon-chat-card__effect-label {
+  font-weight: bold;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  margin-right: 5px;
+  color: #8a8070;
+}
+.icon-chat-card__tags { display: flex; gap: 3px; flex-wrap: wrap; }
+
+/* ============================================================
+   44. Damage Card
+   ============================================================ */
+.icon-chat-card--damage { border-color: var(--ic-red-dim); }
+
+.icon-chat-card__damage-breakdown {
+  font-size: 0.83em;
+  margin: 5px 0;
+  border: 1px solid rgba(255,255,255,.06);
+  border-radius: var(--ic-radius-sm);
+  overflow: hidden;
+}
+.icon-chat-card__damage-step {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 6px;
+  background: rgba(0,0,0,.15);
+}
+.icon-chat-card__damage-step:nth-child(even) { background: rgba(0,0,0,.05); }
+.icon-chat-card__damage-step--final {
+  border-top: 1px solid rgba(255,255,255,.1);
+  padding-top: 4px;
+  font-weight: bold;
+  background: rgba(176,32,32,.1);
+}
+
+.icon-chat-card__damage-label { color: #7a7060; }
+.icon-chat-card__damage-value { font-weight: bold; color: #e0d0b0; }
+.icon-chat-card__damage-value--negative { color: #60d080; }
+.icon-chat-card__damage-total {
+  font-size: 1.15em;
+  font-weight: bold;
+  text-align: right;
+  color: #ff6060;
+  margin-top: 4px;
+}
+.icon-chat-card__vigor-note    { font-size: 0.78em; color: #60a0d0; margin-left: 6px; }
+
+/* Targets block inside damage card */
+.icon-chat-card__targets {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(200,150,28,0.2);
+}
+.icon-chat-card__targets-header {
+  font-size: 0.78em;
+  color: var(--ic-gold, #c8961c);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.icon-chat-card__target-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  margin: 3px 0;
+  background: rgba(0,0,0,0.15);
+  border: 1px solid rgba(200,150,28,0.15);
+  border-radius: 3px;
+  font-size: 0.82em;
+  flex-wrap: wrap;
+}
+.icon-chat-card__target-img {
+  width: 28px; height: 28px;
+  border-radius: 3px;
+  border: 1px solid rgba(200,150,28,0.3);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.icon-chat-card__target-name { flex: 1 1 auto; min-width: 80px; }
+.icon-chat-card__target-def,
+.icon-chat-card__target-hp {
+  font-size: 0.85em;
+  color: #9a9070;
+  white-space: nowrap;
+}
+
+.icon-chat-btn {
+  padding: 3px 8px;
+  font-size: 0.82em;
+  font-weight: bold;
+  background: rgba(216,48,48,0.25);
+  color: #ffb0b0;
+  border: 1px solid rgba(216,48,48,0.5);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.icon-chat-btn:hover {
+  background: rgba(216,48,48,0.45);
+  color: #fff;
+  transform: scale(1.05);
+}
+.icon-chat-btn:disabled {
+  cursor: not-allowed;
+  transform: none;
+}
+.icon-chat-btn--apply-half {
+  padding: 3px 7px;
+  background: rgba(216,48,48,0.12);
+  color: #e09090;
+}
+
+/* Apply confirmation card */
+.icon-chat-card--apply {
+  padding: 6px 10px;
+  background: rgba(216,48,48,0.08);
+  border-left: 3px solid var(--ic-red, #d83030);
+  font-size: 0.9em;
+}
+.icon-chat-card__wound-notice  {
+  margin-top: 7px;
+  padding: 4px 8px;
+  background: rgba(176,32,32,.1);
+  border: 1px solid var(--ic-red);
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.85em;
+  color: #ff8080;
+}
+.icon-chat-card__fallen-notice {
+  margin-top: 7px;
+  padding: 5px 9px;
+  background: rgba(0,0,0,.18);
+  border: 2px solid #4a4540;
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.88em;
+  font-weight: bold;
+  color: #a0906e;
+  text-align: center;
+  letter-spacing: .04em;
+}
+
+.icon-chat-card--wound  { border-color: #8a4808; background: rgba(192,100,32,.05); }
+.icon-chat-card--fallen { border-color: #3a3528; background: rgba(0,0,0,.12); text-align: center; padding: 10px; }
+
+/* ============================================================
+   45. Save Roll
+   ============================================================ */
+.icon-chat-card--save { border-color: var(--ic-blue); }
+.icon-chat-card--save-success { border-color: #246838; }
+.icon-chat-card--save-failure { border-color: #6a1414; }
+
+/* ============================================================
+   46. Scrollbars (Webkit)
+   ============================================================ */
+.icon.sheet ::-webkit-scrollbar       { width: 5px; }
+.icon.sheet ::-webkit-scrollbar-track { background: var(--ic-bg-deep); }
+.icon.sheet ::-webkit-scrollbar-thumb { background: var(--ic-border-vis); border-radius: 3px; }
+.icon.sheet ::-webkit-scrollbar-thumb:hover { background: var(--ic-border-strong); }
+
+/* ============================================================
+   47. Utility / Legacy
+   ============================================================ */
+.icon-roll { padding: 8px; border-radius: var(--ic-radius); font-size: 0.9em; color: #c0b898; }
+.icon-roll__header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+.icon-roll__dice   { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; flex-wrap: wrap; }
+.icon-die {
+  display: inline-block;
+  width: 28px; height: 28px;
+  line-height: 28px; text-align: center;
+  border: 2px solid #3a3528; border-radius: 5px;
+  font-weight: bold; background: #12161e; color: #8a8070;
+}
+.icon-die--picked  { border-color: #38a058; background: rgba(52,160,88,.1); color: #60d080; }
+.icon-die--d20     { width: 36px; height: 36px; line-height: 36px; border-radius: 7px; }
+.icon-roll__result { font-weight: bold; font-size: 1.1em; color: #e0d0b0; }
+.icon-roll__mod, .icon-roll__total, .icon-roll__vs { font-size: 0.9em; color: #7a7060; }
+
+/* Legend player-scale pill (sheet HP row) */
+.legend-header__hp-row { display: flex; align-items: center; gap: 6px; }
+.legend-header__player-scale {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-left: 10px; padding: 2px 8px;
+  border: 1px solid #5a4830; border-radius: 999px;
+  background: rgba(90, 72, 48, .18);
+  font-size: 0.85em; color: #d0c0a0;
+}
+.legend-header__player-scale-icon { font-size: 0.95em; opacity: .9; }
+.legend-header__player-scale input {
+  width: 36px; padding: 1px 3px;
+  background: transparent; border: none; color: inherit;
+  text-align: center; font-weight: bold;
+}
+.legend-header__player-scale input:focus { outline: 1px solid #8a7040; }
+
+/* ============================================================
+   Macro chat cards — high-contrast dark fantasy
+   ============================================================ */
+.icon-macro-card {
+  background: #0a0a0f;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.icon-macro-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #111118;
+  border-bottom: 2px solid var(--ic-gold);
+  color: var(--ic-gold);
+  font-size: 1.1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.icon-macro-header h3 {
+  margin: 0;
+  font-size: 1em;
+  color: inherit;
+  border: none;
+  letter-spacing: inherit;
+}
+.icon-macro-header i.fas {
+  font-size: 1.1em;
+}
+.icon-macro-body {
+  padding: 10px 12px;
+  color: #e8e0d0;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+.icon-macro-body p { margin: 4px 0; }
+.icon-macro-body h4 {
+  margin: 8px 0 4px;
+  color: var(--ic-gold-bright);
+  font-size: 0.95em;
+  border-bottom: 1px solid var(--ic-border-subtle);
+  padding-bottom: 2px;
+}
+.icon-macro-footer {
+  padding: 6px 12px;
+  background: #0d0d14;
+  border-top: 1px solid var(--ic-border-vis);
+  color: #888;
+  font-size: 0.85em;
+  font-style: italic;
+}
+
+.icon-macro-camp .icon-macro-header     { border-color: #27ae60; color: #27ae60; }
+.icon-macro-interlude .icon-macro-header{ border-color: #8e44ad; color: #c39bd3; }
+.icon-macro-xp .icon-macro-header       { border-color: var(--ic-gold); color: var(--ic-gold); }
+.icon-macro-combat .icon-macro-header   { border-color: #c0392b; color: #e74c3c; }
+
+.icon-macro-list { list-style: none; padding: 0; margin: 6px 0; }
+.icon-macro-list li {
+  padding: 4px 0;
+  border-bottom: 1px solid #1a1a24;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.icon-macro-list li:last-child { border-bottom: none; }
+.icon-macro-list .icon-macro-pc-name {
+  color: #e8e0d0;
+  font-weight: bold;
+}
+.icon-macro-value   { color: var(--ic-gold); font-weight: bold; }
+.icon-macro-success { color: #27ae60; }
+.icon-macro-warning { color: #e67e22; }
+.icon-macro-danger  { color: #c0392b; }
+
+.icon-macro-sub {
+  display: block;
+  color: #888;
+  font-size: 0.82em;
+  margin-top: 2px;
+}
+
+.icon-macro-levelup-alert {
+  background: #1a1500;
+  border: 1px solid var(--ic-gold);
+  border-radius: 4px;
+  padding: 6px 10px;
+  color: var(--ic-gold);
+  font-weight: bold;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* ============================================================
+   Notes tab — single textarea, numbered ideal rows
+   ============================================================ */
+.icon-notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 8px;
+}
+.icon-notes-section .icon-section-header {
+  border-bottom: 2px solid var(--ic-gold-dim);
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+.icon-notes-section .icon-section-header h3 {
+  margin: 0;
+  color: var(--ic-gold);
+  font-size: 1em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+}
+.icon-notes-section .icon-ideals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.icon-notes-section .icon-ideal-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-notes-section .icon-ideal-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  background: rgba(200,150,28,.15);
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: 50%;
+  color: var(--ic-gold-bright);
+  font-weight: bold;
+  font-size: 0.9em;
+  flex-shrink: 0;
+}
+.icon-notes-section .icon-ideal-row input[type="text"] {
+  flex: 1;
+  background: #0d0d14;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: 4px;
+  color: #e8e0d0;
+  padding: 6px 8px;
+  font-size: 0.95em;
+}
+.icon-notes-section .icon-ideal-row input[type="text"]:focus {
+  outline: none;
+  border-color: var(--ic-gold);
+}
+.icon-notes-textarea {
+  width: 100%;
+  min-height: 200px;
+  background: #0d0d14;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: 4px;
+  color: #e8e0d0;
+  padding: 8px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.9em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+.icon-notes-textarea:focus {
+  outline: none;
+  border-color: var(--ic-gold);
+}
+
+/* ============================================================
+   FOE SHEET REFRESH — opzione 6
+   Class-themed accent colors + bigger header + card polish
+   ============================================================ */
+
+/* Per-class accent colors (used via data-foe-class attribute).
+   --foe-accent/dim  = hex for borders/text
+   --foe-accent-rgb  = "r,g,b" triple for use inside rgba() backgrounds */
+.foe-header[data-foe-class="heavy"],
+.icon-tab--foe-main[data-foe-class="heavy"] {
+  --foe-accent:     #c84030;
+  --foe-accent-dim: #6a2418;
+  --foe-accent-rgb: 200,64,48;
+}
+.foe-header[data-foe-class="skirmisher"],
+.icon-tab--foe-main[data-foe-class="skirmisher"] {
+  --foe-accent:     #e07820;
+  --foe-accent-dim: #7a3e10;
+  --foe-accent-rgb: 224,120,32;
+}
+.foe-header[data-foe-class="leader"],
+.icon-tab--foe-main[data-foe-class="leader"] {
+  --foe-accent:     #d8b040;
+  --foe-accent-dim: #6a5418;
+  --foe-accent-rgb: 216,176,64;
+}
+.foe-header[data-foe-class="artillery"],
+.icon-tab--foe-main[data-foe-class="artillery"] {
+  --foe-accent:     #4080d0;
+  --foe-accent-dim: #1f4670;
+  --foe-accent-rgb: 64,128,208;
+}
+.foe-header[data-foe-class="mob"],
+.icon-tab--foe-main[data-foe-class="mob"] {
+  --foe-accent:     #888888;
+  --foe-accent-dim: #444444;
+  --foe-accent-rgb: 136,136,136;
+}
+
+/* Header layout — bigger portrait, accent border */
+.foe-header {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+  padding: 12px;
+  background: linear-gradient(180deg,
+    rgba(var(--foe-accent-rgb, 50,50,50), .25),
+    rgba(0,0,0,.4));
+  border: 1px solid var(--foe-accent-dim, var(--ic-border-subtle));
+  border-left: 4px solid var(--foe-accent, var(--ic-gold));
+  border-radius: var(--ic-radius);
+  margin-bottom: 8px;
+}
+.foe-portrait {
+  grid-row: 1 / span 2;
+  width: 96px;
+  height: 96px;
+  border-radius: var(--ic-radius);
+  border: 2px solid var(--foe-accent, var(--ic-gold-dim));
+  object-fit: cover;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(0,0,0,.6);
+}
+.foe-header .icon-sheet__identity {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+.foe-header .icon-sheet__name {
+  font-size: 1.4em;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--foe-accent, var(--ic-gold-dim));
+  color: var(--foe-accent, var(--ic-text-bright));
+  padding: 2px 4px;
+  text-shadow: 0 1px 3px rgba(0,0,0,.7);
+}
+.foe-header .icon-sheet__name:focus {
+  outline: none;
+  border-bottom-color: var(--foe-accent);
+}
+.foe-header .icon-sheet__badges {
+  margin-top: 0;
+  flex-wrap: wrap;
+}
+
+/* HP bar — full-width, prominent below identity */
+.foe-header__hp {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 4px;
+}
+.foe-header__hp .icon-hp-bar {
+  height: 18px;
+  border: 1px solid var(--foe-accent-dim, var(--ic-border-vis));
+}
+.foe-header__hp .icon-hp-bar__fill {
+  background: linear-gradient(90deg, var(--foe-accent-dim, #6a2418), var(--foe-accent, #c84030));
+  box-shadow: 0 0 8px rgba(216,48,48,.4);
+}
+.foe-header__hp-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: bold;
+  font-size: 0.95em;
+}
+.foe-header__hp-inputs input {
+  width: 60px;
+  text-align: center;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--foe-accent-dim, var(--ic-border-vis));
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-bright);
+  padding: 2px 4px;
+}
+.foe-header__vigor {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85em;
+}
+.foe-header__vigor-label { color: #6fe89a; font-weight: bold; }
+.foe-header__vigor-max   { color: var(--ic-text-dim); }
+.foe-header__vigor input {
+  width: 48px;
+  text-align: center;
+  background: var(--ic-bg-deep);
+  border: 1px solid #27ae6066;
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-bright);
+  padding: 2px 4px;
+}
+
+/* Mob block recolored to use accent */
+.foe-header[data-foe-class="mob"] .foe-header__mob {
+  grid-column: 2;
+  grid-row: 2;
+  background: rgba(136,136,136,.12);
+  border-color: var(--foe-accent-dim);
+}
+.foe-header[data-foe-class="mob"] .foe-header__mob-label { color: var(--foe-accent); }
+
+/* Stat grid — accent borders, hover highlight */
+.icon-tab--foe-main .icon-stats-grid {
+  grid-template-columns: repeat(6, 1fr);
+}
+.icon-tab--foe-main .icon-stat-block {
+  border: 1px solid var(--foe-accent-dim, var(--ic-border-subtle));
+  background: linear-gradient(180deg, rgba(var(--foe-accent-rgb, 50,50,50), .15), transparent);
+  border-radius: var(--ic-radius-sm);
+  padding: 6px 4px;
+  text-align: center;
+  transition: border-color .15s, transform .15s;
+}
+.icon-tab--foe-main .icon-stat-block:hover {
+  border-color: var(--foe-accent, var(--ic-gold));
+  transform: translateY(-1px);
+}
+.icon-tab--foe-main .icon-stat__label {
+  font-size: 0.7em;
+  letter-spacing: .08em;
+  color: var(--foe-accent, var(--ic-text-dim));
+  text-transform: uppercase;
+}
+.icon-tab--foe-main .icon-stat__value {
+  font-size: 1.2em;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: center;
+  color: var(--ic-text-bright);
+  width: 100%;
+}
+
+/* Foe section headers — accent color */
+.icon-tab--foe-main .icon-section__title {
+  color: var(--foe-accent, var(--ic-gold));
+  border-bottom: 1px solid var(--foe-accent-dim, var(--ic-gold-dim));
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+/* Action / Trait / Interrupt cards inside foe-main get accent borders */
+.icon-tab--foe-main .icon-foe-action,
+.icon-tab--foe-main .icon-trait,
+.icon-tab--foe-main .icon-interrupt {
+  border-left: 3px solid var(--foe-accent, var(--ic-gold-dim));
+  background: linear-gradient(90deg,
+    rgba(var(--foe-accent-rgb, 50,50,50), .12),
+    transparent 70%);
+  transition: background .15s, transform .15s;
+}
+.icon-tab--foe-main .icon-foe-action:hover,
+.icon-tab--foe-main .icon-trait:hover,
+.icon-tab--foe-main .icon-interrupt:hover {
+  background: linear-gradient(90deg,
+    rgba(var(--foe-accent-rgb, 50,50,50), .22),
+    transparent 70%);
+}
+
+/* Tags as colored pills */
+.icon-tab--foe-main .icon-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: rgba(var(--foe-accent-rgb, 50,50,50), .35);
+  border: 1px solid var(--foe-accent-dim, var(--ic-border-subtle));
+  color: var(--foe-accent, var(--ic-text-dim));
+  font-size: 0.72em;
+  letter-spacing: .04em;
+  text-transform: lowercase;
+}
+
+/* Roll button — accent color */
+.icon-tab--foe-main .icon-btn--roll {
+  background: var(--foe-accent-dim, var(--ic-bg-light));
+  border: 1px solid var(--foe-accent, var(--ic-gold));
+  color: var(--ic-text-bright);
+  padding: 2px 10px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
+.icon-tab--foe-main .icon-btn--roll:hover {
+  background: var(--foe-accent, var(--ic-gold));
+  color: #000;
+}
+
+/* Foe builder hint — slimmer */
+.icon-tab--foe-main .icon-foe-builder {
+  background: rgba(var(--foe-accent-rgb, 50,50,50), .08);
+  border-left: 3px solid var(--foe-accent, var(--ic-gold-dim));
+  padding: 8px 10px;
+}
+
+/* Tab nav for foe sheet — match PC style */
+.foe-sheet .tabs,
+.icon.sheet[class*="foe"] .tabs {
+  background: var(--ic-bg-deep);
+  border-bottom: 1px solid var(--ic-gold-dim);
+}
+
+/* ============================================================
+   LEGEND SHEET REDESIGN — two-column layout, phase color coding
+   ============================================================ */
+
+.legend-sheet .tabs {
+  background: var(--ic-bg-deep);
+  border-bottom: 1px solid var(--ic-gold-dim);
+}
+
+/* Two-column grid: left = stats + phases, right = traits/actions/etc. */
+.legend-grid {
+  display: grid;
+  grid-template-columns: 45% 55%;
+  gap: 12px;
+  align-items: start;
+}
+.legend-col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+
+/* Stats grid — compact 7-cell line */
+.legend-stats-grid {
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+.legend-stats-grid .icon-stat-block {
+  border: 1px solid var(--ic-gold-dim);
+  background: rgba(200,150,28,.06);
+  border-radius: var(--ic-radius-sm);
+  padding: 4px 2px;
+  text-align: center;
+}
+.legend-stats-grid .icon-stat__label {
+  font-size: 0.62em;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ic-gold);
+}
+.legend-stats-grid .icon-stat__value {
+  width: 100%;
+  font-size: 1.05em;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  text-align: center;
+  color: var(--ic-text-bright);
+}
+
+/* Per-phase color classes — used by .legend-phase--p0/p1/p2 and
+   .legend-card--p0/p1/p2 (traits and actions tied to a phase) */
+.legend-phase--p0,
+.legend-card--p0 { --legend-phase-color: #c84030; --legend-phase-rgb: 200,64,48;  }
+.legend-phase--p1,
+.legend-card--p1 { --legend-phase-color: #d88030; --legend-phase-rgb: 216,128,48; }
+.legend-phase--p2,
+.legend-card--p2 { --legend-phase-color: #d8c040; --legend-phase-rgb: 216,192,64; }
+.legend-phase--p3,
+.legend-card--p3 { --legend-phase-color: #80c040; --legend-phase-rgb: 128,192,64; }
+
+/* Phase cards */
+.legend-phase {
+  border: 1px solid var(--ic-border-subtle);
+  border-left: 4px solid var(--legend-phase-color, var(--ic-gold-dim));
+  border-radius: var(--ic-radius-sm);
+  background: linear-gradient(90deg,
+    rgba(var(--legend-phase-rgb, 100,100,100), .12),
+    transparent 70%);
+  padding: 8px;
+  margin-bottom: 6px;
+  transition: box-shadow .2s, border-color .2s;
+}
+.legend-phase--current {
+  border-color: var(--legend-phase-color, var(--ic-gold));
+  box-shadow: 0 0 12px rgba(var(--legend-phase-rgb, 200,150,28), .35);
+}
+.legend-phase__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.legend-phase__name {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--legend-phase-color, var(--ic-gold-dim));
+  color: var(--legend-phase-color, var(--ic-text-bright));
+  font-weight: bold;
+  font-size: 0.95em;
+  padding: 2px 4px;
+}
+.legend-phase__hp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78em;
+  color: var(--ic-text-dim);
+}
+.legend-phase__hp input {
+  width: 50px;
+  text-align: center;
+}
+.icon-badge--phase-active {
+  background: var(--legend-phase-color, var(--ic-gold));
+  color: #000;
+  font-weight: bold;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 0.65em;
+  letter-spacing: .06em;
+}
+.legend-phase__body {
+  font-size: 0.85em;
+  color: var(--ic-text-normal);
+  margin-top: 4px;
+}
+
+/* Trait / Action / Interrupt / Round Action cards — common chrome.
+   width:100% + box-sizing:border-box ensures cards fill their column. */
+.legend-trait,
+.legend-action,
+.legend-interrupt,
+.legend-round-action {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: 4px;
+  background: #111118;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  transition: border-color .15s;
+}
+.legend-trait:hover,
+.legend-action:hover,
+.legend-interrupt:hover,
+.legend-round-action:hover {
+  border-color: var(--ic-gold-dim);
+}
+
+/* Trait — inherits phase color (or gold default) on the left bar */
+.legend-trait {
+  border-left: 3px solid var(--legend-phase-color, var(--ic-gold));
+}
+.legend-trait--locked { opacity: 0.4; }
+.legend-trait__title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  padding-bottom: 4px;
+  border-bottom: 1px dotted var(--ic-border-subtle);
+  width: 100%;
+}
+.legend-trait__name {
+  flex: 1;
+  font-weight: bold;
+  font-size: 1.05em;
+  background: transparent;
+  border: none;
+  color: var(--ic-gold);
+  padding: 2px 0;
+}
+.legend-trait__name::placeholder { color: rgba(200,150,28,0.4); font-style: italic; }
+.legend-trait__phase-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.legend-trait__phase-row label {
+  font-size: 0.72em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ic-text-dim);
+}
+.legend-trait__body {
+  font-size: 0.88em;
+  color: var(--ic-text-normal);
+  width: 100%;
+}
+.legend-trait textarea {
+  width: 100%;
+  min-height: 60px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+/* Action — header has phase color, hit/miss/area as labeled blocks */
+.legend-action {
+  border-left: 3px solid var(--legend-phase-color, var(--ic-gold-dim));
+}
+.legend-action--locked { opacity: 0.4; }
+.legend-action__header {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0,0,0,.25);
+  padding: 4px 6px;
+  margin: -7px -9px 6px;
+  border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
+  border-bottom: 1px solid var(--ic-border-subtle);
+  flex-wrap: wrap;
+}
+.legend-action__name {
+  flex: 1;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  color: var(--ic-text-bright);
+  min-width: 100px;
+}
+.legend-cost-select,
+.legend-phase-select {
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-normal);
+  font-size: 0.78em;
+  padding: 2px 4px;
+}
+.legend-action__tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.legend-action__tags .icon-tag {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 9px;
+  background: rgba(200,150,28,.18);
+  border: 1px solid var(--ic-gold-dim);
+  color: var(--ic-gold);
+  font-size: 0.7em;
+  text-transform: lowercase;
+}
+.legend-action__effects {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.legend-action__effects label {
+  font-size: 0.72em;
+  color: var(--ic-text-dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.legend-action__effects textarea {
+  width: 100%;
+  min-height: 50px;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 0.84em;
+}
+.legend-action__effects label {
+  display: block;
+  width: 100%;
+}
+.legend-interrupt textarea,
+.legend-round-action textarea {
+  width: 100%;
+  min-height: 50px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+.legend-action__effect {
+  font-size: 0.84em;
+  color: var(--ic-text-normal);
+  margin-bottom: 3px;
+}
+
+/* Interrupt — purple accent */
+.legend-interrupt {
+  border-left: 3px solid #8060c8;
+  background: linear-gradient(90deg, rgba(128,96,200,.10), transparent 60%);
+}
+.legend-interrupt__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.legend-interrupt__name {
+  flex: 1;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dotted var(--ic-border-subtle);
+  color: var(--ic-text-bright);
+}
+.icon-badge--interrupt {
+  background: rgba(128,96,200,.25);
+  border: 1px solid #8060c8;
+  color: #b89cf0;
+  border-radius: 9px;
+  padding: 1px 7px;
+  font-size: 0.7em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.icon-badge--interrupt input {
+  width: 28px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-weight: bold;
+  text-align: center;
+}
+.legend-interrupt__trigger {
+  font-size: 0.82em;
+  color: var(--ic-text-dim);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-interrupt__trigger input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dotted var(--ic-border-subtle);
+  color: var(--ic-text-normal);
+}
+.legend-interrupt__effect { font-size: 0.85em; color: var(--ic-text-normal); }
+
+/* Round Action — blue accent + prominent round number */
+.legend-round-action {
+  border-left: 3px solid #4080c8;
+  background: linear-gradient(90deg, rgba(64,128,200,.10), transparent 60%);
+}
+.legend-round-action__header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.legend-round-action__round {
+  background: #4080c8;
+  color: #000;
+  font-weight: bold;
+  font-size: 0.78em;
+  padding: 2px 8px;
+  border-radius: 9px;
+  letter-spacing: .04em;
+}
+.legend-round-action__name {
+  flex: 1;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dotted var(--ic-border-subtle);
+  color: var(--ic-text-bright);
+}
+.legend-round-action__round-input { width: 50px; text-align: center; }
+.legend-round-action__effect { font-size: 0.85em; color: var(--ic-text-normal); }
+
+/* Notes textareas — taller for legend */
+.legend-notes__textarea {
+  min-height: 120px;
+}
+
+/* ============================================================
+   LEGEND ACTION CARDS — equipped-ability style
+   ============================================================ */
+.icon-legend-action {
+  background: #111118;
+  border: 1px solid var(--ic-border-vis);
+  border-left: 3px solid var(--ic-gold);
+  border-radius: 4px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+.icon-legend-action--locked { opacity: 0.4; }
+.icon-legend-action .icon-ability-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: #0d0d14;
+  border-bottom: 1px solid var(--ic-border-vis);
+}
+.icon-legend-action .icon-ability-name {
+  flex: 1;
+  font-weight: bold;
+  color: #e8e0d0;
+  font-size: 0.95em;
+}
+.icon-legend-action .icon-ability-cost-badge {
+  font-size: 0.7em;
+  background: #1a1a2e;
+  border: 1px solid var(--ic-border-vis);
+  color: #aaa;
+  padding: 2px 6px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.icon-legend-action .icon-ability-phase-badge {
+  font-size: 0.7em;
+  background: #1a1500;
+  border: 1px solid var(--ic-gold);
+  color: var(--ic-gold);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.icon-legend-action .icon-btn-roll {
+  background: #1a1500;
+  border: 1px solid var(--ic-gold);
+  color: var(--ic-gold);
+  padding: 3px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+.icon-legend-action .icon-btn-roll:hover {
+  background: var(--ic-gold);
+  color: #000;
+}
+.icon-legend-action .icon-btn-danger {
+  background: #2a1010;
+  border: 1px solid #6a2418;
+  color: #e08070;
+  padding: 3px 7px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 0.85em;
+}
+.icon-legend-action .icon-btn-danger:hover {
+  background: #6a2418;
+  color: #fff;
+}
+.icon-legend-action .icon-btn-sm { font-size: 0.78em; }
+.icon-legend-action .icon-ability-tags {
+  padding: 5px 10px 0;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.icon-legend-action .icon-ability-tags .icon-tag {
+  background: rgba(200,150,28,.15);
+  border: 1px solid var(--ic-gold-dim);
+  color: var(--ic-gold);
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-size: 0.7em;
+  text-transform: lowercase;
+}
+.icon-legend-action .icon-ability-description {
+  padding: 8px 10px;
+  color: #c8c0b0;
+  font-size: 0.88em;
+  line-height: 1.5;
+  border-bottom: 1px solid #1a1a24;
+}
+.icon-legend-action .icon-ability-description p:last-child { margin-bottom: 0; }
+.icon-legend-action .icon-ability-effects {
+  padding: 6px 10px;
+}
+.icon-legend-action .icon-effect-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin-bottom: 4px;
+  font-size: 0.85em;
+}
+.icon-legend-action .icon-effect-row:last-child { margin-bottom: 0; }
+.icon-legend-action .icon-effect-label {
+  font-size: 0.7em;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 38px;
+  text-align: center;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(0,0,0,.4);
+}
+.icon-legend-action .icon-effect-label.hit  { color: #4ad080; }
+.icon-legend-action .icon-effect-label.miss { color: #f0a050; }
+.icon-legend-action .icon-effect-label.area { color: #5fa8e8; }
+.icon-legend-action .icon-effect-text {
+  color: #c8c0b0;
+  flex: 1;
+}
+.icon-legend-action .icon-effect-text p { margin: 0; }
+.icon-legend-action .icon-action-edit {
+  border-top: 1px solid #1a1a24;
+}
+.icon-legend-action .icon-action-edit summary {
+  padding: 4px 10px;
+  font-size: 0.72em;
+  color: #666;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.icon-legend-action .icon-action-edit summary:hover {
+  color: var(--ic-gold-dim);
+}
+.icon-legend-action .icon-action-edit[open] {
+  padding: 0 10px 8px;
+}
+.icon-legend-action .icon-action-edit label {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  color: var(--ic-text-dim);
+  margin-top: 4px;
+  display: block;
+}
+.icon-legend-action .icon-action-edit textarea,
+.icon-legend-action .icon-action-edit input,
+.icon-legend-action .icon-action-edit select {
+  width: 100%;
+  margin-bottom: 4px;
+  background: #0d0d14;
+  border: 1px solid var(--ic-border-vis);
+  color: #e8e0d0;
+  padding: 4px 6px;
+  border-radius: 3px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+.icon-legend-action .icon-action-edit textarea {
+  min-height: 50px;
+  resize: vertical;
+}
+
+/* Manual phase override select in the legend header */
+.legend-header__phase-control {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-header__phase-control label {
+  font-size: 0.78em;
+  color: var(--ic-text-dim);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-header__phase-control select {
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-bright);
+  padding: 3px 6px;
+  font-size: 0.85em;
+  min-width: 100px;
+}
+.legend-header__phase-control select:hover {
+  border-color: var(--ic-gold);
+}
+
+/* ============================================================
+   Combo Token System
+   ============================================================ */
+
+/* COMBO toggle checkbox — always visible in the equipped abilities header */
+.icon-combo-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border: 1px solid rgba(120, 80, 200, .4);
+  border-radius: var(--ic-radius-sm);
+  font-size: 0.85em;
+  color: #a080d0;
+  cursor: pointer;
+}
+.icon-combo-checkbox:hover {
+  border-color: rgba(160, 100, 255, .7);
+  color: #c0a0ff;
+  background: rgba(100, 60, 180, .2);
+}
+.icon-combo-checkbox--active {
+  background: rgba(100, 60, 200, .35);
+  border-color: #9060e0;
+  color: #d0b0ff;
+  box-shadow: 0 0 6px rgba(140, 80, 255, .5);
+}
+.icon-combo-checkbox input {
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Slot badge for combo abilities */
+.icon-ability-slot__badge--combo {
+  background: rgba(80, 40, 160, .5);
+  color: #b090e0;
+  border: 1px solid rgba(120, 80, 200, .4);
+}
+.icon-ability-slot__badge--combo-active {
+  background: rgba(100, 60, 200, .6) !important;
+  color: #d0b0ff !important;
+  border-color: #9060e0 !important;
+  box-shadow: 0 0 4px rgba(140, 80, 255, .4);
+}
+
+/* Ability preview — when combo is active, strike through normal content */
+.icon-ability-preview--combo-active .icon-ability-preview__desc,
+.icon-ability-preview--combo-active .icon-ability-preview__effect {
+  text-decoration: line-through;
+  opacity: 0.45;
+}
+
+/* Combo block at the bottom of the preview */
+.icon-ability-preview__combo {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: var(--ic-radius-sm);
+  border: 1px solid rgba(120, 80, 200, .3);
+  background: rgba(60, 30, 120, .15);
+  color: var(--ic-text-dim);
+}
+.icon-ability-preview__combo--active {
+  border-color: #9060e0;
+  background: rgba(80, 40, 180, .25);
+  color: var(--ic-text-normal);
+}
+.icon-ability-preview__combo-label {
+  margin: 0 0 4px;
+  font-size: 0.78em;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: #b090e0;
+}
+.icon-ability-preview__combo-text {
+  font-size: 0.9em;
+}
+
+/* Chat card — combo variant */
+.icon-chat-card--combo {
+  border-color: #6040b0;
+  background: rgba(40, 20, 90, .3);
+}
+.icon-badge--combo {
+  background: #5030a0;
+  color: #d0b0ff;
+  border: 1px solid #8060c0;
+}
+
+/* ============================================================
+   Clock +/- buttons (burden / ambition)
+   ============================================================ */
+.icon-clock-adjust {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* ============================================================
+   Loose gear rows
+   ============================================================ */
+.icon-loose-gear-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.icon-loose-gear-row input { flex: 1; }
+
+/* ============================================================
+   Selected-token status panel (PF2e-style, top-right)
+   ============================================================ */
+.icon-token-status-hud {
+  position: fixed;
+  top: 64px;
+  right: 320px;           /* sits left of the (expanded) sidebar */
+  z-index: 60;
+  display: none;
+  max-width: 250px;
+  padding: 8px 10px;
+  background: rgba(20, 16, 12, .92);
+  border: 2px solid var(--ic-gold, #c8961c);
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .6);
+  pointer-events: none;   /* never block canvas interaction */
+  font-family: var(--font-primary, sans-serif);
+}
+.icon-token-status-hud.active { display: block; }
+.icon-token-status-hud__title {
+  font-weight: bold;
+  font-size: 1em;
+  color: var(--ic-gold, #e0c068);
+  margin-bottom: 6px;
+  text-align: center;
+  border-bottom: 1px solid rgba(200, 150, 28, .4);
+  padding-bottom: 4px;
+}
+.icon-token-status-hud__list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.icon-token-status-hud__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.icon-token-status-hud__item img {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border: none;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .8));
+}
+.icon-token-status-hud__name {
+  font-size: 0.95em;
+  color: #f0e6d0;
+  font-weight: 600;
+}
+.icon-token-status-hud__count {
+  min-width: 18px;
+  padding: 0 5px;
+  font-size: 0.85em;
+  font-weight: bold;
+  text-align: center;
+  color: #1a140c;
+  background: var(--ic-gold, #c8961c);
+  border-radius: 9px;
+}
+.icon-token-status-hud__controls {
+  margin-left: auto;
+  display: flex;
+  gap: 3px;
+}
+/* Only the buttons capture clicks, so the panel body never blocks the canvas. */
+.icon-token-status-hud__controls button {
+  pointer-events: auto;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  line-height: 1;
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #f0e6d0;
+  background: rgba(80, 60, 30, .85);
+  border: 1px solid rgba(200, 150, 28, .5);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.icon-token-status-hud__controls button:hover {
+  background: var(--ic-gold, #c8961c);
+  color: #1a140c;
+}
+.icon-token-status-hud__controls button[data-act="remove"]:hover {
+  background: #b03020;
+  border-color: #d05040;
+  color: #fff;
+}

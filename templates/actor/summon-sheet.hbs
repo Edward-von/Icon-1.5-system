@@ -1,0 +1,110 @@
+{{!-- summon-sheet.hbs --}}
+<div class="icon-sheet summon-sheet">
+  <header class="icon-sheet__header summon-header">
+    <img class="icon-sheet__portrait icon-sheet__portrait--sm"
+         src="{{actor.img}}" alt="{{actor.name}}"
+         data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+    <div class="icon-sheet__identity">
+      <input class="icon-sheet__name" type="text" name="name"
+             value="{{actor.name}}" {{#unless isEditable}}disabled{{/unless}}>
+      <div class="icon-sheet__badges">
+        {{#if system.intangible}}
+          <span class="icon-badge icon-badge--intangible">Intangible</span>
+        {{else}}
+          <span class="icon-badge">Tangible</span>
+        {{/if}}
+        {{#if isEditable}}
+          <button type="button" class="icon-btn" data-action="toggleIntangible">
+            Toggle Intangible
+          </button>
+        {{/if}}
+        <span class="icon-badge">Size {{system.size}}</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="summon-sheet__body">
+
+    {{#if isEditable}}
+      <p class="summon-sheet__drop-hint">
+        💡 Drop an <strong>Actor</strong> here to set the summoner, or drop an
+        <strong>Ability</strong> item to auto-fill the Source Ability and
+        Summon Action text.
+      </p>
+    {{/if}}
+
+    <div class="icon-section">
+      <div class="icon-field-row">
+        <label>Summoner</label>
+        <span>{{summonerName}}</span>
+        {{#if isEditable}}
+          <input type="text" name="system.summonerActorId"
+                 value="{{system.summonerActorId}}" placeholder="Actor ID (or drop an Actor)">
+        {{/if}}
+      </div>
+      <div class="icon-field-row">
+        <label>Source Ability</label>
+        <input type="text" name="system.sourceAbilityName"
+               value="{{system.sourceAbilityName}}" placeholder="Ability name (or drop an Item)"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label>Speed</label>
+        <input type="number" name="system.speed" value="{{system.speed}}"
+               min="0" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      {{#unless system.intangible}}
+        <div class="icon-field-row">
+          <label>HP</label>
+          <input type="number" name="system.hp.value" value="{{system.hp.value}}" min="0"
+                 {{#unless isEditable}}disabled{{/unless}}>
+          /
+          <input type="number" name="system.hp.max" value="{{system.hp.max}}" min="0"
+                 {{#unless isEditable}}disabled{{/unless}}>
+        </div>
+        <div class="icon-field-row">
+          <label>Defense</label>
+          <input type="number" name="system.defense" value="{{system.defense}}"
+                 {{#unless isEditable}}disabled{{/unless}}>
+        </div>
+      {{/unless}}
+    </div>
+
+    <div class="icon-section">
+      <div class="icon-section__header">
+        <h3 class="icon-section__title">Summon Action</h3>
+        {{#if hasAction}}
+          <button type="button" class="icon-btn icon-btn--roll"
+                  data-action="rollSummonAttack"
+                  title="Roll attack">⚔ Attack</button>
+          {{#if dealsDamage}}
+            <button type="button" class="icon-btn icon-btn--roll"
+                    data-action="rollSummonDamage"
+                    title="Roll damage">💥 Damage</button>
+          {{/if}}
+        {{/if}}
+      </div>
+      <div class="icon-editor-wrap">{{{enrichedSummonAction}}}</div>
+      {{#if isEditable}}
+        <textarea name="system.summonAction" class="icon-editor">{{system.summonAction}}</textarea>
+      {{/if}}
+    </div>
+
+    <div class="icon-section">
+      <h3 class="icon-section__title">Passive Effect</h3>
+      <div class="icon-editor-wrap">{{{enrichedSummonEffect}}}</div>
+      {{#if isEditable}}
+        <textarea name="system.summonEffect" class="icon-editor">{{system.summonEffect}}</textarea>
+      {{/if}}
+    </div>
+
+    <div class="icon-section">
+      <h3 class="icon-section__title">Notes</h3>
+      <div class="icon-editor-wrap">{{{enrichedNotes}}}</div>
+      {{#if isEditable}}
+        <textarea name="system.notes" class="icon-editor">{{system.notes}}</textarea>
+      {{/if}}
+    </div>
+
+  </section>
+</div>

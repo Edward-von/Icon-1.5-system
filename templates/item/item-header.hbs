@@ -1,0 +1,26 @@
+{{!-- item-header.hbs --}}
+<header class="icon-sheet__header icon-item-header">
+  <img class="icon-sheet__portrait icon-sheet__portrait--sm"
+       src="{{item.img}}" alt="{{item.name}}"
+       data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+  <div class="icon-sheet__identity">
+    <input class="icon-sheet__name" type="text" name="name"
+           value="{{item.name}}" {{#unless isEditable}}disabled{{/unless}}>
+    <div class="icon-sheet__badges">
+      <span class="icon-badge icon-badge--type">{{itemType}}</span>
+      {{!-- class badge for job-related items --}}
+      {{#if system.class}}
+        <span class="icon-badge icon-class--{{system.class}}">{{system.class}}</span>
+      {{/if}}
+      {{#if system.jobName}}
+        <span class="icon-badge">{{system.jobName}}</span>
+      {{/if}}
+      {{#if system.chapter}}
+        <span class="icon-badge">Ch {{system.chapter}}</span>
+      {{/if}}
+      {{#if system.bondName}}
+        <span class="icon-badge">{{system.bondName}}</span>
+      {{/if}}
+    </div>
+  </div>
+</header>

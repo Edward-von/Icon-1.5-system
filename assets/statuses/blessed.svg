@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#1a1408" stroke="#c09020" stroke-width="4"/>
+  <circle cx="50" cy="50" r="30" fill="#c09020" opacity="0.15"/>
+  <!-- Four-point blessing sparkle -->
+  <path d="M50 18 C53 40 60 47 82 50 C60 53 53 60 50 82 C47 60 40 53 18 50 C40 47 47 40 50 18 Z"
+        fill="#e8c030" stroke="#f0d850" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="50" cy="50" r="6" fill="#fff4c0"/>
+  <!-- Small accent sparkles -->
+  <path d="M26 26 L28 32 L34 34 L28 36 L26 42 L24 36 L18 34 L24 32 Z" fill="#f0d850" opacity="0.85"/>
+  <path d="M74 70 L75.5 74.5 L80 76 L75.5 77.5 L74 82 L72.5 77.5 L68 76 L72.5 74.5 Z" fill="#f0d850" opacity="0.85"/>
+</svg>

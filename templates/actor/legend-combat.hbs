@@ -1,0 +1,339 @@
+{{!-- legend-combat.hbs — Stats & Abilities tab for Legends.
+     Two-column redesign: stats + phases on the left, traits/actions/
+     interrupts/round-actions on the right. Description fields show only
+     the editable textarea when in edit mode (no duplicate enriched
+     preview), and only the rendered preview when read-only. --}}
+<section class="tab icon-tab icon-tab--legend-main {{tab.cssClass}}" data-tab="main" data-group="primary">
+
+  <div class="legend-grid">
+
+    {{!-- =========================== LEFT COLUMN =========================== --}}
+    <div class="legend-col legend-col--left">
+
+      {{!-- Stats grid --}}
+      <div class="icon-section">
+        <h3 class="icon-section__title">Stats</h3>
+        <div class="icon-stats-grid legend-stats-grid">
+          <div class="icon-stat-block"><span class="icon-stat__label">VIT</span>
+            <input class="icon-stat__value" type="number" name="system.vit"
+                   value="{{system.vit}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">DEF</span>
+            <input class="icon-stat__value" type="number" name="system.defense"
+                   value="{{system.defense}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">SPD</span>
+            <input class="icon-stat__value" type="number" name="system.speed"
+                   value="{{system.speed}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">ARM</span>
+            <input class="icon-stat__value" type="number" name="system.armor"
+                   value="{{system.armor}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">FRAY</span>
+            <input class="icon-stat__value" type="number" name="system.fray"
+                   value="{{system.fray}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">[D]</span>
+            <input class="icon-stat__value icon-stat__value--sm" type="text" name="system.damagedie"
+                   value="{{system.damagedie}}" {{#unless isEditable}}disabled{{/unless}}></div>
+          <div class="icon-stat-block"><span class="icon-stat__label">RES</span>
+            <input class="icon-stat__value" type="number" name="system.resolvePool"
+                   value="{{system.resolvePool}}" {{#unless isEditable}}disabled{{/unless}}></div>
+        </div>
+      </div>
+
+      {{!-- Phases --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Phases</h3>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addPhase">+ Phase</button>
+          {{/if}}
+        </div>
+        {{#each enrichedPhases as |phase|}}
+          <div class="legend-phase legend-phase--p{{phase.i}} {{#if phase.isCurrent}}legend-phase--current{{/if}}">
+            <div class="legend-phase__header">
+              <input class="legend-phase__name" type="text" name="system.phases.{{phase.i}}.label"
+                     value="{{phase.label}}" placeholder="Phase name"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              <span class="legend-phase__hp">HP ≤
+                <input type="number" name="system.phases.{{phase.i}}.hpThreshold"
+                       value="{{phase.hpThreshold}}" min="0"
+                       {{#unless ../isEditable}}disabled{{/unless}}>
+              </span>
+              {{#if phase.isCurrent}}<span class="icon-badge icon-badge--phase-active">ACTIVE</span>{{/if}}
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removePhase" data-index="{{phase.i}}">✕</button>
+              {{/if}}
+            </div>
+            {{#if ../isEditable}}
+              <textarea name="system.phases.{{phase.i}}.description" class="icon-editor"
+                        placeholder="Phase description (plain text)">{{phase.description}}</textarea>
+            {{else}}
+              <div class="legend-phase__body">{{{phase.enrichedDescription}}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    {{!-- =========================== RIGHT COLUMN =========================== --}}
+    <div class="legend-col legend-col--right">
+
+      {{!-- Traits --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Traits</h3>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addTrait">+ Trait</button>
+          {{/if}}
+        </div>
+        {{#each enrichedTraits as |trait|}}
+          <div class="legend-trait {{#unless trait.isActive}}legend-trait--locked{{/unless}} legend-card--p{{trait.phaseIndex}}">
+            {{!-- Title row: trait name as bold header + remove × on the right --}}
+            <div class="legend-trait__title-row">
+              <input class="legend-trait__name" type="text" name="system.traits.{{trait.i}}.name"
+                     value="{{trait.name}}" placeholder="Trait name"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removeTrait" data-index="{{trait.i}}">✕</button>
+              {{/if}}
+            </div>
+            {{!-- Phase selector row, BELOW the title --}}
+            <div class="legend-trait__phase-row">
+              <label>Active in:</label>
+              <select class="legend-phase-select" name="system.traits.{{trait.i}}.phaseIndex"
+                      {{#unless ../isEditable}}disabled{{/unless}}>
+                <option value="" {{#unless trait.phaseIndex}}selected{{/unless}}>All phases</option>
+                {{#each ../system.phases as |p pi|}}
+                  <option value="{{pi}}" {{#icon-eq pi ../trait.phaseIndex}}selected{{/icon-eq}}>{{p.label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{#if ../isEditable}}
+              <textarea name="system.traits.{{trait.i}}.description" class="icon-editor"
+                        placeholder="Trait description (plain text)">{{trait.description}}</textarea>
+            {{else}}
+              <div class="legend-trait__body">{{{trait.enrichedDescription}}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+
+      {{!-- Actions — equipped-ability style cards --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Actions</h3>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addAction">+ Action</button>
+          {{/if}}
+        </div>
+        {{#each enrichedActions as |action|}}
+          <div class="icon-legend-action {{#unless action.isActive}}icon-legend-action--locked{{/unless}}">
+            <div class="icon-ability-header">
+              <span class="icon-ability-name">{{action.name}}</span>
+              <span class="icon-ability-cost-badge">{{action.cost}}</span>
+              <span class="icon-ability-phase-badge">{{action.phaseLabel}}</span>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn-roll"
+                        data-action="rollAction" data-action-index="{{action.i}}"
+                        title="Roll attack">
+                  <i class="fas fa-dice-d20"></i>
+                </button>
+                {{#if action.dealsDamage}}
+                  <button type="button" class="icon-btn-roll"
+                          data-action="rollLegendDamage" data-action-index="{{action.i}}"
+                          title="Roll damage">
+                    <i class="fas fa-burst"></i>
+                  </button>
+                {{/if}}
+                <button type="button" class="icon-btn-danger icon-btn-sm"
+                        data-action="removeAction" data-index="{{action.i}}"
+                        title="Remove action">
+                  <i class="fas fa-times"></i>
+                </button>
+              {{/if}}
+            </div>
+
+            {{#if action.tags.length}}
+              <div class="icon-ability-tags">
+                {{#each action.tags as |tag|}}
+                  <span class="icon-tag">{{tag}}</span>
+                {{/each}}
+              </div>
+            {{/if}}
+
+            {{#if action.description}}
+              <div class="icon-ability-description">{{{action.enrichedDesc}}}</div>
+            {{/if}}
+
+            <div class="icon-ability-effects">
+              {{#if action.hitEffect}}
+                <div class="icon-effect-row">
+                  <span class="icon-effect-label hit">HIT</span>
+                  <span class="icon-effect-text">{{{action.enrichedHit}}}</span>
+                </div>
+              {{/if}}
+              {{#if action.missEffect}}
+                <div class="icon-effect-row">
+                  <span class="icon-effect-label miss">MISS</span>
+                  <span class="icon-effect-text">{{{action.enrichedMiss}}}</span>
+                </div>
+              {{/if}}
+              {{#if action.areaEffect}}
+                <div class="icon-effect-row">
+                  <span class="icon-effect-label area">AREA</span>
+                  <span class="icon-effect-text">{{{action.enrichedArea}}}</span>
+                </div>
+              {{/if}}
+            </div>
+
+            {{#if ../isEditable}}
+              <details class="icon-action-edit" data-open-key="action-edit-{{action.i}}">
+                <summary>Edit</summary>
+                <input type="text" name="system.actions.{{action.i}}.name"
+                       value="{{action.name}}" placeholder="Action name">
+                <select name="system.actions.{{action.i}}.cost">
+                  <option value="1action"  {{#icon-eq action.cost "1action"}}selected{{/icon-eq}}>1 action</option>
+                  <option value="2actions" {{#icon-eq action.cost "2actions"}}selected{{/icon-eq}}>2 actions</option>
+                  <option value="free"     {{#icon-eq action.cost "free"}}selected{{/icon-eq}}>Free</option>
+                </select>
+                <select name="system.actions.{{action.i}}.phaseIndex">
+                  <option value="" {{#unless action.phaseIndex}}selected{{/unless}}>All phases</option>
+                  {{#each ../system.phases as |p pi|}}
+                    <option value="{{pi}}" {{#icon-eq pi ../action.phaseIndex}}selected{{/icon-eq}}>{{p.label}}</option>
+                  {{/each}}
+                </select>
+                <label>Description</label>
+                <textarea name="system.actions.{{action.i}}.description"
+                          placeholder="Main descriptive text">{{action.description}}</textarea>
+                <label>Hit effect</label>
+                <textarea name="system.actions.{{action.i}}.hitEffect"
+                          placeholder="On hit effect">{{action.hitEffect}}</textarea>
+                <label>Miss effect</label>
+                <textarea name="system.actions.{{action.i}}.missEffect"
+                          placeholder="On miss effect">{{action.missEffect}}</textarea>
+                <label>Area effect</label>
+                <textarea name="system.actions.{{action.i}}.areaEffect"
+                          placeholder="Area effect">{{action.areaEffect}}</textarea>
+
+                <fieldset class="icon-damage-config">
+                  <legend>Damage</legend>
+                  <label>Deals damage
+                    <select name="system.actions.{{action.i}}.damageMode">
+                      <option value="none"     {{#icon-eq action.damageMode "none"}}selected{{/icon-eq}}>No</option>
+                      <option value="hit"      {{#icon-eq action.damageMode "hit"}}selected{{/icon-eq}}>On hit</option>
+                      <option value="hit-miss" {{#icon-eq action.damageMode "hit-miss"}}selected{{/icon-eq}}>On hit and miss</option>
+                    </select>
+                  </label>
+                  {{#unless (icon-eq action.damageMode "none")}}
+                    <div class="icon-damage-config__row">
+                      <strong>Hit:</strong>
+                      <label>Dice ([D])
+                        <input type="number" min="0" style="width:60px"
+                               name="system.actions.{{action.i}}.damageHitDice"
+                               value="{{action.damageHitDice}}">
+                      </label>
+                      <label>
+                        <input type="checkbox" name="system.actions.{{action.i}}.damageHitFray"
+                               {{#if action.damageHitFray}}checked{{/if}}>
+                        + fray
+                      </label>
+                    </div>
+                  {{/unless}}
+                  {{#if (icon-eq action.damageMode "hit-miss")}}
+                    <div class="icon-damage-config__row">
+                      <strong>Miss:</strong>
+                      <label>Dice ([D])
+                        <input type="number" min="0" style="width:60px"
+                               name="system.actions.{{action.i}}.damageMissDice"
+                               value="{{action.damageMissDice}}">
+                      </label>
+                      <label>
+                        <input type="checkbox" name="system.actions.{{action.i}}.damageMissFray"
+                               {{#if action.damageMissFray}}checked{{/if}}>
+                        + fray
+                      </label>
+                    </div>
+                  {{/if}}
+                </fieldset>
+              </details>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+
+      {{!-- Interrupts --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Interrupts</h3>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addInterrupt">+ Interrupt</button>
+          {{/if}}
+        </div>
+        {{#each enrichedInterrupts as |interrupt|}}
+          <div class="legend-interrupt">
+            <div class="legend-interrupt__header">
+              <input class="legend-interrupt__name" type="text" name="system.interrupts.{{interrupt.i}}.name"
+                     value="{{interrupt.name}}" placeholder="Interrupt name"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              <span class="icon-badge icon-badge--interrupt">Interrupt
+                <input type="number" name="system.interrupts.{{interrupt.i}}.limit"
+                       value="{{interrupt.limit}}" min="0"
+                       {{#unless ../isEditable}}disabled{{/unless}}>
+              </span>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removeInterrupt" data-index="{{interrupt.i}}">✕</button>
+              {{/if}}
+            </div>
+            <div class="legend-interrupt__trigger">
+              <strong>Trigger:</strong>
+              <input type="text" name="system.interrupts.{{interrupt.i}}.trigger"
+                     value="{{interrupt.trigger}}" placeholder="Trigger condition"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+            </div>
+            {{#if ../isEditable}}
+              <textarea name="system.interrupts.{{interrupt.i}}.effect" class="icon-editor"
+                        placeholder="Interrupt effect">{{interrupt.effect}}</textarea>
+            {{else}}
+              <div class="legend-interrupt__effect">{{{interrupt.enrichedEffect}}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+
+      {{!-- Round Actions --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Round Actions</h3>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addRoundAction">+ Round Action</button>
+          {{/if}}
+        </div>
+        {{#each enrichedRoundActions as |ra|}}
+          <div class="legend-round-action">
+            <div class="legend-round-action__header">
+              <span class="legend-round-action__round">R{{ra.roundNumber}}+</span>
+              <input class="legend-round-action__name" type="text" name="system.roundActions.{{ra.i}}.name"
+                     value="{{ra.name}}" placeholder="Round action name"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              {{#if ../isEditable}}
+                <input class="legend-round-action__round-input" type="number"
+                       name="system.roundActions.{{ra.i}}.roundNumber"
+                       value="{{ra.roundNumber}}" min="1" title="Triggers from this round onwards">
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removeRoundAction" data-index="{{ra.i}}">✕</button>
+              {{/if}}
+            </div>
+            {{#if ../isEditable}}
+              <textarea name="system.roundActions.{{ra.i}}.effect" class="icon-editor"
+                        placeholder="Effect">{{ra.effect}}</textarea>
+            {{else}}
+              <div class="legend-round-action__effect">{{{ra.enrichedEffect}}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+
+</section>

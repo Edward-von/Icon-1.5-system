@@ -1,0 +1,23 @@
+{{!-- templates/chat/save-roll.hbs --}}
+<div class="icon-chat-card icon-chat-card--save
+            {{#if ongoing}}icon-chat-card--save-failure
+            {{else if success}}icon-chat-card--save-success
+            {{else}}icon-chat-card--save-failure{{/if}}">
+  <div class="icon-chat-card__header">
+    <strong>Save vs {{statusLabel}}</strong>
+    {{#if ongoing}}<span class="icon-badge icon-badge--ongoing">Ongoing+</span>{{/if}}
+  </div>
+  <div class="icon-chat-card__dice">
+    <span class="icon-chat-die icon-chat-die--d20">{{total}}</span>
+    <span class="icon-chat-card__vs">vs 10</span>
+  </div>
+  <div class="icon-chat-card__result">
+    {{#if ongoing}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">Cannot Save (Ongoing+)</strong>
+    {{else if success}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--hit">Saved! {{statusLabel}} cleared.</strong>
+    {{else}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">Failed — {{statusLabel}} persists.</strong>
+    {{/if}}
+  </div>
+</div>

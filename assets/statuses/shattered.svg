@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#1a0808" stroke="#a02020" stroke-width="4"/>
+  <polygon points="50,50 28,18 50,32" fill="#c03030" opacity="0.95"/>
+  <polygon points="50,50 72,18 84,46" fill="#902020" opacity="0.9"/>
+  <polygon points="50,50 84,64 68,82" fill="#c03030" opacity="0.9"/>
+  <polygon points="50,50 28,82 16,58" fill="#902020" opacity="0.9"/>
+  <polygon points="50,50 16,44 22,22" fill="#c03030" opacity="0.8"/>
+  <polygon points="50,50 78,28 82,52" fill="#801818" opacity="0.75"/>
+  <polygon points="50,50 56,84 32,80" fill="#c03030" opacity="0.85"/>
+  <circle cx="50" cy="50" r="11" fill="#1a0808"/>
+  <line x1="50" y1="39" x2="50" y2="16" stroke="#ff4040" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="59" y1="43" x2="74" y2="26" stroke="#c03030" stroke-width="2" stroke-linecap="round"/>
+</svg>

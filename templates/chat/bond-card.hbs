@@ -1,0 +1,37 @@
+{{!-- templates/chat/bond-card.hbs — Show in Chat for a Bond (special ability,
+      second wind, ideals, gambit, description). --}}
+<div class="icon-chat-card icon-chat-card--bond">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{bond.name}}</strong>
+    {{#if bond.effortMax}}<span class="icon-badge">Effort {{bond.effortMax}}</span>{{/if}}
+  </div>
+
+  {{#if bond.primaryActions.length}}
+    <div class="icon-chat-card__tags">
+      <em>Primary:</em>
+      {{#each bond.primaryActions as |a|}}<span class="icon-badge icon-badge--primary">{{a}}</span>{{/each}}
+    </div>
+  {{/if}}
+
+  {{#if bond.secondWindTrigger}}
+    <p><strong>Second Wind:</strong> {{bond.secondWindTrigger}}</p>
+  {{/if}}
+
+  {{#if bond.ideals.length}}
+    <p><strong>Ideals:</strong> {{#each bond.ideals as |id|}}{{id}}{{#unless @last}}; {{/unless}}{{/each}}</p>
+  {{/if}}
+
+  {{#if bond.special}}
+    <p><strong>Special Ability:</strong></p>
+    <div class="icon-chat-card__desc">{{{bond.special}}}</div>
+  {{/if}}
+
+  {{#if bond.gambit}}
+    <p><strong>Gambit Power:</strong></p>
+    <div class="icon-chat-card__desc">{{{bond.gambit}}}</div>
+  {{/if}}
+
+  {{#if bond.description}}
+    <div class="icon-chat-card__desc">{{{bond.description}}}</div>
+  {{/if}}
+</div>

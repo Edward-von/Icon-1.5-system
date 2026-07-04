@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#100c08" stroke="#b08030" stroke-width="4"/>
+  <!-- ascending terrain steps -->
+  <path d="M22 76 L40 76 L40 60 L58 60 L58 44 L80 44" fill="none" stroke="#7a6848" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- up arrow -->
+  <path d="M50 18 L66 40 L56 40 L56 56 L44 56 L44 40 L34 40 Z" fill="#e8c040" stroke="#f0d860" stroke-width="2" stroke-linejoin="round"/>
+</svg>

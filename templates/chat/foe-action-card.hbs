@@ -1,0 +1,17 @@
+{{!-- templates/chat/foe-action-card.hbs — Show in Chat for a foe action --}}
+<div class="icon-chat-card icon-chat-card--foe-action">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{a.name}}</strong>
+    {{#if foeName}}<span class="icon-badge">{{foeName}}</span>{{/if}}
+    {{#if a.cost}}<span class="icon-badge">{{a.cost}}</span>{{/if}}
+  </div>
+  {{#if a.tags.length}}
+    <div class="icon-chat-card__tags">
+      {{#each a.tags as |tag|}}<span class="icon-tag icon-tag--small">{{tag}}</span>{{/each}}
+    </div>
+  {{/if}}
+  {{#if a.description}}<div class="icon-chat-card__desc">{{{a.description}}}</div>{{/if}}
+  {{#if a.hitEffect}}<p><strong>Hit:</strong> {{{a.hitEffect}}}</p>{{/if}}
+  {{#if a.missEffect}}<p><strong>Miss:</strong> {{{a.missEffect}}}</p>{{/if}}
+  {{#if a.areaEffect}}<p><strong>Area:</strong> {{{a.areaEffect}}}</p>{{/if}}
+</div>

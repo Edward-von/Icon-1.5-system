@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#0a1018" stroke="#3a78c0" stroke-width="4"/>
+  <!-- d6 die face -->
+  <rect x="28" y="28" width="44" height="44" rx="8" fill="#16263c" stroke="#5a9ad8" stroke-width="3"/>
+  <!-- five pips -->
+  <circle cx="40" cy="40" r="4.5" fill="#9fd0ff"/>
+  <circle cx="60" cy="40" r="4.5" fill="#9fd0ff"/>
+  <circle cx="50" cy="50" r="4.5" fill="#e8f2ff"/>
+  <circle cx="40" cy="60" r="4.5" fill="#9fd0ff"/>
+  <circle cx="60" cy="60" r="4.5" fill="#9fd0ff"/>
+</svg>

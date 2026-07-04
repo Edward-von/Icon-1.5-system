@@ -1,0 +1,13 @@
+{{!-- templates/chat/bond-power-card.hbs — Show in Chat for a bond power --}}
+<div class="icon-chat-card icon-chat-card--bond-power">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{bp.name}}</strong>
+    {{#if bp.bondName}}<span class="icon-badge">{{bp.bondName}}</span>{{/if}}
+    {{#if bp.isGambit}}<span class="icon-badge icon-badge--primary">Gambit</span>{{/if}}
+    {{#if bp.effortCost}}<span class="icon-badge">{{bp.effortCost}}e</span>{{/if}}
+    {{#if bp.limitPerSession}}<span class="icon-badge">{{bp.limitPerSession}}/session</span>{{/if}}
+  </div>
+  {{#if bp.description}}
+    <div class="icon-chat-card__desc">{{{bp.description}}}</div>
+  {{/if}}
+</div>

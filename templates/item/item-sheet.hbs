@@ -1,0 +1,71 @@
+{{!-- item-sheet.hbs — Generic item sheet (Phase 2 adds type-conditional panels) --}}
+<div class="icon-sheet icon-item-sheet">
+  <header class="icon-sheet__header">
+    <img src="{{item.img}}" alt="{{item.name}}" data-edit="img">
+    <div class="icon-sheet__identity">
+      <input type="text" name="name" value="{{item.name}}">
+      <span class="icon-badge">{{itemType}}</span>
+    </div>
+  </header>
+
+  <section class="icon-sheet__body">
+    {{!-- Common: description --}}
+    {{#if system.description}}
+      <div class="icon-field">
+        <label>Description</label>
+        {{editor system.description target="system.description" button=true editable=true}}
+      </div>
+    {{/if}}
+
+    {{!-- ability / limit-break --}}
+    {{#icon-eq itemType "ability"}}
+      <div class="icon-field-row">
+        <label>Job</label><input type="text" name="system.jobName" value="{{system.jobName}}">
+        <label>Class</label><input type="text" name="system.class" value="{{system.class}}">
+        <label>Chapter</label><input type="number" name="system.chapter" value="{{system.chapter}}" min="1" max="3">
+        <label>Cost</label><input type="text" name="system.cost" value="{{system.cost}}">
+      </div>
+      <div class="icon-field"><label>Hit Effect</label>
+        {{editor system.hitEffect target="system.hitEffect" button=true editable=true}}
+      </div>
+      <div class="icon-field"><label>Miss Effect</label>
+        {{editor system.missEffect target="system.missEffect" button=true editable=true}}
+      </div>
+    {{/icon-eq}}
+
+    {{#icon-eq itemType "limit-break"}}
+      <div class="icon-field-row">
+        <label>Job</label><input type="text" name="system.jobName" value="{{system.jobName}}">
+        <label>Resolve Cost</label><input type="number" name="system.resolveCost" value="{{system.resolveCost}}" min="1">
+      </div>
+      <div class="icon-field"><label>Effect</label>
+        {{editor system.effect target="system.effect" button=true editable=true}}
+      </div>
+      <div class="icon-field"><label>Ultimate (Ch3)</label>
+        {{editor system.ultimate target="system.ultimate" button=true editable=true}}
+      </div>
+    {{/icon-eq}}
+
+    {{!-- relic --}}
+    {{#icon-eq itemType "relic"}}
+      <div class="icon-field-row">
+        <label>Invoke Type</label><input type="text" name="system.invokeType" value="{{system.invokeType}}">
+        <label>Invoke Condition</label><input type="text" name="system.invokeCondition" value="{{system.invokeCondition}}">
+      </div>
+      <div class="icon-field"><label>Rank I</label>
+        {{editor system.rank1.description target="system.rank1.description" button=true editable=true}}
+      </div>
+      <div class="icon-field"><label>Rank II ({{system.rank2.dustCost}} Dust)</label>
+        {{editor system.rank2.description target="system.rank2.description" button=true editable=true}}
+      </div>
+      <div class="icon-field"><label>Rank III ({{system.rank3.dustCost}} Dust)</label>
+        {{editor system.rank3.description target="system.rank3.description" button=true editable=true}}
+      </div>
+      <div class="icon-field"><label>Aspect ({{system.aspect.dustCost}} Dust / Quest)</label>
+        {{editor system.aspect.description target="system.aspect.description" button=true editable=true}}
+      </div>
+    {{/icon-eq}}
+
+    <p class="icon-stub-notice">Full item fields — Phase 2</p>
+  </section>
+</div>

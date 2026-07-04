@@ -1,0 +1,452 @@
+{{!-- icon-narrative.hbs — 2-column compact layout (55/45) --}}
+<section class="tab icon-tab icon-tab--narrative {{tab.cssClass}}" data-tab="narrative" data-group="primary">
+
+  <div class="icon-narrative-grid">
+
+    {{!-- ==================================================== --}}
+    {{!-- LEFT COLUMN (55%): Bond / Burdens / Ambitions / Gear  --}}
+    {{!-- ==================================================== --}}
+    <div class="icon-narrative-col icon-narrative-col--left">
+
+      {{!-- Bond + Bond Powers --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Bond</h3>
+        </div>
+
+        {{#if bondItem}}
+          <div class="icon-bond-slot icon-bond-slot--filled" data-item-id="{{bondItem.id}}">
+            <div class="icon-bond-slot__header">
+              {{#if bondItem.img}}
+                <img src="{{bondItem.img}}" class="icon-bond-slot__img" alt="">
+              {{/if}}
+              <span class="icon-bond-slot__name">{{bondItem.name}}</span>
+              {{#if bondItem.effortMax}}
+                <span class="icon-badge">Effort {{bondItem.effortMax}}</span>
+              {{/if}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                      data-action="bondShowInChat" data-item-id="{{bondItem.id}}"
+                      title="Post bond (special ability, second wind, ideals, description) to chat"
+                      onclick="event.preventDefault()">💬</button>
+              {{#if isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                        data-action="removeItem" data-item-id="{{bondItem.id}}"
+                        title="Remove bond"
+                        onclick="event.preventDefault()">×</button>
+              {{/if}}
+            </div>
+            {{#if bondItem.primaryActions.length}}
+              <div class="icon-bond-slot__primary">
+                Primary: {{#each bondItem.primaryActions}}<span class="icon-badge icon-badge--primary">{{capitalize this}}</span>{{/each}}
+              </div>
+            {{/if}}
+            {{#if bondItem.secondWindTrigger}}
+              <div class="icon-bond-slot__trigger">
+                <em>Second Wind:</em> {{bondItem.secondWindTrigger}}
+              </div>
+            {{/if}}
+            {{#if bondItem.enrichedDescription}}
+              <details class="icon-bond-slot__details">
+                <summary>Description</summary>
+                <div class="icon-editor-wrap">{{{bondItem.enrichedDescription}}}</div>
+              </details>
+            {{/if}}
+            {{#if bondItem.enrichedSpecial}}
+              <details class="icon-bond-slot__details">
+                <summary>Special Ability</summary>
+                <div class="icon-editor-wrap">{{{bondItem.enrichedSpecial}}}</div>
+              </details>
+            {{/if}}
+            {{#if bondItem.enrichedGambit}}
+              <details class="icon-bond-slot__details">
+                <summary>Gambit Power</summary>
+                <div class="icon-editor-wrap">{{{bondItem.enrichedGambit}}}</div>
+              </details>
+            {{/if}}
+          </div>
+        {{else}}
+          <div class="icon-bond-slot icon-bond-slot--empty">
+            <p class="icon-empty">Drop a Bond from the Bonds compendium.</p>
+          </div>
+        {{/if}}
+
+        {{!-- Bond Powers (collapsible per power) --}}
+        <div class="icon-subtitle-row">
+          <h4 class="icon-subtitle">Powers</h4>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--sm"
+                    data-action="resetSessionPowers"
+                    title="Reset per-session power uses (new session)">
+              <i class="fas fa-rotate"></i> New Session
+            </button>
+          {{/if}}
+        </div>
+        {{#if bondPowerItems.length}}
+          <div class="icon-bond-powers">
+            {{#each bondPowerItems as |bp|}}
+              <details class="icon-bond-power-collapsible" data-item-id="{{bp.id}}">
+                <summary class="icon-bond-power__summary">
+                  <span class="icon-bond-power__name">{{bp.name}}</span>
+                  {{#if bp.isGambit}}
+                    <span class="icon-badge icon-badge--primary">Gambit</span>
+                  {{/if}}
+                  {{#if bp.effortCost}}
+                    <span class="icon-badge">{{bp.effortCost}}e</span>
+                  {{/if}}
+                  {{#if bp.limitPerSession}}
+                    <span class="icon-session-uses" title="Uses this session ({{bp.usedThisSession}}/{{bp.limitPerSession}})">
+                      {{#icon-range 0 (icon-add bp.limitPerSession -1)}}
+                        <button type="button"
+                                class="icon-use-pip {{#icon-lt this bp.usedThisSession}}icon-use-pip--used{{/icon-lt}}"
+                                data-action="toggleBondPowerUse" data-item-id="{{bp.id}}" data-index="{{this}}"
+                                {{#unless ../../isEditable}}disabled{{/unless}}
+                                onclick="event.preventDefault()"></button>
+                      {{/icon-range}}
+                    </span>
+                  {{/if}}
+                  <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                          data-action="bondPowerShowInChat" data-item-id="{{bp.id}}"
+                          title="Post bond power to chat"
+                          onclick="event.preventDefault()">💬</button>
+                  {{#if ../isEditable}}
+                    <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                            data-action="removeItem" data-item-id="{{bp.id}}"
+                            title="Remove bond power"
+                            onclick="event.preventDefault()">×</button>
+                  {{/if}}
+                </summary>
+                {{#if bp.description}}
+                  <div class="icon-bond-power__body icon-editor-wrap">{{{bp.description}}}</div>
+                {{/if}}
+              </details>
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="icon-empty">Drop one from the Bond Powers compendium.</p>
+        {{/if}}
+      </div>
+
+      {{!-- Burdens --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Burdens <small>({{system.narrative.burdens.length}}/3)</small></h3>
+          {{#if isEditable}}
+            {{#icon-lte system.narrative.burdens.length 2}}
+              <button type="button" class="icon-btn icon-btn--add" data-action="addBurden">
+                <i class="fas fa-plus"></i> Burden
+              </button>
+            {{/icon-lte}}
+          {{/if}}
+        </div>
+        {{#each system.narrative.burdens as |burden i|}}
+          <div class="icon-burden">
+            <div class="icon-burden__header">
+              <input type="text" name="system.narrative.burdens.{{i}}.name"
+                     value="{{burden.name}}" placeholder="Burden name"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              <select name="system.narrative.burdens.{{i}}.clock.max"
+                      class="icon-clock-size"
+                      {{#unless ../isEditable}}disabled{{/unless}}>
+                <option value="4"  {{#icon-eq burden.clock.max 4}}selected{{/icon-eq}}>4</option>
+                <option value="6"  {{#icon-eq burden.clock.max 6}}selected{{/icon-eq}}>6</option>
+                <option value="10" {{#icon-eq burden.clock.max 10}}selected{{/icon-eq}}>10</option>
+              </select>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removeBurden" data-index="{{i}}"
+                        title="Remove burden">
+                  <i class="fas fa-times"></i>
+                </button>
+              {{/if}}
+            </div>
+            <div class="icon-burden__clock">
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm icon-clock-adjust"
+                        data-action="adjustClock" data-type="burden" data-index="{{i}}" data-delta="-1"
+                        title="Untick one segment">−</button>
+              {{/if}}
+              {{#each (iconRange burden.clock.max) as |seg|}}
+                <span class="icon-clock-seg {{#if (icon-lte seg ../burden.clock.value)}}icon-clock-seg--filled{{/if}}"
+                      data-action="setClockSegment"
+                      data-type="burden"
+                      data-index="{{../i}}"
+                      data-segment="{{seg}}"
+                      title="Set clock to {{seg}}"></span>
+              {{/each}}
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm icon-clock-adjust"
+                        data-action="adjustClock" data-type="burden" data-index="{{i}}" data-delta="1"
+                        title="Tick one segment">+</button>
+              {{/if}}
+              {{#icon-eq burden.clock.value burden.clock.max}}
+                <span class="icon-badge icon-badge--healed">
+                  <i class="fas fa-heart"></i> HEALED
+                </span>
+              {{/icon-eq}}
+            </div>
+            <div class="icon-burden__actions">
+              <span class="icon-action-badge">
+                <input type="text" name="system.narrative.burdens.{{i}}.actions.0"
+                       value="{{burden.actions.[0]}}" placeholder="Action 1"
+                       {{#unless ../isEditable}}disabled{{/unless}}>
+              </span>
+              <span class="icon-action-badge">
+                <input type="text" name="system.narrative.burdens.{{i}}.actions.1"
+                       value="{{burden.actions.[1]}}" placeholder="Action 2"
+                       {{#unless ../isEditable}}disabled{{/unless}}>
+              </span>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+
+      {{!-- Ambitions --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Ambitions <small>({{system.narrative.ambitions.length}}/3)</small></h3>
+          {{#if isEditable}}
+            {{#icon-lte system.narrative.ambitions.length 2}}
+              <button type="button" class="icon-btn icon-btn--add" data-action="addAmbition">
+                <i class="fas fa-plus"></i> Ambition
+              </button>
+            {{/icon-lte}}
+          {{/if}}
+        </div>
+        {{#each system.narrative.ambitions as |amb i|}}
+          <div class="icon-ambition">
+            <div class="icon-ambition__header">
+              <input type="text" name="system.narrative.ambitions.{{i}}.name"
+                     value="{{amb.name}}" placeholder="Ambition"
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+              <select name="system.narrative.ambitions.{{i}}.clock.max"
+                      class="icon-clock-size"
+                      {{#unless ../isEditable}}disabled{{/unless}}>
+                <option value="4"  {{#icon-eq amb.clock.max 4}}selected{{/icon-eq}}>4</option>
+                <option value="6"  {{#icon-eq amb.clock.max 6}}selected{{/icon-eq}}>6</option>
+                <option value="10" {{#icon-eq amb.clock.max 10}}selected{{/icon-eq}}>10</option>
+              </select>
+              <span class="icon-badge icon-badge--xp">
+                {{#icon-eq amb.clock.max 4}}1 XP{{/icon-eq}}
+                {{#icon-eq amb.clock.max 6}}2 XP{{/icon-eq}}
+                {{#icon-eq amb.clock.max 10}}3 XP{{/icon-eq}}
+              </span>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove"
+                        data-action="removeAmbition" data-index="{{i}}"
+                        title="Remove ambition">
+                  <i class="fas fa-times"></i>
+                </button>
+              {{/if}}
+            </div>
+            <div class="icon-ambition__clock">
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm icon-clock-adjust"
+                        data-action="adjustClock" data-type="ambition" data-index="{{i}}" data-delta="-1"
+                        title="Untick one segment">−</button>
+              {{/if}}
+              {{#each (iconRange amb.clock.max) as |seg|}}
+                <span class="icon-clock-seg {{#if (icon-lte seg ../amb.clock.value)}}icon-clock-seg--filled{{/if}}"
+                      data-action="setClockSegment"
+                      data-type="ambition"
+                      data-index="{{../i}}"
+                      data-segment="{{seg}}"
+                      title="Set clock to {{seg}}"></span>
+              {{/each}}
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm icon-clock-adjust"
+                        data-action="adjustClock" data-type="ambition" data-index="{{i}}" data-delta="1"
+                        title="Tick one segment">+</button>
+              {{/if}}
+              {{#icon-eq amb.clock.value amb.clock.max}}
+                <span class="icon-badge icon-badge--healed">
+                  <i class="fas fa-check"></i> COMPLETE
+                </span>
+              {{/icon-eq}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+
+      {{!-- Gear --}}
+      <div class="icon-section">
+        <h3 class="icon-section__title">Gear Kit</h3>
+        <input type="text" name="system.narrative.gearKit"
+               value="{{system.narrative.gearKit}}" placeholder="Equipped kit"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <div class="icon-section__header">
+          <h4 class="icon-subtitle">Loose Gear <small>({{system.narrative.looseGear.length}}/2)</small></h4>
+          {{#if isEditable}}
+            {{#icon-lte system.narrative.looseGear.length 1}}
+              <button type="button" class="icon-btn icon-btn--add" data-action="addLooseGear">
+                <i class="fas fa-plus"></i> Gear
+              </button>
+            {{/icon-lte}}
+          {{/if}}
+        </div>
+        {{#each system.narrative.looseGear as |item i|}}
+          <div class="icon-loose-gear-row">
+            <input type="text" name="system.narrative.looseGear.{{i}}"
+                   value="{{item}}" placeholder="Gear item"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove"
+                      data-action="removeLooseGear" data-index="{{i}}"
+                      title="Remove gear">
+                <i class="fas fa-times"></i>
+              </button>
+            {{/if}}
+          </div>
+        {{/each}}
+        {{#unless system.narrative.looseGear.length}}
+          <p class="icon-empty">No loose gear. Click <strong>+ Gear</strong> to add (max 2).</p>
+        {{/unless}}
+      </div>
+
+      {{!-- Dust — used to infuse relics and pay for refocus --}}
+      <div class="icon-section">
+        <h3 class="icon-section__title">Dust</h3>
+        <div class="icon-counter-row">
+          <button type="button" class="icon-btn icon-btn--sm" data-action="adjustDust" data-delta="-1"
+                  {{#unless isEditable}}disabled{{/unless}}>−</button>
+          <input type="number" class="icon-counter-value" name="system.narrative.dust"
+                 value="{{system.narrative.dust}}" min="0"
+                 {{#unless isEditable}}disabled{{/unless}}>
+          <button type="button" class="icon-btn icon-btn--sm" data-action="adjustDust" data-delta="1"
+                  {{#unless isEditable}}disabled{{/unless}}>+</button>
+        </div>
+      </div>
+
+      {{!-- Effort --}}
+      <div class="icon-section">
+        <div class="icon-section__header">
+          <h4 class="icon-resource__title">Effort
+            <small>({{system.narrative.effort.value}}/{{system.narrative.effort.max}})</small>
+          </h4>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--sm"
+                    data-action="recoverAllEffort"
+                    title="Refill effort to max">
+              <i class="fas fa-rotate"></i> Recover All
+            </button>
+          {{/if}}
+        </div>
+        <div class="icon-boxes icon-boxes--row">
+          {{#icon-range 0 (icon-add system.narrative.effort.max -1)}}
+            <button type="button"
+                    class="icon-box {{#icon-lt this ../system.narrative.effort.value}}icon-box--filled{{/icon-lt}}"
+                    data-action="toggleEffort" data-index="{{this}}"
+                    {{#unless ../isEditable}}disabled{{/unless}}>
+            </button>
+          {{/icon-range}}
+          <label class="icon-resource__max-inline">
+            Max
+            <input type="number" name="system.narrative.effort.max"
+                   value="{{system.narrative.effort.max}}" min="1" max="6"
+                   {{#unless isEditable}}disabled{{/unless}}>
+          </label>
+        </div>
+      </div>
+
+      {{!-- Strain --}}
+      <div class="icon-section">
+        <h4 class="icon-resource__title">Strain
+          <small>({{system.narrative.strain.value}}/5)</small>
+        </h4>
+        <div class="icon-boxes icon-boxes--row">
+          {{#each (iconRange 5) as |i|}}
+            <span class="icon-strain-box {{#if (icon-lte i ../system.narrative.strain.value)}}strained{{/if}}"
+                  data-action="setStrain"
+                  data-value="{{i}}"
+                  title="Set strain to {{i}} (click the last filled box to clear one)"></span>
+          {{/each}}
+        </div>
+      </div>
+
+      {{!-- XP Bar --}}
+      <div class="icon-xp-section">
+        <div class="icon-xp-header">
+          <span class="icon-xp-label">XP {{system.narrative.xp.value}} / 15</span>
+          {{#if narrative.levelUpAvailable}}
+          <span class="icon-levelup-badge">
+            <i class="fas fa-arrow-up"></i> LEVEL UP
+          </span>
+          {{/if}}
+        </div>
+        <div class="icon-xp-track">
+          {{#each (iconRange 15) as |i|}}
+          <span class="icon-xp-pip {{#if (icon-lte i ../system.narrative.xp.value)}}filled{{/if}}
+                                    {{#if (icon-eq i 7)}}milestone{{/if}}
+                                    {{#if (icon-eq i 15)}}max{{/if}}"
+                data-action="setXp"
+                data-value="{{i}}">
+          </span>
+          {{/each}}
+        </div>
+        {{#if isEditable}}
+        <div class="icon-xp-controls">
+          <button type="button" data-action="adjustXp" data-delta="-1" class="icon-xp-btn">
+            <i class="fas fa-minus"></i>
+          </button>
+          <button type="button" data-action="adjustXp" data-delta="1" class="icon-xp-btn">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button type="button" data-action="openLevelUp" class="icon-levelup-btn">
+            <i class="fas fa-arrow-up"></i> Level Up
+          </button>
+          <button type="button" data-action="levelDown" class="icon-xp-btn"
+                  {{#icon-lte system.combat.level 0}}disabled{{/icon-lte}}
+                  title="Decrease level by 1">
+            <i class="fas fa-arrow-down"></i>
+          </button>
+          {{#unless system.narrative.bond}}
+            <button type="button" data-action="openCharCreation" class="icon-xp-btn"
+                    title="Run character creation wizard">
+              <i class="fas fa-wand-magic-sparkles"></i>
+            </button>
+          {{/unless}}
+        </div>
+        {{/if}}
+      </div>
+
+    </div>
+
+    {{!-- ==================================================== --}}
+    {{!-- RIGHT COLUMN (45%): Actions                           --}}
+    {{!-- ==================================================== --}}
+    <div class="icon-narrative-col icon-narrative-col--right">
+
+      {{!-- 10 Actions --}}
+      <section class="icon-actions-section">
+        <h3 class="icon-section-title">ACTIONS</h3>
+        <div class="icon-actions-list icon-actions-list--compact">
+          {{#each system.narrative.actions as |value key|}}
+          <div class="icon-action-row">
+            <div class="icon-action-dots">
+              {{#each (iconRange 4) as |i|}}
+              <span class="icon-dot {{#if (icon-lte i value)}}filled{{/if}}"
+                    data-action="setActionRating"
+                    data-skill="{{key}}"
+                    data-value="{{i}}"></span>
+              {{/each}}
+            </div>
+            <input type="number"
+                   class="icon-action-value"
+                   name="system.narrative.actions.{{key}}"
+                   value="{{value}}"
+                   min="0" max="4">
+            <button type="button"
+                    class="icon-action-roll"
+                    data-action="rollNarrativeAction"
+                    data-skill="{{key}}">
+              <i class="fas fa-dice-d6"></i>
+            </button>
+            <span class="icon-action-label">{{capitalize key}}</span>
+          </div>
+          {{/each}}
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+</section>

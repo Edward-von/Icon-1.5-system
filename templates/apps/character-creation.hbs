@@ -1,0 +1,148 @@
+{{!-- character-creation.hbs — CharacterCreationDialog template --}}
+<div class="icon-cc">
+
+  <header class="icon-cc__header">
+    <h2>Character Creation</h2>
+    <p class="icon-cc__subtitle">{{actor.name}} — Level 0 setup</p>
+    <p class="icon-cc__hint">Rules reference: ICON 1.5 p. 241. None of your action ratings can exceed <strong>{{maxRating}}</strong> at level 0.</p>
+  </header>
+
+  {{!-- 1. Kin & Culture --}}
+  <section class="icon-cc__section">
+    <h3>1. Kin &amp; Culture</h3>
+    <div class="icon-cc__row">
+      <label class="icon-cc__field">
+        <span>Kin Type</span>
+        <select name="kintype">
+          <option value="">— Select —</option>
+          {{#each kinTypes as |kt|}}
+            <option value="{{kt.key}}" {{#if (icon-eq kt.key ../current.kintype)}}selected{{/if}}>{{kt.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+      <label class="icon-cc__field">
+        <span>Culture</span>
+        <select name="culture">
+          <option value="">— Select —</option>
+          {{#each cultures as |c|}}
+            <option value="{{c.key}}" {{#if (icon-eq c.key ../current.culture)}}selected{{/if}}>{{c.label}}</option>
+          {{/each}}
+        </select>
+      </label>
+    </div>
+  </section>
+
+  {{!-- 2. Bond --}}
+  <section class="icon-cc__section">
+    <h3>2. Bond</h3>
+    <label class="icon-cc__field">
+      <span>Bond</span>
+      <select name="bondUuid">
+        <option value="">— Select a bond —</option>
+        {{#each bonds as |b|}}
+          <option value="{{b.uuid}}" data-name="{{b.name}}" data-actions="{{b.primaryActionsCsv}}">
+            {{b.name}}{{#if b.primaryActionsCsv}} ({{b.primaryActionsCsv}}){{/if}}
+          </option>
+        {{/each}}
+      </select>
+    </label>
+    {{#unless bonds.length}}
+      <p class="icon-cc__warn">No bonds found in the <code>icon-system.bonds</code> compendium.</p>
+    {{/unless}}
+  </section>
+
+  {{!-- 3. Primary action (+2 dots) --}}
+  <section class="icon-cc__section">
+    <h3>3. Primary Action (+2 dots)</h3>
+    <p class="icon-cc__hint">Pick one of your bond's primary actions. It starts at rating 2.</p>
+    <div class="icon-cc__radio-grid">
+      {{#each actions as |a|}}
+        <label class="icon-cc__primary-option" data-action="{{a.key}}">
+          <input type="radio" name="primaryAction" value="{{a.key}}">
+          {{a.label}}
+        </label>
+      {{/each}}
+    </div>
+  </section>
+
+  {{!-- 4. Distribute 4 extra dots --}}
+  <section class="icon-cc__section">
+    <h3>4. Distribute 4 Extra Dots</h3>
+    <p class="icon-cc__hint">Spend 4 additional +1 dots across any actions. No rating may exceed <strong>{{maxRating}}</strong>.</p>
+    <div class="icon-cc__row">
+      {{#each distributionSlots as |slot|}}
+        <label class="icon-cc__field">
+          <span>Dot #{{slot}}</span>
+          <select name="distribution{{slot}}">
+            <option value="">—</option>
+            {{#each ../actions as |a|}}
+              <option value="{{a.key}}">{{a.label}}</option>
+            {{/each}}
+          </select>
+        </label>
+      {{/each}}
+    </div>
+  </section>
+
+  {{!-- 5. Bond Power --}}
+  <section class="icon-cc__section">
+    <h3>5. Bond Power</h3>
+    <label class="icon-cc__field">
+      <span>Bond Power</span>
+      <select name="bondPowerUuid">
+        <option value="">— Select a bond power —</option>
+        {{#each bondPowers as |bp|}}
+          <option value="{{bp.uuid}}" data-bond="{{bp.bondName}}">{{bp.name}}</option>
+        {{/each}}
+      </select>
+    </label>
+    {{#unless bondPowers.length}}
+      <p class="icon-cc__warn">No bond powers found in the <code>icon-system.bond-powers</code> compendium.</p>
+    {{/unless}}
+  </section>
+
+  {{!-- 6. Starting Job --}}
+  <section class="icon-cc__section">
+    <h3>6. Starting Job</h3>
+    <label class="icon-cc__field">
+      <span>Job</span>
+      <select name="jobUuid">
+        <option value="">— Select a job —</option>
+        {{#each jobs as |j|}}
+          <option value="{{j.uuid}}" data-jobname="{{j.jobName}}" data-class="{{j.class}}">
+            [{{j.class}}] {{j.jobName}}
+          </option>
+        {{/each}}
+      </select>
+    </label>
+    {{#unless jobs.length}}
+      <p class="icon-cc__warn">No job templates found in the <code>icon-system.jobs</code> compendium.</p>
+    {{/unless}}
+    <p class="icon-cc__hint">Job base stats, traits, and limit break will be copied onto your character automatically.</p>
+  </section>
+
+  {{!-- 7. Starting Abilities --}}
+  <section class="icon-cc__section">
+    <h3>7. Starting Abilities</h3>
+    <p class="icon-cc__hint">Pick exactly <strong>{{startingAbilities}}</strong> chapter-1 abilities from your chosen job.</p>
+    <div class="icon-cc__ability-list">
+      {{#each abilities as |a|}}
+        <label class="icon-cc__ability-row" data-jobname="{{a.jobName}}" data-class="{{a.class}}" hidden>
+          <input type="checkbox" name="abilityPick" value="{{a.uuid}}">
+          <span class="icon-cc__ability-name">{{a.name}}</span>
+          <span class="icon-badge icon-class--{{a.class}}">{{a.jobName}}</span>
+          <span class="icon-badge">{{a.cost}}</span>
+        </label>
+      {{/each}}
+    </div>
+    {{#unless abilities.length}}
+      <p class="icon-cc__warn">No chapter-1 abilities found in the compendium.</p>
+    {{/unless}}
+  </section>
+
+  <footer class="icon-cc__footer">
+    <button type="submit" class="icon-btn icon-btn--primary">Finalize Character</button>
+    <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
+  </footer>
+
+</div>

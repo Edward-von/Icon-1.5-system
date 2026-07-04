@@ -1,0 +1,735 @@
+/**
+ * LegendSheet — ApplicationV2 sheet for Legend (Boss) actors (type: "legend").
+ */
+import { combatRoll } from "../../dice/rolls.mjs";
+import { postAbilityDamageCard } from "../../combat/damage.mjs";
+import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
+import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
+import { applyStatus, removeStatus, hasStatus,
+         STACKABLE_STATUSES, getStatusCharges,
+         setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
+import { _parseAbilityDamage } from "./IconSheet.mjs";
+import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
+import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
+
+const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
+
+const _log = (...args) => console.debug("[ICON | LegendSheet]", ...args);
+
+export class LegendSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
+
+  static DEFAULT_OPTIONS = {
+    classes: ["icon", "sheet", "actor", "legend-sheet"],
+    position: { width: 820, height: 760 },
+    window:   { resizable: true, controls: [PROTOTYPE_TOKEN_CONTROL, REFERENCE_CONTROL] },
+    actions: {
+      configurePrototypeToken: onConfigurePrototypeToken,
+      showReference:     onShowReferenceControl,
+      rollAction:        LegendSheet.#onRollAction,
+      rollLegendDamage:  LegendSheet.#onRollLegendDamage,
+      addTrait:          LegendSheet.#onAddTrait,
+      removeTrait:       LegendSheet.#onRemoveTrait,
+      addAction:         LegendSheet.#onAddAction,
+      removeAction:      LegendSheet.#onRemoveAction,
+      addInterrupt:      LegendSheet.#onAddInterrupt,
+      removeInterrupt:   LegendSheet.#onRemoveInterrupt,
+      addRoundAction:    LegendSheet.#onAddRoundAction,
+      removeRoundAction: LegendSheet.#onRemoveRoundAction,
+      addPhase:          LegendSheet.#onAddPhase,
+      removePhase:       LegendSheet.#onRemovePhase,
+      toggleStatus:        LegendSheet.#onToggleStatus,
+      adjustElevation:     LegendSheet.#onAdjustElevation,
+      adjustStatusCharges: LegendSheet.#onAdjustStatusCharges,
+    },
+    form: { submitOnChange: true },
+  };
+
+  static PARTS = {
+    header:     { template: "systems/icon-system/templates/actor/legend-header.hbs" },
+    tabs:       { template: "templates/generic/tab-navigation.hbs" },
+    main:       { template: "systems/icon-system/templates/actor/legend-combat.hbs",   scrollable: [""] },
+    conditions: { template: "systems/icon-system/templates/actor/icon-conditions.hbs", scrollable: [""] },
+    notes:      { template: "systems/icon-system/templates/actor/legend-notes.hbs",    scrollable: [""] },
+  };
+
+  tabGroups = { primary: "main" };
+
+  get title() { return this.document.name; }
+
+  /** @override — add the "Prototype Token" control (DocumentSheetV2 lacks it). */
+  _getHeaderControls() { return filterPrototypeTokenControl(super._getHeaderControls(), this); }
+
+  /**
+   * Intercept form submission to rescale HP when the GM changes
+   * `playerScale`. The Legend's canonical 2-player HP is stored in
+   * `system.hp.baseline`; changing `playerScale` updates `hp.max` (and
+   * proportionally `hp.value`) to `baseline × max(playerScale, 2) / 2`.
+   *
+   * On the very first scale change for a legend, if `baseline` is 0
+   * (never set), we capture the current `hp.max` as the baseline. All
+   * existing legend JSONs were authored at the 2-player baseline, so
+   * this gives them the right starting point with zero migration.
+   */
+  _prepareSubmitData(event, form, formData, updateData) {
+    const submitData = super._prepareSubmitData(event, form, formData, updateData);
+    const system     = submitData?.system;
+    if (!system) return submitData;
+
+    const currentScale = this.document.system.playerScale ?? 2;
+    const newScaleRaw  = system.playerScale;
+    if (newScaleRaw == null) return submitData;
+
+    const newScale = Math.max(2, Number(newScaleRaw) || 2);
+    if (newScale === currentScale) return submitData;
+
+    // Ensure baseline is set. If it's 0, treat the CURRENT hp.max as the
+    // 2-player baseline (first-time scaling) — but if the current scale
+    // is already above 2, back-compute to find the true baseline.
+    let baseline = this.document.system.hp?.baseline ?? 0;
+    if (!baseline) {
+      const currentMax = this.document.system.hp?.max ?? 0;
+      baseline = Math.round(currentMax * 2 / Math.max(currentScale, 2));
+    }
+
+    const newMax = Math.max(1, Math.round(baseline * newScale / 2));
+    const oldMax = Math.max(1, this.document.system.hp?.max ?? newMax);
+    const oldVal = this.document.system.hp?.value ?? oldMax;
+    // Scale current value proportionally so a boss mid-fight stays at
+    // the same % HP when the scale changes.
+    const newVal = Math.max(0, Math.min(newMax, Math.round(oldVal * newMax / oldMax)));
+
+    system.hp = {
+      ...(system.hp ?? {}),
+      baseline,
+      max:   newMax,
+      value: newVal,
+    };
+
+    _log(`_prepareSubmitData — playerScale ${currentScale} → ${newScale} | baseline:${baseline} | hp:${oldVal}/${oldMax} → ${newVal}/${newMax}`);
+    return submitData;
+  }
+
+  async _prepareContext(options) {
+    _log(`_prepareContext — actor: "${this.document.name}" | activeTab: ${this.tabGroups.primary}`);
+    const context = await super._prepareContext(options);
+    const actor   = this.document;
+    const system  = actor.system;
+
+    context.actor      = actor;
+    context.system     = system;
+    context.config     = CONFIG.ICON;
+    context.isEditable = this.isEditable;
+    context.tabs       = this._buildTabs();
+
+    const enrich = (s) => enrichHTML(s);
+
+    context.enrichedDescription = await enrich(system.description);
+    context.enrichedTactics     = await enrich(system.tactics);
+    context.enrichedLore        = await enrich(system.lore);
+    context.enrichedLoot        = await enrich(system.loot);
+
+    // Build plain objects with explicit field assignment instead of spreading
+    // the schema-backed array entries — Foundry data models don't always
+    // enumerate fields on `...spread`, so the textareas would render empty.
+    context.enrichedTraits = await Promise.all(system.traits.map(async (t, i) => ({
+      i,
+      name:        t.name ?? "",
+      description: t.description ?? "",
+      phaseIndex:  t.phaseIndex,
+      isActive:    t.phaseIndex == null || t.phaseIndex <= system.currentPhase,
+      enrichedDescription: await enrich(t.description),
+    })));
+
+    context.enrichedActions = await Promise.all(system.actions.map(async (a, i) => {
+      const phaseLabel = a.phaseIndex == null
+        ? "All"
+        : (system.phases?.[a.phaseIndex]?.label ?? `Phase ${a.phaseIndex + 1}`);
+      const parsed = _parseAbilityDamage(a);
+      const mode   = a.damageMode ?? "none";
+      // When the GM has set an explicit damageMode we trust that over the
+      // text parser. Otherwise fall back to the parser's dealsDamage flag.
+      const dealsDamage = mode === "none" ? false
+                        : mode === "hit" || mode === "hit-miss" ? true
+                        : parsed.dealsDamage;
+      return {
+        i,
+        name:        a.name ?? "",
+        cost:        a.cost ?? "1action",
+        tags:        a.tags ?? [],
+        hitEffect:   a.hitEffect  ?? "",
+        missEffect:  a.missEffect ?? "",
+        areaEffect:  a.areaEffect ?? "",
+        description: a.description ?? "",
+        phaseIndex:  a.phaseIndex,
+        phaseLabel,
+        isActive:    a.phaseIndex == null || a.phaseIndex <= system.currentPhase,
+        enrichedHit:  await enrich(a.hitEffect),
+        enrichedMiss: await enrich(a.missEffect),
+        enrichedArea: await enrich(a.areaEffect),
+        enrichedDesc: await enrich(a.description),
+        parsed,
+        dealsDamage,
+        damageMode:     mode,
+        damageHitDice:  a.damageHitDice  ?? 0,
+        damageHitFray:  !!a.damageHitFray,
+        damageMissDice: a.damageMissDice ?? 0,
+        damageMissFray: !!a.damageMissFray,
+      };
+    }));
+
+    context.enrichedInterrupts = await Promise.all(system.interrupts.map(async (r, i) => ({
+      i,
+      name:        r.name ?? "",
+      limit:       r.limit ?? 2,
+      trigger:     r.trigger ?? "",
+      effect:      r.effect ?? "",
+      description: r.description ?? "",
+      enrichedEffect: await enrich(r.effect),
+      enrichedDesc:   await enrich(r.description),
+    })));
+
+    context.enrichedRoundActions = await Promise.all(system.roundActions.map(async (r, i) => ({
+      i,
+      name:        r.name ?? "",
+      roundNumber: r.roundNumber ?? 1,
+      effect:      r.effect ?? "",
+      description: r.description ?? "",
+      enrichedEffect: await enrich(r.effect),
+    })));
+
+    context.enrichedPhases = await Promise.all(system.phases.map(async (p, i) => ({
+      i,
+      label:        p.label ?? "",
+      hpThreshold:  p.hpThreshold ?? 0,
+      description:  p.description ?? "",
+      isCurrent:    i === system.currentPhase,
+      enrichedDescription: await enrich(p.description),
+    })));
+
+    context.phaseBar = system.phases.map(p => ({
+      label: p.label,
+      pct:   system.hp.max > 0 ? Math.round((p.hpThreshold / system.hp.max) * 100) : 0,
+    }));
+
+    // Conditions tab — shared with IconSheet/FoeSheet
+    const elevationLevel = actor.getFlag("icon-system", "elevation") ?? 0;
+    context.elevationLevel = elevationLevel;
+    const allCharges = actor.getFlag("icon-system", "statusCharges") ?? {};
+    context.statusCharges = allCharges;
+    const groups = groupStatusesForUI();
+    const markActive = list => list.map(s => {
+      const stackable = STACKABLE_STATUSES.has(s.id);
+      const charges   = stackable ? (allCharges[s.id] ?? 0) : 0;
+      return {
+        ...s,
+        stackable,
+        charges,
+        active: s.id === "elevation"
+          ? elevationLevel !== 0
+          : stackable
+            ? charges > 0
+            : (actor.statuses?.has(s.id) ?? false),
+      };
+    });
+    context.conditions = {
+      negative: markActive(groups.negative),
+      positive: markActive(groups.positive),
+      special:  markActive(groups.special),
+    };
+
+    _log(`_prepareContext — done | phases: ${system.phases.length} | currentPhase: ${system.currentPhase} | actions: ${system.actions.length}`);
+    return context;
+  }
+
+  async _preparePartContext(partId, context, options) {
+    await super._preparePartContext(partId, context, options);
+    if (context.tabs?.[partId]) context.tab = context.tabs[partId];
+    _log(`_preparePartContext — part: "${partId}" | tab.cssClass: "${context.tab?.cssClass ?? "(none)"}"`);
+    return context;
+  }
+
+  _buildTabs() {
+    const active = this.tabGroups.primary;
+    return {
+      main:       { id: "main",       group: "primary", label: "Stats & Abilities", active: active === "main",       cssClass: active === "main"       ? "active" : "" },
+      conditions: { id: "conditions", group: "primary", label: "Conditions",        active: active === "conditions", cssClass: active === "conditions" ? "active" : "" },
+      notes:      { id: "notes",      group: "primary", label: "Notes",             active: active === "notes",      cssClass: active === "notes"      ? "active" : "" },
+    };
+  }
+
+  /** Which <details data-open-key> elements were open at last render.
+   *  Preserves expand/collapse state across the re-renders triggered by
+   *  submitOnChange so the GM can edit multiple fields in a row without
+   *  the Edit panel snapping shut each time. */
+  _openDetails = new Set();
+
+  _onRender(context, options) {
+    _log(`_onRender — actor: "${this.document.name}" | activeTab: ${this.tabGroups.primary}`);
+    super._onRender(context, options);
+    for (const [group, tabId] of Object.entries(this.tabGroups)) {
+      _log(`_onRender — changeTab("${tabId}", "${group}")`);
+      this.changeTab(tabId, group, { initial: true });
+    }
+
+    // Restore open <details> and wire toggle listeners to keep tracking.
+    this.element.querySelectorAll("details[data-open-key]").forEach(d => {
+      const key = d.dataset.openKey;
+      if (this._openDetails.has(key)) d.open = true;
+      if (d.dataset.iconToggleBound) return;
+      d.dataset.iconToggleBound = "true";
+      d.addEventListener("toggle", () => {
+        if (d.open) this._openDetails.add(key);
+        else        this._openDetails.delete(key);
+      });
+    });
+    // Bind drop listener ONCE per element; without this guard every render
+    // stacks another listener causing N-fold duplicate drops.
+    if (!this.element.dataset.iconDropBound) {
+      this.element.dataset.iconDropBound = "true";
+      this.element.addEventListener("dragover", ev => ev.preventDefault());
+      this.element.addEventListener("drop",     ev => this.#onDrop(ev));
+    }
+
+    // Elevation button (Conditions tab) — right-click decrements.
+    this.element.querySelectorAll('button[data-action="adjustElevation"]').forEach(btn => {
+      if (btn.dataset.iconCtxBound) return;
+      btn.dataset.iconCtxBound = "true";
+      btn.addEventListener("contextmenu", async ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (!this.isEditable) return;
+        const actor = this.document;
+        const current = actor.getFlag("icon-system", "elevation") ?? 0;
+        const next = current - 1;
+        _log(`adjustElevation (right-click) — actor: "${actor.name}" | ${current} → ${next}`);
+        await actor.setFlag("icon-system", "elevation", next);
+        if (next !== 0 && !hasStatus(actor, "elevation")) {
+          await applyStatus(actor, "elevation");
+        } else if (next === 0 && hasStatus(actor, "elevation")) {
+          await removeStatus(actor, "elevation");
+        }
+      });
+    });
+
+    // Stackable-status buttons (Blessed, Power Die) — right-click decrements.
+    this.element.querySelectorAll('button[data-action="adjustStatusCharges"]').forEach(btn => {
+      if (btn.dataset.iconCtxBound) return;
+      btn.dataset.iconCtxBound = "true";
+      btn.addEventListener("contextmenu", async ev => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (!this.isEditable) return;
+        const statusId = btn.dataset.statusId;
+        if (!statusId) return;
+        const next = await adjustStatusCharges(this.document, statusId, -1);
+        _log(`adjustStatusCharges (right-click) — "${statusId}" → ${next}`);
+      });
+    });
+
+    // Portrait img picker — V2 sheets don't auto-bind data-edit="img".
+    this.element.querySelectorAll('img[data-edit="img"]').forEach(img => {
+      if (img.dataset.iconImgBound) return;
+      img.dataset.iconImgBound = "true";
+      img.style.cursor = "pointer";
+      img.addEventListener("click", ev => {
+        if (!this.isEditable) return;
+        ev.preventDefault();
+        new foundry.applications.apps.FilePicker.implementation({
+          type: "image",
+          current: this.document.img,
+          callback: path => {
+            _log(`portrait — picked: "${path}"`);
+            this.document.update({ img: path });
+          },
+          top:  this.position.top + 40,
+          left: this.position.left + 10,
+        }).browse();
+      });
+    });
+  }
+
+  /* -------------------------------------------------- */
+  /*  Actions                                            */
+  /* -------------------------------------------------- */
+
+  static async #onRollAction(event, target) {
+    const idx    = Number(target.dataset.actionIndex);
+    const actor  = this.document;
+    const action = actor.system.actions[idx];
+    _log(`rollAction — actor: "${actor.name}" | action[${idx}]: "${action?.name}"`);
+    if (!action) return;
+
+    const mods = await LegendSheet.#promptAttackMods(action, actor);
+    if (!mods) return;
+
+    await combatRoll({
+      abilityName: action.name,
+      boons:       mods.boons,
+      curses:      mods.curses,
+      defense:     mods.defense,
+      actor,
+    });
+  }
+
+  static async #onRollLegendDamage(event, target) {
+    event.stopPropagation();
+    const idx    = Number(target.dataset.actionIndex);
+    const actor  = this.document;
+    const action = actor.system.actions[idx];
+    if (!action) return;
+
+    // If the GM has configured explicit damage (damageMode != "none") we use
+    // those structured values; otherwise fall back to parsing the text.
+    const mode   = action.damageMode ?? "none";
+    const parsed = mode === "none"
+      ? _parseAbilityDamage(action)
+      : {
+          dealsDamage: true,
+          hit:  { mult: action.damageHitDice  ?? 0, fray: !!action.damageHitFray,  flat: 0 },
+          miss: mode === "hit-miss"
+            ? { mult: action.damageMissDice ?? 0, fray: !!action.damageMissFray, flat: 0 }
+            : { mult: 0, fray: false, flat: 0 },
+          area: { mult: 0, fray: false, flat: 0 },
+        };
+    _log(`rollLegendDamage — actor: "${actor.name}" | action[${idx}]: "${action.name}" | mode: ${mode} | parsed:`, parsed);
+    if (!parsed.dealsDamage) {
+      ui.notifications.warn(`"${action.name}" does not deal damage.`);
+      return;
+    }
+
+    const mods = await LegendSheet.#promptLegendDamageMods(action, parsed);
+    if (!mods) return;
+
+    await postAbilityDamageCard(actor, {
+      parsed,
+      outcome:     mods.outcome,
+      damagedie:   actor.system.damagedie || "d8",
+      fray:        actor.system.fray ?? 0,
+      abilityName: action.name,
+      bonusDice:   mods.bonusDice,
+      vulnerable:  mods.vulnerable,
+      resistance:  mods.resistance,
+      weakened:    mods.weakened,
+    });
+  }
+
+  static async #promptLegendDamageMods(action, parsed) {
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>Outcome</label>
+          <select name="outcome">
+            <option value="hit"  selected>Hit</option>
+            ${parsed.hit.mult > 0 ? '<option value="crit">Critical (+1 die)</option>' : ""}
+            ${parsed.miss.fray || parsed.miss.flat > 0 ? '<option value="miss">Miss</option>' : ""}
+            ${parsed.area.mult > 0 || parsed.area.flat > 0 || parsed.area.fray ? '<option value="area">Area</option>' : ""}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Bonus dice</label>
+          <input type="number" name="bonusDice" value="0" min="0">
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" name="vulnerable"> Target is vulnerable (+1)</label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" name="resistance"> Target has resistance (½)</label>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" name="weakened"> Attacker is weakened (−2)</label>
+        </div>
+      </form>
+    `;
+    return foundry.applications.api.DialogV2.wait({
+      window:  { title: `Damage: ${action.name}` },
+      content,
+      buttons: [
+        { action: "roll", label: "Roll Damage", default: true, callback: (_e, btn) => {
+          const f = btn.form;
+          return {
+            outcome:    f.elements.outcome.value,
+            bonusDice:  Number(f.elements.bonusDice.value) || 0,
+            vulnerable: f.elements.vulnerable.checked,
+            resistance: f.elements.resistance.checked,
+            weakened:   f.elements.weakened.checked,
+          };
+        } },
+        { action: "cancel", label: "Cancel", callback: () => null },
+      ],
+      rejectClose: false,
+    });
+  }
+
+  /**
+   * Attack-roll prompt for legend actions. Pre-fills boons/curses from
+   * status auto-mods + elevation difference vs targets, and defense from
+   * the targeted token. Mirrors FoeSheet/IconSheet prompts.
+   */
+  static async #promptAttackMods(action, actor) {
+    const auto = getActorStatusMods(actor);
+
+    // Auto-detect target defense
+    const targets = Array.from(game.user?.targets ?? []);
+    let autoDefense = "";
+    let targetNote = "";
+    if (targets.length > 0) {
+      const defenses = targets.map(t => {
+        const a = t.actor;
+        return a?.system?.combat?.defense ?? a?.system?.defense ?? null;
+      }).filter(d => d != null);
+      if (defenses.length) {
+        autoDefense = Math.min(...defenses);
+        const names = targets.map(t => t.actor?.name ?? "?").join(", ");
+        targetNote = `<p style="margin:0;font-size:.85em;color:#7fb2ff;border-left:3px solid #7fb2ff;padding-left:6px">🎯 Target: ${names} (DEF ${autoDefense})</p>`;
+      }
+    }
+
+    // Elevation: read actor flag, fall back to token elevation
+    const readEl = (a, tok) => a?.getFlag?.("icon-system", "elevation")
+                              ?? tok?.document?.elevation
+                              ?? 0;
+    const sourceToken = canvas?.tokens?.controlled?.find(t => t.actor?.id === actor.id)
+                     ?? actor.getActiveTokens?.()?.[0]
+                     ?? null;
+    let elevationBoons  = 0;
+    let elevationCurses = 0;
+    let elevationNote = "";
+    if (targets.length > 0) {
+      const srcEl = readEl(actor, sourceToken);
+      const elDiffs = targets.map(t => srcEl - readEl(t.actor, t));
+      const worstDiff = Math.min(...elDiffs);
+      const bestDiff  = Math.max(...elDiffs);
+      if (worstDiff < 0) {
+        elevationCurses = Math.abs(worstDiff);
+        elevationNote = `Height disadvantage Δ${elevationCurses}: +${elevationCurses} curse${elevationCurses > 1 ? "s" : ""}`;
+      } else if (bestDiff > 0) {
+        elevationBoons = bestDiff;
+        elevationNote = `Height advantage Δ${elevationBoons}: +${elevationBoons} boon${elevationBoons > 1 ? "s" : ""}`;
+      }
+    }
+
+    const totalBoons  = auto.boons  + elevationBoons;
+    const totalCurses = auto.curses + elevationCurses;
+    const allNotes = [...auto.notes];
+    if (elevationNote) allNotes.push(elevationNote);
+    const noteHtml = allNotes.length
+      ? `<p style="margin:0;font-size:.85em;color:#c4a64f;border-left:3px solid #c4a64f;padding-left:6px">⚠ Auto-applied: ${allNotes.join(" • ")}</p>`
+      : "";
+
+    const content = `
+      <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
+        <p style="margin:0"><strong>${escapeHTML(action.name)}</strong></p>
+        ${targetNote}
+        ${noteHtml}
+        <label>Boons:  <input type="number" name="boons" value="${totalBoons}" min="0" max="9" style="width:60px"></label>
+        <label>Curses: <input type="number" name="curses" value="${totalCurses}" min="0" max="9" style="width:60px"></label>
+        <label>Target Defense: <input type="number" name="defense" value="${autoDefense}" min="0" placeholder="(optional)" style="width:80px"></label>
+      </div>
+    `;
+    try {
+      return await foundry.applications.api.DialogV2.prompt({
+        window:   { title: `Attack: ${action.name}` },
+        content,
+        ok: {
+          label: "Roll Attack",
+          callback: (_e, button, dialog) => {
+            const root = button?.form ?? dialog?.element ?? dialog;
+            const defenseVal = root.querySelector('input[name="defense"]')?.value;
+            return {
+              boons:   Number(root.querySelector('input[name="boons"]')?.value ?? 0),
+              curses:  Number(root.querySelector('input[name="curses"]')?.value ?? 0),
+              defense: defenseVal ? Number(defenseVal) : null,
+            };
+          },
+        },
+        rejectClose: false,
+      });
+    } catch { return null; }
+  }
+
+  /** Toggle a status effect on this legend (Conditions tab buttons). */
+  static async #onToggleStatus(event, target) {
+    const statusId = target.dataset.statusId;
+    if (!statusId) return;
+    const actor = this.document;
+    if (hasStatus(actor, statusId)) {
+      _log(`toggleStatus — removing "${statusId}" from "${actor.name}"`);
+      await removeStatus(actor, statusId);
+    } else {
+      _log(`toggleStatus — applying "${statusId}" to "${actor.name}"`);
+      await applyStatus(actor, statusId);
+    }
+  }
+
+  /** Adjust this legend's elevation flag (left=+1, right-click=-1 via _onRender). */
+  static async #onAdjustElevation(event, target) {
+    event.preventDefault();
+    const actor = this.document;
+    const current = actor.getFlag("icon-system", "elevation") ?? 0;
+    const next = current + 1;
+    _log(`adjustElevation — actor: "${actor.name}" | ${current} → ${next}`);
+    await actor.setFlag("icon-system", "elevation", next);
+    if (next !== 0 && !hasStatus(actor, "elevation")) {
+      await applyStatus(actor, "elevation");
+    } else if (next === 0 && hasStatus(actor, "elevation")) {
+      await removeStatus(actor, "elevation");
+    }
+  }
+
+  /** Adjust the charge count of a stackable status (Blessed, Power Die). */
+  static async #onAdjustStatusCharges(event, target) {
+    event.preventDefault();
+    const statusId = target.dataset.statusId;
+    if (!statusId) return;
+    const next = await adjustStatusCharges(this.document, statusId, 1);
+    _log(`adjustStatusCharges — "${statusId}" → ${next}`);
+  }
+
+  static async #onAddPhase(event, target) {
+    const phases = foundry.utils.deepClone(this.document.system.phases);
+    _log(`addPhase — actor: "${this.document.name}" | count: ${phases.length} → ${phases.length + 1}`);
+    phases.push({ label: `Phase ${phases.length + 1}`, hpThreshold: 0, description: "", traitsAdded: [], actionsAdded: [] });
+    await this.document.update({ "system.phases": phases });
+  }
+
+  static async #onRemovePhase(event, target) {
+    const idx    = Number(target.dataset.index);
+    const phases = foundry.utils.deepClone(this.document.system.phases);
+    _log(`removePhase — actor: "${this.document.name}" | idx: ${idx} | label: "${phases[idx]?.label}"`);
+    phases.splice(idx, 1);
+    await this.document.update({ "system.phases": phases });
+  }
+
+  static async #onAddTrait(event, target) {
+    const traits = foundry.utils.deepClone(this.document.system.traits);
+    _log(`addTrait — actor: "${this.document.name}" | count: ${traits.length} → ${traits.length + 1}`);
+    traits.push({ name: "New Trait", description: "", phaseIndex: null });
+    await this.document.update({ "system.traits": traits });
+  }
+
+  static async #onRemoveTrait(event, target) {
+    const idx    = Number(target.dataset.index);
+    const traits = foundry.utils.deepClone(this.document.system.traits);
+    _log(`removeTrait — actor: "${this.document.name}" | idx: ${idx} | name: "${traits[idx]?.name}"`);
+    traits.splice(idx, 1);
+    await this.document.update({ "system.traits": traits });
+  }
+
+  static async #onAddAction(event, target) {
+    const actions = foundry.utils.deepClone(this.document.system.actions);
+    _log(`addAction — actor: "${this.document.name}" | count: ${actions.length} → ${actions.length + 1}`);
+    actions.push({ name: "New Action", cost: "1action", tags: [], hitEffect: "", missEffect: "", areaEffect: "", description: "", phaseIndex: null });
+    await this.document.update({ "system.actions": actions });
+  }
+
+  static async #onRemoveAction(event, target) {
+    const idx     = Number(target.dataset.index);
+    const actions = foundry.utils.deepClone(this.document.system.actions);
+    _log(`removeAction — actor: "${this.document.name}" | idx: ${idx} | name: "${actions[idx]?.name}"`);
+    actions.splice(idx, 1);
+    await this.document.update({ "system.actions": actions });
+  }
+
+  static async #onAddInterrupt(event, target) {
+    const interrupts = foundry.utils.deepClone(this.document.system.interrupts);
+    _log(`addInterrupt — actor: "${this.document.name}" | count: ${interrupts.length} → ${interrupts.length + 1}`);
+    interrupts.push({ name: "New Interrupt", limit: 2, trigger: "", effect: "", description: "" });
+    await this.document.update({ "system.interrupts": interrupts });
+  }
+
+  static async #onRemoveInterrupt(event, target) {
+    const idx        = Number(target.dataset.index);
+    const interrupts = foundry.utils.deepClone(this.document.system.interrupts);
+    _log(`removeInterrupt — actor: "${this.document.name}" | idx: ${idx} | name: "${interrupts[idx]?.name}"`);
+    interrupts.splice(idx, 1);
+    await this.document.update({ "system.interrupts": interrupts });
+  }
+
+  static async #onAddRoundAction(event, target) {
+    const ra = foundry.utils.deepClone(this.document.system.roundActions);
+    _log(`addRoundAction — actor: "${this.document.name}" | count: ${ra.length} → ${ra.length + 1}`);
+    ra.push({ name: "New Round Action", roundNumber: ra.length + 1, effect: "", description: "" });
+    await this.document.update({ "system.roundActions": ra });
+  }
+
+  static async #onRemoveRoundAction(event, target) {
+    const idx = Number(target.dataset.index);
+    const ra  = foundry.utils.deepClone(this.document.system.roundActions);
+    _log(`removeRoundAction — actor: "${this.document.name}" | idx: ${idx} | name: "${ra[idx]?.name}"`);
+    ra.splice(idx, 1);
+    await this.document.update({ "system.roundActions": ra });
+  }
+
+  /* -------------------------------------------------- */
+  /*  Drag-drop                                          */
+  /* -------------------------------------------------- */
+
+  async #onDrop(event) {
+    if (this._dropInProgress) {
+      _log(`drop — IGNORED (another drop is already in progress)`);
+      return;
+    }
+    this._dropInProgress = true;
+    try {
+      let data;
+      try { data = JSON.parse(event.dataTransfer.getData("text/plain")); } catch { return; }
+      if (data.type !== "Item") { _log(`drop — ignored data.type: "${data.type}"`); return; }
+
+      _log(`drop — resolving item from data:`, data);
+      const item = await Item.implementation.fromDropData(data);
+      if (!item) { _log(`drop — ERROR: could not resolve item`); return; }
+
+      _log(`drop — item: "${item.name}" | type: "${item.type}"`);
+      if (item.type !== "foe-ability") {
+        _log(`drop — WARN: expected foe-ability, got "${item.type}"`);
+        return ui.notifications.warn(`Cannot drop item type "${item.type}" on a Legend.`);
+      }
+      await this.#onDropFoeAbility(item);
+    } finally {
+      this._dropInProgress = false;
+    }
+  }
+
+  async #onDropFoeAbility(item) {
+    const s     = item.system;
+    const actor = this.document;
+    // Strip the "FoeName — " prefix used by compendium item names.
+    const cleanName = item.name.includes(" — ")
+      ? item.name.split(" — ").slice(1).join(" — ").trim()
+      : item.name;
+    _log(`dropFoeAbility — actor: "${actor.name}" | item: "${item.name}" | cleaned: "${cleanName}" | abilityType: "${s.abilityType}"`);
+    switch (s.abilityType) {
+      case "action": {
+        const actions = foundry.utils.deepClone(actor.system.actions);
+        actions.push({ name: cleanName, cost: s.cost || "1action", tags: s.tags ?? [], hitEffect: s.hitEffect ?? "", missEffect: s.missEffect ?? "", areaEffect: s.areaEffect ?? "", description: s.description ?? "", phaseIndex: null });
+        _log(`dropFoeAbility — added action "${cleanName}" | total actions: ${actions.length}`);
+        await actor.update({ "system.actions": actions });
+        break;
+      }
+      case "interrupt": {
+        const interrupts = foundry.utils.deepClone(actor.system.interrupts);
+        interrupts.push({ name: cleanName, limit: s.interruptLimit ?? 2, trigger: s.trigger ?? "", effect: s.description ?? "", description: "" });
+        _log(`dropFoeAbility — added interrupt "${cleanName}" | total: ${interrupts.length}`);
+        await actor.update({ "system.interrupts": interrupts });
+        break;
+      }
+      case "trait": {
+        const traits = foundry.utils.deepClone(actor.system.traits);
+        traits.push({ name: cleanName, description: s.description ?? "", phaseIndex: null });
+        _log(`dropFoeAbility — added trait "${cleanName}" | total: ${traits.length}`);
+        await actor.update({ "system.traits": traits });
+        break;
+      }
+      case "round-action": {
+        const ra = foundry.utils.deepClone(actor.system.roundActions);
+        ra.push({ name: cleanName, roundNumber: s.roundNumber ?? ra.length + 1, effect: s.description ?? "", description: "" });
+        _log(`dropFoeAbility — added round-action "${cleanName}" | total: ${ra.length}`);
+        await actor.update({ "system.roundActions": ra });
+        break;
+      }
+      default:
+        _log(`dropFoeAbility — WARN: unknown abilityType "${s.abilityType}"`);
+    }
+    ui.notifications.info(`"${cleanName}" added.`);
+  }
+}

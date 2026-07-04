@@ -1,0 +1,78 @@
+{{!-- legend-header.hbs --}}
+<header class="icon-sheet__header legend-header">
+  <img class="icon-sheet__portrait icon-sheet__portrait--lg"
+       src="{{actor.img}}" alt="{{actor.name}}"
+       data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+  <div class="icon-sheet__identity">
+    <input class="icon-sheet__name icon-sheet__name--legend" type="text"
+           name="name" value="{{actor.name}}"
+           {{#unless isEditable}}disabled{{/unless}}>
+    <div class="icon-sheet__badges">
+      <select class="icon-badge-select" name="system.faction"
+              {{#unless isEditable}}disabled{{/unless}}>
+        <option value="">— Faction —</option>
+        {{#each config.factions as |labelKey key|}}
+          <option value="{{key}}" {{#icon-eq key ../system.faction}}selected{{/icon-eq}}>
+            {{localize labelKey}}
+          </option>
+        {{/each}}
+      </select>
+      <select class="icon-badge-select" name="system.chapter"
+              {{#unless isEditable}}disabled{{/unless}}>
+        <option value="1" {{#icon-eq system.chapter 1}}selected{{/icon-eq}}>Ch 1</option>
+        <option value="2" {{#icon-eq system.chapter 2}}selected{{/icon-eq}}>Ch 2</option>
+        <option value="3" {{#icon-eq system.chapter 3}}selected{{/icon-eq}}>Ch 3</option>
+      </select>
+      <span class="icon-badge">Size
+        <input type="number" name="system.size" value="{{system.size}}" min="1" max="3"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </span>
+      {{#each enrichedPhases as |phase|}}
+        <span class="icon-badge icon-badge--phase {{#if phase.isCurrent}}icon-badge--phase-active{{/if}}">
+          {{phase.label}}
+        </span>
+      {{/each}}
+    </div>
+    {{!-- Manual phase override: GM can force a phase regardless of HP. --}}
+    {{#if system.phases.length}}
+      <div class="legend-header__phase-control">
+        <label>Phase:
+          <select name="system.manualPhase" {{#unless isEditable}}disabled{{/unless}}>
+            <option value="-1" {{#icon-eq system.manualPhase -1}}selected{{/icon-eq}}>Auto (HP)</option>
+            {{#each system.phases as |phase i|}}
+              <option value="{{i}}" {{#icon-eq i ../system.manualPhase}}selected{{/icon-eq}}>
+                {{phase.label}}
+              </option>
+            {{/each}}
+          </select>
+        </label>
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- Phase bar + HP --}}
+  <div class="legend-header__hp-section">
+    {{!-- Phase threshold bar --}}
+    <div class="icon-phase-bar legend-phase-bar">
+      {{#each phaseBar as |p|}}
+        <span class="icon-phase-bar__marker" style="left:{{p.pct}}%"
+              title="{{p.label}} ≤{{p.pct}}%"></span>
+      {{/each}}
+      <div class="icon-hp-bar">
+        <div class="icon-hp-bar__fill" style="width:{{icon-pct system.hp.value system.hp.max}}"></div>
+      </div>
+    </div>
+    <div class="legend-header__hp-row">
+      <input type="number" name="system.hp.value" value="{{system.hp.value}}" min="0"
+             {{#unless isEditable}}disabled{{/unless}}>
+      /
+      <input type="number" name="system.hp.max" value="{{system.hp.max}}" min="1"
+             {{#unless isEditable}}disabled{{/unless}}>
+      <span class="legend-header__player-scale" title="Number of PCs — scales Legend HP from the 2-player baseline.">
+        <span class="legend-header__player-scale-icon">👥</span>
+        <input type="number" name="system.playerScale" value="{{system.playerScale}}" min="2" max="10"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </span>
+    </div>
+  </div>
+</header>

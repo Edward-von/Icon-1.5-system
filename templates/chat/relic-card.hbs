@@ -1,0 +1,18 @@
+{{!-- templates/chat/relic-card.hbs — Show in Chat for a relic --}}
+<div class="icon-chat-card icon-chat-card--relic">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{rl.name}}</strong>
+    <span class="icon-badge icon-badge--rank">Rank {{rl.currentRank}}{{#if rl.aspectUnlocked}} (Aspected){{/if}}</span>
+    {{#if rl.invokeType}}<span class="icon-badge icon-badge--invoke">{{rl.invokeType}}</span>{{/if}}
+  </div>
+  {{#if rl.invokeCondition}}
+    <p><em>{{rl.invokeCondition}}</em></p>
+  {{/if}}
+  {{#if rl.invokeEffect}}
+    <div class="icon-chat-card__desc">{{{rl.invokeEffect}}}</div>
+  {{/if}}
+  {{#if rl.rank1}}<p><strong>Rank I:</strong> {{{rl.rank1}}}</p>{{/if}}
+  {{#if (icon-gte rl.currentRank 2)}}{{#if rl.rank2}}<p><strong>Rank II:</strong> {{{rl.rank2}}}</p>{{/if}}{{/if}}
+  {{#if (icon-gte rl.currentRank 3)}}{{#if rl.rank3}}<p><strong>Rank III:</strong> {{{rl.rank3}}}</p>{{/if}}{{/if}}
+  {{#if rl.aspectUnlocked}}{{#if rl.aspect}}<p><strong>Aspect:</strong> {{{rl.aspect}}}</p>{{/if}}{{/if}}
+</div>

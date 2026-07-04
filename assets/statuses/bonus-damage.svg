@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="46" fill="#1a0d08" stroke="#e07a2c" stroke-width="4"/>
+  <!-- d6 die face -->
+  <rect x="26" y="26" width="40" height="40" rx="8" fill="#3a1c0c" stroke="#f0a050" stroke-width="3"/>
+  <circle cx="36" cy="36" r="4" fill="#ffd9a0"/>
+  <circle cx="56" cy="36" r="4" fill="#ffd9a0"/>
+  <circle cx="46" cy="46" r="4" fill="#fff0d8"/>
+  <circle cx="36" cy="56" r="4" fill="#ffd9a0"/>
+  <circle cx="56" cy="56" r="4" fill="#ffd9a0"/>
+  <!-- bonus "+" badge -->
+  <circle cx="71" cy="71" r="17" fill="#e0402c" stroke="#1a0d08" stroke-width="3"/>
+  <path d="M71 62 V80 M62 71 H80" stroke="#fff0d8" stroke-width="5" stroke-linecap="round"/>
+</svg>

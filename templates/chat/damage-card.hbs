@@ -1,0 +1,68 @@
+{{!-- templates/chat/damage-card.hbs --}}
+<div class="icon-chat-card icon-chat-card--damage">
+  <div class="icon-chat-card__header">
+    <strong>Damage</strong>
+    {{#if targetName}}<span class="icon-chat-card__vs">→ {{targetName}}</span>{{/if}}
+  </div>
+
+  <div class="icon-chat-card__damage-breakdown">
+    {{#each steps as |step|}}
+      <div class="icon-chat-card__damage-step
+                  {{#if step.isFinal}}icon-chat-card__damage-step--final{{/if}}">
+        <span class="icon-chat-card__damage-label">{{{step.label}}}</span>
+        <span class="icon-chat-card__damage-value
+                     {{#if step.isNegative}}icon-chat-card__damage-value--negative{{/if}}">
+          {{step.value}}
+        </span>
+      </div>
+    {{/each}}
+  </div>
+
+  <div class="icon-chat-card__damage-total">
+    <strong>{{finalDamage}}</strong> damage
+    {{#if vigorAbsorbed}}<span class="icon-chat-card__vigor-note">({{vigorAbsorbed}} absorbed by Vigor)</span>{{/if}}
+  </div>
+
+  {{!-- Targets (if the user pressed T on any tokens before rolling) --}}
+  {{#if hasTargets}}
+    <div class="icon-chat-card__targets">
+      <div class="icon-chat-card__targets-header">
+        <span>Targets</span>
+      </div>
+      {{#each targets as |t|}}
+        <div class="icon-chat-card__target-row" data-actor-uuid="{{t.actorUuid}}">
+          {{#if t.img}}<img class="icon-chat-card__target-img" src="{{t.img}}" alt="" width="28" height="28">{{/if}}
+          <span class="icon-chat-card__target-name"><strong>{{t.name}}</strong></span>
+          {{#if t.defense}}<span class="icon-chat-card__target-def">DEF {{t.defense}}</span>{{/if}}
+          {{#if t.hp}}<span class="icon-chat-card__target-hp">HP {{t.hp}}/{{t.hpMax}}</span>{{/if}}
+          <button type="button" class="icon-chat-btn icon-chat-btn--apply"
+                  data-action="applyDamage"
+                  data-actor-uuid="{{t.actorUuid}}"
+                  data-amount="{{../finalDamage}}"
+                  title="Apply {{../finalDamage}} damage to {{t.name}}">
+            Apply {{../finalDamage}}
+          </button>
+          <button type="button" class="icon-chat-btn icon-chat-btn--apply-half"
+                  data-action="applyDamage"
+                  data-actor-uuid="{{t.actorUuid}}"
+                  data-amount="{{../finalDamage}}"
+                  data-half="true"
+                  title="Apply half ({{../finalDamage}}/2)">
+            ½
+          </button>
+        </div>
+      {{/each}}
+    </div>
+  {{/if}}
+
+  {{#if woundApplied}}
+    <div class="icon-chat-card__wound-notice">
+      ⚠ <strong>{{targetName}}</strong> is Defeated! ({{woundCount}}/4 wounds)
+    </div>
+  {{/if}}
+  {{#if fallen}}
+    <div class="icon-chat-card__fallen-notice">
+      ✕ <strong>{{targetName}}</strong> has <em>Fallen!</em>
+    </div>
+  {{/if}}
+</div>

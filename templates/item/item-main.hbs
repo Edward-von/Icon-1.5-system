@@ -1,0 +1,712 @@
+{{!-- item-main.hbs — type-conditional item body --}}
+<section class="icon-item-sheet__body">
+
+  {{!-- ===== ABILITY ===== --}}
+  {{#icon-eq itemType "ability"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Job</label>
+        <input type="text" name="system.jobName" value="{{system.jobName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Class</label>
+        <select name="system.class" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each classChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.class}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Chapter</label>
+        <select name="system.chapter" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each chapterChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.chapter}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Cost</label>
+        <select name="system.cost" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each costChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.cost}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>
+          <input type="checkbox" name="system.isAttack"
+                 {{#if system.isAttack}}checked{{/if}}
+                 {{#unless isEditable}}disabled{{/unless}}>
+          Attack
+        </label>
+        <label>
+          <input type="checkbox" name="system.isCombo"
+                 {{#if system.isCombo}}checked{{/if}}
+                 {{#unless isEditable}}disabled{{/unless}}>
+          Combo
+        </label>
+      </div>
+      {{#if isInterruptAbility}}
+        <div class="icon-field-row">
+          <label>Interrupt Trigger</label>
+          <input type="text" name="system.interruptTrigger" value="{{system.interruptTrigger}}"
+                 placeholder="When this interrupt may be used"
+                 {{#unless isEditable}}disabled{{/unless}}>
+        </div>
+      {{/if}}
+      {{!-- Tags --}}
+      <div class="icon-tags-row">
+        {{#each system.tags as |tag i|}}
+          <span class="icon-tag">
+            <input type="text" name="system.tags.{{i}}" value="{{tag}}"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                      data-action="removeTag" data-index="{{i}}">×</button>
+            {{/if}}
+          </span>
+        {{/each}}
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add icon-btn--sm"
+                  data-action="addTag">+ Tag</button>
+        {{/if}}
+      </div>
+    </div>
+
+    {{!-- Description (shown first for read-only compendium use) --}}
+    {{#if (icon-or system.description isEditable)}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Description</h4>
+        <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+        {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+      </div>
+    {{/if}}
+
+    {{!-- Effect fields — each section is hidden when empty in read-only mode --}}
+    <div class="icon-item-section">
+      {{#if (icon-or system.hitEffect isEditable)}}
+        <h4 class="icon-section__title">Hit Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.hitEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.hitEffect" class="icon-editor">{{system.hitEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.missEffect isEditable)}}
+        <h4 class="icon-section__title">Miss Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.missEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.missEffect" class="icon-editor">{{system.missEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.areaEffect isEditable)}}
+        <h4 class="icon-section__title">Area Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.areaEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.areaEffect" class="icon-editor">{{system.areaEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.chargeEffect isEditable)}}
+        <h4 class="icon-section__title">Charge Effect <small>(slow turn)</small></h4>
+        <div class="icon-editor-wrap">{{{enriched.chargeEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.chargeEffect" class="icon-editor">{{system.chargeEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.heroicEffect isEditable)}}
+        <h4 class="icon-section__title">Heroic Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.heroicEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.heroicEffect" class="icon-editor">{{system.heroicEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.exceedEffect isEditable)}}
+        <h4 class="icon-section__title">Exceed Effect <small>(15+)</small></h4>
+        <div class="icon-editor-wrap">{{{enriched.exceedEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.exceedEffect" class="icon-editor">{{system.exceedEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.collideEffect isEditable)}}
+        <h4 class="icon-section__title">Collide Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.collideEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.collideEffect" class="icon-editor">{{system.collideEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.slayEffect isEditable)}}
+        <h4 class="icon-section__title">Slay Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.slayEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.slayEffect" class="icon-editor">{{system.slayEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.critEffect isEditable)}}
+        <h4 class="icon-section__title">Crit Effect</h4>
+        <div class="icon-editor-wrap">{{{enriched.critEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.critEffect" class="icon-editor">{{system.critEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.finishingBlowEffect isEditable)}}
+        <h4 class="icon-section__title">Finishing Blow Effect <small>(Vagabond; bloodied target)</small></h4>
+        <div class="icon-editor-wrap">{{{enriched.finishingBlowEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.finishingBlowEffect" class="icon-editor">{{system.finishingBlowEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.comebackEffect isEditable)}}
+        <h4 class="icon-section__title">Comeback Effect <small>(user bloodied)</small></h4>
+        <div class="icon-editor-wrap">{{{enriched.comebackEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.comebackEffect" class="icon-editor">{{system.comebackEffect}}</textarea>{{/if}}
+      {{/if}}
+
+      {{#if (icon-or system.comboEffect isEditable)}}
+        <h4 class="icon-section__title">⚡ Combo Effect <small>(replaces the ability when a Combo token is spent; requires the Combo checkbox above)</small></h4>
+        <div class="icon-editor-wrap">{{{enriched.comboEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.comboEffect" class="icon-editor">{{system.comboEffect}}</textarea>{{/if}}
+      {{/if}}
+    </div>
+
+    {{!-- Talents + Mastery --}}
+    {{#if (icon-or (icon-or system.talent1 system.talent2) (icon-or system.mastery isEditable))}}
+      <div class="icon-item-section">
+        {{#if (icon-or system.talent1 isEditable)}}
+          <h4 class="icon-section__title">Talent 1</h4>
+          <div class="icon-editor-wrap">{{{enriched.talent1}}}</div>
+          {{#if isEditable}}<textarea name="system.talent1" class="icon-editor">{{system.talent1}}</textarea>{{/if}}
+        {{/if}}
+        {{#if (icon-or system.talent2 isEditable)}}
+          <h4 class="icon-section__title">Talent 2</h4>
+          <div class="icon-editor-wrap">{{{enriched.talent2}}}</div>
+          {{#if isEditable}}<textarea name="system.talent2" class="icon-editor">{{system.talent2}}</textarea>{{/if}}
+        {{/if}}
+        {{#if (icon-or system.mastery isEditable)}}
+          <h4 class="icon-section__title">Mastery</h4>
+          <div class="icon-editor-wrap">{{{enriched.mastery}}}</div>
+          {{#if isEditable}}<textarea name="system.mastery" class="icon-editor">{{system.mastery}}</textarea>{{/if}}
+        {{/if}}
+      </div>
+    {{/if}}
+  {{/icon-eq}}
+
+  {{!-- ===== LIMIT BREAK ===== --}}
+  {{#icon-eq itemType "limit-break"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Job</label>
+        <input type="text" name="system.jobName" value="{{system.jobName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Class</label>
+        <select name="system.class" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each classChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.class}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Cost</label>
+        <select name="system.cost" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="1action"  {{#icon-eq system.cost "1action"}}selected{{/icon-eq}}>1 Action</option>
+          <option value="2actions" {{#icon-eq system.cost "2actions"}}selected{{/icon-eq}}>2 Actions</option>
+        </select>
+        <label>Resolve Cost</label>
+        <input type="number" name="system.resolveCost" value="{{system.resolveCost}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Effect</h4>
+      <div class="icon-editor-wrap">{{{enriched.effect}}}</div>
+      {{#if isEditable}}<textarea name="system.effect" class="icon-editor">{{system.effect}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Ultimate (Chapter 3)</h4>
+      <div class="icon-editor-wrap">{{{enriched.ultimate}}}</div>
+      {{#if isEditable}}<textarea name="system.ultimate" class="icon-editor">{{system.ultimate}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== TRAIT ===== --}}
+  {{#icon-eq itemType "trait"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Job</label>
+        <input type="text" name="system.jobName" value="{{system.jobName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Class</label>
+        <select name="system.class" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each classChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.class}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Source</label>
+        <select name="system.source" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each sourceChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.source}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Chapter</label>
+        <select name="system.chapter" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each chapterChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.chapter}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>
+          <input type="checkbox" name="system.passive"
+                 {{#if system.passive}}checked{{/if}}
+                 {{#unless isEditable}}disabled{{/unless}}>
+          Passive
+        </label>
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== RELIC ===== --}}
+  {{#icon-eq itemType "relic"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Invoke Type</label>
+        <select name="system.invokeType" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each invokeChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.invokeType}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Condition</label>
+        <input type="text" name="system.invokeCondition" value="{{system.invokeCondition}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Form</label>
+        <input type="text" name="system.suggestedForm" value="{{system.suggestedForm}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field">
+        <label>Invoke Effect</label>
+        <div class="icon-editor-wrap">{{{enriched.invokeEffect}}}</div>
+        {{#if isEditable}}<textarea name="system.invokeEffect" class="icon-editor">{{system.invokeEffect}}</textarea>{{/if}}
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <div class="icon-relic-ranks">
+        <div class="icon-relic-rank icon-relic-rank--1">
+          <h4>Rank I (Free)</h4>
+          <div class="icon-editor-wrap">{{{enriched.rank1}}}</div>
+          {{#if isEditable}}<textarea name="system.rank1.description" class="icon-editor">{{system.rank1.description}}</textarea>{{/if}}
+        </div>
+        <div class="icon-relic-rank icon-relic-rank--2">
+          <h4>Rank II
+            <input type="number" name="system.rank2.dustCost" value="{{system.rank2.dustCost}}" min="0"
+                   {{#unless isEditable}}disabled{{/unless}}> Dust
+          </h4>
+          <div class="icon-editor-wrap">{{{enriched.rank2}}}</div>
+          {{#if isEditable}}<textarea name="system.rank2.description" class="icon-editor">{{system.rank2.description}}</textarea>{{/if}}
+        </div>
+        <div class="icon-relic-rank icon-relic-rank--3">
+          <h4>Rank III
+            <input type="number" name="system.rank3.dustCost" value="{{system.rank3.dustCost}}" min="0"
+                   {{#unless isEditable}}disabled{{/unless}}> Dust
+          </h4>
+          <div class="icon-editor-wrap">{{{enriched.rank3}}}</div>
+          {{#if isEditable}}<textarea name="system.rank3.description" class="icon-editor">{{system.rank3.description}}</textarea>{{/if}}
+        </div>
+        <div class="icon-relic-rank icon-relic-rank--aspect">
+          <h4>Aspect (12 Dust / Quest)</h4>
+          <div class="icon-editor-wrap">{{{enriched.aspect}}}</div>
+          {{#if isEditable}}<textarea name="system.aspect.description" class="icon-editor">{{system.aspect.description}}</textarea>{{/if}}
+          <div class="icon-editor-wrap"><em>{{{enriched.questDesc}}}</em></div>
+          {{#if isEditable}}<textarea name="system.aspect.questDescription" class="icon-editor">{{system.aspect.questDescription}}</textarea>{{/if}}
+        </div>
+      </div>
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== BOND ===== --}}
+  {{#icon-eq itemType "bond"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>+2 Action 1</label>
+        <input type="text" name="system.primaryActions.0" value="{{system.primaryActions.[0]}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>+2 Action 2</label>
+        <input type="text" name="system.primaryActions.1" value="{{system.primaryActions.[1]}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Effort Max</label>
+        <input type="number" name="system.effortMax" value="{{system.effortMax}}" min="1" max="6"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label>Second Wind Trigger</label>
+        <input type="text" name="system.secondWindTrigger" value="{{system.secondWindTrigger}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label>Ideal 1</label>
+        <input type="text" name="system.ideals.0" value="{{system.ideals.[0]}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Ideal 2</label>
+        <input type="text" name="system.ideals.1" value="{{system.ideals.[1]}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Special Ability</h4>
+      <div class="icon-editor-wrap">{{{enriched.specialAbility}}}</div>
+      {{#if isEditable}}<textarea name="system.specialAbility" class="icon-editor">{{system.specialAbility}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== BOND POWER ===== --}}
+  {{#icon-eq itemType "bond-power"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Bond</label>
+        <input type="text" name="system.bondName" value="{{system.bondName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Effort Cost</label>
+        <input type="number" name="system.effortCost" value="{{system.effortCost}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Limit/Session</label>
+        <input type="number" name="system.limitPerSession" value="{{system.limitPerSession}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>
+          <input type="checkbox" name="system.isGambit"
+                 {{#if system.isGambit}}checked{{/if}}
+                 {{#unless isEditable}}disabled{{/unless}}>
+          Gambit
+        </label>
+      </div>
+    </div>
+    {{#if system.chapterScaling.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Chapter Scaling</h4>
+        {{#each system.chapterScaling as |entry i|}}
+          <div class="icon-field-row">
+            <span class="icon-badge">Ch {{entry.chapter}}</span>
+            {{#if ../isEditable}}<textarea name="system.chapterScaling.{{i}}.description" class="icon-editor">{{entry.description}}</textarea>{{/if}}
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove"
+                      data-action="removeChapterScaling" data-index="{{i}}">✕</button>
+            {{/if}}
+          </div>
+        {{/each}}
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add"
+                  data-action="addChapterScaling">+ Chapter Entry</button>
+        {{/if}}
+      </div>
+    {{/if}}
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== GEAR KIT ===== --}}
+  {{#icon-eq itemType "gear-kit"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Bond</label>
+        <input type="text" name="system.bondName" value="{{system.bondName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Kit Name</label>
+        <input type="text" name="system.kitName" value="{{system.kitName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>
+          <input type="checkbox" name="system.isAdventurersKit"
+                 {{#if system.isAdventurersKit}}checked{{/if}}
+                 {{#unless isEditable}}disabled{{/unless}}>
+          Adventurer's Kit
+        </label>
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Items</h4>
+      {{#each system.items as |item i|}}
+        <div class="icon-field-row">
+          <input type="text" name="system.items.{{i}}" value="{{item}}"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+        </div>
+      {{/each}}
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ===== FOE ABILITY ===== --}}
+  {{#icon-eq itemType "foe-ability"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Type</label>
+        <select name="system.abilityType" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each abilityTypeChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.abilityType}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Cost</label>
+        <input type="text" name="system.cost" value="{{system.cost}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      {{#icon-eq system.abilityType "interrupt"}}
+        <div class="icon-field-row">
+          <label>Limit</label>
+          <input type="number" name="system.interruptLimit" value="{{system.interruptLimit}}" min="0"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+          <label>Trigger</label>
+          <input type="text" name="system.trigger" value="{{system.trigger}}"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+        </div>
+      {{/icon-eq}}
+      {{#icon-eq system.abilityType "round-action"}}
+        <div class="icon-field-row">
+          <label>Round</label>
+          <input type="number" name="system.roundNumber" value="{{system.roundNumber}}" min="1"
+                 {{#unless ../isEditable}}disabled{{/unless}}>
+        </div>
+      {{/icon-eq}}
+      {{!-- Tags --}}
+      <div class="icon-tags-row">
+        {{#each system.tags as |tag i|}}
+          <span class="icon-tag">
+            <input type="text" name="system.tags.{{i}}" value="{{tag}}"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                      data-action="removeTag" data-index="{{i}}">×</button>
+            {{/if}}
+          </span>
+        {{/each}}
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add icon-btn--sm"
+                  data-action="addTag">+ Tag</button>
+        {{/if}}
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Hit Effect</h4>
+      <div class="icon-editor-wrap">{{{enriched.hitEffect}}}</div>
+      {{#if isEditable}}<textarea name="system.hitEffect" class="icon-editor">{{system.hitEffect}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Miss Effect</h4>
+      <div class="icon-editor-wrap">{{{enriched.missEffect}}}</div>
+      {{#if isEditable}}<textarea name="system.missEffect" class="icon-editor">{{system.missEffect}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Area Effect</h4>
+      <div class="icon-editor-wrap">{{{enriched.areaEffect}}}</div>
+      {{#if isEditable}}<textarea name="system.areaEffect" class="icon-editor">{{system.areaEffect}}</textarea>{{/if}}
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ====================================================
+       JOB
+       ==================================================== --}}
+  {{#icon-eq itemType "job"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Class</label>
+        <select name="system.className" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each classChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.className}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Chapter</label>
+        <select name="system.chapter" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="1" {{#icon-eq system.chapter 1}}selected{{/icon-eq}}>1</option>
+          <option value="2" {{#icon-eq system.chapter 2}}selected{{/icon-eq}}>2</option>
+          <option value="3" {{#icon-eq system.chapter 3}}selected{{/icon-eq}}>3</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Base Stats</h4>
+      <div class="icon-field-row">
+        <label>VIT</label>
+        <input type="number" name="system.vit" value="{{system.vit}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Defense</label>
+        <input type="number" name="system.defense" value="{{system.defense}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Speed</label>
+        <input type="number" name="system.speed" value="{{system.speed}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label>Armor</label>
+        <input type="number" name="system.armor" value="{{system.armor}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Fray</label>
+        <input type="number" name="system.fray" value="{{system.fray}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>[D]</label>
+        <select name="system.damagedie" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="d6"  {{#icon-eq system.damagedie "d6"}}selected{{/icon-eq}}>d6</option>
+          <option value="d8"  {{#icon-eq system.damagedie "d8"}}selected{{/icon-eq}}>d8</option>
+          <option value="d10" {{#icon-eq system.damagedie "d10"}}selected{{/icon-eq}}>d10</option>
+        </select>
+        <label>Basic Attack Range</label>
+        <input type="number" name="system.basicAttackRange" value="{{system.basicAttackRange}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+
+    <div class="icon-item-section">
+      <div class="icon-section__header">
+        <h4 class="icon-section__title">Traits</h4>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add icon-btn--sm" data-action="addJobTrait">+ Trait</button>
+        {{/if}}
+      </div>
+      {{#each enrichedJobTraits as |t|}}
+        <div class="icon-job-trait">
+          <div class="icon-field-row">
+            <input type="text" name="system.traits.{{t.i}}.name" value="{{t.name}}"
+                   placeholder="Trait name"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                      data-action="removeJobTrait" data-index="{{t.i}}">×</button>
+            {{/if}}
+          </div>
+          <div class="icon-editor-wrap">{{{t.enrichedDescription}}}</div>
+          {{#if ../isEditable}}
+            <textarea name="system.traits.{{t.i}}.description" class="icon-editor">{{t.description}}</textarea>
+          {{/if}}
+        </div>
+      {{/each}}
+      {{#unless enrichedJobTraits.length}}
+        <p class="icon-empty">No traits yet. Click "+ Trait" to add one.</p>
+      {{/unless}}
+    </div>
+
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+  {{!-- ====================================================
+       JOB TEMPLATE — drag onto an Icon PC to import job data
+       ==================================================== --}}
+  {{#icon-eq itemType "job-template"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Class</label>
+        <select name="system.class" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each classChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.class}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+        <label>Job Name</label>
+        <input type="text" name="system.jobName" value="{{system.jobName}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Base Stats</h4>
+      <div class="icon-field-row">
+        <label>VIT</label>
+        <input type="number" name="system.baseStats.vit" value="{{system.baseStats.vit}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Defense</label>
+        <input type="number" name="system.baseStats.defense" value="{{system.baseStats.defense}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Speed</label>
+        <input type="number" name="system.baseStats.speed" value="{{system.baseStats.speed}}" min="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label>Armor</label>
+        <input type="number" name="system.baseStats.armor" value="{{system.baseStats.armor}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Fray</label>
+        <input type="number" name="system.baseStats.fray" value="{{system.baseStats.fray}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>[D]</label>
+        <select name="system.baseStats.damagedie" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="d6"  {{#icon-eq system.baseStats.damagedie "d6"}}selected{{/icon-eq}}>d6</option>
+          <option value="d8"  {{#icon-eq system.baseStats.damagedie "d8"}}selected{{/icon-eq}}>d8</option>
+          <option value="d10" {{#icon-eq system.baseStats.damagedie "d10"}}selected{{/icon-eq}}>d10</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="icon-item-section">
+      <div class="icon-section__header">
+        <h4 class="icon-section__title">Weapon Slots</h4>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add icon-btn--sm" data-action="addWeaponSlot">+ Slot</button>
+        {{/if}}
+      </div>
+      <div class="icon-tags-row">
+        {{#each system.weaponSlots as |slot i|}}
+          <span class="icon-tag">
+            <input type="text" name="system.weaponSlots.{{i}}" value="{{slot}}"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                      data-action="removeWeaponSlot" data-index="{{i}}">×</button>
+            {{/if}}
+          </span>
+        {{/each}}
+      </div>
+    </div>
+
+    <div class="icon-item-section">
+      <div class="icon-section__header">
+        <h4 class="icon-section__title">Traits</h4>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--add icon-btn--sm" data-action="addJobTrait">+ Trait</button>
+        {{/if}}
+      </div>
+      {{#each enrichedJobTraits as |t|}}
+        <div class="icon-job-trait">
+          <div class="icon-field-row">
+            <input type="text" name="system.traits.{{t.i}}.name" value="{{t.name}}"
+                   placeholder="Trait name"
+                   {{#unless ../isEditable}}disabled{{/unless}}>
+            <label>Ch</label>
+            <select name="system.traits.{{t.i}}.chapter" {{#unless ../isEditable}}disabled{{/unless}}>
+              <option value="1" {{#icon-eq t.chapter 1}}selected{{/icon-eq}}>1</option>
+              <option value="2" {{#icon-eq t.chapter 2}}selected{{/icon-eq}}>2</option>
+              <option value="3" {{#icon-eq t.chapter 3}}selected{{/icon-eq}}>3</option>
+            </select>
+            {{#if ../isEditable}}
+              <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
+                      data-action="removeJobTrait" data-index="{{t.i}}">×</button>
+            {{/if}}
+          </div>
+          <div class="icon-editor-wrap">{{{t.enrichedDescription}}}</div>
+          {{#if ../isEditable}}
+            <textarea name="system.traits.{{t.i}}.description" class="icon-editor">{{t.description}}</textarea>
+          {{/if}}
+        </div>
+      {{/each}}
+      {{#unless enrichedJobTraits.length}}
+        <p class="icon-empty">No traits yet.</p>
+      {{/unless}}
+    </div>
+
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Limit Break</h4>
+      <div class="icon-field-row">
+        <label>Name</label>
+        <input type="text" name="system.limitBreak.name" value="{{system.limitBreak.name}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Resolve Cost</label>
+        <input type="number" name="system.limitBreak.resolveCost" value="{{system.limitBreak.resolveCost}}" min="0"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Cost</label>
+        <select name="system.limitBreak.cost" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each costChoices as |label key|}}
+            <option value="{{key}}" {{#icon-eq key ../system.limitBreak.cost}}selected{{/icon-eq}}>{{label}}</option>
+          {{/each}}
+        </select>
+      </div>
+      <h5 class="icon-section__title">Effect</h5>
+      <div class="icon-editor-wrap">{{{enriched.lbEffect}}}</div>
+      {{#if isEditable}}<textarea name="system.limitBreak.effect" class="icon-editor">{{system.limitBreak.effect}}</textarea>{{/if}}
+      <h5 class="icon-section__title">Ultimate (Chapter 3)</h5>
+      <div class="icon-editor-wrap">{{{enriched.lbUltimate}}}</div>
+      {{#if isEditable}}<textarea name="system.limitBreak.ultimate" class="icon-editor">{{system.limitBreak.ultimate}}</textarea>{{/if}}
+    </div>
+
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Description</h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+    </div>
+  {{/icon-eq}}
+
+</section>

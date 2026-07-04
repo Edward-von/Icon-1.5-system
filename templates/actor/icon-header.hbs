@@ -1,0 +1,36 @@
+{{!-- icon-header.hbs --}}
+<header class="icon-sheet__header">
+  <img class="icon-sheet__portrait" src="{{actor.img}}" alt="{{actor.name}}"
+       data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+  <div class="icon-sheet__identity">
+    <input class="icon-sheet__name" type="text" name="name" value="{{actor.name}}"
+           {{#unless isEditable}}disabled{{/unless}}>
+    <div class="icon-sheet__meta">
+      <select name="system.biography.kintype" {{#unless isEditable}}disabled{{/unless}}>
+        <option value="">— Kin —</option>
+        {{#each config.kinTypes as |labelKey key|}}
+          <option value="{{key}}" {{#icon-eq key ../system.biography.kintype}}selected{{/icon-eq}}>
+            {{localize labelKey}}
+          </option>
+        {{/each}}
+      </select>
+      <select name="system.biography.culture" {{#unless isEditable}}disabled{{/unless}}>
+        <option value="">— Culture —</option>
+        {{#each config.cultures as |labelKey key|}}
+          <option value="{{key}}" {{#icon-eq key ../system.biography.culture}}selected{{/icon-eq}}>
+            {{localize labelKey}}
+          </option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="icon-sheet__badges">
+      <span class="icon-badge icon-badge--level">Lv {{system.combat.level}}</span>
+      <span class="icon-badge icon-badge--chapter">Ch {{system.combat.chapter}}</span>
+      {{#each system.combat.jobs as |job i|}}
+        <span class="icon-badge icon-badge--job icon-class--{{job.class}} {{#if job.primary}}icon-badge--primary{{/if}}">
+          {{job.name}}{{#if job.primary}} ★{{/if}}
+        </span>
+      {{/each}}
+    </div>
+  </div>
+</header>

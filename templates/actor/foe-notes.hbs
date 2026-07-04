@@ -1,0 +1,36 @@
+{{!-- foe-notes.hbs --}}
+<section class="tab icon-tab icon-tab--foe-notes {{tab.cssClass}}" data-tab="notes" data-group="primary">
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Tactics</h3>
+    <div class="icon-editor-wrap">{{{enrichedTactics}}}</div>
+    {{#if isEditable}}
+      <textarea name="system.tactics" class="icon-editor">{{system.tactics}}</textarea>
+    {{/if}}
+  </div>
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Defeat</h3>
+    <div class="icon-editor-wrap">{{{enrichedDefeat}}}</div>
+    {{#if isEditable}}
+      <textarea name="system.defeat" class="icon-editor">{{system.defeat}}</textarea>
+    {{/if}}
+  </div>
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Loot</h3>
+    <div class="icon-editor-wrap">{{{enrichedLoot}}}</div>
+    {{#if isEditable}}
+      <textarea name="system.loot" class="icon-editor">{{system.loot}}</textarea>
+    {{/if}}
+  </div>
+
+  <div class="icon-section">
+    <h3 class="icon-section__title">Description</h3>
+    <div class="icon-editor-wrap">{{{enrichedDescription}}}</div>
+    {{#if isEditable}}
+      <textarea name="system.description" class="icon-editor">{{system.description}}</textarea>
+    {{/if}}
+  </div>
+
+</section>

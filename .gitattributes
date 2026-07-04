@@ -1,0 +1,9 @@
+# LevelDB pack files are binary — never touch line endings
+packs/** -text
+
+# Everything else: normalize to LF in repo, keep LF on checkout
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.pdf binary

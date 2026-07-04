@@ -1,0 +1,15 @@
+# Rulebook reference material (Massif Press content, not distributable; excluded from deploy too)
+ICON 1.5.pdf
+ICON 1.5.txt
+
+# LevelDB pack lock/log files change at runtime; packs themselves ARE tracked
+packs/**/LOCK
+
+# Backups and scratch
+*.bak
+_safety-*/
+_installed-backup-*/
+
+# OS noise
+Thumbs.db
+Desktop.ini

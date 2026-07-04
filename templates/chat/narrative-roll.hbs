@@ -1,0 +1,35 @@
+{{!-- templates/chat/narrative-roll.hbs --}}
+<div class="icon-chat-card icon-chat-card--narrative icon-chat-card--{{outcome}}">
+  <div class="icon-chat-card__header">
+    <span class="icon-chat-card__action">{{actionLabel}}</span>
+    {{#unless isStandard}}
+      <span class="icon-chat-card__rolltype icon-chat-card__rolltype--{{rollType}}">
+        {{rollTypeLabel}}
+      </span>
+    {{/unless}}
+    <span class="icon-chat-card__pool">
+      {{#if isLowest}}2d6 pick lowest{{else}}{{pool}}d6{{/if}}
+      {{#if boons}} +{{boons}}B{{/if}}{{#if curses}} −{{curses}}C{{/if}}
+      (rating {{rating}})
+    </span>
+  </div>
+
+  <div class="icon-chat-card__dice">
+    {{#each diceData as |die|}}
+      <span class="icon-chat-die
+                   {{#if die.picked}}icon-chat-die--picked{{/if}}
+                   {{#if die.isSix}}icon-chat-die--six{{/if}}">
+        {{die.value}}
+      </span>
+    {{/each}}
+  </div>
+
+  <div class="icon-chat-card__result icon-chat-card__result--{{outcome}}">
+    <strong class="icon-chat-card__value">{{result}}</strong>
+    <span class="icon-chat-card__outcome-label">— {{outcomeLabel}}</span>
+  </div>
+
+  {{#if outcomeEffect}}
+    <p class="icon-chat-card__effect-hint">{{outcomeEffect}}</p>
+  {{/if}}
+</div>

@@ -1,0 +1,698 @@
+/**
+ * icon.mjs — Entry point for ICON 1.5 Foundry VTT v13 system.
+ */
+
+/* -------------------------------------------------- */
+/*  Config                                             */
+/* -------------------------------------------------- */
+import { ICON } from "./module/config.mjs";
+
+/* -------------------------------------------------- */
+/*  Data Models — Actors                               */
+/* -------------------------------------------------- */
+import { IconData   } from "./module/data/actor/IconData.mjs";
+import { SummonData } from "./module/data/actor/SummonData.mjs";
+import { FoeData    } from "./module/data/actor/FoeData.mjs";
+import { LegendData } from "./module/data/actor/LegendData.mjs";
+
+/* -------------------------------------------------- */
+/*  Data Models — Items                                */
+/* -------------------------------------------------- */
+import { AbilityData    } from "./module/data/item/AbilityData.mjs";
+import { LimitBreakData } from "./module/data/item/LimitBreakData.mjs";
+import { TraitData      } from "./module/data/item/TraitData.mjs";
+import { RelicData      } from "./module/data/item/RelicData.mjs";
+import { BondData       } from "./module/data/item/BondData.mjs";
+import { BondPowerData  } from "./module/data/item/BondPowerData.mjs";
+import { GearKitData    } from "./module/data/item/GearKitData.mjs";
+import { FoeAbilityData } from "./module/data/item/FoeAbilityData.mjs";
+import { JobTemplateData } from "./module/data/item/JobTemplateData.mjs";
+
+/* -------------------------------------------------- */
+/*  Actor & Item Documents                             */
+/* -------------------------------------------------- */
+import { IconActor } from "./module/actor/IconActor.mjs";
+import { IconItem  } from "./module/item/IconItem.mjs";
+
+/* -------------------------------------------------- */
+/*  Sheets                                             */
+/* -------------------------------------------------- */
+import { IconSheet    } from "./module/actor/sheets/IconSheet.mjs";
+import { SummonSheet  } from "./module/actor/sheets/SummonSheet.mjs";
+import { FoeSheet     } from "./module/actor/sheets/FoeSheet.mjs";
+import { LegendSheet  } from "./module/actor/sheets/LegendSheet.mjs";
+import { IconItemSheet } from "./module/item/IconItemSheet.mjs";
+
+/* -------------------------------------------------- */
+/*  Combat                                             */
+/* -------------------------------------------------- */
+import { IconCombat, registerCombatHooks } from "./module/combat/IconCombat.mjs";
+
+/* -------------------------------------------------- */
+/*  Dice                                               */
+/* -------------------------------------------------- */
+import { narrativeRoll, combatRoll, saveRoll, damageRoll } from "./module/dice/rolls.mjs";
+
+/* -------------------------------------------------- */
+/*  Combat utilities (damage, status, vigor, wounds)  */
+/* -------------------------------------------------- */
+import { applyDamagePipeline, addVigor, clearVigor,
+         applyWound, recoverAction, postCombatHeal } from "./module/combat/damage.mjs";
+import { registerStatuses, applyStatus, removeStatus,
+         toggleOngoing, hasStatus }                 from "./module/combat/statuses.mjs";
+
+/* -------------------------------------------------- */
+/*  Helpers                                            */
+/* -------------------------------------------------- */
+import { registerHandlebarsHelpers } from "./module/helpers/handlebars.mjs";
+
+/* -------------------------------------------------- */
+/*  Onboarding                                         */
+/* -------------------------------------------------- */
+import { showWelcomeGuide } from "./module/apps/welcome.mjs";
+import { showReferenceGuide } from "./module/apps/reference.mjs";
+
+/* -------------------------------------------------- */
+/*  Token status HUD (PF2e-style selected-token panel) */
+/* -------------------------------------------------- */
+import { registerTokenStatusHud } from "./module/apps/token-status-hud.mjs";
+
+/* ================================================== */
+/*  init                                              */
+/* ================================================== */
+
+Hooks.once("init", () => {
+  console.log("ICON 1.5 | Initialising system");
+
+  // ---- House rules (opt-in) ----
+  // Off by default: divergences from the ICON 1.5 RAW manual.
+  // Enabled by the GM in Configure Settings → System Settings.
+  game.settings.register("icon-system", "hrPartyResolveAutoIncrement", {
+    name: "House Rule — Party Resolve +1 at the start of each round",
+    hint: "If enabled, Party Resolve increases by 1 at the start of every combat round. House rule: the RAW manual provides no automatic increment.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+  game.settings.register("icon-system", "hrInterludeDustHealing", {
+    name: "House Rule — Dust to heal Burdens during an Interlude",
+    hint: "If enabled, during an Interlude PCs may spend 2 Dust for each extra Burden segment healed (beyond the base 3). House rule: in RAW, spending Dust per segment exists only for Ambition clocks, not Burdens.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+  game.settings.register("icon-system", "hrNarrativeDifficultyVariants", {
+    name: "House Rule — Heroic / Routine narrative difficulties",
+    hint: "If enabled, the narrative-roll prompt lets you choose between Standard, Heroic (harder) and Routine (easier). House rule: the RAW manual only provides the Standard difficulty.",
+    scope: "world",
+    config: true,
+    type: Boolean,
+    default: false,
+  });
+
+  // First-launch onboarding guide — shown once per user (client-scoped flag).
+  game.settings.register("icon-system", "welcomeShown", {
+    name:   "Welcome guide shown",
+    scope:  "client",
+    config: false,
+    type:   Boolean,
+    default: false,
+  });
+
+  // Expose config
+  CONFIG.ICON = ICON;
+
+  // ---- Combat document class ----
+  CONFIG.Combat.documentClass = IconCombat;
+
+  // ---- Document classes ----
+  CONFIG.Actor.documentClass = IconActor;
+  CONFIG.Item.documentClass  = IconItem;
+
+  // ---- Data models — Actors ----
+  CONFIG.Actor.dataModels = {
+    icon:   IconData,
+    summon: SummonData,
+    foe:    FoeData,
+    legend: LegendData,
+  };
+
+  // ---- Data models — Items ----
+  CONFIG.Item.dataModels = {
+    "ability":     AbilityData,
+    "limit-break": LimitBreakData,
+    "trait":       TraitData,
+    "relic":       RelicData,
+    "bond":        BondData,
+    "bond-power":  BondPowerData,
+    "gear-kit":    GearKitData,
+    "foe-ability":  FoeAbilityData,
+    "job-template": JobTemplateData,
+  };
+
+  // ---- Register sheets ----
+  foundry.documents.collections.Actors.registerSheet("icon-system", IconSheet,   { types: ["icon"],    makeDefault: true });
+  foundry.documents.collections.Actors.registerSheet("icon-system", FoeSheet,    { types: ["foe"],     makeDefault: true });
+  foundry.documents.collections.Actors.registerSheet("icon-system", LegendSheet, { types: ["legend"],  makeDefault: true });
+  foundry.documents.collections.Actors.registerSheet("icon-system", SummonSheet, { types: ["summon"],  makeDefault: true });
+  foundry.documents.collections.Items.registerSheet("icon-system",  IconItemSheet, { makeDefault: true });
+
+  // ---- Status effects ----
+  registerStatuses();
+
+  // ---- Combat hooks (turn automation, tracker UI) ----
+  registerCombatHooks();
+
+  // ---- Handlebars helpers ----
+  registerHandlebarsHelpers();
+
+  // ---- Global API for macros ----
+  game.icon = {
+    narrativeRoll,
+    combatRoll,
+    saveRoll,
+    damageRoll,
+    applyDamagePipeline,
+    addVigor,
+    clearVigor,
+    applyWound,
+    recoverAction,
+    postCombatHeal,
+    applyStatus,
+    removeStatus,
+    toggleOngoing,
+    hasStatus,
+    IconCombat,
+    showWelcomeGuide,
+    showReferenceGuide,
+  };
+
+  console.log("ICON 1.5 | System initialised");
+});
+
+/* ================================================== */
+/*  ready                                             */
+/* ================================================== */
+
+/* ----------------------------------------------------------------
+ * preCreateActor: lock token rotation by default for new actors.
+ * ICON tokens shouldn't rotate when moved — facing isn't a tactical
+ * resource in this system. Existing actors must be updated manually
+ * (right-click token → Configure → lock rotation).
+ * ---------------------------------------------------------------- */
+Hooks.on("preCreateActor", (doc, data /*, options, userId */) => {
+  try {
+    doc.updateSource({ "prototypeToken.lockRotation": true });
+  } catch (err) {
+    console.warn("ICON 1.5 | preCreateActor lockRotation failed:", err);
+  }
+});
+
+/* ----------------------------------------------------------------
+ * preCreateToken: also lock rotation on every token placed on a scene,
+ * regardless of the prototype settings. Belt-and-suspenders for actors
+ * that were created before the prototype hook was installed.
+ * ---------------------------------------------------------------- */
+Hooks.on("preCreateToken", (doc, data /*, options, userId */) => {
+  try {
+    doc.updateSource({ lockRotation: true });
+  } catch (err) {
+    console.warn("ICON 1.5 | preCreateToken lockRotation failed:", err);
+  }
+});
+
+Hooks.once("ready", async () => {
+  console.log("ICON 1.5 | Ready");
+
+  /* Selected-token status panel (top-right, PF2e-style). */
+  try {
+    registerTokenStatusHud();
+  } catch (err) {
+    console.warn("ICON 1.5 | Token status HUD failed to register:", err);
+  }
+
+  /* The blocks below are defensive workarounds for bugs in Foundry v13's
+   * Notifications / CombatTracker / token-HUD combat-toggle pipeline. They are
+   * written to be harmless no-ops when the underlying bug is absent: each one
+   * either acts only on a specific error string or guards for a missing method.
+   * On v14+ they should be re-verified and removed once combat start, the token
+   * HUD combat toggle, and notifications are confirmed working without them. */
+  if ((game.release?.generation ?? 0) >= 14) {
+    console.debug("ICON 1.5 | Foundry v14+ detected — the v13 compatibility shims in the ready hook are candidates for removal after a smoke test (combat toggle, notifications, tracker hover).");
+  }
+
+  /* First-launch onboarding: show the "how to build a character" guide once
+   * per user. The flag is client-scoped, so every GM and player sees it on
+   * their first load and never again automatically; it can be reopened any
+   * time from the Character Management section of the PC sheet. */
+  try {
+    if (!game.settings.get("icon-system", "welcomeShown")) {
+      showWelcomeGuide();
+      await game.settings.set("icon-system", "welcomeShown", true);
+    }
+  } catch (err) {
+    console.warn("ICON 1.5 | Welcome guide failed:", err);
+  }
+
+  /* --------------------------------------------------------------
+   * Monkey-patch ui.notifications.warn/info/error to swallow internal
+   * formatter errors. Foundry v13 has a bug where the Notifications
+   * class's internal #fetch throws "Cannot convert undefined or null
+   * to object" when destructuring malformed data — this surfaces as
+   * a cryptic console error during #onToggleCombat and other flows
+   * even when the underlying operation succeeds. We wrap the three
+   * notification methods so exceptions from the formatter are logged
+   * quietly instead of propagating up the call stack.
+   * -------------------------------------------------------------- */
+  if (ui?.notifications) {
+    for (const method of ["warn", "info", "error"]) {
+      const original = ui.notifications[method]?.bind(ui.notifications);
+      if (!original) continue;
+      ui.notifications[method] = function(...args) {
+        const swallow = (err) => {
+          console.debug(`ICON 1.5 | Suppressed notifications.${method} error:`, err?.message || err, "args:", args);
+          return null;
+        };
+        try {
+          const result = original(...args);
+          // Handle both sync throws AND async rejections from core's buggy
+          // #fetch pipeline in Foundry v13's Notifications class.
+          if (result && typeof result.catch === "function") {
+            return result.catch(swallow);
+          }
+          return result;
+        } catch (err) {
+          return swallow(err);
+        }
+      };
+    }
+  }
+
+  /* --------------------------------------------------------------
+   * Global unhandled-rejection catcher for the "Cannot convert
+   * undefined or null to object" errors originating from Foundry
+   * core's Notifications #fetch. Prevents the cryptic red console
+   * error when core's notification path rejects without being awaited.
+   * -------------------------------------------------------------- */
+  window.addEventListener("unhandledrejection", (ev) => {
+    const msg = ev.reason?.message || String(ev.reason || "");
+    if (msg.includes("Cannot convert undefined or null to object")) {
+      console.debug("ICON 1.5 | Swallowed core notification rejection:", ev.reason);
+      ev.preventDefault();
+    }
+  });
+
+  /* --------------------------------------------------------------
+   * Patch CombatTracker hover handlers. Foundry v13's
+   * _onCombatantHoverIn/Out read `combatant.token.object` without a
+   * null guard — when a combat still holds a combatant whose token
+   * no longer exists on the current scene (stale combat, scene
+   * switch, deleted token), hovering a row throws
+   * "Cannot read properties of undefined (reading 'token')".
+   * We wrap both handlers to swallow the error silently.
+   * -------------------------------------------------------------- */
+  try {
+    const Tracker = foundry.applications.sidebar.tabs.CombatTracker;
+    for (const method of ["_onCombatantHoverIn", "_onCombatantHoverOut"]) {
+      const original = Tracker?.prototype?.[method];
+      if (typeof original !== "function") continue;
+      Tracker.prototype[method] = function(...args) {
+        try {
+          return original.apply(this, args);
+        } catch (err) {
+          console.debug(`ICON 1.5 | Suppressed CombatTracker.${method} error:`, err?.message || err);
+          return null;
+        }
+      };
+    }
+  } catch (err) {
+    console.warn("ICON 1.5 | Could not patch CombatTracker hover handlers:", err);
+  }
+
+  /* --------------------------------------------------------------
+   * Override the token HUD "Toggle Combat State" button.
+   *
+   * Foundry v13 core's #onToggleCombat pipeline triggers a bug in
+   * Notifications#fetch ("Cannot convert undefined or null to
+   * object") that aborts the flow mid-execution, leaving the combat
+   * tracker empty. Since #onToggleCombat is a private method we
+   * can't patch it directly — instead we replace the click handler
+   * on the HUD button with our own implementation that creates
+   * the combat + combatants cleanly.
+   * -------------------------------------------------------------- */
+  Hooks.on("renderTokenHUD", (hud, html /*, data */) => {
+    try {
+      const root = html instanceof HTMLElement ? html : html?.[0];
+      if (!root) return;
+      const btn = root.querySelector('[data-action="combat"]')
+               ?? root.querySelector('.control-icon.combat');
+      if (!btn) return;
+
+      // Clone-replace strips core's click listeners
+      const fresh = btn.cloneNode(true);
+      btn.parentNode.replaceChild(fresh, btn);
+
+      fresh.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        try {
+          await iconToggleCombatForHUD(hud);
+        } catch (err) {
+          console.error("ICON 1.5 | iconToggleCombatForHUD failed:", err);
+          ui.notifications.error(`Toggle combat failed: ${err.message}. See console.`);
+        }
+      });
+    } catch (err) {
+      console.error("ICON 1.5 | Error wiring token HUD combat button:", err);
+    }
+  });
+
+  /* Expose a manual migration on the global API. The automatic version was
+   * disabled because it could leave tokens in a state Foundry's internal
+   * #onToggleCombat couldn't handle, producing a cryptic
+   * "Cannot convert undefined or null to object" error.
+   *
+   * Run from the GM console:
+   *   await game.icon.linkAllTokens();
+   */
+  game.icon = game.icon ?? {};
+
+  /** Delete all existing Combat encounters (useful when a combat is stuck). */
+  game.icon.resetCombats = async function() {
+    if (!game.user.isGM) { ui.notifications.warn("GM only."); return; }
+    const all = [...game.combats];
+    for (const c of all) {
+      try { await c.delete(); } catch (err) {
+        console.error(`ICON 1.5 | Failed to delete combat ${c.id}:`, err);
+      }
+    }
+    ui.notifications.info(`ICON 1.5 — deleted ${all.length} combat${all.length !== 1 ? "s" : ""}.`);
+  };
+
+  game.icon.linkAllTokens = async function() {
+    if (!game.user.isGM) {
+      ui.notifications.warn("Only the GM can run this migration.");
+      return;
+    }
+
+    let actorsFixed = 0;
+    for (const actor of game.actors) {
+      if (actor.prototypeToken?.actorLink !== true) {
+        try {
+          await actor.update({ "prototypeToken.actorLink": true });
+          actorsFixed++;
+        } catch (err) {
+          console.error(`ICON 1.5 | Failed to link prototype for "${actor.name}":`, err);
+        }
+      }
+    }
+
+    let tokensFixed = 0;
+    for (const scene of game.scenes) {
+      const unlinked = scene.tokens.filter(t =>
+        t.actorLink !== true &&
+        t.actorId &&
+        game.actors.has(t.actorId)       // skip tokens with dangling actor refs
+      );
+      if (!unlinked.length) continue;
+      const updates = unlinked.map(t => ({ _id: t.id, actorLink: true }));
+      try {
+        await scene.updateEmbeddedDocuments("Token", updates);
+        tokensFixed += unlinked.length;
+      } catch (err) {
+        console.error(`ICON 1.5 | Failed to link tokens on scene "${scene.name}":`, err);
+      }
+    }
+
+    const msg = `ICON 1.5 — linkAllTokens: ${actorsFixed} actor prototype${actorsFixed !== 1 ? "s" : ""}, ${tokensFixed} placed token${tokensFixed !== 1 ? "s" : ""} updated.`;
+    console.log(`ICON 1.5 | ${msg}`);
+    ui.notifications.info(msg);
+  };
+});
+
+/* ================================================== */
+/*  Token HUD — custom toggle combat                   */
+/* ================================================== */
+
+/**
+ * Replacement for Foundry core's token HUD combat-toggle flow.
+ * Bypasses the buggy Notifications#fetch path by doing the combat
+ * and combatant creation directly.
+ *
+ * Behavior: toggles every currently-controlled token. If none are
+ * controlled, toggles the token the HUD is attached to. Creates a
+ * Combat for the active scene if none exists.
+ */
+async function iconToggleCombatForHUD(hud) {
+  const scene = canvas.scene;
+  if (!scene) {
+    ui.notifications.warn("No active scene.");
+    return;
+  }
+
+  /* --- Collect target tokens --- */
+  const controlled = canvas.tokens?.controlled ?? [];
+  const hudToken   = hud?.object;
+  const targets    = controlled.length ? controlled : (hudToken ? [hudToken] : []);
+  if (!targets.length) {
+    ui.notifications.warn("No tokens selected.");
+    return;
+  }
+
+  /* --- Get or create a Combat on this scene --- */
+  let combat = game.combats.find(c => c.scene?.id === scene.id);
+  if (!combat) {
+    combat = await Combat.create({ scene: scene.id, active: true });
+    if (!combat) {
+      ui.notifications.error("Failed to create combat.");
+      return;
+    }
+  }
+  if (!combat.active) {
+    try { await combat.activate(); } catch (err) {
+      console.warn("ICON 1.5 | Could not activate combat:", err);
+    }
+  }
+
+  /* --- Ensure combat.previous is an object, not null ---
+   * Foundry v13 core's Combat#recordPreviousState runs
+   * `Object.assign(this.previous, {...})` when combatants are added.
+   * On a freshly-created Combat document, `this.previous` can be null,
+   * which makes Object.assign throw "Cannot convert undefined or null
+   * to object" and aborts the combatant creation transaction.
+   * We seed it to a valid empty state before touching combatants. */
+  if (combat.previous == null) {
+    combat.previous = { round: null, turn: null, tokenId: null, combatantId: null };
+  }
+
+  /* --- Partition targets: add new, remove existing --- */
+  const toAdd    = [];
+  const toRemove = [];
+  for (const t of targets) {
+    const existing = combat.combatants.find(c =>
+      c.tokenId === t.id && c.sceneId === scene.id
+    );
+    if (existing) {
+      toRemove.push(existing.id);
+      continue;
+    }
+    if (!t.actor) {
+      console.warn(`ICON 1.5 | Skipping token "${t.name}" — no actor.`);
+      continue;
+    }
+    toAdd.push({
+      tokenId: t.id,
+      sceneId: scene.id,
+      actorId: t.actor.id,
+      hidden:  t.document.hidden ?? false,
+    });
+  }
+
+  if (toRemove.length) {
+    await combat.deleteEmbeddedDocuments("Combatant", toRemove);
+  }
+  if (toAdd.length) {
+    await combat.createEmbeddedDocuments("Combatant", toAdd);
+  }
+}
+
+/* ================================================== */
+/*  Chat card actions — Apply Damage from damage-card  */
+/* ================================================== */
+
+/**
+ * Wire up the "Apply Damage" buttons on damage-card chat messages.
+ * Foundry v13 exposes `renderChatMessageHTML` which passes the HTMLElement
+ * of the rendered message. We delegate clicks on any `[data-action="applyDamage"]`
+ * button inside the card.
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  const buttons = html.querySelectorAll('[data-action="applyDamage"]');
+  if (!buttons.length) return;
+
+  buttons.forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+
+      const uuid   = btn.dataset.actorUuid;
+      const amount = Number(btn.dataset.amount) || 0;
+      const half   = btn.dataset.half === "true";
+
+      if (!uuid || amount <= 0) return;
+
+      const actor = await fromUuid(uuid);
+      if (!actor) {
+        ui.notifications.error(`Could not find target actor for damage application.`);
+        return;
+      }
+
+      // ICON pipeline: subtract the DEFENDER's own Armor before any halving.
+      // PCs store armor at system.combat.armor; foes/legends/summons at system.armor.
+      const armor = actor.type === "icon"
+        ? (actor.system?.combat?.armor ?? 0)
+        : (actor.system?.armor ?? 0);
+      const afterArmor = Math.max(0, amount - armor);
+      const armorBlocked = amount - afterArmor;        // how much armor actually absorbed
+      // Armor applies before the ½ (Resistance/Cover) split, per the manual.
+      const apply  = half ? Math.floor(afterArmor / 2) : afterArmor;
+
+      // Permission check — only owners (or GM) can update the actor
+      if (!actor.isOwner) {
+        ui.notifications.warn(`You don't have permission to apply damage to "${actor.name}".`);
+        return;
+      }
+
+      // ICON stores HP in different places per actor type:
+      //   • icon (PCs) — system.combat.hp.{value,max} + system.combat.vigor
+      //   • foe / legend — system.hp.{value,max} + system.vigor
+      //   • mob (foeClass === "mob") — system.mob.hitsRemaining (damage instance
+      //       removes exactly 1 hit regardless of amount, per manual p.291)
+      //   • summon — system.hp.{value,max} (no vigor)
+      // Pick the right path so damage lands on the real HP/hits field.
+      const type        = actor.type;
+      const isMob       = type === "foe" && actor.system?.foeClass === "mob";
+      const useCombatPath = type === "icon";
+
+      /* --- MOB path: decrement 1 hit per damage instance --- */
+      if (isMob) {
+        const mob = actor.system?.mob ?? { members: 0, hitsRemaining: 0 };
+        const hitsBefore = mob.hitsRemaining ?? 0;
+        const hitsAfter  = Math.max(0, hitsBefore - 1);
+        const membersAfter = Math.ceil(hitsAfter / 2);   // 2 hits per member
+        await actor.update({
+          "system.mob.hitsRemaining": hitsAfter,
+          "system.mob.members":       membersAfter,
+        });
+
+        await ChatMessage.create({
+          speaker: { alias: "Damage Applied" },
+          content: `<div class="icon-chat-card icon-chat-card--apply">
+                      <strong>${actor.name}</strong>: 1 hit removed
+                      <br><small>hits ${hitsBefore} → ${hitsAfter} (${membersAfter} members remaining)</small>
+                      ${hitsAfter === 0 ? "<br><strong>Mob defeated!</strong>" : ""}
+                    </div>`,
+        });
+
+        btn.disabled = true;
+        btn.textContent = `✓ −1 hit`;
+        btn.style.opacity = "0.5";
+        return;
+      }
+
+      const hpPath      = useCombatPath ? "system.combat.hp.value"    : "system.hp.value";
+      const vigorPath   = useCombatPath ? "system.combat.vigor.value" : "system.vigor.value";
+      const hpContainer = useCombatPath ? actor.system?.combat?.hp    : actor.system?.hp;
+      const vgContainer = useCombatPath ? actor.system?.combat?.vigor : actor.system?.vigor;
+      const currentHp   = hpContainer?.value ?? 0;
+      const currentVigor = vgContainer?.value ?? 0;
+
+      // Vigor absorbs damage before HP (ICON rule: "damage hits vigor before HP").
+      // Applies to any actor that has a vigor field — PCs, foes, legends.
+      let vigorAbsorbed = 0;
+      let remaining     = apply;
+      if (currentVigor > 0) {
+        vigorAbsorbed = Math.min(currentVigor, remaining);
+        remaining    -= vigorAbsorbed;
+      }
+
+      const effectiveHp = Math.max(0, currentHp - remaining);
+
+      const updates = { [hpPath]: effectiveHp };
+      if (vigorAbsorbed > 0) {
+        updates[vigorPath] = Math.max(0, currentVigor - vigorAbsorbed);
+      }
+
+      await actor.update(updates);
+
+      // Brief chat confirmation
+      const parts = [];
+      if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor`);
+      if (half)              parts.push(`halved`);
+      if (vigorAbsorbed > 0) parts.push(`${vigorAbsorbed} absorbed by Vigor`);
+      parts.push(`${remaining} → HP`);
+      const note = parts.join(", ");
+
+      await ChatMessage.create({
+        speaker: { alias: "Damage Applied" },
+        content: `<div class="icon-chat-card icon-chat-card--apply">
+                    <strong>${actor.name}</strong>: <strong>${apply}</strong> damage applied
+                    <br><small>${note} — HP ${currentHp} → ${effectiveHp}</small>
+                  </div>`,
+      });
+
+      // Visual feedback on the button
+      btn.disabled = true;
+      btn.textContent = `✓ Applied ${apply}`;
+      btn.style.opacity = "0.5";
+    });
+  });
+});
+
+/* ================================================== */
+/*  setup — Sheets + Pre-load templates               */
+/* ================================================== */
+
+Hooks.once("setup", async () => {
+
+  // ---- Pre-load templates ----
+  const templates = [
+    // Actor — Icon
+    "systems/icon-system/templates/actor/icon-header.hbs",
+    "systems/icon-system/templates/actor/icon-narrative.hbs",
+    "systems/icon-system/templates/actor/icon-combat.hbs",
+    "systems/icon-system/templates/actor/icon-relics.hbs",
+    "systems/icon-system/templates/actor/icon-notes.hbs",
+    // Actor — Foe
+    "systems/icon-system/templates/actor/foe-header.hbs",
+    "systems/icon-system/templates/actor/foe-main.hbs",
+    "systems/icon-system/templates/actor/foe-notes.hbs",
+    // Actor — Legend
+    "systems/icon-system/templates/actor/legend-header.hbs",
+    "systems/icon-system/templates/actor/legend-combat.hbs",
+    "systems/icon-system/templates/actor/legend-notes.hbs",
+    // Actor — Summon
+    "systems/icon-system/templates/actor/summon-sheet.hbs",
+    // Item
+    "systems/icon-system/templates/item/item-header.hbs",
+    "systems/icon-system/templates/item/item-main.hbs",
+    "systems/icon-system/templates/item/item-sheet.hbs",
+    // Chat
+    "systems/icon-system/templates/chat/narrative-roll.hbs",
+    "systems/icon-system/templates/chat/attack-roll.hbs",
+    "systems/icon-system/templates/chat/save-roll.hbs",
+    "systems/icon-system/templates/chat/damage-card.hbs",
+    "systems/icon-system/templates/chat/ability-card.hbs",
+    "systems/icon-system/templates/chat/trait-card.hbs",
+    "systems/icon-system/templates/chat/relic-card.hbs",
+    "systems/icon-system/templates/chat/bond-power-card.hbs",
+    "systems/icon-system/templates/chat/bond-card.hbs",
+    "systems/icon-system/templates/chat/foe-action-card.hbs",
+  ];
+  await foundry.applications.handlebars.loadTemplates(templates);
+  console.log("ICON 1.5 | Templates loaded");
+});
