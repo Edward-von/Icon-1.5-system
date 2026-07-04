@@ -216,11 +216,12 @@ export async function applyEndOfTurnEffects(combatant) {
   // import dynamically to avoid circular dep. addVigor caps at the actor's VIT
   // and no-ops for actors without a vigor track.
   const { addVigor } = await import("./damage.mjs");
-  await addVigor(actor, 4);
+  const regen = CONFIG.ICON?.rules?.regenerationVigor ?? 4;
+  await addVigor(actor, regen);
   const speaker = ChatMessage.getSpeaker({ actor });
   await ChatMessage.create({
     speaker,
-    content: `<div class="icon-chat-card"><strong>${escapeHTML(actor.name)}</strong> regenerates 4 Vigor (bloodied).</div>`,
+    content: `<div class="icon-chat-card"><strong>${escapeHTML(actor.name)}</strong> regenerates ${regen} Vigor (bloodied).</div>`,
   });
 }
 

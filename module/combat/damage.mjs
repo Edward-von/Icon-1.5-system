@@ -12,6 +12,7 @@
  * Wounds reduce hp.max by VIT each; 4 wounds = Fallen.
  */
 
+import { ICON } from "../config.mjs";
 import { damageRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { getStatusCharges, setStatusCharges } from "./statuses.mjs";
@@ -227,7 +228,7 @@ export async function applyDamageToActor(actor, amount, {
     const hitsBefore = actor.system.mob?.hitsRemaining ?? 0;
     if (hitsBefore <= 0) return { ...zero, isMob: true };
     const hitsAfter    = Math.max(0, hitsBefore - 1);
-    const membersAfter = Math.ceil(hitsAfter / 2);   // 2 hits per member
+    const membersAfter = Math.ceil(hitsAfter / ICON.rules.mobHitsPerMember);
     await actor.update({
       "system.mob.hitsRemaining": hitsAfter,
       "system.mob.members":       membersAfter,
@@ -320,11 +321,12 @@ export async function applyWound(actor) {
 async function _applyWound(actor) {
   if (actor.type !== "icon") return { wounds: 0, fallen: false };
 
+  const maxWounds = ICON.rules.maxWounds;
   const wounds    = (actor.system.combat?.wounds?.value ?? 0) + 1;
-  const fallen    = wounds >= 4;
-  const vit       = actor.system.combat?.vit ?? 10;
+  const fallen    = wounds >= maxWounds;
+  const vit       = actor.system.combat?.vit ?? ICON.rules.defaultVit;
 
-  const updates = { "system.combat.wounds.value": Math.min(wounds, 4) };
+  const updates = { "system.combat.wounds.value": Math.min(wounds, maxWounds) };
 
   if (fallen) {
     updates["system.combat.hp.value"] = 0;
@@ -354,7 +356,7 @@ async function _applyWound(actor) {
       speaker,
       content: `<div class="icon-chat-card icon-chat-card--wound">
         ⚠ <strong>${escapeHTML(actor.name)}</strong> is <em>Defeated!</em>
-        (Wound ${wounds}/4 — max HP reduced by ${vit}. Can be Rescued.)
+        (Wound ${wounds}/${maxWounds} — max HP reduced by ${vit}. Can be Rescued.)
       </div>`,
     });
   }
@@ -446,14 +448,15 @@ export async function recoverAction(actor) {
   if (!combat)     return;
   const bloodied   = combat.hp.value <= combat.hp.bloodied;
   const surge      = bloodied;
-  await addVigor(actor, surge ? 0 : 4, surge);
+  const gain       = ICON.rules.recoverVigor;
+  await addVigor(actor, surge ? 0 : gain, surge);
 
   const speaker = ChatMessage.getSpeaker({ actor });
   await ChatMessage.create({
     speaker,
     content: `<div class="icon-chat-card">
       <strong>${escapeHTML(actor.name)}</strong> Recovers.
-      ${surge ? "Vigor Surge (bloodied)!" : "Gains 4 Vigor."}
+      ${surge ? "Vigor Surge (bloodied)!" : `Gains ${gain} Vigor.`}
     </div>`,
   });
 
@@ -564,8 +567,9 @@ export async function postAbilityDamageCard(actor, {
     running = halved;
   }
   if (weakened) {
-    running = Math.max(0, running - 2);
-    steps.push({ label: "Weakened −2", value: -2, isNegative: true });
+    const pen = ICON.rules.weakenedPenalty;
+    running = Math.max(0, running - pen);
+    steps.push({ label: `Weakened −${pen}`, value: -pen, isNegative: true });
   }
 
   const net = Math.max(0, running);

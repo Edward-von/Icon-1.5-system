@@ -11,6 +11,8 @@
 /*  Constants                                          */
 /* ================================================== */
 
+import { ICON } from "../config.mjs";
+
 const TPLPATH = "systems/icon-system/templates/chat";
 
 /**
@@ -85,7 +87,8 @@ export async function narrativeRoll({
   rollType = "standard",
   actor,
 } = {}) {
-  const net      = Math.max(-2, Math.min(2, boons - curses));
+  const cap      = ICON.rules.boonCurseCap;
+  const net      = Math.max(-cap, Math.min(cap, boons - curses));
   const pool     = Math.max(0, rating + net + bonusDice);
   const isLowest = pool === 0;   // 2d6 pick lowest when pool would be 0 or negative
 
@@ -406,8 +409,9 @@ export async function damageRoll({
 
   /* --- Weakened (attacker) --- */
   if (weakened) {
-    running = Math.max(0, running - 2);
-    steps.push({ label: "Weakened −2", value: -2, isNegative: true });
+    const pen = ICON.rules.weakenedPenalty;
+    running = Math.max(0, running - pen);
+    steps.push({ label: `Weakened −${pen}`, value: -pen, isNegative: true });
   }
 
   steps[steps.length - 1].isFinal = true;

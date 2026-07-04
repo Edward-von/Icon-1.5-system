@@ -953,9 +953,10 @@ export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
         const rawBoons  = Math.max(0, Number(boonsEl.value)  || 0);
         const rawCurses = Math.max(0, Number(cursesEl.value) || 0);
         const pushBonus = pushEl?.checked ? 1 : 0;
-        // Boons/curses cap to ±2 net; push is added on top as bonus die.
+        // Boons/curses cap to ±cap net; push is added on top as bonus die.
+        const cap       = CONFIG.ICON?.rules?.boonCurseCap ?? 2;
         const netRaw    = rawBoons - rawCurses;
-        const netCapped = Math.max(-2, Math.min(2, netRaw));
+        const netCapped = Math.max(-cap, Math.min(cap, netRaw));
         const effectivePool = Math.max(0, rating + netCapped + pushBonus);
         const isLowest  = effectivePool === 0;
 
@@ -969,10 +970,10 @@ export class IconSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
 
         // Warn when boons/curses exceed the cap (push is separate and always works).
         const warnings = [];
-        if (netRaw > 2) {
-          warnings.push(`⚠ Net would be +${netRaw}, capped at +2. Extra boons wasted.`);
-        } else if (netRaw < -2) {
-          warnings.push(`⚠ Net would be ${netRaw}, capped at −2. Extra curses wasted.`);
+        if (netRaw > cap) {
+          warnings.push(`⚠ Net would be +${netRaw}, capped at +${cap}. Extra boons wasted.`);
+        } else if (netRaw < -cap) {
+          warnings.push(`⚠ Net would be ${netRaw}, capped at −${cap}. Extra curses wasted.`);
         }
         warnEl.innerHTML = warnings.map(w => `<div>${w}</div>`).join("");
       };

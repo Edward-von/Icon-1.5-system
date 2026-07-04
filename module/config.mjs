@@ -4,6 +4,23 @@
 export const ICON = {};
 
 /* -------------------------------------------------- */
+/*  Core rule constants                                */
+/*  Single authoritative source for rule numbers that  */
+/*  were previously scattered as literals. Mutable at  */
+/*  runtime via CONFIG.ICON.rules for house rules.     */
+/* -------------------------------------------------- */
+
+ICON.rules = {
+  maxWounds:         4,   // 4th wound = Fallen (exits the campaign)
+  defaultVit:        10,  // fallback VIT when a PC has none set
+  recoverVigor:      4,   // Recover action: vigor gained when not bloodied
+  regenerationVigor: 4,   // Regeneration status: vigor at end of turn while bloodied
+  weakenedPenalty:   2,   // Weakened: flat damage reduction on the attacker
+  boonCurseCap:      2,   // net boons/curses clamp to ±this
+  mobHitsPerMember:  2,   // mob members have 2 hits each (manual p.291)
+};
+
+/* -------------------------------------------------- */
 /*  Classes & Jobs                                     */
 /* -------------------------------------------------- */
 
