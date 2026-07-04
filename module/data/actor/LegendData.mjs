@@ -2,6 +2,8 @@
  * LegendData — TypeDataModel for Legend (Boss) actors (type: "legend").
  * Legends have multiple actions, enhanced interrupts, phases, and round actions.
  */
+import { combatStatsSchema, prepareCombatStats } from "./common.mjs";
+
 const {
   SchemaField, StringField, NumberField, BooleanField,
   ArrayField, HTMLField,
@@ -80,7 +82,11 @@ export class LegendData extends foundry.abstract.TypeDataModel {
       faction: new StringField({ required: true, initial: "" }),
       chapter: new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
 
-      vit:      new NumberField({ required: true, initial: 10, min: 1, integer: true }),
+      // Shared combat stats (vigor cap = VIT, lost at end of combat — legends
+      // can gain Vigor from their own abilities, e.g. Apex's Steaming Rage).
+      ...combatStatsSchema({
+        vit: 10, defense: 8, speed: 4, armor: 0, damagedie: "d8", fray: 3,
+      }),
       // Legend HP scales with PC count per p.298: "50 per player character
       // (minimum 100)". The 2-player baseline is therefore 100. `baseline`
       // stores that canonical 2-PC value; `hp.max` is the scaled value
@@ -92,18 +98,6 @@ export class LegendData extends foundry.abstract.TypeDataModel {
         baseline: new NumberField({ required: true, initial: 0,   min: 0, integer: true }),
       }),
       playerScale: new NumberField({ required: true, initial: 2, min: 2, integer: true }),
-      // Legends can gain Vigor from their own abilities (e.g. Apex's Steaming
-      // Rage, Keeper's Light the Everforge). Capped at VIT; lost at end of
-      // combat.
-      vigor: new SchemaField({
-        value: new NumberField({ required: true, initial: 0,  min: 0, integer: true }),
-        max:   new NumberField({ required: true, initial: 10, min: 0, integer: true }),
-      }),
-      defense:   new NumberField({ required: true, initial: 8, min: 0, integer: true }),
-      speed:     new NumberField({ required: true, initial: 4, min: 0, integer: true }),
-      armor:     new NumberField({ required: true, initial: 0, min: 0, integer: true }),
-      damagedie: new StringField({ required: true, initial: "d8" }),
-      fray:      new NumberField({ required: true, initial: 3, min: 0, integer: true }),
       size:      new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
 
       phases:       new ArrayField(phaseSchema(),       { initial: [] }),
@@ -127,12 +121,7 @@ export class LegendData extends foundry.abstract.TypeDataModel {
   }
 
   prepareDerivedData() {
-    // Cap hp.value to max
-    this.hp.value = Math.min(this.hp.value, this.hp.max);
-
-    // Vigor cap scales with VIT
-    this.vigor.max   = this.vit;
-    this.vigor.value = Math.min(this.vigor.value, this.vigor.max);
+    prepareCombatStats(this);
 
     // Update currentPhase. If manualPhase ≥ 0, the GM has overridden the
     // HP-based auto-calculation — clamp to the phase array length and use it.

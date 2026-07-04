@@ -1,6 +1,8 @@
 /**
  * IconData — TypeDataModel for Player Character (type: "icon").
  */
+import { combatStatsSchema, prepareCombatStats } from "./common.mjs";
+
 const {
   SchemaField, StringField, NumberField, BooleanField,
   ArrayField, ObjectField, HTMLField,
@@ -107,8 +109,14 @@ export class IconData extends foundry.abstract.TypeDataModel {
         masteries:       new NumberField({ required: true, initial: 0, min: 0, integer: true }),
         skillRanksTotal: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
 
-        // Base combat stats (set from primary job)
-        vit:      new NumberField({ required: true, initial: 10, min: 1, integer: true }),
+        // Base combat stats (set from primary job). vit/defense/speed/armor/
+        // damagedie/fray/vigor come from the shared factory; hp keeps its
+        // PC-specific bloodied field and wounds is PC-only.
+        ...combatStatsSchema({
+          vit: 10, defense: 6, speed: 4, armor: 0, damagedie: "d6", fray: 4,
+          damagedieChoices: ["d6", "d8", "d10"],
+          minSpeed: 1,
+        }),
         hp: new SchemaField({
           value:    new NumberField({ required: true, initial: 40, min: 0, integer: true }),
           max:      new NumberField({ required: true, initial: 40, min: 1, integer: true }),
@@ -118,16 +126,6 @@ export class IconData extends foundry.abstract.TypeDataModel {
           value: new NumberField({ required: true, initial: 0, min: 0, max: 4, integer: true }),
           max:   new NumberField({ required: true, initial: 4, min: 4, max: 4, integer: true }),
         }),
-        vigor: new SchemaField({
-          value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
-          max:   new NumberField({ required: true, initial: 10, min: 0, integer: true }),
-        }),
-
-        defense:   new NumberField({ required: true, initial: 6, min: 0, integer: true }),
-        speed:     new NumberField({ required: true, initial: 4, min: 1, integer: true }),
-        armor:     new NumberField({ required: true, initial: 0, min: 0, integer: true }),
-        damagedie: new StringField({ required: true, initial: "d6", choices: ["d6","d8","d10"] }),
-        fray:      new NumberField({ required: true, initial: 4, min: 0, integer: true }),
 
         resolve: new SchemaField({
           personal: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
@@ -195,10 +193,7 @@ export class IconData extends foundry.abstract.TypeDataModel {
   prepareDerivedData() {
     const combat = this.combat;
 
-    // vigor.max = vit (= hp.max / 4)
-    combat.vigor.max = combat.vit;
-
-    // hp.max derives from vit and wounds
+    // hp.max derives from vit and wounds:
     // hp.max = (vit * 4) - (wounds.value * vit)
     const baseMax = combat.vit * 4;
     const woundPenalty = combat.wounds.value * combat.vit;
@@ -208,11 +203,8 @@ export class IconData extends foundry.abstract.TypeDataModel {
     // it would lag a cycle behind any VIT/wound change.
     combat.hp.bloodied = Math.ceil(combat.hp.max / 2);
 
-    // Cap hp.value to max
-    combat.hp.value = Math.min(combat.hp.value, combat.hp.max);
-
-    // Cap vigor.value to vigor.max
-    combat.vigor.value = Math.min(combat.vigor.value, combat.vigor.max);
+    // Shared caps: hp.value to max, vigor.max = vit, vigor.value to max.
+    prepareCombatStats(combat);
 
     // Narrative: cap effort.value to max
     const effort = this.narrative.effort;

@@ -15,6 +15,8 @@
  * then drags traits and actions from the "Foe Abilities" compendium.
  * Stat fields remain editable so individual foes can be tweaked.
  */
+import { combatStatsSchema, prepareCombatStats } from "./common.mjs";
+
 const {
   SchemaField, StringField, NumberField, BooleanField,
   ArrayField, HTMLField,
@@ -146,22 +148,20 @@ export class FoeData extends foundry.abstract.TypeDataModel {
         hitsRemaining: new NumberField({ required: true, initial: 12, min: 0, integer: true }),
       }),
 
-      vit:       new NumberField({ required: true, initial: base.vit,     min: 1, integer: true }),
+      // Shared combat stats (vigor cap = VIT, lost at end of combat — foes can
+      // gain Vigor from their own abilities, e.g. Knuckle's Bulk Up).
+      ...combatStatsSchema({
+        vit:       base.vit,
+        defense:   base.defense,
+        speed:     base.speed,
+        armor:     base.armor,
+        damagedie: base.damagedie,
+        fray:      base.fray,
+      }),
       hp: new SchemaField({
         value:   new NumberField({ required: true, initial: hpMax, min: 0, integer: true }),
         max:     new NumberField({ required: true, initial: hpMax, min: 1, integer: true }),
       }),
-      // Foes can gain Vigor from their own abilities (e.g. Knuckle's Bulk Up).
-      // Capped at VIT like PCs; lost at end of combat.
-      vigor: new SchemaField({
-        value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
-        max:   new NumberField({ required: true, initial: base.vit, min: 0, integer: true }),
-      }),
-      defense:   new NumberField({ required: true, initial: base.defense,  min: 0, integer: true }),
-      speed:     new NumberField({ required: true, initial: base.speed,    min: 0, integer: true }),
-      armor:     new NumberField({ required: true, initial: base.armor,    min: 0, integer: true }),
-      damagedie: new StringField({ required: true, initial: base.damagedie }),
-      fray:      new NumberField({ required: true, initial: base.fray,     min: 0, integer: true }),
       size:      new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
 
       traits:       new ArrayField(traitSchema(),       { initial: [] }),
@@ -177,10 +177,6 @@ export class FoeData extends foundry.abstract.TypeDataModel {
   }
 
   prepareDerivedData() {
-    // Cap current hp to max
-    this.hp.value = Math.min(this.hp.value, this.hp.max);
-    // Vigor cap scales with VIT
-    this.vigor.max   = this.vit;
-    this.vigor.value = Math.min(this.vigor.value, this.vigor.max);
+    prepareCombatStats(this);
   }
 }
