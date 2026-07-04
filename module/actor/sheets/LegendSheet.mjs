@@ -8,7 +8,7 @@ import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modi
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, getStatusCharges,
          setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
-import { _parseAbilityDamage } from "./IconSheet.mjs";
+import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 

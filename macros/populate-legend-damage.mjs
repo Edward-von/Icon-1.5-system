@@ -26,8 +26,8 @@
  * overwrites actions whose current fields differ from the computed ones.
  */
 
-const { _parseAbilityDamage } = await import(
-  `/systems/icon-system/module/actor/sheets/IconSheet.mjs?t=${Date.now()}`
+const { parseAbilityDamage: _parseAbilityDamage } = await import(
+  `/systems/icon-system/module/combat/ability-damage.mjs?t=${Date.now()}`
 );
 
 const PACK_ID = "icon-system.legends";

@@ -5,7 +5,7 @@ import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { getActorStatusMods } from "../../combat/status-modifiers.mjs";
-import { _parseAbilityDamage } from "./IconSheet.mjs";
+import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 

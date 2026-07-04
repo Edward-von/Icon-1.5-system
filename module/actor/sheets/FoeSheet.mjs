@@ -15,7 +15,7 @@ import { applyStatus, removeStatus, hasStatus,
          cycleOngoingStatus } from "../../combat/statuses.mjs";
 import { enrichHTML } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
-import { _parseAbilityDamage } from "./IconSheet.mjs";
+import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 
