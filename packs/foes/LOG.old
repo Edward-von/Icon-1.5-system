@@ -1,16 +1,18 @@
-2026/07/06-14:26:57.506 1284 Recovering log #1277
-2026/07/06-14:26:57.507 1284 Level-0 table #1279: started
-2026/07/06-14:26:57.515 1284 Level-0 table #1279: 59309 bytes OK
-2026/07/06-14:26:57.523 1284 Delete type=0 #1277
-2026/07/06-14:26:57.524 1284 Delete type=3 #1276
-2026/07/06-14:26:57.526 a2f0 Level-0 table #1282: started
-2026/07/06-14:26:57.526 a2f0 Level-0 table #1282: 0 bytes OK
-2026/07/06-14:26:57.529 a2f0 Delete type=0 #1280
-2026/07/06-14:26:57.530 a2f0 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!f4943db345a9e5e1' @ 3331 : 1
-2026/07/06-14:26:57.530 a2f0 Compacting 1@0 + 1@1 files
-2026/07/06-14:26:57.543 a2f0 Generated table #1283@0: 369 keys, 510357 bytes
-2026/07/06-14:26:57.543 a2f0 Compacted 1@0 + 1@1 files => 510357 bytes
-2026/07/06-14:26:57.546 a2f0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/07/06-14:26:57.546 a2f0 Delete type=2 #1263
-2026/07/06-14:26:57.546 a2f0 Delete type=2 #1279
-2026/07/06-14:26:57.546 a2f0 Manual compaction at level-0 from '!actors!f4943db345a9e5e1' @ 3331 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/07/06-14:31:10.929 64ec Recovering log #1298
+2026/07/06-14:31:10.929 64ec Level-0 table #1300: started
+2026/07/06-14:31:10.934 64ec Level-0 table #1300: 2267 bytes OK
+2026/07/06-14:31:10.941 64ec Delete type=0 #1298
+2026/07/06-14:31:10.941 64ec Delete type=3 #1296
+2026/07/06-14:31:10.943 69fc Compacting 4@0 + 1@1 files
+2026/07/06-14:31:10.944 69fc Level-0 table #1304: started
+2026/07/06-14:31:10.944 69fc Level-0 table #1304: 0 bytes OK
+2026/07/06-14:31:10.947 69fc Delete type=0 #1301
+2026/07/06-14:31:10.959 69fc Generated table #1303@0: 376 keys, 521135 bytes
+2026/07/06-14:31:10.959 69fc Compacted 4@0 + 1@1 files => 521135 bytes
+2026/07/06-14:31:10.960 69fc compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/07/06-14:31:10.960 69fc Delete type=2 #1283
+2026/07/06-14:31:10.961 69fc Delete type=2 #1289
+2026/07/06-14:31:10.961 69fc Delete type=2 #1294
+2026/07/06-14:31:10.961 69fc Delete type=2 #1297
+2026/07/06-14:31:10.962 69fc Delete type=2 #1300
+2026/07/06-14:31:10.962 69fc Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)

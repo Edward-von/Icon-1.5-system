@@ -1,7 +1,7 @@
-2026/07/06-14:26:57.604 5b7c Recovering log #382
-2026/07/06-14:26:57.612 5b7c Delete type=0 #382
-2026/07/06-14:26:57.613 5b7c Delete type=3 #381
-2026/07/06-14:26:57.615 a2f0 Level-0 table #386: started
-2026/07/06-14:26:57.615 a2f0 Level-0 table #386: 0 bytes OK
-2026/07/06-14:26:57.617 a2f0 Delete type=0 #384
-2026/07/06-14:26:57.618 a2f0 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/07/06-14:31:11.015 40a0 Recovering log #388
+2026/07/06-14:31:11.022 40a0 Delete type=0 #388
+2026/07/06-14:31:11.024 40a0 Delete type=3 #387
+2026/07/06-14:31:11.025 69fc Level-0 table #392: started
+2026/07/06-14:31:11.025 69fc Level-0 table #392: 0 bytes OK
+2026/07/06-14:31:11.028 69fc Delete type=0 #390
+2026/07/06-14:31:11.028 69fc Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
