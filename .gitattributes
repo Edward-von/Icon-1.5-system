@@ -1,9 +1,11 @@
-# LevelDB pack files are binary — never touch line endings
-packs/** -text
-
-# Everything else: normalize to LF in repo, keep LF on checkout
+# Default: normalize to LF in repo, keep LF on checkout
 * text=auto eol=lf
 *.png binary
 *.jpg binary
 *.webp binary
 *.pdf binary
+
+# LevelDB pack files are binary — never touch line endings.
+# NOTE: must come LAST — in .gitattributes the last matching rule wins,
+# so this must override the `* text=auto` default above.
+packs/** -text
