@@ -1,3 +1,16 @@
-2026/07/06-11:54:54.692 5a88 Recovering log #1209
-2026/07/06-11:54:54.701 5a88 Delete type=0 #1209
-2026/07/06-11:54:54.701 5a88 Delete type=3 #1206
+2026/07/06-12:34:51.140 15d0 Recovering log #1223
+2026/07/06-12:34:51.140 15d0 Level-0 table #1225: started
+2026/07/06-12:34:51.145 15d0 Level-0 table #1225: 8930 bytes OK
+2026/07/06-12:34:51.154 15d0 Delete type=0 #1223
+2026/07/06-12:34:51.154 15d0 Delete type=3 #1222
+2026/07/06-12:34:51.156 1df4 Level-0 table #1228: started
+2026/07/06-12:34:51.156 1df4 Level-0 table #1228: 0 bytes OK
+2026/07/06-12:34:51.160 1df4 Delete type=0 #1226
+2026/07/06-12:34:51.160 1df4 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!f4bc341900bfa2f6' @ 3287 : 1
+2026/07/06-12:34:51.160 1df4 Compacting 1@0 + 1@1 files
+2026/07/06-12:34:51.171 1df4 Generated table #1229@0: 367 keys, 500549 bytes
+2026/07/06-12:34:51.171 1df4 Compacted 1@0 + 1@1 files => 500549 bytes
+2026/07/06-12:34:51.175 1df4 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/07/06-12:34:51.175 1df4 Delete type=2 #1211
+2026/07/06-12:34:51.175 1df4 Delete type=2 #1225
+2026/07/06-12:34:51.176 1df4 Manual compaction at level-0 from '!actors!f4bc341900bfa2f6' @ 3287 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
