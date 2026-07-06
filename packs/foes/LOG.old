@@ -1,16 +1,16 @@
-2026/07/06-12:34:51.140 15d0 Recovering log #1223
-2026/07/06-12:34:51.140 15d0 Level-0 table #1225: started
-2026/07/06-12:34:51.145 15d0 Level-0 table #1225: 8930 bytes OK
-2026/07/06-12:34:51.154 15d0 Delete type=0 #1223
-2026/07/06-12:34:51.154 15d0 Delete type=3 #1222
-2026/07/06-12:34:51.156 1df4 Level-0 table #1228: started
-2026/07/06-12:34:51.156 1df4 Level-0 table #1228: 0 bytes OK
-2026/07/06-12:34:51.160 1df4 Delete type=0 #1226
-2026/07/06-12:34:51.160 1df4 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!f4bc341900bfa2f6' @ 3287 : 1
-2026/07/06-12:34:51.160 1df4 Compacting 1@0 + 1@1 files
-2026/07/06-12:34:51.171 1df4 Generated table #1229@0: 367 keys, 500549 bytes
-2026/07/06-12:34:51.171 1df4 Compacted 1@0 + 1@1 files => 500549 bytes
-2026/07/06-12:34:51.175 1df4 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/07/06-12:34:51.175 1df4 Delete type=2 #1211
-2026/07/06-12:34:51.175 1df4 Delete type=2 #1225
-2026/07/06-12:34:51.176 1df4 Manual compaction at level-0 from '!actors!f4bc341900bfa2f6' @ 3287 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/07/06-12:46:39.958 3954 Recovering log #1235
+2026/07/06-12:46:39.958 3954 Level-0 table #1237: started
+2026/07/06-12:46:39.963 3954 Level-0 table #1237: 2715 bytes OK
+2026/07/06-12:46:39.971 3954 Delete type=0 #1235
+2026/07/06-12:46:39.971 3954 Delete type=3 #1234
+2026/07/06-12:46:39.974 2714 Level-0 table #1240: started
+2026/07/06-12:46:39.974 2714 Level-0 table #1240: 0 bytes OK
+2026/07/06-12:46:39.977 2714 Delete type=0 #1238
+2026/07/06-12:46:39.978 2714 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!M7wudWVDZbBkVFOc' @ 3291 : 1
+2026/07/06-12:46:39.978 2714 Compacting 1@0 + 1@1 files
+2026/07/06-12:46:39.988 2714 Generated table #1241@0: 368 keys, 502563 bytes
+2026/07/06-12:46:39.988 2714 Compacted 1@0 + 1@1 files => 502563 bytes
+2026/07/06-12:46:39.991 2714 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/07/06-12:46:39.991 2714 Delete type=2 #1229
+2026/07/06-12:46:39.991 2714 Delete type=2 #1237
+2026/07/06-12:46:39.991 2714 Manual compaction at level-0 from '!actors!M7wudWVDZbBkVFOc' @ 3291 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
