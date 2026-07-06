@@ -1,14 +1,7 @@
-2026/07/06-09:57:56.414 4b50 Recovering log #339
-2026/07/06-09:57:56.422 4b50 Delete type=0 #339
-2026/07/06-09:57:56.422 4b50 Delete type=3 #338
-2026/07/06-09:57:56.424 a5bc Level-0 table #343: started
-2026/07/06-09:57:56.424 a5bc Level-0 table #343: 0 bytes OK
-2026/07/06-09:57:56.427 a5bc Delete type=0 #341
-2026/07/06-09:57:56.427 a5bc Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!szusvRoVWLpTeieE' @ 280 : 1
-2026/07/06-09:57:56.427 a5bc Compacting 1@0 + 1@1 files
-2026/07/06-09:57:56.433 a5bc Generated table #344@0: 28 keys, 100347 bytes
-2026/07/06-09:57:56.433 a5bc Compacted 1@0 + 1@1 files => 100347 bytes
-2026/07/06-09:57:56.436 a5bc compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/07/06-09:57:56.437 a5bc Delete type=2 #304
-2026/07/06-09:57:56.437 a5bc Delete type=2 #336
-2026/07/06-09:57:56.437 a5bc Manual compaction at level-0 from '!actors!szusvRoVWLpTeieE' @ 280 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/07/06-11:54:54.497 9d20 Recovering log #354
+2026/07/06-11:54:54.506 9d20 Delete type=0 #354
+2026/07/06-11:54:54.506 9d20 Delete type=3 #353
+2026/07/06-11:54:54.508 64c8 Level-0 table #358: started
+2026/07/06-11:54:54.508 64c8 Level-0 table #358: 0 bytes OK
+2026/07/06-11:54:54.512 64c8 Delete type=0 #356
+2026/07/06-11:54:54.512 64c8 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
