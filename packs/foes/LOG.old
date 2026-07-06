@@ -1,16 +1,16 @@
-2026/07/06-13:07:32.945 2770 Recovering log #1258
-2026/07/06-13:07:32.955 2770 Delete type=0 #1258
-2026/07/06-13:07:32.955 2770 Delete type=3 #1256
-2026/07/06-13:07:32.956 8878 Level-0 table #1262: started
-2026/07/06-13:07:32.957 8878 Level-0 table #1262: 0 bytes OK
-2026/07/06-13:07:32.959 8878 Delete type=0 #1260
-2026/07/06-13:07:32.960 8878 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!ba4114c904974e1b' @ 3299 : 1
-2026/07/06-13:07:32.960 8878 Compacting 3@0 + 1@1 files
-2026/07/06-13:07:32.974 8878 Generated table #1263@0: 369 keys, 506109 bytes
-2026/07/06-13:07:32.974 8878 Compacted 3@0 + 1@1 files => 506109 bytes
-2026/07/06-13:07:32.976 8878 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/07/06-13:07:32.976 8878 Delete type=2 #1241
-2026/07/06-13:07:32.977 8878 Delete type=2 #1251
-2026/07/06-13:07:32.977 8878 Delete type=2 #1254
-2026/07/06-13:07:32.978 8878 Delete type=2 #1257
-2026/07/06-13:07:32.978 8878 Manual compaction at level-0 from '!actors!ba4114c904974e1b' @ 3299 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/07/06-14:26:57.506 1284 Recovering log #1277
+2026/07/06-14:26:57.507 1284 Level-0 table #1279: started
+2026/07/06-14:26:57.515 1284 Level-0 table #1279: 59309 bytes OK
+2026/07/06-14:26:57.523 1284 Delete type=0 #1277
+2026/07/06-14:26:57.524 1284 Delete type=3 #1276
+2026/07/06-14:26:57.526 a2f0 Level-0 table #1282: started
+2026/07/06-14:26:57.526 a2f0 Level-0 table #1282: 0 bytes OK
+2026/07/06-14:26:57.529 a2f0 Delete type=0 #1280
+2026/07/06-14:26:57.530 a2f0 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!f4943db345a9e5e1' @ 3331 : 1
+2026/07/06-14:26:57.530 a2f0 Compacting 1@0 + 1@1 files
+2026/07/06-14:26:57.543 a2f0 Generated table #1283@0: 369 keys, 510357 bytes
+2026/07/06-14:26:57.543 a2f0 Compacted 1@0 + 1@1 files => 510357 bytes
+2026/07/06-14:26:57.546 a2f0 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/07/06-14:26:57.546 a2f0 Delete type=2 #1263
+2026/07/06-14:26:57.546 a2f0 Delete type=2 #1279
+2026/07/06-14:26:57.546 a2f0 Manual compaction at level-0 from '!actors!f4943db345a9e5e1' @ 3331 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
