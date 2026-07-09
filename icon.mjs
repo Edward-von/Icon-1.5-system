@@ -46,7 +46,8 @@ import { IconItemSheet } from "./module/item/IconItemSheet.mjs";
 /* -------------------------------------------------- */
 /*  Combat                                             */
 /* -------------------------------------------------- */
-import { IconCombat, registerCombatHooks } from "./module/combat/IconCombat.mjs";
+import { IconCombat, IconCombatant, registerCombatHooks } from "./module/combat/IconCombat.mjs";
+import { IconCombatTracker } from "./module/combat/IconCombatTracker.mjs";
 
 /* -------------------------------------------------- */
 /*  Dice                                               */
@@ -133,7 +134,9 @@ Hooks.once("init", () => {
   CONFIG.ICON = ICON;
 
   // ---- Combat document class ----
-  CONFIG.Combat.documentClass = IconCombat;
+  CONFIG.Combat.documentClass    = IconCombat;
+  CONFIG.Combatant.documentClass = IconCombatant;
+  CONFIG.ui.combat               = IconCombatTracker;
 
   // ---- Document classes ----
   CONFIG.Actor.documentClass = IconActor;
