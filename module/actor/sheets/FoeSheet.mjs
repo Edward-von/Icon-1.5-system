@@ -14,6 +14,7 @@ import { applyStatus, removeStatus, hasStatus,
 import { enrichHTML } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
+import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
@@ -94,6 +95,10 @@ export class FoeSheet extends BaseActorSheet {
         enrichedMiss: await enrich(a.missEffect),
         enrichedArea: await enrich(a.areaEffect),
         enrichedDesc: await enrich(a.description),
+        // Display chips with prettified label + rule tooltip ("combo-2" →
+        // "Combo 2" with the sequence rule). Kept separate from `tags`,
+        // which stays the raw editable array.
+        tagChips: (a.tags ?? []).map(formatTag).filter(Boolean),
         parsed,
         dealsDamage: parsed.dealsDamage,
       };

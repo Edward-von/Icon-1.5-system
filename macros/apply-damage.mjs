@@ -30,8 +30,15 @@
         <label>Label (optional)
           <input type="text" name="label" placeholder="Counter" style="width:160px">
         </label>
+        <label style="display:flex;align-items:center;gap:6px">
+          <input type="checkbox" name="pierce">
+          Pierce — ignore target Armor
+        </label>
         <p style="margin:0;font-size:.82em;color:#7fb2ff">
           🎯 ${tokens.length} target(s): ${tokens.map(t => t.actor?.name ?? t.name ?? "?").join(", ")}
+        </p>
+        <p style="margin:0;font-size:.78em;color:#8a8a8a">
+          The Apply buttons on the card subtract each target's Armor (unless Pierce), then Vigor absorbs before HP.
         </p>
       </div>`,
     ok: {
@@ -41,6 +48,7 @@
         return {
           amount: Math.max(0, Number(root.querySelector('input[name="amount"]')?.value) || 0),
           label:  root.querySelector('input[name="label"]')?.value?.trim() || "",
+          pierce: !!root.querySelector('input[name="pierce"]')?.checked,
         };
       },
     },
@@ -52,13 +60,14 @@
     return;
   }
 
-  const { amount, label } = result;
+  const { amount, label, pierce } = result;
 
   const targets = tokens.map(t => ({
     actorUuid: t.actor?.uuid ?? null,
     name:      t.actor?.name ?? t.document?.name ?? "Unknown",
     img:       t.actor?.img ?? t.document?.texture?.src ?? "",
     defense:   t.actor?.system?.combat?.defense ?? t.actor?.system?.defense ?? null,
+    armor:     Number(t.actor?.system?.combat?.armor ?? t.actor?.system?.armor ?? 0) || 0,
     hp:        t.actor?.system?.combat?.hp?.value ?? t.actor?.system?.hp?.value ?? null,
     hpMax:     t.actor?.system?.combat?.hp?.max ?? t.actor?.system?.hp?.max ?? null,
   })).filter(t => t.actorUuid);
@@ -68,7 +77,8 @@
     return;
   }
 
-  const steps = [{ label: label ? `${label} (flat)` : "Flat damage", value: amount, isFinal: true }];
+  const stepLabel = `${label || "Flat damage"}${pierce ? " (pierce)" : ""}`;
+  const steps = [{ label: stepLabel, value: amount, isFinal: true }];
 
   const renderTpl = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const content = await renderTpl("systems/icon-system/templates/chat/damage-card.hbs", {
@@ -77,6 +87,7 @@
     targetName:  "",
     targets,
     hasTargets:  true,
+    pierce,
   });
 
   await ChatMessage.create({
@@ -84,7 +95,7 @@
     content,
     flags: {
       "icon-system": {
-        damage: { amount, sourceName: label || "Damage", targets: targets.map(t => t.actorUuid) },
+        damage: { amount, pierce, sourceName: label || "Damage", targets: targets.map(t => t.actorUuid) },
       },
     },
   });

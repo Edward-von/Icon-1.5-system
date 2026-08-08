@@ -36,6 +36,10 @@ export const ICON_STATUSES = [
   { id: "weakened",      name: "Weakened",      img: `${ICON_STATUSES_BASE}/weakened.svg`,     canSave: true,  ongoing: false },
   { id: "vulnerable",    name: "Vulnerable",    img: `${ICON_STATUSES_BASE}/vulnerable.svg`,   canSave: true,  ongoing: false },
   { id: "immobile",      name: "Immobile",      img: `${ICON_STATUSES_BASE}/immobile.svg`,     canSave: true,  ongoing: false },
+  // Marked has no end-of-turn save: each mark ability defines its own removal
+  // condition, so it stays until manually cleared. Stackable so multiple marks
+  // from different sources show as Marked: 1/2/3.
+  { id: "marked",        name: "Marked",        img: `${ICON_STATUSES_BASE}/marked.svg`,       canSave: false, ongoing: false },
   // ---- Positive ----
   { id: "counter",       name: "Counter",       img: `${ICON_STATUSES_BASE}/counter.svg`,      canSave: false, isBoon: true },
   { id: "defiance",      name: "Defiance",      img: `${ICON_STATUSES_BASE}/defiance.svg`,     canSave: false, isBoon: true },
@@ -312,7 +316,7 @@ async function _removeStatus(actor, statusId) {
  * Conditions tab, with left/right-click to add/remove a charge). The
  * underlying ActiveEffect is auto-applied when count > 0.
  */
-export const STACKABLE_STATUSES = new Set(["blessed", "power-die", "vigilance", "bonus-damage"]);
+export const STACKABLE_STATUSES = new Set(["blessed", "power-die", "vigilance", "bonus-damage", "marked"]);
 
 /** Read the charge count of a stackable status from the actor's flag. */
 export function getStatusCharges(actor, statusId) {

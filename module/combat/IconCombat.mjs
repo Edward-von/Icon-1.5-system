@@ -365,8 +365,14 @@ export class IconCombat extends Combat {
    */
   async deactivateCombatant(id) {
     const turn = this.turns.findIndex(t => t.id === id);
-    if (turn !== this.turn) return this;
-    if (!this.turns[turn].testUserPermission(game.user, "OWNER") && !game.user.isGM) return this;
+    if (turn !== this.turn) {
+      ui.notifications?.warn("This combatant is not the active turn.");
+      return this;
+    }
+    if (!this.turns[turn].testUserPermission(game.user, "OWNER") && !game.user.isGM) {
+      ui.notifications?.warn(`You don't control ${this.turns[turn].name} — only their owner (or the GM) can end their turn.`);
+      return this;
+    }
     return this.nextTurn();
   }
 
@@ -535,6 +541,7 @@ export class IconCombat extends Combat {
           "system.combat.classResources.comboToken.value":     0,
           "system.combat.classResources.blessingTokens.value": 0,
           "system.combat.classResources.powerDice":            [],
+          "flags.icon-system.-=comboSpentOnItem":              null,
         });
       }
     }
@@ -595,13 +602,14 @@ export class IconCombat extends Combat {
   }
 
   /* -------------------------------------------------- */
-  /*  Slow Turn (marker only)                            */
+  /*  Slow Turn                                          */
   /* -------------------------------------------------- */
 
   /**
-   * Toggle slow-turn status for a combatant. Purely a marker in this turn
-   * model (activation order is free), but it matters for Charge/Delay
-   * effects, so it stays visible on the tracker row.
+   * Toggle slow-turn status for a combatant. Activation order stays free in
+   * this turn model, but the tracker sorts slow combatants after the normal
+   * pending ones and tints their row, and the marker matters for
+   * Charge/Delay effects.
    */
   static async toggleSlowTurn(combatantId) {
     const combat     = game.combat;
@@ -909,7 +917,9 @@ function _renderIconTracker(app, html, data, combat) {
       const isSlow  = IconCombat.isSlow(c);
       const slowBtn = document.createElement("button");
       slowBtn.type  = "button";
-      slowBtn.title = isSlow ? "Cancel Slow Turn" : "Declare a Slow Turn (triggers Charge effects)";
+      slowBtn.title = isSlow
+        ? "Cancel Slow Turn"
+        : "Declare a Slow Turn — sorts after normal turns for this round (triggers Charge effects)";
       slowBtn.classList.add("icon-slow-btn");
       if (isSlow) slowBtn.classList.add("icon-slow-btn--active");
       slowBtn.textContent = isSlow ? "⏩ Slow" : "⏸ Slow";

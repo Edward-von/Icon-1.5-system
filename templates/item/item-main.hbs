@@ -324,12 +324,18 @@
         <input type="text" name="system.secondWindTrigger" value="{{system.secondWindTrigger}}"
                {{#unless isEditable}}disabled{{/unless}}>
       </div>
+      {{!-- Bonds carry 3 ideals. All three inputs must be in the form: the
+           ArrayField truncates to the submitted keys, so rendering fewer rows
+           than the array holds silently deletes the extra ideals on save. --}}
       <div class="icon-field-row">
         <label>Ideal 1</label>
         <input type="text" name="system.ideals.0" value="{{system.ideals.[0]}}"
                {{#unless isEditable}}disabled{{/unless}}>
         <label>Ideal 2</label>
         <input type="text" name="system.ideals.1" value="{{system.ideals.[1]}}"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label>Ideal 3</label>
+        <input type="text" name="system.ideals.2" value="{{system.ideals.[2]}}"
                {{#unless isEditable}}disabled{{/unless}}>
       </div>
     </div>

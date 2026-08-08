@@ -236,7 +236,7 @@ export async function promptAttackMods(ab, actor) {
 }
 
 /** Minimal dialog for damage-roll modifiers. */
-export async function promptDamageMods(ab, combat) {
+export async function promptDamageMods(ab, combat, { comboDefault = false } = {}) {
   const p = ab.parsed ?? { hit: {}, miss: {}, area: {} };
   // Build human-readable formula strings from parsed data
   const fmtChunk = (c, label) => {
@@ -251,6 +251,18 @@ export async function promptDamageMods(ab, combat) {
   const missLabel = fmtChunk(p.miss, "Miss") || "Miss: (no damage)";
   const areaLabel = fmtChunk(p.area, "Area") || null;
 
+  // Combo version, when the ability has one that deals damage: an explicit
+  // checkbox so the roll uses the combo formula instead of the base one.
+  const pc = ab.parsedCombo;
+  const comboHitLabel = pc?.dealsDamage
+    ? (fmtChunk(pc.hit, "hit") || fmtChunk(pc.area, "area") || "see card")
+    : null;
+  const comboRow = comboHitLabel ? `
+      <label title="Roll the combo version's damage instead of the base ability's.">
+        <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}>
+        <strong>Combo version</strong> (${comboHitLabel})
+      </label>` : "";
+
   const content = `
     <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
       <p style="margin:0"><strong>${ab.name}</strong>${ab.isAutoHit ? ' <span class="icon-badge icon-badge--primary">Auto-hit</span>' : ""}</p>
@@ -262,6 +274,7 @@ export async function promptDamageMods(ab, combat) {
           ${areaLabel ? `<option value="area">${areaLabel}</option>` : ""}
         </select>
       </label>
+      ${comboRow}
       <label>Target name: <input type="text" name="targetName" value="" style="width:140px"></label>
       <div style="display:flex; gap:10px; flex-wrap:wrap">
         <label title="Extra [D] dice added to the pool. Top N are summed where N = base dice count.">
@@ -294,6 +307,7 @@ export async function promptDamageMods(ab, combat) {
             vulnerable: !!root.querySelector('input[name="vulnerable"]')?.checked,
             resistance: !!root.querySelector('input[name="resistance"]')?.checked,
             weakened:   !!root.querySelector('input[name="weakened"]')?.checked,
+            useCombo:   !!root.querySelector('input[name="useCombo"]')?.checked,
           };
         },
       },

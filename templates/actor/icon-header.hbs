@@ -34,3 +34,17 @@
     </div>
   </div>
 </header>
+
+{{!-- New-character call-out: a fresh sheet has no jobs yet. Shown on every
+     tab (the header renders above the tab body) until a job is picked. --}}
+{{#if isEditable}}{{#unless system.combat.jobs.length}}
+  <div class="icon-setup-banner">
+    <div class="icon-setup-banner__text">
+      <strong>New character?</strong>
+      <span>Use the setup wizard to pick your class, job, abilities and bond.</span>
+    </div>
+    <button type="button" class="icon-btn icon-setup-banner__btn" data-action="openCharCreation">
+      <i class="fas fa-wand-magic-sparkles"></i> Character Setup Wizard
+    </button>
+  </div>
+{{/unless}}{{/if}}

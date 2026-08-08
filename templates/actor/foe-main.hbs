@@ -119,10 +119,10 @@
                     data-action="removeAction" data-index="{{action.i}}">✕</button>
           {{/if}}
         </div>
-        {{#if action.tags.length}}
+        {{#if action.tagChips.length}}
           <div class="icon-foe-action__tags">
-            {{#each action.tags as |tag|}}
-              <span class="icon-tag">{{tag}}</span>
+            {{#each action.tagChips as |tag|}}
+              <span class="icon-tag" {{#if tag.tooltip}}title="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>
             {{/each}}
           </div>
         {{/if}}

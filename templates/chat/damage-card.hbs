@@ -28,17 +28,22 @@
     <div class="icon-chat-card__targets">
       <div class="icon-chat-card__targets-header">
         <span>Targets</span>
+        <span class="icon-chat-card__targets-note">
+          {{#if pierce}}Pierce — target Armor ignored{{else}}Apply subtracts the target's Armor{{/if}}
+        </span>
       </div>
       {{#each targets as |t|}}
         <div class="icon-chat-card__target-row" data-actor-uuid="{{t.actorUuid}}">
           {{#if t.img}}<img class="icon-chat-card__target-img" src="{{t.img}}" alt="" width="28" height="28">{{/if}}
           <span class="icon-chat-card__target-name"><strong>{{t.name}}</strong></span>
           {{#if t.defense}}<span class="icon-chat-card__target-def">DEF {{t.defense}}</span>{{/if}}
+          {{#if t.armor}}<span class="icon-chat-card__target-def">ARM {{t.armor}}</span>{{/if}}
           {{#if t.hp}}<span class="icon-chat-card__target-hp">HP {{t.hp}}/{{t.hpMax}}</span>{{/if}}
           <button type="button" class="icon-chat-btn icon-chat-btn--apply"
                   data-action="applyDamage"
                   data-actor-uuid="{{t.actorUuid}}"
                   data-amount="{{../finalDamage}}"
+                  {{#if ../pierce}}data-pierce="true"{{/if}}
                   title="Apply {{../finalDamage}} damage to {{t.name}}">
             Apply {{../finalDamage}}
           </button>
@@ -47,6 +52,7 @@
                   data-actor-uuid="{{t.actorUuid}}"
                   data-amount="{{../finalDamage}}"
                   data-half="true"
+                  {{#if ../pierce}}data-pierce="true"{{/if}}
                   title="Apply half ({{../finalDamage}}/2)">
             ½
           </button>

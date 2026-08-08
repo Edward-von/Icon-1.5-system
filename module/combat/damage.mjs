@@ -583,6 +583,7 @@ export async function postAbilityDamageCard(actor, {
     name:      t.actor?.name ?? t.document?.name ?? "Unknown",
     img:       t.actor?.img  ?? t.document?.texture?.src ?? "",
     defense:   t.actor?.system?.combat?.defense ?? t.actor?.system?.defense ?? null,
+    armor:     t.actor ? getActorArmor(t.actor) : null,
     hp:        t.actor?.system?.combat?.hp?.value ?? t.actor?.system?.hp?.value ?? null,
     hpMax:     t.actor?.system?.combat?.hp?.max   ?? t.actor?.system?.hp?.max   ?? null,
   })).filter(t => t.actorUuid);

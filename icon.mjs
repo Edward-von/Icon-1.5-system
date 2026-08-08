@@ -561,6 +561,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       const uuid   = btn.dataset.actorUuid;
       const amount = Number(btn.dataset.amount) || 0;
       const half   = btn.dataset.half === "true";
+      const pierce = btn.dataset.pierce === "true";
 
       if (!uuid || amount <= 0) return;
 
@@ -576,7 +577,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       let result;
       try {
         result = await applyDamageToActor(actor, amount, {
-          applyArmor:  true,
+          applyArmor:  !pierce,
           half,
           chatConfirm: true,
         });

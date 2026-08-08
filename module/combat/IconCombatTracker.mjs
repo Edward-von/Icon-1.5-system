@@ -53,21 +53,24 @@ export class IconCombatTracker extends CoreCombatTracker {
 
       // Summons (max 0 activations) get no faction tint and are never "done".
       const takesTurns = (activations.max ?? 0) > 0;
+      const slow = IconCombat.isSlow(combatant);
       const extra = [
         IconCombat.isPC(combatant) ? "icon-faction-pc"
           : IconCombat.isNPC(combatant) ? "icon-faction-npc" : "",
         (combat.started && takesTurns && !isActive && pending === 0) ? "icon-done" : "",
+        slow ? "icon-slow" : "",
       ].filter(Boolean).join(" ");
 
-      return { ...t, buttons, pending, css: `${t.css ?? ""} ${extra}`.trim() };
+      return { ...t, buttons, pending, slow, css: `${t.css ?? ""} ${extra}`.trim() };
     });
 
-    // Active combatant on top, spent units at the bottom (stable otherwise).
-    context.turns.sort((a, b) => {
-      const active = (b.css.includes("active") ? 1 : 0) - (a.css.includes("active") ? 1 : 0);
-      if (active !== 0) return active;
-      return (a.pending === 0 ? 1 : 0) - (b.pending === 0 ? 1 : 0);
-    });
+    // Active combatant on top, spent units at the bottom; slow-turn units sort
+    // after the normal pending ones (they act at the end of the round). Stable
+    // otherwise.
+    const rank = t => t.css.includes("active") ? 0
+                    : t.pending === 0          ? 3
+                    : t.slow                   ? 2 : 1;
+    context.turns.sort((a, b) => rank(a) - rank(b));
   }
 
   static async #onActivateCombatant(event, target) {

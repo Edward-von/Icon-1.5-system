@@ -65,7 +65,9 @@ const RULES = {
                            : "Shove: move a character involuntarily away from you in a straight line. Collide triggers if they hit an obstruction.",
   "cure":        "Cure: grants Vigor 4 to the target (or a Vigor surge if Bloodied). The target may then save against all active statuses, ending each on a success.",
   "bless":       "Bless: give a blessing token to a character in range. Tokens can be spent for various Mendicant-specific effects and are discarded at combat end.",
-  "combo":       "Combo: actions with Combo have a base and combo version. Using the base grants a Combo token. The next Combo ability consumes the token and uses its combo version instead. Max one token at a time; all tokens are discarded at combat end.",
+  "combo":       (n) => n
+    ? `Combo (step ${n}): foe combo abilities are a sequence, not a token — each part must be used in order, on different turns, looping back to the start after the last part (p.290).`
+    : "Combo: actions with Combo have a base and combo version. Using the base grants a Combo token. The next Combo ability consumes the token and uses its combo version instead. Max one token at a time; all tokens are discarded at combat end.",
   "mark":        "Mark: place a mark on a specific character. Each ability only places one mark at a time; a character can only have one mark per marking ability. Marks persist and are hard for foes to remove.",
   "summon":      "Summon: places a character under your control. Summons are Intangible and don't count as foes or allies for ability purposes. They act via a summon action on their summoner's turn, or have a passive summon effect. Removed when the summoner is defeated.",
   "rebound":     "Rebound: a rebounded ability bounces off a target character and is redirected from their space as the new origin, respecting cover and line-of-sight from there. Effects tied to the original user (sacrificing HP, moving) still apply. Does not stack.",

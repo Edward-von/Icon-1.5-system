@@ -2,7 +2,7 @@
  * IconSheet — ApplicationV2 sheet for Player Characters (type: "icon").
  */
 import { narrativeRoll, combatRoll, damageRoll, saveRoll } from "../../dice/rolls.mjs";
-import { postAbilityDamageCard } from "../../combat/damage.mjs";
+import { postAbilityDamageCard, recoverAction } from "../../combat/damage.mjs";
 import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
@@ -10,6 +10,7 @@ import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs"
 import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc } from "../../helpers/classes.mjs";
+import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, getStatusCharges,
@@ -23,7 +24,7 @@ const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
-import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
+import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage } from "../../combat/ability-damage.mjs";
 export { _parseAbilityDamage };
 
 export class IconSheet extends BaseActorSheet {
@@ -100,6 +101,10 @@ export class IconSheet extends BaseActorSheet {
       addPowerDie:      IconSheet.#onAddPowerDie,
       tickPowerDie:     IconSheet.#onTickPowerDie,
       removePowerDie:   IconSheet.#onRemovePowerDie,
+      // Basic actions (p.85)
+      basicAttackRoll:  IconSheet.#onBasicAttackRoll,
+      basicDamageRoll:  IconSheet.#onBasicDamageRoll,
+      basicRecover:     IconSheet.#onBasicRecover,
     },
     form: { submitOnChange: true },
   };
@@ -242,6 +247,7 @@ export class IconSheet extends BaseActorSheet {
       const talentSelected  = s.talentSelected ?? 0;
       const masteryUnlocked = !!s.masteryUnlocked;
       const parsed = _parseAbilityDamage(s);
+      const parsedCombo = parseComboAbilityDamage(s);
       return {
         id:          a.id,
         name:        a.name,
@@ -252,10 +258,12 @@ export class IconSheet extends BaseActorSheet {
         tags:        (s.tags ?? []).map(formatTag).filter(Boolean),
         talentSelected,
         masteryUnlocked,
-        // Parsed combat data — drives which buttons show and pre-fills dialogs
+        // Parsed combat data — drives which buttons show and pre-fills dialogs.
+        // dealsDamage includes the combo version so combo-only damage still
+        // gets a Damage button.
         isAttack:    parsed.isAttack,
         isAutoHit:   parsed.isAutoHit,
-        dealsDamage: parsed.dealsDamage,
+        dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage,
         description:         await enrichHTML(s.description),
         hitEffect:           await enrichHTML(s.hitEffect),
         missEffect:          await enrichHTML(s.missEffect),
@@ -975,6 +983,7 @@ export class IconSheet extends BaseActorSheet {
     if (!item) return null;
     const s = item.system ?? {};
     const parsed = _parseAbilityDamage(s);
+    const parsedCombo = parseComboAbilityDamage(s);
     return {
       id:          item.id,
       name:        item.name,
@@ -989,6 +998,7 @@ export class IconSheet extends BaseActorSheet {
       isAutoHit:   parsed.isAutoHit,
       dealsDamage: parsed.dealsDamage,
       parsed,
+      parsedCombo,
       description:         await enrichHTML(s.description),
       hitEffect:           await enrichHTML(s.hitEffect),
       missEffect:          await enrichHTML(s.missEffect),
@@ -1048,7 +1058,12 @@ export class IconSheet extends BaseActorSheet {
     });
 
     if (comboMode) {
+      // Consume the token, but remember which ability it was spent on: the
+      // damage roll comes as a separate click afterwards, and by then the
+      // token reads 0 — the stash lets the damage dialog default to the
+      // combo version anyway.
       await this.document.update({ "system.combat.classResources.comboToken.value": 0 });
+      await this.document.setFlag("icon-system", "comboSpentOnItem", itemId);
     }
   }
 
@@ -1229,15 +1244,21 @@ export class IconSheet extends BaseActorSheet {
     const mods = await promptAttackMods(ab, this.document);
     if (!mods) return;
 
+    // Combo armed (token held, or spent on this ability via Show in Chat):
+    // show the combo text on the hit line so the card matches what was used.
+    const comboToken   = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
+    const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
+    const comboArmed   = ab.hasCombo && (comboToken || comboSpentOn === ab.id);
+
     await combatRoll({
-      abilityName:  ab.name,
+      abilityName:  comboArmed ? `${ab.name} (Combo)` : ab.name,
       costLabel:    ab.cost,
       // `ab.tags` is an array of {raw, label, tooltip} — combatRoll expects plain strings
       tags:         ab.tags.map(t => t.label ?? t.raw ?? ""),
       boons:        mods.boons,
       curses:       mods.curses,
       defense:      mods.defense,
-      hitEffect:    ab.hitEffect,
+      hitEffect:    comboArmed ? ab.comboEffect : ab.hitEffect,
       missEffect:   ab.missEffect,
       exceedEffect: ab.exceedEffect,
       critEffect:   ab.critEffect,
@@ -1260,16 +1281,101 @@ export class IconSheet extends BaseActorSheet {
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
     const combat = this.document.system.combat;
-    _log(`abilityDamageRoll — "${ab.name}" | parsed:`, ab.parsed);
+    _log(`abilityDamageRoll — "${ab.name}" | parsed:`, ab.parsed, "| parsedCombo:", ab.parsedCombo);
 
-    if (!ab.dealsDamage) {
+    if (!ab.dealsDamage && !ab.parsedCombo?.dealsDamage) {
       ui.notifications.warn(`"${ab.name}" does not deal damage.`);
       return;
     }
 
-    const mods = await promptDamageMods(ab, combat);
+    // Default the "combo version" choice from combo state: token still held,
+    // or already spent on this very ability via Show in Chat.
+    const comboToken   = (combat.classResources?.comboToken?.value ?? 0) === 1;
+    const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
+    const comboDefault = !!ab.parsedCombo && (comboToken || comboSpentOn === itemId);
+
+    const mods = await promptDamageMods(ab, combat, { comboDefault });
     if (!mods) return;
 
+    const useCombo = !!(mods.useCombo && ab.parsedCombo);
+    if (comboSpentOn === itemId) {
+      await this.document.unsetFlag("icon-system", "comboSpentOnItem");
+    }
+
+    await postAbilityDamageCard(this.document, {
+      parsed:      useCombo ? ab.parsedCombo : ab.parsed,
+      outcome:     mods.outcome,
+      damagedie:   combat.damagedie,
+      fray:        combat.fray,
+      abilityName: useCombo ? `${ab.name} (Combo)` : ab.name,
+      bonusDice:   mods.bonusDice,
+      vulnerable:  mods.vulnerable,
+      resistance:  mods.resistance,
+      weakened:    mods.weakened,
+      targetName:  mods.targetName,
+    });
+
+    _log(`abilityDamageRoll — "${ab.name}" | outcome: ${mods.outcome} | combo: ${useCombo}`);
+  }
+
+
+  /* -------------------------------------------------- */
+  /*  Basic actions (p.85)                               */
+  /* -------------------------------------------------- */
+
+  /**
+   * Synthetic ability detail for the two basic attacks, shaped like
+   * _getAbilityDetail output so the shared attack/damage dialogs work.
+   * Light: 1 action, [D] + fray. Heavy: 2 actions, 2[D] + fray. Miss: fray.
+   */
+  static #basicAttackDetail(heavy) {
+    return {
+      name:  heavy ? "Heavy Attack" : "Light Attack",
+      cost:  heavy ? "2 actions" : "1 action",
+      tags:  [],
+      isAttack:    true,
+      isAutoHit:   false,
+      dealsDamage: true,
+      parsed: {
+        isAttack: true, isAutoHit: false, dealsDamage: true,
+        hit:  { mult: heavy ? 2 : 1, fray: true, flat: 0 },
+        miss: { mult: 0, fray: true, flat: 0 },
+        area: { mult: 0, fray: false, flat: 0 },
+      },
+      parsedCombo: null,
+      hitEffect:  heavy ? "2[D] + fray" : "[D] + fray",
+      missEffect: "Fray damage.",
+    };
+  }
+
+  static async #onBasicAttackRoll(event, target) {
+    event.stopPropagation();
+    const heavy = target.dataset.heavy === "true";
+    const ab = IconSheet.#basicAttackDetail(heavy);
+    _log(`basicAttackRoll — "${ab.name}"`);
+    const mods = await promptAttackMods(ab, this.document);
+    if (!mods) return;
+    await combatRoll({
+      abilityName: ab.name,
+      costLabel:   ab.cost,
+      tags:        [],
+      boons:       mods.boons,
+      curses:      mods.curses,
+      defense:     mods.defense,
+      hitEffect:   ab.hitEffect,
+      missEffect:  ab.missEffect,
+      actor:       this.document,
+    });
+  }
+
+  static async #onBasicDamageRoll(event, target) {
+    event.stopPropagation();
+    const heavy = target.dataset.heavy === "true";
+    const ab = IconSheet.#basicAttackDetail(heavy);
+    const combat = this.document.system.combat;
+    _log(`basicDamageRoll — "${ab.name}"`);
+    const mods = await promptDamageMods(ab, combat);
+    if (!mods) return;
     await postAbilityDamageCard(this.document, {
       parsed:      ab.parsed,
       outcome:     mods.outcome,
@@ -1282,10 +1388,15 @@ export class IconSheet extends BaseActorSheet {
       weakened:    mods.weakened,
       targetName:  mods.targetName,
     });
-
-    _log(`abilityDamageRoll — "${ab.name}" | outcome: ${mods.outcome}`);
   }
 
+  /** Recover (2 actions): +4 Vigor (surge if bloodied) + chat card. Status
+   *  saves stay manual — use the sheet's save button per status. */
+  static async #onBasicRecover(event, target) {
+    event.stopPropagation();
+    _log(`basicRecover — actor: "${this.document.name}"`);
+    await recoverAction(this.document);
+  }
 
   /**
    * Toggle the hidden preview panel for an equipped ability. Shows the
@@ -2174,6 +2285,36 @@ export class IconSheet extends BaseActorSheet {
     }
   }
 
+  /**
+   * Chapter gate for dropped abilities / limit breaks. The level-up and
+   * character-creation dialogs already filter by chapter, but dragging
+   * straight from a compendium bypassed them entirely. Players are blocked;
+   * the GM gets a confirm so deliberate overrides stay possible.
+   * @returns {Promise<boolean>} true if the drop may proceed.
+   */
+  async #checkChapterGate(item) {
+    if (item.type !== "ability" && item.type !== "limit-break") return true;
+    const itemChapter  = item.system?.chapter ?? 1;
+    const actorChapter = this.document.system.combat?.chapter ?? 1;
+    if (itemChapter <= actorChapter) return true;
+
+    const label = item.type === "ability" ? "ability" : "limit break";
+    if (!game.user.isGM) {
+      ui.notifications.warn(
+        `"${item.name}" is a chapter ${itemChapter} ${label} — ${this.document.name} is chapter ${actorChapter}. Ask your GM if you think this is unlocked.`);
+      _log(`chapterGate — BLOCKED "${item.name}" (ch ${itemChapter} > actor ch ${actorChapter})`);
+      return false;
+    }
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window:  { title: "Chapter Lock" },
+      content: `<p><strong>${escapeHTML(item.name)}</strong> is a chapter ${itemChapter} ${label}, but <strong>${escapeHTML(this.document.name)}</strong> is chapter ${actorChapter}.</p>
+                <p>Add it anyway?</p>`,
+      modal: true,
+    }).catch(() => false);
+    _log(`chapterGate — GM override for "${item.name}": ${ok}`);
+    return !!ok;
+  }
+
   /** Actual drop routing — called exactly once per drop event via #onDrop. */
   async #handleDrop(event) {
     let data;
@@ -2197,6 +2338,7 @@ export class IconSheet extends BaseActorSheet {
       case "bond-power":
       case "trait":
       case "relic":
+        if (!(await this.#checkChapterGate(item))) return;
         _log(`drop — embedding "${item.name}" (${item.type})`);
         await this.document.createEmbeddedDocuments("Item", [item.toObject()]);
         break;
@@ -2206,11 +2348,22 @@ export class IconSheet extends BaseActorSheet {
       case "job-template":
         await this.#onDropJobTemplate(item);
         break;
-      case "gear-kit":
+      case "gear-kit": {
+        // Equip the kit by name AND write its contents into the Notes tab —
+        // the kit's item list used to be readable only on the compendium item.
         _log(`drop — gear-kit: setting gearKit to "${item.name}"`);
-        await this.document.update({ "system.narrative.gearKit": item.name });
-        ui.notifications.info(`Kit "${item.name}" equipped.`);
+        const kitItems = Array.isArray(item.system?.items) ? item.system.items.filter(Boolean) : [];
+        const updates  = { "system.narrative.gearKit": item.name };
+        const marker   = `${item.name} —`;
+        const notes    = this.document.system.biography?.notes ?? "";
+        if (kitItems.length && !notes.includes(marker)) {
+          updates["system.biography.notes"] =
+            `${notes ? `${notes}\n\n` : ""}${marker} ${kitItems.join(", ")}`;
+        }
+        await this.document.update(updates);
+        ui.notifications.info(`Kit "${item.name}" equipped${kitItems.length ? " (contents listed in Notes)" : ""}.`);
         break;
+      }
       default:
         _log(`drop — WARN: unhandled item type "${item.type}"`);
         ui.notifications.warn(`Cannot drop item type "${item.type}" on this sheet.`);
@@ -2436,12 +2589,22 @@ export class IconSheet extends BaseActorSheet {
 
     _log(`dropBond — bond: "${item.name}" | effortMax: ${s.effortMax} | ideals: ${JSON.stringify(s.ideals)}`);
     await actor.createEmbeddedDocuments("Item", [item.toObject()]);
-    await actor.update({
+    const updates = {
       "system.narrative.bond":       item.name,
       "system.narrative.effort.max": s.effortMax ?? 3,
       "system.biography.ideals":     Array.isArray(s.ideals) ? s.ideals : [],
-    });
-    ui.notifications.info(`Bond "${item.name}" applied.`);
+    };
+
+    // List the bond's baseline equipment kits in the Notes tab so players can
+    // pick one without digging through the Gear Kits compendium.
+    const kitsBlock = await buildBondKitsNote(item.name);
+    const notes     = actor.system.biography?.notes ?? "";
+    if (kitsBlock && !notes.includes(`Kits (${item.name})`)) {
+      updates["system.biography.notes"] = `${notes ? `${notes}\n\n` : ""}${kitsBlock}`;
+    }
+
+    await actor.update(updates);
+    ui.notifications.info(`Bond "${item.name}" applied${kitsBlock ? " — its gear kits are listed in Notes" : ""}.`);
   }
 
   async #onDropAbilitySlot(event, slot) {
@@ -2455,6 +2618,8 @@ export class IconSheet extends BaseActorSheet {
       _log(`dropAbilitySlot — BLOCKED: item type is "${item?.type}" (need "ability")`);
       return ui.notifications.warn("Only ability items can be slotted.");
     }
+
+    if (!(await this.#checkChapterGate(item))) return;
 
     _log(`dropAbilitySlot — ability: "${item.name}" | slot: ${slot.dataset.slot} | alreadyEmbedded: ${item.parent?.id === this.document.id}`);
 

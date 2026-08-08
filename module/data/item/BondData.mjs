@@ -17,7 +17,7 @@ export class BondData extends foundry.abstract.TypeDataModel {
 
       secondWindTrigger: new StringField({ required: true, initial: "" }),
       specialAbility:    new HTMLField({ required: true, initial: "" }),
-      ideals:            new ArrayField(new StringField({ initial: "" }), { initial: ["", ""] }),
+      ideals:            new ArrayField(new StringField({ initial: "" }), { initial: ["", "", ""] }),
 
       // "Take from another bond" gambit power (requires 4 bond powers owned)
       gambitPower:  new HTMLField({ required: true, initial: "" }),

@@ -20,7 +20,7 @@ export class IconData extends foundry.abstract.TypeDataModel {
         kintype:  new StringField({ required: true, initial: "" }),
         culture:  new StringField({ required: true, initial: "" }),
         notes:    new HTMLField({ required: true, initial: "" }),
-        ideals:   new ArrayField(new StringField({ initial: "" }), { initial: ["", ""] }),
+        ideals:   new ArrayField(new StringField({ initial: "" }), { initial: ["", "", ""] }),
       }),
 
       /* -------------------------------------------------- */

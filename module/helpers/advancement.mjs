@@ -54,3 +54,26 @@ export const MAX_EQUIPPED_ABILITIES = 6;
 
 /** Number of xp ticks required to bank a level-up. */
 export const XP_PER_LEVEL = 15;
+
+/**
+ * Build a plain-text summary of the gear kits belonging to a bond (plus the
+ * shared Adventurer's Kit) from the gear-kits compendium. Used by the bond
+ * drop handler and the character-creation wizard to list a new character's
+ * baseline equipment options in the Notes tab. Returns "" when the pack is
+ * missing or has no kits for that bond.
+ */
+export async function buildBondKitsNote(bondName) {
+  const pack = game.packs.get("icon-system.gear-kits");
+  if (!pack) return "";
+  let docs;
+  try { docs = await pack.getDocuments(); } catch { return ""; }
+  const forBond = docs.filter(d =>
+    (d.system?.bondName ?? "").toLowerCase() === String(bondName ?? "").toLowerCase() ||
+    d.system?.isAdventurersKit);
+  if (!forBond.length) return "";
+  const lines = forBond.map(d => {
+    const items = Array.isArray(d.system?.items) ? d.system.items.filter(Boolean) : [];
+    return `• ${d.name}${items.length ? `: ${items.join(", ")}` : ""}`;
+  });
+  return `Kits (${bondName}) — drop one on the sheet to equip it:\n${lines.join("\n")}`;
+}

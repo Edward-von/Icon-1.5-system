@@ -101,5 +101,21 @@ export function parseAbilityDamage(itemSystem) {
   };
 }
 
+/**
+ * Parse the COMBO version of an ability. `comboEffect` is a single free-text
+ * blob that replaces the base ability's text when the combo token is spent,
+ * so it is parsed as a description-only ability: the "On hit:" / "Miss:" /
+ * "Area Effect:" fallbacks in parseAbilityDamage pick the chunks out of it.
+ * Returns null when the ability has no usable combo version.
+ */
+export function parseComboAbilityDamage(itemSystem) {
+  const s = itemSystem ?? {};
+  if (!s.isCombo || !s.comboEffect || !String(s.comboEffect).trim()) return null;
+  return parseAbilityDamage({
+    isAttack:    !!s.isAttack,
+    description: s.comboEffect,
+  });
+}
+
 /** @deprecated Old name kept for existing world macros — use parseAbilityDamage. */
 export const _parseAbilityDamage = parseAbilityDamage;

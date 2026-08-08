@@ -12,6 +12,7 @@
  * On submit, writes everything to the actor in a single transaction.
  */
 import { buildClassTraitDocs } from "../helpers/classes.mjs";
+import { buildBondKitsNote } from "../helpers/advancement.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -349,6 +350,14 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
     };
     for (const [key, val] of Object.entries(finalActions)) {
       if (val !== baseActions[key]) updates[`system.narrative.actions.${key}`] = val;
+    }
+
+    // List the bond's baseline equipment kits in the Notes tab so a fresh
+    // character can pick one without digging through the Gear Kits compendium.
+    const kitsBlock = await buildBondKitsNote(bondItem.name);
+    const notes     = actor.system.biography?.notes ?? "";
+    if (kitsBlock && !notes.includes(`Kits (${bondItem.name})`)) {
+      updates["system.biography.notes"] = `${notes ? `${notes}\n\n` : ""}${kitsBlock}`;
     }
 
     _log(`applying updates:`, updates);

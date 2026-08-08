@@ -165,6 +165,67 @@
     </div>
   </div>
 
+  {{!-- Basic Actions — the universal actions from p.85, collapsed by default. --}}
+  <div class="icon-section icon-basic-actions">
+    <details>
+      <summary class="icon-section__title icon-basic-actions__summary">Basic Actions <small>(everyone has these)</small></summary>
+      <ul class="icon-basic-actions__list">
+        <li>
+          <span class="icon-basic-actions__name">Standard Move</span>
+          <span class="icon-badge">free</span>
+          <span class="icon-basic-actions__desc">Move your speed ({{system.combat.speed}}).</span>
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Dash</span>
+          <span class="icon-badge">1 action</span>
+          <span class="icon-basic-actions__desc">Dash half your speed, rounded up, ignoring engagement.</span>
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Interact</span>
+          <span class="icon-badge">1 action</span>
+          <span class="icon-basic-actions__desc">Interact with the map: pull a lever, open a heavy door, pick up a heavy object…</span>
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Rescue</span>
+          <span class="icon-badge">1 action</span>
+          <span class="icon-basic-actions__desc">Help an adjacent defeated ally: they end incapacitated and heal to full HP minus wounds.</span>
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Light Attack</span>
+          <span class="icon-badge">1 action</span>
+          <span class="icon-basic-actions__desc">On hit: [D] + fray. Miss: fray.</span>
+          {{#if isEditable}}
+            <span class="icon-basic-actions__btns">
+              <button type="button" class="icon-btn icon-btn--sm" data-action="basicAttackRoll" title="Roll the attack (d20 vs Defense)"><i class="fas fa-dice-d20"></i></button>
+              <button type="button" class="icon-btn icon-btn--sm" data-action="basicDamageRoll" title="Roll damage"><i class="fas fa-burst"></i></button>
+            </span>
+          {{/if}}
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Heavy Attack</span>
+          <span class="icon-badge">2 actions</span>
+          <span class="icon-basic-actions__desc">On hit: 2[D] + fray. Miss: fray.</span>
+          {{#if isEditable}}
+            <span class="icon-basic-actions__btns">
+              <button type="button" class="icon-btn icon-btn--sm" data-action="basicAttackRoll" data-heavy="true" title="Roll the attack (d20 vs Defense)"><i class="fas fa-dice-d20"></i></button>
+              <button type="button" class="icon-btn icon-btn--sm" data-action="basicDamageRoll" data-heavy="true" title="Roll damage"><i class="fas fa-burst"></i></button>
+            </span>
+          {{/if}}
+        </li>
+        <li>
+          <span class="icon-basic-actions__name">Recover</span>
+          <span class="icon-badge">2 actions</span>
+          <span class="icon-basic-actions__desc">Cure yourself: gain 4 Vigor (Vigor Surge if bloodied), then save vs all statuses.</span>
+          {{#if isEditable}}
+            <span class="icon-basic-actions__btns">
+              <button type="button" class="icon-btn icon-btn--sm" data-action="basicRecover" title="Apply the Vigor gain and post to chat"><i class="fas fa-heart-pulse"></i></button>
+            </span>
+          {{/if}}
+        </li>
+      </ul>
+    </details>
+  </div>
+
   {{!-- Core stats row --}}
   <div class="icon-section">
     <div class="icon-stats-grid">

@@ -57,8 +57,8 @@
   /* --- Class palette --- */
   --stalwart:  #c0392b;
   --vagabond:  #d4a017;
-  --mendicant: #2980b9;
-  --wright:    #27ae60;
+  --mendicant: #27ae60;
+  --wright:    #2980b9;
 
   /* --- Sheet geometry --- */
   --ic-radius-sm: 3px;
@@ -228,6 +228,37 @@
   font-size: 0.8em;
 }
 
+/* New-character setup call-out (shown until the sheet has a job) */
+.icon-setup-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 6px 0 4px;
+  padding: 8px 12px;
+  border: 1px solid var(--ic-gold, #c8961c);
+  border-radius: var(--ic-radius-sm);
+  background: rgba(200, 150, 28, .12);
+}
+.icon-setup-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.icon-setup-banner__text strong { color: var(--ic-gold-bright, #e8b83c); }
+.icon-setup-banner__text span   { font-size: .85em; color: var(--ic-text-normal); }
+.icon-setup-banner__btn {
+  font-size: .95em;
+  padding: 8px 14px;
+  border-color: var(--ic-gold, #c8961c);
+  color: var(--ic-gold-bright, #e8b83c);
+  white-space: nowrap;
+}
+.icon-setup-banner__btn:hover {
+  background: rgba(200, 150, 28, .25);
+}
+
 /* ============================================================
    5. Badges
    ============================================================ */
@@ -304,8 +335,13 @@
   background: rgba(138, 96, 48, .15);
 }
 .foe-builder-field--elite input[type="checkbox"] {
+  /* Foundry v13 renders checkboxes as a font glyph sized by font-size;
+     without matching it to the box the glyph overflows bottom-right. */
   width: 16px; height: 16px;
+  font-size: 16px;
+  line-height: 16px;
   margin: 0;
+  flex: 0 0 auto;
   accent-color: #d09040;
 }
 
@@ -853,8 +889,8 @@
 }
 .icon-resource-section--stalwart  { border-left-color: #c04848; }
 .icon-resource-section--vagabond  { border-left-color: #c8a028; }
-.icon-resource-section--mendicant { border-left-color: #4088d0; }
-.icon-resource-section--wright    { border-left-color: #50a060; }
+.icon-resource-section--mendicant { border-left-color: #50a060; }
+.icon-resource-section--wright    { border-left-color: #4088d0; }
 
 .icon-resource-block {
   margin-top: 6px;
@@ -1083,6 +1119,51 @@
   min-width: 0;
   font-size: 1em;
   flex: 1;
+}
+
+/* --- Basic Actions (combat tab, collapsible) --- */
+.icon-basic-actions__summary {
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.icon-basic-actions__summary::before {
+  content: "▸ ";
+  color: var(--ic-gold, #c8961c);
+}
+.icon-basic-actions details[open] .icon-basic-actions__summary::before,
+details[open] > .icon-basic-actions__summary::before {
+  content: "▾ ";
+}
+.icon-basic-actions__list {
+  list-style: none;
+  margin: 6px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.icon-basic-actions__list li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 6px;
+  border-bottom: 1px solid var(--ic-border-subtle, rgba(180,160,100,.12));
+}
+.icon-basic-actions__name {
+  flex: 0 0 110px;
+  font-weight: bold;
+  color: var(--ic-text-bright);
+}
+.icon-basic-actions__desc {
+  flex: 1;
+  font-size: .85em;
+  color: var(--ic-text-normal);
+}
+.icon-basic-actions__btns {
+  display: inline-flex;
+  gap: 4px;
+  align-self: center;
 }
 
 /* --- Effort / Strain boxes in a single horizontal row --- */
@@ -2180,8 +2261,8 @@
 /* Color-code the left border by class */
 .icon-ability-preview.icon-class--stalwart  { border-left-color: #e74c3c; }
 .icon-ability-preview.icon-class--vagabond  { border-left-color: #f1c40f; }
-.icon-ability-preview.icon-class--mendicant { border-left-color: #3498db; }
-.icon-ability-preview.icon-class--wright    { border-left-color: #27ae60; }
+.icon-ability-preview.icon-class--mendicant { border-left-color: #27ae60; }
+.icon-ability-preview.icon-class--wright    { border-left-color: #3498db; }
 
 /* ============================================================
    Bond Power cards (Narrative tab)
@@ -2633,6 +2714,12 @@
 }
 .combat-tracker .combatant.icon-done:hover { opacity: 0.75; }
 
+/* === Slow Turn: amber edge + sorted after normal pending combatants === */
+.combat-tracker .combatant.icon-slow {
+  border-left: 3px solid rgba(224, 160, 32, .8);
+  background: linear-gradient(90deg, rgba(224,160,32,.10), transparent 60%);
+}
+
 /* === Combat banner: round + PC/NPC turn indicator + party resolve === */
 .icon-combat-banner {
   display: flex;
@@ -3069,6 +3156,13 @@ ol.chat-log .chat-message,
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-bottom: 4px;
+}
+.icon-chat-card__targets-note {
+  margin-left: 6px;
+  color: var(--ic-text-dim);
+  text-transform: none;
+  letter-spacing: normal;
+  font-style: italic;
 }
 .icon-chat-card__target-row {
   display: flex;

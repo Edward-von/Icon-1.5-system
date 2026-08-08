@@ -72,7 +72,24 @@
   });
   } catch { return; }
 
-  if (!result || result.total === 0) {
+  if (!result) return;
+
+  // End of session: refresh per-session bond power uses on every PC processed,
+  // even when 0 XP is awarded — the session still ended.
+  let powersReset = 0;
+  for (const actor of pcs) {
+    const used = actor.items.filter(i =>
+      i.type === "bond-power" && (i.system?.usedThisSession ?? 0) > 0);
+    if (!used.length) continue;
+    await actor.updateEmbeddedDocuments("Item",
+      used.map(i => ({ _id: i.id, "system.usedThisSession": 0 })));
+    powersReset += used.length;
+  }
+  if (powersReset) {
+    ui.notifications.info(`XP Award: reset ${powersReset} per-session bond power use(s).`);
+  }
+
+  if (result.total === 0) {
     ui.notifications.info("XP Award: No XP awarded (0 total).");
     return;
   }
@@ -102,7 +119,7 @@
     `);
 
     if (newXp >= 15) {
-      levelups.push(`<div class="icon-macro-levelup-alert"><i class="fas fa-arrow-up"></i> ${actor.name} — LEVEL UP DISPONIBILE</div>`);
+      levelups.push(`<div class="icon-macro-levelup-alert"><i class="fas fa-arrow-up"></i> ${actor.name} — LEVEL UP AVAILABLE</div>`);
       ui.notifications.info(`${actor.name} has filled their XP bar!`);
     }
   }

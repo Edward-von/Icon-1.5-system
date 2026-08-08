@@ -4,6 +4,9 @@
     <div class="icon-section-header">
       <h3>IDEALS</h3>
     </div>
+    {{!-- Bonds carry 3 ideals. All three inputs must be in the form: the
+         ArrayField truncates to the submitted keys, so rendering fewer rows
+         than the array holds silently deletes the extra ideals on save. --}}
     <div class="icon-ideals">
       <div class="icon-ideal-row">
         <span class="icon-ideal-num">1</span>
@@ -19,6 +22,14 @@
                name="system.biography.ideals.1"
                value="{{system.biography.ideals.[1]}}"
                placeholder="Second ideal"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-ideal-row">
+        <span class="icon-ideal-num">3</span>
+        <input type="text"
+               name="system.biography.ideals.2"
+               value="{{system.biography.ideals.[2]}}"
+               placeholder="Third ideal"
                {{#unless isEditable}}disabled{{/unless}}>
       </div>
     </div>
