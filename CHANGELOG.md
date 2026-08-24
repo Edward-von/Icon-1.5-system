@@ -1,5 +1,46 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 24 agosto 2026 (sera) — Audit completo delle ability dei PG
+
+Audit manuale di **tutte le 148 ability, 96 tratti e 16 limit break** dei 16 job,
+confrontati pagina per pagina con il manuale (pp. 116–236). Fedeltà dei testi già
+ottima; corretti però parecchi problemi strutturali sistematici:
+
+### 🐛 Correzioni di gioco
+- **13 interrupt avevano perso la riga "Trigger:"** (Catapult, Perseus, Righteous
+  Disdain, Boiling Blood, Sucker Punch, Masquerade, Warding Bolts, Nocturne, Justice,
+  Wish, Midas, Sturmreiten, Heave-Ho) — ripristinata dal manuale. Senza, non si sapeva
+  QUANDO usarli.
+- **Regole delle evocazioni ripristinate**: le sezioni SUMMONS dei job erano andate
+  perse — **Bomb** (Fool), **Shadow + Shadow Cloud** (Shade), **Beast** (Warden),
+  **Thrall + Plant** (Harvester); completate anche **Wild Card** (Seer) e **Salt
+  Sprite** (Stormbender). Ora vivono nel tratto di riferimento del job (visibile in
+  scheda) e nelle ability principali; i template job aggiornati di conseguenza.
+- **Effetti incondizionati fuori dal campo "On hit"** (~28 ability): le righe
+  "Effect:"/"Mark:" del manuale valgono anche se l'attacco manca, ma erano dentro
+  l'effetto colpito — la scheda le nascondeva sul miss. Spostate nella descrizione.
+- **"Miss:" incastrato nel campo hit** (~16 ability, blocchi Mendicant/Wright):
+  separato nei campi corretti — ora la scheda mostra il danno da miss.
+- **Effetti da talento mostrati come base** (12 ability): exceed/comeback/slay/charge
+  che il manuale dà SOLO con un talento erano anche nei campi base — ripuliti.
+- **Testi mancanti reintegrati**: vincoli di Terraforming, clausole di Underway,
+  esplosione fissa di Magnapyre, altezza impilata dello Spirit Shrine, "counts as an
+  attack" di Split Heaven and Hell, distanza illimitata di Deus Ex Machina e altri.
+
+### 🔧 Pulizia dati
+- Rimossi i duplicati-ability dei tratti di capitolo 3 Mendicant (Gran Redempta, Defy
+  the Cycle, Great Spirit Festival, Chakravartin) — restano tratti come da manuale, e
+  ora sono inclusi nei template job (prima mancavano).
+- Placeholder d'authoring eliminati ("[attack]", "(implicit: see description)").
+- I template job ora incorporano il **testo completo dei Limit Break** (prima una
+  versione riassunta finiva sulla scheda del PG).
+- Tag fuorvianti rimossi, dieresi ripristinate (Ätherwand, Bifröst, Ragnarök,
+  Götterdämmerung…), tag di testata dei Limit Break (Divine, ecc.) reintegrati nel
+  testo, flavor mancanti aggiunti dove certi.
+
+Nota: i PG già creati conservano le copie vecchie delle ability — per riallinearle,
+ri-trascina le ability dal compendio (o usa il wizard su un PG nuovo).
+
 ## 24 agosto 2026 — Hotfix: schede PG
 
 ### 🐛 Correzioni di gioco
