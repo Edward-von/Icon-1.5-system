@@ -1,4 +1,8 @@
 {{!-- icon-header.hbs --}}
+{{!-- Single root element: ApplicationV2 template parts must render exactly
+     one top-level HTML element. The conditional setup banner below used to
+     be a second root, which broke sheet rendering for jobless (new) PCs. --}}
+<div class="icon-header-part">
 <header class="icon-sheet__header">
   <img class="icon-sheet__portrait" src="{{actor.img}}" alt="{{actor.name}}"
        data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
@@ -48,3 +52,4 @@
     </button>
   </div>
 {{/unless}}{{/if}}
+</div>
