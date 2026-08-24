@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 24 agosto 2026 — Hotfix: schede PG
+
+### 🐛 Correzioni di gioco
+- **Le schede dei PG non si aprivano**: il bug colpiva i personaggi **senza job assegnato** — quindi tutti i PG nuovi. Il banner del wizard di creazione (novità dell'8 agosto) aggiungeva un secondo elemento radice al template dell'header, e Foundry lo rifiuta in blocco (*"Template part must render a single HTML element"*). I PG con job già scelti non erano toccati, per questo il bug era sfuggito ai test. Corretto e verificato su tutte le schede: PG nuovi, PG esistenti, foe, legend e summon.
+- **Errori di migrazione all'avvio del mondo**: ~2.150 documenti dei compendi risultavano scritti da Foundry "14.360" e a ogni avvio del mondo riempivano il log di errori *"cannot be migrated"* (i compendi funzionavano lo stesso, ma la migrazione lato server veniva saltata). Versioni normalizzate a 13.351 — l'avvio ora è pulito.
+
+### ✨ Novità
+- **Barra HP sui token**: i nuovi attori hanno di default la **barra HP sul token** — sempre visibile per i PG, visibile solo al GM per i nemici. Gli HP si possono anche modificare direttamente dall'HUD del token (click destro sul token), senza aprire la scheda. Per i mondi già esistenti: da console GM (F12) `await game.icon.enableTokenBars();` aggiorna in un colpo tutti gli attori e i token già piazzati.
+
+### 📎 Promemoria
+- Il **Basic Attack dalla scheda** richiesto è **già presente** nella release dell'8 agosto (tab *Combat* → sezione *Basic Actions*: Light/Heavy Attack con tiro d'attacco e danno, più Recover) — era nella zip che il bug delle schede ha impedito di provare.
+
+---
+
 ## 8 agosto 2026 — Secondo giro di feedback
 
 ### 🐛 Correzioni di gioco

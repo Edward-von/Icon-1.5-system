@@ -150,6 +150,16 @@ Hooks.once("init", () => {
     legend: LegendData,
   };
 
+  // ---- Token resource bars ----
+  // Which attributes the token-config "bar" dropdowns offer per actor type.
+  // PCs keep combat stats under system.combat; foes/legends/summons at top level.
+  CONFIG.Actor.trackableAttributes = {
+    icon:   { bar: ["combat.hp", "combat.vigor"], value: [] },
+    foe:    { bar: ["hp", "vigor"], value: [] },
+    legend: { bar: ["hp", "vigor"], value: [] },
+    summon: { bar: ["hp"], value: [] },
+  };
+
   // ---- Data models — Items ----
   CONFIG.Item.dataModels = {
     "ability":     AbilityData,
@@ -216,9 +226,20 @@ Hooks.once("init", () => {
  * ---------------------------------------------------------------- */
 Hooks.on("preCreateActor", (doc, data /*, options, userId */) => {
   try {
-    doc.updateSource({ "prototypeToken.lockRotation": true });
+    const updates = { "prototypeToken.lockRotation": true };
+    // Default HP bar on tokens (player feedback: read HP without opening the
+    // sheet). PC bars are visible to everyone; NPC bars to the owner (GM)
+    // only. Skipped when the creator already configured a bar (e.g. actors
+    // imported from a compendium that set their own).
+    if (!data?.prototypeToken?.bar1?.attribute) {
+      updates["prototypeToken.bar1.attribute"] = doc.type === "icon" ? "combat.hp" : "hp";
+      updates["prototypeToken.displayBars"] = doc.type === "icon"
+        ? CONST.TOKEN_DISPLAY_MODES.ALWAYS
+        : CONST.TOKEN_DISPLAY_MODES.OWNER;
+    }
+    doc.updateSource(updates);
   } catch (err) {
-    console.warn("ICON 1.5 | preCreateActor lockRotation failed:", err);
+    console.warn("ICON 1.5 | preCreateActor token defaults failed:", err);
   }
 });
 
@@ -446,6 +467,60 @@ Hooks.once("ready", async () => {
     }
 
     const msg = `ICON 1.5 — linkAllTokens: ${actorsFixed} actor prototype${actorsFixed !== 1 ? "s" : ""}, ${tokensFixed} placed token${tokensFixed !== 1 ? "s" : ""} updated.`;
+    console.log(`ICON 1.5 | ${msg}`);
+    ui.notifications.info(msg);
+  };
+
+  /**
+   * Retrofit the default HP bar onto existing actors and placed tokens.
+   * New actors get it automatically (preCreateActor hook); this migrates a
+   * world created before that. Run from the GM console:
+   *   await game.icon.enableTokenBars();
+   */
+  game.icon.enableTokenBars = async function() {
+    if (!game.user.isGM) {
+      ui.notifications.warn("Only the GM can run this migration.");
+      return;
+    }
+    const barFor = type => ({
+      attribute:   type === "icon" ? "combat.hp" : "hp",
+      displayBars: type === "icon"
+        ? CONST.TOKEN_DISPLAY_MODES.ALWAYS
+        : CONST.TOKEN_DISPLAY_MODES.OWNER,
+    });
+
+    let actorsFixed = 0;
+    for (const actor of game.actors) {
+      if (actor.prototypeToken?.bar1?.attribute) continue;
+      const { attribute, displayBars } = barFor(actor.type);
+      try {
+        await actor.update({
+          "prototypeToken.bar1.attribute": attribute,
+          "prototypeToken.displayBars":    displayBars,
+        });
+        actorsFixed++;
+      } catch (err) {
+        console.error(`ICON 1.5 | Failed to set HP bar for "${actor.name}":`, err);
+      }
+    }
+
+    let tokensFixed = 0;
+    for (const scene of game.scenes) {
+      const missing = scene.tokens.filter(t => !t.bar1?.attribute && t.actor);
+      if (!missing.length) continue;
+      const updates = missing.map(t => {
+        const { attribute, displayBars } = barFor(t.actor.type);
+        return { _id: t.id, "bar1.attribute": attribute, displayBars };
+      });
+      try {
+        await scene.updateEmbeddedDocuments("Token", updates);
+        tokensFixed += missing.length;
+      } catch (err) {
+        console.error(`ICON 1.5 | Failed to set HP bars on scene "${scene.name}":`, err);
+      }
+    }
+
+    const msg = `ICON 1.5 — enableTokenBars: ${actorsFixed} actor prototype${actorsFixed !== 1 ? "s" : ""}, ${tokensFixed} placed token${tokensFixed !== 1 ? "s" : ""} updated.`;
     console.log(`ICON 1.5 | ${msg}`);
     ui.notifications.info(msg);
   };
