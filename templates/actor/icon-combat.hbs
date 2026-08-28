@@ -389,6 +389,53 @@
                       title="Remove trait">×</button>
             {{/if}}
           </div>
+          {{#if trait.quick}}
+            <div class="icon-trait__quick icon-trait__quick--{{trait.quick.type}}">
+              {{#if (icon-eq trait.quick.type "vigilance")}}
+                <span class="icon-trait__quick-label">Vigilance {{trait.quick.value}}/{{trait.quick.max}}</span>
+                <span class="icon-vigilance-track icon-vigilance-track--inline">
+                  {{#each trait.quick.pips as |p|}}
+                    <span class="icon-vigilance-pip {{#if p.active}}icon-vigilance-pip--active{{/if}}"
+                          data-action="setVigilance" data-value="{{p.i}}" title="Set vigilance to {{p.i}}">⚡</span>
+                  {{/each}}
+                </span>
+                {{#if ../isEditable}}
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="spendVigilance"
+                          title="Spend charges: roll 1d6 each, total reduces damage">Spend</button>
+                {{/if}}
+              {{/if}}
+              {{#if (icon-eq trait.quick.type "wright")}}
+                <span class="icon-trait__quick-label">Aether</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}}>−</button>
+                <span class="icon-counter-value">{{trait.quick.aether}}</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}}>+</button>
+                <span class="icon-trait__quick-label">Power Dice</span>
+                {{#each trait.quick.dice as |die|}}
+                  <span class="icon-power-die icon-power-die--inline" data-die-id="{{die.id}}">
+                    <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="-1" {{#unless ../../isEditable}}disabled{{/unless}}>−</button>
+                    <span class="icon-power-die__value">{{die.ticks}}</span>
+                    <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="1" {{#unless ../../isEditable}}disabled{{/unless}}>+</button>
+                    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" data-id="{{die.id}}" title="Roll this power die (1d6)">🎲</button>
+                  </span>
+                {{/each}}
+                {{#if ../isEditable}}
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="addPowerDie" title="Add a power die">+ Die</button>
+                {{/if}}
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" title="Roll a power die (1d6)">🎲 Roll</button>
+              {{/if}}
+              {{#if (icon-eq trait.quick.type "blessings")}}
+                <span class="icon-trait__quick-label">Blessing Tokens</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}}>−</button>
+                <span class="icon-counter-value">{{trait.quick.value}}</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}}>+</button>
+              {{/if}}
+              {{#if (icon-eq trait.quick.type "combo")}}
+                <span class="icon-trait__quick-label">Combo Token</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="toggleComboToken"
+                        {{#unless ../isEditable}}disabled{{/unless}}>{{#if trait.quick.value}}● armed{{else}}○ none{{/if}}</button>
+              {{/if}}
+            </div>
+          {{/if}}
           {{#if trait.enrichedDescription}}
             <div class="icon-trait__body icon-editor-wrap">{{{trait.enrichedDescription}}}</div>
           {{/if}}

@@ -42,6 +42,12 @@ fix pass completo. Findings e script in `icon-compendium-audit/foes-audit/`.
   Stesso fix sulle legend, dove inoltre il bottone 💥 Damage non compariva mai sulle
   azioni senza `damageMode` esplicito.
 
+### ✨ Scheda PG — controlli di classe accanto alla class feature (richiesta Maar)
+- Nel tratto di classe (Heroics / Aether / Blessing / Finishing Blow) compaiono ora i
+  controlli rapidi della risorsa: **pip di Vigilance + Spend** (Stalwart), **Aether −/+,
+  Power Dice con −/+/🎲 e "+ Die" / "🎲 Roll"** (Wright), **Blessing Tokens −/+**
+  (Mendicant), **Combo Token** (Vagabond). Il blocco nel tab Combat resta invariato.
+
 ### 🔧 Pulizia dati
 - ~180 code di scraping rimosse ("Chapter 1+", "335 of 501", intro di altri foe…).
 - Testi dei tratti glossario unificati (263 tratti, testo p.104).

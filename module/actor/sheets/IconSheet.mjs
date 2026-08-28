@@ -99,6 +99,7 @@ export class IconSheet extends BaseActorSheet {
       adjustStatusCharges: IconSheet.#onAdjustStatusCharges,
       rollSave:            IconSheet.#onRollSave,
       addPowerDie:      IconSheet.#onAddPowerDie,
+      rollPowerDie:     IconSheet.#onRollPowerDie,
       tickPowerDie:     IconSheet.#onTickPowerDie,
       removePowerDie:   IconSheet.#onRemovePowerDie,
       // Basic actions (p.85)
@@ -420,9 +421,26 @@ export class IconSheet extends BaseActorSheet {
         if (chCmp) return chCmp;
         return a.name.localeCompare(b.name);
       });
+    // Quick class-resource controls shown in the header of the CLASS trait
+    // (source "class": Heroics / Finishing Blow / Blessing / Aether), so the
+    // Vigilance pips, Power Dice, Blessings and Combo token are usable right
+    // next to the class feature that explains them (Maar's request, Aug 2026).
+    const cr = system.combat?.classResources ?? {};
+    const quickFor = (t) => {
+      if (t.system?.source !== "class") return null;
+      switch (t.system?.class) {
+        case "stalwart":  return { type: "vigilance", value: cr.vigilance?.value ?? 0, max: cr.vigilance?.max ?? 6,
+                                   pips: Array.from({ length: 6 }, (_, i) => ({ i: i + 1, active: i + 1 <= (cr.vigilance?.value ?? 0) })) };
+        case "wright":    return { type: "wright", aether: cr.aether?.value ?? 0, dice: cr.powerDice ?? [] };
+        case "mendicant": return { type: "blessings", value: cr.blessingTokens?.value ?? 0 };
+        case "vagabond":  return { type: "combo", value: cr.comboToken?.value ?? 0 };
+        default: return null;
+      }
+    };
     context.traitItems = await Promise.all(rawTraits.map(async t => {
       const chapter = t.system?.chapter ?? 1;
       return {
+        quick:               quickFor(t),
         id:                  t.id,
         name:                t.name,
         jobName:             t.system?.jobName ?? "",
@@ -2223,6 +2241,23 @@ export class IconSheet extends BaseActorSheet {
     if (newInvested >= nextCost) {
       ui.notifications.info(`${relic.name} fully infused (${newInvested}/${nextCost}) — upgrade is now available.`);
     }
+  }
+
+  /**
+   * Wright — roll a power die (1d6). When the button carries a die id the
+   * chat flavor names that die and its current ticks.
+   */
+  static async #onRollPowerDie(event, target) {
+    const actor = this.document;
+    const id    = target.dataset.id;
+    const dice  = actor.system.combat.classResources.powerDice ?? [];
+    const die   = id ? dice.find(d => d.id === id) : null;
+    const roll  = await new Roll("1d6").evaluate();
+    const flavor = die
+      ? `Power Die (${die.ticks} ${die.ticks === 1 ? "tick" : "ticks"}) — rolled 1d6`
+      : "Power Die — rolled 1d6";
+    _log(`rollPowerDie — actor: "${actor.name}" | die: ${id ?? "-"} | result: ${roll.total}`);
+    await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor });
   }
 
   /** Wright — add a new power die with ticks = 1. */

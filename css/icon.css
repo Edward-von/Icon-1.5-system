@@ -1894,6 +1894,10 @@ details[open] > .icon-basic-actions__summary::before {
 }
 .icon-trait--locked { opacity: 0.45; filter: grayscale(0.6); }
 .icon-trait--locked .icon-trait__body { font-style: italic; }
+.icon-trait__quick { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 2px 0 6px; padding: 4px 6px; border-radius: 4px; background: rgba(0,0,0,0.06); }
+.icon-trait__quick-label { font-size: 0.8em; font-weight: 600; opacity: 0.8; margin-right: 2px; }
+.icon-vigilance-track--inline { display: inline-flex; gap: 2px; }
+.icon-power-die--inline { display: inline-flex; align-items: center; gap: 2px; padding: 0 4px; border-radius: 4px; background: rgba(0,0,0,0.08); }
 .icon-trait__header { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; flex-wrap: wrap; }
 .icon-trait__body   { font-size: 0.85em; color: var(--ic-text-normal); }
 .icon-trait__lock-hint { font-size: 0.75em; color: var(--ic-text-dim); margin: 4px 0 0; font-style: italic; }
