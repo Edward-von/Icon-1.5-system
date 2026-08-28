@@ -1,14 +1,14 @@
-2026/08/28-19:31:22.866 367c Recovering log #458
-2026/08/28-19:31:22.866 367c Level-0 table #460: started
-2026/08/28-19:31:22.870 367c Level-0 table #460: 17246 bytes OK
-2026/08/28-19:31:22.880 367c Delete type=0 #458
-2026/08/28-19:31:22.880 367c Delete type=3 #456
-2026/08/28-19:31:22.880 36a0 Compacting 4@0 + 1@1 files
-2026/08/28-19:31:22.888 36a0 Generated table #462@0: 28 keys, 139654 bytes
-2026/08/28-19:31:22.888 36a0 Compacted 4@0 + 1@1 files => 139654 bytes
-2026/08/28-19:31:22.889 36a0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/08/28-19:31:22.890 36a0 Delete type=2 #449
-2026/08/28-19:31:22.890 36a0 Delete type=2 #451
-2026/08/28-19:31:22.890 36a0 Delete type=2 #454
-2026/08/28-19:31:22.890 36a0 Delete type=2 #457
-2026/08/28-19:31:22.890 36a0 Delete type=2 #460
+2026/08/28-19:33:22.128 3950 Recovering log #469
+2026/08/28-19:33:22.135 3950 Delete type=0 #469
+2026/08/28-19:33:22.135 3950 Delete type=3 #468
+2026/08/28-19:33:22.137 8858 Level-0 table #473: started
+2026/08/28-19:33:22.137 8858 Level-0 table #473: 0 bytes OK
+2026/08/28-19:33:22.139 8858 Delete type=0 #471
+2026/08/28-19:33:22.141 8858 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!actors!SummerFlameAesiHOB01' @ 381 : 1
+2026/08/28-19:33:22.141 8858 Compacting 1@0 + 1@1 files
+2026/08/28-19:33:22.147 8858 Generated table #474@0: 28 keys, 144218 bytes
+2026/08/28-19:33:22.147 8858 Compacted 1@0 + 1@1 files => 144218 bytes
+2026/08/28-19:33:22.150 8858 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/08/28-19:33:22.150 8858 Delete type=2 #462
+2026/08/28-19:33:22.150 8858 Delete type=2 #464
+2026/08/28-19:33:22.151 8858 Manual compaction at level-0 from '!actors!SummerFlameAesiHOB01' @ 381 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
