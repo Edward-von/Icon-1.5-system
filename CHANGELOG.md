@@ -1,5 +1,52 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 28 agosto 2026 — Audit completo dei foe e delle legend (fix pass)
+
+Audit manuale di **tutti i 376 foe e le 28 legend** contro il manuale (pp. 288–501), poi
+fix pass completo. Findings e script in `icon-compendium-audit/foes-audit/`.
+
+### 🐛 Correzioni di gioco (foes)
+- **Template di fazione applicati a tutti i foe** (prima li avevano solo i Demon): Legion
+  of the Dead (Relict), Enrage (Ruin Beast), Valuables/Greed/Cut and Run (Scavenger),
+  Chain of Command (Imperial), Blightland Survivalists (Lowlander), Legacy of the Titans
+  con **size 2** per tutti i Jotunn (Titanblood), Nature Spirits + **Trickery/charge** e
+  Spirit Away (Hob).
+- **Le varianti ora hanno tutto il kit della base** (154 varianti, 33 famiglie), con i
+  testi verbatim della base e gli interrupt separati; classe/statline allineate alla base.
+- **10 foe mancanti creati**: Ruin Ape, Bouncer, Feathered Demon, Priest of the Nettle,
+  Priest of the Herb, Mayfly spirit, Beast spirit, Cultist, Vile Darter, Giant Insect
+  (erano fusi in altri foe). Archon↔Sniper rimessi nella fazione giusta.
+- Fix puntuali: Kelpie elite HP 56 · Clot speed 2 · Basilisk Petrification · Color Demon
+  Distorted Soul · Great Boulder Lumbering · Greenkeeper Living Root · Geryan Bargain ·
+  Watcher Phasing · Horn Demon Regeneration · Crystalline Counter · Mondo Sturdy e
+  duplicati rimossi · Judge (4 azioni inventate rimosse) · Sword Master (kit Steam Wright
+  rimosso) · Royal Guard Battalion of Limbs completo · Battle Wagon Torpedo completo ·
+  Radiance of the Black Sun (ch3) su tutta la famiglia Necrosavant · Starfall sui Tethian
+  · Sentinel/Sapper/Diviner (basic jobs) e molti altri.
+- Note di capitolo (Chapter 2+/3) rimesse sull'abilità giusta della base; campo
+  **chapter** popolato (110 foe).
+- **Combo sequenziate** (Wraith, Impaler, Floatfish, Boil Slug, White Beast, Ring Finger,
+  Gear Walker…); le azioni del Calderone dei Troll non sono più taggate combo.
+
+### 🐛 Legend
+- **Tutte le 28 legend ri-autorate verbatim dal manuale**: tratti, azioni, interrupt,
+  round action, fasi con nome e gating (`phaseIndex`), combo, tattiche e trofei. Erano
+  riassunte, con abilità tronche o intere sezioni assenti (Chimaera senza le 10 teste,
+  Apex senza Might of the Wild, Master mezzo vuoto, Keeper senza armi/armature, ecc.).
+- **24 legend avevano `_id` non validi**: Foundry le scartava in migrazione — il pack
+  legend non si era mai caricato davvero. Corretto.
+
+### 🔧 Pulizia dati
+- ~180 code di scraping rimosse ("Chapter 1+", "335 of 501", intro di altri foe…).
+- Testi dei tratti glossario unificati (263 tratti, testo p.104).
+- Tag normalizzati (`boon-1`, `per-round-1`, `unerring`…), tag spuri rimossi.
+- Attori-oggetto/parti di legend rimossi (10) o ridotti a summon puliti (8).
+- Pack `foe-abilities` rigenerato dagli attori (3.917 item, id conservati dove possibile).
+- Verificato headless: 404/404 schede si aprono, 0 errori.
+
+**Per i mondi esistenti**: i foe e le legend già trascinati nei mondi NON si aggiornano
+da soli — reimportarli dal compendio.
+
 ## 24 agosto 2026 (sera) — Audit completo delle ability dei PG
 
 Audit manuale di **tutte le 148 ability, 96 tratti e 16 limit break** dei 16 job,
