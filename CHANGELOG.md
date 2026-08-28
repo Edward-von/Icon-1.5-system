@@ -36,6 +36,12 @@ fix pass completo. Findings e script in `icon-compendium-audit/foes-audit/`.
 - **24 legend avevano `_id` non validi**: Foundry le scartava in migrazione — il pack
   legend non si era mai caricato davvero. Corretto.
 
+### 🐛 Scheda foe/legend
+- **Il bottone ⚔ Attack compariva su TUTTE le azioni dei foe** (era la segnalazione di
+  Maar): ora compare solo sulle azioni che sono attacchi (tag `attack` o riga "On hit:").
+  Stesso fix sulle legend, dove inoltre il bottone 💥 Damage non compariva mai sulle
+  azioni senza `damageMode` esplicito.
+
 ### 🔧 Pulizia dati
 - ~180 code di scraping rimosse ("Chapter 1+", "335 of 501", intro di altri foe…).
 - Testi dei tratti glossario unificati (263 tratti, testo p.104).

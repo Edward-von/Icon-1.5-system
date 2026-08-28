@@ -117,5 +117,19 @@ export function parseComboAbilityDamage(itemSystem) {
   });
 }
 
+/**
+ * Foe/legend actions have no `isAttack` field: an action is an attack if it carries an
+ * attack tag (book header "attack" / "melee attack" / "ranged attack") or spells out an
+ * "On hit:" line. Non-attack abilities (marks, terrain, Diaga, traits-as-actions…) must
+ * NOT show the ⚔ Attack button on the sheet.
+ */
+export function isFoeActionAttack(action) {
+  const a = action ?? {};
+  const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
+  if (tags.some(t => t === "attack" || t === "melee-attack" || t === "ranged-attack" || /^ranged-attack-\d+$/.test(t))) return true;
+  const text = `${a.hitEffect ?? ""} ${a.description ?? ""}`;
+  return /on\s+hit/i.test(text);
+}
+
 /** @deprecated Old name kept for existing world macros — use parseAbilityDamage. */
 export const _parseAbilityDamage = parseAbilityDamage;

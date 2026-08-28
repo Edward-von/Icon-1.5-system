@@ -133,11 +133,13 @@
               <span class="icon-ability-cost-badge">{{action.cost}}</span>
               <span class="icon-ability-phase-badge">{{action.phaseLabel}}</span>
               {{#if ../isEditable}}
+                {{#if action.isAttack}}
                 <button type="button" class="icon-btn-roll"
                         data-action="rollAction" data-action-index="{{action.i}}"
                         title="Roll attack">
                   <i class="fas fa-dice-d20"></i>
                 </button>
+                {{/if}}
                 {{#if action.dealsDamage}}
                   <button type="button" class="icon-btn-roll"
                           data-action="rollLegendDamage" data-action-index="{{action.i}}"

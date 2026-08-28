@@ -3,6 +3,7 @@
  */
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
+import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
@@ -146,9 +147,10 @@ export class LegendSheet extends BaseActorSheet {
       const mode   = a.damageMode ?? "none";
       // When the GM has set an explicit damageMode we trust that over the
       // text parser. Otherwise fall back to the parser's dealsDamage flag.
-      const dealsDamage = mode === "none" ? false
-                        : mode === "hit" || mode === "hit-miss" ? true
-                        : parsed.dealsDamage;
+      // damageMode "none" is the schema default (no explicit config) → trust the
+      // text parser, exactly like #onRollLegendDamage does. Only an explicit
+      // "hit"/"hit-miss" forces the button on.
+      const dealsDamage = mode === "hit" || mode === "hit-miss" ? true : parsed.dealsDamage;
       return {
         i,
         name:        a.name ?? "",
@@ -167,6 +169,7 @@ export class LegendSheet extends BaseActorSheet {
         enrichedDesc: await enrich(a.description),
         parsed,
         dealsDamage,
+        isAttack:    isFoeActionAttack(a),
         damageMode:     mode,
         damageHitDice:  a.damageHitDice  ?? 0,
         damageHitFray:  !!a.damageHitFray,

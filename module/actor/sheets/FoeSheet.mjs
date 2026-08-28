@@ -8,6 +8,7 @@
  */
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
+import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -101,6 +102,7 @@ export class FoeSheet extends BaseActorSheet {
         tagChips: (a.tags ?? []).map(formatTag).filter(Boolean),
         parsed,
         dealsDamage: parsed.dealsDamage,
+        isAttack: isFoeActionAttack(a),
       };
     }));
     context.enrichedInterrupts = await Promise.all(system.interrupts.map(async (r, i) => ({

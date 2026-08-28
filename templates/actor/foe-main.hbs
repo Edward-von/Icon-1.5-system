@@ -106,9 +106,11 @@
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeActionShowInChat" data-action-index="{{action.i}}"
                   title="Post this action to chat">💬</button>
+          {{#if action.isAttack}}
           <button type="button" class="icon-btn icon-btn--roll"
                   data-action="rollAction" data-action-index="{{action.i}}"
                   title="Roll attack">⚔ Attack</button>
+          {{/if}}
           {{#if action.dealsDamage}}
             <button type="button" class="icon-btn icon-btn--roll"
                     data-action="rollFoeDamage" data-action-index="{{action.i}}"

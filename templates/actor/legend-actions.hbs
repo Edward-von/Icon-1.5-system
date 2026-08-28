@@ -26,9 +26,11 @@
                  value="{{action.phaseIndex}}" placeholder="All"
                  {{#unless ../isEditable}}disabled{{/unless}}>
           {{#if ../isEditable}}
+            {{#if action.isAttack}}
             <button type="button" class="icon-btn icon-btn--roll"
                     data-action="rollAction" data-action-index="{{action.i}}"
                     title="Roll attack">⚔ Attack</button>
+            {{/if}}
             {{#if action.dealsDamage}}
               <button type="button" class="icon-btn icon-btn--roll"
                       data-action="rollLegendDamage" data-action-index="{{action.i}}"
