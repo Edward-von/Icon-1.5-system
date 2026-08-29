@@ -3,13 +3,20 @@
      one top-level HTML element. The conditional setup banner below used to
      be a second root, which broke sheet rendering for jobless (new) PCs. --}}
 <div class="icon-header-part">
-<header class="icon-sheet__header">
-  <img class="icon-sheet__portrait" src="{{actor.img}}" alt="{{actor.name}}"
-       data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
-  <div class="icon-sheet__identity">
-    <input class="icon-sheet__name" type="text" name="name" value="{{actor.name}}"
+<header class="icon-sheet__header icon-hero icon-class--{{primaryJobClass}}">
+  <div class="icon-hero__notch">
+    <img class="icon-sheet__portrait" src="{{actor.img}}" alt="{{actor.name}}"
+         data-edit="img" {{#unless isEditable}}disabled{{/unless}}>
+  </div>
+  <div class="icon-sheet__identity icon-hero__identity">
+    <input class="icon-sheet__name icon-hero__name" type="text" name="name" value="{{actor.name}}"
            {{#unless isEditable}}disabled{{/unless}}>
-    <div class="icon-sheet__meta">
+    <div class="icon-hero__jobs">
+      {{#each system.combat.jobs as |job i|}}
+        <span class="icon-hero__job icon-class--{{job.class}} {{#if job.primary}}icon-hero__job--primary{{/if}}">{{job.name}}<small>{{job.class}}</small></span>
+      {{/each}}
+    </div>
+    <div class="icon-sheet__meta icon-hero__meta">
       <select name="system.biography.kintype" {{#unless isEditable}}disabled{{/unless}}>
         <option value="">— Kin —</option>
         {{#each config.kinTypes as |labelKey key|}}
@@ -27,15 +34,10 @@
         {{/each}}
       </select>
     </div>
-    <div class="icon-sheet__badges">
-      <span class="icon-badge icon-badge--level">Lv {{system.combat.level}}</span>
-      <span class="icon-badge icon-badge--chapter">Ch {{system.combat.chapter}}</span>
-      {{#each system.combat.jobs as |job i|}}
-        <span class="icon-badge icon-badge--job icon-class--{{job.class}} {{#if job.primary}}icon-badge--primary{{/if}}">
-          {{job.name}}{{#if job.primary}} ★{{/if}}
-        </span>
-      {{/each}}
-    </div>
+  </div>
+  <div class="icon-hero__level">
+    <span class="icon-hero__level-value">{{system.combat.level}}</span>
+    <span class="icon-hero__level-label">Level · Ch {{system.combat.chapter}}</span>
   </div>
 </header>
 

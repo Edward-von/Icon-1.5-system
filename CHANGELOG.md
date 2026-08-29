@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 29 agosto 2026 — Restyle "Ink & Gold × Tactics"
+
+Nuovo look scelto su canvas (mix delle direzioni A e C):
+- **Header PG** a taglio diagonale nel colore della classe primaria: ritratto nella tacca scura, nome in
+  *IM Fell English*, job primario ★ + secondario, kin/cultura compatti, livello grande a destra.
+- **Blocco HP** con barra a 4 segmenti "tagliati" (ferite tratteggiate da destra) e **statistiche in griglia
+  accanto** (VIT/DEF/SPD/ARM/FRAY/[D]/Level/Chapter); Vigor a tacche (una per punto).
+- Sezioni/card più scure, trait e slot abilità con stripe del colore di classe e titoli in IM Fell.
+- **Scheda Foe**: banda diagonale con l'accento della fazione/classe nell'header.
+- **Chat**: card con testata scura, totale del tiro in "chip" oro tagliato (viola su crit, grigio su miss),
+  danno in chip rosso, bottoni Apply/½ tagliati.
+- **Combat tracker**: banner round oro a taglio, pip di attivazione a chevron colorati per fazione.
+- Font display caricato da Google Fonts (fallback Palatino/Book Antiqua se offline).
+
 ## 29 agosto 2026 (pomeriggio) — Summons compendium, gambit self-heal, barre HP token
 
 - **Nuovo compendium "Summons"** (Actor, tipo summon): i 12 summon dei job PG trascritti a mano

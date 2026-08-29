@@ -2,6 +2,7 @@
 <section class="tab icon-tab icon-tab--combat {{tab.cssClass}}" data-tab="combat" data-group="primary">
 
   {{!-- HP Bar with wound markers --}}
+  <div class="icon-combat-top">
   <div class="icon-section icon-section--hp">
     <div class="icon-hp-bar-wrap">
       <div class="icon-hp-labels">
@@ -18,6 +19,7 @@
                 style="left:{{seg.left}}%; width:{{seg.width}}%"
                 title="{{#if seg.wounded}}Wound {{seg.woundNo}}{{else}}Segment {{seg.i}} ({{seg.hpFrom}}–{{seg.hpTo}} HP){{/if}}"></span>
         {{/each}}
+        <div class="icon-hp-empty" style="width: calc(100% - {{icon-pct system.combat.hp.value system.combat.hp.baseMax}})"></div>
         {{!-- Wound threshold markers at 25%, 50%, 75% --}}
         <span class="icon-hp-marker" style="left:25%"  title="Wound 3"></span>
         <span class="icon-hp-marker icon-hp-marker--bloodied" style="left:50%"  title="Bloodied ({{system.combat.hp.bloodied}} HP or less)"></span>
@@ -52,9 +54,8 @@
       <div class="icon-vigor-labels">
         <span class="icon-vigor-label">Vigor {{system.combat.vigor.value}} / {{system.combat.vigor.max}}</span>
       </div>
-      <div class="icon-vigor-bar">
-        <div class="icon-vigor-bar__fill"
-             style="width:{{icon-pct system.combat.vigor.value system.combat.vigor.max}}"></div>
+      <div class="icon-vigor-ticks" style="grid-template-columns: repeat({{system.combat.vigor.max}}, minmax(0, 1fr));">
+        {{#each vigorTicks as |t|}}<span class="icon-vigor-tick {{#if t}}icon-vigor-tick--on{{/if}}"></span>{{/each}}
       </div>
       {{#if isEditable}}
         <div class="icon-vigor-controls">
@@ -235,7 +236,7 @@
   </div>
 
   {{!-- Core stats row --}}
-  <div class="icon-section">
+  <div class="icon-section icon-section--stats">
     <div class="icon-stats-grid">
       <div class="icon-stat-block">
         <span class="icon-stat__label">VIT</span>
@@ -303,6 +304,7 @@
       </div>
     {{/if}}
   </div>
+  </div>{{!-- /icon-combat-top --}}
 
   {{!-- Jobs --}}
   <div class="icon-section">

@@ -498,6 +498,13 @@ export class IconSheet extends BaseActorSheet {
         onScene: !!canvas?.scene?.tokens?.some(t => t.actorId === a.id),
       }));
 
+    // Vigor ticks (one per point up to vigor.max = VIT).
+    {
+      const vmax = Math.max(1, system.combat?.vigor?.max ?? 1);
+      const vval = system.combat?.vigor?.value ?? 0;
+      context.vigorTicks = Array.from({ length: vmax }, (_, i) => i < vval);
+    }
+
     // HP bar segments: 4 quarters of VIT each over the BASE max. Wounds
     // black out quarters from the right (p. 15 diagram) — the bloodied line
     // at 50% never moves.
