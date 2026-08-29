@@ -6,12 +6,10 @@
     <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
     <span class="icon-badge">{{ab.cost}}</span>
     {{#if comboMode}}<span class="icon-badge icon-badge--combo">⚡ COMBO</span>{{/if}}
-    {{#unless comboMode}}
-      {{#icon-gt ab.talentSelected 0}}
-        <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
-      {{/icon-gt}}
-      {{#if ab.masteryUnlocked}}<span class="icon-badge icon-badge--primary">★ Mastered</span>{{/if}}
-    {{/unless}}
+    {{#icon-gt ab.talentSelected 0}}
+      <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
+    {{/icon-gt}}
+    {{#if ab.masteryUnlocked}}<span class="icon-badge icon-badge--primary">★ Mastered</span>{{/if}}
   </div>
 
   {{#if comboMode}}
@@ -28,6 +26,11 @@
     {{#if ab.comboEffect}}
       <div class="icon-chat-card__desc">{{{ab.comboEffect}}}</div>
     {{/if}}
+    {{!-- Talents / mastery are permanent upgrades of the ability — they still
+         apply (and must be readable) when the combo version is used. --}}
+    {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
+    {{#if ab.hasTalent2}}<p><strong>Talent II:</strong> {{{ab.talent2}}}</p>{{/if}}
+    {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}
   {{else}}
     {{!-- Normal version --}}
     {{#if ab.tags.length}}

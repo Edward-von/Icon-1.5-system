@@ -2,7 +2,7 @@
  * IconItemSheet — ApplicationV2 sheet for all ICON item types.
  * Renders type-specific fields via conditional HBS blocks.
  */
-import { enrichHTML } from "../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard } from "../helpers/enrich.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -23,6 +23,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       removeJobTrait:       IconItemSheet.#onRemoveJobTrait,
       addWeaponSlot:        IconItemSheet.#onAddWeaponSlot,
       removeWeaponSlot:     IconItemSheet.#onRemoveWeaponSlot,
+      itemShowInChat:       IconItemSheet.#onItemShowInChat,
     },
     form: { submitOnChange: true },
   };
@@ -33,6 +34,34 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   };
 
   get title() { return `${this.document.name} [${this.document.type}]`; }
+
+  /** Show in Chat from the item sheet itself (works in compendium view too,
+   *  where there is no actor sheet to post from). Foe abilities and traits
+   *  post the generic trait/action card; the parent actor (if embedded) is
+   *  the speaker. */
+  static async #onItemShowInChat(event, target) {
+    event.stopPropagation();
+    const item   = this.document;
+    const actor  = item.parent instanceof Actor ? item.parent : null;
+    const system = item.system ?? {};
+    _log(`itemShowInChat — "${item.name}" (${item.type})`);
+    if (item.type === "foe-ability" && system.abilityType !== "trait") {
+      const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+      const a = {
+        name:        item.name,
+        cost:        system.cost ?? "",
+        tags:        (system.tags ?? []).filter(t => t && t.trim()),
+        description: await enrichHTML(system.description),
+        hitEffect:   await enrichHTML(system.hitEffect),
+        missEffect:  await enrichHTML(system.missEffect),
+        areaEffect:  await enrichHTML(system.areaEffect),
+      };
+      const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+      await ChatMessage.create({ speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(), content });
+      return;
+    }
+    await postNpcTraitCard(actor, { name: item.name, description: system.description }, { label: system.jobName || actor?.name || "" });
+  }
 
   async _prepareContext(options) {
     _log(`_prepareContext — item: "${this.document.name}" | type: "${this.document.type}"`);
@@ -45,6 +74,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     context.itemType   = item.type;
     context.config     = CONFIG.ICON;
     context.isEditable = this.isEditable;
+    context.canShowInChat = ["foe-ability", "trait"].includes(item.type);
 
     context.classChoices = {
       stalwart:  "Stalwart",

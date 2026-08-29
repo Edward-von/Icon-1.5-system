@@ -22,7 +22,7 @@ const SYSTEM_ID = "icon-system";
 const SETTING   = "schemaVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 1;
+export const CURRENT_SCHEMA_VERSION = 2;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -37,7 +37,30 @@ export const CURRENT_SCHEMA_VERSION = 1;
  *     });
  *   },
  */
-const MIGRATIONS = {};
+const MIGRATIONS = {
+  /* 2 — Secondary-class Gambit traits. Until 2026-08-29 TraitData.source
+   * rejected "gambit", so PCs with a secondary job of another class never
+   * received that class's Gambit trait. Embed the missing ones. */
+  2: async () => {
+    const { buildClassGambitDoc } = await import("./helpers/classes.mjs");
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const jobs = actor.system?.combat?.jobs ?? [];
+      const primaryCls = jobs.find(j => j.primary)?.class;
+      const wanted = new Set(jobs.filter(j => !j.primary && j.class && j.class !== primaryCls).map(j => j.class));
+      const docs = [];
+      for (const cls of wanted) {
+        const has = actor.items.some(i => i.type === "trait" && i.system?.source === "gambit" && i.system?.class === cls);
+        const doc = has ? null : buildClassGambitDoc(cls);
+        if (doc) docs.push(doc);
+      }
+      if (docs.length) {
+        console.log(`ICON 1.5 | Migration 2: embedding ${docs.length} gambit trait(s) on "${actor.name}"`);
+        await actor.createEmbeddedDocuments("Item", docs);
+      }
+    }
+  },
+};
 
 /** Register the world-scoped schema version setting. Call from the init hook. */
 export function registerMigrationSettings() {

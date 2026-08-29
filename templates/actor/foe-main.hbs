@@ -70,6 +70,9 @@
           <input type="text" name="system.traits.{{trait.i}}.name"
                  value="{{trait.name}}" placeholder="Trait name"
                  {{#unless ../isEditable}}disabled{{/unless}}>
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                  data-action="foeTraitShowInChat" data-trait-index="{{trait.i}}"
+                  title="Post trait to chat">💬</button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove"
                     data-action="removeTrait" data-index="{{trait.i}}">✕</button>

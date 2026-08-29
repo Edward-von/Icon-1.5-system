@@ -4,7 +4,7 @@
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
-import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, postNpcTraitCard } from "../../helpers/enrich.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -26,6 +26,7 @@ export class LegendSheet extends BaseActorSheet {
       showReference:     onShowReferenceControl,
       rollAction:        LegendSheet.#onRollAction,
       rollLegendDamage:  LegendSheet.#onRollLegendDamage,
+      foeTraitShowInChat: LegendSheet.#onFoeTraitShowInChat,
       addTrait:          LegendSheet.#onAddTrait,
       removeTrait:       LegendSheet.#onRemoveTrait,
       addAction:         LegendSheet.#onAddAction,
@@ -533,6 +534,17 @@ export class LegendSheet extends BaseActorSheet {
     _log(`removePhase — actor: "${this.document.name}" | idx: ${idx} | label: "${phases[idx]?.label}"`);
     phases.splice(idx, 1);
     await this.document.update({ "system.phases": phases });
+  }
+
+  /** Post a legend trait to chat. */
+  static async #onFoeTraitShowInChat(event, target) {
+    event.stopPropagation();
+    const idx   = Number(target.dataset.traitIndex);
+    const actor = this.document;
+    const trait = actor.system.traits[idx];
+    if (!trait) return;
+    _log(`foeTraitShowInChat — actor: "${actor.name}" | trait[${idx}]: "${trait.name}"`);
+    await postNpcTraitCard(actor, trait);
   }
 
   static async #onAddTrait(event, target) {

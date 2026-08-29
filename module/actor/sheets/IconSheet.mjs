@@ -82,6 +82,8 @@ export class IconSheet extends BaseActorSheet {
       removeJob:     IconSheet.#onRemoveJob,
       // Class resources (conditional by primary job class)
       setVigilance:     IconSheet.#onSetVigilance,
+      setStackedDice:   IconSheet.#onSetStackedDice,
+      openSummon:       IconSheet.#onOpenSummon,
       spendVigilance:   IconSheet.#onSpendVigilance,
       clearVigilance:   IconSheet.#onClearVigilance,
       clearStance:      IconSheet.#onClearStance,
@@ -427,6 +429,16 @@ export class IconSheet extends BaseActorSheet {
     // next to the class feature that explains them (Maar's request, Aug 2026).
     const cr = system.combat?.classResources ?? {};
     const quickFor = (t) => {
+      // Fool's "Stack Dice" job trait: pips for the die(s) currently held.
+      if (t.system?.source === "job" && /stack/i.test(t.name ?? "") && /fool/i.test(t.system?.jobName ?? "")) {
+        const sd  = cr.stackedDice ?? {};
+        // Death's Apprentice (Fool Ch.2 trait) lets them hold 2 — auto-raise
+        // the cap once that trait is present and unlocked.
+        const hasDA = rawTraits.some(o => /death.s apprentice/i.test(o.name ?? "") && (o.system?.chapter ?? 1) <= currentChapter);
+        const max = hasDA ? 2 : 1;
+        return { type: "stackedDice", value: sd.value ?? 0, max,
+                 pips: Array.from({ length: max }, (_, i) => ({ i: i + 1, active: i + 1 <= (sd.value ?? 0) })) };
+      }
       if (t.system?.source !== "class") return null;
       switch (t.system?.class) {
         case "stalwart":  return { type: "vigilance", value: cr.vigilance?.value ?? 0, max: cr.vigilance?.max ?? 6,
@@ -470,6 +482,40 @@ export class IconSheet extends BaseActorSheet {
       context.actionsList.sort((a, b) => a.label.localeCompare(b.label));
     } else if (this._actionSortMode === "rank") {
       context.actionsList.sort((a, b) => b.rating - a.rating || a.label.localeCompare(b.label));
+    }
+
+    // Summons attached to this PC (summon actors whose summonerActorId points
+    // here). Players had no way to reach them from their own sheet.
+    context.summons = (game.actors?.contents ?? [])
+      .filter(a => a.type === "summon" && a.system?.summonerActorId === actor.id)
+      .map(a => ({
+        id:    a.id,
+        name:  a.name,
+        img:   a.img,
+        source: a.system?.sourceAbilityName ?? "",
+        hp:    a.system?.hp?.value ?? null,
+        hpMax: a.system?.hp?.max ?? null,
+        onScene: !!canvas?.scene?.tokens?.some(t => t.actorId === a.id),
+      }));
+
+    // HP bar segments: 4 quarters of VIT each over the BASE max. Wounds
+    // black out quarters from the right (p. 15 diagram) — the bloodied line
+    // at 50% never moves.
+    {
+      const vit    = system.combat?.vit ?? 0;
+      const wounds = system.combat?.wounds?.value ?? 0;
+      context.hpSegments = Array.from({ length: 4 }, (_, k) => {
+        const i = k + 1;                       // 1..4 from the left
+        const woundNo = 4 - k;                 // segment 4 (rightmost) = wound 1
+        return {
+          i, woundNo,
+          left:   k * 25,
+          width:  25,
+          hpFrom: k * vit + 1,
+          hpTo:   i * vit,
+          wounded: woundNo <= wounds,
+        };
+      });
     }
 
     // Combo token — active when a vagabond (or any class with combo abilities)
@@ -628,6 +674,10 @@ export class IconSheet extends BaseActorSheet {
       if (el.dataset.iconDblBound) return;
       el.dataset.iconDblBound = "true";
       el.addEventListener("dblclick", ev => {
+        // Ignore double-clicks on interactive controls inside the box (quick
+        // class-resource buttons, pips, inputs) — opening the item sheet
+        // from a rapid "+ +" on Blessings was Maar's complaint.
+        if (ev.target.closest("button, input, select, textarea, a, [data-action]")) return;
         const item = this.document.items.get(el.dataset.itemId);
         _log(`dblclick item — id: "${el.dataset.itemId}" | found: ${!!item}`);
         item?.sheet.render(true);
@@ -1783,6 +1833,24 @@ export class IconSheet extends BaseActorSheet {
     const next    = current ? 0 : 1;
     _log(`toggleComboToken — actor: "${this.document.name}" | ${current} → ${next}`);
     await this.document.update({ "system.combat.classResources.comboToken.value": next });
+  }
+
+  /** Fool — set Stacked Dice held (click the last active pip to drop one). */
+  static async #onSetStackedDice(event, target) {
+    const sd      = this.document.system.combat.classResources.stackedDice ?? {};
+    const current = sd.value ?? 0;
+    const max     = Number(target.dataset.max) || 1;
+    const clicked = Number(target.dataset.value) || 0;
+    const next    = Math.max(0, Math.min(max, clicked === current ? clicked - 1 : clicked));
+    _log(`setStackedDice — actor: "${this.document.name}" | ${current} → ${next}`);
+    await this.document.update({ "system.combat.classResources.stackedDice.value": next });
+  }
+
+  /** Open the sheet of a summon attached to this PC. */
+  static async #onOpenSummon(event, target) {
+    const summon = game.actors?.get(target.dataset.actorId);
+    _log(`openSummon — id: "${target.dataset.actorId}" | found: ${!!summon}`);
+    summon?.sheet.render(true);
   }
 
   /** Mendicant — +/- blessing tokens (clamped to ≥ 0). */

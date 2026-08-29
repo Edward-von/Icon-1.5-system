@@ -11,7 +11,10 @@ export class TraitData extends foundry.abstract.TypeDataModel {
     return {
       jobName:     new StringField({ required: true, initial: "" }),
       class:       new StringField({ required: true, initial: "stalwart", choices: ["stalwart","vagabond","mendicant","wright"] }),
-      source:      new StringField({ required: true, initial: "job", choices: ["job","class"] }),
+      // "gambit": the class Gambit granted by a SECONDARY job of another
+      // class (buildClassGambitDoc). Was missing from choices until 2026-08-29,
+      // so every secondary-job gambit failed validation and was never embedded.
+      source:      new StringField({ required: true, initial: "job", choices: ["job","class","gambit"] }),
       passive:     new BooleanField({ required: true, initial: true }),
       chapter:     new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
       description: new HTMLField({ required: true, initial: "" }),

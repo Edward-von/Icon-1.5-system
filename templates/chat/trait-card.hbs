@@ -3,7 +3,7 @@
   <div class="icon-chat-card__header">
     <strong class="icon-chat-card__action">{{tr.name}}</strong>
     {{#if tr.jobName}}<span class="icon-badge icon-class--{{tr.class}}">{{tr.jobName}}</span>{{/if}}
-    <span class="icon-badge icon-badge--chapter">Ch {{tr.chapter}}</span>
+    {{#if tr.chapter}}<span class="icon-badge icon-badge--chapter">Ch {{tr.chapter}}</span>{{/if}}
     <span class="icon-badge">Trait</span>
   </div>
   {{#if tr.description}}

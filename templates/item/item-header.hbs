@@ -21,6 +21,10 @@
       {{#if system.bondName}}
         <span class="icon-badge">{{system.bondName}}</span>
       {{/if}}
+      {{#if canShowInChat}}
+        <button type="button" class="icon-btn icon-btn--sm icon-btn--chat icon-item-header__chat"
+                data-action="itemShowInChat" title="Post to chat">💬 Chat</button>
+      {{/if}}
     </div>
   </div>
 </header>

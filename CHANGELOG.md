@@ -1,5 +1,25 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 29 agosto 2026 — Feedback round 3 (8 fix)
+
+- **Doppio click sui trait**: un doppio click sui controlli rapidi dentro il box (pips Vigilance,
+  +/− Blessing, dado Stacked…) non apre più la scheda dell'item.
+- **Combo token**: la card combo in chat stampa anche il Talento equipaggiato (I/II) e la Mastery.
+- **Checkbox Elite** ricentrata nel suo riquadro (glifo Foundry v13 centrato con grid).
+- **Trait degli NPC in chat**: bottone 💬 sui trait di foe e legend nella scheda attore, e bottone
+  "💬 Chat" nell'header della scheda item *foe-ability* / *trait* (funziona anche dal compendio).
+- **Summon**: nuova sezione "Summons" nel tab Combat del PG che elenca i summon collegati
+  (summonerActorId) con HP/on scene; click per aprire la scheda.
+- **Fool — Stacked Dice**: pip 🎲 direttamente sul trait "Stack Dice" (nuova risorsa
+  `classResources.stackedDice`); il cap passa a 2 automaticamente con Death's Apprentice sbloccato.
+- **Barra HP a segmenti**: la barra è sempre larga 4×VIT; le ferite anneriscono i quarti da destra
+  (come nel manuale) e il riempimento è calcolato sul max base. **Bloodied = 50% del max BASE**
+  (`hp.bloodied` = ⌈4·VIT/2⌉, es. VIT 7 + 1 ferita → bloodied a 14, non a 11).
+- **Seconda classe → Gambit**: bug root cause — `TraitData.source` non accettava `"gambit"`, quindi
+  il trait Gambit falliva la validazione e non veniva mai creato. Aggiunto alla schema; il level-up
+  (L4/L8 nuovo job) ora lo aggiunge come il drag-drop; **migrazione schema 2** aggiunge i Gambit
+  mancanti ai PG multiclasse esistenti.
+
 ## 28 agosto 2026 — Audit completo dei foe e delle legend (fix pass)
 
 Audit manuale di **tutti i 376 foe e le 28 legend** contro il manuale (pp. 288–501), poi

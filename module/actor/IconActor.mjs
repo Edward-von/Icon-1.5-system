@@ -133,10 +133,12 @@ export class IconActor extends Actor {
   /*  Helpers                                            */
   /* -------------------------------------------------- */
 
-  /** Whether this actor is bloodied (at or below 50% max HP). */
+  /** Whether this actor is bloodied (at or below 50% max HP). PCs use the
+   *  derived `hp.bloodied` (50% of the BASE, un-wounded max). */
   get isBloodied() {
     const hp = this.system.combat?.hp ?? this.system.hp;
     if (!hp) return false;
-    return hp.value <= Math.ceil(hp.max / 2);
+    const threshold = hp.bloodied ?? Math.ceil(hp.max / 2);
+    return hp.value <= threshold;
   }
 }

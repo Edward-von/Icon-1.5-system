@@ -23,3 +23,25 @@ export function escapeHTML(str) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 }
+
+/**
+ * Post an NPC (foe / legend / foe-ability item) trait to chat using the
+ * shared trait card. `trait` is a plain `{ name, description }` object —
+ * NPC traits are inline schema entries, not embedded Items. `actor` may be
+ * null (compendium item view): the card then has no speaker actor.
+ */
+export async function postNpcTraitCard(actor, trait, { label } = {}) {
+  const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+  const tr = {
+    name:        trait?.name ?? "Trait",
+    jobName:     label ?? actor?.name ?? "",
+    class:       "",
+    chapter:     null,
+    description: await enrichHTML(trait?.description),
+  };
+  const content = await renderTemplate("systems/icon-system/templates/chat/trait-card.hbs", { tr });
+  await ChatMessage.create({
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content,
+  });
+}

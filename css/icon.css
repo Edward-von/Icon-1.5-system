@@ -335,14 +335,23 @@
   background: rgba(138, 96, 48, .15);
 }
 .foe-builder-field--elite input[type="checkbox"] {
-  /* Foundry v13 renders checkboxes as a font glyph sized by font-size;
-     without matching it to the box the glyph overflows bottom-right. */
+  /* Foundry v13 draws the checkbox as a ::before font glyph. Give the input a
+     fixed box, then centre the glyph inside it with grid so it doesn't sit
+     low/right of the label column. */
+  --checkbox-size: 16px;
   width: 16px; height: 16px;
-  font-size: 16px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 1;
   margin: 0;
+  padding: 0;
   flex: 0 0 auto;
+  display: grid;
+  place-items: center;
   accent-color: #d09040;
+}
+.foe-builder-field--elite input[type="checkbox"]::before {
+  margin: 0;
+  line-height: 1;
 }
 
 /* Summon sheet — drop hint */
@@ -526,6 +535,26 @@
   width: 2px;
   background: rgba(0,0,0,.6);
 }
+.icon-hp-marker--bloodied { background: rgba(255,255,255,.55); }
+/* Wound segments: each quarter of the bar is VIT HP; a wound blacks out the
+   rightmost free quarter (the "cracked" segment in the book's diagram). */
+.icon-hp-segment {
+  position: absolute;
+  top: 0; bottom: 0;
+  pointer-events: none;
+}
+.icon-hp-segment--wounded {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,.08) 0 3px, transparent 3px 8px),
+    #15100f;
+  box-shadow: inset 0 0 4px rgba(0,0,0,.9);
+  pointer-events: auto;
+}
+/* Chat button on NPC trait/action headers + item sheet header */
+.icon-btn--chat { flex: 0 0 auto; padding: 1px 6px; font-size: 0.85em; }
+.icon-item-header__chat { margin-left: auto; }
+.icon-trait__header > input[type="text"],
+.legend-trait__title-row > input[type="text"] { flex: 1 1 auto; min-width: 0; }
 
 /* Vigor bar — same shape as HP, blue-cyan gradient */
 .icon-vigor-wrap   { margin-top: 8px; margin-bottom: 8px; }
@@ -4483,3 +4512,20 @@ ol.chat-log .chat-message,
   border-color: #d05040;
   color: #fff;
 }
+
+/* Summons attached to a PC (Combat tab) */
+.icon-summon-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.icon-summon-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 8px 3px 3px;
+  background: var(--ic-bg-deep);
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-normal);
+  cursor: pointer;
+  width: auto; line-height: 1.2;
+}
+.icon-summon-chip:hover { border-color: var(--ic-gold-dim); }
+.icon-summon-chip img { width: 24px; height: 24px; object-fit: cover; border-radius: 3px; border: none; }
+.icon-summon-chip__name { font-weight: 600; }
+.icon-stacked-die-pip { font-size: 1.05em; }

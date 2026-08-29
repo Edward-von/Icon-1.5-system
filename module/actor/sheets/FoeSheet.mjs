@@ -12,7 +12,7 @@ import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
-import { enrichHTML } from "../../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
@@ -34,6 +34,7 @@ export class FoeSheet extends BaseActorSheet {
       rollAction:       FoeSheet.#onRollAction,
       rollFoeDamage:    FoeSheet.#onRollFoeDamage,
       foeActionShowInChat: FoeSheet.#onFoeActionShowInChat,
+      foeTraitShowInChat:  FoeSheet.#onFoeTraitShowInChat,
       applyBaseStats:   FoeSheet.#onApplyBaseStats,
       addTrait:         FoeSheet.#onAddTrait,
       removeTrait:      FoeSheet.#onRemoveTrait,
@@ -251,6 +252,18 @@ export class FoeSheet extends BaseActorSheet {
   }
 
   /** Post a foe action to chat (name, cost, tags, description, hit/miss/area). */
+  /** Post a foe trait to chat (elites/legends often carry fight-defining
+   *  passives here — the GM needs to show them without retyping). */
+  static async #onFoeTraitShowInChat(event, target) {
+    event.stopPropagation();
+    const idx   = Number(target.dataset.traitIndex);
+    const actor = this.document;
+    const trait = actor.system.traits[idx];
+    if (!trait) return;
+    _log(`foeTraitShowInChat — actor: "${actor.name}" | trait[${idx}]: "${trait.name}"`);
+    await postNpcTraitCard(actor, trait);
+  }
+
   static async #onFoeActionShowInChat(event, target) {
     event.stopPropagation();
     const idx    = Number(target.dataset.actionIndex);

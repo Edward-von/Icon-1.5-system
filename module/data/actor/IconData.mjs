@@ -167,6 +167,12 @@ export class IconData extends foundry.abstract.TypeDataModel {
             value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
             max:   new NumberField({ required: true, initial: 10, min: 1, integer: true }),
           }),
+          // Fool (Vagabond job) — Stacked Dice held (Stack Dice trait: max 1;
+          // Death's Apprentice raises it to 2). Lost at end of combat.
+          stackedDice: new SchemaField({
+            value: new NumberField({ required: true, initial: 0, min: 0, max: 2, integer: true }),
+            max:   new NumberField({ required: true, initial: 1, min: 1, max: 2, integer: true }),
+          }),
           // Wright — array of power dice: { id, ticks }
           powerDice: new ArrayField(new SchemaField({
             id:    new StringField({ required: true, initial: "" }),
@@ -199,9 +205,12 @@ export class IconData extends foundry.abstract.TypeDataModel {
     const woundPenalty = combat.wounds.value * combat.vit;
     combat.hp.max = Math.max(combat.vit, baseMax - woundPenalty);
 
-    // bloodied = ceil(hp.max / 2) — computed AFTER hp.max is derived, otherwise
-    // it would lag a cycle behind any VIT/wound change.
-    combat.hp.bloodied = Math.ceil(combat.hp.max / 2);
+    // bloodied = 50% of the BASE max (4 × VIT), NOT of the wound-reduced max:
+    // wounds eat the bar from the right, the bloodied line stays put (p. 15
+    // bar diagram — a wound removes the rightmost quarter, the middle marker
+    // doesn't move). So with VIT 7 + 1 wound (max 21) you're bloodied at 14.
+    combat.hp.baseMax  = baseMax;
+    combat.hp.bloodied = Math.ceil(baseMax / 2);
 
     // Shared caps: hp.value to max, vigor.max = vit, vigor.value to max.
     prepareCombatStats(combat);

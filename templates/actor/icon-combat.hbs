@@ -8,11 +8,19 @@
         <span class="icon-hp-label">HP {{system.combat.hp.value}} / {{system.combat.hp.max}}</span>
         {{#if actor.isBloodied}}<span class="icon-badge icon-badge--bloodied">BLOODIED</span>{{/if}}
       </div>
-      <div class="icon-hp-bar">
-        <div class="icon-hp-bar__fill" style="width:{{icon-pct system.combat.hp.value system.combat.hp.max}}"></div>
+      {{!-- Bar is always the BASE max (4 × VIT) wide: 4 segments of VIT each.
+           Wounds blacken segments from the right (p. 15 diagram) and the fill
+           is measured against the base max so the bloodied line never moves. --}}
+      <div class="icon-hp-bar icon-hp-bar--segmented" title="Base max {{system.combat.hp.baseMax}} — {{system.combat.wounds.value}} wound(s)">
+        <div class="icon-hp-bar__fill" style="width:{{icon-pct system.combat.hp.value system.combat.hp.baseMax}}"></div>
+        {{#each hpSegments as |seg|}}
+          <span class="icon-hp-segment {{#if seg.wounded}}icon-hp-segment--wounded{{/if}}"
+                style="left:{{seg.left}}%; width:{{seg.width}}%"
+                title="{{#if seg.wounded}}Wound {{seg.woundNo}}{{else}}Segment {{seg.i}} ({{seg.hpFrom}}–{{seg.hpTo}} HP){{/if}}"></span>
+        {{/each}}
         {{!-- Wound threshold markers at 25%, 50%, 75% --}}
         <span class="icon-hp-marker" style="left:25%"  title="Wound 3"></span>
-        <span class="icon-hp-marker" style="left:50%"  title="Wound 2 / Bloodied"></span>
+        <span class="icon-hp-marker icon-hp-marker--bloodied" style="left:50%"  title="Bloodied ({{system.combat.hp.bloodied}} HP or less)"></span>
         <span class="icon-hp-marker" style="left:75%"  title="Wound 1"></span>
       </div>
       {{#if isEditable}}
@@ -429,6 +437,16 @@
                 <span class="icon-counter-value">{{trait.quick.value}}</span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}}>+</button>
               {{/if}}
+              {{#if (icon-eq trait.quick.type "stackedDice")}}
+                <span class="icon-trait__quick-label">Stacked Dice {{trait.quick.value}}/{{trait.quick.max}}</span>
+                <span class="icon-vigilance-track icon-vigilance-track--inline">
+                  {{#each trait.quick.pips as |p|}}
+                    <span class="icon-vigilance-pip icon-stacked-die-pip {{#if p.active}}icon-vigilance-pip--active{{/if}}"
+                          data-action="setStackedDice" data-value="{{p.i}}" data-max="{{../trait.quick.max}}"
+                          title="{{#if p.active}}Spend / drop stacked die{{else}}Gain a stacked die (gamble result becomes 6){{/if}}">🎲</span>
+                  {{/each}}
+                </span>
+              {{/if}}
               {{#if (icon-eq trait.quick.type "combo")}}
                 <span class="icon-trait__quick-label">Combo Token</span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="toggleComboToken"
@@ -448,6 +466,25 @@
       <p class="icon-empty">No traits. Drop a Job Template from the Jobs compendium, or drag a trait item directly onto the sheet.</p>
     {{/if}}
   </div>
+
+  {{!-- Summons attached to this PC --}}
+  {{#if summons.length}}
+    <div class="icon-section">
+      <h3 class="icon-section__title">Summons <small>(click to open)</small></h3>
+      <div class="icon-summon-list">
+        {{#each summons as |sm|}}
+          <button type="button" class="icon-summon-chip" data-action="openSummon" data-actor-id="{{sm.id}}"
+                  title="Open {{sm.name}}{{#if sm.source}} — from {{sm.source}}{{/if}}">
+            <img src="{{sm.img}}" alt="">
+            <span class="icon-summon-chip__name">{{sm.name}}</span>
+            {{#if sm.source}}<span class="icon-badge">{{sm.source}}</span>{{/if}}
+            {{#if sm.hpMax}}<span class="icon-badge">HP {{sm.hp}}/{{sm.hpMax}}</span>{{/if}}
+            {{#if sm.onScene}}<span class="icon-badge icon-badge--primary">on scene</span>{{/if}}
+          </button>
+        {{/each}}
+      </div>
+    </div>
+  {{/if}}
 
   {{!-- Equipped Abilities (6 slots, drag-drop) --}}
   <div class="icon-section">
