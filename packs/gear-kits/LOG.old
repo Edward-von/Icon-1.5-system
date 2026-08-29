@@ -1,3 +1,7 @@
-2026/08/24-12:16:19.800 911c Recovering log #33
-2026/08/24-12:16:19.806 911c Delete type=0 #33
-2026/08/24-12:16:19.806 911c Delete type=3 #31
+2026/08/29-11:28:18.984 9824 Recovering log #37
+2026/08/29-11:28:18.992 9824 Delete type=0 #37
+2026/08/29-11:28:18.992 9824 Delete type=3 #36
+2026/08/29-11:28:18.999 97ac Level-0 table #41: started
+2026/08/29-11:28:18.999 97ac Level-0 table #41: 0 bytes OK
+2026/08/29-11:28:19.001 97ac Delete type=0 #39
+2026/08/29-11:28:19.002 97ac Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)

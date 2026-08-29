@@ -1,5 +1,5 @@
 {{!-- item-header.hbs --}}
-<header class="icon-sheet__header icon-item-header icon-item-header--{{itemType}} {{#if system.class}}icon-class--{{system.class}}{{/if}}">
+<header class="icon-sheet__header icon-item-header {{#if system.class}}icon-class--{{system.class}}{{/if}}">
   <div class="icon-band icon-item-header__band"></div>
   <img class="icon-sheet__portrait icon-sheet__portrait--sm"
        src="{{item.img}}" alt="{{item.name}}"

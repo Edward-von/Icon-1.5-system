@@ -16,7 +16,11 @@ Nuovo look scelto su canvas (mix delle direzioni A e C):
 - **Altre schede** (stesso linguaggio): header a banda diagonale per **Legend** (viola), **Summon** (blu),
   **Item** (colore di classe, oro se senza classe); il nome del **Foe** ora sta nella banda accanto al
   ritratto; dialog **Level Up** e **Character Creation** con testata oro e titolo in IM Fell.
-  Fix tecnico: gli header che sono "part" AppV2 ricevevano `display:block` dal reset — ripristinata la grid.
+  Fix tecnico: gli header che sono "part" AppV2 ricevevano `display:block` dal reset — ora il reset
+  esclude gli `<header>` (`:not(header)`), così ogni header part tiene il proprio layout.
+- Post-review: hint dei dialog non più neri su fondo scuro (colore scoperto solo nella testata), riga 2
+  dell'header foe corretta anche per i mob, niente più gap sotto l'header foe, indicatore di focus sui
+  campi nome nelle bande, CSS delle bande consolidato (un solo `.icon-band` con `--band`).
 
 ## 29 agosto 2026 (pomeriggio) — Summons compendium, gambit self-heal, barre HP token
 
