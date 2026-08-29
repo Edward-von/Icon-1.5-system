@@ -14,6 +14,8 @@
 - **Barre HP dei token**: migrazione schema 3 imposta `bar1 = hp` (PG: `combat.hp`, sempre visibile;
   NPC: solo owner) su tutti gli attori senza barra **e sui token già piazzati nelle scene**.
   I summon intangibili non hanno HP → nessuna barra (voluto).
+- **Colori cartelle del compendium Jobs**: Mendicant era blu e Wright verde (anche le sottocartelle job e
+  "Abilities"). Ora Mendicant verde (#27ae60 / job #2ecc71) e Wright blu (#2980b9 / job #3498db).
 - Colori classe: alias CSS per classi con iniziale maiuscola nei dati legacy.
 
 ## 29 agosto 2026 — Feedback round 3 (8 fix)
