@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 29 agosto 2026 (pomeriggio) — Summons compendium, gambit self-heal, barre HP token
+
+- **Nuovo compendium "Summons"** (Actor, tipo summon): i 12 summon dei job PG trascritti a mano
+  dal manuale — Bomb (Fool), Astral Seraph (Freelancer), Shadow (Shade), Great Beast + Beast (Warden),
+  Thrall + Plant + Severed Soul (Harvester), Wild Card + Master Card (Seer), Selkie + Salt Sprite
+  (Stormbender). Regola di evocazione nelle note, Summon Action/Effect nei campi. Trascina il PG sulla
+  scheda del summon importato per collegarlo (compare nella sezione Summons del PG).
+  Sorgente: `icon-compendium-audit/summons-pack/summons.json` + `build-summons-pack.mjs`.
+- **Gambit del secondo job**: nuovo `ensureClassGambits()` condiviso (drop job, level-up, migrazione 2)
+  e **self-heal all'apertura della scheda PG** — se manca il Gambit di una classe secondaria viene
+  creato subito. Confronto classi case-insensitive (attori vecchi con "Wright" maiuscolo).
+- **Barre HP dei token**: migrazione schema 3 imposta `bar1 = hp` (PG: `combat.hp`, sempre visibile;
+  NPC: solo owner) su tutti gli attori senza barra **e sui token già piazzati nelle scene**.
+  I summon intangibili non hanno HP → nessuna barra (voluto).
+- Colori classe: alias CSS per classi con iniziale maiuscola nei dati legacy.
+
 ## 29 agosto 2026 — Feedback round 3 (8 fix)
 
 - **Doppio click sui trait**: un doppio click sui controlli rapidi dentro il box (pips Vigilance,

@@ -22,7 +22,7 @@ const SYSTEM_ID = "icon-system";
 const SETTING   = "schemaVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 2;
+export const CURRENT_SCHEMA_VERSION = 3;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -42,23 +42,43 @@ const MIGRATIONS = {
    * rejected "gambit", so PCs with a secondary job of another class never
    * received that class's Gambit trait. Embed the missing ones. */
   2: async () => {
-    const { buildClassGambitDoc } = await import("./helpers/classes.mjs");
+    const { ensureClassGambits } = await import("./helpers/classes.mjs");
     for (const actor of game.actors) {
       if (actor.type !== "icon") continue;
-      const jobs = actor.system?.combat?.jobs ?? [];
-      const primaryCls = jobs.find(j => j.primary)?.class;
-      const wanted = new Set(jobs.filter(j => !j.primary && j.class && j.class !== primaryCls).map(j => j.class));
-      const docs = [];
-      for (const cls of wanted) {
-        const has = actor.items.some(i => i.type === "trait" && i.system?.source === "gambit" && i.system?.class === cls);
-        const doc = has ? null : buildClassGambitDoc(cls);
-        if (doc) docs.push(doc);
-      }
-      if (docs.length) {
-        console.log(`ICON 1.5 | Migration 2: embedding ${docs.length} gambit trait(s) on "${actor.name}"`);
-        await actor.createEmbeddedDocuments("Item", docs);
-      }
+      const created = await ensureClassGambits(actor);
+      if (created.length) console.log(`ICON 1.5 | Migration 2: embedded ${created.length} gambit trait(s) on "${actor.name}"`);
     }
+  },
+
+  /* 3 — Token HP bars. Actors created before the preCreateActor hook (and
+   * tokens already placed on scenes) have no bar1 attribute, so no HP bar
+   * shows on the map. Same defaults as the hook: PCs → combat.hp always
+   * visible; NPCs → hp, owner only. Intangible summons keep no bar. */
+  3: async () => {
+    const barFor = type => ({
+      attribute:   type === "icon" ? "combat.hp" : "hp",
+      displayBars: type === "icon" ? CONST.TOKEN_DISPLAY_MODES.ALWAYS : CONST.TOKEN_DISPLAY_MODES.OWNER,
+    });
+    let actors = 0, tokens = 0;
+    for (const actor of game.actors) {
+      if (actor.type === "summon" && actor.system?.intangible) continue;
+      if (actor.prototypeToken?.bar1?.attribute) continue;
+      const { attribute, displayBars } = barFor(actor.type);
+      await actor.update({ "prototypeToken.bar1.attribute": attribute, "prototypeToken.displayBars": displayBars });
+      actors++;
+    }
+    for (const scene of game.scenes) {
+      const updates = [];
+      for (const tok of scene.tokens) {
+        const type = tok.actor?.type;
+        if (!type || tok.bar1?.attribute) continue;
+        if (type === "summon" && tok.actor?.system?.intangible) continue;
+        const { attribute, displayBars } = barFor(type);
+        updates.push({ _id: tok.id, "bar1.attribute": attribute, displayBars });
+      }
+      if (updates.length) { await scene.updateEmbeddedDocuments("Token", updates); tokens += updates.length; }
+    }
+    console.log(`ICON 1.5 | Migration 3: HP bars set on ${actors} actor(s) and ${tokens} placed token(s)`);
   },
 };
 

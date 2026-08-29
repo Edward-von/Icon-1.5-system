@@ -23,7 +23,7 @@ import {
   MAX_EQUIPPED_ABILITIES, XP_PER_LEVEL,
 } from "../helpers/advancement.mjs";
 import { enrichHTML, escapeHTML } from "../helpers/enrich.mjs";
-import { buildClassGambitDoc } from "../helpers/classes.mjs";
+import { ensureClassGambits } from "../helpers/classes.mjs";
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -481,7 +481,6 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     /* ---------- Combat benefits ---------- */
     const c = benefits.combat ?? {};
     let apGain      = c.ap ?? 0;
-    const extraEmbeds = [];   // items created alongside the level-up picks (secondary-class gambit)
     let masteryGain = c.masteryPoint ?? 0;
 
     // L4 / L8 fork
@@ -513,20 +512,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
             templateUuid: newJobTemplate.uuid,
           });
           updates["system.combat.jobs"] = jobs;
-          // A secondary job of ANOTHER class grants that class's Gambit
-          // ("Stalwart Gambit: if you take a Stalwart ability as a
-          // non-Stalwart class, you get Heroics…"). Same rule as the
-          // drag-drop path in IconSheet.
-          const primaryCls = jobs.find(j => j.primary)?.class;
-          if (newCls !== primaryCls) {
-            const hasGambit = actor.items.some(i =>
-              i.type === "trait" && i.system?.source === "gambit" && i.system?.class === newCls);
-            const gambitDoc = hasGambit ? null : buildClassGambitDoc(newCls);
-            if (gambitDoc) {
-              _log(`embedding ${newCls} gambit for new secondary job "${jobName}"`);
-              extraEmbeds.push(gambitDoc);
-            }
-          }
+          // A secondary job of ANOTHER class grants that class's Gambit —
+          // ensureClassGambits() runs right after the actor update below.
         }
       } else {
         masteryGain += 1;
@@ -645,7 +632,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // new job added at L4/L8 is a secondary job — use the "Set as Primary"
     // button in the Combat tab to swap traits/LB to this job before an
     // expedition.
-    const toEmbed = [...extraEmbeds];
+    // Secondary-class Gambit trait (jobs array is now updated on the actor).
+    await ensureClassGambits(actor);
+
+    const toEmbed = [];
 
     // Ability items
     for (const uuid of pickedAbilityUuids) {

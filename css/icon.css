@@ -155,6 +155,11 @@
 .icon-class--vagabond  { --class-color: var(--vagabond);  }
 .icon-class--mendicant { --class-color: var(--mendicant); }
 .icon-class--wright    { --class-color: var(--wright);    }
+/* Legacy data may carry a capitalised class ("Wright") — same colours. */
+.icon-class--Stalwart  { --class-color: var(--stalwart);  }
+.icon-class--Vagabond  { --class-color: var(--vagabond);  }
+.icon-class--Mendicant { --class-color: var(--mendicant); }
+.icon-class--Wright    { --class-color: var(--wright);    }
 
 /* ============================================================
    4. Sheet Header

@@ -233,6 +233,7 @@ export function buildClassTraitDocs(cls) {
  * can find and prune it.
  */
 export function buildClassGambitDoc(cls) {
+  cls = String(cls ?? "").toLowerCase();
   const info = CLASS_INFO[cls];
   if (!info?.gambit) return null;
   return {
@@ -247,4 +248,29 @@ export function buildClassGambitDoc(cls) {
       description: info.gambit,
     },
   };
+}
+
+/**
+ * Make sure a PC owns the Gambit trait of every SECONDARY class (a job whose
+ * class differs from the primary job's class). Returns the docs it created.
+ * Idempotent — safe to call on sheet render, level-up, job drop, migration.
+ * Class names are compared case-insensitively (legacy actors stored "Wright").
+ */
+export async function ensureClassGambits(actor) {
+  if (actor?.type !== "icon" || !actor.isOwner) return [];
+  const jobs = actor.system?.combat?.jobs ?? [];
+  const norm = c => String(c ?? "").toLowerCase();
+  const primaryCls = norm(jobs.find(j => j.primary)?.class);
+  const wanted = new Set(jobs.filter(j => !j.primary && norm(j.class) && norm(j.class) !== primaryCls).map(j => norm(j.class)));
+  const docs = [];
+  for (const cls of wanted) {
+    const has = actor.items.some(i => i.type === "trait" && i.system?.source === "gambit" && norm(i.system?.class) === cls);
+    const doc = has ? null : buildClassGambitDoc(cls);
+    if (doc) docs.push(doc);
+  }
+  if (docs.length) {
+    console.debug(`[ICON | classes] ensureClassGambits — "${actor.name}": embedding ${docs.map(d => d.name).join(", ")}`);
+    return actor.createEmbeddedDocuments("Item", docs);
+  }
+  return [];
 }

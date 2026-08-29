@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
-import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc } from "../../helpers/classes.mjs";
+import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
@@ -631,6 +631,14 @@ export class IconSheet extends BaseActorSheet {
   /* -------------------------------------------------- */
   /*  Render hooks                                       */
   /* -------------------------------------------------- */
+
+  async _onFirstRender(context, options) {
+    await super._onFirstRender?.(context, options);
+    // Self-heal: secondary-class Gambit traits (they silently failed to embed
+    // before the TraitData "gambit" fix). Creating items re-renders the sheet.
+    try { await ensureClassGambits(this.document); }
+    catch (err) { console.warn("ICON 1.5 | ensureClassGambits failed:", err); }
+  }
 
   _onRender(context, options) {
     _log(`_onRender — actor: "${this.document.name}" | activeTab: ${this.tabGroups.primary}`);
@@ -2572,22 +2580,8 @@ export class IconSheet extends BaseActorSheet {
     // SECONDARY job: embed the new class's Gambit trait if its class differs
     // from the current primary's class, and the actor doesn't already have it.
     if (!willBePrimary) {
-      const primaryJob = actor.system.combat.jobs?.find(j => j.primary);
-      const primaryClass = primaryJob?.class;
-      if (cls && cls !== primaryClass) {
-        const hasGambit = actor.items.some(i =>
-          i.type === "trait" &&
-          i.system?.source === "gambit" &&
-          i.system?.class === cls,
-        );
-        if (!hasGambit) {
-          const gambitDoc = buildClassGambitDoc(cls);
-          if (gambitDoc) {
-            _log(`dropJobTemplate — embedding ${cls} gambit (secondary class)`);
-            await actor.createEmbeddedDocuments("Item", [gambitDoc]);
-          }
-        }
-      }
+      const created = await ensureClassGambits(actor);
+      if (created.length) _log(`dropJobTemplate — embedded ${created.map(d => d.name).join(", ")} (secondary class)`);
     }
 
     ui.notifications.info(

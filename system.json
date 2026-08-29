@@ -93,6 +93,13 @@
       "system": "icon-system"
     },
     {
+      "name": "summons",
+      "label": "Summons",
+      "path": "packs/summons",
+      "type": "Actor",
+      "system": "icon-system"
+    },
+    {
       "name": "foe-abilities",
       "label": "Foe Abilities",
       "path": "packs/foe-abilities",
