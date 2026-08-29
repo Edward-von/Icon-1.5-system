@@ -13,6 +13,10 @@ Nuovo look scelto su canvas (mix delle direzioni A e C):
   danno in chip rosso, bottoni Apply/½ tagliati.
 - **Combat tracker**: banner round oro a taglio, pip di attivazione a chevron colorati per fazione.
 - Font display caricato da Google Fonts (fallback Palatino/Book Antiqua se offline).
+- **Altre schede** (stesso linguaggio): header a banda diagonale per **Legend** (viola), **Summon** (blu),
+  **Item** (colore di classe, oro se senza classe); il nome del **Foe** ora sta nella banda accanto al
+  ritratto; dialog **Level Up** e **Character Creation** con testata oro e titolo in IM Fell.
+  Fix tecnico: gli header che sono "part" AppV2 ricevevano `display:block` dal reset — ripristinata la grid.
 
 ## 29 agosto 2026 (pomeriggio) — Summons compendium, gambit self-heal, barre HP token
 

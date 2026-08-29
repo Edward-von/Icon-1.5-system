@@ -4801,3 +4801,104 @@ ol.chat-log .chat-message,
 .foe-header__band { height: 118px; clip-path: polygon(0 0, 100% 0, 100% 62%, 0 100%); opacity: .9; }
 .foe-header { background: var(--ic-bg-deep); border-left: none; }
 .foe-header .foe-builder-field__label { color: var(--ic-text-dim); }
+
+/* ---------- Restyle: other sheets (2026-08-29) ---------- */
+/* Generic diagonal band: a grid item that spans row 1 under the portrait+identity. */
+.icon-band {
+  grid-row: 1; grid-column: 1 / -1; align-self: stretch;
+  margin: -12px -12px 0 -12px;
+  background: linear-gradient(100deg, color-mix(in srgb, var(--band, #8a6814) 45%, #100) 0%, var(--band, #8a6814) 65%, color-mix(in srgb, var(--band, #8a6814) 75%, #fff) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+  pointer-events: none; z-index: 0;
+}
+.icon-band ~ * { position: relative; z-index: 1; }
+
+/* Foe header → explicit grid; name now sits in the band next to the portrait */
+.foe-header {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 8px 12px;
+  padding: 12px;
+  background: var(--ic-bg-deep);
+  border: none; border-radius: 0; overflow: hidden;
+}
+.foe-header__band { position: static; inset: auto; height: auto; opacity: 1; grid-row: 1; grid-column: 1 / -1; margin: -12px -12px 0 -12px; clip-path: polygon(0 0, 100% 0, 100% 66%, 0 100%); padding-bottom: 26px; }
+.foe-header .foe-portrait { grid-row: 1; grid-column: 1; position: relative; z-index: 1; margin-bottom: 14px; }
+.foe-header .icon-sheet__identity { grid-row: 1; grid-column: 2; position: relative; z-index: 1; padding-bottom: 14px; }
+.foe-header__hp, .foe-header__mob { grid-row: 2; grid-column: 1 / -1; }
+.foe-header .foe-builder-field__label { color: rgba(255,240,210,.85); }
+.foe-header .foe-builder-field--elite { background: rgba(0,0,0,.25); border-color: rgba(255,215,122,.6); }
+
+/* Legend header — purple "resolve" band */
+.legend-header {
+  --band: #6a2a9a;
+  display: grid; grid-template-columns: 110px minmax(0, 1fr); grid-template-rows: auto auto;
+  gap: 8px 12px; padding: 12px; background: var(--ic-bg-deep); border-bottom: 1px solid var(--ic-border-subtle);
+  overflow: hidden;
+}
+.legend-header__band { padding-bottom: 30px; }
+.legend-header .icon-sheet__portrait--lg { grid-row: 1; grid-column: 1; margin-bottom: 16px; border-color: rgba(255,215,122,.6); }
+.legend-header .icon-sheet__identity { grid-row: 1; grid-column: 2; padding-bottom: 16px; }
+.legend-header__hp-section { grid-row: 2; grid-column: 1 / -1; }
+.icon.sheet .legend-header input.icon-sheet__name--legend {
+  font-family: var(--ic-display); font-size: 2em; font-weight: normal; color: #fff7e0; height: auto;
+  background: transparent !important; border: none !important; text-shadow: 0 1px 0 rgba(0,0,0,.4); padding: 0;
+}
+.legend-header .icon-badge-select, .legend-header .icon-badge { background: rgba(0,0,0,.3); color: #fff7e0; border-color: rgba(255,255,255,.25); }
+.legend-header .icon-badge--phase-active { background: var(--ic-red); border-color: var(--ic-red-bright); }
+
+/* Summon header — blue band */
+.summon-header {
+  --band: #1f5fa0;
+  display: grid; grid-template-columns: 64px minmax(0, 1fr); grid-template-rows: auto;
+  gap: 12px; padding: 12px; background: var(--ic-bg-deep); border: none; overflow: hidden;
+}
+.summon-header__band { padding-bottom: 22px; }
+.summon-header .icon-sheet__portrait--sm { grid-row: 1; grid-column: 1; margin-bottom: 10px; }
+.summon-header .icon-sheet__identity { grid-row: 1; grid-column: 2; padding-bottom: 10px; }
+.icon.sheet .summon-header input.icon-sheet__name { font-family: var(--ic-display); font-size: 1.7em; color: #fff7e0; background: transparent !important; border: none !important; height: auto; padding: 0; }
+.summon-header .icon-badge { background: rgba(0,0,0,.3); color: #fff7e0; border-color: rgba(255,255,255,.25); }
+
+/* Item header — class-coloured band (gold when the item has no class) */
+.icon-item-header {
+  --band: var(--class-color, #8a6814);
+  display: grid; grid-template-columns: 56px minmax(0, 1fr); grid-template-rows: auto;
+  gap: 12px; padding: 12px; background: var(--ic-bg-deep); border: none; overflow: hidden; min-height: 0;
+}
+.icon-item-header__band { padding-bottom: 20px; }
+.icon-item-header .icon-sheet__portrait--sm { grid-row: 1; grid-column: 1; margin-bottom: 8px; border-color: rgba(255,215,122,.55); }
+.icon-item-header .icon-sheet__identity { grid-row: 1; grid-column: 2; padding-bottom: 8px; }
+.icon.sheet .icon-item-header input.icon-sheet__name { font-family: var(--ic-display); font-size: 1.6em; color: #fff7e0; background: transparent !important; border: none !important; height: auto; padding: 0; }
+.icon-item-header .icon-badge { background: rgba(0,0,0,.3); color: #fff7e0; border-color: rgba(255,255,255,.25); }
+.icon-item-header .icon-badge--type { text-transform: uppercase; letter-spacing: .12em; font-size: .68em; }
+
+/* Level-up & character-creation dialogs — gold band header with display title */
+.icon-level-up__header, .icon-cc__header {
+  position: relative; overflow: hidden;
+  padding: 16px 18px 26px;
+  margin: 0 0 12px;
+  background: linear-gradient(100deg, #6a4c10 0%, var(--ic-gold) 65%, #e0c060 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
+  color: var(--ic-bg-deep);
+}
+.icon-level-up__header h2, .icon-cc__header h2 {
+  font-family: var(--ic-display); font-size: 2em; font-weight: normal; margin: 0 0 4px; color: #1a1408; border: none;
+}
+.icon-level-up__levels, .icon-level-up__subtitle, .icon-cc__subtitle, .icon-cc__hint { color: #2a2010; margin: 2px 0; }
+.icon-level-up__header .icon-badge, .icon-cc__header .icon-badge { background: rgba(0,0,0,.25); color: #fff7e0; border-color: rgba(0,0,0,.35); }
+.icon-level-up__section h3, .icon-cc__section h3 {
+  font-size: .78em; letter-spacing: .16em; text-transform: uppercase; color: var(--ic-gold); font-weight: 700; border: none;
+}
+.icon-level-up__section, .icon-cc__section { background: #161c26; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius); }
+/* headers that are AppV2 parts get display:block from the part reset — restore the grid */
+.icon.sheet header.foe-header[data-application-part],
+.icon.sheet header.legend-header[data-application-part],
+.icon.sheet header.icon-item-header[data-application-part] { display: grid; }
+.icon-level-up__section, .icon-cc__section { padding: 10px 12px; margin-bottom: 10px; }
+.icon-cc__section h3, .icon-level-up__section h3 { margin: 0 0 8px; }
+.legend-header .icon-sheet__badges { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.icon.sheet .legend-header .icon-badge-select { width: auto; flex: 0 0 auto; padding: 2px 6px; font-size: .78em; }
+.legend-header .icon-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; }
+.legend-header .icon-badge input[type="number"] { width: 38px; padding: 1px 3px; }
+.legend-phase-bar .icon-hp-bar { height: 16px; }
