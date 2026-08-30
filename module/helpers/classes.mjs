@@ -17,6 +17,7 @@
 export const CLASS_INFO = {
   stalwart: {
     label: "Stalwart",
+    basicAttackRange: 3,
     specialMechanic: {
       name: "Heroics",
       description:
@@ -105,6 +106,7 @@ export const CLASS_INFO = {
 
   vagabond: {
     label: "Vagabond",
+    basicAttackRange: 4,
     relevantRules: [],
     specialMechanic: {
       name: "Finishing Blow",
@@ -139,6 +141,7 @@ export const CLASS_INFO = {
 
   mendicant: {
     label: "Mendicant",
+    basicAttackRange: 5,
     relevantRules: [],
     specialMechanic: {
       name: "Blessing",
@@ -172,6 +175,7 @@ export const CLASS_INFO = {
 
   wright: {
     label: "Wright",
+    basicAttackRange: 6,
     relevantRules: [],
     specialMechanic: {
       name: "Aether",

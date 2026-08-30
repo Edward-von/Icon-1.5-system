@@ -127,9 +127,15 @@ export class IconCombatant extends Combatant {
    */
   async modifyCurrentActivations(num) {
     if (num === 0) return this;
+    // Persist `max` too: for a combatant added mid-round the max only lives
+    // in the prepareBaseData seed (never written to the DB), so a value-only
+    // update left other clients / reloads with an unseeded flag and a wrong
+    // pip count (re-seeded to full, or 0 when the canvas wasn't ready yet).
+    const max = this.activations.max ?? 1;
     return this.update({
       [`flags.${FLAG_NS}.activations`]: {
-        value: Math.clamp((this.activations.value ?? 0) + num, 0, this.activations.max ?? 1),
+        max,
+        value: Math.clamp((this.activations.value ?? 0) + num, 0, max),
       },
     });
   }
@@ -531,7 +537,8 @@ export class IconCombat extends Combat {
      *   • Combo Token (Vagabond)   → 0
      *   • Blessing Tokens (Mendicant) → 0
      *   • Power Dice  (Wright)     → []
-     * Aether (Wright) persists across combats per ICON rules.
+     *   • Aether      (Wright)     → 0  ("All Aether disperses at the end of combat", p.204)
+     * Stacked Dice (Fool) are also lost at end of combat.
      */
     for (const combatant of this.combatants) {
       if (combatant.actor?.type === "icon") {
@@ -541,6 +548,8 @@ export class IconCombat extends Combat {
           "system.combat.classResources.comboToken.value":     0,
           "system.combat.classResources.blessingTokens.value": 0,
           "system.combat.classResources.powerDice":            [],
+          "system.combat.classResources.aether.value":         0,
+          "system.combat.classResources.stackedDice.value":    0,
           "flags.icon-system.-=comboSpentOnItem":              null,
         });
       }

@@ -162,7 +162,7 @@ export class IconData extends foundry.abstract.TypeDataModel {
             value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
             max:   new NumberField({ required: true, initial: 10, min: 1, integer: true }),
           }),
-          // Wright — Aether pool (persists across combats)
+          // Wright — Aether pool (disperses at end of combat, p.204)
           aether: new SchemaField({
             value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
             max:   new NumberField({ required: true, initial: 10, min: 1, integer: true }),

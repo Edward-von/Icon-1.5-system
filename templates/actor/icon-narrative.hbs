@@ -166,10 +166,10 @@
                         title="Untick one segment">−</button>
               {{/if}}
               {{#each (iconRange burden.clock.max) as |seg|}}
-                <span class="icon-clock-seg {{#if (icon-lte seg ../burden.clock.value)}}icon-clock-seg--filled{{/if}}"
+                <span class="icon-clock-seg {{#if (icon-lte seg burden.clock.value)}}icon-clock-seg--filled{{/if}}"
                       data-action="setClockSegment"
                       data-type="burden"
-                      data-index="{{../i}}"
+                      data-index="{{i}}"
                       data-segment="{{seg}}"
                       title="Set clock to {{seg}}"></span>
               {{/each}}
@@ -245,10 +245,10 @@
                         title="Untick one segment">−</button>
               {{/if}}
               {{#each (iconRange amb.clock.max) as |seg|}}
-                <span class="icon-clock-seg {{#if (icon-lte seg ../amb.clock.value)}}icon-clock-seg--filled{{/if}}"
+                <span class="icon-clock-seg {{#if (icon-lte seg amb.clock.value)}}icon-clock-seg--filled{{/if}}"
                       data-action="setClockSegment"
                       data-type="ambition"
-                      data-index="{{../i}}"
+                      data-index="{{i}}"
                       data-segment="{{seg}}"
                       title="Set clock to {{seg}}"></span>
               {{/each}}

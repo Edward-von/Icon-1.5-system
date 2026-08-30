@@ -4,7 +4,7 @@
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
-import { enrichHTML, escapeHTML, postNpcTraitCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard } from "../../helpers/enrich.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -33,6 +33,7 @@ export class LegendSheet extends BaseActorSheet {
       removeAction:      LegendSheet.#onRemoveAction,
       addInterrupt:      LegendSheet.#onAddInterrupt,
       removeInterrupt:   LegendSheet.#onRemoveInterrupt,
+      foeInterruptShowInChat: LegendSheet.#onFoeInterruptShowInChat,
       addRoundAction:    LegendSheet.#onAddRoundAction,
       removeRoundAction: LegendSheet.#onRemoveRoundAction,
       addPhase:          LegendSheet.#onAddPhase,
@@ -537,6 +538,17 @@ export class LegendSheet extends BaseActorSheet {
   }
 
   /** Post a legend trait to chat. */
+  /** Post a foe/legend interrupt (trigger + effect) to chat. */
+  static async #onFoeInterruptShowInChat(event, target) {
+    event.stopPropagation();
+    const idx       = Number(target.dataset.interruptIndex);
+    const actor     = this.document;
+    const interrupt = actor.system.interrupts[idx];
+    if (!interrupt) return;
+    _log(`foeInterruptShowInChat — actor: "" | interrupt[]: ""`);
+    await postNpcInterruptCard(actor, interrupt);
+  }
+
   static async #onFoeTraitShowInChat(event, target) {
     event.stopPropagation();
     const idx   = Number(target.dataset.traitIndex);

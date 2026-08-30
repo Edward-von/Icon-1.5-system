@@ -12,7 +12,7 @@ import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
-import { enrichHTML, postNpcTraitCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard, postNpcInterruptCard } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
@@ -42,6 +42,7 @@ export class FoeSheet extends BaseActorSheet {
       removeAction:     FoeSheet.#onRemoveAction,
       addInterrupt:     FoeSheet.#onAddInterrupt,
       removeInterrupt:  FoeSheet.#onRemoveInterrupt,
+      foeInterruptShowInChat: FoeSheet.#onFoeInterruptShowInChat,
       addRoundAction:   FoeSheet.#onAddRoundAction,
       removeRoundAction:FoeSheet.#onRemoveRoundAction,
       tickInterrupt:    FoeSheet.#onTickInterrupt,
@@ -254,6 +255,17 @@ export class FoeSheet extends BaseActorSheet {
   /** Post a foe action to chat (name, cost, tags, description, hit/miss/area). */
   /** Post a foe trait to chat (elites/legends often carry fight-defining
    *  passives here — the GM needs to show them without retyping). */
+  /** Post a foe/legend interrupt (trigger + effect) to chat. */
+  static async #onFoeInterruptShowInChat(event, target) {
+    event.stopPropagation();
+    const idx       = Number(target.dataset.interruptIndex);
+    const actor     = this.document;
+    const interrupt = actor.system.interrupts[idx];
+    if (!interrupt) return;
+    _log(`foeInterruptShowInChat — actor: "" | interrupt[]: ""`);
+    await postNpcInterruptCard(actor, interrupt);
+  }
+
   static async #onFoeTraitShowInChat(event, target) {
     event.stopPropagation();
     const idx   = Number(target.dataset.traitIndex);

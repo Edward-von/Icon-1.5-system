@@ -28,6 +28,39 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
     this.#bindSharedListeners();
   }
 
+  /* -------------------------------------------------- */
+  /*  Re-render state preservation                       */
+  /* -------------------------------------------------- */
+
+  /**
+   * Keep `<details>` open/closed state across re-renders. Core's
+   * `Combat#_onUpdate` → `updateCombatantActors()` re-renders every
+   * combatant's sheet on each turn change, and `submitOnChange` re-renders on
+   * every form edit — without this, every collapsible (Basic Actions, class
+   * rules, bond details, foe "Edit Effects"…) snapped shut whenever anyone
+   * ended their turn. Keyed by `data-details-key` when present, otherwise by
+   * position within the part.
+   * @override
+   */
+  _preSyncPartState(partId, newElement, priorElement, state) {
+    super._preSyncPartState(partId, newElement, priorElement, state);
+    state.openDetails = Array.from(priorElement.querySelectorAll("details")).map((d, i) => ({
+      key:  d.dataset.detailsKey ?? String(i),
+      open: d.open,
+    }));
+  }
+
+  /** @override */
+  _syncPartState(partId, newElement, priorElement, state) {
+    super._syncPartState(partId, newElement, priorElement, state);
+    if (!state.openDetails?.length) return;
+    const byKey = new Map(state.openDetails.map(s => [s.key, s.open]));
+    newElement.querySelectorAll("details").forEach((d, i) => {
+      const key = d.dataset.detailsKey ?? String(i);
+      if (byKey.has(key)) d.open = byKey.get(key);
+    });
+  }
+
   /**
    * Drop handler hook — subclasses override with their own routing.
    * The base class binds it ONCE per element; subclasses keep their own

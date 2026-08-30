@@ -11,6 +11,8 @@
     </div>
   {{/if}}
   {{#if a.description}}<div class="icon-chat-card__desc">{{{a.description}}}</div>{{/if}}
+  {{#if a.trigger}}<p><strong>Trigger:</strong> {{{a.trigger}}}</p>{{/if}}
+  {{#if a.effect}}<p><strong>Effect:</strong> {{{a.effect}}}</p>{{/if}}
   {{#if a.hitEffect}}<p><strong>Hit:</strong> {{{a.hitEffect}}}</p>{{/if}}
   {{#if a.missEffect}}<p><strong>Miss:</strong> {{{a.missEffect}}}</p>{{/if}}
   {{#if a.areaEffect}}<p><strong>Area:</strong> {{{a.areaEffect}}}</p>{{/if}}

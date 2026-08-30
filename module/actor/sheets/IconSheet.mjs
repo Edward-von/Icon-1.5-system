@@ -7,7 +7,7 @@ import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
-import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, splitAbilityDescription } from "../../helpers/enrich.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
@@ -251,6 +251,8 @@ export class IconSheet extends BaseActorSheet {
       const masteryUnlocked = !!s.masteryUnlocked;
       const parsed = _parseAbilityDamage(s);
       const parsedCombo = parseComboAbilityDamage(s);
+      const desc = splitAbilityDescription(s.description);
+      const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       return {
         id:          a.id,
         name:        a.name,
@@ -267,7 +269,9 @@ export class IconSheet extends BaseActorSheet {
         isAttack:    parsed.isAttack,
         isAutoHit:   parsed.isAutoHit,
         dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage,
-        description:         await enrichHTML(s.description),
+        description:         await enrichHTML(desc.flavor),
+        trigger:             await enrichHTML(trigger),
+        effect:              await enrichHTML(desc.effect),
         hitEffect:           await enrichHTML(s.hitEffect),
         missEffect:          await enrichHTML(s.missEffect),
         areaEffect:          await enrichHTML(s.areaEffect),
@@ -311,7 +315,9 @@ export class IconSheet extends BaseActorSheet {
         hasMasteryRaw: !!(s.mastery && s.mastery.trim()),
         // Mastery visible only if unlocked
         hasMastery: !!(s.mastery && s.mastery.trim()) && masteryUnlocked,
-        hasDesc:    !!(s.description && s.description.trim()),
+        hasDesc:    !!desc.flavor,
+        hasTrigger: !!trigger,
+        hasEffect:  !!desc.effect,
       };
     }));
 
@@ -1067,6 +1073,8 @@ export class IconSheet extends BaseActorSheet {
     const s = item.system ?? {};
     const parsed = _parseAbilityDamage(s);
     const parsedCombo = parseComboAbilityDamage(s);
+    const desc = splitAbilityDescription(s.description);
+    const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
     return {
       id:          item.id,
       name:        item.name,
@@ -1082,7 +1090,9 @@ export class IconSheet extends BaseActorSheet {
       dealsDamage: parsed.dealsDamage,
       parsed,
       parsedCombo,
-      description:         await enrichHTML(s.description),
+      description:         await enrichHTML(desc.flavor),
+      trigger:             await enrichHTML(trigger),
+      effect:              await enrichHTML(desc.effect),
       hitEffect:           await enrichHTML(s.hitEffect),
       missEffect:          await enrichHTML(s.missEffect),
       areaEffect:          await enrichHTML(s.areaEffect),
@@ -1097,7 +1107,9 @@ export class IconSheet extends BaseActorSheet {
       talent1:             await enrichHTML(s.talent1),
       talent2:             await enrichHTML(s.talent2),
       mastery:             await enrichHTML(s.mastery),
-      hasDesc:     !!(s.description && s.description.trim()),
+      hasDesc:     !!desc.flavor,
+      hasTrigger:  !!trigger,
+      hasEffect:   !!desc.effect,
       hasHit:      !!(s.hitEffect && s.hitEffect.trim()),
       hasMiss:     !!(s.missEffect && s.missEffect.trim()),
       hasArea:     !!(s.areaEffect && s.areaEffect.trim()),
@@ -1411,11 +1423,22 @@ export class IconSheet extends BaseActorSheet {
    * _getAbilityDetail output so the shared attack/damage dialogs work.
    * Light: 1 action, [D] + fray. Heavy: 2 actions, 2[D] + fray. Miss: fray.
    */
-  static #basicAttackDetail(heavy) {
+  /** Basic attack range of the actor's primary job class (0 if unknown). */
+  static #basicAttackRange(actor) {
+    const jobs    = actor.system.combat?.jobs ?? [];
+    const primary = jobs.find(j => j.primary) ?? jobs[0];
+    const cls     = (primary?.class ?? "").toLowerCase();
+    return CLASS_INFO[cls]?.basicAttackRange ?? 0;
+  }
+
+  static #basicAttackDetail(heavy, range = 0) {
     return {
       name:  heavy ? "Heavy Attack" : "Light Attack",
       cost:  heavy ? "2 actions" : "1 action",
-      tags:  [],
+      // Basic attack range is a CLASS statistic (Stalwart 3 / Vagabond 4 /
+      // Mendicant 5 / Wright 6) — surfaced as a tag so the chat card and the
+      // attack dialog remind the table of it.
+      tags:  range ? [{ raw: `range-${range}`, label: `Range ${range}` }] : [],
       isAttack:    true,
       isAutoHit:   false,
       dealsDamage: true,
@@ -1434,14 +1457,14 @@ export class IconSheet extends BaseActorSheet {
   static async #onBasicAttackRoll(event, target) {
     event.stopPropagation();
     const heavy = target.dataset.heavy === "true";
-    const ab = IconSheet.#basicAttackDetail(heavy);
+    const ab = IconSheet.#basicAttackDetail(heavy, IconSheet.#basicAttackRange(this.document));
     _log(`basicAttackRoll — "${ab.name}"`);
     const mods = await promptAttackMods(ab, this.document);
     if (!mods) return;
     await combatRoll({
       abilityName: ab.name,
       costLabel:   ab.cost,
-      tags:        [],
+      tags:        ab.tags.map(t => t.label),
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
@@ -1454,7 +1477,7 @@ export class IconSheet extends BaseActorSheet {
   static async #onBasicDamageRoll(event, target) {
     event.stopPropagation();
     const heavy = target.dataset.heavy === "true";
-    const ab = IconSheet.#basicAttackDetail(heavy);
+    const ab = IconSheet.#basicAttackDetail(heavy, IconSheet.#basicAttackRange(this.document));
     const combat = this.document.system.combat;
     _log(`basicDamageRoll — "${ab.name}"`);
     const mods = await promptDamageMods(ab, combat);

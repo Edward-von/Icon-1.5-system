@@ -75,6 +75,19 @@ function _ensurePanel() {
   return el;
 }
 
+/**
+ * Anchor the panel just left of the sidebar. The CSS default (`right: 320px`)
+ * assumed the v12 sidebar width; in v13 the sidebar is wider (tab strip +
+ * content) and its width changes when collapsed, so the panel ended up
+ * drawn over the sidebar tabs. Measure the live `#sidebar` rect instead.
+ */
+function _positionPanel(el) {
+  const sidebar = document.getElementById("sidebar");
+  const rect    = sidebar?.getBoundingClientRect();
+  if (rect?.width) el.style.right = `${Math.round(window.innerWidth - rect.left) + 8}px`;
+  else el.style.removeProperty("right");
+}
+
 /** Handle +/−/× on a status row. */
 async function _onPanelClick(ev) {
   const btn = ev.target.closest("button[data-act]");
@@ -123,6 +136,7 @@ export function renderTokenStatusHud() {
   const interactive = !!actor.isOwner;
   el.classList.toggle("interactive", interactive);
   el.classList.add("active");
+  _positionPanel(el);
 
   el.innerHTML = `
     <div class="icon-token-status-hud__title">${escapeHTML(actor.name)}</div>
@@ -153,6 +167,17 @@ export function registerTokenStatusHud() {
   Hooks.on("controlToken", () => renderTokenStatusHud());
   Hooks.on("canvasReady",  () => renderTokenStatusHud());
   Hooks.on("deleteToken",  () => renderTokenStatusHud());
+
+  // Keep the panel clear of the sidebar when it collapses/expands or the
+  // window is resized (the sidebar's left edge moves).
+  Hooks.on("collapseSidebar", () => {
+    const el = document.getElementById(PANEL_ID);
+    if (el) setTimeout(() => _positionPanel(el), 350); // after the collapse transition
+  });
+  window.addEventListener("resize", () => {
+    const el = document.getElementById(PANEL_ID);
+    if (el) _positionPanel(el);
+  });
 
   // Status effects are ActiveEffects on the actor — refresh when the controlled
   // actor's effects change.

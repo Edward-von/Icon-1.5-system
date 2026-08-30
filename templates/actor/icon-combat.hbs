@@ -115,7 +115,7 @@
         {{!-- Wright — Aether + Power Dice --}}
         {{#if (icon-eq primaryJobClass "wright")}}
           <div class="icon-resource-block icon-resource-block--wright icon-resource-block--inline">
-            <h4>Aether <small>(persists across combats)</small></h4>
+            <h4>Aether <small>(+1 at start of your turn; lost at end of combat)</small></h4>
             <div class="icon-counter-row">
               <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="-1"
                       {{#unless isEditable}}disabled{{/unless}}>−</button>
@@ -202,6 +202,7 @@
         <li>
           <span class="icon-basic-actions__name">Light Attack</span>
           <span class="icon-badge">1 action</span>
+          {{#if classInfo.basicAttackRange}}<span class="icon-badge" title="Basic attack range of your class ({{classInfo.label}})">Range {{classInfo.basicAttackRange}}</span>{{/if}}
           <span class="icon-basic-actions__desc">On hit: [D] + fray. Miss: fray.</span>
           {{#if isEditable}}
             <span class="icon-basic-actions__btns">
@@ -213,6 +214,7 @@
         <li>
           <span class="icon-basic-actions__name">Heavy Attack</span>
           <span class="icon-badge">2 actions</span>
+          {{#if classInfo.basicAttackRange}}<span class="icon-badge" title="Basic attack range of your class ({{classInfo.label}})">Range {{classInfo.basicAttackRange}}</span>{{/if}}
           <span class="icon-basic-actions__desc">On hit: 2[D] + fray. Miss: fray.</span>
           {{#if isEditable}}
             <span class="icon-basic-actions__btns">
@@ -630,9 +632,13 @@
         {{#if ab.hasDesc}}
           <div class="icon-ability-preview__desc">{{{ab.description}}}</div>
         {{/if}}
+        {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> <span class="icon-ability-preview__effect">{{{ab.trigger}}}</span></p>{{/if}}
+        {{!-- Effect: printed after the Attack/Area lines for attacks (book layout); before the Area line for non-attacks (the effect usually creates the area). --}}
+        {{#if ab.hasEffect}}{{#unless ab.hasHit}}<p><strong>Effect:</strong> <span class="icon-ability-preview__effect">{{{ab.effect}}}</span></p>{{/unless}}{{/if}}
         {{#if ab.hasHit}}<p><strong>Hit:</strong> <span class="icon-ability-preview__effect">{{{ab.hitEffect}}}</span></p>{{/if}}
         {{#if ab.hasMiss}}<p><strong>Miss:</strong> <span class="icon-ability-preview__effect">{{{ab.missEffect}}}</span></p>{{/if}}
         {{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}
+        {{#if ab.hasEffect}}{{#if ab.hasHit}}<p><strong>Effect:</strong> <span class="icon-ability-preview__effect">{{{ab.effect}}}</span></p>{{/if}}{{/if}}
         {{#if ab.hasCharge}}<p><strong>Charge:</strong> <span class="icon-ability-preview__effect">{{{ab.chargeEffect}}}</span></p>{{/if}}
         {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> <span class="icon-ability-preview__effect">{{{ab.heroicEffect}}}</span></p>{{/if}}
         {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> <span class="icon-ability-preview__effect">{{{ab.exceedEffect}}}</span></p>{{/if}}

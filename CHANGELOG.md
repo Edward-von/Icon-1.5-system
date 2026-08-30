@@ -1,5 +1,25 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 agosto 2026 — Feedback round 4 (Maar)
+
+- **Burden/Ambition clock**: i segmenti non si coloravano mai (e il click andava sempre al primo burden):
+  dentro l'`#each` annidato `../burden.clock.value` e `../i` sono lookup di contesto, non block-param →
+  `undefined`. Ora i segmenti si riempiono e ogni clock risponde al proprio indice.
+- **Aether**: si azzera a fine combattimento (manuale p.204 "All Aether disperses at the end of combat");
+  il promemoria diceva il contrario. Azzerati a fine combat anche gli Stacked Dice del Fool.
+- **Attacchi base**: badge "Range N" (range per classe: Stalwart 3 / Vagabond 4 / Mendicant 5 / Wright 6)
+  accanto a Light/Heavy Attack e come tag nella card del tiro.
+- **Dropdown che si chiudevano a ogni fine turno**: core ri-renderizza le schede di tutti i combattenti a
+  ogni cambio turno; ora lo stato aperto/chiuso dei `<details>` sopravvive ai re-render (tutte le schede).
+- **Pannello status del token**: ancorato al bordo sinistro reale della sidebar v13 (prima usava un
+  `right` fisso e copriva le tab della sidebar); si riposiziona al collapse/expand e al resize.
+- **Abilità**: il testo "Trigger:" e "Effect:" contenuto nella descrizione viene ora separato e
+  stampato come nel manuale — Trigger prima di tutto (Heave-Ho non mostrava il trigger), Effect dopo
+  Hit/Miss/Area per gli attacchi (Draken Cross) e prima dell'Area per le non-attacco.
+- **Interrupt di Foe/Legend**: bottone 💬 per postarli in chat (nome, Interrupt N, Trigger, Effect).
+- **Tracker**: le modifiche alle attivazioni persistono anche `max` (un combattente aggiunto a metà
+  round aveva il max solo in memoria → conteggio pip sbagliato su altri client / al reload).
+
 ## 29 agosto 2026 — Restyle "Ink & Gold × Tactics"
 
 Nuovo look scelto su canvas (mix delle direzioni A e C):

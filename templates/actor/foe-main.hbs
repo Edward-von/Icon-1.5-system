@@ -180,6 +180,9 @@
                    {{#unless ../isEditable}}disabled{{/unless}}>
             / turn
           </span>
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                  data-action="foeInterruptShowInChat" data-interrupt-index="{{interrupt.i}}"
+                  title="Post this interrupt to chat">💬</button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove"
                     data-action="removeInterrupt" data-index="{{interrupt.i}}">✕</button>
