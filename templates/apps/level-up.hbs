@@ -1,101 +1,110 @@
-{{!-- level-up.hbs — LevelUpDialog template (multi-stage wizard) --}}
-<div class="icon-level-up">
+{{!-- level-up.hbs — LevelUpDialog template (two-stage wizard, chrome shared with Character Creation) --}}
+<div class="icon-wizard icon-level-up">
 
-  <header class="icon-level-up__header">
-    <h2>{{actor.name}}</h2>
-    <p class="icon-level-up__levels">
-      Level <strong>{{currentLevel}}</strong> → <strong>{{targetLevel}}</strong>
-      <span class="icon-badge">Chapter {{chapter}}</span>
-      <span class="icon-badge icon-badge--primary">Stage {{stage}} / 2</span>
-    </p>
-    {{#if primaryClass}}
-      <p class="icon-level-up__subtitle">
-        Primary job: <strong>{{primaryJobName}}</strong>
-        <span class="icon-badge icon-class--{{primaryClass}}">{{primaryClass}}</span>
-      </p>
-    {{/if}}
+  <header class="icon-wizard__hero icon-class--{{primaryClass}}">
+    <div class="icon-wizard__notch"><img src="{{actor.img}}" alt="{{actor.name}}"></div>
+    <div class="icon-wizard__identity">
+      <span class="icon-wizard__kicker">Level Up · ICON 1.5 p.241</span>
+      <h2 class="icon-wizard__title">{{actor.name}}</h2>
+      <div class="icon-wizard__jobs">
+        {{#each jobs as |job|}}
+          <span class="icon-hero__job icon-class--{{job.class}} {{#if job.primary}}icon-hero__job--primary{{/if}}">{{job.name}}<small>{{job.class}}</small></span>
+        {{/each}}
+        {{#if pendingJob}}<span class="icon-hero__job icon-class--{{pendingJob.class}}">{{pendingJob.jobName}}<small>new</small></span>{{/if}}
+      </div>
+    </div>
+    <div class="icon-wizard__level">
+      <span class="icon-wizard__level-value">{{currentLevel}} <small>→</small> {{targetLevel}}</span>
+      <span class="icon-wizard__level-label">Level · Ch {{chapter}}</span>
+    </div>
   </header>
 
+  <ol class="icon-wizard__rail">
+    <li class="icon-wizard__rail-step {{#if isStage1}}icon-wizard__rail-step--active{{else}}icon-wizard__rail-step--done{{/if}}" data-action="prevStage"><span class="icon-wizard__num">1</span>Benefits &amp; paths</li>
+    <li class="icon-wizard__rail-step {{#if isStage2}}icon-wizard__rail-step--active{{/if}}"><span class="icon-wizard__num">2</span>Your picks</li>
+  </ol>
+
+  <div class="icon-wizard__body">
+
   {{!-- ================================================================
-       STAGE 1 — Review benefits, make critical forks (L4/L8)
+       STAGE 1 — Review benefits, make the L4/L8 forks
        ================================================================ --}}
   {{#if isStage1}}
-    <section class="icon-level-up__section">
-      <h3>Benefits Gained at Level {{targetLevel}}</h3>
-      <ul class="icon-level-up__grant-list">
-        {{#if combat.ap}}<li>+ <strong>{{combat.ap}}</strong> Ability Point{{#icon-gt combat.ap 1}}s{{/icon-gt}}</li>{{/if}}
-        {{#if combat.masteryPoint}}<li>+ <strong>{{combat.masteryPoint}}</strong> Mastery Point</li>{{/if}}
-        {{#if combat.limitBreak}}<li>🔓 Limit Break unlocked</li>{{/if}}
-        {{#if combat.relic}}<li>✨ Gain Relic #{{combat.relicNumber}}</li>{{/if}}
-        {{#if combat.jobChoice}}<li>⚖ New job <em>or</em> +1 Mastery (choose below)</li>{{/if}}
-        {{#if narrative.bondPowers}}<li>🌟 Gain {{narrative.bondPowers}} Bond Power</li>{{/if}}
-        {{#if narrative.actionImprovements}}<li>⬆ Improve {{narrative.actionImprovements}} action{{#icon-gt narrative.actionImprovements 1}}s{{/icon-gt}}</li>{{/if}}
-        {{#if narrative.bondPowerOrActions}}<li>⚖ Bond Power <em>or</em> +1 to 2 Actions (choose below)</li>{{/if}}
-      </ul>
+    <section class="icon-wizard__step icon-wizard__step--done">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">✦</span>
+        <h3 class="icon-wizard__step-title">Gained at level {{targetLevel}}</h3>
+      </div>
+      <div class="icon-grant-grid">
+        {{#if combat.ap}}<div class="icon-grant"><span class="icon-grant__value">+{{combat.ap}}</span> Ability Point{{#icon-gt combat.ap 1}}s{{/icon-gt}}</div>{{/if}}
+        {{#if combat.masteryPoint}}<div class="icon-grant"><span class="icon-grant__value">+{{combat.masteryPoint}}</span> Mastery Point</div>{{/if}}
+        {{#if combat.limitBreak}}<div class="icon-grant"><span class="icon-grant__icon">🔓</span> Limit Break unlocked</div>{{/if}}
+        {{#if combat.relic}}<div class="icon-grant"><span class="icon-grant__icon">✨</span> Relic #{{combat.relicNumber}}</div>{{/if}}
+        {{#if narrative.bondPowers}}<div class="icon-grant"><span class="icon-grant__icon">🌟</span> {{narrative.bondPowers}} Bond Power</div>{{/if}}
+        {{#if narrative.actionImprovements}}<div class="icon-grant"><span class="icon-grant__value">+{{narrative.actionImprovements}}</span> Action improvement{{#icon-gt narrative.actionImprovements 1}}s{{/icon-gt}}</div>{{/if}}
+        {{#if combat.jobChoice}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> New job <em>or</em> +1 Mastery</div>{{/if}}
+        {{#if narrative.bondPowerOrActions}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> Bond Power <em>or</em> +1 to 2 actions</div>{{/if}}
+      </div>
     </section>
 
     {{!-- L4/L8 combat fork --}}
     {{#if hasCombatFork}}
-      <section class="icon-level-up__section">
-        <h3>Combat Path</h3>
-        <div class="icon-level-up__choice">
-          <label>
-            <input type="radio" name="jobChoice" value="newJob"
-                   {{#unless (icon-eq savedData.jobChoice "mastery")}}checked{{/unless}}>
-            <strong>New Job</strong> (+2 AP — unlocks the new job's abilities)
+      <section class="icon-wizard__step icon-wizard__step--done">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">⚔</span>
+          <h3 class="icon-wizard__step-title">Combat path</h3>
+        </div>
+        <div class="icon-option-grid icon-option-grid--wide">
+          <label class="icon-option">
+            <input type="radio" name="jobChoice" value="newJob" {{#unless (icon-eq savedData.jobChoice "mastery")}}checked{{/unless}}>
+            <span class="icon-option__title">New Job</span>
+            <span class="icon-option__desc"><strong>+2 AP</strong> and access to the new job's abilities. Traits and Limit Break still come from your <strong>primary</strong> job (switch it from the Combat tab each expedition).</span>
           </label>
-          <div class="icon-level-up__nested">
-            <label>Pick a Job Template:
-              <select name="newJobTemplateUuid">
-                <option value="">— Select a job —</option>
-                {{#each jobTemplates as |jt|}}
-                  <option value="{{jt.uuid}}" {{#icon-eq jt.uuid ../savedData.newJobTemplateUuid}}selected{{/icon-eq}}>
-                    [{{jt.class}}] {{jt.jobName}}
-                  </option>
-                {{/each}}
-              </select>
-            </label>
-            {{#unless jobTemplates.length}}
-              <p class="icon-level-up__warn">No more job templates available (you already own all jobs).</p>
-            {{/unless}}
-            <p class="icon-level-up__hint">
-              ⚠ A new job unlocks access to its <strong>abilities</strong> only. <strong>Traits</strong>
-              and <strong>Limit Break</strong> come exclusively from your <em>primary</em> job.
-              You can switch which job is primary from the Combat tab each expedition.
-            </p>
+          <label class="icon-option">
+            <input type="radio" name="jobChoice" value="mastery" {{#icon-eq savedData.jobChoice "mastery"}}checked{{/icon-eq}}>
+            <span class="icon-option__title">+1 Mastery Point</span>
+            <span class="icon-option__desc">Keep your jobs and specialise deeper: unlock a Mastery on one of your abilities.</span>
+          </label>
+        </div>
+        <div data-role="new-job-block" style="margin-top:8px">
+          <p class="icon-wizard__hint">Pick the new job:</p>
+          <div class="icon-option-grid">
+            {{#each jobTemplates as |jt|}}
+              <label class="icon-option icon-class--{{jt.class}}">
+                <input type="radio" name="newJobTemplateUuid" value="{{jt.uuid}}" {{#icon-eq jt.uuid ../savedData.newJobTemplateUuid}}checked{{/icon-eq}}>
+                <span class="icon-option__title">{{jt.jobName}}</span>
+                <span class="icon-option__meta"><span class="icon-badge icon-class--{{jt.class}}">{{jt.class}}</span></span>
+              </label>
+            {{/each}}
           </div>
-          <label>
-            <input type="radio" name="jobChoice" value="mastery"
-                   {{#icon-eq savedData.jobChoice "mastery"}}checked{{/icon-eq}}>
-            <strong>+1 Mastery Point</strong> (keep current job and specialize deeper)
-          </label>
+          {{#unless jobTemplates.length}}
+            <p class="icon-wizard__warn">No more job templates available (you already own all jobs).</p>
+          {{/unless}}
         </div>
       </section>
     {{/if}}
 
     {{!-- L4/L8 narrative fork --}}
     {{#if hasNarrativeFork}}
-      <section class="icon-level-up__section">
-        <h3>Narrative Path</h3>
-        <div class="icon-level-up__choice">
-          <label>
-            <input type="radio" name="narrativeChoice" value="bondPower"
-                   {{#unless (icon-eq savedData.narrativeChoice "actions")}}checked{{/unless}}>
-            Gain a <strong>Bond Power</strong>
+      <section class="icon-wizard__step icon-wizard__step--done">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">📖</span>
+          <h3 class="icon-wizard__step-title">Narrative path</h3>
+        </div>
+        <div class="icon-option-grid icon-option-grid--wide">
+          <label class="icon-option">
+            <input type="radio" name="narrativeChoice" value="bondPower" {{#unless (icon-eq savedData.narrativeChoice "actions")}}checked{{/unless}}>
+            <span class="icon-option__title">Bond Power</span>
+            <span class="icon-option__desc">Learn one more power of your bond.</span>
           </label>
-          <label>
-            <input type="radio" name="narrativeChoice" value="actions"
-                   {{#icon-eq savedData.narrativeChoice "actions"}}checked{{/icon-eq}}>
-            Improve <strong>2 Actions</strong>
+          <label class="icon-option">
+            <input type="radio" name="narrativeChoice" value="actions" {{#icon-eq savedData.narrativeChoice "actions"}}checked{{/icon-eq}}>
+            <span class="icon-option__title">Improve 2 Actions</span>
+            <span class="icon-option__desc">+1 dot on two actions (the same one twice is allowed, max 4).</span>
           </label>
         </div>
       </section>
     {{/if}}
-
-    <footer class="icon-level-up__footer">
-      <button type="button" class="icon-btn icon-btn--primary" data-action="nextStage">Next →</button>
-      <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
-    </footer>
   {{/if}}
 
   {{!-- ================================================================
@@ -114,53 +123,56 @@
       <input type="hidden" name="narrativeChoice" value="{{savedData.narrativeChoice}}">
     {{/if}}
 
-    {{!-- Recap of stage-1 choices --}}
-    <section class="icon-level-up__section icon-level-up__recap">
-      <h3>Your Choices</h3>
-      <ul class="icon-level-up__recap-list">
-        {{#if combat.ap}}<li>+{{combat.ap}} AP to spend</li>{{/if}}
-        {{#if combat.masteryPoint}}<li>+{{combat.masteryPoint}} Mastery Point</li>{{/if}}
+    <section class="icon-wizard__step icon-wizard__recap">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">✦</span>
+        <h3 class="icon-wizard__step-title">Level {{targetLevel}} — your choices</h3>
+        <button type="button" class="icon-btn icon-btn--sm" data-action="prevStage">← Change</button>
+      </div>
+      <ul>
+        {{#if apGranted}}<li>+{{apGranted}} AP to spend</li>{{/if}}
+        {{#if masteryGain}}<li>+{{masteryGain}} Mastery Point{{#icon-gt masteryGain 1}}s{{/icon-gt}}</li>{{/if}}
         {{#if combat.limitBreak}}<li>Limit Break unlocked</li>{{/if}}
-        {{#if combat.relic}}<li>Relic #{{combat.relicNumber}} to pick below</li>{{/if}}
+        {{#if combat.relic}}<li>Relic #{{combat.relicNumber}}</li>{{/if}}
         {{#if savedData.jobChoice}}
           {{#icon-eq savedData.jobChoice "newJob"}}
-            <li>Combat: <strong>New Job</strong> — <span class="icon-badge icon-class--{{pendingJob.class}}">{{pendingJob.jobName}}</span> + 2 AP</li>
+            <li>New job: <span class="icon-badge icon-class--{{pendingJob.class}}">{{pendingJob.jobName}}</span></li>
           {{else}}
-            <li>Combat: <strong>+1 Mastery Point</strong> (keep current job)</li>
+            <li>Combat: +1 Mastery Point instead of a new job</li>
           {{/icon-eq}}
         {{/if}}
         {{#if savedData.narrativeChoice}}
-          {{#icon-eq savedData.narrativeChoice "bondPower"}}
-            <li>Narrative: gain a <strong>Bond Power</strong></li>
-          {{else}}
-            <li>Narrative: improve <strong>2 Actions</strong></li>
-          {{/icon-eq}}
+          {{#icon-eq savedData.narrativeChoice "bondPower"}}<li>Narrative: a Bond Power</li>{{else}}<li>Narrative: improve 2 actions</li>{{/icon-eq}}
         {{/if}}
       </ul>
-      <button type="button" class="icon-btn icon-btn--sm" data-action="prevStage">← Back to Edit</button>
     </section>
 
     {{!-- COMBAT PICKERS ------------------------------------------------ --}}
 
     {{#if hasAbilityPicker}}
-      <section class="icon-level-up__section">
-        <h3>Pick New Abilities</h3>
-        <p class="icon-level-up__hint">
-          Eligible abilities from your unlocked jobs: <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em>
-          — chapter ≤ {{actorChapter}}. Each costs <strong>1 AP</strong>.
-          You have <strong>{{apGranted}} AP</strong> to spend (shared with talents below).
-          At least half of your 6 equipped abilities must match <span class="icon-badge icon-class--{{primaryClass}}">{{primaryClass}}</span>.
-          Currently equipped: {{equippedCount}}/{{maxEquipped}}.
+      <section class="icon-wizard__step" data-step="abilities">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">1</span>
+          <h3 class="icon-wizard__step-title">New abilities</h3>
+          <span class="icon-wizard__counter" data-role="ap-counter">AP {{apGranted}} left</span>
+        </div>
+        <p class="icon-wizard__hint">
+          From <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em>, chapter ≤ {{actorChapter}}. Each ability costs <strong>1 AP</strong>,
+          the same pool as the talents below. At least half of your equipped abilities must match <span class="icon-badge icon-class--{{primaryClass}}">{{primaryClass}}</span>
+          (★ cards). Equipped now: <strong>{{equippedCount}}/{{maxEquipped}}</strong>.
         </p>
-        <div class="icon-level-up__ability-list">
+        <div class="icon-option-grid icon-option-grid--wide icon-option-grid--scroll">
           {{#each abilities as |a|}}
-            <label class="icon-level-up__ability-row {{#if a.matchesPrimary}}icon-level-up__ability-row--match{{/if}}">
-              <input type="checkbox" name="abilityPick" value="{{a.uuid}}">
-              <span class="icon-level-up__ability-name">{{a.name}}</span>
-              <span class="icon-badge icon-class--{{a.class}}">{{a.jobName}}</span>
-              <span class="icon-badge icon-badge--chapter">Ch {{a.chapter}}</span>
-              <span class="icon-badge">{{a.cost}}</span>
-              {{#if a.matchesPrimary}}<span class="icon-badge icon-badge--primary">★</span>{{/if}}
+            <label class="icon-option icon-class--{{a.class}} {{#if a.matchesPrimary}}icon-option--match{{/if}}">
+              <input type="checkbox" name="abilityPick" value="{{a.uuid}}" data-role="ap-spend">
+              <span class="icon-option__title">{{#if a.matchesPrimary}}★ {{/if}}{{a.name}}</span>
+              <span class="icon-option__meta">
+                <span class="icon-badge icon-class--{{a.class}}">{{a.jobName}}</span>
+                <span class="icon-badge icon-badge--chapter">Ch {{a.chapter}}</span>
+                <span class="icon-badge">{{a.cost}}</span>
+                {{#each a.tags as |t|}}<span class="icon-tag icon-tag--small">{{t}}</span>{{/each}}
+              </span>
+              {{#if a.flavor}}<span class="icon-option__desc">{{a.flavor}}</span>{{/if}}
             </label>
           {{/each}}
         </div>
@@ -168,46 +180,47 @@
     {{/if}}
 
     {{#if hasNoAbilities}}
-      <section class="icon-level-up__section">
-        <p class="icon-level-up__warn">
+      <section class="icon-wizard__step icon-wizard__step--warn">
+        <p class="icon-wizard__warn">
           No eligible abilities found.
           {{#unless unlockedJobNames.length}}
             You have no unlocked jobs — add one first via a Job Template drop.
           {{else}}
-            Every chapter ≤ {{actorChapter}} ability from <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em> is already embedded on your character.
+            Every chapter ≤ {{actorChapter}} ability from <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em> is already on your character.
           {{/unless}}
         </p>
       </section>
     {{/if}}
 
     {{#if hasTalentPicker}}
-      <section class="icon-level-up__section">
-        <h3>Unlock Talents</h3>
-        <p class="icon-level-up__hint">
-          Alternative use of AP: unlock a <strong>Talent</strong> on an ability you already have.
-          Each talent costs <strong>1 AP</strong>. Talents I and II are mutually exclusive.
-        </p>
+      <section class="icon-wizard__step" data-step="talents">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">2</span>
+          <h3 class="icon-wizard__step-title">Talents</h3>
+          <span class="icon-badge">1 AP each</span>
+        </div>
+        <p class="icon-wizard__hint">Alternative use of AP: unlock a <strong>Talent</strong> on an ability you already own. Talent I and II are mutually exclusive.</p>
         <div class="icon-level-up__talent-list">
           {{#each talentOptions as |t|}}
-            <div class="icon-level-up__talent-row">
+            <div class="icon-level-up__talent-row icon-class--{{t.class}}">
               <div class="icon-level-up__talent-header">
-                <strong>{{t.name}}</strong>
+                <strong class="icon-option__title">{{t.name}}</strong>
                 {{#if t.jobName}}<span class="icon-badge icon-class--{{t.class}}">{{t.jobName}}</span>{{/if}}
               </div>
               <div class="icon-level-up__talent-options">
                 <label class="icon-level-up__talent-option">
-                  <input type="radio" name="talent:{{t.id}}" value="" checked>
+                  <input type="radio" name="talent:{{t.id}}" value="" checked data-role="ap-spend">
                   <span class="icon-level-up__talent-label">— None —</span>
                 </label>
                 {{#if t.hasT1}}
                   <label class="icon-level-up__talent-option">
-                    <input type="radio" name="talent:{{t.id}}" value="1">
+                    <input type="radio" name="talent:{{t.id}}" value="1" data-role="ap-spend">
                     <span class="icon-level-up__talent-label"><strong>Talent I:</strong> {{{t.talent1}}}</span>
                   </label>
                 {{/if}}
                 {{#if t.hasT2}}
                   <label class="icon-level-up__talent-option">
-                    <input type="radio" name="talent:{{t.id}}" value="2">
+                    <input type="radio" name="talent:{{t.id}}" value="2" data-role="ap-spend">
                     <span class="icon-level-up__talent-label"><strong>Talent II:</strong> {{{t.talent2}}}</span>
                   </label>
                 {{/if}}
@@ -219,25 +232,24 @@
     {{/if}}
 
     {{#if hasMasteryPicker}}
-      <section class="icon-level-up__section">
-        <h3>Spend Mastery Point</h3>
-        <p class="icon-level-up__hint">
-          You gained <strong>{{masteryGain}}</strong> Mastery Point{{#icon-gt masteryGain 1}}s{{/icon-gt}}.
-          Unlock the Mastery effect of one of your owned abilities.
-        </p>
-        <div class="icon-level-up__mastery-list">
-          <label class="icon-level-up__mastery-row">
+      <section class="icon-wizard__step" data-step="mastery">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">3</span>
+          <h3 class="icon-wizard__step-title">Mastery</h3>
+          <span class="icon-wizard__counter">{{masteryGain}} point{{#icon-gt masteryGain 1}}s{{/icon-gt}}</span>
+        </div>
+        <p class="icon-wizard__hint">Unlock the Mastery effect of one of your abilities, or keep the point for later.</p>
+        <div class="icon-option-grid icon-option-grid--list icon-option-grid--scroll">
+          <label class="icon-option icon-option--pill">
             <input type="radio" name="masteryPick" value="" checked>
-            <span class="icon-level-up__mastery-name">— Skip (save for later) —</span>
+            <span class="icon-option__title">Keep the point for later</span>
           </label>
           {{#each masteryOptions as |m|}}
-            <label class="icon-level-up__mastery-row">
+            <label class="icon-option icon-class--{{m.class}}">
               <input type="radio" name="masteryPick" value="{{m.id}}">
-              <span class="icon-level-up__mastery-name">
-                <strong>{{m.name}}</strong>
-                {{#if m.jobName}}<span class="icon-badge icon-class--{{m.class}}">{{m.jobName}}</span>{{/if}}
-              </span>
-              <div class="icon-level-up__mastery-desc">{{{m.mastery}}}</div>
+              <span class="icon-option__title">{{m.name}}</span>
+              <span class="icon-option__meta">{{#if m.jobName}}<span class="icon-badge icon-class--{{m.class}}">{{m.jobName}}</span>{{/if}}</span>
+              <span class="icon-option__desc">{{{m.mastery}}}</span>
             </label>
           {{/each}}
         </div>
@@ -245,20 +257,24 @@
     {{/if}}
 
     {{#if hasRelicPicker}}
-      <section class="icon-level-up__section">
-        <h3>Choose a Relic</h3>
-        <p class="icon-level-up__hint">Pick your {{combat.relicNumber}}° relic. It will be added to your Relics tab at rank 1.</p>
-        <label class="icon-cc__field">
-          <span>Relic</span>
-          <select name="relicUuid">
-            <option value="">— Select a relic —</option>
-            {{#each relics as |r|}}
-              <option value="{{r.uuid}}">{{r.name}} [{{r.invokeType}}]</option>
-            {{/each}}
-          </select>
-        </label>
+      <section class="icon-wizard__step" data-step="relic">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">4</span>
+          <h3 class="icon-wizard__step-title">Relic #{{combat.relicNumber}}</h3>
+        </div>
+        <p class="icon-wizard__hint">Added to your Relics tab at rank 1.</p>
+        <div class="icon-option-grid icon-option-grid--wide icon-option-grid--scroll">
+          {{#each relics as |r|}}
+            <label class="icon-option">
+              <input type="radio" name="relicUuid" value="{{r.uuid}}">
+              <span class="icon-option__title">{{r.name}}</span>
+              <span class="icon-option__meta"><span class="icon-badge">{{r.invokeType}} invoke</span></span>
+              {{#if r.description}}<span class="icon-option__desc">{{r.description}}</span>{{/if}}
+            </label>
+          {{/each}}
+        </div>
         {{#unless relics.length}}
-          <p class="icon-level-up__warn">No relics found in the <code>icon-system.relics</code> compendium.</p>
+          <p class="icon-wizard__warn">No relics found in the <code>icon-system.relics</code> compendium.</p>
         {{/unless}}
       </section>
     {{/if}}
@@ -266,49 +282,66 @@
     {{!-- NARRATIVE PICKERS ---------------------------------------------- --}}
 
     {{#if hasBondPower}}
-      <section class="icon-level-up__section">
-        <h3>Bond Power</h3>
-        <div class="icon-level-up__field">
-          <label for="bondPowerUuid">Bond Power {{#if bondName}}(bond: <strong>{{bondName}}</strong>){{/if}}:</label>
-          <select id="bondPowerUuid" name="bondPowerUuid">
-            <option value="">— Select a bond power —</option>
-            {{#each bondPowers as |bp|}}
-              <option value="{{bp.uuid}}">{{bp.name}}</option>
-            {{/each}}
-          </select>
-          {{#unless bondPowers.length}}
-            <p class="icon-level-up__warn">
-              No bond powers available. {{#unless bondName}}Set your Bond first, or check the compendium.{{/unless}}
-            </p>
-          {{/unless}}
+      <section class="icon-wizard__step" data-step="bond-power">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">5</span>
+          <h3 class="icon-wizard__step-title">Bond Power</h3>
+          {{#if bondName}}<span class="icon-badge">{{bondName}}</span>{{/if}}
         </div>
+        <div class="icon-option-grid icon-option-grid--wide icon-option-grid--scroll">
+          {{#each bondPowers as |bp|}}
+            <label class="icon-option">
+              <input type="radio" name="bondPowerUuid" value="{{bp.uuid}}">
+              <span class="icon-option__title">{{bp.name}}</span>
+              {{#if bp.description}}<span class="icon-option__desc">{{bp.description}}</span>{{/if}}
+            </label>
+          {{/each}}
+        </div>
+        {{#unless bondPowers.length}}
+          <p class="icon-wizard__warn">No bond powers available. {{#unless bondName}}Set your Bond first, or check the compendium.{{/unless}}</p>
+        {{/unless}}
       </section>
     {{/if}}
 
     {{#if improveSlots.length}}
-      <section class="icon-level-up__section">
-        <h3>Improve Actions</h3>
-        {{#each improveSlots as |slot|}}
-          <div class="icon-level-up__field">
-            <label for="improveAction{{slot}}">Action #{{slot}}:</label>
-            <select id="improveAction{{slot}}" name="improveAction{{slot}}">
-              <option value="">— Select an action —</option>
-              {{#each ../actions as |a|}}
-                <option value="{{a.key}}" {{#if a.maxed}}disabled{{/if}}>
-                  {{a.label}} ({{a.rating}}{{#unless a.maxed}} → {{a.nextRating}}{{/unless}}{{#if a.maxed}} — MAX{{/if}})
-                </option>
-              {{/each}}
-            </select>
-          </div>
-        {{/each}}
+      <section class="icon-wizard__step" data-step="actions">
+        <div class="icon-wizard__step-head">
+          <span class="icon-wizard__num">6</span>
+          <h3 class="icon-wizard__step-title">Improve actions</h3>
+          <span class="icon-wizard__counter">+{{improveSlots.length}} dot{{#icon-gt improveSlots.length 1}}s{{/icon-gt}}</span>
+        </div>
+        <div class="icon-wizard__fields">
+          {{#each improveSlots as |slot|}}
+            <label class="icon-wizard__field">
+              <span>Dot #{{slot}}</span>
+              <select name="improveAction{{slot}}">
+                <option value="">— Select an action —</option>
+                {{#each ../actions as |a|}}
+                  <option value="{{a.key}}" {{#if a.maxed}}disabled{{/if}}>
+                    {{a.label}} ({{a.rating}}{{#unless a.maxed}} → {{a.nextRating}}{{/unless}}{{#if a.maxed}} — MAX{{/if}})
+                  </option>
+                {{/each}}
+              </select>
+            </label>
+          {{/each}}
+        </div>
       </section>
     {{/if}}
-
-    <footer class="icon-level-up__footer">
-      <button type="button" class="icon-btn" data-action="prevStage">← Back</button>
-      <button type="submit" class="icon-btn icon-btn--primary">Confirm Level Up</button>
-      <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
-    </footer>
   {{/if}}
+
+  </div>
+
+  <footer class="icon-wizard__footer">
+    {{#if isStage1}}
+      <span class="icon-wizard__summary">Step 1 of 2 — review, then pick.</span>
+      <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
+      <button type="button" class="icon-btn icon-btn--primary" data-action="nextStage">Next →</button>
+    {{else}}
+      <span class="icon-wizard__summary" data-role="summary"></span>
+      <button type="button" class="icon-btn" data-action="prevStage">← Back</button>
+      <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
+      <button type="submit" class="icon-btn icon-btn--primary">Confirm Level Up</button>
+    {{/if}}
+  </footer>
 
 </div>

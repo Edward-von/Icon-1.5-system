@@ -81,6 +81,37 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
       Foundry funzionino ancora.
 - [ ] **Scheda item**: abilità e trait hanno la riga "Power die / starts at / current" e salvano.
 
+## Sessione 5 (7 settembre 2026) — Level Up e Character Creation nello stile della scheda
+
+- [ ] **Character Creation, aspetto**: nuovo PG vuoto → "Character Setup Wizard". Banda diagonale in
+      alto con ritratto nella tacca, nome in IM Fell, "Level 0 · Ch 1"; rail dei 7 step sotto la banda;
+      ogni step è una card con numero e titolo. Ridimensiona la finestra: niente scroll orizzontale, footer
+      "Finalize" resta visibile in basso.
+- [ ] **CC, Bond → Primary → Power**: scegli un Bond (card) → nel banner compare il badge del bond, lo step 3
+      mostra solo le azioni primarie del bond (pill) con la prima già selezionata, lo step 5 mostra solo i
+      power di quel bond (card con descrizione). Cambia bond → tutto si aggiorna e le scelte vecchie si
+      azzerano.
+- [ ] **CC, Extra Dots**: nello step 4 la riga dell'azione primaria è dorata con 2 pallini pieni. Premi +
+      su alcune azioni: contatore "N left" scende, a 0 diventa pieno e i + si disabilitano; non si supera
+      rating 3 (il + si disabilita); − restituisce il punto. Rail e card dello step diventano oro quando
+      i 4 punti sono spesi.
+- [ ] **CC, Job → banda e abilità**: scegli un Job (card con striscia del colore di classe) → la banda
+      cambia colore (rosso Stalwart, ecc.), il nome del job compare nel banner, lo step 7 mostra solo le
+      abilità ch.1 di quel job (card con costo, tag, prima frase). Selezionane 2: contatore "2 / 2" e le
+      altre card si disabilitano; deselezionane una → si riabilitano.
+- [ ] **CC, Finalize**: con tutti i 7 step in oro (summary "All set") premi Finalize → scheda compilata
+      come prima: kin/culture, bond, azioni (primaria 2 + 4 punti), bond power, job con stat/trait/LB,
+      2 abilità. Prova anche a premere Finalize con uno step incompleto → messaggio di errore chiaro.
+- [ ] **Level Up, stage 1**: PG con 15 XP → "Level Up". Banda del colore della classe primaria con
+      "N → N+1", chip dei job nella banda, rail "1 Benefits & paths / 2 Your picks". I benefici sono card
+      "grant". A L4/L8: le due card "New Job / +1 Mastery" e "Bond Power / Improve 2 Actions"; scegliendo
+      "+1 Mastery" la griglia dei job sparisce, con "New Job" ricompare e si può scegliere il job (card).
+- [ ] **Level Up, stage 2**: "Next" → recap dorato con bottone "← Change" che torna allo stage 1 tenendo
+      le scelte. Abilità come card (★ quelle della classe primaria); contatore "AP N left" che scende
+      anche scegliendo un Talent; a 0 le card non selezionate si disabilitano. Mastery/Relic/Bond Power
+      come card con descrizione. Footer: riepilogo "x/y AP · mastery picked …". "Confirm Level Up" applica
+      tutto come prima (livello, AP, item embeddati, messaggio in chat).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

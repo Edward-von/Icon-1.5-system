@@ -1,148 +1,209 @@
-{{!-- character-creation.hbs — CharacterCreationDialog template --}}
-<div class="icon-cc">
+{{!-- character-creation.hbs — CharacterCreationDialog template (wizard chrome shared with Level Up) --}}
+<div class="icon-wizard icon-cc">
 
-  <header class="icon-cc__header">
-    <h2>Character Creation</h2>
-    <p class="icon-cc__subtitle">{{actor.name}} — Level 0 setup</p>
-    <p class="icon-cc__hint">Rules reference: ICON 1.5 p. 241. None of your action ratings can exceed <strong>{{maxRating}}</strong> at level 0.</p>
+  {{!-- Hero band: takes the class colour of the job once one is picked (JS swaps the icon-class--* class) --}}
+  <header class="icon-wizard__hero" data-role="hero">
+    <div class="icon-wizard__notch"><img src="{{actor.img}}" alt="{{actor.name}}"></div>
+    <div class="icon-wizard__identity">
+      <span class="icon-wizard__kicker">Character Creation · ICON 1.5 p.241</span>
+      <h2 class="icon-wizard__title">{{actor.name}}</h2>
+      <div class="icon-wizard__jobs">
+        <span class="icon-hero__job icon-hero__job--primary" data-role="hero-job" hidden></span>
+        <span class="icon-badge" data-role="hero-bond" hidden></span>
+      </div>
+    </div>
+    <div class="icon-wizard__level">
+      <span class="icon-wizard__level-value">0</span>
+      <span class="icon-wizard__level-label">Level · Ch 1</span>
+    </div>
   </header>
 
-  {{!-- 1. Kin & Culture --}}
-  <section class="icon-cc__section">
-    <h3>1. Kin &amp; Culture</h3>
-    <div class="icon-cc__row">
-      <label class="icon-cc__field">
-        <span>Kin Type</span>
-        <select name="kintype">
-          <option value="">— Select —</option>
-          {{#each kinTypes as |kt|}}
-            <option value="{{kt.key}}" {{#if (icon-eq kt.key ../current.kintype)}}selected{{/if}}>{{kt.label}}</option>
-          {{/each}}
-        </select>
-      </label>
-      <label class="icon-cc__field">
-        <span>Culture</span>
-        <select name="culture">
-          <option value="">— Select —</option>
-          {{#each cultures as |c|}}
-            <option value="{{c.key}}" {{#if (icon-eq c.key ../current.culture)}}selected{{/if}}>{{c.label}}</option>
-          {{/each}}
-        </select>
-      </label>
-    </div>
-  </section>
+  {{!-- Step rail: lights up as each step is completed; click scrolls to the step --}}
+  <ol class="icon-wizard__rail" data-role="rail">
+    <li class="icon-wizard__rail-step" data-step="kin"><span class="icon-wizard__num">1</span>Kin</li>
+    <li class="icon-wizard__rail-step" data-step="bond"><span class="icon-wizard__num">2</span>Bond</li>
+    <li class="icon-wizard__rail-step" data-step="primary"><span class="icon-wizard__num">3</span>Primary</li>
+    <li class="icon-wizard__rail-step" data-step="dots"><span class="icon-wizard__num">4</span>Dots</li>
+    <li class="icon-wizard__rail-step" data-step="power"><span class="icon-wizard__num">5</span>Power</li>
+    <li class="icon-wizard__rail-step" data-step="job"><span class="icon-wizard__num">6</span>Job</li>
+    <li class="icon-wizard__rail-step" data-step="abilities"><span class="icon-wizard__num">7</span>Abilities</li>
+  </ol>
 
-  {{!-- 2. Bond --}}
-  <section class="icon-cc__section">
-    <h3>2. Bond</h3>
-    <label class="icon-cc__field">
-      <span>Bond</span>
-      <select name="bondUuid">
-        <option value="">— Select a bond —</option>
-        {{#each bonds as |b|}}
-          <option value="{{b.uuid}}" data-name="{{b.name}}" data-actions="{{b.primaryActionsCsv}}">
-            {{b.name}}{{#if b.primaryActionsCsv}} ({{b.primaryActionsCsv}}){{/if}}
-          </option>
-        {{/each}}
-      </select>
-    </label>
-    {{#unless bonds.length}}
-      <p class="icon-cc__warn">No bonds found in the <code>icon-system.bonds</code> compendium.</p>
-    {{/unless}}
-  </section>
+  <div class="icon-wizard__body">
 
-  {{!-- 3. Primary action (+2 dots) --}}
-  <section class="icon-cc__section">
-    <h3>3. Primary Action (+2 dots)</h3>
-    <p class="icon-cc__hint">Pick one of your bond's primary actions. It starts at rating 2.</p>
-    <div class="icon-cc__radio-grid">
-      {{#each actions as |a|}}
-        <label class="icon-cc__primary-option" data-action="{{a.key}}">
-          <input type="radio" name="primaryAction" value="{{a.key}}">
-          {{a.label}}
-        </label>
-      {{/each}}
-    </div>
-  </section>
-
-  {{!-- 4. Distribute 4 extra dots --}}
-  <section class="icon-cc__section">
-    <h3>4. Distribute 4 Extra Dots</h3>
-    <p class="icon-cc__hint">Spend 4 additional +1 dots across any actions. No rating may exceed <strong>{{maxRating}}</strong>.</p>
-    <div class="icon-cc__row">
-      {{#each distributionSlots as |slot|}}
-        <label class="icon-cc__field">
-          <span>Dot #{{slot}}</span>
-          <select name="distribution{{slot}}">
-            <option value="">—</option>
-            {{#each ../actions as |a|}}
-              <option value="{{a.key}}">{{a.label}}</option>
+    {{!-- 1. Kin & Culture --}}
+    <section class="icon-wizard__step" data-step="kin">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">1</span>
+        <h3 class="icon-wizard__step-title">Kin &amp; Culture</h3>
+      </div>
+      <div class="icon-wizard__fields">
+        <label class="icon-wizard__field">
+          <span>Kin Type</span>
+          <select name="kintype">
+            <option value="">— Select —</option>
+            {{#each kinTypes as |kt|}}
+              <option value="{{kt.key}}" {{#if (icon-eq kt.key ../current.kintype)}}selected{{/if}}>{{kt.label}}</option>
             {{/each}}
           </select>
         </label>
-      {{/each}}
-    </div>
-  </section>
-
-  {{!-- 5. Bond Power --}}
-  <section class="icon-cc__section">
-    <h3>5. Bond Power</h3>
-    <label class="icon-cc__field">
-      <span>Bond Power</span>
-      <select name="bondPowerUuid">
-        <option value="">— Select a bond power —</option>
-        {{#each bondPowers as |bp|}}
-          <option value="{{bp.uuid}}" data-bond="{{bp.bondName}}">{{bp.name}}</option>
-        {{/each}}
-      </select>
-    </label>
-    {{#unless bondPowers.length}}
-      <p class="icon-cc__warn">No bond powers found in the <code>icon-system.bond-powers</code> compendium.</p>
-    {{/unless}}
-  </section>
-
-  {{!-- 6. Starting Job --}}
-  <section class="icon-cc__section">
-    <h3>6. Starting Job</h3>
-    <label class="icon-cc__field">
-      <span>Job</span>
-      <select name="jobUuid">
-        <option value="">— Select a job —</option>
-        {{#each jobs as |j|}}
-          <option value="{{j.uuid}}" data-jobname="{{j.jobName}}" data-class="{{j.class}}">
-            [{{j.class}}] {{j.jobName}}
-          </option>
-        {{/each}}
-      </select>
-    </label>
-    {{#unless jobs.length}}
-      <p class="icon-cc__warn">No job templates found in the <code>icon-system.jobs</code> compendium.</p>
-    {{/unless}}
-    <p class="icon-cc__hint">Job base stats, traits, and limit break will be copied onto your character automatically.</p>
-  </section>
-
-  {{!-- 7. Starting Abilities --}}
-  <section class="icon-cc__section">
-    <h3>7. Starting Abilities</h3>
-    <p class="icon-cc__hint">Pick exactly <strong>{{startingAbilities}}</strong> chapter-1 abilities from your chosen job.</p>
-    <div class="icon-cc__ability-list">
-      {{#each abilities as |a|}}
-        <label class="icon-cc__ability-row" data-jobname="{{a.jobName}}" data-class="{{a.class}}" hidden>
-          <input type="checkbox" name="abilityPick" value="{{a.uuid}}">
-          <span class="icon-cc__ability-name">{{a.name}}</span>
-          <span class="icon-badge icon-class--{{a.class}}">{{a.jobName}}</span>
-          <span class="icon-badge">{{a.cost}}</span>
+        <label class="icon-wizard__field">
+          <span>Culture</span>
+          <select name="culture">
+            <option value="">— Select —</option>
+            {{#each cultures as |c|}}
+              <option value="{{c.key}}" {{#if (icon-eq c.key ../current.culture)}}selected{{/if}}>{{c.label}}</option>
+            {{/each}}
+          </select>
         </label>
-      {{/each}}
-    </div>
-    {{#unless abilities.length}}
-      <p class="icon-cc__warn">No chapter-1 abilities found in the compendium.</p>
-    {{/unless}}
-  </section>
+      </div>
+    </section>
 
-  <footer class="icon-cc__footer">
-    <button type="submit" class="icon-btn icon-btn--primary">Finalize Character</button>
+    {{!-- 2. Bond --}}
+    <section class="icon-wizard__step" data-step="bond">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">2</span>
+        <h3 class="icon-wizard__step-title">Bond</h3>
+      </div>
+      <p class="icon-wizard__hint">Your narrative archetype. It sets your primary actions, effort and the bond powers you can learn.</p>
+      <div class="icon-option-grid">
+        {{#each bonds as |b|}}
+          <label class="icon-option">
+            <input type="radio" name="bondUuid" value="{{b.uuid}}" data-name="{{b.name}}" data-actions="{{b.primaryActionsCsv}}">
+            <span class="icon-option__title">{{b.name}}</span>
+            <span class="icon-option__meta">
+              {{#each b.primaryActions as |a|}}<span class="icon-badge icon-badge--chapter">{{a}}</span>{{/each}}
+              <span class="icon-badge">Effort {{b.effortMax}}</span>
+            </span>
+          </label>
+        {{/each}}
+      </div>
+      {{#unless bonds.length}}
+        <p class="icon-wizard__warn">No bonds found in the <code>icon-system.bonds</code> compendium.</p>
+      {{/unless}}
+    </section>
+
+    {{!-- 3. Primary action (+2 dots) --}}
+    <section class="icon-wizard__step" data-step="primary">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">3</span>
+        <h3 class="icon-wizard__step-title">Primary Action</h3>
+        <span class="icon-wizard__counter">+2 dots</span>
+      </div>
+      <p class="icon-wizard__hint">One of your bond's primary actions starts at rating <strong>2</strong>.</p>
+      <div class="icon-option-grid" data-role="primary-grid">
+        {{#each actions as |a|}}
+          <label class="icon-option icon-option--pill" data-action-key="{{a.key}}" hidden>
+            <input type="radio" name="primaryAction" value="{{a.key}}">
+            <span class="icon-option__title">{{a.label}}</span>
+          </label>
+        {{/each}}
+      </div>
+      <p class="icon-wizard__empty" data-role="primary-empty">Pick a bond first.</p>
+    </section>
+
+    {{!-- 4. Distribute 4 extra dots --}}
+    <section class="icon-wizard__step" data-step="dots">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">4</span>
+        <h3 class="icon-wizard__step-title">Extra Dots</h3>
+        <span class="icon-wizard__counter" data-role="dots-counter">{{distributionSlots.length}} left</span>
+      </div>
+      <p class="icon-wizard__hint">Spend <strong>{{distributionSlots.length}}</strong> more +1 dots on any actions. No rating may exceed <strong>{{maxRating}}</strong> at level 0. The gold dot is your primary action.</p>
+      <div class="icon-dots-allocator" data-role="allocator">
+        {{#each actions as |a|}}
+          <div class="icon-dots-row" data-action-key="{{a.key}}">
+            <span class="icon-dots-row__label">{{a.label}}</span>
+            <span class="icon-action-dots">
+              {{#each (iconRange 4) as |i|}}<span class="icon-dot" data-i="{{i}}"></span>{{/each}}
+            </span>
+            <button type="button" class="icon-btn icon-btn--sm icon-dots-row__btn" data-role="dot-minus" title="Remove a dot">−</button>
+            <button type="button" class="icon-btn icon-btn--sm icon-dots-row__btn" data-role="dot-plus" title="Add a dot">+</button>
+          </div>
+        {{/each}}
+      </div>
+      {{!-- The submit handler reads distribution1..N (one action key per dot): kept in sync by the allocator --}}
+      {{#each distributionSlots as |slot|}}
+        <input type="hidden" name="distribution{{slot}}" value="" data-role="distribution">
+      {{/each}}
+    </section>
+
+    {{!-- 5. Bond Power --}}
+    <section class="icon-wizard__step" data-step="power">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">5</span>
+        <h3 class="icon-wizard__step-title">Bond Power</h3>
+      </div>
+      <p class="icon-wizard__hint">Powers of your bond. You start with one.</p>
+      <div class="icon-option-grid icon-option-grid--wide" data-role="power-grid">
+        {{#each bondPowers as |bp|}}
+          <label class="icon-option" data-bond="{{bp.bondName}}" hidden>
+            <input type="radio" name="bondPowerUuid" value="{{bp.uuid}}">
+            <span class="icon-option__title">{{bp.name}}</span>
+            {{#if bp.description}}<span class="icon-option__desc">{{bp.description}}</span>{{/if}}
+          </label>
+        {{/each}}
+      </div>
+      <p class="icon-wizard__empty" data-role="power-empty">Pick a bond first.</p>
+      {{#unless bondPowers.length}}
+        <p class="icon-wizard__warn">No bond powers found in the <code>icon-system.bond-powers</code> compendium.</p>
+      {{/unless}}
+    </section>
+
+    {{!-- 6. Starting Job --}}
+    <section class="icon-wizard__step" data-step="job">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">6</span>
+        <h3 class="icon-wizard__step-title">Starting Job</h3>
+      </div>
+      <p class="icon-wizard__hint">The job sets your class, base stats, traits and Limit Break. They are copied onto the sheet automatically.</p>
+      <div class="icon-option-grid">
+        {{#each jobs as |j|}}
+          <label class="icon-option icon-class--{{j.class}}">
+            <input type="radio" name="jobUuid" value="{{j.uuid}}" data-jobname="{{j.jobName}}" data-class="{{j.class}}">
+            <span class="icon-option__title">{{j.jobName}}</span>
+            <span class="icon-option__meta"><span class="icon-badge icon-class--{{j.class}}">{{j.class}}</span></span>
+          </label>
+        {{/each}}
+      </div>
+      {{#unless jobs.length}}
+        <p class="icon-wizard__warn">No job templates found in the <code>icon-system.jobs</code> compendium.</p>
+      {{/unless}}
+    </section>
+
+    {{!-- 7. Starting Abilities --}}
+    <section class="icon-wizard__step" data-step="abilities">
+      <div class="icon-wizard__step-head">
+        <span class="icon-wizard__num">7</span>
+        <h3 class="icon-wizard__step-title">Starting Abilities</h3>
+        <span class="icon-wizard__counter" data-role="ability-counter">0 / {{startingAbilities}}</span>
+      </div>
+      <p class="icon-wizard__hint">Pick exactly <strong>{{startingAbilities}}</strong> chapter-1 abilities of your job.</p>
+      <div class="icon-option-grid icon-option-grid--wide" data-role="ability-grid">
+        {{#each abilities as |a|}}
+          <label class="icon-option icon-class--{{a.class}}" data-jobname="{{a.jobName}}" hidden>
+            <input type="checkbox" name="abilityPick" value="{{a.uuid}}">
+            <span class="icon-option__title">{{a.name}}</span>
+            <span class="icon-option__meta">
+              <span class="icon-badge">{{a.cost}}</span>
+              {{#each a.tags as |t|}}<span class="icon-tag icon-tag--small">{{t}}</span>{{/each}}
+            </span>
+            {{#if a.flavor}}<span class="icon-option__desc">{{a.flavor}}</span>{{/if}}
+          </label>
+        {{/each}}
+      </div>
+      <p class="icon-wizard__empty" data-role="ability-empty">Pick a job first.</p>
+      {{#unless abilities.length}}
+        <p class="icon-wizard__warn">No chapter-1 abilities found in the compendium.</p>
+      {{/unless}}
+    </section>
+
+  </div>
+
+  <footer class="icon-wizard__footer">
+    <span class="icon-wizard__summary" data-role="summary">0 / 7 steps done</span>
     <button type="button" class="icon-btn" data-action="cancel">Cancel</button>
+    <button type="submit" class="icon-btn icon-btn--primary">Finalize Character</button>
   </footer>
 
 </div>

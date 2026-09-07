@@ -95,9 +95,11 @@ Emerso dalla Sessione 3 (da fare in un blocco futuro):
 - [ ] Gran Reversa: Talent I porta il power die a d6 con 6 cariche → oggi si cambia a mano nella scheda
       dell'abilità; valutare override del die per talento come per i tag. (S)
 
-## Sessione 5 — Level Up / First-time setup UI (L)
+## Sessione 5 — Level Up / First-time setup UI (L) — FATTA il 7 settembre 2026
 
-- [ ] Rework dei dialog `LevelUpDialog` / `CharacterCreationDialog` allo stile del resto della scheda. (L)
+- [x] Rework dei dialog `LevelUpDialog` / `CharacterCreationDialog` allo stile del resto della scheda. (L —
+      chrome condiviso `.icon-wizard`: banda di classe con ritratto, rail degli step, card opzione, allocatore
+      dei punti, footer sticky; logica di submit invariata)
 
 ## Sessione 6+ — Template Blast/Line/Arc (XL)
 

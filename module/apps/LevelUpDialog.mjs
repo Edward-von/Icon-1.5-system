@@ -22,8 +22,15 @@ import {
   LEVEL_BENEFITS, chapterForLevel,
   MAX_EQUIPPED_ABILITIES, XP_PER_LEVEL,
 } from "../helpers/advancement.mjs";
-import { enrichHTML, escapeHTML } from "../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, parseAbilitySections } from "../helpers/enrich.mjs";
 import { ensureClassGambits } from "../helpers/classes.mjs";
+import { formatTag } from "../helpers/rule-tooltips.mjs";
+
+/** Plain-text, trimmed excerpt of a rich-text field (for option cards). */
+function _excerpt(html, max = 150) {
+  const t = String(html ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return t.length > max ? `${t.slice(0, max - 1).replace(/\s+\S*$/, "")}…` : t;
+}
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -51,7 +58,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
   static DEFAULT_OPTIONS = {
     classes: ["icon", "level-up-dialog"],
-    position: { width: 680, height: 720 },
+    position: { width: 740, height: 760 },
     tag: "form",
     form: {
       handler: LevelUpDialog.#onSubmit,
@@ -211,6 +218,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
     return {
       actor:          this.actor,
+      jobs:           this.actor.system.combat.jobs ?? [],
       currentLevel:   this.currentLevel,
       targetLevel:    this.targetLevel,
       chapter:        chapterForLevel(this.targetLevel),
@@ -320,7 +328,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       .filter(i => !bondName || (i.system?.bondName ?? "").trim().toLowerCase() === bondName)
       .filter(i => !owned.has(i.name))
       .sort((a, b) => a.name.localeCompare(b.name))
-      .map(i => ({ uuid: i.uuid, name: i.name }));
+      .map(i => ({ uuid: i.uuid, name: i.name, description: _excerpt(i.system?.description, 160) }));
 
     _log(`loaded ${this._bondPowers.length} bond powers for bond: "${bondName || "(any)"}"`);
   }
@@ -388,6 +396,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         chapter:        i.system?.chapter ?? 1,
         cost:           i.system?.cost ?? "",
         matchesPrimary: i.system?.class === primaryClass,
+        tags:           (i.system?.tags ?? []).map(formatTag).filter(Boolean).map(t => t.label),
+        flavor:         _excerpt(parseAbilitySections(i.system?.description).flavor, 110),
       }));
 
     _log(`loaded ${this._abilities.length} eligible abilities (from ${unlockedJobNames.size} unlocked jobs, chapter <= ${actorChapter})`);
@@ -439,6 +449,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         name:          i.name,
         invokeType:    i.system?.invokeType ?? "",
         invokeCondition: i.system?.invokeCondition ?? "",
+        description:   _excerpt(i.system?.rank1?.description ?? i.system?.invokeEffect ?? i.system?.suggestedForm, 150),
       }));
     _log(`loaded ${this._relics.length} relics`);
   }
@@ -725,6 +736,62 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   static async #onCancel(event, target) {
     _log(`cancel`);
     this.close();
+  }
+
+  /**
+   * Live helpers on top of the form: the new-job card grid follows the
+   * combat-path radio (stage 1); the AP counter follows ability + talent
+   * picks and locks the remaining ability cards once the budget is spent
+   * (stage 2). Submit still validates everything server-side of the form.
+   */
+  _onRender(context, options) {
+    super._onRender(context, options);
+    const html = this.element;
+    const $  = (sel) => html.querySelector(sel);
+    const $$ = (sel) => Array.from(html.querySelectorAll(sel));
+
+    /* Stage 1: new-job picker only matters when "New Job" is the chosen path */
+    const newJobBlock = $('[data-role="new-job-block"]');
+    const syncJobChoice = () => {
+      if (!newJobBlock) return;
+      newJobBlock.hidden = $('input[name="jobChoice"]:checked')?.value !== "newJob";
+    };
+
+    /* Stage 2: AP budget = new abilities + talents */
+    const apCounter    = $('[data-role="ap-counter"]');
+    const abilityBoxes = $$('input[name="abilityPick"]');
+    const budget       = context.apGranted ?? 0;
+    const syncAp = () => {
+      const abilities = abilityBoxes.filter(b => b.checked).length;
+      const talents   = $$('input[name^="talent:"]:checked').filter(r => r.value !== "").length;
+      const spent     = abilities + talents;
+      const left      = budget - spent;
+      abilityBoxes.forEach(b => { b.disabled = !b.checked && left <= 0; });
+      if (apCounter) {
+        apCounter.textContent = left > 0 ? `AP ${left} left` : left === 0 ? "AP all spent" : `AP ${-left} over`;
+        apCounter.classList.toggle("icon-wizard__counter--full", left === 0);
+        apCounter.classList.toggle("icon-wizard__counter--over", left < 0);
+      }
+      const summary = $('[data-role="summary"]');
+      if (summary) {
+        const parts = [];
+        if (budget) parts.push(`<strong>${spent}/${budget}</strong> AP`);
+        if ($('input[name="masteryPick"]:checked')?.value) parts.push("mastery picked");
+        if ($('input[name="relicUuid"]:checked')) parts.push("relic picked");
+        if ($('input[name="bondPowerUuid"]:checked')) parts.push("bond power picked");
+        summary.innerHTML = parts.join(" · ") || "Make your picks, then confirm.";
+      }
+    };
+
+    // Bind on the part root (replaced on every render), not on this.element
+    // (the <form>, which persists across renders and would stack listeners).
+    (html.querySelector(".icon-wizard") ?? html).addEventListener("change", ev => {
+      const name = ev.target?.name ?? "";
+      if (name === "jobChoice") syncJobChoice();
+      else syncAp();
+    });
+    syncJobChoice();
+    syncAp();
   }
 
   /**

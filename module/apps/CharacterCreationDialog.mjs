@@ -13,6 +13,14 @@
  */
 import { buildClassTraitDocs } from "../helpers/classes.mjs";
 import { buildBondKitsNote } from "../helpers/advancement.mjs";
+import { formatTag } from "../helpers/rule-tooltips.mjs";
+import { parseAbilitySections, escapeHTML } from "../helpers/enrich.mjs";
+
+/** Plain-text, trimmed excerpt of a rich-text field (for option cards). */
+function _excerpt(html, max = 150) {
+  const t = String(html ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  return t.length > max ? `${t.slice(0, max - 1).replace(/\s+\S*$/, "")}…` : t;
+}
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
@@ -35,7 +43,7 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
 
   static DEFAULT_OPTIONS = {
     classes: ["icon", "character-creation-dialog"],
-    position: { width: 620, height: 720 },
+    position: { width: 740, height: 780 },
     tag: "form",
     form: {
       handler: CharacterCreationDialog.#onSubmit,
@@ -122,9 +130,10 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
       .filter(i => i.type === "bond-power")
       .sort((a, b) => a.name.localeCompare(b.name))
       .map(i => ({
-        uuid:     i.uuid,
-        name:     i.name,
-        bondName: (i.system?.bondName ?? "").trim().toLowerCase(),
+        uuid:        i.uuid,
+        name:        i.name,
+        bondName:    (i.system?.bondName ?? "").trim().toLowerCase(),
+        description: _excerpt(i.system?.description, 160),
       }));
     _log(`loaded ${this._powers.length} bond powers`);
   }
@@ -163,6 +172,8 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
         class:   i.system?.class ?? "",
         jobName: i.system?.jobName ?? "",
         cost:    i.system?.cost ?? "",
+        tags:    (i.system?.tags ?? []).map(formatTag).filter(Boolean).map(t => t.label),
+        flavor:  _excerpt(parseAbilitySections(i.system?.description).flavor, 110),
       }));
     _log(`loaded ${this._abilities.length} chapter-1 abilities`);
   }
@@ -171,86 +182,188 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
   /*  Render hooks                                       */
   /* -------------------------------------------------- */
 
+  /**
+   * Wire the wizard. The whole part is re-rendered by AppV2 on each render,
+   * so every listener is bound fresh here (no duplicates). Everything the
+   * submit handler reads is still a plain form field: the option cards are
+   * labels around hidden radios/checkboxes, and the dot allocator writes the
+   * `distribution1..N` hidden inputs.
+   */
   _onRender(context, options) {
     super._onRender(context, options);
     const html = this.element;
+    const $  = (sel) => html.querySelector(sel);
+    const $$ = (sel) => Array.from(html.querySelectorAll(sel));
 
-    const bondSelect      = html.querySelector('[name="bondUuid"]');
-    const primaryOptions  = html.querySelectorAll(".icon-cc__primary-option");
-    const bondPowerSelect = html.querySelector('[name="bondPowerUuid"]');
-    const bondPowerOptions = bondPowerSelect?.querySelectorAll("option[data-bond]") ?? [];
+    const hero      = $('[data-role="hero"]');
+    const heroJob   = $('[data-role="hero-job"]');
+    const heroBond  = $('[data-role="hero-bond"]');
+    const steps     = $$(".icon-wizard__step");
+    const railSteps = $$('[data-role="rail"] .icon-wizard__rail-step');
+
+    /* ---------- Bond → primary actions + bond powers ---------- */
+    const primaryCards = $$('[data-role="primary-grid"] .icon-option');
+    const powerCards   = $$('[data-role="power-grid"] .icon-option');
+    const checkedBond  = () => $('input[name="bondUuid"]:checked');
 
     const syncFromBond = () => {
-      const selected = bondSelect?.selectedOptions?.[0];
-      const bondName = (selected?.dataset?.name ?? "").toLowerCase();
-      const actionsAllowed = (selected?.dataset?.actions ?? "").split(",").filter(Boolean);
-      _log(`bond changed — "${bondName}" | primary actions: ${actionsAllowed.join("/")}`);
+      const sel      = checkedBond();
+      const bondName = (sel?.dataset?.name ?? "").toLowerCase();
+      const allowed  = (sel?.dataset?.actions ?? "").split(",").filter(Boolean);
+      _log(`bond changed — "${bondName}" | primary actions: ${allowed.join("/")}`);
 
-      // Show only allowed primary-action radios
-      primaryOptions.forEach(opt => {
-        const key = opt.dataset.action;
-        const show = actionsAllowed.includes(key);
-        opt.style.display = show ? "" : "none";
-        const input = opt.querySelector("input");
-        if (input && !show) input.checked = false;
+      primaryCards.forEach(card => {
+        const show = allowed.includes(card.dataset.actionKey);
+        card.hidden = !show;
+        if (!show) card.querySelector("input").checked = false;
       });
-      // Pre-select first allowed option
-      const firstAllowed = Array.from(primaryOptions)
-        .find(opt => actionsAllowed.includes(opt.dataset.action));
-      if (firstAllowed) firstAllowed.querySelector("input").checked = true;
+      if (allowed.length && !$('input[name="primaryAction"]:checked')) {
+        primaryCards.find(c => !c.hidden)?.querySelector("input")?.click();
+      }
+      $('[data-role="primary-empty"]').hidden = allowed.length > 0;
 
-      // Filter bond powers by bond name
-      bondPowerOptions.forEach(opt => {
-        const bn = (opt.dataset.bond ?? "").toLowerCase();
-        const show = !bondName || !bn || bn === bondName;
-        opt.hidden = !show;
-        if (!show && opt.selected) {
-          opt.selected = false;
-          if (bondPowerSelect) bondPowerSelect.selectedIndex = 0;
-        }
+      let visiblePowers = 0;
+      powerCards.forEach(card => {
+        const bn   = (card.dataset.bond ?? "").toLowerCase();
+        const show = !!bondName && (!bn || bn === bondName);
+        card.hidden = !show;
+        if (!show) card.querySelector("input").checked = false;
+        if (show) visiblePowers++;
       });
+      $('[data-role="power-empty"]').hidden = visiblePowers > 0;
+
+      if (heroBond) { heroBond.textContent = sel?.dataset?.name ?? ""; heroBond.hidden = !sel; }
+      syncDots();
     };
 
-    bondSelect?.addEventListener("change", syncFromBond);
-    // Initial sync (triggers in case a bond is already selected)
-    if (bondSelect?.value) syncFromBond();
-    else primaryOptions.forEach(o => o.style.display = "none");
+    /* ---------- Dot allocator (step 4) ---------- */
+    const rows        = $$('[data-role="allocator"] .icon-dots-row');
+    const distInputs  = $$('input[data-role="distribution"]');
+    const dotsCounter = $('[data-role="dots-counter"]');
+    const base        = this.actor.system.narrative.actions ?? {};
+    const alloc       = {};                         // action key → extra dots picked here
+    const totalAlloc  = () => Object.values(alloc).reduce((a, b) => a + b, 0);
+    const ratingOf    = (key) => (base[key] ?? 0) + (key === $('input[name="primaryAction"]:checked')?.value ? 2 : 0) + (alloc[key] ?? 0);
 
-    /* ---------- Job → Ability filter ---------- */
-    const jobSelect    = html.querySelector('[name="jobUuid"]');
-    const abilityRows  = html.querySelectorAll(".icon-cc__ability-row");
+    const syncDots = () => {
+      const primary = $('input[name="primaryAction"]:checked')?.value;
+      const left    = DISTRIBUTION_DOTS - totalAlloc();
+      for (const row of rows) {
+        const key    = row.dataset.actionKey;
+        const rating = ratingOf(key);
+        const extra  = alloc[key] ?? 0;
+        row.classList.toggle("icon-dots-row--primary", key === primary);
+        row.querySelectorAll(".icon-dot").forEach(dot => {
+          const i = Number(dot.dataset.i);
+          dot.classList.toggle("base",   i <= rating - extra);
+          dot.classList.toggle("alloc",  i > rating - extra && i <= rating);
+          dot.classList.toggle("capped", i > L0_MAX_RATING);
+        });
+        row.querySelector('[data-role="dot-plus"]').disabled  = left <= 0 || rating >= L0_MAX_RATING;
+        row.querySelector('[data-role="dot-minus"]').disabled = extra <= 0;
+      }
+      // Hidden inputs: one action key per dot, in allocation order
+      const keys = Object.entries(alloc).flatMap(([k, n]) => Array(n).fill(k));
+      distInputs.forEach((inp, i) => { inp.value = keys[i] ?? ""; });
+      if (dotsCounter) {
+        dotsCounter.textContent = left > 0 ? `${left} left` : "all spent";
+        dotsCounter.classList.toggle("icon-wizard__counter--full", left === 0);
+      }
+      refreshProgress();
+    };
+
+    for (const row of rows) {
+      const key = row.dataset.actionKey;
+      row.querySelector('[data-role="dot-plus"]').addEventListener("click", () => {
+        if (totalAlloc() >= DISTRIBUTION_DOTS || ratingOf(key) >= L0_MAX_RATING) return;
+        alloc[key] = (alloc[key] ?? 0) + 1; syncDots();
+      });
+      row.querySelector('[data-role="dot-minus"]').addEventListener("click", () => {
+        if (!alloc[key]) return;
+        alloc[key] -= 1; if (!alloc[key]) delete alloc[key]; syncDots();
+      });
+    }
+
+    /* ---------- Job → hero colour + abilities ---------- */
+    const abilityCards   = $$('[data-role="ability-grid"] .icon-option');
+    const abilityCounter = $('[data-role="ability-counter"]');
+    const CLASSES = ["stalwart", "vagabond", "mendicant", "wright"];
 
     const syncFromJob = () => {
-      const selected = jobSelect?.selectedOptions?.[0];
-      const jobName  = (selected?.dataset?.jobname ?? "").toLowerCase();
-      _log(`job changed — "${jobName}"`);
+      const sel     = $('input[name="jobUuid"]:checked');
+      const jobName = (sel?.dataset?.jobname ?? "").toLowerCase();
+      const cls     = sel?.dataset?.class ?? "";
+      _log(`job changed — "${jobName}" (${cls})`);
 
-      abilityRows.forEach(row => {
-        const rowJob = (row.dataset.jobname ?? "").toLowerCase();
-        const show = !jobName || rowJob === jobName;
-        row.hidden = !show;
-        if (!show) {
-          const input = row.querySelector("input[type='checkbox']");
-          if (input) input.checked = false;
-        }
+      if (hero) { CLASSES.forEach(c => hero.classList.remove(`icon-class--${c}`)); if (cls) hero.classList.add(`icon-class--${cls}`); }
+      if (heroJob) {
+        heroJob.innerHTML = sel ? `${escapeHTML(sel.dataset.jobname)}<small>${escapeHTML(cls)}</small>` : "";
+        heroJob.hidden = !sel;
+      }
+      let visible = 0;
+      abilityCards.forEach(card => {
+        const show = !!jobName && (card.dataset.jobname ?? "").toLowerCase() === jobName;
+        card.hidden = !show;
+        if (!show) card.querySelector("input").checked = false;
+        if (show) visible++;
       });
+      $('[data-role="ability-empty"]').hidden = visible > 0;
+      syncAbilities();
     };
 
-    jobSelect?.addEventListener("change", syncFromJob);
-    if (jobSelect?.value) syncFromJob();
-    else abilityRows.forEach(r => r.hidden = true);
-
-    /* ---------- Enforce max 2 ability checkboxes ---------- */
-    const abilityChecks = html.querySelectorAll('input[name="abilityPick"]');
-    abilityChecks.forEach(cb => {
-      cb.addEventListener("change", () => {
-        const checked = html.querySelectorAll('input[name="abilityPick"]:checked');
-        if (checked.length > STARTING_ABILITIES) {
-          cb.checked = false;
-          ui.notifications.warn(`You can only pick ${STARTING_ABILITIES} starting abilities.`);
-        }
+    const syncAbilities = () => {
+      const picked = $$('input[name="abilityPick"]:checked').length;
+      abilityCards.forEach(card => {
+        const input = card.querySelector("input");
+        input.disabled = !input.checked && picked >= STARTING_ABILITIES;
       });
+      if (abilityCounter) {
+        abilityCounter.textContent = `${picked} / ${STARTING_ABILITIES}`;
+        abilityCounter.classList.toggle("icon-wizard__counter--full", picked === STARTING_ABILITIES);
+      }
+      refreshProgress();
+    };
+
+    /* ---------- Progress rail + footer summary ---------- */
+    const stepDone = {
+      kin:       () => !!$('[name="kintype"]')?.value && !!$('[name="culture"]')?.value,
+      bond:      () => !!checkedBond(),
+      primary:   () => !!$('input[name="primaryAction"]:checked'),
+      dots:      () => totalAlloc() === DISTRIBUTION_DOTS,
+      power:     () => !!$('input[name="bondPowerUuid"]:checked'),
+      job:       () => !!$('input[name="jobUuid"]:checked'),
+      abilities: () => $$('input[name="abilityPick"]:checked').length === STARTING_ABILITIES,
+    };
+    const refreshProgress = () => {
+      let done = 0;
+      for (const step of steps) {
+        const ok = !!stepDone[step.dataset.step]?.();
+        step.classList.toggle("icon-wizard__step--done", ok);
+        railSteps.find(r => r.dataset.step === step.dataset.step)?.classList.toggle("icon-wizard__rail-step--done", ok);
+        if (ok) done++;
+      }
+      const summary = $('[data-role="summary"]');
+      if (summary) summary.innerHTML = done === steps.length
+        ? `<strong>All set.</strong> Finalize to write everything on the sheet.`
+        : `<strong>${done} / ${steps.length}</strong> steps done`;
+    };
+
+    railSteps.forEach(r => r.addEventListener("click", () => {
+      steps.find(s => s.dataset.step === r.dataset.step)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }));
+
+    /* ---------- Bind (on the part root, which is replaced on every render) ---------- */
+    (html.querySelector(".icon-wizard") ?? html).addEventListener("change", ev => {
+      const name = ev.target?.name ?? "";
+      if (name === "bondUuid")             syncFromBond();
+      else if (name === "primaryAction")   syncDots();
+      else if (name === "jobUuid")         syncFromJob();
+      else if (name === "abilityPick")     syncAbilities();
+      else                                 refreshProgress();
     });
+
+    syncFromBond();
+    syncFromJob();
   }
 
   /* -------------------------------------------------- */

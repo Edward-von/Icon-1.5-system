@@ -2203,54 +2203,7 @@ details[open] > .icon-basic-actions__summary::before {
   font-size: 1em;
 }
 
-/* Level-up ability picker rows */
-.icon-level-up__ability-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 240px;
-  overflow-y: auto;
-  padding: 4px;
-  border: 1px solid var(--ic-border-subtle);
-  border-radius: var(--ic-radius-sm);
-  background: var(--ic-bg-deep);
-}
-.icon-level-up__ability-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 6px;
-  border-radius: var(--ic-radius-sm);
-  cursor: pointer;
-}
-.icon-level-up__ability-row:hover { background: rgba(255,255,255,0.03); }
-.icon-level-up__ability-row--match { background: rgba(200,150,28,0.08); }
-.icon-level-up__ability-name { flex: 1; font-weight: 500; }
-
-/* ============================================================
-   Character Creation — ability picker
-   ============================================================ */
-.icon-cc__ability-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 240px;
-  overflow-y: auto;
-  padding: 4px;
-  border: 1px solid var(--ic-border-subtle);
-  border-radius: var(--ic-radius-sm);
-  background: var(--ic-bg-deep);
-}
-.icon-cc__ability-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 6px;
-  border-radius: var(--ic-radius-sm);
-  cursor: pointer;
-}
-.icon-cc__ability-row:hover { background: rgba(255,255,255,0.03); }
-.icon-cc__ability-name { flex: 1; font-weight: 500; }
+/* (Level-up / character-creation pickers: see the "Wizard dialogs" block near the end of the file) */
 
 /* ============================================================
    Ability preview panel — click on an equipped slot to expand
@@ -4898,16 +4851,145 @@ ol.chat-log .chat-message,
 .icon.sheet .icon-item-header input.icon-sheet__name { font-size: 1.6em; }
 .icon-item-header .icon-badge--type { text-transform: uppercase; letter-spacing: .12em; font-size: .68em; }
 
-/* Level-up & character-creation dialogs: gold band header with display title */
-.icon-level-up__header, .icon-cc__header {
-  position: relative; overflow: hidden;
-  padding: 16px 18px 26px; margin: 0 0 12px;
-  background: linear-gradient(100deg, #6a4c10 0%, var(--ic-gold) 65%, #e0c060 100%);
-  clip-path: polygon(0 0, 100% 0, 100% 78%, 0 100%);
-  color: var(--ic-bg-deep);
+/* ============================================================
+   Wizard dialogs (Level Up, Character Creation) — same language as the
+   PC sheet: class-coloured diagonal band with the portrait in a notch,
+   display-face title, step rail, numbered step cards, option cards with a
+   class stripe, gold dots, cut-corner primary buttons.
+   ============================================================ */
+.icon-wizard { display: flex; flex-direction: column; min-height: 100%; background: var(--ic-bg-dark); }
+
+/* --- Hero band --- */
+.icon-wizard__hero {
+  --band: var(--class-color, var(--ic-gold-dim));
+  position: relative; display: flex; align-items: stretch; gap: 0; margin: 0; padding: 0;
+  background: linear-gradient(100deg, color-mix(in srgb, var(--band) 55%, #200) 0%, var(--band) 60%, color-mix(in srgb, var(--band) 80%, #fff) 100%);
+  clip-path: polygon(0 0, 100% 0, 100% 84%, 0 100%);
+  transition: background .3s;
 }
-.icon-level-up__header h2, .icon-cc__header h2 { font-family: var(--ic-display); font-size: 2em; font-weight: normal; margin: 0 0 4px; color: #1a1408; border: none; }
-.icon-level-up__header p, .icon-cc__header p { color: #2a2010; margin: 2px 0; }   /* scoped to the band: hints inside dark sections keep their colour */
-.icon-level-up__header .icon-badge, .icon-cc__header .icon-badge { background: rgba(0,0,0,.25); color: #fff7e0; border-color: rgba(0,0,0,.35); }
-.icon-level-up__section, .icon-cc__section { background: #161c26; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius); padding: 10px 12px; margin-bottom: 10px; }
-.icon-level-up__section h3, .icon-cc__section h3 { font-size: .78em; letter-spacing: .16em; text-transform: uppercase; color: var(--ic-gold); font-weight: 700; border: none; margin: 0 0 8px; }
+.icon-wizard__notch {
+  flex: 0 0 104px; display: flex; align-items: center; justify-content: center;
+  background: var(--ic-bg-deep); clip-path: polygon(0 0, 100% 0, 80% 100%, 0 100%);
+  padding: 10px 22px 18px 10px;
+}
+.icon-wizard__notch img { width: 70px; height: 70px; object-fit: cover; border: 2px solid rgba(255,215,122,.6); border-radius: var(--ic-radius); background: #000; }
+.icon-wizard__identity { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 10px 12px 20px 4px; min-width: 0; }
+.icon-wizard__kicker { font-size: .68em; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,240,210,.8); }
+.icon-wizard__title { font-family: var(--ic-display); font-size: 1.9em; font-weight: normal; line-height: 1.05; margin: 0; border: none; color: #fff7e0; text-shadow: 0 1px 0 rgba(0,0,0,.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.icon-wizard__jobs { display: flex; gap: 10px; flex-wrap: wrap; align-items: baseline; }
+.icon-wizard__jobs .icon-hero__job { color: rgba(255,240,210,.9); }
+.icon-wizard__hero .icon-badge { background: rgba(0,0,0,.3); color: #fff7e0; border-color: rgba(255,255,255,.25); }
+.icon-wizard__level { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; padding: 0 18px 18px 12px; flex: 0 0 auto; }
+.icon-wizard__level-value { font-family: var(--ic-display); font-size: 2.4em; line-height: 1; color: #fff7e0; white-space: nowrap; }
+.icon-wizard__level-value small { font-size: .55em; opacity: .75; }
+.icon-wizard__level-label { font-size: .6em; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,240,210,.8); }
+
+/* --- Step rail --- */
+.icon-wizard__rail { list-style: none; display: flex; gap: 4px; margin: -6px 10px 10px; padding: 0; position: relative; z-index: 1; flex-wrap: wrap; }
+.icon-wizard__rail-step {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 14px 4px 10px;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%, 8px 50%);
+  background: var(--ic-bg-light); color: var(--ic-text-dim); font-size: .72em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  cursor: pointer; transition: background .15s, color .15s;
+}
+.icon-wizard__rail-step:first-child { clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 50%, calc(100% - 8px) 100%, 0 100%); }
+.icon-wizard__rail-step .icon-wizard__num { width: 16px; height: 16px; font-size: .9em; }
+.icon-wizard__rail-step:hover { background: var(--ic-bg-hover); color: var(--ic-text-bright); }
+.icon-wizard__rail-step--done { background: rgba(200,150,28,.25); color: var(--ic-gold-bright); }
+.icon-wizard__rail-step--active { background: var(--ic-gold); color: #1a1408; }
+.icon-wizard__rail-step--active .icon-wizard__num { background: #1a1408; color: var(--ic-gold-bright); border-color: #1a1408; }
+
+/* --- Body & step cards --- */
+.icon-wizard__body { flex: 1 1 auto; padding: 0 10px 8px; display: flex; flex-direction: column; gap: 10px; }
+.icon-wizard__step {
+  background: #161c26; border: 1px solid var(--ic-border-subtle); border-left: 3px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius); padding: 10px 12px 12px; margin: 0;
+  transition: border-color .2s;
+}
+.icon-wizard__step--done { border-left-color: var(--ic-gold); }
+.icon-wizard__step--warn { border-left-color: #c04060; }
+.icon-wizard__step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap; }
+.icon-wizard__num {
+  display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  width: 22px; height: 22px; border-radius: 50%; font-size: .78em; font-weight: 700;
+  border: 2px solid var(--ic-gold-dim); color: var(--ic-gold); background: rgba(40,30,10,.6);
+}
+.icon-wizard__step--done .icon-wizard__num { background: radial-gradient(circle, #e0b040 0%, #a07820 80%); color: #1a1408; border-color: #ffcc40; box-shadow: 0 0 6px rgba(255,200,60,.5); }
+.icon-wizard__step-title { font-family: var(--ic-display); font-size: 1.25em; font-weight: normal; margin: 0; border: none; color: var(--ic-text-bright); flex: 1 1 auto; }
+.icon-wizard__counter {
+  display: inline-flex; align-items: center; gap: 5px; padding: 2px 10px;
+  clip-path: var(--ic-cut); background: rgba(200,150,28,.16); color: var(--ic-gold-bright);
+  font-size: .74em; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; white-space: nowrap;
+}
+.icon-wizard__counter--full { background: var(--ic-gold); color: #1a1408; }
+.icon-wizard__counter--over { background: #7a1f2e; color: #ffd0d8; }
+.icon-wizard__hint { font-size: .82em; color: var(--ic-text-dim); margin: 0 0 8px; line-height: 1.35; }
+.icon-wizard__hint strong { color: var(--ic-text-normal); }
+.icon-wizard__warn { font-size: .84em; color: #ff8080; margin: 4px 0 0; }
+.icon-wizard__fields { display: flex; gap: 10px; flex-wrap: wrap; }
+.icon-wizard__field { display: flex; flex-direction: column; gap: 3px; flex: 1 1 180px; min-width: 0; }
+.icon-wizard__field > span { font-size: .72em; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ic-gold); }
+.icon-wizard__field select, .icon-wizard__field input { width: 100%; background: var(--ic-bg-field); color: var(--ic-text-normal); border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); padding: 4px 6px; }
+.icon-wizard__empty { font-size: .84em; color: var(--ic-text-dim); font-style: italic; margin: 4px 0; }
+
+/* --- Option cards (radio / checkbox inside a label) --- */
+.icon-option-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
+.icon-option-grid--wide { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.icon-option-grid--list { grid-template-columns: 1fr; }
+.icon-option-grid--scroll { max-height: 300px; overflow-y: auto; padding: 4px; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: var(--ic-bg-deep); }
+.icon-option {
+  position: relative; display: flex; flex-direction: column; gap: 4px;
+  padding: 7px 9px 7px 12px; min-height: 40px; cursor: pointer;
+  background: var(--ic-bg-panel); border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius);
+  border-top: 3px solid var(--class-color, var(--ic-border-vis));
+  transition: background .15s, border-color .15s, box-shadow .15s, opacity .15s;
+}
+.icon-option:hover { background: var(--ic-bg-hover); }
+.icon-option input[type="radio"], .icon-option input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; margin: 0; pointer-events: none; }
+.icon-option:has(input:checked) { background: rgba(200,150,28,.14); border-color: var(--ic-gold); box-shadow: inset 0 0 0 1px var(--ic-gold), 0 0 8px rgba(200,150,28,.25); }
+.icon-option:has(input:checked)::after { content: "✓"; position: absolute; top: 4px; right: 8px; color: var(--ic-gold-bright); font-weight: 700; }
+.icon-option:has(input:disabled) { opacity: .45; cursor: not-allowed; }
+.icon-option--pill { flex-direction: row; align-items: center; min-height: 0; padding: 5px 12px; border-top-width: 1px; }
+.icon-option--pill:has(input:checked)::after { position: static; margin-left: auto; }
+.icon-option__title { font-family: var(--ic-display); font-size: 1.05em; color: var(--ic-text-bright); padding-right: 16px; line-height: 1.15; }
+.icon-option__meta { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+.icon-option__desc { font-size: .78em; color: var(--ic-text-dim); line-height: 1.3; }
+.icon-option__desc strong { color: var(--ic-text-normal); }
+.icon-option--match { border-top-color: var(--ic-gold); }
+
+/* --- Grant cards (level benefits) --- */
+.icon-grant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.icon-grant { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: rgba(200,150,28,.07); border: 1px solid rgba(200,150,28,.25); border-radius: var(--ic-radius); font-size: .88em; }
+.icon-grant__icon { font-size: 1.25em; flex: 0 0 auto; }
+.icon-grant__value { font-family: var(--ic-display); font-size: 1.35em; color: var(--ic-gold-bright); line-height: 1; }
+.icon-grant--fork { border-style: dashed; }
+
+/* --- Dots allocator (action ratings) --- */
+.icon-dots-allocator { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 4px 12px; }
+.icon-dots-row { display: flex; align-items: center; gap: 6px; padding: 3px 6px; border-radius: var(--ic-radius-sm); background: var(--ic-bg-panel); border: 1px solid var(--ic-border-faint, var(--ic-border-subtle)); }
+.icon-dots-row--primary { border-color: rgba(200,150,28,.5); background: rgba(200,150,28,.08); }
+.icon-dots-row__label { flex: 1 1 auto; font-size: .84em; font-weight: 600; color: var(--ic-text-bright); text-transform: capitalize; }
+.icon-dots-row .icon-action-dots .icon-dot { cursor: default; }
+.icon-dots-row .icon-dot.base { background: var(--ic-gold-dim); border-color: var(--ic-gold-dim); }
+.icon-dots-row .icon-dot.alloc { background: var(--ic-gold); }
+.icon-dots-row .icon-dot.capped { border-color: rgba(255,255,255,.12); }
+.icon-dots-row__btn { width: 20px; height: 20px; padding: 0; line-height: 1; font-size: .9em; }
+.icon-dots-row__btn:disabled { opacity: .3; cursor: not-allowed; }
+
+/* --- Sticky footer --- */
+.icon-wizard__footer {
+  position: sticky; bottom: 0; z-index: 2; display: flex; align-items: center; gap: 8px;
+  padding: 8px 12px; margin-top: auto;
+  background: linear-gradient(180deg, rgba(14,17,23,0) 0%, var(--ic-bg-deep) 30%);
+  border-top: 1px solid var(--ic-border-subtle);
+}
+.icon-wizard__footer .icon-btn--primary { padding: 6px 18px; font-size: .9em; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: var(--ic-gold); color: #1a1408; border-color: var(--ic-gold); }
+.icon-wizard__footer .icon-btn--primary:hover { background: var(--ic-gold-bright); color: #1a1408; }
+.icon-wizard__footer .icon-btn--primary:disabled { opacity: .45; cursor: not-allowed; }
+.icon-wizard__summary { flex: 1 1 auto; font-size: .8em; color: var(--ic-text-dim); }
+.icon-wizard__summary strong { color: var(--ic-gold-bright); }
+
+/* Level-up recap card */
+.icon-wizard__recap { background: rgba(200,150,28,.05); border-left-color: var(--ic-gold); }
+.icon-wizard__recap ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .86em; }
+.icon-wizard__recap li::before { content: "◆ "; color: var(--ic-gold); font-size: .7em; }

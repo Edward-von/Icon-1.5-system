@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 7 settembre 2026 — Sessione 5: Level Up e Character Creation nello stile della scheda
+
+- **Dialog rifatti con lo stesso linguaggio della scheda PG** ("Ink & Gold × Tactics"): banda diagonale nel
+  colore della classe con il ritratto nella tacca, nome in IM Fell, blocco livello a destra ("3 → 4",
+  "Level 0 · Ch 1"), rail degli step a chevron che si accende man mano, ogni passo come card numerata con
+  titolo in display, footer sticky con riepilogo e bottone oro a taglio. CSS condiviso in un unico blocco
+  `.icon-wizard*` in `css/icon.css` (rimosso il vecchio CSS delle liste a checkbox).
+- **Character Creation**: bond, bond power, job e abilità sono card selezionabili (striscia del colore di
+  classe, badge, prima frase del testo) invece di select e checkbox; le azioni primarie del bond sono pill;
+  i 4 punti extra si assegnano con un allocatore a pallini (+/−, contatore "N left", cap 3 applicato dal
+  vivo, riga dorata per l'azione primaria); scegliendo il job la banda prende il colore della classe e
+  compare il nome del job; contatore "2 / 2" sulle abilità con blocco delle altre card. Il rail e le card
+  diventano oro quando lo step è completo; il footer dice "N / 7 steps done". Il submit legge gli stessi
+  campi di prima (gli input `distribution1..4` sono aggiornati dall'allocatore), quindi la logica di
+  scrittura sulla scheda non è cambiata.
+- **Level Up**: benefici come card "grant"; i bivi di L4/L8 (New Job / +1 Mastery, Bond Power / 2 Actions)
+  sono card, e la scelta del nuovo job è una griglia di card di classe che compare solo con "New Job";
+  nello stage 2 recap dorato con "← Change", abilità/mastery/reliquie/bond power come card con descrizione,
+  contatore "AP N left" che conta anche i talenti e disabilita le card quando il budget è finito, riepilogo
+  live nel footer. Finestre allargate a 740px.
+
 ## 7 settembre 2026 — Sessione 4: power die sulle abilità, blocchi e keyword nel testo delle abilità
 
 - **Power die tracciabile sull'abilità** (Odinforce, Soul Blade, Gallows Humor, Exorcism…): prima esisteva
