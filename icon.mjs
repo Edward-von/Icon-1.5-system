@@ -90,17 +90,23 @@ import { registerTokenStatusHud } from "./module/apps/token-status-hud.mjs";
 Hooks.once("init", () => {
   console.log("ICON 1.5 | Initialising system");
 
-  // ---- House rules (opt-in) ----
-  // Off by default: divergences from the ICON 1.5 RAW manual.
-  // Enabled by the GM in Configure Settings → System Settings.
+  // ---- Rules toggles ----
+  // Party Resolve +1 per round is RAW (manual p.99: "Party Resolve goes up by
+  // 1 at the start of each round in combat"), so it is ON by default; the
+  // setting key keeps its historical "hr" name so existing worlds keep their
+  // stored choice.
   game.settings.register("icon-system", "hrPartyResolveAutoIncrement", {
-    name: "House Rule — Party Resolve +1 at the start of each round",
-    hint: "If enabled, Party Resolve increases by 1 at the start of every combat round. House rule: the RAW manual provides no automatic increment.",
+    name: "Party Resolve +1 at the start of each round (RAW, p.99)",
+    hint: "Party Resolve increases by 1 at the start of every combat round and is synced to every PC sheet. Turn off only if your table tracks it by hand.",
     scope: "world",
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
   });
+
+  // ---- House rules (opt-in) ----
+  // Off by default: divergences from the ICON 1.5 RAW manual.
+  // Enabled by the GM in Configure Settings → System Settings.
   game.settings.register("icon-system", "hrInterludeDustHealing", {
     name: "House Rule — Dust to heal Burdens during an Interlude",
     hint: "If enabled, during an Interlude PCs may spend 2 Dust for each extra Burden segment healed (beyond the base 3). House rule: in RAW, spending Dust per segment exists only for Ambition clocks, not Burdens.",

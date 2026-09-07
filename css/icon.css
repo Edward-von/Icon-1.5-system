@@ -2599,6 +2599,15 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-tags-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
 
 /* Rule tags — hoverable with Foundry tooltip, interactive feel */
+/* Tag introduced by an unlocked talent / mastery (see resolveAbilityTags) */
+.icon-tag--upgraded {
+  border-color: var(--ic-gold, #c9a54a);
+  color: var(--ic-gold-bright, #e8c96a);
+  box-shadow: inset 0 0 0 1px rgba(201,165,74,.35);
+}
+.icon-tag-override { margin: 2px 0 8px; }
+.icon-tag-override label { font-size: .8em; opacity: .8; }
+
 .icon-tag--rule[data-tooltip] {
   cursor: help;
   border-color: var(--ic-gold-dim);
@@ -2820,6 +2829,24 @@ details[open] > .icon-basic-actions__summary::before {
   letter-spacing: .06em;
 }
 .icon-party-resolve__value { font-weight: bold; font-size: 1.05em; }
+.icon-party-resolve__controls { display: inline-flex; align-items: center; gap: 4px; }
+.icon-party-resolve__btn {
+  padding: 0 6px;
+  font-size: 0.85em;
+  line-height: 1.3;
+  background: rgba(112,48,160,.3);
+  color: #c080ff;
+  border: 1px solid rgba(112,48,160,.6);
+  border-radius: var(--ic-radius-sm);
+  cursor: pointer;
+  min-width: 0;
+  width: auto;
+}
+.icon-party-resolve__btn:hover {
+  background: rgba(112,48,160,.55);
+  color: #e0b0ff;
+  border-color: #c080ff;
+}
 
 /* === Legend round-action indicator === */
 .icon-legend-round-actions {

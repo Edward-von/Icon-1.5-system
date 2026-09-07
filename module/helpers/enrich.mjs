@@ -80,6 +80,57 @@ export function splitAbilityDescription(description) {
   return { flavor: head.trim(), trigger: trigger.trim(), effect: effect.trim() };
 }
 
+/** Human label for a foe/legend action cost key. */
+const NPC_COST_LABELS = { "1action": "1 Action", "2actions": "2 Actions", "free": "Free" };
+
+/**
+ * Post a foe/legend action to chat (name, cost, tags, description,
+ * hit/miss/area). Works for non-attack actions too — the card simply omits
+ * the Hit/Miss lines when they are empty.
+ * @param {Actor} actor
+ * @param {{name:string, cost:string, tags?:string[], description?:string, hitEffect?:string, missEffect?:string, areaEffect?:string}} action
+ */
+export async function postNpcActionCard(actor, action) {
+  const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+  const a = {
+    name:        action?.name ?? "Action",
+    cost:        NPC_COST_LABELS[action?.cost] ?? action?.cost ?? "",
+    tags:        (action?.tags ?? []).filter(t => t && t.trim()),
+    description: await enrichHTML(action?.description),
+    hitEffect:   await enrichHTML(action?.hitEffect),
+    missEffect:  await enrichHTML(action?.missEffect),
+    areaEffect:  await enrichHTML(action?.areaEffect),
+  };
+  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+  await ChatMessage.create({
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content,
+  });
+}
+
+/**
+ * Post a foe/legend round action to chat (reuses the foe-action card layout,
+ * with "Round N" as the cost badge).
+ * @param {Actor} actor
+ * @param {{name:string, roundNumber?:number, effect?:string, description?:string}} roundAction
+ */
+export async function postNpcRoundActionCard(actor, roundAction) {
+  const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+  const rn = Number(roundAction?.roundNumber ?? 1);
+  const a = {
+    name:        roundAction?.name ?? "Round Action",
+    cost:        rn > 1 ? `Round Action — Round ${rn}+` : "Round Action",
+    tags:        [],
+    description: await enrichHTML(roundAction?.description),
+    effect:      await enrichHTML(roundAction?.effect),
+  };
+  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+  await ChatMessage.create({
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content,
+  });
+}
+
 /**
  * Post a foe/legend interrupt to chat (reuses the foe-action card layout).
  * @param {Actor} actor

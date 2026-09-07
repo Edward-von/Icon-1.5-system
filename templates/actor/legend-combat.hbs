@@ -135,6 +135,9 @@
               <span class="icon-ability-name">{{action.name}}</span>
               <span class="icon-ability-cost-badge">{{action.cost}}</span>
               <span class="icon-ability-phase-badge">{{action.phaseLabel}}</span>
+              <button type="button" class="icon-btn-roll icon-btn--chat"
+                      data-action="foeActionShowInChat" data-action-index="{{action.i}}"
+                      title="Post this action to chat">💬</button>
               {{#if ../isEditable}}
                 {{#if action.isAttack}}
                 <button type="button" class="icon-btn-roll"
@@ -321,6 +324,9 @@
               <input class="legend-round-action__name" type="text" name="system.roundActions.{{ra.i}}.name"
                      value="{{ra.name}}" placeholder="Round action name"
                      {{#unless ../isEditable}}disabled{{/unless}}>
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                      data-action="foeRoundActionShowInChat" data-round-action-index="{{ra.i}}"
+                      title="Post this round action to chat">💬</button>
               {{#if ../isEditable}}
                 <input class="legend-round-action__round-input" type="number"
                        name="system.roundActions.{{ra.i}}.roundNumber"

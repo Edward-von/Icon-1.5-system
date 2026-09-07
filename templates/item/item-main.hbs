@@ -157,16 +157,37 @@
           <h4 class="icon-section__title">Talent 1</h4>
           <div class="icon-editor-wrap">{{{enriched.talent1}}}</div>
           {{#if isEditable}}<textarea name="system.talent1" class="icon-editor">{{system.talent1}}</textarea>{{/if}}
+          {{#if isEditable}}
+            <div class="icon-field-row icon-tag-override">
+              <label title="Comma-separated tags that REPLACE the ability's tags once Talent I is unlocked (e.g. attack, range-5, medium-blast). Leave empty if the upgrade doesn't change them.">Tags when unlocked</label>
+              <input type="text" name="system.talent1Tags" value="{{system.talent1Tags}}"
+                     placeholder="e.g. attack, range-5, medium-blast">
+            </div>
+          {{/if}}
         {{/if}}
         {{#if (icon-or system.talent2 isEditable)}}
           <h4 class="icon-section__title">Talent 2</h4>
           <div class="icon-editor-wrap">{{{enriched.talent2}}}</div>
           {{#if isEditable}}<textarea name="system.talent2" class="icon-editor">{{system.talent2}}</textarea>{{/if}}
+          {{#if isEditable}}
+            <div class="icon-field-row icon-tag-override">
+              <label title="Comma-separated tags that REPLACE the ability's tags once Talent II is unlocked (e.g. attack, range-5, medium-blast). Leave empty if the upgrade doesn't change them.">Tags when unlocked</label>
+              <input type="text" name="system.talent2Tags" value="{{system.talent2Tags}}"
+                     placeholder="e.g. attack, range-5, medium-blast">
+            </div>
+          {{/if}}
         {{/if}}
         {{#if (icon-or system.mastery isEditable)}}
           <h4 class="icon-section__title">Mastery</h4>
           <div class="icon-editor-wrap">{{{enriched.mastery}}}</div>
           {{#if isEditable}}<textarea name="system.mastery" class="icon-editor">{{system.mastery}}</textarea>{{/if}}
+          {{#if isEditable}}
+            <div class="icon-field-row icon-tag-override">
+              <label title="Comma-separated tags that REPLACE the ability's tags once Mastery is unlocked (e.g. attack, range-5, medium-blast). Leave empty if the upgrade doesn't change them.">Tags when unlocked</label>
+              <input type="text" name="system.masteryTags" value="{{system.masteryTags}}"
+                     placeholder="e.g. attack, range-5, medium-blast">
+            </div>
+          {{/if}}
         {{/if}}
       </div>
     {{/if}}

@@ -220,6 +220,9 @@
                      value="{{ra.name}}" placeholder="Name"
                      class="icon-round-action__name"
                      {{#unless ../isEditable}}disabled{{/unless}}>
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                      data-action="foeRoundActionShowInChat" data-round-action-index="{{ra.i}}"
+                      title="Post this round action to chat">💬</button>
               {{#if ../isEditable}}
                 <input type="number" name="system.roundActions.{{ra.i}}.roundNumber"
                        value="{{ra.roundNumber}}" min="1"

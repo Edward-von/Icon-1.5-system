@@ -199,3 +199,48 @@ export function formatTag(tag) {
     .join(" ");
   return { raw, label, tooltip: explainTag(raw) };
 }
+
+/** Parse a comma-separated tag override string into clean raw tags. */
+function _parseTagList(str) {
+  return String(str ?? "").split(",").map(t => t.trim().toLowerCase().replace(/\s+/g, "-")).filter(Boolean);
+}
+
+/** Strip HTML tags and collapse whitespace (for tooltips built from rich text). */
+function _plainText(html) {
+  return String(html ?? "").replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Resolve the tags an ability currently shows, applying the talent / mastery
+ * tag overrides the character has unlocked (see AbilityData.talent1Tags etc).
+ * Each active override replaces the whole list; the mastery override wins
+ * over the talent one. Tags that were not in the base list are flagged
+ * `upgraded` and carry the source (e.g. "Talent II") in their tooltip.
+ * @param {object} system  ability system data
+ * @returns {Array<{raw:string,label:string,tooltip:string|null,upgraded:boolean}>}
+ */
+export function resolveAbilityTags(system) {
+  const s = system ?? {};
+  const base = (s.tags ?? []).map(t => String(t ?? "").trim()).filter(Boolean);
+  const selected = Number(s.talentSelected ?? 0);
+
+  const layers = [];
+  if (selected === 1 && String(s.talent1Tags ?? "").trim()) layers.push({ tags: _parseTagList(s.talent1Tags), source: "Talent I",  text: s.talent1 });
+  if (selected === 2 && String(s.talent2Tags ?? "").trim()) layers.push({ tags: _parseTagList(s.talent2Tags), source: "Talent II", text: s.talent2 });
+  if (s.masteryUnlocked && String(s.masteryTags ?? "").trim()) layers.push({ tags: _parseTagList(s.masteryTags), source: "Mastery", text: s.mastery });
+
+  let current = base;
+  const origin = new Map();   // raw tag → layer that introduced it
+  for (const layer of layers) {
+    for (const t of layer.tags) if (!base.includes(t) && !origin.has(t)) origin.set(t, layer);
+    current = layer.tags;
+  }
+
+  return current.map(formatTag).filter(Boolean).map(tag => {
+    const layer = origin.get(tag.raw);
+    if (!layer) return { ...tag, upgraded: false };
+    const from = `From ${layer.source}: ${_plainText(layer.text)}`;
+    const tooltip = tag.tooltip ? [from, tag.tooltip].join("\n\n") : from;
+    return { ...tag, upgraded: true, tooltip };
+  });
+}

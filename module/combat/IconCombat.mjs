@@ -587,20 +587,33 @@ export class IconCombat extends Combat {
 
   /** Increment shared party resolve on the combat document and on all PC actors. */
   async _incrementPartyResolve() {
-    const current = this.getFlag(FLAG_NS, FLAG_RESOLVE) ?? 0;
-    const next    = current + 1;
-    await this.setFlag(FLAG_NS, FLAG_RESOLVE, next);
+    await IconCombat.setPartyResolve(this.partyResolve + 1, { combat: this });
+  }
 
-    // Also sync to each PC actor's party resolve field
-    for (const combatant of this.combatants) {
+  /**
+   * Set the shared Party Resolve to `value` (manual p.99: one pool shared by
+   * the whole party). Single source of truth: the flag on the Combat document
+   * is written first, then every PC combatant's `system.combat.resolve.party`
+   * is aligned to the same number, so the tracker banner, the "⚡p+P" badges
+   * and the PC sheets always agree. Actor updates carry the
+   * `iconPartyResolveSync` option so the updateActor hook below does not
+   * re-enter. Players relay the request to the active GM.
+   */
+  static async setPartyResolve(value, { combat = game.combat, silent = false } = {}) {
+    if (!combat) return;
+    const next = Math.max(0, Math.floor(Number(value) || 0));
+    if (_emitTrackerActionToGM({ type: "combatTrackerAction", method: "setPartyResolve", combatId: combat.id, value: next })) return;
+
+    if ((combat.getFlag(FLAG_NS, FLAG_RESOLVE) ?? 0) !== next) await combat.setFlag(FLAG_NS, FLAG_RESOLVE, next);
+
+    for (const combatant of combat.combatants) {
       const actor = combatant.actor;
       if (actor?.type !== "icon") continue;
-      await actor.update({
-        "system.combat.resolve.party": actor.system.combat.resolve.party + 1,
-      });
+      if ((actor.system.combat?.resolve?.party ?? 0) === next) continue;
+      await actor.update({ "system.combat.resolve.party": next }, { iconPartyResolveSync: true });
     }
 
-    ui.notifications?.info(`Party Resolve: ${next}`);
+    if (!silent) ui.notifications?.info(`Party Resolve: ${next}`);
   }
 
   /** Current party resolve (from combat document flag). */
@@ -700,6 +713,9 @@ export function registerCombatHooks() {
         } else if (data.method === "awardResolve") {
           const actor = game.actors.get(data.actorId);
           if (actor) await IconCombat.awardPersonalResolve(actor, data.amount ?? 1);
+        } else if (data.method === "setPartyResolve") {
+          const combat = game.combats.get(data.combatId);
+          if (combat) await IconCombat.setPartyResolve(data.value, { combat });
         } else if (data.method === "requestActivation") {
           const combat = game.combats.get(data.combatId);
           const combatant = combat?.combatants.get(data.combatantId);
@@ -859,6 +875,25 @@ export function registerCombatHooks() {
     options._iconLegendOldPhase = actor.system.currentPhase ?? 0;
   });
 
+  /**
+   * A PC's party resolve changed from the sheet (manual edit, or the Limit
+   * Break button spending it): Party Resolve is one shared pool, so the
+   * active GM propagates the new value to the combat flag and to the other
+   * PCs in the encounter. Writes made by setPartyResolve itself are tagged
+   * with `iconPartyResolveSync` and skipped here.
+   */
+  Hooks.on("updateActor", async (actor, changes, options /*, userId */) => {
+    if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
+    if (actor.type !== "icon" || options?.iconPartyResolveSync) return;
+    if (!foundry.utils.hasProperty(changes, "system.combat.resolve.party")) return;
+    const combat = game.combat;
+    if (!combat || !combat.combatants.some(c => c.actor?.id === actor.id)) return;
+    const value = actor.system.combat?.resolve?.party ?? 0;
+    if (value === combat.partyResolve) return;
+    console.debug("[ICON | IconCombat]", `updateActor — "${actor.name}" changed party resolve → ${value}; syncing combat + party`);
+    await IconCombat.setPartyResolve(value, { combat, silent: true });
+  });
+
   Hooks.on("updateActor", async (actor, changes, options /*, userId */) => {
     if (!game.user.isGM) return;
     if (actor.type !== "legend") return;
@@ -1007,11 +1042,21 @@ function _renderIconTracker(app, html, data, combat) {
       banner.innerHTML = `
         <div class="icon-combat-banner__round">Round <strong>${combat.round}</strong></div>
         <div class="icon-turn-indicator ${factionClass}">${factionLabel}</div>
-        <div class="icon-party-resolve">
+        <div class="icon-party-resolve" title="Shared by the whole party (p.99). Spend it from a PC sheet with the Limit Break button, or adjust it here.">
           <span class="icon-party-resolve__label">Party Resolve</span>
-          <span class="icon-party-resolve__value">⚡${combat.partyResolve}</span>
+          <span class="icon-party-resolve__controls">
+            <button type="button" class="icon-party-resolve__btn" data-delta="-1" title="Party Resolve −1">−</button>
+            <span class="icon-party-resolve__value">⚡${combat.partyResolve}</span>
+            <button type="button" class="icon-party-resolve__btn" data-delta="1" title="Party Resolve +1">+</button>
+          </span>
         </div>
       `;
+      banner.querySelectorAll(".icon-party-resolve__btn").forEach(btn => {
+        btn.addEventListener("click", ev => {
+          ev.stopPropagation();
+          IconCombat.setPartyResolve(combat.partyResolve + Number(btn.dataset.delta), { combat });
+        });
+      });
       header.appendChild(banner);
 
       // --- Legend round-action indicator: list legends with round actions

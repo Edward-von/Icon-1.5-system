@@ -12,7 +12,7 @@ import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
-import { enrichHTML, postNpcTraitCard, postNpcInterruptCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
@@ -43,6 +43,7 @@ export class FoeSheet extends BaseActorSheet {
       addInterrupt:     FoeSheet.#onAddInterrupt,
       removeInterrupt:  FoeSheet.#onRemoveInterrupt,
       foeInterruptShowInChat: FoeSheet.#onFoeInterruptShowInChat,
+      foeRoundActionShowInChat: FoeSheet.#onFoeRoundActionShowInChat,
       addRoundAction:   FoeSheet.#onAddRoundAction,
       removeRoundAction:FoeSheet.#onRemoveRoundAction,
       tickInterrupt:    FoeSheet.#onTickInterrupt,
@@ -262,7 +263,7 @@ export class FoeSheet extends BaseActorSheet {
     const actor     = this.document;
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
-    _log(`foeInterruptShowInChat — actor: "" | interrupt[]: ""`);
+    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}"`);
     await postNpcInterruptCard(actor, interrupt);
   }
 
@@ -283,25 +284,20 @@ export class FoeSheet extends BaseActorSheet {
     const action = actor.system.actions[idx];
     if (!action) return;
     _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
-
-    const COST_LABELS = { "1action": "1 Action", "2actions": "2 Actions", "free": "Free" };
-    const a = {
-      name:        action.name,
-      cost:        COST_LABELS[action.cost] ?? action.cost,
-      tags:        (action.tags ?? []).filter(t => t && t.trim()),
-      description: await enrichHTML(action.description),
-      hitEffect:   await enrichHTML(action.hitEffect),
-      missEffect:  await enrichHTML(action.missEffect),
-      areaEffect:  await enrichHTML(action.areaEffect),
-    };
-
-    const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
-    const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor.name });
-    await ChatMessage.create({
-      speaker: ChatMessage.getSpeaker({ actor }),
-      content,
-    });
+    await postNpcActionCard(actor, action);
   }
+
+  /** Post a foe round action (name, round, effect) to chat. */
+  static async #onFoeRoundActionShowInChat(event, target) {
+    event.stopPropagation();
+    const idx   = Number(target.dataset.roundActionIndex);
+    const actor = this.document;
+    const ra    = actor.system.roundActions[idx];
+    if (!ra) return;
+    _log(`foeRoundActionShowInChat — actor: "${actor.name}" | roundAction[${idx}]: "${ra.name}"`);
+    await postNpcRoundActionCard(actor, ra);
+  }
+
 
   /**
    * Roll damage for a foe action. Parses [D] / fray / flat from the action's

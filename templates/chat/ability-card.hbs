@@ -18,7 +18,7 @@
     {{#if ab.tags.length}}
       <div class="icon-chat-card__tags">
         {{#each ab.tags as |tag|}}
-          <span class="icon-tag icon-tag--small icon-tag--rule"
+          <span class="icon-tag icon-tag--small icon-tag--rule {{#if tag.upgraded}}icon-tag--upgraded{{/if}}"
                 {{#if tag.tooltip}}data-tooltip="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>
         {{/each}}
       </div>
@@ -36,7 +36,7 @@
     {{#if ab.tags.length}}
       <div class="icon-chat-card__tags">
         {{#each ab.tags as |tag|}}
-          <span class="icon-tag icon-tag--small icon-tag--rule"
+          <span class="icon-tag icon-tag--small icon-tag--rule {{#if tag.upgraded}}icon-tag--upgraded{{/if}}"
                 {{#if tag.tooltip}}data-tooltip="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>
         {{/each}}
       </div>

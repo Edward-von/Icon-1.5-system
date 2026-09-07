@@ -8,7 +8,7 @@ import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs"
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, splitAbilityDescription } from "../../helpers/enrich.mjs";
-import { formatTag } from "../../helpers/rule-tooltips.mjs";
+import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -227,7 +227,7 @@ export class IconSheet extends BaseActorSheet {
         class:       s.class ?? "",
         cost:        s.cost ?? "",
         chapter:     s.chapter ?? 1,
-        tags:        (s.tags ?? []).map(formatTag).filter(Boolean),
+        tags:        resolveAbilityTags(s),
         talentSelected,
         masteryUnlocked,
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
@@ -1049,7 +1049,7 @@ export class IconSheet extends BaseActorSheet {
       class:       s.class ?? "",
       cost:        s.cost ?? "",
       chapter:     s.chapter ?? 1,
-      tags:        (s.tags ?? []).map(formatTag).filter(Boolean),
+      tags:        resolveAbilityTags(s),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       isAttack:    parsed.isAttack,

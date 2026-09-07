@@ -35,6 +35,13 @@ export class AbilityData extends foundry.abstract.TypeDataModel {
       talent1:     new HTMLField({ required: true, initial: "" }),
       talent2:     new HTMLField({ required: true, initial: "" }),
       mastery:     new HTMLField({ required: true, initial: "" }),
+      // Optional tag overrides: when the matching talent / mastery is unlocked,
+      // this comma-separated list REPLACES `tags` on the sheet and chat cards
+      // (e.g. Draken Cross Talent II → "attack, range-5, medium-blast").
+      // Empty = the upgrade does not change the tags.
+      talent1Tags: new StringField({ required: true, initial: "" }),
+      talent2Tags: new StringField({ required: true, initial: "" }),
+      masteryTags: new StringField({ required: true, initial: "" }),
       description: new HTMLField({ required: true, initial: "" }),
 
       // Combo ability — Vagabond (and others) can have a powered-up version that

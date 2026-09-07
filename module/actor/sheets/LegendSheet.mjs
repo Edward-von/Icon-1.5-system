@@ -4,7 +4,7 @@
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
-import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -34,6 +34,8 @@ export class LegendSheet extends BaseActorSheet {
       addInterrupt:      LegendSheet.#onAddInterrupt,
       removeInterrupt:   LegendSheet.#onRemoveInterrupt,
       foeInterruptShowInChat: LegendSheet.#onFoeInterruptShowInChat,
+      foeActionShowInChat:    LegendSheet.#onFoeActionShowInChat,
+      foeRoundActionShowInChat: LegendSheet.#onFoeRoundActionShowInChat,
       addRoundAction:    LegendSheet.#onAddRoundAction,
       removeRoundAction: LegendSheet.#onRemoveRoundAction,
       addPhase:          LegendSheet.#onAddPhase,
@@ -538,6 +540,28 @@ export class LegendSheet extends BaseActorSheet {
   }
 
   /** Post a legend trait to chat. */
+  /** Post a legend action to chat (also for actions with no attack roll, e.g. Dread March). */
+  static async #onFoeActionShowInChat(event, target) {
+    event.stopPropagation();
+    const idx    = Number(target.dataset.actionIndex);
+    const actor  = this.document;
+    const action = actor.system.actions[idx];
+    if (!action) return;
+    _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
+    await postNpcActionCard(actor, action);
+  }
+
+  /** Post a legend round action (name, round, effect) to chat. */
+  static async #onFoeRoundActionShowInChat(event, target) {
+    event.stopPropagation();
+    const idx   = Number(target.dataset.roundActionIndex);
+    const actor = this.document;
+    const ra    = actor.system.roundActions[idx];
+    if (!ra) return;
+    _log(`foeRoundActionShowInChat — actor: "${actor.name}" | roundAction[${idx}]: "${ra.name}"`);
+    await postNpcRoundActionCard(actor, ra);
+  }
+
   /** Post a foe/legend interrupt (trigger + effect) to chat. */
   static async #onFoeInterruptShowInChat(event, target) {
     event.stopPropagation();
@@ -545,7 +569,7 @@ export class LegendSheet extends BaseActorSheet {
     const actor     = this.document;
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
-    _log(`foeInterruptShowInChat — actor: "" | interrupt[]: ""`);
+    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}"`);
     await postNpcInterruptCard(actor, interrupt);
   }
 

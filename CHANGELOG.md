@@ -1,5 +1,35 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 7 settembre 2026 — Sessione 2: chat NPC, tag Draken Cross, Party Resolve sincronizzato
+
+- **Round Action dei Legend (e dei Foe) non stampabili in chat**: mancava il bottone → nuovo 💬 accanto al
+  nome di ogni Round Action (scheda Legend e Foe), che posta una card con nome, "Round Action — Round N+" ed
+  effetto (`postNpcRoundActionCard` in `module/helpers/enrich.mjs`).
+- **Azioni dei Legend senza tiro (es. Dread March dei Dread Lords) non stampabili in chat**: la scheda Legend
+  aveva solo ⚔/💥 (visibili solo se l'azione ha un attacco/danno) e nessun 💬, mentre la scheda Foe lo aveva
+  già → aggiunto il 💬 a tutte le azioni del Legend, con o senza tiro; la logica della card è ora condivisa
+  (`postNpcActionCard`) tra Foe e Legend.
+- **Draken Cross: scegliendo il talento il tag non diventava "Medium Blast"**: nel manuale è il Talent II
+  ("Charge: Increase range to 5, and all areas may be increased to medium blasts") — non la mastery — e i tag
+  delle abilità erano una lista fissa. Ora ogni abilità ha tre campi opzionali "Tags when unlocked" (Talent I,
+  Talent II, Mastery; nella scheda item sotto ogni testo): se compilati, sostituiscono i tag quando quel
+  talento/mastery è sbloccato. I tag nuovi appaiono in oro con tooltip "From Talent II: …" (scheda PG, card in
+  chat e card del tiro). Draken Cross nel compendio Jobs ha già `Talent II → attack, range-5, medium-blast`
+  (script `icon-compendium-audit/tag-overrides/apply-tag-overrides.mjs`). Nota: le copie di Draken Cross già
+  importate sui PG non si aggiornano da sole: basta scrivere `attack, range-5, medium-blast` nel campo Talent II
+  della scheda dell'abilità (o re-importarla).
+- **Party Resolve dal tracker: non spendibile col Limit Break e non riflesso sulle schede PG**: c'erano due
+  contatori separati — il flag sul combat (mostrato nel banner del tracker, senza modo di cambiarlo a mano) e
+  il campo `resolve.party` di ogni PG (quello che il bottone "Use Limit Break" spende) — e si parlavano solo
+  con l'incremento automatico a inizio round. Ora c'è un'unica funzione `IconCombat.setPartyResolve` che
+  scrive il flag e allinea tutti i PG del combat: la usano i nuovi bottoni −/+ nel banner "Party Resolve" del
+  tracker (anche i giocatori, inoltrati al GM), l'incremento di inizio round, e un hook che intercetta ogni
+  modifica al Party Resolve fatta da una scheda PG (Use Limit Break, o editing a mano) e la propaga a combat e
+  agli altri PG.
+- **Party Resolve +1 a inizio round era segnato come house rule OFF**: è RAW (manuale p.99 "Party Resolve goes
+  up by 1 at the start of each round in combat") → il setting è rinominato e ora è ON di default (la chiave
+  interna resta la stessa, i mondi che l'avevano cambiato tengono la loro scelta).
+
 ## 7 settembre 2026 — Sessione 1: tag NPC cancellati, cap Aether, conferma End Encounter
 
 - **NPC: modificare HP/Vigor/nome/size/classe cancellava i tag di tutte le abilità**: le action dei foe sono un

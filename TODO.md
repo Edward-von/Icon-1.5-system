@@ -21,8 +21,8 @@ Prima di riaprirli, chiedere a Maar di aggiornare e riprovare.
 - [ ] Interrupt NPC non stampabili in chat (fix: bottone 💬 sugli interrupt Foe/Legend)
 - [ ] Burden/Ambition non avanzano cliccando le caselle o +1 (fix: lookup block-param nel `#each`)
 - [ ] Heave-Ho senza trigger (fix: split Trigger/Effect)
-- [ ] Draken Cross: effetto nel posto sbagliato (fix: Effect dopo Area per gli attacchi) — resta aperto il
-      pezzo "mastery → tag Medium Blast", vedi Sessione 2
+- [ ] Draken Cross: effetto nel posto sbagliato (fix: Effect dopo Area per gli attacchi) — il pezzo
+      "talento → tag Medium Blast" è fatto in Sessione 2
 - [ ] Overlay status sopra le tab della sidebar (fix: HUD ancorato alla sidebar reale)
 - [ ] Range degli attacchi base come promemoria (fix: badge "Range N")
 - [ ] Testo Aether "persists across combats" (fix: reset a fine combat + testo corretto)
@@ -45,14 +45,21 @@ Prima di riaprirli, chiedere a Maar di aggiornare e riprovare.
 - [x] **"End encounter" ricarica gli HP PRIMA della conferma**: spostare il refill dopo il dialog di
       conferma. (S)
 
-## Sessione 2 — Chat e tracker (S+M+S+M)
+## Sessione 2 — Chat e tracker (S+M+S+M) — FATTA il 7 settembre 2026
 
-- [ ] Round Actions dei Legend non stampabili in chat. (S — stesso pattern del bottone 💬 degli interrupt)
-- [ ] Abilità senza tiro (es. Dread March dei Dread Lords) non stampabili in chat. (M — capire dove manca
-      il bottone: foe actions senza attacco? abilità PG senza roll?)
-- [ ] Draken Cross: selezionando la mastery il tag non diventa "Medium Blast". (S)
-- [ ] Party Resolve dal tracker: non usabile se si sta usando un Limit Break, e le modifiche non si
+- [x] Round Actions dei Legend non stampabili in chat. (S — stesso pattern del bottone 💬 degli interrupt)
+- [x] Abilità senza tiro (es. Dread March dei Dread Lords) non stampabili in chat. (M — era la scheda Legend:
+      le azioni non avevano il 💬, solo ⚔/💥 condizionali)
+- [x] Draken Cross: selezionando la mastery il tag non diventa "Medium Blast". (S — in realtà è il Talent II;
+      fatto con campi "Tags when unlocked" per Talent I/II/Mastery su ogni abilità)
+- [x] Party Resolve dal tracker: non usabile se si sta usando un Limit Break, e le modifiche non si
       riflettono sulle schede PG. (M)
+
+Emerso dalla Sessione 2 (da fare in un blocco futuro):
+- [ ] Passata sui dati del pack `jobs`: compilare "Tags when unlocked" per le altre abilità i cui talenti/mastery
+      cambiano range/area/tag (script: `icon-compendium-audit/tag-overrides/apply-tag-overrides.mjs`). (M)
+- [ ] `templates/actor/legend-actions.hbs` non è usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`):
+      rimuoverlo. (S)
 
 ## Sessione 3 — Dati compendium + Rampart (S+S+S+M)
 
