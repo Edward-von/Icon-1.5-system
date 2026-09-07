@@ -137,46 +137,13 @@ export class IconSheet extends BaseActorSheet {
   /*  Form submission                                    */
   /* -------------------------------------------------- */
 
-  /**
-   * With `submitOnChange: true`, every form change re-serialises the whole
-   * form and rebuilds array fields wholesale. Several array sub-fields have
-   * NO form input — `jobs[].primary`, `jobs[].templateUuid`, and the burden/
-   * ambition `clock.value` (it's driven by clickable segments, not an input).
-   * Without intervention the ArrayField rebuild resets those to their schema
-   * defaults on every submit. Symptoms reported in play:
-   *   - typing HP manually wiped the primary-job flag → Vigilance/Aether/
-   *     Blessing trackers and class-rule reminders vanished;
-   *   - burden/ambition clocks couldn't be ticked and interlude healing
-   *     "didn't stick".
-   * Restore those fields from the live document before the update is applied.
-   * (Adds/removes/Set-as-Primary all go through dedicated action handlers with
-   * direct updates, so during a form submit the array lengths match the doc.)
-   * @override
+  /*
+   * Array sub-fields with NO form input (`jobs[].primary`, `jobs[].templateUuid`,
+   * burden/ambition `clock.value`) used to be reset by every submit. They are
+   * now preserved generically by BaseActorSheet._processFormData, which merges
+   * each submitted array element onto its live counterpart before the clean
+   * step — the same fix that protects foe/legend action tags.
    */
-  _prepareSubmitData(event, form, formData, updateData) {
-    const submitData = super._prepareSubmitData(event, form, formData, updateData);
-
-    const jobsSub  = foundry.utils.getProperty(submitData, "system.combat.jobs");
-    const jobsLive = this.document.system.combat?.jobs ?? [];
-    if (Array.isArray(jobsSub)) {
-      jobsSub.forEach((job, i) => {
-        if (!jobsLive[i] || !job) return;
-        job.primary      = jobsLive[i].primary;
-        job.templateUuid = jobsLive[i].templateUuid;
-      });
-    }
-
-    for (const key of ["burdens", "ambitions"]) {
-      const sub  = foundry.utils.getProperty(submitData, `system.narrative.${key}`);
-      const live = this.document.system.narrative?.[key] ?? [];
-      if (!Array.isArray(sub)) continue;
-      sub.forEach((entry, i) => {
-        if (entry?.clock && live[i]?.clock) entry.clock.value = live[i].clock.value;
-      });
-    }
-
-    return submitData;
-  }
 
   /* -------------------------------------------------- */
   /*  Getters                                            */
@@ -1906,11 +1873,12 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({ "system.combat.classResources.blessingTokens.value": 0 });
   }
 
-  /** Wright — +/- aether (clamped to ≥ 0). */
+  /** Wright — +/- aether, clamped to 0..6 (Aether is tracked on a d6 power die, p.204). */
   static async #onAdjustAether(event, target) {
     const delta   = Number(target.dataset.delta) || 0;
     const current = this.document.system.combat.classResources.aether.value ?? 0;
-    const next    = Math.max(0, current + delta);
+    const next    = Math.clamp(current + delta, 0, CONFIG.ICON.rules.aetherMax);
+    if (next === current && delta > 0) ui.notifications.info(`Aether is capped at ${CONFIG.ICON.rules.aetherMax} (d6 power die).`);
     _log(`adjustAether — actor: "${this.document.name}" | ${current} → ${next}`);
     await this.document.update({ "system.combat.classResources.aether.value": next });
   }

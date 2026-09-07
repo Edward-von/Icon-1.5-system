@@ -18,6 +18,7 @@ ICON.rules = {
   weakenedPenalty:   2,   // Weakened: flat damage reduction on the attacker
   boonCurseCap:      2,   // net boons/curses clamp to ±this
   mobHitsPerMember:  2,   // mob members have 2 hits each (manual p.291)
+  aetherMax:         6,   // Wright Aether is tracked on a d6 power die (p.204)
 };
 
 /* -------------------------------------------------- */

@@ -518,8 +518,33 @@ export class IconCombat extends Combat {
   /*  End combat                                         */
   /* -------------------------------------------------- */
 
-  /** @override */
+  /**
+   * @override
+   * Core endCombat() only shows a confirmation dialog and deletes the combat
+   * on "Yes". Our cleanup (vigor, post-combat heal, class resources) used to
+   * run BEFORE calling super — i.e. before the GM confirmed — so pressing
+   * "No" still refilled everyone's HP. Now we show the same confirmation
+   * first and run the cleanup only after a "Yes".
+   */
   async endCombat() {
+    const confirmed = await foundry.applications.api.DialogV2.confirm({
+      window:  { title: "COMBAT.EndTitle" },
+      content: `<p>${game.i18n.localize("COMBAT.EndConfirmation")}</p>`,
+      modal:   true,
+    });
+    if (!confirmed) return this;
+
+    await this.#cleanupAfterCombat();
+    await this.delete();
+    return this;
+  }
+
+  /**
+   * End-of-combat bookkeeping for PC actors: vigor cleared, post-combat heal,
+   * party resolve reset, class resources reset. Runs only after the GM has
+   * confirmed the "End Encounter" dialog.
+   */
+  async #cleanupAfterCombat() {
     /* --- Clear Vigor from all PC actors --- */
     for (const combatant of this.combatants) {
       if (combatant.actor?.type === "icon") {
@@ -554,8 +579,6 @@ export class IconCombat extends Combat {
         });
       }
     }
-
-    return super.endCombat();
   }
 
   /* -------------------------------------------------- */

@@ -162,10 +162,11 @@ export class IconData extends foundry.abstract.TypeDataModel {
             value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
             max:   new NumberField({ required: true, initial: 10, min: 1, integer: true }),
           }),
-          // Wright — Aether pool (disperses at end of combat, p.204)
+          // Wright — Aether pool, tracked on a d6 power die so it caps at 6
+          // (disperses at end of combat, p.204)
           aether: new SchemaField({
             value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
-            max:   new NumberField({ required: true, initial: 10, min: 1, integer: true }),
+            max:   new NumberField({ required: true, initial: 6, min: 1, integer: true }),
           }),
           // Fool (Vagabond job) — Stacked Dice held (Stack Dice trait: max 1;
           // Death's Apprentice raises it to 2). Lost at end of combat.

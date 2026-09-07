@@ -115,7 +115,7 @@
         {{!-- Wright — Aether + Power Dice --}}
         {{#if (icon-eq primaryJobClass "wright")}}
           <div class="icon-resource-block icon-resource-block--wright icon-resource-block--inline">
-            <h4>Aether <small>(+1 at start of your turn; lost at end of combat)</small></h4>
+            <h4>Aether <small>(+1 at start of your turn; max 6; lost at end of combat)</small></h4>
             <div class="icon-counter-row">
               <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="-1"
                       {{#unless isEditable}}disabled{{/unless}}>−</button>

@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 7 settembre 2026 — Sessione 1: tag NPC cancellati, cap Aether, conferma End Encounter
+
+- **NPC: modificare HP/Vigor/nome/size/classe cancellava i tag di tutte le abilità**: le action dei foe sono un
+  `ArrayField` di oggetti e la scheda invia solo alcuni campi di ogni action come input (nome, costo, testi);
+  i tag sono chip senza `<input>` → a ogni submit Foundry ricostruiva l'array dal form e la pulizia dei dati
+  riempiva i campi mancanti con il valore iniziale (`tags: []`). Fix generico in `BaseActorSheet`
+  (`_processFormData` + nuovo helper `module/helpers/form-arrays.mjs`): prima della pulizia, ogni elemento
+  inviato viene fuso sopra quello già salvato allo stesso indice, così i campi non renderizzati conservano il
+  valore. Copre foe e legend (actions, traits, interrupts) e la scheda PG (jobs, burdens, ambitions), che
+  aveva lo stesso problema con un fix parziale scritto a mano, ora rimosso. Verificato con uno script Node
+  che usa i DataField veri di Foundry: senza fix i tag spariscono, con il fix restano.
+- **Aether sopra 6**: il contatore saliva senza limite → l'Aether è un power die d6 (manuale p.204). Ora
+  +/- è bloccato a 0..6 (costante `CONFIG.ICON.rules.aetherMax`), con avviso quando si tenta di superarlo;
+  `aether.max` di default passa da 10 a 6 e il promemoria in scheda dice "max 6".
+- **End Encounter curava PRIMA della conferma**: il nostro `endCombat` faceva pulizia (vigor, heal post-combat,
+  reset risorse di classe) e poi chiamava quello core, che apre il dialog di conferma → anche premendo "No"
+  gli HP erano già stati ricaricati. Ora il dialog viene mostrato per primo e la pulizia + cancellazione del
+  combat avvengono solo dopo il "Sì".
+
 ## 30 agosto 2026 — Feedback round 4 (Maar)
 
 - **Burden/Ambition clock**: i segmenti non si coloravano mai (e il click andava sempre al primo burden):

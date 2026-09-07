@@ -11,6 +11,7 @@
  */
 import { applyStatus, removeStatus, hasStatus,
          adjustStatusCharges, cycleOngoingStatus } from "../../combat/statuses.mjs";
+import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -67,6 +68,29 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
    * re-entry guard (_dropInProgress) where they need one.
    */
   async _onDropSheet(event) {}
+
+  /* -------------------------------------------------- */
+  /*  Form submission — protect partially-rendered arrays */
+  /* -------------------------------------------------- */
+
+  /**
+   * Merge every submitted array element onto its live counterpart BEFORE the
+   * clean step in _prepareSubmitData, so element fields with no form input
+   * (foe action tags, burden clock values, primary-job flag…) survive the
+   * submit instead of being reset to their schema initial. See
+   * helpers/form-arrays.mjs for the full story.
+   * @override
+   */
+  _processFormData(event, form, formData) {
+    const submitData = super._processFormData(event, form, formData);
+    const schema = this.document.system?.schema;
+    const sub    = submitData?.system;
+    if (schema && sub) {
+      const merged = mergeLiveArrayElements(schema, sub, this.document.system.toObject());
+      if (merged.length) this._log(`_processFormData — merged live data into array elements: ${merged.join(", ")}`);
+    }
+    return submitData;
+  }
 
   #bindSharedListeners() {
     const html = this.element;
