@@ -1,5 +1,30 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 7 settembre 2026 — Sessione 3: Armor Demon, Rush X, Guard/Armor 2, cartelle nei compendi
+
+- **Armor Demon segnato Leader invece di Heavy**: nel PDF (p.408) è una variante "Chapter 1+" del Battle
+  Demon, senza classe scritta; nel pack `foes` era Leader. Ora è Heavy con le stat base p.298 (VIT 10,
+  Def 6, Fray 4, d6, Armor 2) e il trait di classe Guard oltre a Sturdy. Vale per i re-import; le copie già
+  nel mondo non cambiano.
+- **"Rush X" come trait Stalwart con tracker Vigilance**: era nella lista dei trait di classe in
+  `module/helpers/classes.mjs` (non nel pack), e ogni trait di classe Stalwart mostra i pip Vigilance.
+  Rush è una keyword usata dentro le abilità, non un trait → tolto dai trait di classe e spostato tra le
+  regole di classe (dropdown "Rules" nel tab Combat). Migrazione 4: il trait "Rush X" viene cancellato dai
+  PG esistenti (solo quello con source "class").
+- **Heavy senza Armor 2 / Rampart**: il trait di classe Heavy è Guard (p.298: "Has Rampart. Reduce all
+  damage to self and allies in orthogonal spaces by 2, as if by armor"), ma nel pack tutti gli Heavy con
+  Guard avevano Armor 0, quindi "Apply Damage" non bloccava nulla. Ora: stat base Heavy = Armor 2
+  (anche per i foe nuovi e per "Apply base stats"); nel pack `foes` tutti i 50 foe con il trait Guard
+  (Heavy, più Bouncer e Giant Insect) hanno Armor 2; chi "lacks the Guard trait" (Atrophic Grave,
+  Battle Beetle, Beast spirit, Ooze) resta a 0; Lord Evictor resta a 2 (l'armor non si somma, p.98).
+  Il Legend Dread Lords ("Sturdy, Rampart, Armor 2") passa ad Armor 2.
+- **Cartelle nei compendi** (come Jobs / Foe Abilities): Bond Powers e Gear Kits per Bond (Adventurer's
+  Kit alla radice), Relics per tipo di Invoke (Attack / Round / Gambit), Foes per Fazione › Classe,
+  Legends per Fazione. Colori delle fazioni uguali a Foe Abilities. Script
+  `icon-compendium-audit/session3/add-pack-folders.mjs` (idempotente).
+- **Nuovo `PLAYTEST.md`**: ogni sessione ci scrive i test da fare, che si eseguono in una sessione di
+  playtest separata con Claude in Chrome (contiene già i test delle Sessioni 1, 2 e 3).
+
 ## 7 settembre 2026 — Sessione 2: chat NPC, tag Draken Cross, Party Resolve sincronizzato
 
 - **Round Action dei Legend (e dei Foe) non stampabili in chat**: mancava il bottone → nuovo 💬 accanto al

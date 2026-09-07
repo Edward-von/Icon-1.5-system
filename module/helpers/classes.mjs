@@ -28,6 +28,15 @@ export const CLASS_INFO = {
       "Stalwart Gambit: If you take a Stalwart ability as a non-Stalwart class, you get Heroics, and " +
       "the ability to trigger a Heroic ability for free once a combat.",
     relevantRules: [
+      // Rush is a keyword used inside abilities ("rush 1", "may rush 2 before
+      // this attack"), not a trait of its own — listed here as a rule, so it
+      // no longer appears as a trait card with the Vigilance tracker.
+      {
+        name: "Rush X",
+        description:
+          "Stalwarts can rush as part of their abilities. When you rush, you move X spaces and are " +
+          "unstoppable and immune to all damage during that move.",
+      },
       {
         name: "Shove X",
         description:
@@ -94,12 +103,6 @@ export const CLASS_INFO = {
         name: "Fortify",
         description:
           "Spaces adjacent to you have Rampart. Gain Vigilance +1 at the end of your turn.",
-      },
-      {
-        name: "Rush X",
-        description:
-          "Stalwarts can rush as part of their abilities. When you rush, you move X spaces and are " +
-          "unstoppable and immune to all damage during that move.",
       },
     ],
   },

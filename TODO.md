@@ -6,7 +6,8 @@ sessione e l'altra: ogni sessione fa un blocco, spunta le voci, aggiorna il CHAN
 Come lavorare una sessione:
 1. Sessione nuova (`/clear`), prompt: "Leggi TODO.md e fai la sessione N".
 2. Fare SOLO il blocco indicato. Se qualcosa esce dal blocco → aggiungerlo qui, non farlo.
-3. Fine sessione: test in Foundry, voce in CHANGELOG.md, commit, spuntare le caselle qui.
+3. Fine sessione: test da fare in `PLAYTEST.md` (si eseguono in una sessione di playtest separata, con
+   Claude in Chrome), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
 
 Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione · XL = più sessioni.
 
@@ -61,15 +62,22 @@ Emerso dalla Sessione 2 (da fare in un blocco futuro):
 - [ ] `templates/actor/legend-actions.hbs` non è usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`):
       rimuoverlo. (S)
 
-## Sessione 3 — Dati compendium + Rampart (S+S+S+M)
+## Sessione 3 — Dati compendium + Rampart (S+S+S+M) — FATTA il 7 settembre 2026
 
-- [ ] Armor Demon segnato Leader invece di Heavy. (S — pack `foes`)
-- [ ] "Rush X" listato come Trait con Vigilance Die tracciabile sugli Stalwart: non esiste come abilità,
-      Rush è solo parte di alcune abilità. Rimuovere il trait. (S — pack `jobs`)
-- [ ] NPC Rampart: gli Heavy non hanno Armor 2 e Rampart di fatto lo dà. Far dare +2 Armor al trait
-      Rampart (o metterlo nelle stat base Heavy, verificare le 1-2 eccezioni che lo tolgono). (S/M)
-- [ ] Compendium in cartelle come Jobs/Foe Abilities: Bond Powers, Foes, Legends, Gear Kits, Relics.
-      (M — tedioso, script di build in `icon-compendium-audit/`)
+- [x] Armor Demon segnato Leader invece di Heavy. (S — pack `foes`)
+- [x] "Rush X" listato come Trait con Vigilance Die tracciabile sugli Stalwart: non esiste come abilità,
+      Rush è solo parte di alcune abilità. Rimuovere il trait. (S — era in `module/helpers/classes.mjs`,
+      non nel pack; migrazione 4 lo toglie dai PG esistenti)
+- [x] NPC Rampart: gli Heavy non hanno Armor 2 e Rampart di fatto lo dà. Far dare +2 Armor al trait
+      Rampart (o metterlo nelle stat base Heavy, verificare le 1-2 eccezioni che lo tolgono). (S/M —
+      il trait di classe è "Guard" p.298; armor 2 a tutti i foe con Guard, base Heavy = armor 2)
+- [x] Compendium in cartelle come Jobs/Foe Abilities: Bond Powers, Foes, Legends, Gear Kits, Relics.
+      (M — script `icon-compendium-audit/session3/add-pack-folders.mjs`)
+
+Emerso dalla Sessione 3 (da fare in un blocco futuro):
+- [ ] Famiglia Battle Demon (Battle, Starving, Gaping, Nail, Horn Demon) è classificata Leader nel pack
+      `foes`, come lo era l'Armor Demon; nel PDF (p.407-408) sono varianti per capitolo dello stesso
+      Battle Demon, che non ha classe scritta. Chiedere a Maar se vanno tutti Heavy. (S)
 
 ## Sessione 4 — Abilità: power die + formattazione (M+L)
 

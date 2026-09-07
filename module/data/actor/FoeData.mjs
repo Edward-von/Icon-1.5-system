@@ -32,11 +32,15 @@ const {
  *
  * Notes:
  *   • Skirmisher dashes its FULL speed (special trait), not half.
+ *   • Heavy: the class trait Guard (p.298) "has Rampart, reduce all damage to
+ *     self and allies in orthogonal spaces by 2, as if by armor" → armor 2.
+ *     Foes whose entry says "lacks the Guard trait" (e.g. Atrophic Grave)
+ *     keep armor 0 in the pack.
  *   • Mob: VIT/HP are placeholder; mobs don't track HP — they use the
  *     mob.members + mob.hitsRemaining tracker (1 hit per damage instance).
  */
 export const FOE_BASE_STATS = {
-  heavy:      { vit: 10, defense:  6, speed: 4, fray: 4, damagedie: "d6",  armor: 0 },
+  heavy:      { vit: 10, defense:  6, speed: 4, fray: 4, damagedie: "d6",  armor: 2 },
   skirmisher: { vit:  7, defense: 10, speed: 4, fray: 2, damagedie: "d10", armor: 0 },
   leader:     { vit: 10, defense:  8, speed: 4, fray: 3, damagedie: "d6",  armor: 0 },
   artillery:  { vit:  8, defense:  7, speed: 4, fray: 3, damagedie: "d8",  armor: 0 },

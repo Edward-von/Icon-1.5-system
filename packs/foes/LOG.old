@@ -1,7 +1,14 @@
-2026/08/29-11:28:18.817 9824 Recovering log #1458
-2026/08/29-11:28:18.826 9824 Delete type=0 #1458
-2026/08/29-11:28:18.826 9824 Delete type=3 #1457
-2026/08/29-11:28:18.836 97ac Level-0 table #1462: started
-2026/08/29-11:28:18.836 97ac Level-0 table #1462: 0 bytes OK
-2026/08/29-11:28:18.838 97ac Delete type=0 #1460
-2026/08/29-11:28:18.838 97ac Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at (end)
+2026/09/07-18:58:42.121 1678 Recovering log #1488
+2026/09/07-18:58:42.129 1678 Delete type=0 #1488
+2026/09/07-18:58:42.129 1678 Delete type=3 #1487
+2026/09/07-18:58:42.154 5bf4 Level-0 table #1492: started
+2026/09/07-18:58:42.163 5bf4 Level-0 table #1492: 658835 bytes OK
+2026/09/07-18:58:42.167 5bf4 Delete type=0 #1490
+2026/09/07-18:58:42.167 5bf4 Manual compaction at level-0 from '\x00' @ 72057594037927935 : 1 .. '\xc3\xbf' @ 0 : 0; will stop at '!folders!fba8b67f5f06db72' @ 5007 : 0
+2026/09/07-18:58:42.167 5bf4 Compacting 1@0 + 1@1 files
+2026/09/07-18:58:42.179 5bf4 Generated table #1493@0: 438 keys, 657977 bytes
+2026/09/07-18:58:42.179 5bf4 Compacted 1@0 + 1@1 files => 657977 bytes
+2026/09/07-18:58:42.181 5bf4 compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/09/07-18:58:42.181 5bf4 Delete type=2 #1484
+2026/09/07-18:58:42.181 5bf4 Delete type=2 #1492
+2026/09/07-18:58:42.183 5bf4 Manual compaction at level-0 from '!folders!fba8b67f5f06db72' @ 5007 : 0 .. '\xc3\xbf' @ 0 : 0; will stop at (end)

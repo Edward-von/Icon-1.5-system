@@ -22,7 +22,7 @@ const SYSTEM_ID = "icon-system";
 const SETTING   = "schemaVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 3;
+export const CURRENT_SCHEMA_VERSION = 4;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -79,6 +79,22 @@ const MIGRATIONS = {
       if (updates.length) { await scene.updateEmbeddedDocuments("Token", updates); tokens += updates.length; }
     }
     console.log(`ICON 1.5 | Migration 3: HP bars set on ${actors} actor(s) and ${tokens} placed token(s)`);
+  },
+
+  /* 4 — "Rush X" is a keyword, not a Stalwart class trait (Maar, Sept 2026).
+   * Removed from CLASS_INFO.stalwart.traits; delete the trait items the
+   * system had embedded on existing PCs (source "class", so player-made
+   * traits with the same name are left alone). */
+  4: async () => {
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const ids = actor.items
+        .filter(i => i.type === "trait" && i.system?.source === "class" && /^rush/i.test(i.name ?? ""))
+        .map(i => i.id);
+      if (!ids.length) continue;
+      await actor.deleteEmbeddedDocuments("Item", ids);
+      console.log(`ICON 1.5 | Migration 4: removed ${ids.length} "Rush X" class trait(s) from "${actor.name}"`);
+    }
   },
 };
 
