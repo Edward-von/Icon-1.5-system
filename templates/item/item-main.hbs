@@ -39,6 +39,21 @@
           Combo
         </label>
       </div>
+      <div class="icon-field-row icon-power-die-fields">
+        <label title="Set a die size if this item tracks its own power die (manual glossary). none = no power die.">Power die</label>
+        <select name="system.powerDie.faces" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="0" {{#icon-eq system.powerDie.faces 0}}selected{{/icon-eq}}>— none —</option>
+          <option value="4" {{#icon-eq system.powerDie.faces 4}}selected{{/icon-eq}}>d4</option>
+          <option value="6" {{#icon-eq system.powerDie.faces 6}}selected{{/icon-eq}}>d6</option>
+          <option value="8" {{#icon-eq system.powerDie.faces 8}}selected{{/icon-eq}}>d8</option>
+        </select>
+        <label title="Ticks the die is set out at (starting at N)">starts at</label>
+        <input type="number" name="system.powerDie.start" value="{{system.powerDie.start}}" min="0" max="8"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label title="Current ticks; 0 = not set out">current</label>
+        <input type="number" name="system.powerDie.value" value="{{system.powerDie.value}}" min="0" max="8"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </div>
       {{#if isInterruptAbility}}
         <div class="icon-field-row">
           <label>Interrupt Trigger</label>
@@ -260,6 +275,21 @@
                  {{#unless isEditable}}disabled{{/unless}}>
           Passive
         </label>
+      </div>
+      <div class="icon-field-row icon-power-die-fields">
+        <label title="Set a die size if this item tracks its own power die (manual glossary). none = no power die.">Power die</label>
+        <select name="system.powerDie.faces" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="0" {{#icon-eq system.powerDie.faces 0}}selected{{/icon-eq}}>— none —</option>
+          <option value="4" {{#icon-eq system.powerDie.faces 4}}selected{{/icon-eq}}>d4</option>
+          <option value="6" {{#icon-eq system.powerDie.faces 6}}selected{{/icon-eq}}>d6</option>
+          <option value="8" {{#icon-eq system.powerDie.faces 8}}selected{{/icon-eq}}>d8</option>
+        </select>
+        <label title="Ticks the die is set out at (starting at N)">starts at</label>
+        <input type="number" name="system.powerDie.start" value="{{system.powerDie.start}}" min="0" max="8"
+               {{#unless isEditable}}disabled{{/unless}}>
+        <label title="Current ticks; 0 = not set out">current</label>
+        <input type="number" name="system.powerDie.value" value="{{system.powerDie.value}}" min="0" max="8"
+               {{#unless isEditable}}disabled{{/unless}}>
       </div>
     </div>
     <div class="icon-item-section">

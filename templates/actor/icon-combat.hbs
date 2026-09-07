@@ -458,6 +458,22 @@
               {{/if}}
             </div>
           {{/if}}
+          {{#if trait.powerDie}}
+            <div class="icon-trait__quick icon-power-die-widget" title="Power die unique to this item. Set it out when the text says so, tick it up or down as the text tells you; at 0 it is discarded.">
+              <span class="icon-trait__quick-label">🎲 Power die d{{trait.powerDie.faces}}</span>
+              {{#if trait.powerDie.active}}
+                <span class="icon-power-die icon-power-die--inline">
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{trait.id}}" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick down">−</button>
+                  <span class="icon-power-die__value">{{trait.powerDie.value}}</span>
+                  <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{trait.id}}" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick up (max {{trait.powerDie.faces}})">+</button>
+                </span>
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{trait.id}}" title="Roll 1d{{trait.powerDie.faces}}">🎲</button>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieSet" data-item-id="{{trait.id}}" data-value="0" {{#unless ../isEditable}}disabled{{/unless}} title="Discard the die">Discard</button>
+              {{else}}
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--primary" data-action="itemPowerDieSet" data-item-id="{{trait.id}}" data-value="{{trait.powerDie.start}}" {{#unless ../isEditable}}disabled{{/unless}}>Set out at {{trait.powerDie.start}}</button>
+              {{/if}}
+            </div>
+          {{/if}}
           {{#if trait.enrichedDescription}}
             <div class="icon-trait__body icon-editor-wrap">{{{trait.enrichedDescription}}}</div>
           {{/if}}
@@ -595,6 +611,25 @@
           {{/if}}
         </div>
 
+        {{!-- Power die tracked on the ability (Odinforce, Soul Blade…): set out at its
+             starting value, tick up/down, discard at 0 (manual glossary "Power Die"). --}}
+        {{#if ab.powerDie}}
+          <div class="icon-trait__quick icon-power-die-widget" title="Power die unique to this item. Set it out when the text says so, tick it up or down as the text tells you; at 0 it is discarded.">
+            <span class="icon-trait__quick-label">🎲 Power die d{{ab.powerDie.faces}}</span>
+            {{#if ab.powerDie.active}}
+              <span class="icon-power-die icon-power-die--inline">
+                <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{ab.id}}" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick down">−</button>
+                <span class="icon-power-die__value">{{ab.powerDie.value}}</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{ab.id}}" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick up (max {{ab.powerDie.faces}})">+</button>
+              </span>
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{ab.id}}" title="Roll 1d{{ab.powerDie.faces}}">🎲</button>
+              <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieSet" data-item-id="{{ab.id}}" data-value="0" {{#unless ../isEditable}}disabled{{/unless}} title="Discard the die">Discard</button>
+            {{else}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--primary" data-action="itemPowerDieSet" data-item-id="{{ab.id}}" data-value="{{ab.powerDie.start}}" {{#unless ../isEditable}}disabled{{/unless}}>Set out at {{ab.powerDie.start}}</button>
+            {{/if}}
+          </div>
+        {{/if}}
+
         {{!-- Talent / Mastery editor — costs 1 AP per talent, 1 mastery per
              mastery unlock. Disabled when the equipped-abilities lock is on
              so a stray click during play can't change the build. --}}
@@ -633,12 +668,16 @@
           <div class="icon-ability-preview__desc">{{{ab.description}}}</div>
         {{/if}}
         {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> <span class="icon-ability-preview__effect">{{{ab.trigger}}}</span></p>{{/if}}
-        {{!-- Effect: printed after the Attack/Area lines for attacks (book layout); before the Area line for non-attacks (the effect usually creates the area). --}}
-        {{#if ab.hasEffect}}{{#unless ab.hasHit}}<p><strong>Effect:</strong> <span class="icon-ability-preview__effect">{{{ab.effect}}}</span></p>{{/unless}}{{/if}}
+        {{!-- Book layout: attacks print Hit/Miss/Area first, then the rules blocks (Effect, Stance, Mark…)
+             parsed out of the description in their written order; non-attacks print the blocks first
+             (they usually create the area) and the Area line last. --}}
         {{#if ab.hasHit}}<p><strong>Hit:</strong> <span class="icon-ability-preview__effect">{{{ab.hitEffect}}}</span></p>{{/if}}
         {{#if ab.hasMiss}}<p><strong>Miss:</strong> <span class="icon-ability-preview__effect">{{{ab.missEffect}}}</span></p>{{/if}}
-        {{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}
-        {{#if ab.hasEffect}}{{#if ab.hasHit}}<p><strong>Effect:</strong> <span class="icon-ability-preview__effect">{{{ab.effect}}}</span></p>{{/if}}{{/if}}
+        {{#if ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}{{/if}}
+        {{#each ab.sections as |sec|}}
+          <p class="icon-ability-section"><strong>{{sec.label}}:</strong> <span class="icon-ability-preview__effect">{{{sec.text}}}</span></p>
+        {{/each}}
+        {{#unless ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}{{/unless}}
         {{#if ab.hasCharge}}<p><strong>Charge:</strong> <span class="icon-ability-preview__effect">{{{ab.chargeEffect}}}</span></p>{{/if}}
         {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> <span class="icon-ability-preview__effect">{{{ab.heroicEffect}}}</span></p>{{/if}}
         {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> <span class="icon-ability-preview__effect">{{{ab.exceedEffect}}}</span></p>{{/if}}

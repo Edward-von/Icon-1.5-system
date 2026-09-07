@@ -15,8 +15,9 @@ const TEXT    = "#d8c9a8";
 const DIM     = "#a89878";
 const BORDER  = "#3a3528";
 
-/** Glossary data — grouped by category. Each entry: [term, definition]. */
-const GLOSSARY = [
+/** Glossary data — grouped by category. Each entry: [term, definition].
+ *  Also the single source of the inline keyword tooltips (helpers/keywords.mjs). */
+export const GLOSSARY = [
   {
     title: "Core Stats & Health",
     terms: [

@@ -10,6 +10,7 @@
       <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
     {{/icon-gt}}
     {{#if ab.masteryUnlocked}}<span class="icon-badge icon-badge--primary">★ Mastered</span>{{/if}}
+    {{#if ab.powerDie.active}}<span class="icon-badge" title="Power die (current ticks)">🎲 d{{ab.powerDie.faces}}: {{ab.powerDie.value}}</span>{{/if}}
   </div>
 
   {{#if comboMode}}
@@ -46,9 +47,13 @@
       <div class="icon-chat-card__desc">{{{ab.description}}}</div>
     {{/if}}
 
+    {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
+    {{!-- Same order as the sheet: attacks Hit/Miss/Area then the rules blocks; non-attacks blocks then Area. --}}
     {{#if ab.hasHit}}<p><strong>Hit:</strong> {{{ab.hitEffect}}}</p>{{/if}}
     {{#if ab.hasMiss}}<p><strong>Miss:</strong> {{{ab.missEffect}}}</p>{{/if}}
-    {{#if ab.hasArea}}<p><strong>Area:</strong> {{{ab.areaEffect}}}</p>{{/if}}
+    {{#if ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> {{{ab.areaEffect}}}</p>{{/if}}{{/if}}
+    {{#each ab.sections as |sec|}}<p class="icon-ability-section"><strong>{{sec.label}}:</strong> {{{sec.text}}}</p>{{/each}}
+    {{#unless ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> {{{ab.areaEffect}}}</p>{{/if}}{{/unless}}
     {{#if ab.hasCharge}}<p><strong>Charge:</strong> {{{ab.chargeEffect}}}</p>{{/if}}
     {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> {{{ab.heroicEffect}}}</p>{{/if}}
     {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> {{{ab.exceedEffect}}}</p>{{/if}}

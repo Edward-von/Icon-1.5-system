@@ -1,5 +1,33 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 7 settembre 2026 — Sessione 4: power die sulle abilità, blocchi e keyword nel testo delle abilità
+
+- **Power die tracciabile sull'abilità** (Odinforce, Soul Blade, Gallows Humor, Exorcism…): prima esisteva
+  solo la lista generica "Power Dice" del Wright nelle risorse di classe, scollegata dall'abilità. Ora ogni
+  abilità e ogni trait ha un campo "Power die" (d4/d6/d8, "starts at N", valore corrente) nella scheda item,
+  e nel pannello dell'abilità sulla scheda PG compare il widget "🎲 Power die dN": "Set out at N", −/+ (mai
+  sopra la taglia del dado), 🎲 per tirarlo in chat, Discard; a 0 il dado viene scartato (glossario "Power
+  Die"). La card in chat mostra il badge "🎲 d6: N" quando il dado è attivo; a fine combat i dadi si
+  azzerano. Nel pack Jobs sono compilati 12 item (Soul Blade, Wicked Sheath, Gran Reversa, Sleight of Hand,
+  Umbral Echo, Obsidian Flesh, Crimson Bloom, Odinforce, Rampant Nail, Gallows Humor, Exorcism, Godly Smite);
+  per le copie già sui PG basta impostare il dado nella scheda dell'abilità.
+- **Testo delle abilità a blocchi, in ordine di lettura**: la descrizione veniva stampata come un unico
+  paragrafo, con al massimo un "Effect:" staccato. Ora `parseAbilitySections` riconosce i blocchi del
+  manuale ("Effect:", "Stance:", "Mark:", "Refresh:", "Terrain Effect:", "Summon:", "Interrupt N:",
+  "Infuse N:", "Special:", "Object:", …) e li stampa uno per riga con etichetta in oro, nell'ordine in cui
+  sono scritti; il flavour resta in corsivo; per gli attacchi Hit → Miss → Area → blocchi, per le altre
+  abilità blocchi → Area. Stesso ordine nel pannello della scheda PG e nella card 💬 in chat.
+- **Card in chat senza Trigger/Effect** (regressione del round 4): dallo split Trigger/Effect la card
+  "Show in Chat" stampava solo il flavour e Hit/Miss/Area. Ora stampa Trigger e tutti i blocchi.
+- **Keyword con tooltip dentro il testo**: le parole di regola (status come slashed/weakened/stunned,
+  rush N, shove N, dash, teleport, true strike, bloodied, gamble, aura N, sacrifice N, cure, bless, boon/curse,
+  fray, [D], power die, interrupt N, …) vengono evidenziate in ogni testo arricchito (abilità, trait, azioni
+  dei Foe, card in chat) con il tooltip preso dal glossario del Reference (`module/apps/reference.mjs`,
+  unica fonte). Status in oro, altre keyword con sottolineatura a puntini (`module/helpers/keywords.mjs`).
+- **Passata sui dati rimandata**: `icon-compendium-audit/session4/format-report.md` elenca per ogni abilità
+  i blocchi riconosciuti e i casi da sistemare (etichette minuscole, etichette sconosciute, testi senza
+  blocchi). È la Sessione 4b in TODO.
+
 ## 7 settembre 2026 — Sessione 3: Armor Demon, Rush X, Guard/Armor 2, cartelle nei compendi
 
 - **Armor Demon segnato Leader invece di Heavy**: nel PDF (p.408) è una variante "Chapter 1+" del Battle

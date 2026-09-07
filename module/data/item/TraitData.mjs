@@ -5,6 +5,8 @@ const {
   SchemaField, StringField, NumberField, BooleanField, HTMLField,
 } = foundry.data.fields;
 
+import { powerDieSchema } from "./power-die.mjs";
+
 export class TraitData extends foundry.abstract.TypeDataModel {
 
   static defineSchema() {
@@ -18,6 +20,8 @@ export class TraitData extends foundry.abstract.TypeDataModel {
       passive:     new BooleanField({ required: true, initial: true }),
       chapter:     new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
       description: new HTMLField({ required: true, initial: "" }),
+      // Optional power die tracked on the trait itself (Sealer's Godly Smite mantra die).
+      powerDie: powerDieSchema(),
     };
   }
 }

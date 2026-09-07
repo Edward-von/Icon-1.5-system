@@ -6,8 +6,9 @@ sessione e l'altra: ogni sessione fa un blocco, spunta le voci, aggiorna il CHAN
 Come lavorare una sessione:
 1. Sessione nuova (`/clear`), prompt: "Leggi TODO.md e fai la sessione N".
 2. Fare SOLO il blocco indicato. Se qualcosa esce dal blocco → aggiungerlo qui, non farlo.
-3. Fine sessione: test da fare in `PLAYTEST.md` (si eseguono in una sessione di playtest separata, con
-   Claude in Chrome), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
+3. Fine sessione: **compilare `PLAYTEST.md`** con i test del blocco (NON eseguirli: il playtest è una sessione
+   separata con Claude in Chrome), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
+   Ogni blocco qui sotto sottintende la voce "[ ] compilare PLAYTEST.md".
 
 Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione · XL = più sessioni.
 
@@ -79,13 +80,20 @@ Emerso dalla Sessione 3 (da fare in un blocco futuro):
       `foes`, come lo era l'Armor Demon; nel PDF (p.407-408) sono varianti per capitolo dello stesso
       Battle Demon, che non ha classe scritta. Chiedere a Maar se vanno tutti Heavy. (S)
 
-## Sessione 4 — Abilità: power die + formattazione (M+L)
+## Sessione 4 — Abilità: power die + formattazione (M+L) — FATTA (infrastruttura) il 7 settembre 2026
 
-- [ ] "Power die" generico sulle abilità che ne hanno uno proprio (Odinforce ecc.): campo tracciabile
-      sull'abilità stessa. (M)
-- [ ] Riformattazione abilità da combattimento: ordine top→bottom chiaro, keyword in grassetto/link
-      con tooltip (esiste già `module/helpers/rule-tooltips.mjs` + `enrich.mjs`), correggere le abilità
-      formattate male. (L, probabilmente 2 sessioni: 1 infrastruttura, 1 passata sui dati)
+- [x] "Power die" generico sulle abilità che ne hanno uno proprio (Odinforce ecc.): campo tracciabile
+      sull'abilità stessa. (M — campo `powerDie` su abilità e trait, widget nel pannello, 12 item del pack
+      `jobs` compilati via `icon-compendium-audit/session4/set-power-dice.mjs`)
+- [x] Riformattazione abilità da combattimento: ordine top→bottom chiaro, keyword in grassetto/link
+      con tooltip — **infrastruttura** fatta (parser dei blocchi "Label:" + tooltip sulle keyword nel testo).
+- [ ] **Sessione 4b — passata sui dati**: correggere le abilità formattate male usando il report
+      `icon-compendium-audit/session4/format-report.md` (etichette minuscole, etichette sconosciute, testi
+      senza blocchi). Aggiungere alla lista `SECTION_LABELS` in `module/helpers/enrich.mjs` le etichette
+      legittime che mancano. Rifinire la lista keyword in `module/helpers/keywords.mjs` sui falsi positivi
+      visti nel playtest. (L)
+- [ ] Gran Reversa: Talent I porta il power die a d6 con 6 cariche → oggi si cambia a mano nella scheda
+      dell'abilità; valutare override del die per talento come per i tag. (S)
 
 ## Sessione 5 — Level Up / First-time setup UI (L)
 

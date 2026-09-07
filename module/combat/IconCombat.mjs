@@ -577,6 +577,12 @@ export class IconCombat extends Combat {
           "system.combat.classResources.stackedDice.value":    0,
           "flags.icon-system.-=comboSpentOnItem":              null,
         });
+        // Power dice tracked on ability / trait items end with the combat too
+        // (stances and marks that grant them don't outlive the encounter).
+        const dieResets = combatant.actor.items
+          .filter(i => (i.system?.powerDie?.value ?? 0) > 0)
+          .map(i => ({ _id: i.id, "system.powerDie.value": 0 }));
+        if (dieResets.length) await combatant.actor.updateEmbeddedDocuments("Item", dieResets);
       }
     }
   }

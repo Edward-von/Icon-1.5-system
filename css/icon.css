@@ -2279,9 +2279,23 @@ details[open] > .icon-basic-actions__summary::before {
   border-bottom: 1px solid var(--ic-border-subtle);
 }
 .icon-ability-preview__header strong { font-size: 1.05em; color: var(--ic-gold-bright); }
-.icon-ability-preview__desc  { margin: 4px 0 8px; font-size: 0.9em; line-height: 1.4; }
+.icon-ability-preview__desc  { margin: 4px 0 8px; font-size: 0.9em; line-height: 1.4; font-style: italic; color: var(--ic-text-dim); }
 .icon-ability-preview__effect { font-size: 0.85em; }
 .icon-ability-preview p { margin: 4px 0; }
+/* Rules blocks parsed out of the ability text (Effect / Stance / Mark / Refresh…) */
+.icon-ability-section { padding-left: 8px; border-left: 2px solid rgba(200,150,28,.25); }
+.icon-ability-section strong { color: var(--ic-gold-bright); }
+.icon-chat-card--ability .icon-chat-card__desc { font-style: italic; }
+
+/* Inline rule keywords with hover tooltip (helpers/keywords.mjs) */
+.icon-kw { border-bottom: 1px dotted var(--ic-gold-dim); cursor: help; }
+.icon-kw--status { font-weight: 600; color: var(--ic-gold-bright); border-bottom-color: var(--ic-gold); }
+.icon-kw:hover { background: rgba(200,150,28,.12); }
+
+/* Power die tracked on an ability / trait item */
+.icon-power-die-widget { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 4px 0 6px; padding: 4px 6px; border-radius: var(--ic-radius-sm); background: rgba(0,0,0,.08); }
+.icon-power-die-fields label { white-space: nowrap; }
+.icon-power-die-fields input[type="number"] { width: 4em; }
 
 .icon-ability-preview__actions {
   display: flex;

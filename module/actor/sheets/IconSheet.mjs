@@ -7,8 +7,9 @@ import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
-import { enrichHTML, escapeHTML, splitAbilityDescription } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, parseAbilitySections } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
+import { powerDieView } from "../../data/item/power-die.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -104,6 +105,10 @@ export class IconSheet extends BaseActorSheet {
       rollPowerDie:     IconSheet.#onRollPowerDie,
       tickPowerDie:     IconSheet.#onTickPowerDie,
       removePowerDie:   IconSheet.#onRemovePowerDie,
+      // Power die tracked on an ability / trait item
+      itemPowerDieTick: IconSheet.#onItemPowerDieTick,
+      itemPowerDieSet:  IconSheet.#onItemPowerDieSet,
+      itemPowerDieRoll: IconSheet.#onItemPowerDieRoll,
       // Basic actions (p.85)
       basicAttackRoll:  IconSheet.#onBasicAttackRoll,
       basicDamageRoll:  IconSheet.#onBasicDamageRoll,
@@ -218,7 +223,7 @@ export class IconSheet extends BaseActorSheet {
       const masteryUnlocked = !!s.masteryUnlocked;
       const parsed = _parseAbilityDamage(s);
       const parsedCombo = parseComboAbilityDamage(s);
-      const desc = splitAbilityDescription(s.description);
+      const desc = parseAbilitySections(s.description);
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       return {
         id:          a.id,
@@ -230,6 +235,9 @@ export class IconSheet extends BaseActorSheet {
         tags:        resolveAbilityTags(s),
         talentSelected,
         masteryUnlocked,
+        powerDie:    powerDieView(s),
+        // Book-order rules blocks parsed out of the description (Stance, Mark, Effect…)
+        sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still
         // gets a Damage button.
@@ -238,7 +246,6 @@ export class IconSheet extends BaseActorSheet {
         dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage,
         description:         await enrichHTML(desc.flavor),
         trigger:             await enrichHTML(trigger),
-        effect:              await enrichHTML(desc.effect),
         hitEffect:           await enrichHTML(s.hitEffect),
         missEffect:          await enrichHTML(s.missEffect),
         areaEffect:          await enrichHTML(s.areaEffect),
@@ -284,7 +291,7 @@ export class IconSheet extends BaseActorSheet {
         hasMastery: !!(s.mastery && s.mastery.trim()) && masteryUnlocked,
         hasDesc:    !!desc.flavor,
         hasTrigger: !!trigger,
-        hasEffect:  !!desc.effect,
+        hasSections: desc.sections.length > 0,
       };
     }));
 
@@ -426,6 +433,7 @@ export class IconSheet extends BaseActorSheet {
       const chapter = t.system?.chapter ?? 1;
       return {
         quick:               quickFor(t),
+        powerDie:            powerDieView(t.system),
         id:                  t.id,
         name:                t.name,
         jobName:             t.system?.jobName ?? "",
@@ -1040,7 +1048,7 @@ export class IconSheet extends BaseActorSheet {
     const s = item.system ?? {};
     const parsed = _parseAbilityDamage(s);
     const parsedCombo = parseComboAbilityDamage(s);
-    const desc = splitAbilityDescription(s.description);
+    const desc = parseAbilitySections(s.description);
     const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
     return {
       id:          item.id,
@@ -1052,6 +1060,9 @@ export class IconSheet extends BaseActorSheet {
       tags:        resolveAbilityTags(s),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
+      powerDie:    powerDieView(s),
+      sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
+      hasSections: desc.sections.length > 0,
       isAttack:    parsed.isAttack,
       isAutoHit:   parsed.isAutoHit,
       dealsDamage: parsed.dealsDamage,
@@ -1059,7 +1070,6 @@ export class IconSheet extends BaseActorSheet {
       parsedCombo,
       description:         await enrichHTML(desc.flavor),
       trigger:             await enrichHTML(trigger),
-      effect:              await enrichHTML(desc.effect),
       hitEffect:           await enrichHTML(s.hitEffect),
       missEffect:          await enrichHTML(s.missEffect),
       areaEffect:          await enrichHTML(s.areaEffect),
@@ -1076,7 +1086,6 @@ export class IconSheet extends BaseActorSheet {
       mastery:             await enrichHTML(s.mastery),
       hasDesc:     !!desc.flavor,
       hasTrigger:  !!trigger,
-      hasEffect:   !!desc.effect,
       hasHit:      !!(s.hitEffect && s.hitEffect.trim()),
       hasMiss:     !!(s.missEffect && s.missEffect.trim()),
       hasArea:     !!(s.areaEffect && s.areaEffect.trim()),
@@ -2371,6 +2380,60 @@ export class IconSheet extends BaseActorSheet {
     const next = dice.filter(d => d.id !== id);
     _log(`removePowerDie — id: ${id} | ${dice.length} → ${next.length}`);
     await this.document.update({ "system.combat.classResources.powerDice": next });
+  }
+
+  /* -------------------------------------------------- */
+  /*  Power die on an ability / trait item               */
+  /* -------------------------------------------------- */
+
+  /** Item (ability/trait) carrying a power die, or null. */
+  #powerDieItem(target) {
+    const item = this.document.items.get(target.dataset.itemId);
+    const view = powerDieView(item?.system);
+    if (!item || !view) { _log(`itemPowerDie — BLOCKED: no power die on item "${target.dataset.itemId}"`); return null; }
+    return { item, view };
+  }
+
+  /** Tick the item's power die by ±1; ticking to 0 discards it (manual glossary). */
+  static async #onItemPowerDieTick(event, target) {
+    event.stopPropagation();
+    const found = this.#powerDieItem(target);
+    if (!found) return;
+    const { item, view } = found;
+    const delta = Number(target.dataset.delta) || 0;
+    const next  = Math.min(view.faces, Math.max(0, view.value + delta));
+    if (next === view.value) {
+      if (delta > 0) ui.notifications.info(`${item.name}: power die is already at its maximum (${view.faces}).`);
+      return;
+    }
+    _log(`itemPowerDieTick — "${item.name}" d${view.faces}: ${view.value} → ${next}`);
+    await item.update({ "system.powerDie.value": next });
+    if (next === 0) ui.notifications.info(`${item.name}: power die ticked to 0 — discarded.`);
+  }
+
+  /** Set the item's power die out at its starting value, or discard it (value 0). */
+  static async #onItemPowerDieSet(event, target) {
+    event.stopPropagation();
+    const found = this.#powerDieItem(target);
+    if (!found) return;
+    const { item, view } = found;
+    const value = Math.min(view.faces, Math.max(0, Number(target.dataset.value ?? view.start) || 0));
+    _log(`itemPowerDieSet — "${item.name}" d${view.faces}: ${view.value} → ${value}`);
+    await item.update({ "system.powerDie.value": value });
+  }
+
+  /** Roll the item's power die (1dN) to chat, flagged with its current ticks. */
+  static async #onItemPowerDieRoll(event, target) {
+    event.stopPropagation();
+    const found = this.#powerDieItem(target);
+    if (!found) return;
+    const { item, view } = found;
+    const roll = await new Roll(`1d${view.faces}`).evaluate();
+    _log(`itemPowerDieRoll — "${item.name}" d${view.faces} (${view.value} ticks) → ${roll.total}`);
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      flavor:  `${escapeHTML(item.name)} — power die d${view.faces} (${view.value} ${view.value === 1 ? "tick" : "ticks"})`,
+    });
   }
 
   /* -------------------------------------------------- */

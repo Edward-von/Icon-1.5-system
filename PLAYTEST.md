@@ -59,6 +59,28 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
       Kit alla radice), Relics (Attack / Round / Gambit Invoke), Foes (Fazione › Classe), Legends
       (Fazione). Drag di un documento da una sottocartella sul canvas/sidebar funziona.
 
+## Sessione 4 (7 settembre 2026) — power die sulle abilità, formattazione abilità
+
+- [ ] **Power die su Odinforce**: PG Spellblade con Odinforce importato **dopo** questa build (o con "Power
+      die: d6, starts at 3" impostato a mano nella scheda dell'abilità). Nel pannello dell'abilità compare
+      "🎲 Power die d6" con il bottone "Set out at 3" → click → mostra 3 con −/+, 🎲 e Discard. + oltre 6
+      resta a 6 con avviso; − fino a 0 → "discarded" e torna il bottone Set out. 🎲 tira 1d6 in chat con il
+      nome dell'abilità e i tick.
+- [ ] **Power die su un trait**: Sealer con Godly Smite → stesso widget sulla card del trait (d6, starts at 1).
+- [ ] **Card in chat**: con il die attivo, 💬 Show in Chat mostra il badge "🎲 d6: N" nella testata.
+- [ ] **Reset a fine combat**: die attivo, "End encounter" → Sì → il die torna non attivo.
+- [ ] **Blocchi delle abilità**: apri Gran Reversa (Seer) o Soul Blade: il testo è diviso in righe
+      "Stance:", "Interrupt 1:", "Effect:", "Refresh:" con etichetta in oro e barra a sinistra; il flavour è
+      in corsivo. Draken Cross (attacco): Hit → Miss → Area → Effect. Un'abilità non-attacco con Area
+      (es. Comet): blocchi prima, Area dopo. Card 💬 in chat: stesso ordine e ora mostra anche Trigger ed
+      Effect (prima mancavano).
+- [ ] **Keyword con tooltip**: nel testo di un'abilità le parole come "slashed", "weakened", "rush 1",
+      "true strike", "gamble", "bloodied" sono sottolineate a puntini (gli status in oro); hover → tooltip
+      con la regola del glossario. Vale anche per trait, action dei Foe e card in chat. Controlla che non
+      ci siano falsi positivi evidenti (es. "cover" usato in senso comune) e che i link/inline roll di
+      Foundry funzionino ancora.
+- [ ] **Scheda item**: abilità e trait hanno la riga "Power die / starts at / current" e salvano.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

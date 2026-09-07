@@ -3,9 +3,15 @@
  *
  * In Foundry v13 the global `TextEditor` is deprecated; the correct path is
  * `foundry.applications.ux.TextEditor.implementation.enrichHTML`.
+ * After Foundry's own enrichment (links, rolls) the rule keywords in the text
+ * get their hover tooltips (helpers/keywords.mjs).
  */
-export function enrichHTML(html) {
-  return foundry.applications.ux.TextEditor.implementation.enrichHTML(html ?? "", { async: true });
+import { enrichRuleKeywords } from "./keywords.mjs";
+
+export async function enrichHTML(html) {
+  const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(html ?? "", { async: true });
+  try { return enrichRuleKeywords(out); }
+  catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
 }
 
 /**
@@ -64,20 +70,68 @@ export async function postNpcTraitCard(actor, trait, { label } = {}) {
  * @returns {{ flavor: string, trigger: string, effect: string }}
  */
 export function splitAbilityDescription(description) {
-  const text = (description ?? "").trim();
-  if (!text) return { flavor: "", trigger: "", effect: "" };
+  const { flavor, trigger, sections } = parseAbilitySections(description);
+  const effect = sections.map(s => s.label === "Effect" ? s.text : `${s.label}: ${s.text}`).join(" ");
+  return { flavor, trigger, effect };
+}
 
-  const effectMatch = /(?:^|[.!?…:]\s+|—\s*)Effect:\s*/.exec(text);
-  let head   = effectMatch ? text.slice(0, effectMatch.index + (effectMatch[0].startsWith("Effect") ? 0 : 1)) : text;
-  let effect = effectMatch ? text.slice(effectMatch.index + effectMatch[0].length) : "";
+/**
+ * Labels the book uses to start a rules block inside an ability text. Matched
+ * case-insensitively at a sentence start (or after an em dash / line break);
+ * the first letter must be a capital so "…remove the mark: …" stays prose.
+ * Canonical display form = each word capitalised ("Terrain effect" →
+ * "Terrain Effect").
+ */
+const SECTION_LABELS = [
+  "Effect", "Trigger", "Stance", "Refresh", "Mark", "Terrain Effect", "Summon Effect", "Summon",
+  "Special Effect", "Special", "Object Effect", "Object", "Area Effect", "Charge", "Comeback",
+  "Collide", "Slay", "Exceed", "Heroic", "Crit", "Finishing Blow", "Free Action", "Delay",
+  "Gain Stance", "While in this stance", "In this stance", "Interrupt \\d", "Infuse (?:\\d+|X)",
+  "Slay or Infuse \\d", "Talent", "Mastery",
+];
+const SECTION_RE = new RegExp(
+  `(?:^|[.!?…)\\]]\\s+|—\\s*|>\\s*|\\n\\s*)(${SECTION_LABELS.join("|")}):\\s*`, "gi",
+);
+
+const _canonLabel = (raw) => raw.trim().replace(/\b[a-z]/g, c => c.toUpperCase());
+
+/**
+ * Parse an ability text into its book-layout blocks, in the order they are
+ * written:
+ *   "Flavour. Stance: … Refresh: … Effect: …"
+ *   → { flavor: "Flavour.", trigger: "", sections: [{label:"Stance", text}, {label:"Refresh", …}, …] }
+ * A leading "Trigger:" block (interrupt abilities) is pulled out into
+ * `trigger`; a Trigger nested inside another block ("Interrupt 1: Trigger: …")
+ * stays in that block's text. Unknown "Something:" prefixes are left in the
+ * running text.
+ *
+ * @param {string} description  raw description (plain text or light HTML)
+ * @returns {{ flavor: string, trigger: string, sections: Array<{label: string, text: string}> }}
+ */
+export function parseAbilitySections(description) {
+  // Pack texts are plain; hand-edited ones may carry <p>/<br> wrappers — turn
+  // those into whitespace so a label never ends up inside a half-open tag.
+  const text = String(description ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim();
+  if (!text) return { flavor: "", trigger: "", sections: [] };
+
+  const hits = [];
+  SECTION_RE.lastIndex = 0;
+  for (const m of text.matchAll(SECTION_RE)) {
+    const label = m[1];
+    if (label[0] !== label[0].toUpperCase()) continue;           // lowercase → prose, not a label
+    const labelStart = m.index + m[0].indexOf(label);
+    hits.push({ label: _canonLabel(label), labelStart, bodyStart: m.index + m[0].length });
+  }
+
+  const flavor = (hits.length ? text.slice(0, hits[0].labelStart) : text).trim();
+  const sections = hits.map((h, i) => ({
+    label: h.label,
+    text:  text.slice(h.bodyStart, i + 1 < hits.length ? hits[i + 1].labelStart : undefined).trim(),
+  })).filter(s => s.text);
 
   let trigger = "";
-  const triggerMatch = /(?:^|\s)Trigger:\s*/.exec(head);
-  if (triggerMatch) {
-    trigger = head.slice(triggerMatch.index + triggerMatch[0].length);
-    head    = head.slice(0, triggerMatch.index);
-  }
-  return { flavor: head.trim(), trigger: trigger.trim(), effect: effect.trim() };
+  if (sections[0]?.label === "Trigger") trigger = sections.shift().text;
+  return { flavor, trigger, sections };
 }
 
 /** Human label for a foe/legend action cost key. */

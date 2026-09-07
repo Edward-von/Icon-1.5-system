@@ -6,6 +6,8 @@ const {
   ArrayField, HTMLField,
 } = foundry.data.fields;
 
+import { powerDieSchema } from "./power-die.mjs";
+
 export class AbilityData extends foundry.abstract.TypeDataModel {
 
   static defineSchema() {
@@ -58,6 +60,9 @@ export class AbilityData extends foundry.abstract.TypeDataModel {
       // True once the character has spent a mastery point to unlock this
       // ability's mastery effect.
       masteryUnlocked: new BooleanField({ required: true, initial: false }),
+
+      // Optional power die tracked on the ability itself (Odinforce, Soul Blade…).
+      powerDie: powerDieSchema(),
     };
   }
 }
