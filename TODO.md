@@ -76,7 +76,7 @@ Emerso dalla Sessione 2 (da fare in un blocco futuro):
       (M — script `icon-compendium-audit/session3/add-pack-folders.mjs`)
 
 Emerso dalla Sessione 3 (da fare in un blocco futuro):
-- [ ] Famiglia Battle Demon (Battle, Starving, Gaping, Nail, Horn Demon) è classificata Leader nel pack
+- [x] Famiglia Battle Demon (Battle, Starving, Gaping, Nail, Horn Demon) è classificata Leader nel pack
       `foes`, come lo era l'Armor Demon; nel PDF (p.407-408) sono varianti per capitolo dello stesso
       Battle Demon, che non ha classe scritta. Chiedere a Maar se vanno tutti Heavy. (S)
 
@@ -127,10 +127,11 @@ Raggruppa le voci "emerso dalla Sessione N" qui sopra.
       click su 📐; Aura X come template che segue il token. (M)
 - [x] Tooltip per i tag `width-N`, `interrupt-N`, `no-max-range`, `melee`. (S)
 
-Da chiedere a Maar (non si fanno senza risposta):
-- [ ] Battle Demon e famiglia (Starving, Gaping, Nail, Horn): tutti Heavy come l'Armor Demon?
-- [ ] Template di area: rimuoverli automaticamente all'inizio del turno successivo dell'attore, o lasciarli
-      finché 🗑 area / End encounter (come ora)?
+Decisi con Edoardo il 9 settembre 2026:
+- [x] Battle Demon e famiglia (Starving, Gaping, Nail, Horn): il manuale non dà classi ai demoni (pp.406-427,
+      nessuna intestazione Heavy/Skirmisher); si segue Maar → tutti Heavy come l'Armor Demon
+      (`icon-compendium-audit/session7/battle-demons-heavy.mjs`).
+- [x] Template di area: si tolgono a mano (🗑 area / End encounter), nessuna rimozione automatica.
 
 ## Sessione 8+ — Wishlist alta (una per volta, in quest'ordine)
 

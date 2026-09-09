@@ -193,6 +193,9 @@ Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il gi
       "End encounter" toglie anche le aure.
 - [ ] **Template inutilizzato rimosso**: la scheda Legend si apre e la tab combat funziona come prima
       (`legend-actions.hbs` non esiste più).
+- [ ] **Battle Demon Heavy**: compendio Foes → cartella Demon › Heavy contiene Armor, Battle, Starving, Gaping,
+      Nail e Horn Demon; importa il Battle Demon → classe Heavy, VIT 10 / Def 6 / Fray 4 / Armor 2, trait Guard
+      + Engorge. La cartella Demon › Leader non li contiene più.
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 

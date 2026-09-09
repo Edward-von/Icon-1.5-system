@@ -21,8 +21,11 @@
   aure. Rimosse a fine combat come gli altri template.
 - **Tooltip mancanti sui tag** `width-N`, `interrupt-N`, `no-max-range`, `melee`.
 - **Rimosso `templates/actor/legend-actions.hbs`**, non usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`).
-- Restano da chiedere a Maar (in TODO): famiglia Battle Demon tutta Heavy? e se i template vanno tolti da soli
-  all'inizio del turno successivo.
+- **Famiglia Battle Demon → Heavy** (Battle, Starving, Gaping, Nail, Horn Demon; pack `foes` + specchio in
+  `foe-abilities`): il manuale non assegna classi ai demoni (pp.406-427), quindi si segue la segnalazione di Maar
+  come per l'Armor Demon: stat base Heavy p.298 (VIT 10, Def 6, Fray 4, d6, Armor 2), trait Guard, cartella
+  "Demon › Heavy". Vale per i re-import.
+- I template di area restano finché si tolgono a mano (🗑 area / End encounter): nessuna rimozione automatica.
 
 ## 9 settembre 2026 — Sessione 6: template Blast / Line / Arc / Burst con auto-target
 
