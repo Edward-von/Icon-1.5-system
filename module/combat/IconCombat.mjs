@@ -596,7 +596,7 @@ export class IconCombat extends Combat {
     }
 
     /* --- Blast / Line / Arc / Burst templates left on the map go with the encounter --- */
-    try { await deleteAreaTemplates({ scene: canvas?.scene }); }
+    try { await deleteAreaTemplates({ scene: this.scene ?? canvas?.scene }); }   // the combat's scene, not the one being viewed
     catch (err) { console.warn("[ICON | IconCombat] area template cleanup failed", err); }
   }
 

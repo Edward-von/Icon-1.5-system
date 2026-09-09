@@ -400,6 +400,17 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
     if (abilityPicks.length !== STARTING_ABILITIES) {
       errors.push(`Pick exactly ${STARTING_ABILITIES} starting abilities (picked ${abilityPicks.length}).`);
     }
+    // The picks must belong to the chosen job: the cards of the other jobs are
+    // hidden, but a ticked hidden input would still be submitted.
+    if (data.jobUuid && abilityPicks.length) {
+      const job = await fromUuid(data.jobUuid);
+      const jobName = String(job?.system?.jobName ?? job?.name ?? "").toLowerCase();
+      for (const uuid of abilityPicks) {
+        const ab = await fromUuid(uuid);
+        const abJob = String(ab?.system?.jobName ?? "").toLowerCase();
+        if (jobName && abJob && abJob !== jobName) errors.push(`"${ab.name}" is a ${ab.system.jobName} ability: pick abilities of your job.`);
+      }
+    }
 
     // Simulate final action ratings and enforce the L0 cap (rating 3)
     const baseActions = actor.system.narrative.actions;

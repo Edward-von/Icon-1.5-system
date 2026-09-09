@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Residui del playtest: 2 fix
+
+- **End encounter puliva i template della scena visualizzata**, non di quella del combat: se il GM guardava un'altra
+  scena, spariva la roba sbagliata. Ora usa la scena del combat.
+- **Wizard di creazione**: al Finalize le abilità scelte devono appartenere al job scelto (le card degli altri job sono
+  nascoste, ma via DOM si potevano spuntare). Ora un errore chiaro invece di un PG incoerente.
+- Verificati: Shift+rotella per il lato della Line larga, wizard di creazione completo, reset dei power die a fine
+  combat, dialog danno senza bersaglio e sul Legend.
+
 ## 9 settembre 2026 — Socket di sistema mai attivato: i relay giocatore → GM non hanno mai funzionato
 
 - **`system.json` non aveva `"socket": true`**: Foundry non inoltrava i messaggi `system.icon-system`, quindi tutto ciò

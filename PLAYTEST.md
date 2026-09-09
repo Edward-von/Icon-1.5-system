@@ -134,7 +134,7 @@ suo su `createCombatant` (non nostro).
       nome dell'abilità e i tick.
 - [ ] **Power die su un trait**: Sealer con Godly Smite → stesso widget sulla card del trait (d6, starts at 1).
 - [ ] **Card in chat**: con il die attivo, 💬 Show in Chat mostra il badge "🎲 d6: N" nella testata.
-- [ ] **Reset a fine combat**: die attivo, "End encounter" → Sì → il die torna non attivo.
+- [x] **Reset a fine combat**: die attivo, "End encounter" → Sì → il die torna non attivo.
 - [x] **Blocchi delle abilità**: apri Gran Reversa (Seer) o Soul Blade: il testo è diviso in righe
       "Stance:", "Interrupt 1:", "Effect:", "Refresh:" con etichetta in oro e barra a sinistra; il flavour è
       in corsivo. Draken Cross (attacco): Hit → Miss → Area → Effect. Un'abilità non-attacco con Area
@@ -153,19 +153,19 @@ suo su `createCombatant` (non nostro).
       alto con ritratto nella tacca, nome in IM Fell, "Level 0 · Ch 1"; rail dei 7 step sotto la banda;
       ogni step è una card con numero e titolo. Ridimensiona la finestra: niente scroll orizzontale, footer
       "Finalize" resta visibile in basso.
-- [ ] **CC, Bond → Primary → Power**: scegli un Bond (card) → nel banner compare il badge del bond, lo step 3
+- [x] **CC, Bond → Primary → Power**: scegli un Bond (card) → nel banner compare il badge del bond, lo step 3
       mostra solo le azioni primarie del bond (pill) con la prima già selezionata, lo step 5 mostra solo i
       power di quel bond (card con descrizione). Cambia bond → tutto si aggiorna e le scelte vecchie si
       azzerano.
-- [ ] **CC, Extra Dots**: nello step 4 la riga dell'azione primaria è dorata con 2 pallini pieni. Premi +
+- [x] **CC, Extra Dots**: nello step 4 la riga dell'azione primaria è dorata con 2 pallini pieni. Premi +
       su alcune azioni: contatore "N left" scende, a 0 diventa pieno e i + si disabilitano; non si supera
       rating 3 (il + si disabilita); − restituisce il punto. Rail e card dello step diventano oro quando
       i 4 punti sono spesi.
-- [ ] **CC, Job → banda e abilità**: scegli un Job (card con striscia del colore di classe) → la banda
+- [x] **CC, Job → banda e abilità**: scegli un Job (card con striscia del colore di classe) → la banda
       cambia colore (rosso Stalwart, ecc.), il nome del job compare nel banner, lo step 7 mostra solo le
       abilità ch.1 di quel job (card con costo, tag, prima frase). Selezionane 2: contatore "2 / 2" e le
       altre card si disabilitano; deselezionane una → si riabilitano.
-- [ ] **CC, Finalize**: con tutti i 7 step in oro (summary "All set") premi Finalize → scheda compilata
+- [x] **CC, Finalize**: con tutti i 7 step in oro (summary "All set") premi Finalize → scheda compilata
       come prima: kin/culture, bond, azioni (primaria 2 + 4 punti), bond power, job con stat/trait/LB,
       2 abilità. Prova anche a premere Finalize con uno step incompleto → messaggio di errore chiaro.
 - [x] **Level Up, stage 1**: PG con 15 XP → "Level Up". Banda del colore della classe primaria con
@@ -318,7 +318,7 @@ malus dislivello. Non provato: Legend (stesso codice del Foe) e il caso senza be
       "💥 Roll Damage" → card con gli step giusti e il nome del bersaglio targettato.
 - [x] **Foe e Legend**: ⚔ e 💥 sulle azioni aprono gli stessi dialog con la banda rossa NPC e il ritratto del foe;
       il dado mostra il [D] del foe (d6) / della legend (d8) e il suo fray.
-- [ ] **Senza bersaglio**: card tratteggiata "No token targeted — hover a token and press T", Defense vuota,
+- [x] **Senza bersaglio**: card tratteggiata "No token targeted — hover a token and press T", Defense vuota,
       anteprima "No Defense: the card shows the total".
 
 ## Relay giocatore → GM (9 settembre 2026, sera, dopo il riavvio con socket attivo)
@@ -328,6 +328,16 @@ GM" e il GM crea l'effetto con la card in chat; "Apply" sulla card del danno da 
 "+" del Party Resolve dal tracker come Player → 0 → 1 sul combat e sui PG. Dati di prova poi ripristinati.
 - [x] Mark relay, Apply Damage relay, Party Resolve relay.
 - [ ] Da riprovare con Maar: richiesta di attivazione di un NPC da Player (chevron → avviso al GM con suono).
+
+## Residui piccoli (9 settembre 2026, sera) — FATTI
+
+Provati dalla tab GM con copie TEST: Shift+rotella sposta la colonna extra della Line larga (cols 6-7 → 7-8) senza
+zoom e la rotella normale ruota; wizard di creazione completato via DOM (kin, culture, bond Mighty, primaria Sneak,
+4 punti, potere, job Chanter, 2 abilità, Finalize → PG con bond, potere, trait di classe, LB e abilità); power die di
+Odinforce 3 → 0 con End Encounter; dialog danno senza bersaglio (card tratteggiata "No token targeted…"); dialog
+danno del Legend (Earth Breaker, banda rossa, [D] d8, fray 3).
+Trovato e corretto: "End encounter" puliva i template della scena **visualizzata** invece di quella del combat; il
+Finalize del wizard accettava abilità di un job diverso se spuntate via DOM (le card nascoste): ora le rifiuta.
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
