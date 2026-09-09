@@ -13,6 +13,7 @@ import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } f
 import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
+import { npcActionStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -266,8 +267,14 @@ export class FoeSheet extends BaseActorSheet {
       curses:      mods.curses,
       defense:     mods.defense,
       areaHtml:    areaSummaryHtml(placement),
+      statusEntries: npcActionStatusEntries(action, { sourceName: actor.name }),
       actor,
     });
+  }
+
+  /** "Inflict" block for a foe action / interrupt / round action card (statuses read from its text). */
+  #statusHtmlFor(action, name) {
+    return statusBlockHtml(npcActionStatusEntries(action, { sourceName: this.document.name }), { source: this.document, abilityName: name });
   }
 
   /** 🎯 Mark the targeted token with this action (marks.mjs); exactly one target. */
@@ -311,7 +318,7 @@ export class FoeSheet extends BaseActorSheet {
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
     _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}"`);
-    await postNpcInterruptCard(actor, interrupt);
+    await postNpcInterruptCard(actor, interrupt, { statusHtml: this.#statusHtmlFor(interrupt, interrupt.name) });
   }
 
   static async #onFoeTraitShowInChat(event, target) {
@@ -331,7 +338,7 @@ export class FoeSheet extends BaseActorSheet {
     const action = actor.system.actions[idx];
     if (!action) return;
     _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
-    await postNpcActionCard(actor, action);
+    await postNpcActionCard(actor, action, { statusHtml: this.#statusHtmlFor(action, action.name) });
   }
 
   /** Post a foe round action (name, round, effect) to chat. */
@@ -342,7 +349,7 @@ export class FoeSheet extends BaseActorSheet {
     const ra    = actor.system.roundActions[idx];
     if (!ra) return;
     _log(`foeRoundActionShowInChat — actor: "${actor.name}" | roundAction[${idx}]: "${ra.name}"`);
-    await postNpcRoundActionCard(actor, ra);
+    await postNpcRoundActionCard(actor, ra, { statusHtml: this.#statusHtmlFor(ra, ra.name) });
   }
 
 

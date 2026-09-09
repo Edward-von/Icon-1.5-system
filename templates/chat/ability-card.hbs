@@ -68,4 +68,6 @@
     {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}
     {{#each ab.relicReminders as |rr|}}<p class="icon-ability-relic"><strong class="icon-ability-relic__label" title="From the relic {{rr.relic}}, rank {{rr.rankLabel}}">✦ {{rr.relic}} {{rr.rankLabel}}:</strong> {{{rr.text}}}</p>{{/each}}
   {{/if}}
+  {{!-- Inflicted statuses: a button per status and target (ability-statuses.mjs) --}}
+  {{#if statusHtml}}{{{statusHtml}}}{{/if}}
 </div>

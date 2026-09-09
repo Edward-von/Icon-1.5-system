@@ -5,6 +5,7 @@ import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
 import { combatRoll } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { getActorStatusMods } from "../../combat/status-modifiers.mjs";
+import { summonStatusEntries } from "../../combat/ability-statuses.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
@@ -152,6 +153,7 @@ export class SummonSheet extends BaseActorSheet {
       boons:   mods.boons,
       curses:  mods.curses,
       defense: mods.defense,
+      statusEntries: summonStatusEntries(actor.system.summonAction, { sourceName: actor.name }),
       actor,
     });
   }

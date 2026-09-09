@@ -14,6 +14,7 @@ import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes } from "../../combat/relic-reminders.mjs";
+import { abilityStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -1153,8 +1154,13 @@ export class IconSheet extends BaseActorSheet {
     const comboMode   = comboActive && ab.hasCombo;
     _log(`abilityShowInChat — "${ab.name}" | comboMode: ${comboMode}`);
 
+    // Statuses the text inflicts → "Inflict" buttons for the current targets
+    // (non-attack abilities like Implode / Gentleness only have this card).
+    const item = this.document.items.get(itemId);
+    const statusHtml = statusBlockHtml(abilityStatusEntries(item?.system, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
+
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
-    const content = await renderTemplate("systems/icon-system/templates/chat/ability-card.hbs", { ab, comboMode });
+    const content = await renderTemplate("systems/icon-system/templates/chat/ability-card.hbs", { ab, comboMode, statusHtml });
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
@@ -1392,6 +1398,13 @@ export class IconSheet extends BaseActorSheet {
     const relicInvokes = attackInvokes(this.document);
     const relicNotes   = abilityRelicReminders(this.document, ab.relicProfile, { forAttackCard: true });
 
+    // Combo armed (token held, or spent on this ability via Show in Chat):
+    // the combo text replaces the normal one on the card and for the statuses.
+    const comboToken   = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
+    const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
+    const comboArmed   = ab.hasCombo && (comboToken || comboSpentOn === ab.id);
+    const statusEntries = abilityStatusEntries(this.document.items.get(itemId)?.system, { comboMode: comboArmed, sourceName: this.document.name });
+
     if (ab.isAutoHit) {
       // Auto-hit: no d20 roll, just announce and (optionally) chain into damage.
       // With an attack invoke, p.245 says to roll 1d20 anyway just to check it.
@@ -1413,6 +1426,7 @@ export class IconSheet extends BaseActorSheet {
                     <p>This attack ignores the attack roll and goes directly to damage.</p>
                     ${invokeHtml}
                     ${relicNotesHtml(relicNotes)}
+                    ${statusBlockHtml(statusEntries, { source: this.document, abilityName: ab.name, outcome: { isHit: true, isCrit: false, isExceed: false } })}
                   </div>`,
         rolls,
       });
@@ -1425,12 +1439,6 @@ export class IconSheet extends BaseActorSheet {
 
     const mods = await promptAttackMods(ab, this.document);
     if (!mods) return;
-
-    // Combo armed (token held, or spent on this ability via Show in Chat):
-    // show the combo text on the hit line so the card matches what was used.
-    const comboToken   = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
-    const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
-    const comboArmed   = ab.hasCombo && (comboToken || comboSpentOn === ab.id);
 
     await combatRoll({
       abilityName:  comboArmed ? `${ab.name} (Combo)` : ab.name,
@@ -1447,6 +1455,7 @@ export class IconSheet extends BaseActorSheet {
       areaHtml,
       relicInvokes,
       relicNotes,
+      statusEntries,
       actor:        this.document,
     });
   }

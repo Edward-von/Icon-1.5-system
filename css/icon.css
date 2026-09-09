@@ -3358,6 +3358,69 @@ ol.chat-log .chat-message,
 .icon-chat-card--save { border-color: var(--ic-blue); }
 .icon-chat-card--save-success { border-color: #246838; }
 .icon-chat-card--save-failure { border-color: #6a1414; }
+.icon-chat-card__subtitle { font-size: .8em; color: var(--ic-text-dim); margin: -2px 0 4px; font-style: italic; }
+
+/* ============================================================
+   45b. Inflict block (statuses read from the ability text) +
+        "is now Dazed" notes + the save dialog
+   ============================================================ */
+.icon-chat-statuses {
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(31,95,160,.35);
+}
+.icon-chat-statuses__header {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 6px;
+  font-size: .78em; color: var(--ic-blue-bright, #2e84d8);
+  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px;
+}
+.icon-chat-statuses__note { color: var(--ic-text-dim); text-transform: none; letter-spacing: normal; font-style: italic; }
+.icon-chat-statuses__row {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  padding: 4px 6px; margin: 3px 0;
+  background: rgba(0,0,0,.15); border: 1px solid rgba(31,95,160,.25); border-radius: 3px;
+  font-size: .82em;
+}
+.icon-chat-statuses__row--live { border-style: dashed; }
+.icon-chat-statuses__name { flex: 0 1 auto; min-width: 60px; }
+.icon-chat-statuses__buttons { display: flex; flex-wrap: wrap; gap: 4px 8px; flex: 1 1 auto; }
+.icon-chat-statuses__group { display: inline-flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.icon-chat-statuses__group--off { opacity: .45; }
+.icon-chat-statuses__group--off .icon-chat-btn--status { border-style: dashed; }
+.icon-chat-statuses__section {
+  font-size: .78em; text-transform: uppercase; letter-spacing: .05em;
+  color: #8a8070; margin-right: 1px;
+}
+.icon-chat-btn--status {
+  background: rgba(31,95,160,.25); color: #b8d4f4; border-color: rgba(46,132,216,.55);
+}
+.icon-chat-btn--status:hover { background: rgba(31,95,160,.5); color: #fff; }
+.icon-chat-btn--status-save { background: rgba(112,48,160,.25); color: #d8c0f4; border-color: rgba(152,64,200,.55); }
+.icon-chat-btn--status-save:hover { background: rgba(112,48,160,.5); }
+.icon-chat-btn--status-on-success { border-style: double; }
+.icon-chat-btn--status-ongoing { box-shadow: inset 0 0 0 1px rgba(232,184,40,.45); }
+.icon-chat-btn--done     { opacity: .6; background: rgba(36,104,56,.3) !important; color: #b0e8c0 !important; border-color: rgba(52,160,88,.5) !important; }
+.icon-chat-btn--resisted { opacity: .6; background: rgba(0,0,0,.2) !important; color: #a0a090 !important; }
+
+.icon-chat-card--status-applied {
+  padding: 6px 10px;
+  background: rgba(31,95,160,.08);
+  border-left: 3px solid var(--ic-blue-bright, #2e84d8);
+  font-size: .9em;
+}
+.icon-chat-card--status-applied small { color: var(--ic-text-dim); }
+
+.icon-inflict-dialog { display: flex; flex-direction: column; gap: 6px; min-width: 320px; }
+.icon-inflict-dialog p { margin: 0; }
+.icon-inflict-dialog__lead small { color: var(--ic-text-dim); }
+.icon-inflict-dialog__rule { font-style: italic; font-size: .88em; color: var(--ic-text-normal); border-left: 3px solid rgba(46,132,216,.5); padding-left: 6px; }
+.icon-inflict-dialog__hint { font-size: .85em; color: var(--ic-text-dim); }
+.icon-inflict-dialog__note { font-size: .82em; color: var(--ic-gold, #c8961c); }
+.icon-inflict-dialog__mods { display: flex; gap: 12px; }
+.icon-inflict-dialog__mods label { display: flex; align-items: center; gap: 6px; }
+.icon-inflict-dialog__mods input { width: 60px; }
+.icon-inflict-dialog__check { display: flex; align-items: center; gap: 6px; font-size: .9em; }
+.icon-inflict-dialog__mode { display: flex; align-items: center; gap: 8px; }
 
 /* ============================================================
    46. Scrollbars (Webkit)

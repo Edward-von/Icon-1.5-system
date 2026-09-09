@@ -2,7 +2,7 @@
   "id": "icon-system",
   "title": "ICON 1.5",
   "description": "ICON 1.5 by Tom 'Abbadon' Bloom (Massif Press) — Foundry VTT v14 implementation.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "socket": true,
   "authors": [
     { "name": "Edward_von", "discord": "edward_von" }

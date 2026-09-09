@@ -28,6 +28,7 @@
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
 import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
+import { handleInflictSocket } from "./inflict-status.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
@@ -759,6 +760,10 @@ export function registerCombatHooks() {
         /* A player marks / un-marks an actor they don't own, or gains Hatred
          * on a shared actor — the active GM writes the effect. */
         await handleMarkSocket(data);
+      } else if (data?.type === "inflictStatus") {
+        /* A player pressed a status button on a card for an actor they don't
+         * own (an "Inflict" block, inflict-status.mjs) — the active GM applies it. */
+        await handleInflictSocket(data);
       }
     } catch (err) {
       console.error("ICON 1.5 | combat socket handler failed:", err);

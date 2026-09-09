@@ -1,5 +1,41 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 11: status inflitti letti dal testo, blocco "Inflict" sulle card, save 10+ (versione 1.3.0)
+
+- **Infliggere uno status voleva dire leggere il testo, aprire la scheda del bersaglio e cliccare nella tab
+  Conditions, tirando il save a mano** (wishlist Maar: "automazione effetti/save offensiva"): nuovo parser
+  `module/combat/ability-statuses.mjs` che legge dal testo di abilità PG, action/interrupt/round action di Foe e
+  Legend e azioni dei summon gli status negativi da infliggere ("[D]+fray and foe is dazed", "must save or be
+  stunned", "become blinded+", "gain hatred of you") e da quale blocco vengono (Hit, Miss, Effect, Collide,
+  Exceed, Chapter 2+, Talent I…). Riconosce le forme del manuale sui save: "save or …" (applicato se il save
+  fallisce), "… on a successful save" (applicato se riesce, p.es. Swindle), "Foes can pass a save to avoid this
+  effect", "+1 curse on the save", "Bloodied foes fail the save", il "+" degli ongoing. Ignora gli usi come
+  aggettivo o condizione ("Dazed foes take fray damage", "against weakened or slashed foes", "if the target is
+  stunned", "immune to…"), gli status su se stessi ("you are pacified", "the Cantrix is immobile") e sugli
+  alleati, le righe delle statistiche dei summon. Verificato offline (Node) su 32 frasi campione e sull'intero
+  corpus dei pack (1477 testi con status su 6257; script in `icon-compendium-audit/session11/`).
+- **Blocco "Inflict" sulle card in chat**: card del tiro d'attacco (PG, Foe, Legend, Summon), card "Auto-hit",
+  card 💬 delle abilità PG e delle action/interrupt/round action NPC. Una riga per token targettato (o "🎯 Current
+  targets" se non c'era nessun target: applica a chi è targettato al momento del click), un bottone per status
+  raggruppato per blocco di origine; sulla card d'attacco i gruppi degli esiti non raggiunti (Miss su un hit,
+  Exceed sotto 15, Crit) restano cliccabili ma sbiaditi. "⚄" segna gli status con save, il bordo doppio quelli
+  che si applicano su un save riuscito, il bordo oro gli ongoing "+". Talent/Mastery solo se sbloccati; con il
+  Combo armato si legge il testo Combo.
+- **Click → save → applica** (`module/combat/inflict-status.mjs`): senza save applica subito via `applyStatus`
+  (già presente → "is already X", oppure upgrade a ongoing se il testo dice "+"); con save apre un dialog con la
+  frase del testo, boons/curses (precompilati dal testo), una carica Blessed del bersaglio (+1 boon, consumata),
+  la spunta "Automatic failure" già attiva quando il bersaglio è bloodied/… e il testo lo dice, e "Already
+  rolled — failed/succeeded" per chi ha già tirato. Il save usa `saveRoll` (1d20 + boons − curses, 10+, p.94) con
+  sottotitolo "Abilità — attaccante → bersaglio" e testi "Saved! X avoided." / "Failed — X applied." (quelli di
+  fine turno restano "cleared / persists"). Hatred passa da `applyHatred` → "Hatred of <attaccante>" (p.104).
+  Card blu "X is now Dazed — Haymaker (Brawler), save 7" e bottone "✓ Dazed" / "✓ saved" / "→ GM".
+- **Giocatori senza permessi sul bersaglio**: il tiro avviene sul loro client, l'applicazione viene inoltrata al
+  GM attivo via socket (`type: "inflictStatus"`, stesso canale dei mark; Hatred usa il relay dei mark).
+- API per le macro: `game.icon.parseInflictedStatuses / abilityStatusEntries / npcActionStatusEntries /
+  statusBlockHtml / inflictStatus`. Versione 1.3.0.
+- Noto (accettato): "Showdown" del Freelancer ("Choose a foe in range 3 and become immobile", riferito a sé)
+  mostra un bottone Immobile di troppo; i danni "on a failed save" restano manuali (pipeline del danno).
+
 ## 9 settembre 2026 — Sessione 10: Encounter Designer (versione 1.2.0)
 
 - **Preparare un incontro voleva dire contare a mano i punti del p.292 e importare i foe uno a uno dal compendio**

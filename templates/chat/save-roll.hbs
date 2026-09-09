@@ -7,17 +7,19 @@
     <strong>Save vs {{statusLabel}}</strong>
     {{#if ongoing}}<span class="icon-badge icon-badge--ongoing">Ongoing+</span>{{/if}}
   </div>
+  {{#if subtitle}}<div class="icon-chat-card__subtitle">{{subtitle}}</div>{{/if}}
   <div class="icon-chat-card__dice">
     <span class="icon-chat-die icon-chat-die--d20">{{total}}</span>
     <span class="icon-chat-card__vs">vs 10</span>
+    {{#if boonCurseLabel}}<small class="icon-chat-card__boon-label">d20 {{d20}} {{boonCurseLabel}}</small>{{/if}}
   </div>
   <div class="icon-chat-card__result">
     {{#if ongoing}}
       <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">Cannot Save (Ongoing+)</strong>
     {{else if success}}
-      <strong class="icon-chat-card__result-label icon-chat-card__result-label--hit">Saved! {{statusLabel}} cleared.</strong>
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--hit">{{#if successText}}{{successText}}{{else}}Saved! {{statusLabel}} cleared.{{/if}}</strong>
     {{else}}
-      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">Failed — {{statusLabel}} persists.</strong>
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">{{#if failureText}}{{failureText}}{{else}}Failed — {{statusLabel}} persists.{{/if}}</strong>
     {{/if}}
   </div>
 </div>

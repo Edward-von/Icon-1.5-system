@@ -160,7 +160,7 @@ export function abilityCostLabel(cost) {
  * @param {Actor} actor
  * @param {{name:string, cost:string, tags?:string[], description?:string, hitEffect?:string, missEffect?:string, areaEffect?:string}} action
  */
-export async function postNpcActionCard(actor, action) {
+export async function postNpcActionCard(actor, action, { statusHtml = "" } = {}) {
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const a = {
     name:        action?.name ?? "Action",
@@ -171,7 +171,7 @@ export async function postNpcActionCard(actor, action) {
     missEffect:  await enrichHTML(action?.missEffect),
     areaEffect:  await enrichHTML(action?.areaEffect),
   };
-  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "", statusHtml });
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
@@ -184,7 +184,7 @@ export async function postNpcActionCard(actor, action) {
  * @param {Actor} actor
  * @param {{name:string, roundNumber?:number, effect?:string, description?:string}} roundAction
  */
-export async function postNpcRoundActionCard(actor, roundAction) {
+export async function postNpcRoundActionCard(actor, roundAction, { statusHtml = "" } = {}) {
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const rn = Number(roundAction?.roundNumber ?? 1);
   const a = {
@@ -194,7 +194,7 @@ export async function postNpcRoundActionCard(actor, roundAction) {
     description: await enrichHTML(roundAction?.description),
     effect:      await enrichHTML(roundAction?.effect),
   };
-  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "", statusHtml });
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
@@ -206,7 +206,7 @@ export async function postNpcRoundActionCard(actor, roundAction) {
  * @param {Actor} actor
  * @param {{name:string, limit:number, trigger:string, effect:string, description?:string}} interrupt
  */
-export async function postNpcInterruptCard(actor, interrupt) {
+export async function postNpcInterruptCard(actor, interrupt, { statusHtml = "" } = {}) {
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const limit = Number(interrupt?.limit ?? 1);
   const a = {
@@ -217,7 +217,7 @@ export async function postNpcInterruptCard(actor, interrupt) {
     description: await enrichHTML(interrupt?.description),
     effect:      await enrichHTML(interrupt?.effect),
   };
-  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
+  const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "", statusHtml });
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,

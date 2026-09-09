@@ -201,7 +201,20 @@ Decisi con Edoardo il 9 settembre 2026:
             copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
       - [ ] Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
             passata sul pack (`img` + `prototypeToken.texture`). (M, dati)
-- [ ] **Automazione effetti/save** offensiva (applica status al target, tira il save con bonus). (XL)
+- [x] **Automazione effetti/save** offensiva (FATTA il 9 settembre 2026, Sessione 11): parser degli status
+      inflitti dal testo (`module/combat/ability-statuses.mjs`), blocco "Inflict" con un bottone per status e
+      per bersaglio sulle card d'attacco / auto-hit / 💬 (PG, Foe, Legend, Summon), save 1d20 10+ con boons/curses
+      dal testo, Blessed, "Bloodied foes fail the save", "already rolled"; `applyStatus` / `applyHatred`, relay al GM
+      via socket (`module/combat/inflict-status.mjs`). Versione 1.3.0.
+      Emerso (da fare in un blocco futuro):
+      - [ ] Danni "on a failed save" ("must save or take 2[D]+fray, or [D]+fray on a successful save"): oggi solo
+            il testo; collegare l'esito del save al dialog del danno (outcome "save failed / passed"). (M)
+      - [ ] Effetti non-status letti dal testo ("shoved 2", "unable to attack until the end of their next turn",
+            "+1 curse on all attacks and saves"): promemoria sulla card o effetto generico con durata. (L)
+      - [ ] Falso positivo noto: Freelancer "Showdown" ("Choose a foe in range 3 and become immobile" = se stessi)
+            mostra un bottone Immobile. Regola per l'imperativo senza soggetto. (S)
+      - [ ] Status positivi su di sé / alleati ("you gain evasion", "allies gain sturdy") come bottone "Gain" sulla
+            card (versione difensiva del blocco Inflict). (M)
 - [ ] **Automazione difensiva** (Evasion, Cover ½ danno, Dodge). (XL, dipende dalla precedente)
 
 ---

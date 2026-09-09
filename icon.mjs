@@ -94,6 +94,8 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 /*  Hatred of X + ability marks                        */
 /* -------------------------------------------------- */
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
+import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
+import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 
 /* ================================================== */
 /*  init                                              */
@@ -248,6 +250,12 @@ Hooks.once("init", () => {
     applyHatred,
     applyMark,
     removeMark,
+    // Session 11 — inflicted statuses read from ability text
+    parseInflictedStatuses,
+    abilityStatusEntries,
+    npcActionStatusEntries,
+    statusBlockHtml,
+    inflictStatus,
     openEncounterDesigner: () => EncounterDesigner.open(),
     EncounterDesigner,
   };
@@ -712,6 +720,15 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       btn.style.opacity = "0.5";
     });
   });
+});
+
+/**
+ * "Inflict" block on attack / ability / foe-action cards: a button per status
+ * the text inflicts, per target — save roll (10+) first when the text asks
+ * for one, then applyStatus (or a relay to the GM). See inflict-status.mjs.
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  bindInflictButtons(html);
 });
 
 /**

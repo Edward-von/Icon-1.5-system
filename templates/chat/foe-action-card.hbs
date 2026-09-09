@@ -16,4 +16,6 @@
   {{#if a.hitEffect}}<p><strong>Hit:</strong> {{{a.hitEffect}}}</p>{{/if}}
   {{#if a.missEffect}}<p><strong>Miss:</strong> {{{a.missEffect}}}</p>{{/if}}
   {{#if a.areaEffect}}<p><strong>Area:</strong> {{{a.areaEffect}}}</p>{{/if}}
+  {{!-- Inflicted statuses: a button per status and target (ability-statuses.mjs) --}}
+  {{#if statusHtml}}{{{statusHtml}}}{{/if}}
 </div>

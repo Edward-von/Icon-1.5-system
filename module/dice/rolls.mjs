@@ -12,6 +12,7 @@
 /* ================================================== */
 
 import { ICON } from "../config.mjs";
+import { statusBlockHtml } from "../combat/ability-statuses.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
@@ -193,6 +194,7 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {string}   [opts.costLabel]     "1 Action" etc.
  * @param {string[]} [opts.tags]
  * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
+ * @param {Array}    [opts.statusEntries] Statuses the ability inflicts (ability-statuses.mjs) → "Inflict" buttons per target
  * @param {Actor}    [opts.actor]
  * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls}>}
  */
@@ -201,6 +203,7 @@ export async function combatRoll({
   hitEffect, missEffect, exceedEffect, critEffect,
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
+  statusEntries = [],
   actor,
 } = {}) {
   const net    = boons - curses;
@@ -249,6 +252,10 @@ export async function combatRoll({
     // the relic reminders that apply to this attack.
     relicInvokeHtml: relicInvokeHtml(relicInvokes, d20),
     relicNotesHtml:  relicNotesHtml(relicNotes),
+    // Inflicted statuses: one button per status and target; the groups of
+    // the outcomes this roll did not reach (Miss on a hit, Exceed under 15…)
+    // are dimmed, not hidden.
+    statusHtml: actor ? statusBlockHtml(statusEntries, { source: actor, abilityName: abilityName ?? "Attack", outcome: { isHit, isCrit, isExceed } }) : "",
   });
 
   const speaker = actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();
@@ -308,10 +315,13 @@ export function relicNotesHtml(notes) {
  * @param {number}  [opts.boons]      Boons applied to the save (e.g. 1 from a Mendicant blessing)
  * @param {number}  [opts.curses]     Curses applied to the save
  * @param {string}  [opts.boonNote]   Optional note shown next to the modifier (e.g. "blessing")
+ * @param {string}  [opts.subtitle]   Context line ("Haymaker — Brawler → Warrior") for saves against an incoming effect
+ * @param {string}  [opts.successText]  Result text override (default: "Saved! X cleared." — the end-of-turn wording)
+ * @param {string}  [opts.failureText]  Result text override (default: "Failed — X persists.")
  * @param {Actor}   [opts.actor]
  * @returns {Promise<{total, success, roll}>}
  */
-export async function saveRoll({ statusLabel, ongoing = false, boons = 0, curses = 0, boonNote = "", actor } = {}) {
+export async function saveRoll({ statusLabel, ongoing = false, boons = 0, curses = 0, boonNote = "", subtitle = "", successText = "", failureText = "", actor } = {}) {
   const d20r  = await new Roll("1d20").evaluate();
   const d20   = d20r.total;
   const rolls = [d20r];
@@ -341,6 +351,9 @@ export async function saveRoll({ statusLabel, ongoing = false, boons = 0, curses
     modifier,
     boonCurseLabel,
     success,
+    subtitle,
+    successText,
+    failureText,
   });
 
   const speaker = actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();
