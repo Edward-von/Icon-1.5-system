@@ -199,6 +199,8 @@ Decisi con Edoardo il 9 settembre 2026:
             sulla card in chat). (S/M)
       - [ ] Deploy con "riusa gli attori del mondo" (oggi i foe presi dalla sorgente World vengono comunque
             copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
+      - [ ] Nilfling (Jotunn, Ch1 skirmisher 28 HP) non è Elite nel pack `foes` mentre gli altri Jotunn lo sono:
+            controllare sul manuale (p.44x) e correggere il flag se serve. (S, dati)
       - [ ] Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
             passata sul pack (`img` + `prototypeToken.texture`). (M, dati)
 - [x] **Automazione effetti/save** offensiva (FATTA il 9 settembre 2026, Sessione 11): parser degli status

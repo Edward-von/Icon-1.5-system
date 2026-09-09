@@ -341,34 +341,43 @@ Finalize del wizard accettava abilità di un job diverso se spuntate via DOM (le
 
 ## Sessione 9 (9 settembre 2026) — Relic integration: reminder sulle abilità e Invoke (Attack, N+)
 
+**Esito del playtest del 9 settembre 2026 (sera, Claude in Chrome sul mondo Jade Regent, scena "test", build 1.3.0)**:
+provato con una copia "TEST Asteria" (Blitz, Odinforce, Atherwand, Sturmreiten) e le reliquie Byrax, Ape God, Ruin,
+Esper, Skipjack, Conquering King, Paleblood, Arenheir dal pack; tutto cancellato a fine prova. Tutto ok: reminder per
+rango (Byrax I → III → Aspect → rimossa), Ruin/Skipjack/Conquering King sulle abilità giuste, Esper II "Range of cure
+effects +2" su un testo con "cure", card 💬 con le righe ✦, Invoke Ape God spento su 7/4/3/13/6 e acceso su un 17
+grezzo con "Stun your attack target.", soglie Aspect (Paleblood 12+, Conquering King una riga 15+), attacco base con
+Invoke + Ruin + Skipjack, round 5 → "Round 5: this ability deals bonus damage (Round 5+)" e Arenheir III "exceed on
+12+, crit on 17+", round 3 → "exceed on 13+, crit on 18+". Non provata la card Auto-hit (nessuna abilità autohit sul PG).
+
 Prerequisito: un PG con reliquie dal compendio Relics (drop sulla tab Relics). Suggeriti: **Byrax** (stance),
 **Ape God** (Invoke Attack 17+), **Ruin** (attacchi), **Esper** o **Mercy** (cure), **Skipjack** (range +1),
 **Conquering King** (round). I rank si alzano dalla tab Relics (↑ Upgrade, serve Dust: mettere Dust a 30 nel
 Narrative per provare). Le reliquie NON sono automazione: sono righe di promemoria, i numeri non cambiano.
 
-- [ ] **Reminder sul pannello abilità**: PG con Byrax rango I e un'abilità con tag `stance` (es. un Colossus,
+- [x] **Reminder sul pannello abilità**: PG con Byrax rango I e un'abilità con tag `stance` (es. un Colossus,
       o aggiungi il tag "stance" a un'abilità) → nel pannello dell'abilità, dopo Talent/Mastery e prima del
       blocco COMBO, la riga viola "✦ Byrax I: Whenever you refresh this stance, dash 1." (hover sull'etichetta →
       tooltip "From the relic Byrax (rank I)"). Un'abilità senza tag stance NON ha la riga.
-- [ ] **Rango che cambia i reminder**: porta Byrax a rango III → sulla stessa stance compaiono anche "Byrax III:
+- [x] **Rango che cambia i reminder**: porta Byrax a rango III → sulla stessa stance compaiono anche "Byrax III:
       On the first turn of combat, you may take this stance as a free action" (solo se costa 1 action o free) e,
       ad Aspect, "Byrax Aspect: You can hold one more stance than normal". Togli la reliquia (×) → righe sparite.
-- [ ] **Reminder per attacchi / cure / range**: con Ruin I ogni abilità d'attacco ha "✦ Ruin I: Once per attack,
+- [x] **Reminder per attacchi / cure / range**: con Ruin I ogni abilità d'attacco ha "✦ Ruin I: Once per attack,
       trade 1 boon for bonus damage." (abilità non-attacco: niente). Con Esper II un'abilità che dice "cure" ha
       "Range of cure effects +2". Con Skipjack I un'abilità con tag `range-4` mostra "Range 5 (listed range +1)".
-- [ ] **Card in chat**: 💬 Show in Chat sull'abilità → le stesse righe ✦ in fondo alla card (anche in modalità
+- [x] **Card in chat**: 💬 Show in Chat sull'abilità → le stesse righe ✦ in fondo alla card (anche in modalità
       COMBO). Anche i Foe/Legend restano senza righe (le reliquie sono solo dei PG).
-- [ ] **Invoke (Attack, N+) sul tiro d'attacco**: PG con Ape God I, ⚔ su un attacco → nella card del tiro, sotto
+- [x] **Invoke (Attack, N+) sul tiro d'attacco**: PG con Ape God I, ⚔ su un attacco → nella card del tiro, sotto
       HIT/MISS, la riga "Invoke — Ape God I (17+ · d20 N)": se il d20 GREZZO (non il totale con i boon) è ≥ 17 è
       accesa in oro con "✦ Invoke" e "Stun your attack target."; altrimenti grigia con "not triggered". Ripeti
       finché escono entrambi i casi. Con Ape God ad Aspect, quando scatta, in corsivo la nota dell'Aspect (bonus
       damage, shove…). Con due reliquie Invoke Attack (es. + Gloam 14+) → due righe.
-- [ ] **Soglia abbassata dall'Aspect**: Paleblood a rango Aspect → la riga dice "Paleblood II (Aspect) (12+ …)"
+- [x] **Soglia abbassata dall'Aspect**: Paleblood a rango Aspect → la riga dice "Paleblood II (Aspect) (12+ …)"
       invece di 16+. Conquering King ad Aspect → UNA sola riga "Conquering King III (Aspect) (15+ …)", non due.
-- [ ] **Auto-hit e attacco base**: un'abilità auto-hit (tag `autohit`) con Ape God → nella card "Auto-hit" compare
+- [ ] **Auto-hit e attacco base** (attacco base OK; auto-hit non provato): un'abilità auto-hit (tag `autohit`) con Ape God → nella card "Auto-hit" compare
       comunque la riga Invoke con un d20 tirato e la nota "1d20 rolled only to check the relic invoke (p.245)".
       ⚔ sull'attacco base (Basic/Heavy) → riga Invoke e reminder da attacco (es. Ruin I) presenti.
-- [ ] **Reminder legati al round**: Conquering King I, combat NON avviato → sul pannello "Round 5+: this ability
+- [x] **Reminder legati al round**: Conquering King I, combat NON avviato → sul pannello "Round 5+: this ability
       deals bonus damage" (sempre visibile); sulla card del tiro d'attacco la riga NON c'è finché il combat non
       è al round 5; al round 5+ compare "Round 5: this ability deals bonus damage (Round 5+)". Arenheir III al
       round 3 → "Round 3: exceed on 13+, crit on 18+".
@@ -377,57 +386,73 @@ Narrative per provare). Le reliquie NON sono automazione: sono righe di promemor
 
 ## Sessione 10 (9 settembre 2026) — Encounter Designer
 
+**Esito del playtest del 9 settembre 2026 (sera, stessa sessione)**: **bug bloccante trovato e corretto**: il designer
+non si apriva affatto (`Cannot set property state of ApplicationV2 which has only a getter`: `this.state` è riservato
+in AppV2 → rinominato `this.enc`); provato con una toppa in pagina, poi fix nel codice. Verificato ok: party
+preselezionato dai token in scena, toggle PG / On scene / All, budget = giocatori + 1, one-fight 2 × giocatori,
+Adjust, Chapter cap (351 → 285 con Ch1, 404 con "Higher chapters"), filtri fazione/classe/sorgente (World = 1,
+Both = 352), ricerca senza perdere il focus, "+" e doppio click (qty, turni, banda), −, Elite (80 HP, 2 turni, 2 pt,
+disabilitato su Jotunn/Legend/Mob, mob "6 members"), Legend = tutto il budget + secondo Legend rifiutato + over
+budget, riserva R2 (riga tratteggiata, "7 on map · 4 in reserve"), Random fill Folk per esattamente 3 punti e avviso
+a budget pieno, Save/New/Load/✕ con conferma, card sussurrata ai due GM, 📥 4 attori in "Encounter: Prova" con flag,
+🗺 Deploy (4 token, 1 nascosto, combat con i PG in scena), 👁 Reveal reserves (Cook visibile e nel tracker, "✓ 1
+revealed"), chiudi/riapri = stessa istanza. Altri due difetti corretti: dopo "Clear" il campo di ricerca restava
+scritto (AppV2 conserva il valore del campo a fuoco) e la riga dell'encounter schiacciava il nome a una lettera
+(ora i controlli vanno a capo). Note: i token creati sono **linkati** (IconActor linka ogni nuovo attore; con un attore
+per corpo va bene) → aspettativa "non linkato" corretta; nel pack il Nilfling (Jotunn) non è Elite (TODO); la scena
+"test" ha token doppi dei PG, per cui "+ party" li aggiunge tutti (corretto). Non provati: client Player, resize.
+
 Prerequisito: GM, un mondo con 2-3 PG (almeno uno con token sulla scena aperta), scena con griglia. Il designer
 si apre dal bottone **"♞ Encounter"** in cima alla sidebar Actors, dalla macro "ICON: Encounter Designer" nel
 compendio Macros, o da console con `game.icon.openEncounterDesigner()`. Regole: ICON 1.5 p.292 (budget =
 giocatori + 1; mob 1, foe 1, elite 2, Legend = tutto il budget), p.298 (mob: 2 membri/giocatore; Legend: 50 HP
 per giocatore, min 100), p.299 (template Elite: 2 turni, HP ×2, 2 punti).
 
-- [ ] **Apertura e party**: bottone "Encounter" visibile solo al GM (da client Player: assente; macro → avviso).
+- [x] **Apertura e party**: bottone "Encounter" visibile solo al GM (da client Player: assente; macro → avviso).
       All'apertura sono selezionati i PG che hanno un token sulla scena corrente (se nessuno: tutti); con 3 PG
       la banda dice "0 / 4 points", "3 players", "Chapter ≤ N" con N = capitolo più alto del party.
       Click su un PG lo toglie/aggiunge → budget aggiornato subito. "On scene" / "All" cambiano la selezione.
-- [ ] **Regole del budget**: spunta "One-fight rule" → budget 2 × giocatori (3 PG: 6) e la banda dice "· one fight";
+- [x] **Regole del budget**: spunta "One-fight rule" → budget 2 × giocatori (3 PG: 6) e la banda dice "· one fight";
       "Adjust" −/+ cambia il totale (3 PG, +1 → 5); "Chapter cap" a "Chapter 1" nasconde nel roster i foe Ch2/Ch3
       (es. Abomination Ch2 sparisce), "Higher chapters" li rimostra.
-- [ ] **Roster**: con i filtri a zero e sorgente "Compendium" il contatore dice "404 shown" (376 foe + 28 legend);
+- [x] **Roster**: con i filtri a zero e sorgente "Compendium" il contatore dice "404 shown" (376 foe + 28 legend);
       filtro Faction "Jotunn" → solo Jotunn, tutti con badge Elite e costo 2; Class "Mob" → i 13 mob;
       cercando "guard" mentre si digita il campo NON perde il focus e il contatore scende; sorgente "World" mostra
       i foe già importati nel mondo (badge "world"), "Both" entrambi; ↻ ricarica; "Clear" azzera i filtri.
       👁 apre la scheda del foe del compendio (sola lettura).
-- [ ] **Aggiungere**: "+" su Warrior → riga in "Encounter" con "Heavy · Folk · Ch1 · 40 HP · 1 turn/round", costo 1,
+- [x] **Aggiungere**: "+" su Warrior → riga in "Encounter" con "Heavy · Folk · Ch1 · 40 HP · 1 turn/round", costo 1,
       banda "1 / 4"; di nuovo "+" (o doppio click sulla riga del roster) → quantità 2, costo 2. Il roster NON
       scorre in cima quando si aggiunge (solo party/encounter/banda si ri-renderizzano). −/+ e il campo numerico
       cambiano la quantità; − a 1 rimuove la riga; ✕ rimuove; "Clear" svuota tutto.
-- [ ] **Elite**: bottone "Elite" sul Warrior → oro, "80 HP", "2 turns/round", costo 2 per corpo (×2 → 4, banda
+- [x] **Elite**: bottone "Elite" sul Warrior → oro, "80 HP", "2 turns/round", costo 2 per corpo (×2 → 4, banda
       "4 / 4" in oro e bordo del blocco dorato). Su un Jotunn (es. Aetnir) il bottone è già acceso e disabilitato
       (tooltip "Always Elite"); su un Mob disabilitato ("Mobs can't…"); con 3 PG il mob dice "6 members".
-- [ ] **Legend**: "+" su Dread Lords → costo = budget (4), "3 turns/round · scaled for 3 players", HP 150; il
+- [x] **Legend**: "+" su Dread Lords → costo = budget (4), "3 turns/round · scaled for 3 players", HP 150; il
       suggerimento "A Legend is worth the whole budget" compare; un secondo Legend è rifiutato con avviso.
       Aggiungendo altro si va over budget: contatore rosso, bordo rosso, "Over budget by N".
-- [ ] **Riserve**: select "Reserve · R2" su una riga → riga tratteggiata, "Reserve · end of round 2" nella riga e
+- [x] **Riserve**: select "Reserve · R2" su una riga → riga tratteggiata, "Reserve · end of round 2" nella riga e
       "X on map · Y in reserve" nella banda; il totale conta anche le riserve.
-- [ ] **🎲 Random fill**: filtro Faction "Folk", budget 4 con 1 punto già speso → il riempimento aggiunge foe
+- [x] **🎲 Random fill**: filtro Faction "Folk", budget 4 con 1 punto già speso → il riempimento aggiunge foe
       Folk per esattamente 3 punti (niente Legend; un elite solo se restano ≥ 2 punti); con budget pieno → avviso.
-- [ ] **Salvataggi**: senza nome "Save" avvisa; con nome "Prova" → compare nel menu; "New" azzera picks/nome
+- [x] **Salvataggi**: senza nome "Save" avvisa; con nome "Prova" → compare nel menu; "New" azzera picks/nome
       tenendo il party; "Load" ripristina picks, riserve, elite e nome; F5 → il salvataggio c'è ancora (world
       setting); "✕" chiede conferma e cancella.
-- [ ] **💬 Chat**: card "Encounter Designer" sussurrata ai GM (il Player non la vede) con "N / M points", elenco
+- [x] **💬 Chat**: card "Encounter Designer" sussurrata ai GM (il Player non la vede) con "N / M points", elenco
       "On the map" con qty × nome, classe, Elite, turni e costo; sezione "Reserve" con "enters at the end of
       round 2"; footer con la formula.
-- [ ] **📥 Actors**: crea la cartella Actors "Encounter: Prova" (rosso scuro) con un attore per corpo ("Warrior 1",
+- [x] **📥 Actors**: crea la cartella Actors "Encounter: Prova" (rosso scuro) con un attore per corpo ("Warrior 1",
       "Warrior 2"); il Warrior elite ha Elite spuntato, HP 80/80 e il trait "Elite" in cima; il mob ha 6 membri
-      e 12 hit; il Legend ha playerScale 3 e HP 150/150; token prototipo ostile e non linkato. Card in chat con
+      e 12 hit; il Legend ha playerScale 3 e HP 150/150; token prototipo ostile (linkato: un attore per corpo). Card in chat con
       "Actors in folder …". Gli attori creati NON compaiono nel roster "World" (flag encounter).
-- [ ] **🗺 Deploy**: con nessuna scena aperta il bottone è disabilitato (tooltip "Open a scene first"); over budget
+- [x] **🗺 Deploy**: con nessuna scena aperta il bottone è disabilitato (tooltip "Open a scene first"); over budget
       → dialog di conferma. Con una scena con griglia: token disposti in file vicino al centro della vista
       (i size 2 occupano due celle, seconda fila separata), combat creato/aggiornato con i foe "On map" e — se
       "+ party" è spuntato — i token dei PG selezionati presenti sulla scena (non duplicati se già dentro); i
       token in riserva sono NASCOSTI e NON nel combat; avviso "Deployed N token(s) (K hidden in reserve)".
-- [ ] **Reveal reserves**: sulla card del deploy il bottone "👁 Reveal reserves & add to combat" (solo GM:
+- [x] **Reveal reserves**: sulla card del deploy il bottone "👁 Reveal reserves & add to combat" (solo GM:
       il Player lo vede disabilitato) → i token nascosti diventano visibili e finiscono nel tracker, bottone
       "✓ K revealed" disabilitato; ripremuto non duplica; se i token sono stati cancellati → avviso.
-- [ ] **Robustezza**: nessun errore in console aprendo/chiudendo/riaprendo il designer (riapertura = stessa
+- [x] **Robustezza**: nessun errore in console aprendo/chiudendo/riaprendo il designer (riapertura = stessa
       finestra portata in primo piano), ridimensionando la finestra (roster e picks scorrono dentro le proprie
       liste, footer sempre visibile), con un mondo senza PG ("No player characters…"), su scena senza griglia
       (i token vengono comunque piazzati).

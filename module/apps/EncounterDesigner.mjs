@@ -16,7 +16,7 @@
  *
  * The designer is a singleton ApplicationV2 with five Handlebars parts, so the
  * roster (400 rows, filtered client-side) is not re-rendered when the party or
- * the picks change. State lives on `this.state`; the templates only display it.
+ * the picks change. State lives on `this.enc` (not `this.state`: ApplicationV2 reserves that name for its render state); the templates only display it.
  *
  * Output: a whispered chat card (budget breakdown), world actors in an
  * "Encounter: <name>" folder, or a full deploy (actors + tokens on the current
@@ -98,7 +98,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
 
   constructor(options = {}) {
     super(options);
-    this.state = EncounterDesigner.#defaultState();
+    this.enc = EncounterDesigner.#defaultState();
     this._roster = null;      // [{uuid,name,type,cls,clsLabel,faction,chapter,isElite,size,hpMax,traits,img,src}]
     this._pcs    = null;      // [{id,name,img,level,chapter,cls}]
     this._busy   = false;     // true while creating actors / deploying
@@ -245,23 +245,23 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   /*  Derived values                                     */
   /* -------------------------------------------------- */
 
-  get players() { return this.state.partyIds?.size ?? 0; }
+  get players() { return this.enc.partyIds?.size ?? 0; }
 
   /** Highest chapter among the selected PCs (min 1), or the manual cap. */
   get chapterCap() {
-    if (this.state.chapterCap) return this.state.chapterCap;
+    if (this.enc.chapterCap) return this.enc.chapterCap;
     let cap = 1;
-    for (const pc of this._pcs ?? []) if (this.state.partyIds?.has(pc.id)) cap = Math.max(cap, pc.chapter ?? 1);
+    for (const pc of this._pcs ?? []) if (this.enc.partyIds?.has(pc.id)) cap = Math.max(cap, pc.chapter ?? 1);
     return cap;
   }
 
-  get budget() { return Math.max(0, baseBudget(this.players, this.state.oneFight) + this.state.adjust); }
+  get budget() { return Math.max(0, baseBudget(this.players, this.enc.oneFight) + this.enc.adjust); }
 
   /** Totals for the current picks. */
   get totals() {
     const budget = this.budget;
     let spent = 0, onMap = 0, reserve = 0, npcTurns = 0, bodies = 0;
-    for (const p of this.state.picks) {
+    for (const p of this.enc.picks) {
       const cost = pickCost(p, budget);
       spent += cost;
       if (p.reserve) reserve += cost; else onMap += cost;
@@ -279,12 +279,12 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   async _prepareContext(options) {
     await this._loadRoster();
     this._loadPcs();
-    if (this.state.partyIds === null) {
+    if (this.enc.partyIds === null) {
       const onScene = this.#scenePcIds();
-      this.state.partyIds = onScene.size ? onScene : new Set(this._pcs.map(p => p.id));
+      this.enc.partyIds = onScene.size ? onScene : new Set(this._pcs.map(p => p.id));
     }
     // Drop PCs that no longer exist.
-    for (const id of [...this.state.partyIds]) if (!this._pcs.some(p => p.id === id)) this.state.partyIds.delete(id);
+    for (const id of [...this.enc.partyIds]) if (!this._pcs.some(p => p.id === id)) this.enc.partyIds.delete(id);
 
     const totals = this.totals;
     const cap    = this.chapterCap;
@@ -297,7 +297,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       });
     const worldCount = this._roster.filter(r => r.src === "world").length;
 
-    const picks = this.state.picks.map(p => {
+    const picks = this.enc.picks.map(p => {
       const cost  = pickCost(p, budget);
       const turns = pickTurns(p, this.players);
       const isMob = p.cls === "mob";
@@ -316,15 +316,15 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     const drafts = Object.keys(game.settings.get("icon-system", DRAFTS_SETTING) ?? {}).sort();
 
     return {
-      state:    this.state,
-      name:     this.state.name,
+      state:    this.enc,
+      name:     this.enc.name,
       players:  this.players,
       budget,
-      base:     baseBudget(this.players, this.state.oneFight),
+      base:     baseBudget(this.players, this.enc.oneFight),
       totals,
       cap,
-      capAuto:  !this.state.chapterCap,
-      pcs:      this._pcs.map(pc => ({ ...pc, selected: this.state.partyIds.has(pc.id) })),
+      capAuto:  !this.enc.chapterCap,
+      pcs:      this._pcs.map(pc => ({ ...pc, selected: this.enc.partyIds.has(pc.id) })),
       roster:   this._roster,
       rosterCount: this._roster.length,
       worldCount,
@@ -334,7 +334,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         { value: "leader", label: "Leader" }, { value: "artillery", label: "Artillery" },
         { value: "mob", label: "Mob" }, { value: "legend", label: "Legend" },
       ],
-      filters:  this.state.filters,
+      filters:  this.enc.filters,
       picks,
       hasPicks: picks.length > 0,
       hasLegend: picks.some(p => p.isLegend),
@@ -343,7 +343,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       busy:     this._busy,
       canDeploy: !!canvas?.scene && picks.length > 0 && !this._busy,
       sceneName: canvas?.scene?.name ?? "",
-      addParty: this.state.addParty,
+      addParty: this.enc.addParty,
     };
   }
 
@@ -369,9 +369,9 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #bindParty(el) {
     el.addEventListener("change", ev => {
       const t = ev.target;
-      if (t.name === "oneFight") { this.state.oneFight = !!t.checked; this.#refresh(); }
+      if (t.name === "oneFight") { this.enc.oneFight = !!t.checked; this.#refresh(); }
       else if (t.name === "chapterCap") {
-        this.state.chapterCap = Number(t.value) || 0;
+        this.enc.chapterCap = Number(t.value) || 0;
         this.#refresh(["hero", "party", "encounter", "footer"]);
         this.#applyRosterFilter();
       }
@@ -381,15 +381,15 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #bindRoster(el) {
     const search = el.querySelector('[name="search"]');
     search?.addEventListener("input", () => {
-      this.state.filters.search = search.value;
+      this.enc.filters.search = search.value;
       this.#applyRosterFilter();
     });
     el.addEventListener("change", ev => {
       const t = ev.target;
-      if (t.name === "faction")     this.state.filters.faction = t.value;
-      else if (t.name === "cls")    this.state.filters.cls = t.value;
-      else if (t.name === "src")    this.state.filters.src = t.value;
-      else if (t.name === "allChapters") this.state.filters.allChapters = !!t.checked;
+      if (t.name === "faction")     this.enc.filters.faction = t.value;
+      else if (t.name === "cls")    this.enc.filters.cls = t.value;
+      else if (t.name === "src")    this.enc.filters.src = t.value;
+      else if (t.name === "allChapters") this.enc.filters.allChapters = !!t.checked;
       else return;
       this.#applyRosterFilter();
     });
@@ -406,7 +406,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       const t = ev.target;
       const row = t.closest("[data-index]");
       if (!row) return;
-      const pick = this.state.picks[Number(row.dataset.index)];
+      const pick = this.enc.picks[Number(row.dataset.index)];
       if (!pick) return;
       if (t.name === "reserve") { pick.reserve = Number(t.value) || 0; this.#refresh(["hero", "encounter", "footer"]); }
       else if (t.name === "qty") {
@@ -419,12 +419,12 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #bindFooter(el) {
     const name = el.querySelector('[name="encounterName"]');
     name?.addEventListener("input", () => {
-      this.state.name = name.value;
+      this.enc.name = name.value;
       const title = this.element?.querySelector('[data-role="hero-title"]');
       if (title) title.textContent = name.value.trim() || "New encounter";
     });
     el.addEventListener("change", ev => {
-      if (ev.target.name === "addParty") this.state.addParty = !!ev.target.checked;
+      if (ev.target.name === "addParty") this.enc.addParty = !!ev.target.checked;
     });
   }
 
@@ -436,7 +436,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #applyRosterFilter(root) {
     const el = root ?? this.element?.querySelector('[data-application-part="roster"]');
     if (!el) return;
-    const f = this.state.filters;
+    const f = this.enc.filters;
     const q = f.search.trim().toLowerCase();
     const cap = this.chapterCap;
     let shown = 0;
@@ -471,14 +471,14 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #addPick(key, { silent = false } = {}) {
     const entry = this._roster?.find(r => r.key === key);
     if (!entry) return;
-    if (entry.type === "legend" && this.state.picks.some(p => p.type === "legend")) {
+    if (entry.type === "legend" && this.enc.picks.some(p => p.type === "legend")) {
       ui.notifications.warn("One Legend is already worth the whole budget (p.292).");
       return;
     }
-    const existing = this.state.picks.find(p => p.key === key && !p.reserve);
+    const existing = this.enc.picks.find(p => p.key === key && !p.reserve);
     if (existing && entry.type !== "legend") existing.qty = Math.min(20, existing.qty + 1);
     else {
-      this.state.picks.push({
+      this.enc.picks.push({
         key, uuid: entry.uuid, name: entry.name, type: entry.type, cls: entry.cls, clsLabel: entry.clsLabel,
         faction: entry.faction, chapter: entry.chapter, size: entry.size, hpMax: entry.hpMax, img: entry.img,
         src: entry.src, baseElite: entry.isElite, elite: entry.isElite, qty: 1, reserve: 0,
@@ -490,7 +490,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   #pickFromTarget(target) {
     const row = target.closest("[data-index]");
     const i = Number(row?.dataset.index);
-    return Number.isInteger(i) ? { i, pick: this.state.picks[i] } : { i: -1, pick: null };
+    return Number.isInteger(i) ? { i, pick: this.enc.picks[i] } : { i: -1, pick: null };
   }
 
   /* -------------------------------------------------- */
@@ -500,26 +500,26 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   static #onTogglePc(event, target) {
     const id = target.dataset.pcId;
     if (!id) return;
-    if (this.state.partyIds.has(id)) this.state.partyIds.delete(id); else this.state.partyIds.add(id);
+    if (this.enc.partyIds.has(id)) this.enc.partyIds.delete(id); else this.enc.partyIds.add(id);
     this.#refresh();
     this.#applyRosterFilter();
   }
 
   static #onPartyAll() {
-    this.state.partyIds = new Set((this._pcs ?? []).map(p => p.id));
+    this.enc.partyIds = new Set((this._pcs ?? []).map(p => p.id));
     this.#refresh(); this.#applyRosterFilter();
   }
 
   static #onPartyScene() {
     const ids = this.#scenePcIds();
     if (!ids.size) { ui.notifications.info("No PC tokens on the current scene."); return; }
-    this.state.partyIds = ids;
+    this.enc.partyIds = ids;
     this.#refresh(); this.#applyRosterFilter();
   }
 
   static #onAdjust(event, target) {
     const d = Number(target.dataset.delta) || 0;
-    this.state.adjust = Math.max(-5, Math.min(10, this.state.adjust + d));
+    this.enc.adjust = Math.max(-5, Math.min(10, this.enc.adjust + d));
     this.#refresh();
   }
 
@@ -538,14 +538,14 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   static #onDecPick(event, target) {
     const { i, pick } = this.#pickFromTarget(target);
     if (!pick) return;
-    if (pick.qty <= 1 || pick.type === "legend") this.state.picks.splice(i, 1);
+    if (pick.qty <= 1 || pick.type === "legend") this.enc.picks.splice(i, 1);
     else pick.qty -= 1;
     this.#refresh(["hero", "encounter", "footer"]);
   }
 
   static #onRemovePick(event, target) {
     const { i } = this.#pickFromTarget(target);
-    if (i >= 0) this.state.picks.splice(i, 1);
+    if (i >= 0) this.enc.picks.splice(i, 1);
     this.#refresh(["hero", "encounter", "footer"]);
   }
 
@@ -580,13 +580,17 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   static #onClearPicks() {
-    this.state.picks = [];
+    this.enc.picks = [];
     this.#refresh(["hero", "encounter", "footer"]);
   }
 
-  static #onClearFilters() {
-    this.state.filters = { search: "", faction: "", cls: "", src: "pack", allChapters: false };
-    this.render({ parts: ["roster"] });
+  static async #onClearFilters() {
+    this.enc.filters = { search: "", faction: "", cls: "", src: "pack", allChapters: false };
+    await this.render({ parts: ["roster"] });
+    // AppV2 restores the focused input's value across the re-render: blank the
+    // search box explicitly so the field matches the (cleared) filter.
+    const search = this.element?.querySelector('input[name="search"]');
+    if (search) search.value = "";
   }
 
   static async #onReloadRoster() {
@@ -601,21 +605,21 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   static #onNewEncounter() {
-    const keep = this.state.partyIds;
-    this.state = EncounterDesigner.#defaultState();
-    this.state.partyIds = keep;
+    const keep = this.enc.partyIds;
+    this.enc = EncounterDesigner.#defaultState();
+    this.enc.partyIds = keep;
     this.render({ parts: ["hero", "party", "roster", "encounter", "footer"] });
   }
 
   /* ---------- Drafts (world setting) ---------- */
 
   static async #onSaveDraft() {
-    const name = this.state.name.trim();
+    const name = this.enc.name.trim();
     if (!name) { ui.notifications.warn("Give the encounter a name first (bottom-left field)."); return; }
     const drafts = foundry.utils.deepClone(game.settings.get("icon-system", DRAFTS_SETTING) ?? {});
     drafts[name] = {
-      ...this.state,
-      partyIds: [...(this.state.partyIds ?? [])],
+      ...this.enc,
+      partyIds: [...(this.enc.partyIds ?? [])],
       savedAt: Date.now(),
     };
     await game.settings.set("icon-system", DRAFTS_SETTING, drafts);
@@ -629,11 +633,11 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     const draft = (game.settings.get("icon-system", DRAFTS_SETTING) ?? {})[name];
     if (!draft) { ui.notifications.warn("Pick a saved encounter first."); return; }
     const { savedAt, ...rest } = draft;
-    this.state = { ...EncounterDesigner.#defaultState(), ...foundry.utils.deepClone(rest), partyIds: new Set(rest.partyIds ?? []) };
+    this.enc = { ...EncounterDesigner.#defaultState(), ...foundry.utils.deepClone(rest), partyIds: new Set(rest.partyIds ?? []) };
     // Picks whose source disappeared are dropped with a warning.
-    const before = this.state.picks.length;
-    this.state.picks = this.state.picks.filter(p => this._roster?.some(r => r.key === p.key));
-    if (this.state.picks.length < before) ui.notifications.warn(`${before - this.state.picks.length} pick(s) of "${name}" no longer exist and were dropped.`);
+    const before = this.enc.picks.length;
+    this.enc.picks = this.enc.picks.filter(p => this._roster?.some(r => r.key === p.key));
+    if (this.enc.picks.length < before) ui.notifications.warn(`${before - this.enc.picks.length} pick(s) of "${name}" no longer exist and were dropped.`);
     this.render({ parts: ["hero", "party", "roster", "encounter", "footer"] });
   }
 
@@ -659,17 +663,17 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   /** Build the chat-card context shared by "Post to chat" and the deploy card. */
   #cardContext({ reserveTokens = [], sceneId = "", deployed = false, folderName = "" } = {}) {
     const t = this.totals;
-    const rows = this.state.picks.map(p => ({
+    const rows = this.enc.picks.map(p => ({
       name: p.name, qty: p.type === "legend" ? 1 : p.qty, clsLabel: p.clsLabel, cls: p.cls,
       elite: p.elite, isLegend: p.type === "legend", cost: pickCost(p, t.budget), reserve: p.reserve,
       turns: pickTurns(p, this.players),
     }));
-    const party = (this._pcs ?? []).filter(pc => this.state.partyIds.has(pc.id)).map(pc => pc.name);
+    const party = (this._pcs ?? []).filter(pc => this.enc.partyIds.has(pc.id)).map(pc => pc.name);
     return {
-      name: this.state.name.trim() || "Encounter",
+      name: this.enc.name.trim() || "Encounter",
       players: this.players, party,
-      budget: t.budget, base: baseBudget(this.players, this.state.oneFight), adjust: this.state.adjust,
-      oneFight: this.state.oneFight,
+      budget: t.budget, base: baseBudget(this.players, this.enc.oneFight), adjust: this.enc.adjust,
+      oneFight: this.enc.oneFight,
       spent: t.spent, onMap: t.onMap, reserve: t.reserve, over: t.over, overBy: t.overBy, remaining: t.remaining,
       npcTurns: t.npcTurns, pcTurns: t.pcTurns,
       rows, hasReserve: rows.some(r => r.reserve),
@@ -692,7 +696,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   static async #onPostChat() {
-    if (!this.state.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
+    if (!this.enc.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
     await this.#postCard(this.#cardContext());
   }
 
@@ -708,7 +712,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   async #buildActorData(folderId) {
     const players = this.players;
     const docs = [];
-    for (const p of this.state.picks) {
+    for (const p of this.enc.picks) {
       const src = await fromUuid(p.uuid);
       if (!src) { ui.notifications.warn(`"${p.name}" could not be loaded and was skipped.`); continue; }
       const count = p.type === "legend" ? 1 : p.qty;
@@ -720,7 +724,9 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         data.prototypeToken ??= {};
         data.prototypeToken.name = data.name;
         data.prototypeToken.disposition = CONST.TOKEN_DISPOSITIONS.HOSTILE;
-        data.prototypeToken.actorLink = false;
+        // Linked on purpose: IconActor._preCreate links every new actor's
+        // prototype token, and with one actor per body a linked token is the
+        // right thing (the sheet and the token share the same HP).
         if (data.prototypeToken.width == null) { data.prototypeToken.width = p.size; data.prototypeToken.height = p.size; }
         const sys = data.system;
         if (p.type === "foe") {
@@ -746,7 +752,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         }
         data.flags ??= {};
         data.flags["icon-system"] = { ...(data.flags["icon-system"] ?? {}),
-          encounter: { name: this.state.name.trim() || "Encounter", reserve: p.reserve, source: p.uuid } };
+          encounter: { name: this.enc.name.trim() || "Encounter", reserve: p.reserve, source: p.uuid } };
         docs.push({ data, reserve: p.reserve, size: p.size });
       }
     }
@@ -754,12 +760,12 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   async #createFolder() {
-    const label = `Encounter: ${this.state.name.trim() || "Encounter"}`;
+    const label = `Encounter: ${this.enc.name.trim() || "Encounter"}`;
     return Folder.create({ name: label, type: "Actor", color: "#7a1f2e" });
   }
 
   static async #onCreateActors() {
-    if (!this.state.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
+    if (!this.enc.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
     if (this._busy) return;
     this._busy = true; this.#refresh(["footer"]);
     try {
@@ -782,7 +788,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
    * place); reserves are hidden and kept out of the combat until revealed.
    */
   static async #onDeploy() {
-    if (!this.state.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
+    if (!this.enc.picks.length) { ui.notifications.warn("Add at least one foe first."); return; }
     const scene = canvas?.scene;
     if (!scene) { ui.notifications.warn("Open a scene first."); return; }
     if (this._busy) return;
@@ -829,9 +835,9 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         if (tok.getFlag("icon-system", "encounterReserve")) continue;
         toAdd.push({ tokenId: tok.id, sceneId: scene.id, actorId: tok.actorId, hidden: tok.hidden });
       }
-      if (this.state.addParty) {
+      if (this.enc.addParty) {
         for (const tok of scene.tokens) {
-          if (tok.actor?.type !== "icon" || !this.state.partyIds.has(tok.actor.id)) continue;
+          if (tok.actor?.type !== "icon" || !this.enc.partyIds.has(tok.actor.id)) continue;
           if (combat.combatants.some(c => c.tokenId === tok.id)) continue;
           toAdd.push({ tokenId: tok.id, sceneId: scene.id, actorId: tok.actor.id, hidden: tok.hidden });
         }

@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Playtest delle sessioni 9 e 10: l'Encounter Designer non si apriva
+
+- **Encounter Designer che non si apre** (`Cannot set property state of #<ApplicationV2> which has only a getter`):
+  la finestra teneva i suoi dati in `this.state`, ma in Foundry v13 ApplicationV2 usa quel nome per il proprio stato
+  di rendering (sola lettura) → rinominato `this.enc` in `module/apps/EncounterDesigner.mjs`. Il bug era invisibile
+  nei controlli offline (Node non ha ApplicationV2).
+- **Dopo "Clear" il campo di ricerca restava scritto** mentre il filtro era azzerato: AppV2 conserva il valore del
+  campo a fuoco durante il re-render → il campo viene svuotato esplicitamente dopo il render.
+- **Riga dell'encounter con il nome schiacciato a una lettera** ("W…"): i controlli (quantità, Elite, riserva, costo,
+  ✕) occupavano tutta la larghezza → ora vanno a capo sotto il nome (CSS `flex-wrap`).
+- **Token dei foe creati linkati**: `IconActor._preCreate` linka il token prototipo di ogni nuovo attore, quindi la
+  riga `actorLink = false` del designer non aveva effetto; tolta, con un attore per corpo il token linkato è giusto.
+- Playtest (Claude in Chrome sul mondo di Maar, scena "test", copie TEST cancellate a fine prova): Sessione 9 tutta
+  verificata (reminder per rango, Invoke acceso su un 17 grezzo, soglie Aspect, attacco base, round 3/5); Sessione 10
+  verificata per intero dopo il fix (party, budget, filtri, Elite, Legend, riserve, Random fill, salvataggi, chat,
+  attori, deploy, Reveal reserves). Dettagli in `PLAYTEST.md`. Emerso: nel pack `foes` il Nilfling (Jotunn) non è
+  segnato Elite, da verificare sul manuale (`TODO.md`).
+
 ## 9 settembre 2026 — Sessione 11: status inflitti letti dal testo, blocco "Inflict" sulle card, save 10+ (versione 1.3.0)
 
 - **Infliggere uno status voleva dire leggere il testo, aprire la scheda del bersaglio e cliccare nella tab

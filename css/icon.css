@@ -5329,6 +5329,10 @@ ol.chat-log .chat-message,
 .icon-encounter__row .icon-btn--sm, .icon-encounter__pick .icon-btn--sm { flex: 0 0 auto; min-width: 24px; }
 
 /* Picks */
+/* The pick row carries many controls (qty, Elite, reserve, cost, ✕): let them wrap
+   under the name instead of squeezing the name to a single letter. */
+.icon-encounter__pick { flex-wrap: wrap; row-gap: 4px; }
+.icon-encounter__pick .icon-encounter__row-main { flex: 1 1 150px; min-width: 130px; }
 .icon-encounter__pick--reserve { border-style: dashed; opacity: .8; }
 .icon-encounter__pick--reserve .icon-encounter__meta em { color: var(--ic-gold); font-style: italic; }
 .icon-encounter__elite {
