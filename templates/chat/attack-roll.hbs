@@ -27,9 +27,15 @@
     {{/if}}
   </div>
 
+  {{!-- Evasion (d6 per target with Evasion, before the attack roll — defenses.mjs) --}}
+  {{#if evasionHtml}}{{{evasionHtml}}}{{/if}}
+
   {{!-- Result --}}
   <div class="icon-chat-card__result">
-    {{#if isCrit}}
+    {{#if evaded}}
+      <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">MISS — evaded</strong>
+      <small class="icon-chat-card__result-note">Every target evaded: no attack roll. Effects that don't need a hit still apply.</small>
+    {{else if isCrit}}
       <strong class="icon-chat-card__result-label icon-chat-card__result-label--crit">CRITICAL HIT</strong>
     {{else if isHit}}
       <strong class="icon-chat-card__result-label icon-chat-card__result-label--hit">HIT</strong>

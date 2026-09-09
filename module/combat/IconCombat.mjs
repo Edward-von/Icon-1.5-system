@@ -750,9 +750,9 @@ export function registerCombatHooks() {
          * the active GM applies it through the same shared code path. */
         const actor = await fromUuid(data.actorUuid ?? "");
         if (!actor) return;
-        const { applyArmor = false, half = false } = data.options ?? {};
+        const { applyArmor = false, half = false, halfReason = "" } = data.options ?? {};
         await applyDamageToActor(actor, data.amount, {
-          applyArmor, half,
+          applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60),
           chatConfirm: true,
           allowRelay:  false,
         });

@@ -532,6 +532,56 @@ combat aperto. Regole: p.94 (save = 1d20, 10+), p.104 (Hatred of X), p.108.
       (rollEndOfTurnSaves) ancora con "Saved! X cleared." / "Failed — X persists."; mark 🎯 e Hatred dalla tab
       Conditions come prima.
 
+## Sessione 12 (9 settembre 2026) — Automazione difensiva: Evasion, Dodge, Cover / Resistance (versione 1.4.0)
+
+Prerequisito: un PG e un Foe con token sulla scena, combat aperto. Gli status si mettono dalla tab Conditions
+(o dall'HUD del token): **Evasion**, **Dodge**, **Cover**, **Resistance**, **True Strike**. Regole: Evasion p.146
+(1d6, 4+ = miss, prima del tiro d'attacco), Dodge p.144 (immune al danno da attacchi mancati, save riusciti, area),
+Cover p.92 (½ danno, deciso quando il danno viene applicato), True Strike p.117 (ignora dodge, evasion, blind,
+stealth). Verificato offline (Node) con attori finti: soglie, Spinning Top, True Strike, Dodge su miss/area,
+Cover+Resistance una volta sola, "già dimezzato sul tiro".
+
+- [ ] **Chip nel dialog d'attacco**: metti Evasion sul Warrior, targettalo e ⚔ su un attacco del PG → nella card
+      "🎯 Target" sotto DEF/ARM/HP compare il chip blu "Evasion 4+" e tra i modificatori automatici la riga
+      "⚙ Evasion: Warrior rolls 1d6 (4+ = miss) before the attack".
+- [ ] **Evasion sul tiro**: "⚔ Roll Attack" → nella card in chat, sopra HIT/MISS, il blocco "EVASION — 1d6 per
+      target with Evasion" con la riga "Warrior [d6] evaded (4+) — the attack misses them" (verde) oppure "no
+      effect (needed 4+)". Con un 4+ il risultato è "MISS — evaded" con la nota "Every target evaded: no attack
+      roll…", i blocchi Hit/Exceed/Crit sono sbiaditi, gli Invoke delle reliquie non compaiono e nel blocco
+      Inflict la riga del Warrior è sbiadita con "(evaded)". Con Dice So Nice si vede il d6 prima del d20.
+- [ ] **Due bersagli, uno solo con Evasion**: targetta Warrior (Evasion) e Archer, tira → il blocco Evasion
+      elenca solo il Warrior; se evade, il risultato resta HIT/MISS normale (vale per l'Archer) e solo la riga
+      del Warrior nell'Inflict è sbiadita.
+- [ ] **Spinning Top I**: PG con Evasion e la reliquia Spinning Top al rango I equipaggiata, targettato da un Foe:
+      chip "Evasion 3+" e riga "evaded (3+)" con un 3.
+- [ ] **True Strike**: metti True Strike sull'attaccante → il dialog dice "True Strike: ignores Evasion (Warrior)"
+      e la card mostra "Evasion ignored — attacker has True Strike (p.117)" senza d6. Lo stesso con Unerring.
+- [ ] **Auto-hit non passa dall'Evasion**: un'abilità auto-hit contro un bersaglio con Evasion → nessun blocco
+      Evasion sulla card Auto-hit (p.113: gli effetti automatici passano).
+- [ ] **Cover su Apply**: metti Cover sul Warrior, tira il danno (Hit, 7 punti per esempio) → nella card del danno
+      la riga del Warrior ha il chip verde "Cover ½"; "Apply 7" → card "Damage Applied … halved (Cover)" con
+      HP ridotti della metà dopo l'armatura (es. 7 − ARM 1 = 6 → 3), bottone "✓ Applied 3 (½ Cover)". Il
+      bottone "½" a fianco resta manuale (dimezza sempre, senza motivo).
+- [ ] **Niente doppio dimezzamento**: nel dialog del danno spunta "Resistance / Cover ½" (il chip dice "auto on
+      Apply" e il riquadro "⚙ ½ on Apply: Warrior") → la card ha già il passo "Resistance (halved)", la riga del
+      Warrior mostra "Cover (already ½)" e "Apply" NON dimezza di nuovo.
+- [ ] **Cover + Resistance**: entrambi sul bersaglio → un solo ½ ("halved (Cover + Resistance (½ once))").
+- [ ] **Cover deciso al momento**: tira il danno SENZA Cover sul bersaglio, poi metti Cover e riapri la chat
+      (scroll o F5) → il chip "Cover ½" compare sulla card già postata e "Apply" dimezza.
+- [ ] **Dodge su Miss**: metti Dodge sul Warrior, dialog del danno con esito "Miss" → riquadro "⚙ Dodge: Warrior —
+      no damage from Miss / Area"; sulla card la riga ha il chip verde "Dodge — immune"; "Apply" → card "Warrior:
+      no damage — Dodge — immune to damage from missed attacks (p.144)", HP invariati, bottone "✓ Dodged".
+- [ ] **Dodge su Area**: esito "Area" → stesso comportamento ("… from area effects"). Esito "Hit" → chip "Dodge"
+      grigio, Apply applica il danno normalmente.
+- [ ] **Trait NPC come promemoria**: Foe con un trait che cita evasion/dodge (es. "Slippery: Has Evasion while
+      bloodied", Bandit; o "Traits: Dodge") senza lo status → nel dialog il chip oro "⚠ Slippery" con tooltip
+      "set the evasion status by hand when it applies"; nessun d6 tirato finché lo status non è messo.
+- [ ] **Relay giocatore**: da un client Player, "Apply" su un foe in Cover non posseduto → il GM applica
+      dimezzando e la card dice "halved (Cover)".
+- [ ] **Regressioni**: attacco senza target con Evasion in giro → nessun blocco; card del danno vecchie (senza
+      flag) → Apply come prima; Foe/Legend/Summon che attaccano un PG con Evasion → blocco Evasion anche lì;
+      macro `game.icon.rollEvasion`, `defenseProfile`, `damageMitigation` disponibili.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

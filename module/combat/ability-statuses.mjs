@@ -398,9 +398,10 @@ function _blockOn(key, outcome) {
  * @param {string} opts.abilityName
  * @param {object} [opts.outcome]       { isHit, isCrit, isExceed } from the attack roll (null = no roll)
  * @param {Array}  [opts.targets]       captureTargets() result (default: capture now)
+ * @param {Set<string>} [opts.evaded]   actor uuids that evaded the attack (defenses.mjs) → their row is dimmed
  * @returns {string} safe HTML ("" when there is nothing to inflict)
  */
-export function statusBlockHtml(entries, { source, abilityName = "", outcome = null, targets = null } = {}) {
+export function statusBlockHtml(entries, { source, abilityName = "", outcome = null, targets = null, evaded = null } = {}) {
   if (!entries?.length || !source) return "";
   const rows = targets ?? captureTargets();
   const sourceTokenId = source.getActiveTokens?.()?.[0]?.id ?? "";
@@ -433,9 +434,9 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
   }).join("");
 
   const rowsHtml = rows.length
-    ? rows.map(t => `<div class="icon-chat-statuses__row" data-target-uuid="${esc(t.actorUuid)}">
+    ? rows.map(t => `<div class="icon-chat-statuses__row${evaded?.has(t.actorUuid) ? " icon-chat-statuses__row--evaded" : ""}" data-target-uuid="${esc(t.actorUuid)}"${evaded?.has(t.actorUuid) ? ' title="This target evaded the attack: only effects that don\'t need a hit apply"' : ""}>
         ${t.img ? `<img class="icon-chat-card__target-img" src="${esc(t.img)}" alt="" width="24" height="24">` : ""}
-        <strong class="icon-chat-statuses__name">${esc(t.name)}</strong>
+        <strong class="icon-chat-statuses__name">${esc(t.name)}${evaded?.has(t.actorUuid) ? " <small>(evaded)</small>" : ""}</strong>
         <span class="icon-chat-statuses__buttons">${buttons(t)}</span>
       </div>`).join("")
     : `<div class="icon-chat-statuses__row icon-chat-statuses__row--live">

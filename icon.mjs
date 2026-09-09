@@ -96,6 +96,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
+import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 
 /* ================================================== */
 /*  init                                              */
@@ -232,6 +233,10 @@ Hooks.once("init", () => {
     damageRoll,
     applyDamagePipeline,
     applyDamageToActor,
+    // Defensive automation (defenses.mjs): Evasion d6, Dodge / Cover / Resistance
+    rollEvasion,
+    defenseProfile,
+    damageMitigation,
     addVigor,
     clearVigor,
     applyWound,
@@ -675,6 +680,29 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   const buttons = html.querySelectorAll('[data-action="applyDamage"]');
   if (!buttons.length) return;
 
+  // Card-level facts the defensive automation needs (defenses.mjs).
+  const dmgFlags     = message?.flags?.["icon-system"]?.damage ?? {};
+  const outcome      = dmgFlags.outcome ?? "hit";
+  const halvedOnRoll = !!dmgFlags.halvedOnRoll;
+
+  // Defensive chips on each target row (Dodge / Cover ½ / Resistance ½ …),
+  // read from the target's CURRENT statuses — cover is determined when the
+  // damage is applied (p.92), so the row is re-evaluated at every render.
+  html.querySelectorAll('.icon-chat-card__target-row[data-actor-uuid]').forEach(row => {
+    if (row.dataset.iconDefChips) return;
+    row.dataset.iconDefChips = "true";
+    let actor = null;
+    try { actor = fromUuidSync(row.dataset.actorUuid); } catch { actor = null; }
+    if (!actor) return;
+    const chips = defenseChipsHtml(actor, { outcome, halvedOnRoll, compact: true });
+    if (!chips) return;
+    const holder = document.createElement("span");
+    holder.className = "icon-chat-card__target-defs";
+    holder.innerHTML = chips;
+    const firstBtn = row.querySelector("button");
+    firstBtn ? row.insertBefore(holder, firstBtn) : row.appendChild(holder);
+  });
+
   buttons.forEach(btn => {
     if (btn.dataset.iconBound) return;
     btn.dataset.iconBound = "true";
@@ -684,8 +712,9 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
 
       const uuid   = btn.dataset.actorUuid;
       const amount = Number(btn.dataset.amount) || 0;
-      const half   = btn.dataset.half === "true";
+      let   half   = btn.dataset.half === "true";
       const pierce = btn.dataset.pierce === "true";
+      let   halfReason = half ? "manual ½" : "";
 
       if (!uuid || amount <= 0) return;
 
@@ -693,6 +722,27 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       if (!actor) {
         ui.notifications.error(`Could not find target actor for damage application.`);
         return;
+      }
+
+      // Defensive automation on the full "Apply" button (the ½ button stays a
+      // manual override): Dodge → no damage from a Miss / Area card; Cover or
+      // Resistance → ½ once, unless the roll was already halved.
+      if (!half) {
+        const mit = damageMitigation(actor, { outcome, halvedOnRoll });
+        if (mit.immune) {
+          await ChatMessage.create({
+            speaker: { alias: "Damage Applied" },
+            content: `<div class="icon-chat-card icon-chat-card--apply icon-chat-card--dodged">
+                        <strong>${foundry.utils.escapeHTML(actor.name)}</strong>: no damage
+                        <br><small>${foundry.utils.escapeHTML(mit.immuneReason)} (p.144)</small>
+                      </div>`,
+          });
+          btn.disabled = true;
+          btn.textContent = "✓ Dodged";
+          btn.style.opacity = "0.5";
+          return;
+        }
+        if (mit.half) { half = true; halfReason = mit.halfReason; }
       }
 
       // All deduction rules (armor before ½, mob hits, vigor before HP, wound
@@ -703,6 +753,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
         result = await applyDamageToActor(actor, amount, {
           applyArmor:  !pierce,
           half,
+          halfReason,
           chatConfirm: true,
         });
       } catch (err) {
@@ -716,7 +767,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       btn.disabled = true;
       btn.textContent = result.relayed ? "→ Sent to GM"
                       : result.isMob   ? "✓ −1 hit"
-                      : `✓ Applied ${result.applied}`;
+                      : `✓ Applied ${result.applied}${half && halfReason && halfReason !== "manual ½" ? ` (½ ${halfReason})` : ""}`;
       btn.style.opacity = "0.5";
     });
   });

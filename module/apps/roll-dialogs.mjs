@@ -15,6 +15,7 @@
  */
 import { getActorStatusMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
+import { defenseChipsHtml, defenseProfile, ignoresEvasion } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 
 const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
@@ -40,11 +41,15 @@ function _targets() {
     return {
       id:      t.id,
       name:    t.name,
+      actor:   t.actor,
       img:     t.actor.img ?? t.document?.texture?.src ?? "",
       defense: s.combat?.defense ?? s.defense ?? null,
       armor:   s.combat?.armor ?? s.armor ?? 0,
       hp:      s.combat?.hp?.value ?? s.hp?.value ?? null,
       hpMax:   s.combat?.hp?.max ?? s.hp?.max ?? null,
+      // Defensive statuses / traits of the target (defenses.mjs)
+      defense_: defenseProfile(t.actor),
+      defChips: defenseChipsHtml(t.actor),
     };
   });
 }
@@ -110,6 +115,7 @@ function _targetCard(targets, { showDefense = true } = {}) {
               <span title="Armor (subtracted when the damage is applied)">ARM <b>${t.armor ?? 0}</b></span>
               ${t.hp != null ? `<span title="Hit points">HP <b>${t.hp}</b>${t.hpMax != null ? `/${t.hpMax}` : ""}</span>` : ""}
             </span>
+            ${t.defChips ? `<span class="icon-roll-target__defs">${t.defChips}</span>` : ""}
           </li>`).join("")}
       </ul>
     </section>`;
@@ -165,6 +171,16 @@ export async function promptAttackMods(ab, actor) {
   const boons  = (auto.boons  ?? 0) + elev.boons;
   const curses = (auto.curses ?? 0) + elev.curses;
   const notes  = [...(auto.notes ?? []), elev.note].filter(Boolean);
+
+  // Evasion (p.146): rolled automatically with the attack, one d6 per target
+  // that has it — tell the attacker up front.
+  const evaders = targets.filter(t => t.defense_?.evasion);
+  if (evaders.length) {
+    const ignored = ignoresEvasion(actor);
+    notes.push(ignored
+      ? `${ignored}: ignores Evasion (${evaders.map(t => t.name).join(", ")})`
+      : `Evasion: ${evaders.map(t => `${t.name} rolls 1d6 (${t.defense_.evasionThreshold}+ = miss)`).join(", ")} before the attack`);
+  }
 
   const content = `
     <div class="icon-roll-dialog icon-roll-dialog--attack">
@@ -249,6 +265,12 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   const fray = Number(combat?.fray ?? 0);
   const targets = _targets();
   const hatred  = actor ? hatredDamageHint(actor) : { active: false };
+  // Cover / Resistance are halved automatically when the target presses Apply
+  // (p.92: "determined when and where damage is applied"); the checkbox below
+  // is for targets without the status. Ticking it marks the roll as already
+  // halved so Apply won't halve twice.
+  const autoHalf = targets.filter(t => t.defense_?.cover || t.defense_?.resistance).map(t => t.name);
+  const dodgers  = targets.filter(t => t.defense_?.dodge).map(t => t.name);
 
   const chunkFormula = (c) => {
     const parts = [];
@@ -293,12 +315,16 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           </div>
           <div class="icon-roll-chips">
             <label class="icon-roll-chip"><input type="checkbox" name="vulnerable"><span>Vulnerable <small>+1</small></span></label>
-            <label class="icon-roll-chip"><input type="checkbox" name="resistance"><span>Resistance / Cover <small>½</small></span></label>
+            <label class="icon-roll-chip" title="${autoHalf.length ? `Applied automatically on Apply for ${esc(autoHalf.join(", "))} — tick only for a target WITHOUT the status` : "Half damage. Tick for a target in cover / with resistance that has no status set; otherwise it is applied automatically on Apply"}"><input type="checkbox" name="resistance"><span>Resistance / Cover <small>½${autoHalf.length ? " · auto on Apply" : ""}</small></span></label>
             <label class="icon-roll-chip"><input type="checkbox" name="weakened"><span>Weakened <small>−2</small></span></label>
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
-          ${hatred.active ? `<div class="icon-roll-auto"><span class="icon-roll-auto__chip">⚠ ${esc(hatred.note)}</span></div>` : ""}
-          <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note">Armor is subtracted when the target presses Apply.</span></div>
+          ${hatred.active || autoHalf.length || dodgers.length ? `<div class="icon-roll-auto">
+            ${hatred.active ? `<span class="icon-roll-auto__chip">⚠ ${esc(hatred.note)}</span>` : ""}
+            ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">⚙ ½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}
+            ${dodgers.length ? `<span class="icon-roll-auto__chip" title="Dodge: immune to damage from missed attacks, successful saves and area effects (p.144)">⚙ Dodge: ${esc(dodgers.join(", "))} — no damage from Miss / Area</span>` : ""}
+          </div>` : ""}
+          <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note">Armor, Cover and Resistance are applied when the target presses Apply.</span></div>
         </section>
       </div>
     </div>`;

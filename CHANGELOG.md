@@ -1,5 +1,31 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 12: automazione difensiva — Evasion, Dodge, Cover / Resistance (versione 1.4.0)
+
+- **Evasion andava tirata a mano** (wishlist Maar: "automazione difensiva"): nuovo modulo
+  `module/combat/defenses.mjs`. Quando si tira un attacco (PG, Foe, Legend, Summon), per ogni token targettato con
+  lo status Evasion viene tirato 1d6 **prima** del d20 (p.146): con 4+ (3+ se il bersaglio ha la reliquia Spinning
+  Top I+) l'attacco lo manca. La card d'attacco ha un blocco "Evasion" con il dado e l'esito per bersaglio; se
+  tutti i bersagli evadono il risultato è "MISS — evaded" (niente tiro d'attacco: blocchi Hit/Exceed/Crit sbiaditi,
+  Invoke delle reliquie non mostrati), altrimenti l'esito normale vale per gli altri e nel blocco Inflict le righe
+  di chi ha evaso sono sbiadite. True Strike / Unerring sull'attaccante ignorano l'Evasion (p.117) con una nota.
+  Gli auto-hit non passano dall'Evasion (p.113). Il dialog d'attacco avvisa ("⚙ Evasion: Warrior rolls 1d6…").
+- **Cover / Resistance dimezzavano solo se l'attaccante ricordava di spuntare la casella**: ora "Apply" sulla card
+  del danno legge gli status del bersaglio **in quel momento** (p.92: "cover is determined when and where damage is
+  applied") e dimezza da solo, una volta sola, dopo l'armatura; la card "Damage Applied" dice "halved (Cover)".
+  Se la casella "Resistance / Cover ½" era già spuntata sul tiro la card lo ricorda (`halvedOnRoll`) e Apply non
+  dimezza due volte. Il bottone "½" resta l'override manuale. Vale anche per il relay giocatore → GM.
+- **Dodge non faceva niente**: su una card di danno con esito Miss o Area, "Apply" su un bersaglio con Dodge non
+  toglie HP e posta "no damage — Dodge — immune to damage from missed attacks / area effects" (p.144); il bottone
+  diventa "✓ Dodged". (Il caso "successful saves" arriverà con il collegamento save → danno, già in TODO.)
+- **Chip difensivi**: nei dialog d'attacco e del danno ogni bersaglio mostra i suoi status difensivi (Evasion N+,
+  Dodge, Cover ½, Resistance ½, Stealth, Intangible) e, per Foe/Legend, un chip oro "⚠ Nome trait" per i trait
+  che citano evasion/dodge/cover/resistance senza che lo status sia attivo (es. "Slippery: Has Evasion while
+  bloodied"): promemoria per il GM di mettere lo status a mano. Sulla card del danno le righe dei bersagli hanno
+  gli stessi chip (compatti), ricalcolati a ogni render.
+- API per le macro: `game.icon.rollEvasion`, `defenseProfile`, `damageMitigation`. Verificato offline (Node, 28
+  controlli su attori finti); il playtest in Foundry è in `PLAYTEST.md`.
+
 ## 9 settembre 2026 — Playtest delle sessioni 9 e 10: l'Encounter Designer non si apriva
 
 - **Encounter Designer che non si apre** (`Cannot set property state of #<ApplicationV2> which has only a getter`):

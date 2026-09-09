@@ -5361,3 +5361,33 @@ ol.chat-log .chat-message,
 .icon-encounter-card__budget { font-size: 1.05em; }
 .icon-encounter-card__budget .icon-macro-value { font-size: 1.3em; }
 .icon-encounter-card__reveal { margin-top: 6px; width: 100%; }
+
+/* ==================================================
+   Defensive automation (defenses.mjs): Evasion block on attack cards,
+   defence chips on dialogs / damage-card rows, dodged note.
+   ================================================== */
+.icon-chat-evasion { margin: 6px 0 2px; padding: 4px 8px; border-radius: 4px; border-left: 3px solid rgba(46,132,216,.55); background: rgba(31,95,160,.08); font-size: .86em; }
+.icon-chat-evasion__header { display: flex; justify-content: space-between; gap: 8px; font-weight: 700; color: #b8d4f4; text-transform: uppercase; letter-spacing: .05em; font-size: .85em; }
+.icon-chat-evasion__note { color: var(--ic-text-dim); text-transform: none; letter-spacing: normal; font-style: italic; font-weight: 400; }
+.icon-chat-evasion__row { display: flex; align-items: center; gap: 6px; padding: 2px 0; }
+.icon-chat-evasion__name { font-weight: 600; min-width: 70px; }
+.icon-chat-evasion__text { color: var(--ic-text-dim); font-style: italic; }
+.icon-chat-evasion__row--evaded .icon-chat-evasion__text { color: #b0e8c0; font-style: normal; }
+.icon-chat-evasion__row--ignored { opacity: .7; }
+.icon-chat-die--evasion { background: rgba(31,95,160,.35); border-color: rgba(46,132,216,.7); color: #e8f2ff; min-width: 1.6em; text-align: center; }
+.icon-chat-evasion__row--evaded .icon-chat-die--evasion { background: rgba(36,104,56,.45); border-color: rgba(52,160,88,.7); }
+.icon-chat-card__result-note { display: block; font-size: .78em; color: var(--ic-text-dim); font-style: italic; margin-top: 2px; }
+.icon-chat-statuses__row--evaded { opacity: .5; }
+.icon-chat-statuses__row--evaded .icon-chat-btn--status { border-style: dashed; }
+
+.icon-def-chip {
+  display: inline-block; font-size: .74em; padding: 1px 7px; border-radius: 999px; line-height: 1.5;
+  background: rgba(31,95,160,.14); border: 1px solid rgba(46,132,216,.45); color: #b8d4f4; white-space: nowrap;
+}
+.icon-def-chip--on { background: rgba(36,104,56,.28); border-color: rgba(52,160,88,.6); color: #b0e8c0; font-weight: 600; }
+.icon-def-chip--trait { background: rgba(200,150,28,.12); border-color: rgba(200,150,28,.4); color: var(--ic-gold-bright); }
+.icon-def-chip--stealth, .icon-def-chip--intangible { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.18); color: #c0c0b8; }
+.icon-roll-target { flex-wrap: wrap; }
+.icon-roll-target__defs { display: flex; flex-wrap: wrap; gap: 3px; flex-basis: 100%; padding-left: 36px; }
+.icon-chat-card__target-defs { display: inline-flex; flex-wrap: wrap; gap: 3px; }
+.icon-chat-card--dodged { border-left-color: rgba(46,132,216,.7); }

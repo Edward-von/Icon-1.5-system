@@ -181,6 +181,7 @@ export async function applyDamagePipeline(attacker, target, {
  * @param {object}  [opts]
  * @param {boolean} [opts.applyArmor=false]  Subtract the DEFENDER's armor first.
  * @param {boolean} [opts.half=false]        Halve after armor (Resistance/Cover).
+ * @param {string}  [opts.halfReason=""]     Why it was halved ("Cover", "Resistance") — shown in the chat note.
  * @param {boolean} [opts.chatConfirm=false] Post a "Damage Applied" chat note.
  * @param {boolean} [opts.allowRelay=true]   Relay to GM when caller lacks ownership.
  * @returns {Promise<object|null>} Breakdown, or null for no-ops/denied calls:
@@ -190,6 +191,7 @@ export async function applyDamagePipeline(attacker, target, {
 export async function applyDamageToActor(actor, amount, {
   applyArmor  = false,
   half        = false,
+  halfReason  = "",
   chatConfirm = false,
   allowRelay  = true,
 } = {}) {
@@ -217,7 +219,7 @@ export async function applyDamageToActor(actor, amount, {
       type:      "applyDamage",
       actorUuid: actor.uuid,
       amount,
-      options:   { applyArmor, half },
+      options:   { applyArmor, half, halfReason },
     });
     ui.notifications.info(`Damage sent to the GM to apply to "${actor.name}".`);
     return { ...zero, relayed: true };
@@ -282,7 +284,7 @@ export async function applyDamageToActor(actor, amount, {
   if (chatConfirm) {
     const parts = [];
     if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor`);
-    if (half)              parts.push("halved");
+    if (half)              parts.push(halfReason ? `halved (${escapeHTML(halfReason)})` : "halved");
     if (vigorAbsorbed > 0) parts.push(`${vigorAbsorbed} absorbed by Vigor`);
     parts.push(`${hpBefore - hpAfter} → HP`);
     await ChatMessage.create({
@@ -622,6 +624,9 @@ export async function postAbilityDamageCard(actor, {
           sourceName:      actor.name,
           abilityName,
           outcome,
+          // The attacker already ticked "Resistance / Cover ½" on the roll:
+          // the Apply button must not halve a second time (defenses.mjs).
+          halvedOnRoll: !!resistance,
           targets: targets.map(t => t.actorUuid),
         },
       },

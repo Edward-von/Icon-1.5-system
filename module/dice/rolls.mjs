@@ -13,6 +13,7 @@
 
 import { ICON } from "../config.mjs";
 import { statusBlockHtml } from "../combat/ability-statuses.mjs";
+import { rollEvasion, evasionBlockHtml, currentTargets } from "../combat/defenses.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
@@ -195,8 +196,9 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {string[]} [opts.tags]
  * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
  * @param {Array}    [opts.statusEntries] Statuses the ability inflicts (ability-statuses.mjs) → "Inflict" buttons per target
+ * @param {Array}    [opts.targets]       Targets of the attack (defenses.mjs#currentTargets; default: the user's targets now)
  * @param {Actor}    [opts.actor]
- * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls}>}
+ * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion}>}
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
@@ -204,12 +206,21 @@ export async function combatRoll({
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
   statusEntries = [],
+  targets = null,
   actor,
 } = {}) {
   const net    = boons - curses;
+
+  // Evasion (p.146): a d6 per targeted token with Evasion, checked BEFORE the
+  // attack roll. When every target evades there is no attack roll at all: the
+  // d20 is still shown for reference but the result is a miss and relic
+  // invokes don't trigger.
+  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets() });
+  const evaded  = evasion.allEvaded;
+
   const d20r   = await new Roll("1d20").evaluate();
   const d20    = d20r.total;
-  const rolls  = [d20r];
+  const rolls  = [...evasion.rolls, d20r];
   let modifier = 0;
   let absModifier = 0;
   let boonCurseLabel = "";
@@ -224,9 +235,9 @@ export async function combatRoll({
   }
 
   const total     = d20 + modifier;
-  const isCrit    = total >= 20;
-  const isHit     = defense != null ? total >= defense : null;
-  const isExceed  = total >= 15;
+  const isCrit    = !evaded && total >= 20;
+  const isHit     = evaded ? false : (defense != null ? total >= defense : null);
+  const isExceed  = !evaded && total >= 15;
 
   const content = await renderTemplate(`${TPLPATH}/attack-roll.hbs`, {
     abilityName:   abilityName ?? "Attack",
@@ -244,18 +255,21 @@ export async function combatRoll({
     isCrit,
     isHit,
     isExceed,
+    evaded,
+    evasionHtml:   evasionBlockHtml(evasion),
     hitEffect:     hitEffect   ?? "",
     missEffect:    missEffect  ?? "",
     exceedEffect:  exceedEffect ?? "",
     critEffect:    critEffect   ?? "",
     // Relic integration (p.245): attack invokes check the RAW d20; notes are
-    // the relic reminders that apply to this attack.
-    relicInvokeHtml: relicInvokeHtml(relicInvokes, d20),
+    // the relic reminders that apply to this attack. No attack roll happened
+    // when every target evaded, so the invokes are not shown.
+    relicInvokeHtml: evaded ? "" : relicInvokeHtml(relicInvokes, d20),
     relicNotesHtml:  relicNotesHtml(relicNotes),
     // Inflicted statuses: one button per status and target; the groups of
     // the outcomes this roll did not reach (Miss on a hit, Exceed under 15…)
-    // are dimmed, not hidden.
-    statusHtml: actor ? statusBlockHtml(statusEntries, { source: actor, abilityName: abilityName ?? "Attack", outcome: { isHit, isCrit, isExceed } }) : "",
+    // are dimmed, not hidden. Rows of targets that evaded are dimmed too.
+    statusHtml: actor ? statusBlockHtml(statusEntries, { source: actor, abilityName: abilityName ?? "Attack", outcome: { isHit, isCrit, isExceed }, evaded: evasion.evadedUuids }) : "",
   });
 
   const speaker = actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();
@@ -267,7 +281,7 @@ export async function combatRoll({
     rolls,
   });
 
-  return { d20, modifier, total, isCrit, isHit, isExceed, rolls };
+  return { d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion };
 }
 
 /* ================================================== */

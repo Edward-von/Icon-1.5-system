@@ -217,7 +217,23 @@ Decisi con Edoardo il 9 settembre 2026:
             mostra un bottone Immobile. Regola per l'imperativo senza soggetto. (S)
       - [ ] Status positivi su di sé / alleati ("you gain evasion", "allies gain sturdy") come bottone "Gain" sulla
             card (versione difensiva del blocco Inflict). (M)
-- [ ] **Automazione difensiva** (Evasion, Cover ½ danno, Dodge). (XL, dipende dalla precedente)
+- [x] **Automazione difensiva** (prima versione FATTA il 9 settembre 2026, Sessione 12): `module/combat/defenses.mjs`.
+      Evasion tirata da sola (1d6 per bersaglio con lo status, prima del d20, 4+ o 3+ con Spinning Top I; blocco
+      "Evasion" sulla card, "MISS — evaded", righe Inflict sbiadite, True Strike/Unerring la ignorano); Cover /
+      Resistance dimezzano da soli su "Apply" leggendo gli status del bersaglio al momento (una volta sola, mai
+      doppio con la casella del dialog); Dodge azzera il danno delle card Miss / Area; chip difensivi nei dialog e
+      sulle righe della card del danno, promemoria per i trait NPC che citano evasion/dodge. Versione 1.4.0.
+      Emerso (da fare in un blocco futuro):
+      - [ ] Spinning Top III (tira l'evasion per gli alleati in raggio 2, solo con un 6) e Aspected ("this turn
+            your evasion is always successful"): oggi solo la soglia 3+ del rango I. (S)
+      - [ ] Spinning Top II ("when you or an ally in range 2 successfully evades, deal 2 damage to the attacker"):
+            promemoria sulla card quando un bersaglio con quella reliquia evade. (S)
+      - [ ] Dodge contro il danno "on a successful save": dipende dal collegamento save → dialog del danno (voce
+            della Sessione 11). (M)
+      - [ ] Evasion/Dodge condizionali dei foe ("Has evasion while bloodied", "unless suffering from a status"):
+            oggi solo un chip promemoria; si potrebbe accendere lo status da solo quando la condizione è vera. (M)
+      - [ ] Cover dalla mappa (token adiacente a un muro/oggetto alto 1+): oggi Cover è solo uno status messo a
+            mano. (L)
 
 ---
 
