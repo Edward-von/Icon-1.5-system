@@ -41,6 +41,29 @@ nascoste correttamente, costi "1 Action / 2 Actions / Interrupt 1", chip "🎯 B
 dal blocco giusto, keyword "wound"/"ongoing" evidenziate, Small Blast piazzato con Warrior targettato, click sopra
 il ControlIcon del template precedente accettato (sostituzione), Aura che segue il token (+2 colonne, +1 riga).
 
+**Playtest esplorativo del 9 settembre 2026 (sera, "il primo cliente va in bagno")** — percorsi laterali, non da
+checklist. Verificato ok: mark su due token dello stesso foe (attore linkato condiviso), foe che marca un PG dalla
+scheda del token, scheda item che salva "Power die when unlocked", cambio classe del Foe + "Apply base stats" senza
+perdere i tag delle action, "Apply Damage" dalla card (HP 28 → 20), mark orfano (marcatore cancellato) ancora
+rimovibile dalla tab Conditions, 💬 Show in Chat delle abilità, tag `line` senza numero → dialog della lunghezza,
+HUD con status ongoing+ ed elevation, "+" del Party Resolve dal tracker sincronizzato sul PG, scena senza griglia →
+avviso, Level Up completo (6 → 7, XP azzerati, card in chat). Trovati e corretti:
+- crash `combat.combatants.every is not a function` nell'avviso "tutte le attivazioni spese" a fine round
+  (le Collection di Foundry non hanno `every`);
+- Hatred applicato senza bersaglio (dal HUD core dei token) mostrava "Hatred of ?" nel dialog del danno e
+  pre-spuntava il ½: ora non pre-spunta e spiega di applicarlo dalla tab Conditions;
+- l'HUD del token non distingueva gli status ongoing "+";
+- segnalazione di Edoardo "i giocatori non hanno pulsanti per prendere il turno": i pip sono renderizzati anche
+  per i non-GM (verificato emulando un utente Player lato client) ma sono chevron di 16×10 px senza etichetta.
+  Ora sulla riga del proprio combattente i giocatori vedono "▶ Take turn" e, quando attivi, "■ End turn".
+  **Da confermare con un giocatore vero** (serve un secondo client).
+
+Note per il prossimo playtest con Claude in Chrome: dopo `scene.activate()` ripetuti `game.user.viewedScene`
+può restare null e i target (T, `setTarget`) vengono ignorati in silenzio → riallineare con
+`game.user.viewedScene = canvas.scene.id`; non chiudere "tutte le applicazioni" con `foundry.applications.instances`
+(chiude anche la sidebar e la chat sparisce dal DOM); usare la scena `test` **attivata**, non solo vista, perché
+il tracker mostra il combat della scena attiva.
+
 Da segnalare a Maar: le scene della campagna (Enganoka) sono **senza griglia** (grid type 0); i template di
 area chiedono una griglia quadrata e sulle scene gridless mostrano un avviso. Il modulo Bar Brawl dà un errore
 suo su `createCombatant` (non nostro).

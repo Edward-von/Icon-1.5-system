@@ -38,17 +38,23 @@ export class IconCombatTracker extends CoreCombatTracker {
       const pending     = activations.value ?? 0;
       const isActive    = combat.turn != null && combat.combatant?.id === t.id;
 
-      const buttons = Array.from({ length: pending }, () => ({
+      // Players get a labelled button on the rows they own ("▶ Take turn" /
+      // "■ End turn"): the bare chevron pips were not recognised as buttons
+      // (Maar's table, 9 Sept 2026). The GM keeps the compact pips.
+      const own = !game.user.isGM && !!combatant?.isOwner;
+      const buttons = Array.from({ length: pending }, (_, i) => ({
         icon:    "fa-solid fa-circle-play",
-        cls:     "icon-activation-btn",
+        cls:     "icon-activation-btn" + (own && i === 0 ? " icon-activation-btn--labelled" : ""),
         action:  "activateCombatantTurn",
-        tooltip: "Activate",
+        tooltip: own ? "Take your turn (spends one activation)" : "Activate",
+        label:   own && i === 0 ? "▶ Take turn" : "",
       }));
       if (isActive) buttons.push({
         icon:    "fa-solid fa-circle-stop",
-        cls:     "icon-activation-btn icon-activation-btn--stop",
+        cls:     "icon-activation-btn icon-activation-btn--stop" + (own ? " icon-activation-btn--labelled" : ""),
         action:  "deactivateCombatantTurn",
         tooltip: "End Turn",
+        label:   own ? "■ End turn" : "",
       });
 
       // Summons (max 0 activations) get no faction tint and are never "done".

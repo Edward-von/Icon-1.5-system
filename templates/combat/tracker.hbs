@@ -44,7 +44,7 @@
         <div class="token-initiative icon-activations">
             {{#each buttons}}
             <button type="button" class="inline-control {{ cls }} icon {{ icon }}"
-                    data-action="{{ action }}" data-tooltip aria-label="{{ tooltip }}"></button>
+                    data-action="{{ action }}" data-tooltip aria-label="{{ tooltip }}">{{#if label}}<span class="icon-activation-btn__label">{{ label }}</span>{{/if}}</button>
             {{/each}}
         </div>
     </li>

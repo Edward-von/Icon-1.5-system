@@ -43,7 +43,10 @@ function _statusesFor(actor) {
     if (STACKABLE_STATUSES.has(def.id))   count = getStatusCharges(actor, def.id);
     else if (def.id === "elevation")      count = actor.getFlag("icon-system", "elevation") ?? 0;
     // "Hatred of X" carries its target in the effect name (marks.mjs)
-    const name = def.id === "hatred" ? (getHatred(actor)?.effect?.name ?? def.name) : def.name;
+    let name = def.id === "hatred" ? (getHatred(actor)?.effect?.name ?? def.name) : def.name;
+    // "+" (ongoing) statuses can't be saved against — say so in the panel too
+    const eff = actor.effects.find(e => e.statuses?.has(def.id));
+    if (eff?.getFlag("icon-system", "ongoing")) name += " +";
     out.push({ id: def.id, name, img: def.img, count, adjustable: _isAdjustable(def.id) });
   }
   // Ability-specific marks: one row each, × ends the mark (relayed to the GM if needed)

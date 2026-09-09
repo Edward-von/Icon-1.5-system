@@ -814,7 +814,7 @@ export function registerCombatHooks() {
 
       /* --- Round complete? Nudge the GM to advance --- */
       if (turnChanged && combat.turn == null && combat.started && combat.combatants.size) {
-        const allSpent = combat.combatants.every(c => (c.activations?.value ?? 0) === 0);
+        const allSpent = !combat.combatants.some(c => (c.activations?.value ?? 0) > 0);   // Collection has no .every
         if (allSpent) {
           ui.notifications.info("All activations are spent — advance to the next round.");
         }

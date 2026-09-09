@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Playtest esplorativo: 4 fix e bottoni "Take turn" per i giocatori
+
+- **Crash a fine round**: l'avviso "All activations are spent" usava `combat.combatants.every`, che le Collection di
+  Foundry non hanno (errore in console a ogni fine turno con nessuno attivo). Ora `!some(...)`.
+- **Hatred senza bersaglio** (applicato dal HUD core dei token o da mondi vecchi): il dialog del danno diceva
+  "Hatred of ?" e pre-spuntava il ½. Ora non pre-spunta e invita ad applicarlo dalla tab Conditions per scegliere
+  di chi; il messaggio di fine turno dice solo "Hatred ends".
+- **HUD del token**: gli status ongoing mostrano il "+" anche nel pannello.
+- **Tracker per i giocatori**: sulla riga del proprio combattente i pip diventano bottoni con etichetta
+  "▶ Take turn" e "■ End turn" (il GM tiene i chevron compatti). Risponde alla segnalazione "i giocatori non hanno
+  pulsanti per prendere il turno": i pip c'erano ma erano chevron di 16×10 px senza testo. Da confermare con un
+  giocatore vero.
+
 ## 9 settembre 2026 — Playtest sul mondo di Maar: 9 fix
 
 Primo playtest reale (Claude in Chrome sul mondo Jade Regent, scena di test con copie dei PG). Tutto il blocco

@@ -4784,6 +4784,16 @@ ol.chat-log .chat-message,
 }
 .icon-activation-btn::before { display: none; }
 .combatant .icon-activation-btn--stop { background: var(--ic-orange-bright, #e0a020); }
+/* Player-side labelled buttons ("▶ Take turn" / "■ End turn") instead of the bare chevron */
+.combat-tracker .combatant .icon-activation-btn--labelled {
+  width: auto; height: auto; padding: 2px 8px; margin: 0 2px;
+  font-size: 0.78em; line-height: 1.2; clip-path: var(--ic-cut, none);
+  background: var(--ic-blue, #2e6aa8); color: #fff; border: 1px solid var(--ic-blue-bright, #58a0d8);
+  font-family: inherit; font-weight: 600; white-space: nowrap;
+}
+.combat-tracker .combatant .icon-activation-btn--labelled:hover { transform: none; background: var(--ic-blue-bright, #58a0d8); color: #fff; }
+.combat-tracker .combatant .icon-activation-btn--stop.icon-activation-btn--labelled { background: var(--ic-orange, #a86a10); border-color: var(--ic-orange-bright, #e0a020); }
+.icon-activation-btn__label { font-size: 1em; }
 .icon.sheet .icon-hero .icon-hero__name,
 .icon.sheet .foe-header .icon-sheet__name { background: transparent; }
 .icon-hero__meta { display: flex; gap: 6px; }

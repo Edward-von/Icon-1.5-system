@@ -146,7 +146,8 @@ export async function endHatred(actor, reason = "end of turn") {
   if (!current) return false;
   if (_needsRelay(actor)) { _relay({ method: "endHatred", actorUuid: actor.uuid, reason }); return true; }
   await current.effect.delete();
-  await _chat(actor, `<strong>${escapeHTML(actor.name)}</strong>'s <strong>Hatred of ${escapeHTML(current.name)}</strong> ends (${escapeHTML(reason)}).`);
+  const label = current.name && current.name !== "?" ? `Hatred of ${escapeHTML(current.name)}` : "Hatred";
+  await _chat(actor, `<strong>${escapeHTML(actor.name)}</strong>'s <strong>${label}</strong> ends (${escapeHTML(reason)}).`);
   return true;
 }
 
@@ -159,6 +160,11 @@ export async function endHatred(actor, reason = "end of turn") {
 export function hatredDamageHint(actor) {
   const h = getHatred(actor);
   if (!h) return { active: false, halve: false, name: "", note: "" };
+  // A plain "Hatred" effect (core token HUD, old worlds) has no target recorded:
+  // leave the choice to the player instead of guessing.
+  if (!h.tokenId && !h.actorUuid && (!h.name || h.name === "?")) {
+    return { active: true, halve: false, name: "someone", note: "Hatred (no target recorded — apply it from the Conditions tab to pick who): tick if this isn't your hated foe" };
+  }
   const targets = Array.from(game.user?.targets ?? []);
   const other = targets.filter(t => t.id !== h.tokenId && (!h.actorUuid || t.actor?.uuid !== h.actorUuid));
   const halve = targets.length > 0 && other.length > 0;

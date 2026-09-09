@@ -151,6 +151,12 @@ Decisi con Edoardo il 9 settembre 2026:
 - [x] 9 bug trovati e corretti nella stessa giornata (tab impilate, targeting v13, click sul ControlIcon, aura,
       keyword lookup, chip dei mark, testo mark, Rush X → migrazione 5, costo grezzo). Zip nuovo per Maar.
 - [x] Ri-verifica dei 9 fix sulla build `4f7132d` caricata sul server: tutti confermati (9 settembre, sera).
+- [x] Playtest esplorativo (9 settembre, sera): 4 fix (crash `combatants.every`, Hatred senza bersaglio, "+" nell'HUD,
+      bottoni "▶ Take turn" per i giocatori). Vedi PLAYTEST.md.
+- [ ] **Giocatori e turno**: far confermare a Maar (o a un giocatore) che con la build nuova sulla propria riga del
+      tracker compaiano "▶ Take turn" / "■ End turn" e che il click attivi davvero il turno (l'update di `turn` da
+      parte di un player è permesso da Foundry v13, ma non è stato provato con un secondo client). Se non
+      funziona: relay al GM via socket anche per il proprio combattente.
 - [ ] Non provato: secondo client (relay giocatore → GM per mark/hatred e target), scena gridless, Shift+rotella
       della Line larga, wizard di creazione oltre l'aspetto, reset dei power die a fine combat. Da fare nel
       prossimo playtest o con Maar.
