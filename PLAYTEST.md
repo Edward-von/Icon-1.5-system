@@ -35,6 +35,12 @@ Bug trovati e corretti nella build successiva (`f284e00` → fix del 9 settembre
 - **"Rush X" ancora sul PG Hiroshi** nonostante lo schema 4 → migrazione 5 (per nome).
 - **Costo "2actions" grezzo** nei badge e nella card d'attacco → "2 Actions" / "Interrupt 1".
 
+**Ri-verifica del 9 settembre 2026 (sera), build `4f7132d` caricata sul server**: tutti e 9 i fix confermati sul mondo
+di Maar senza toppe in pagina — migrazione 4→5 eseguita all'apertura (nessun PG ha più "Rush X"), tab delle schede
+nascoste correttamente, costi "1 Action / 2 Actions / Interrupt 1", chip "🎯 Bersaglio" immediato e testo del mark
+dal blocco giusto, keyword "wound"/"ongoing" evidenziate, Small Blast piazzato con Warrior targettato, click sopra
+il ControlIcon del template precedente accettato (sostituzione), Aura che segue il token (+2 colonne, +1 riga).
+
 Da segnalare a Maar: le scene della campagna (Enganoka) sono **senza griglia** (grid type 0); i template di
 area chiedono una griglia quadrata e sulle scene gridless mostrano un avviso. Il modulo Bar Brawl dà un errore
 suo su `createCombatant` (non nostro).
