@@ -427,7 +427,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
         data-auto-fail="${esc(e.autoFailIf)}" data-sentence="${esc(e.sentence)}" data-ability="${esc(abilityName)}"
         data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
         data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"
-        title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}&#10;${esc(e.sentence)}">${save ? "⚄ " : ""}${esc(e.label)}${e.ongoing ? "+" : ""}</button>`;
+        title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}&#10;${esc(e.sentence)}">${save ? "🎲 " : ""}${esc(e.label)}${e.ongoing ? "+" : ""}</button>`;
     }).join("");
     return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${btns}</span>`;
   }).join("");
@@ -444,7 +444,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
       </div>`;
 
   return `<div class="icon-chat-statuses" data-ability="${esc(abilityName)}">
-    <div class="icon-chat-statuses__header"><span>Inflict</span><span class="icon-chat-statuses__note">click to apply · ⚄ = save first (10+)</span></div>
+    <div class="icon-chat-statuses__header"><span>Inflict</span><span class="icon-chat-statuses__note">click to apply · 🎲 = save first (10+)</span></div>
     ${rowsHtml}
   </div>`;
 }

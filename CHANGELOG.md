@@ -18,7 +18,7 @@
   card 💬 delle abilità PG e delle action/interrupt/round action NPC. Una riga per token targettato (o "🎯 Current
   targets" se non c'era nessun target: applica a chi è targettato al momento del click), un bottone per status
   raggruppato per blocco di origine; sulla card d'attacco i gruppi degli esiti non raggiunti (Miss su un hit,
-  Exceed sotto 15, Crit) restano cliccabili ma sbiaditi. "⚄" segna gli status con save, il bordo doppio quelli
+  Exceed sotto 15, Crit) restano cliccabili ma sbiaditi. "🎲" segna gli status con save, il bordo doppio quelli
   che si applicano su un save riuscito, il bordo oro gli ongoing "+". Talent/Mastery solo se sbloccati; con il
   Combo armato si legge il testo Combo.
 - **Click → save → applica** (`module/combat/inflict-status.mjs`): senza save applica subito via `applyStatus`
@@ -33,6 +33,12 @@
   GM attivo via socket (`type: "inflictStatus"`, stesso canale dei mark; Hatred usa il relay dei mark).
 - API per le macro: `game.icon.parseInflictedStatuses / abilityStatusEntries / npcActionStatusEntries /
   statusBlockHtml / inflictStatus`. Versione 1.3.0.
+- **Playtest della sera stessa** (Claude in Chrome sul mondo di Maar, scena "test"): 14 controlli su 16 passati alla
+  prima prova — applicazione diretta, save fallito/riuscito con carta "Save vs X" e sottotitolo, carica Blessed
+  consumata (+2 nel totale), auto-fail sui bloodied con Hatred of <demone>, "pacified on a successful save",
+  "Already rolled", upgrade a ongoing, riga "Current targets", gruppo Exceed sbiadito su un 14, nessun falso
+  bottone su Farmer/Hessian/Cantrix. Non provati: relay da un secondo client, card Auto-hit. **Fix**: il simbolo
+  "⚄" non esiste nel font della chat (quadratino) → 🎲.
 - Noto (accettato): "Showdown" del Freelancer ("Choose a foe in range 3 and become immobile", riferito a sé)
   mostra un bottone Immobile di troppo; i danni "on a failed save" restano manuali (pipeline del danno).
 

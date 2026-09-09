@@ -372,7 +372,7 @@ Narrative per provare). Le reliquie NON sono automazione: sono righe di promemor
       deals bonus damage" (sempre visibile); sulla card del tiro d'attacco la riga NON c'è finché il combat non
       è al round 5; al round 5+ compare "Round 5: this ability deals bonus damage (Round 5+)". Arenheir III al
       round 3 → "Round 3: exceed on 13+, crit on 18+".
-- [ ] **Nessun errore in console** aprendo la scheda di un PG senza reliquie, di un PG con reliquie rinominate
+- [x] **Nessun errore in console** aprendo la scheda di un PG senza reliquie, di un PG con reliquie rinominate
       (es. "Byrax (Edo)": nessuna riga, nessun crash), e tirando un attacco da Foe/Legend/Summon (card invariata).
 
 ## Sessione 10 (9 settembre 2026) — Encounter Designer
@@ -434,6 +434,14 @@ per giocatore, min 100), p.299 (template Elite: 2 turni, HP ×2, 2 punti).
 
 ## Sessione 11 (9 settembre 2026) — Status inflitti dal testo: blocco "Inflict" sulle card, save 10+
 
+**Esito del playtest del 9 settembre 2026 (sera, Claude in Chrome sul mondo Jade Regent, scena "test", build 1.3.0)**:
+provato con copie "TEST" di Hiroshi, Caienna (+ Implode dal pack), Brawler, Armor Demon, Underboss, Hessian e Farmer,
+poi cancellate insieme a combat, token, cartella e 16 messaggi; la Field Battlemap non è stata toccata. Nessun errore
+in console. Le caselle spuntate sono verificate; le altre non sono state provate (relay da un secondo client, card
+Auto-hit, interrupt/round action, Dice So Nice, bottone "+" ongoing da testo, "+1 curse" dal testo — verificato solo
+offline). Unico difetto: il simbolo "⚄" non esiste nel font della chat e appariva come un quadratino → sostituito
+con 🎲 (fix nella build successiva).
+
 Prerequisito: un PG con abilità che infliggono status (es. Demon Slayer: Demon Cutter "Attack target is slashed";
 Enochian: Implode "must save or be stunned"; Knave: Low Blow / Dark Knight per Hatred), un Foe con azioni simili
 (Brawler "Haymaker": "must save or take [D]+fray and become stunned, or just fray damage on a successful save";
@@ -441,53 +449,53 @@ Armor Demon "Aura of Slaughter": "must save or gain hatred of the demon. Bloodie
 "Swindle": "Foes can pass a save to avoid this effect, but are pacified on a successful save"), token sulla scena,
 combat aperto. Regole: p.94 (save = 1d20, 10+), p.104 (Hatred of X), p.108.
 
-- [ ] **Blocco "Inflict" sulla card d'attacco**: targetta il Warrior (T), ⚔ su Demon Cutter → sotto Hit/Miss
-      compare "INFLICT — click to apply · ⚄ = save first (10+)" con una riga "Warrior" e il bottone "Slashed"
+- [x] **Blocco "Inflict" sulla card d'attacco**: targetta il Warrior (T), ⚔ su Demon Cutter → sotto Hit/Miss
+      compare "INFLICT — click to apply · 🎲 = save first (10+)" con una riga "Warrior" e il bottone "Slashed"
       etichettato con il blocco di provenienza ("Effect"). Con due token targettati → due righe. Senza target →
       una riga tratteggiata "🎯 Current targets".
-- [ ] **Esito che attenua i gruppi**: su un'abilità con "Hit: … dazed" e "Exceed: … stunned" (o un foe con
+- [x] **Esito che attenua i gruppi**: su un'abilità con "Hit: … dazed" e "Exceed: … stunned" (o un foe con
       "Exceed: Foe is also stunned", es. Hessian Long Rifle) un tiro sotto 15 mostra il gruppo Exceed sbiadito e
       tratteggiato (tooltip "Not triggered by this roll"), ma ancora cliccabile; un miss sbiadisce il gruppo Hit.
       Senza Defense inserita (isHit ignoto) niente è sbiadito.
-- [ ] **Applicazione diretta**: click su "Slashed" → il Warrior ha l'effetto Slashed (icona sul token, tab
+- [x] **Applicazione diretta**: click su "Slashed" → il Warrior ha l'effetto Slashed (icona sul token, tab
       Conditions), card blu in chat "Warrior is now Slashed — Demon Cutter (Hiroshi)", il bottone diventa
       "✓ Slashed" verde e disabilitato. Un secondo click sulla stessa card non è possibile; con un'altra card lo
       stesso status non viene duplicato ("is already Slashed").
-- [ ] **Save (⚄)**: Foe Brawler, ⚔ su Haymaker con un PG targettato → bottone "⚄ Stunned" viola. Click → dialog
+- [x] **Save (🎲)**: Foe Brawler, ⚔ su Haymaker con un PG targettato → bottone "🎲 Stunned" viola. Click → dialog
       "Save vs Stunned — <PG>" con la frase del testo, boons/curses a 0, select "Roll 1d20 now". Save → card
       "Save vs Stunned" con sottotitolo "Haymaker — Brawler → <PG>", totale vs 10: con 10+ "Saved! Stunned
       avoided." e bottone "✓ saved"; con 9- "Failed — Stunned applied." + card "is now Stunned … save 7" e lo
       status sul PG.
-- [ ] **Bonus al save**: PG con 2 cariche Blessed (tab Conditions) → nel dialog compare "Spend a Blessed charge
+- [x] **Bonus al save**: PG con 2 cariche Blessed (tab Conditions) → nel dialog compare "Spend a Blessed charge
       for +1 boon (2 left)"; spuntato → la card del save mostra "d20 N +K (blessing)" e le cariche scendono a 1.
       Testo con "+1 curse on the save" (es. talento Sisyphus del Seer, o un foe con "foes gain +1 curse on the
       save") → campo Curses precompilato a 1 e nota "⚙ +1 curse from the ability text".
-- [ ] **"Bloodied foes fail the save"**: Armor Demon, 💬 su Aura of Slaughter con un PG bloodied targettato →
-      "⚄ Hatred"; click → nel dialog la spunta "Automatic failure — the text says bloodied characters fail this
+- [x] **"Bloodied foes fail the save"**: Armor Demon, 💬 su Aura of Slaughter con un PG bloodied targettato →
+      "🎲 Hatred"; click → nel dialog la spunta "Automatic failure — the text says bloodied characters fail this
       save (<PG> is bloodied)" è già attiva → nessun tiro, il PG guadagna "Hatred of Armor Demon" (card di
       marks.mjs) e a fine del suo turno l'Hatred cade da solo. Con un PG a HP pieni la spunta è disattiva.
-- [ ] **Status sul successo**: Underboss/Quickfinger "Swindle" ("pacified on a successful save") → bottone
-      "⚄ Pacified" con bordo doppio e tooltip "applies on a SUCCESSFUL save"; save riuscito → "Saved — Pacified
+- [x] **Status sul successo**: Underboss/Quickfinger "Swindle" ("pacified on a successful save") → bottone
+      "🎲 Pacified" con bordo doppio e tooltip "applies on a SUCCESSFUL save"; save riuscito → "Saved — Pacified
       applies on a successful save." e lo status VIENE applicato; fallito → "Failed — the failed-save outcome
       applies instead" e niente Pacified.
-- [ ] **Già tirato**: nel dialog scegli "Already rolled — failed" → nessun tiro, status applicato con nota
+- [x] **Già tirato**: nel dialog scegli "Already rolled — failed" → nessun tiro, status applicato con nota
       "failed save"; "Already rolled — succeeded" → chat "saves against …", niente status.
-- [ ] **Ongoing "+"**: abilità con "blinded+" (es. Mist Strider del Warden, Terror Demon "Terrorize" o un foe
+- [x] **Ongoing "+"**: abilità con "blinded+" (es. Mist Strider del Warden, Terror Demon "Terrorize" o un foe
       con "sealed+") → bottone "Blind+" con bordo oro; applicato → effetto ongoing (icona "+", nessun save di
       fine turno). Su un bersaglio che ha già Blind normale → "upgraded to ongoing".
-- [ ] **Card 💬 (senza tiro)**: PG Enochian, targetta un foe, 💬 su Implode → in fondo alla card "INFLICT" con
-      "⚄ Stunned (Effect)"; stesso blocco sulle card 💬 delle action/interrupt/round action di Foe e Legend
+- [x] **Card 💬 (senza tiro)**: PG Enochian, targetta un foe, 💬 su Implode → in fondo alla card "INFLICT" con
+      "🎲 Stunned (Effect)"; stesso blocco sulle card 💬 delle action/interrupt/round action di Foe e Legend
       (es. Dread Lords) e sulla card "Auto-hit" delle abilità autohit (The Tower del Seer: "foe is sealed").
       Talent I/II e Mastery compaiono solo se sbloccati sulla scheda dell'abilità; con il Combo armato si legge
       il testo Combo.
-- [ ] **Niente falsi bottoni**: 💬 su abilità/azioni che NOMINANO uno status senza infliggerlo → nessun blocco
+- [x] **Niente falsi bottoni**: 💬 su abilità/azioni che NOMINANO uno status senza infliggerlo → nessun blocco
       "Inflict": Farmer "Righteous fist" (solo "bonus damage to weakened foes" + "Collide: Foe is weakened" → solo
       il Collide), Baggoth "Terraslam" ("against weakened or slashed foes"), Cantrix "Chant of investiture"
       ("the Cantrix is immobile" = se stessa), Geyser/Rime dello Stormbender ("Salt Sprite — Size 1, intangible,
       immobile"), Rogue "Wicked Slice" (lista "bloodied, blinded, dazed"), Geryan "Terms" (gli alleati guadagnano
       hatred). Noto e accettato: Freelancer "Showdown" ("become immobile" riferito a sé) mostra un bottone
       Immobile di troppo.
-- [ ] **Riga "🎯 Current targets"**: card postata senza target → click su un bottone senza token targettato →
+- [x] **Riga "🎯 Current targets"**: card postata senza target → click su un bottone senza token targettato →
       avviso "Target a token first"; con un token targettato → applica; la riga resta usabile (non si disabilita).
 - [ ] **Relay giocatore → GM**: da un client Player, card del proprio PG con un foe (non posseduto) targettato →
       click "Dazed" → avviso "sent to the GM", bottone "→ GM"; sul client GM il foe riceve lo status e la card
@@ -495,7 +503,7 @@ combat aperto. Regole: p.94 (save = 1d20, 10+), p.104 (Hatred of X), p.108.
 - [ ] **Nessun errore in console** aprendo card vecchie (senza blocco), cliccando bottoni su una card il cui
       bersaglio è stato cancellato (avviso "no longer exists"), e con Dice So Nice attivo (il d20 del save
       viene animato).
-- [ ] **Regressioni**: card d'attacco senza status (Basic Attack) invariata; save di fine turno del tracker
+- [x] **Regressioni**: card d'attacco senza status (Basic Attack) invariata; save di fine turno del tracker
       (rollEndOfTurnSaves) ancora con "Saved! X cleared." / "Failed — X persists."; mark 🎯 e Hatred dalla tab
       Conditions come prima.
 
