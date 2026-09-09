@@ -25,6 +25,10 @@
       {{/unless}}
       <button type="button" class="icon-encounter__elite {{#if elite}}icon-encounter__elite--on{{/if}}" data-action="toggleElite" {{#if eliteLocked}}disabled{{/if}}
               title="{{#if baseElite}}Always Elite (faction template){{else if isMob}}Mobs can't take the Elite template{{else if isLegend}}Legends scale with the party instead{{else}}Elite template (p.299): 2 turns, double HP, 2 points{{/if}}">Elite</button>
+      {{#if jotunn}}
+      <button type="button" class="icon-encounter__elite icon-encounter__titan {{#if titan}}icon-encounter__elite--on{{/if}}" data-action="toggleTitan" {{#if titanLocked}}disabled{{/if}}
+              title="Titan Armament (p.448, Jotunn): Titansteel weaponry — +1 point, 50% more HP, one extra turn a round">Titan</button>
+      {{/if}}
       <select name="reserve" title="Reserves appear at the edge of the map at the end of that round and act from the next one (p.292)">
         <option value="0" {{#unless reserve}}selected{{/unless}}>On map</option>
         <option value="2" {{#icon-eq reserve 2}}selected{{/icon-eq}}>Reserve · R2</option>

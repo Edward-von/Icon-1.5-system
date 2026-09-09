@@ -46,6 +46,12 @@ const FACTION_ORDER = [
   "Imperial", "Demon", "Lowlander", "Jotunn", "Hob",
 ];
 
+/** Titan Armament (p.448): Jotunn armed with Titansteel — +1 point, +50% HP, one extra turn a round. */
+const TITAN_TRAIT = {
+  name: "Titan Armament",
+  description: "<p>Armed with Titansteel weaponry: 50% more HP and one extra turn a round. (ICON 1.5 p.448 — costs +1 point in the encounter budget.)</p>",
+};
+
 /** Elite template trait text (p.299) added to foes upgraded by the designer. */
 const ELITE_TRAIT = {
   name: "Elite",
@@ -56,17 +62,17 @@ const ELITE_TRAIT = {
 /*  Budget maths (pure functions, also used by tests)  */
 /* -------------------------------------------------- */
 
-/** Points a pick costs. Legends are worth the whole budget (p.292). */
+/** Points a pick costs. Legends are worth the whole budget (p.292); Titan Armament +1 (p.448). */
 export function pickCost(pick, budget) {
   if (pick.type === "legend") return Math.max(budget, 1);
-  const each = pick.cls === "mob" ? 1 : (pick.elite ? 2 : 1);
+  const each = (pick.cls === "mob" ? 1 : (pick.elite ? 2 : 1)) + (pick.titan && pick.cls !== "mob" ? 1 : 0);
   return each * (pick.qty ?? 1);
 }
 
-/** Turns per round a pick takes (p.298-299). */
+/** Turns per round a pick takes (p.298-299); Titan Armament adds one (p.448). */
 export function pickTurns(pick, players) {
   if (pick.type === "legend") return Math.max(players, 2);
-  const each = pick.cls === "mob" ? 1 : (pick.elite ? 2 : 1);
+  const each = (pick.cls === "mob" ? 1 : (pick.elite ? 2 : 1)) + (pick.titan && pick.cls !== "mob" ? 1 : 0);
   return each * (pick.qty ?? 1);
 }
 
@@ -136,6 +142,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       decPick:        EncounterDesigner.#onDecPick,
       removePick:     EncounterDesigner.#onRemovePick,
       toggleElite:    EncounterDesigner.#onToggleElite,
+      toggleTitan:    EncounterDesigner.#onToggleTitan,
       randomFill:     EncounterDesigner.#onRandomFill,
       clearPicks:     EncounterDesigner.#onClearPicks,
       clearFilters:   EncounterDesigner.#onClearFilters,
@@ -209,6 +216,8 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       faction,
       chapter:  Number(sys.chapter ?? 1) || 1,
       isElite:  type === "legend" ? false : !!sys.isElite,
+      // Jotunn (faction, name or trait) can take Titan Armament (p.448).
+      jotunn:   type === "foe" && (/jotunn/i.test(faction) || /jotunn/i.test(e.name ?? "") || traits.some(t => /jotunn|titan/i.test(t))),
       size:     Number(sys.size ?? 1) || 1,
       hpMax:    Number(sys.hp?.max ?? 0) || 0,
       traits,
@@ -301,13 +310,15 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       const cost  = pickCost(p, budget);
       const turns = pickTurns(p, this.players);
       const isMob = p.cls === "mob";
+      const titanOn = !!p.titan && !isMob && p.type !== "legend";
       return {
         ...p, cost, turns, isMob,
         isLegend:   p.type === "legend",
         eliteLocked: p.baseElite || isMob || p.type === "legend",
+        titanLocked: isMob || p.type === "legend",
         hpShown:    p.type === "legend"
           ? Math.round((p.hpMax || 100) * Math.max(this.players, 2) / 2)
-          : (p.elite && !p.baseElite ? p.hpMax * 2 : p.hpMax),
+          : Math.round((p.elite && !p.baseElite ? p.hpMax * 2 : p.hpMax) * (titanOn ? 1.5 : 1)),
         mobMembers: isMob ? Math.max(this.players, 1) * 2 : 0,
         reserveLabel: p.reserve ? `Reserve · end of round ${p.reserve}` : "",
       };
@@ -482,6 +493,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         key, uuid: entry.uuid, name: entry.name, type: entry.type, cls: entry.cls, clsLabel: entry.clsLabel,
         faction: entry.faction, chapter: entry.chapter, size: entry.size, hpMax: entry.hpMax, img: entry.img,
         src: entry.src, baseElite: entry.isElite, elite: entry.isElite, qty: 1, reserve: 0,
+        jotunn: !!entry.jotunn, titan: false,
       });
     }
     if (!silent) this.#refresh(["hero", "encounter", "footer"]);
@@ -553,6 +565,14 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     const { pick } = this.#pickFromTarget(target);
     if (!pick || pick.baseElite || pick.cls === "mob" || pick.type === "legend") return;
     pick.elite = !pick.elite;
+    this.#refresh(["hero", "encounter", "footer"]);
+  }
+
+  /** Titan Armament (p.448) on a Jotunn pick: +1 point, +50% HP, one extra turn. */
+  static #onToggleTitan(event, target) {
+    const { pick } = this.#pickFromTarget(target);
+    if (!pick || pick.cls === "mob" || pick.type === "legend") return;
+    pick.titan = !pick.titan;
     this.#refresh(["hero", "encounter", "footer"]);
   }
 
@@ -665,7 +685,8 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     const t = this.totals;
     const rows = this.enc.picks.map(p => ({
       name: p.name, qty: p.type === "legend" ? 1 : p.qty, clsLabel: p.clsLabel, cls: p.cls,
-      elite: p.elite, isLegend: p.type === "legend", cost: pickCost(p, t.budget), reserve: p.reserve,
+      elite: p.elite, titan: !!p.titan && p.cls !== "mob" && p.type !== "legend",
+      isLegend: p.type === "legend", cost: pickCost(p, t.budget), reserve: p.reserve,
       turns: pickTurns(p, this.players),
     }));
     const party = (this._pcs ?? []).filter(pc => this.enc.partyIds.has(pc.id)).map(pc => pc.name);
@@ -740,6 +761,11 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
             sys.mob.members = Math.max(players, 1) * 2;
             sys.mob.hitsRemaining = sys.mob.members * 2;
           } else {
+            // Titan Armament (p.448): +50% HP, one extra turn (flag read by IconCombat.turnsFor).
+            if (p.titan) {
+              sys.hp.max = Math.round((sys.hp.max || 40) * 1.5);
+              if (!(sys.traits ?? []).some(t => /titan armament/i.test(t.name ?? ""))) sys.traits = [TITAN_TRAIT, ...(sys.traits ?? [])];
+            }
             sys.hp.value = sys.hp.max;
           }
         } else if (p.type === "legend") {
@@ -752,7 +778,8 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         }
         data.flags ??= {};
         data.flags["icon-system"] = { ...(data.flags["icon-system"] ?? {}),
-          encounter: { name: this.enc.name.trim() || "Encounter", reserve: p.reserve, source: p.uuid } };
+          encounter: { name: this.enc.name.trim() || "Encounter", reserve: p.reserve, source: p.uuid },
+          ...(p.titan && p.type === "foe" && p.cls !== "mob" ? { extraTurns: 1 } : {}) };
         docs.push({ data, reserve: p.reserve, size: p.size });
       }
     }

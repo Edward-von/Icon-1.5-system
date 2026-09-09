@@ -494,14 +494,17 @@ export async function recoverAction(actor) {
  * @param {boolean}[opts.resistance=false]
  * @param {boolean}[opts.weakened=false]
  * @param {string} [opts.targetName=""]
+ * @param {Array}  [opts.targetsOverride]  Rows for the Apply buttons instead of the user's targets
+ *                                         ([{tokenId, actorUuid}] — save-linked damage, inflict-status.mjs)
  * @returns {Promise<{net:number}>}
  */
 export async function postAbilityDamageCard(actor, {
   parsed, outcome = "hit", damagedie = "d6", fray = 0, abilityName = "Attack",
   bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
-  hatred = false, targetName = "",
+  hatred = false, targetName = "", targetsOverride = null,
 } = {}) {
-  // Select the parsed chunk for the chosen outcome.
+  // Select the parsed chunk for the chosen outcome. Save-linked damage
+  // ("save-fail" / "save-success") is passed as the hit chunk by the caller.
   const chunk = outcome === "miss" ? parsed.miss
               : outcome === "area" ? parsed.area
               : parsed.hit;
@@ -586,7 +589,10 @@ export async function postAbilityDamageCard(actor, {
 
   // Collect the user's current targets for the Apply buttons. DEF/HP read the
   // PC path first, then the foe/legend path, so foe targets show real numbers.
-  const targets = Array.from(game.user?.targets ?? []).map(t => ({
+  const targetRows = targetsOverride
+    ? targetsOverride.map(o => ({ id: o.tokenId, actor: o.actor ?? fromUuidSync(o.actorUuid), document: canvas?.tokens?.get(o.tokenId)?.document }))
+    : Array.from(game.user?.targets ?? []);
+  const targets = targetRows.map(t => ({
     tokenId:   t.id,
     actorUuid: t.actor?.uuid ?? null,
     name:      t.actor?.name ?? t.document?.name ?? "Unknown",
@@ -609,6 +615,8 @@ export async function postAbilityDamageCard(actor, {
   const flavor = outcome === "crit" ? `${abilityName} — Critical!`
                : outcome === "miss" ? `${abilityName} — Miss (fray only)`
                : outcome === "area" ? `${abilityName} — Area damage`
+               : outcome === "save-fail" ? `${abilityName} — Failed save`
+               : outcome === "save-success" ? `${abilityName} — Successful save (reduced damage)`
                : `${abilityName} — Hit`;
 
   await ChatMessage.create({

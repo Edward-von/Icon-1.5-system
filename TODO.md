@@ -171,6 +171,11 @@ Decisi con Edoardo il 9 settembre 2026:
 - [ ] Maar: le scene della campagna (Enganoka) sono senza griglia → i template di area non funzionano lì.
       Chiedere se vuole una griglia quadrata sulle mappe di combattimento (Field Battlemap ce l'ha).
 
+## Sessione 13 — Tutti i follow-up delle sessioni 9-12 — FATTA il 9 settembre 2026 (versione 1.5.0)
+
+Le voci "Emerso" qui sotto sono spuntate; restano solo le due domande per Maar (riuso attori del mondo, icone token).
+Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
+
 ## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
 
 - [x] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M — Sessione 8) ← il più abbordabile
@@ -182,11 +187,11 @@ Decisi con Edoardo il 9 settembre 2026:
       per gli auto-hit (d20 tirato solo per l'invoke) e gli attacchi base; reminder legati al round (Conquering
       King, Domain/Skipjack Aspect, Arenheir III) sulla card solo quando il round è raggiunto.
       Emerso (da fare in un blocco futuro):
-      - [ ] Invoke **Gambit** delle reliquie (Byrax II, Hermes, Sleipnir, Mistborn…): bottone "Invoke" sulla tab
+      - [x] Invoke **Gambit** delle reliquie (Byrax II, Hermes, Sleipnir, Mistborn…): bottone "Invoke" sulla tab
             Relics con conteggio "usato questo combat" e card in chat; oggi si leggono solo. (M)
-      - [ ] Reliquie con effetti "a inizio/fine turno" (Apophis I, Erenbrass, Storm Lord I, Trollhide I/II,
+      - [x] Reliquie con effetti "a inizio/fine turno" (Apophis I, Erenbrass, Storm Lord I, Trollhide I/II,
             Mistborn III): promemoria in chat al cambio turno del tracker. (S/M)
-      - [ ] Tab Relics: elencare sotto ogni reliquia le abilità equipaggiate che tocca (inverso dei reminder). (S)
+      - [x] Tab Relics: elencare sotto ogni reliquia le abilità equipaggiate che tocca (inverso dei reminder). (S)
 - [x] **Encounter Designer** (FATTA il 9 settembre 2026, Sessione 10): scegli i PG, budget suggerito, pesca da
       fazioni/roster, toggle elite. Finestra GM `module/apps/EncounterDesigner.mjs` (bottone "Encounter" nella
       sidebar Actors, macro, `game.icon.openEncounterDesigner()`): party → budget p.292 (+ one-fight rule,
@@ -194,13 +199,13 @@ Decisi con Edoardo il 9 settembre 2026:
       quantità, 🎲 Random fill, salvataggi, uscite 💬 chat / 📥 attori in cartella / 🗺 deploy token + combat con
       riserve nascoste e "Reveal reserves" dalla card.
       Emerso (da fare in un blocco futuro):
-      - [ ] **Titan Armament** dei Jotunn (p.448: +1 punto, +50% HP, un turno in più) come opzione per riga. (S)
-      - [ ] **Riserve automatiche**: a fine round 2/3 il tracker propone "Reveal reserves" (oggi solo dal bottone
+      - [x] **Titan Armament** dei Jotunn (p.448: +1 punto, +50% HP, un turno in più) come opzione per riga. (S)
+      - [x] **Riserve automatiche**: a fine round 2/3 il tracker propone "Reveal reserves" (oggi solo dal bottone
             sulla card in chat). (S/M)
       - [ ] Deploy con "riusa gli attori del mondo" (oggi i foe presi dalla sorgente World vengono comunque
             copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
-      - [ ] Nilfling (Jotunn, Ch1 skirmisher 28 HP) non è Elite nel pack `foes` mentre gli altri Jotunn lo sono:
-            controllare sul manuale (p.44x) e correggere il flag se serve. (S, dati)
+      - [x] Nilfling (Jotunn, Ch1 skirmisher 28 HP) non è Elite nel pack `foes` mentre gli altri Jotunn lo sono:
+            verificato il 9 settembre 2026 (Sessione 13) sul manuale p.449 ("Thinblood: doesn't have the elite trait"): il pack è giusto.
       - [ ] Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
             passata sul pack (`img` + `prototypeToken.texture`). (M, dati)
 - [x] **Automazione effetti/save** offensiva (FATTA il 9 settembre 2026, Sessione 11): parser degli status
@@ -209,30 +214,31 @@ Decisi con Edoardo il 9 settembre 2026:
       dal testo, Blessed, "Bloodied foes fail the save", "already rolled"; `applyStatus` / `applyHatred`, relay al GM
       via socket (`module/combat/inflict-status.mjs`). Versione 1.3.0.
       Emerso (da fare in un blocco futuro):
-      - [ ] Danni "on a failed save" ("must save or take 2[D]+fray, or [D]+fray on a successful save"): oggi solo
+      - [x] Danni "on a failed save" ("must save or take 2[D]+fray, or [D]+fray on a successful save"): oggi solo
             il testo; collegare l'esito del save al dialog del danno (outcome "save failed / passed"). (M)
-      - [ ] Effetti non-status letti dal testo ("shoved 2", "unable to attack until the end of their next turn",
+      - [x] Effetti non-status letti dal testo ("shoved 2", "unable to attack until the end of their next turn",
             "+1 curse on all attacks and saves"): promemoria sulla card o effetto generico con durata. (L)
-      - [ ] Falso positivo noto: Freelancer "Showdown" ("Choose a foe in range 3 and become immobile" = se stessi)
+      - [x] Falso positivo noto: Freelancer "Showdown" ("Choose a foe in range 3 and become immobile" = se stessi)
             mostra un bottone Immobile. Regola per l'imperativo senza soggetto. (S)
-      - [ ] Status positivi su di sé / alleati ("you gain evasion", "allies gain sturdy") come bottone "Gain" sulla
+      - [x] Status positivi su di sé / alleati ("you gain evasion", "allies gain sturdy") come bottone "Gain" sulla
             card (versione difensiva del blocco Inflict). (M)
 - [x] **Automazione difensiva** (prima versione FATTA il 9 settembre 2026, Sessione 12): `module/combat/defenses.mjs`.
-      Evasion tirata da sola (1d6 per bersaglio con lo status, prima del d20, 4+ o 3+ con Spinning Top I; blocco
+      Evasion tirata da sola (1d6 per bersaglio con lo status, prima del d20, 4+ o 3+ con Rigoletto I (la reliquia dell'evasion: nel pack si chiama Rigoletto); blocco
       "Evasion" sulla card, "MISS — evaded", righe Inflict sbiadite, True Strike/Unerring la ignorano); Cover /
       Resistance dimezzano da soli su "Apply" leggendo gli status del bersaglio al momento (una volta sola, mai
       doppio con la casella del dialog); Dodge azzera il danno delle card Miss / Area; chip difensivi nei dialog e
       sulle righe della card del danno, promemoria per i trait NPC che citano evasion/dodge. Versione 1.4.0.
       Emerso (da fare in un blocco futuro):
-      - [ ] Spinning Top III (tira l'evasion per gli alleati in raggio 2, solo con un 6) e Aspected ("this turn
+      (Follow-up FATTI il 9 settembre 2026, Sessione 13 — vedi CHANGELOG 1.5.0.)
+      - [x] Rigoletto III (tira l'evasion per gli alleati in raggio 2, solo con un 6) e Aspected ("this turn
             your evasion is always successful"): oggi solo la soglia 3+ del rango I. (S)
-      - [ ] Spinning Top II ("when you or an ally in range 2 successfully evades, deal 2 damage to the attacker"):
+      - [x] Rigoletto II ("when you or an ally in range 2 successfully evades, deal 2 damage to the attacker"):
             promemoria sulla card quando un bersaglio con quella reliquia evade. (S)
-      - [ ] Dodge contro il danno "on a successful save": dipende dal collegamento save → dialog del danno (voce
+      - [x] Dodge contro il danno "on a successful save": dipende dal collegamento save → dialog del danno (voce
             della Sessione 11). (M)
-      - [ ] Evasion/Dodge condizionali dei foe ("Has evasion while bloodied", "unless suffering from a status"):
+      - [x] Evasion/Dodge condizionali dei foe ("Has evasion while bloodied", "unless suffering from a status"):
             oggi solo un chip promemoria; si potrebbe accendere lo status da solo quando la condizione è vera. (M)
-      - [ ] Cover dalla mappa (token adiacente a un muro/oggetto alto 1+): oggi Cover è solo uno status messo a
+      - [x] Cover dalla mappa (token adiacente a un muro/oggetto alto 1+): oggi Cover è solo uno status messo a
             mano. (L)
 
 ---

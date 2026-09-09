@@ -17,6 +17,7 @@
 import { applyStatus, hasStatus, getStatusCharges, adjustStatusCharges, toggleOngoing } from "./statuses.mjs";
 import { applyHatred } from "./marks.mjs";
 import { saveRoll } from "../dice/rolls.mjs";
+import { postAbilityDamageCard } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 const _log = (...a) => console.debug("[ICON | InflictStatus]", ...a);
@@ -53,7 +54,16 @@ async function _onInflictClick(btn) {
     if (!targets.length) { ui.notifications.warn("Target a token first (hover it and press T), then click the status again."); return; }
   }
 
+  // Damage tied to the save (ability-statuses.mjs: "must save or take 2[D]+fray,
+  // or [D]+fray on a successful save"), rolled after the save from the same click.
+  let saveDamage = null;
+  if (d.dmgFail) {
+    try { saveDamage = { fail: JSON.parse(d.dmgFail), success: d.dmgSuccess && d.dmgSuccess !== "null" ? JSON.parse(d.dmgSuccess) : null, label: d.dmgLabel || "" }; }
+    catch (err) { console.warn("[ICON | InflictStatus] bad damage data on the button", err); }
+  }
+
   const spec = {
+    kind:        d.kind || "inflict",          // "inflict" | "gain" | "save-damage"
     statusId:    d.statusId,
     label:       d.label || d.statusId,
     ongoing:     d.ongoing === "true",
@@ -65,22 +75,64 @@ async function _onInflictClick(btn) {
     saveCurses:  Number(d.saveCurses) || 0,
     autoFailIf:  d.autoFail || "",
     sourceTokenId: d.sourceToken || "",
+    saveDamage,
     source,
   };
 
   btn.disabled = true;
   const results = [];
   for (const t of targets) {
-    _log(`"${spec.abilityName}" → ${spec.statusId}${spec.ongoing ? "+" : ""} [${spec.when}] on ${t.actor.name}`);
+    _log(`"${spec.abilityName}" [${spec.kind}] → ${spec.statusId || spec.label}${spec.ongoing ? "+" : ""} [${spec.when}] on ${t.actor.name}${saveDamage ? ` + damage ${saveDamage.label}` : ""}`);
     results.push(await inflictStatus({ ...spec, target: t.actor, targetTokenId: t.tokenId }));
   }
 
   // Feedback: a per-target row locks after use; the "current targets" row stays usable.
   const r = results[0];
   if (!d.targetUuid || !r) { btn.disabled = false; return; }
-  btn.textContent = r.relayed ? "→ GM" : r.applied ? `✓ ${spec.label}${spec.ongoing ? "+" : ""}` : "✓ saved";
+  btn.textContent = spec.kind === "save-damage" ? (r.success ? "✓ saved" : "✓ failed — damage rolled")
+                  : r.relayed ? "→ GM" : r.applied ? `✓ ${spec.label}${spec.ongoing ? "+" : ""}` : "✓ saved";
   btn.classList.add(r.applied ? "icon-chat-btn--done" : "icon-chat-btn--resisted");
   btn.disabled = true;
+}
+
+/* -------------------------------------------------- */
+/*  Damage after a save                                */
+/* -------------------------------------------------- */
+
+/** [D] / fray of the acting character (summons use their summoner's). */
+function _damageStats(actor) {
+  let a = actor;
+  if (a?.type === "summon" && a.system?.summonerActorId) a = game.actors?.get(a.system.summonerActorId) ?? a;
+  const s = a?.system ?? {};
+  return { damagedie: s.combat?.damagedie ?? s.damagedie ?? "d6", fray: Number(s.combat?.fray ?? s.fray ?? 0) };
+}
+
+/**
+ * Post the damage card(s) that follow a save: the failed-save damage or the
+ * reduced successful-save damage, with an Apply button for that target only.
+ * A target with Dodge takes no damage from a successful save (defenses.mjs,
+ * on the Apply button).
+ */
+export async function postSaveDamage({ source, target, targetTokenId = "", abilityName = "", saveDamage, success }) {
+  if (!source || !target || !saveDamage) return;
+  const chunk = success ? saveDamage.success : saveDamage.fail;
+  if (!chunk?.deals) {
+    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> takes no damage <small>— ${escapeHTML(abilityName || "effect")}, successful save</small>`);
+    return;
+  }
+  const { damagedie, fray } = _damageStats(source);
+  const times = Math.max(1, Number(chunk.times) || 1);
+  const targets = [{ tokenId: targetTokenId || target.getActiveTokens?.()?.[0]?.id || "", actorUuid: target.uuid, actor: target }];
+  for (let i = 0; i < times; i++) {
+    await postAbilityDamageCard(source, {
+      parsed:      { hit: { mult: chunk.mult, fray: chunk.fray, flat: chunk.flat }, miss: { mult: 0, fray: false, flat: 0 }, area: { mult: 0, fray: false, flat: 0 } },
+      outcome:     success ? "save-success" : "save-fail",
+      damagedie, fray,
+      abilityName: `${abilityName || "Effect"}${times > 1 ? ` (${i + 1}/${times})` : ""}`,
+      targetName:  target.name,
+      targetsOverride: targets,
+    });
+  }
 }
 
 /* -------------------------------------------------- */
@@ -91,16 +143,23 @@ async function _onInflictClick(btn) {
  * Save (if the text asks for one) and apply.
  * @returns {Promise<{applied: boolean, success: boolean|null, relayed: boolean}|null>} null = cancelled
  */
-export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "" }) {
-  if (!target || !statusId) return null;
+export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "", kind = "inflict", saveDamage = null, targetTokenId = "" }) {
+  if (!target) return null;
+  if (!statusId && kind !== "save-damage") return null;
   const fullLabel = `${label}${ongoing ? "+" : ""}`;
 
-  if (when === "always") {
+  // "Gain": the user (or the targeted allies) gets the status, no save.
+  if (kind === "gain") {
+    const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "", gain: true });
+    return res ? { ...res, success: null } : null;
+  }
+
+  if (when === "always" && kind !== "save-damage") {
     const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "" });
     return res ? { ...res, success: null } : null;
   }
 
-  const prompt = await _promptSave({ target, source, label: fullLabel, when, sentence, abilityName, saveBoons, saveCurses, autoFailIf });
+  const prompt = await _promptSave({ target, source, label: kind === "save-damage" ? `damage (${saveDamage?.label ?? ""})` : fullLabel, when, sentence, abilityName, saveBoons, saveCurses, autoFailIf });
   if (!prompt) return null;
 
   let success, rolled = false, total = null, note = "";
@@ -125,12 +184,27 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
     note = prompt.autoFail ? `automatic failure (${prompt.autoFail})` : (success ? "successful save" : "failed save");
   }
 
+  // Damage tied to this save: the failed-save damage, or the reduced damage of
+  // a successful save (Dodge cancels the latter on Apply).
+  const damageAfter = async () => {
+    if (!saveDamage) return;
+    try { await postSaveDamage({ source, target, targetTokenId, abilityName, saveDamage, success }); }
+    catch (err) { console.error("[ICON | InflictStatus] save damage failed", err); ui.notifications.error("Rolling the save damage failed (see console)."); }
+  };
+
+  if (kind === "save-damage") {
+    await damageAfter();
+    return { applied: !success, success, relayed: false };
+  }
+
   const applied = when === "success" ? success : !success;
   if (!applied) {
     if (!rolled) await _chat(target, `<strong>${escapeHTML(target.name)}</strong> ${success ? "saves against" : "fails the save, but"} <strong>${escapeHTML(fullLabel)}</strong> ${success ? "" : "only applies on a successful save"} <small>— ${escapeHTML(abilityName || "effect")}${source ? ` (${escapeHTML(source.name)})` : ""}, ${escapeHTML(note)}</small>`);
+    await damageAfter();
     return { applied: false, success, relayed: false };
   }
   const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note });
+  await damageAfter();
   return res ? { ...res, success } : null;
 }
 
@@ -205,11 +279,12 @@ async function _promptSave({ target, source, label, when, sentence, abilityName,
 /*  Apply (direct or relayed)                          */
 /* -------------------------------------------------- */
 
-async function _apply({ target, source, statusId, ongoing, label, abilityName, sourceTokenId, note }) {
+async function _apply({ target, source, statusId, ongoing, label, abilityName, sourceTokenId, note, gain = false }) {
   const needsRelay = !(target.isOwner || game.user.isGM);
 
   // Hatred is always "of someone" — the attacker (marks.mjs relays it itself).
-  if (statusId === "hatred") {
+  // A "Gain" of Hatred on the user is not a thing the text does.
+  if (statusId === "hatred" && !gain) {
     if (!source) { ui.notifications.warn("Hatred needs a source character."); return null; }
     if (needsRelay && !game.users.activeGM) { ui.notifications.warn("No GM is connected — can't apply that right now."); return null; }
     await applyHatred(target, { name: source.name, tokenId: sourceTokenId || null, actorUuid: source.uuid }, { ongoing });

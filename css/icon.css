@@ -5391,3 +5391,32 @@ ol.chat-log .chat-message,
 .icon-roll-target__defs { display: flex; flex-wrap: wrap; gap: 3px; flex-basis: 100%; padding-left: 36px; }
 .icon-chat-card__target-defs { display: inline-flex; flex-wrap: wrap; gap: 3px; }
 .icon-chat-card--dodged { border-left-color: rgba(46,132,216,.7); }
+
+/* ==================================================
+   Session 13 — follow-ups: Gain / Effects blocks on cards, save-linked
+   damage buttons, relic gambit + "applies to" on the Relics tab, relic turn
+   reminders, Titan Armament, Rigoletto sure evasion, map-cover hint.
+   ================================================== */
+.icon-chat-statuses--gain .icon-chat-statuses__row { border-color: rgba(52,160,88,.35); }
+.icon-chat-btn--gain { background: rgba(36,104,56,.25); color: #b0e8c0; border-color: rgba(52,160,88,.55); }
+.icon-chat-btn--gain:hover { background: rgba(36,104,56,.5); color: #fff; }
+.icon-chat-btn--gain small { font-weight: 400; opacity: .8; margin-left: 3px; }
+.icon-chat-btn--gain-ally { border-style: dashed; }
+.icon-chat-statuses--notes .icon-chat-statuses__row { border-color: rgba(200,150,28,.25); background: rgba(200,150,28,.05); }
+.icon-chat-note { display: inline-block; font-size: .8em; padding: 2px 7px; border-radius: 999px; background: rgba(200,150,28,.12); border: 1px solid rgba(200,150,28,.35); color: var(--ic-gold-bright); }
+.icon-chat-btn--status-damage { background: rgba(160,48,48,.25); color: #f4c0c0; border-color: rgba(216,64,64,.55); }
+.icon-chat-btn--status-damage:hover { background: rgba(160,48,48,.5); }
+
+.icon-relic-card__gambit { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 6px 0; padding: 6px 8px; border-radius: 4px; background: rgba(155,110,220,.08); border-left: 3px solid rgba(155,110,220,.5); font-size: .9em; }
+.icon-relic-card__gambit-text { flex: 1 1 200px; }
+.icon-relic-card__gambit-note { flex-basis: 100%; font-style: italic; color: var(--ic-text-dim); }
+.icon-relic-card__touches { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--ic-border-vis, rgba(200,150,28,.25)); font-size: .85em; }
+.icon-relic-card__touches-label { color: var(--ic-text-dim); margin-right: 2px; }
+.icon-chat-card--relic-turn { border-left: 3px solid #b48ee8; }
+.icon-chat-card--relic-turn .icon-chat-card__header { gap: 8px; }
+
+.icon-encounter__titan { margin-left: 2px; }
+.icon-chat-die--sure { color: var(--ic-gold-bright); background: rgba(201,165,74,.25); border-color: rgba(201,165,74,.7); }
+.icon-chat-evasion__notes { flex-basis: 100%; padding-left: 76px; font-size: .9em; color: var(--ic-gold-bright); }
+.icon-chat-evasion__row { flex-wrap: wrap; }
+.icon-def-chip--cover-hint { border-style: dashed; color: #c0c0b8; background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.2); }

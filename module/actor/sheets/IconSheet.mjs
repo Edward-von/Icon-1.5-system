@@ -13,7 +13,7 @@ import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
-import { buildAbilityProfile, abilityRelicReminders, attackInvokes } from "../../combat/relic-reminders.mjs";
+import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes } from "../../combat/relic-reminders.mjs";
 import { abilityStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
@@ -82,6 +82,7 @@ export class IconSheet extends BaseActorSheet {
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
+      invokeGambit:       IconSheet.#onInvokeGambit,
       bondPowerShowInChat: IconSheet.#onBondPowerShowInChat,
       toggleBondPowerUse:  IconSheet.#onToggleBondPowerUse,
       resetSessionPowers:  IconSheet.#onResetSessionPowers,
@@ -315,6 +316,9 @@ export class IconSheet extends BaseActorSheet {
     // reliably, so build plain objects with pre-enriched HTML here.
     const rawRelics = actor.items.filter(i => i.type === "relic");
     const dustPool  = system.narrative?.dust ?? 0;
+    // Gambit invokes (once per combat, p.114) and the abilities each relic touches
+    // (the inverse of the reminder lines on the ability panels).
+    const gambits = gambitInvokes(actor);
     context.relicItems = await Promise.all(rawRelics.map(async r => {
       const s = r.system ?? {};
       const currentRank = s.currentRank ?? 1;
@@ -363,6 +367,8 @@ export class IconSheet extends BaseActorSheet {
         canUpgradeRank2:  currentRank === 1 && (invested + dustPool) >= rank2Cost,
         canUpgradeRank3:  currentRank === 2 && (invested + dustPool) >= rank3Cost,
         canUpgradeAspect: currentRank === 3 && (invested + dustPool) >= aspectCost,
+        gambit:  gambits.find(g => g.itemId === r.id) ?? null,
+        touches: (context.abilityItems ?? []).filter(a => (a.relicReminders ?? []).some(rr => rr.relic === r.name)).map(a => a.name),
       };
     }));
     context.dustPool = dustPool;
@@ -1228,6 +1234,41 @@ export class IconSheet extends BaseActorSheet {
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content,
     });
+  }
+
+  /**
+   * Invoke a relic's Gambit (p.114: once per combat — twice for Sleipnir /
+   * Tower of Barbs Aspect). Counts the use on the relic item for the current
+   * combat, posts the gambit text to chat; the Rigoletto Aspect also arms
+   * "sure evasion" for this round (defenses.mjs).
+   */
+  static async #onInvokeGambit(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const g = gambitInvokes(this.document).find(x => x.itemId === item.id);
+    if (!g) { ui.notifications.warn(`"${item.name}" has no Invoke (Gambit) in its unlocked ranks.`); return; }
+    if (!g.canInvoke) { ui.notifications.warn(`${g.relic}: the gambit was already used this combat (${g.used}/${g.maxUses}).`); return; }
+    const combat = game.combat?.started ? game.combat : null;
+    _log(`invokeGambit — "${g.relic}" | combat: ${combat?.id ?? "none"} | used: ${g.used}/${g.maxUses}`);
+    if (combat) await item.setFlag("icon-system", "gambitUses", { combatId: combat.id, count: g.used + 1 });
+    if (g.relic.trim().toLowerCase() === "rigoletto" && combat) {
+      await this.document.setFlag("icon-system", "sureEvasion", { combatId: combat.id, round: combat.round });
+    }
+    const used = combat ? `${g.used + 1}/${g.maxUses} used this combat` : "outside combat — not counted";
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      content: `<div class="icon-chat-card icon-chat-card--relic">
+        <div class="icon-chat-card__header">
+          <strong class="icon-chat-card__action">✦ Invoke (Gambit) — ${escapeHTML(g.relic)} ${escapeHTML(g.rankLabel)}</strong>
+          <span class="icon-badge icon-badge--invoke">${escapeHTML(used)}</span>
+        </div>
+        <div class="icon-chat-card__desc">${escapeHTML(g.text)}</div>
+        ${g.notes.length ? `<p class="icon-chat-relic__note">${g.notes.map(escapeHTML).join(" · ")}</p>` : ""}
+        ${g.relic.trim().toLowerCase() === "rigoletto" ? `<p class="icon-chat-relic__note">Evasion is automatically successful for ${escapeHTML(this.document.name)} this round.</p>` : ""}
+      </div>`,
+    });
+    this.render({ parts: ["relics"] });
   }
 
   /** Post a bond-power card to chat. */

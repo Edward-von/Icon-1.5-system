@@ -1,5 +1,53 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 13: tutti i follow-up delle sessioni 9-12 (versione 1.5.0)
+
+- **Invoke (Gambit) delle reliquie** (follow-up Sessione 9): nella tab Relics ogni reliquia con "Invoke (Gambit)" in un
+  rango sbloccato ha il riquadro "✦ Invoke Gambit" con il testo; il click posta la card in chat e conta l'uso per il
+  combat corrente (p.114: una volta per combat; due per Sleipnir Aspect, Tower of Barbs Aspect e Ironsoul III con la
+  nota "regain"); Hermes Aspect riscrive il gambit. Il conteggio è un flag sull'item legato all'id del combat, quindi si
+  azzera da solo al combat successivo. `gambitInvokes()` in `relic-reminders.mjs`.
+- **Promemoria delle reliquie legati al turno**: tabella `RELIC_TURN_REMINDERS` (Apophis I/II, Erenbrass I/II/III/Aspect,
+  Ironsoul e Cloudpiercer Aspect, Mistborn III, Storm Lord I, Trollhide I/II, Byrax III, Scheherezade I, Wyrmtooth
+  Aspect, Paleblood I) → il tracker posta una card "Start of turn" / "End of turn" / "Start of combat" / "End of round N"
+  / "First turn of combat" per il PG interessato. Solo i PG con reliquie di quel tipo ricevono card.
+- **Tab Relics: "Applies to"**: sotto ogni reliquia l'elenco delle abilità equipaggiate che hanno una sua riga ✦.
+- **Titan Armament** (follow-up Sessione 10, p.448): bottone "Titan" nelle righe dei Jotunn dell'Encounter Designer →
+  +1 punto, HP ×1.5, un turno in più (trait "Titan Armament" sull'attore creato e flag `extraTurns` letto da
+  `IconCombat.turnsFor`); indicato nella card in chat.
+- **Riserve proposte dal tracker**: al passaggio di round il GM riceve una card sussurrata "Reserves due — end of round
+  N" con il bottone "Reveal reserves" per i token nascosti con riserva a quel round (una volta per round).
+- **Nilfling**: il manuale (p.449, "Thinblood") conferma che non è Elite: il pack era giusto.
+- **Showdown del Freelancer** (follow-up Sessione 11): "Choose a foe in range 3 and become immobile" non è più un
+  Immobile da infliggere al nemico: l'oggetto dell'imperativo non è il soggetto di "become" → è un "Gain" su di sé.
+- **Blocco "Gain"** sulle card: status positivi (o negativi su se stessi) che il testo dà all'utente ("gain evasion
+  until the start of your next turn", "you are pacified", "Become intangible") o agli alleati ("allies in range 2 gain
+  sturdy" → bottone "👥" applicato ai token targettati). Legge anche i trait/azioni NPC ("The Trooper and its allies
+  … are sturdy and have counter"). Vocabolario `GRANTABLE` in `ability-statuses.mjs`.
+- **Blocco "Effects"**: promemoria (chip, nessuna automazione) per gli effetti non-status letti dal testo: shove/pull
+  N, "unable to … until …", "+N boon/curse on …" (non quelli del save, già gestiti), vigor, dash/rush/teleport/fly N,
+  "take a wound". 2162 chip sul corpus dei pack.
+- **Danno legato al save**: "must save or take 2[D]+fray and become stunned, or just fray on a successful save" → il
+  bottone dello status porta "💥" e, dopo il save, posta la card del danno giusta (fallito: 2[D]+fray; riuscito: fray)
+  con Apply solo per quel bersaglio; senza status ("must save or take 6 damage, or 3 on a successful save",
+  Titanfall) c'è un bottone rosso "🎲 💥 6 / 3 on a successful save"; "twice" / "three times" → più card. [D]/fray
+  dell'attaccante (i summon usano il summoner). `postSaveDamage()` in `inflict-status.mjs`,
+  `targetsOverride` in `postAbilityDamageCard`.
+- **Dodge sul save riuscito** (p.144): le card "Successful save" hanno esito `save-success` → Apply su un bersaglio
+  con Dodge non toglie HP.
+- **Rigoletto** (follow-up Sessione 12; la reliquia dell'evasion nel pack si chiama così, non "Spinning Top" come
+  scritto nella Sessione 12 — corretto): II → nota "deal 2 damage to the attacker" quando evade il portatore o un
+  alleato entro 2 spazi; III → il portatore con Evasion fa tirare l'evasion (solo con un 6) agli alleati entro 2
+  spazi che non ce l'hanno; Aspect → il gambit "evasion always successful this turn" arma un flag per il round e il
+  blocco Evasion mostra "✦ evaded (Rigoletto Aspect)" senza d6.
+- **Evasion/Dodge condizionali dei foe**: i trait "Has Evasion while bloodied", "unless suffering from a status",
+  "While in stealth, has evasion and dodge", "Dodge" vengono valutati dallo stato dell'attore (bloodied, stealth,
+  flying, nessuno status negativo): l'evasion viene tirata e Dodge azzera i Miss senza mettere lo status a mano; le
+  condizioni non leggibili restano chip ⚠.
+- **Cover dalla mappa**: token adiacente a un muro (porte aperte escluse) → chip "Cover? wall" nei dialog e sulle
+  righe della card del danno, solo promemoria (il lato dell'attacco non è calcolato).
+- Restano in TODO le due domande per Maar (riuso degli attori del mondo nel deploy, icone token dei foe).
+
 ## 9 settembre 2026 — Sessione 12: automazione difensiva — Evasion, Dodge, Cover / Resistance (versione 1.4.0)
 
 - **Evasion andava tirata a mano** (wishlist Maar: "automazione difensiva"): nuovo modulo

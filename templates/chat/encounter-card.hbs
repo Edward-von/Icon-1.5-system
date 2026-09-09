@@ -14,7 +14,7 @@
     <ul class="icon-macro-list">
       {{#each rows}}{{#unless reserve}}
       <li>
-        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}} · {{turns}} turn{{#unless (icon-eq turns 1)}}s{{/unless}}</span></span>
+        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}}{{#if titan}} · Titan Armament{{/if}} · {{turns}} turn{{#unless (icon-eq turns 1)}}s{{/unless}}</span></span>
         <span class="icon-macro-value">{{cost}}</span>
       </li>
       {{/unless}}{{/each}}
@@ -24,7 +24,7 @@
     <ul class="icon-macro-list">
       {{#each rows}}{{#if reserve}}
       <li>
-        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}} · enters at the end of round {{reserve}}</span></span>
+        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}}{{#if titan}} · Titan Armament{{/if}} · enters at the end of round {{reserve}}</span></span>
         <span class="icon-macro-value">{{cost}}</span>
       </li>
       {{/if}}{{/each}}

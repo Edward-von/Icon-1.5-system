@@ -538,7 +538,7 @@ Prerequisito: un PG e un Foe con token sulla scena, combat aperto. Gli status si
 (o dall'HUD del token): **Evasion**, **Dodge**, **Cover**, **Resistance**, **True Strike**. Regole: Evasion p.146
 (1d6, 4+ = miss, prima del tiro d'attacco), Dodge p.144 (immune al danno da attacchi mancati, save riusciti, area),
 Cover p.92 (½ danno, deciso quando il danno viene applicato), True Strike p.117 (ignora dodge, evasion, blind,
-stealth). Verificato offline (Node) con attori finti: soglie, Spinning Top, True Strike, Dodge su miss/area,
+stealth). Verificato offline (Node) con attori finti: soglie, Rigoletto (la reliquia dell'evasion: nel pack si chiama così, non "Spinning Top"), True Strike, Dodge su miss/area,
 Cover+Resistance una volta sola, "già dimezzato sul tiro".
 
 - [ ] **Chip nel dialog d'attacco**: metti Evasion sul Warrior, targettalo e ⚔ su un attacco del PG → nella card
@@ -552,7 +552,7 @@ Cover+Resistance una volta sola, "già dimezzato sul tiro".
 - [ ] **Due bersagli, uno solo con Evasion**: targetta Warrior (Evasion) e Archer, tira → il blocco Evasion
       elenca solo il Warrior; se evade, il risultato resta HIT/MISS normale (vale per l'Archer) e solo la riga
       del Warrior nell'Inflict è sbiadita.
-- [ ] **Spinning Top I**: PG con Evasion e la reliquia Spinning Top al rango I equipaggiata, targettato da un Foe:
+- [ ] **Rigoletto I** (corretto in Sessione 13: la reliquia dell'evasion nel pack si chiama Rigoletto): PG con Evasion e la reliquia al rango I equipaggiata, targettato da un Foe:
       chip "Evasion 3+" e riga "evaded (3+)" con un 3.
 - [ ] **True Strike**: metti True Strike sull'attaccante → il dialog dice "True Strike: ignores Evasion (Warrior)"
       e la card mostra "Evasion ignored — attacker has True Strike (p.117)" senza d6. Lo stesso con Unerring.
@@ -581,6 +581,88 @@ Cover+Resistance una volta sola, "già dimezzato sul tiro".
 - [ ] **Regressioni**: attacco senza target con Evasion in giro → nessun blocco; card del danno vecchie (senza
       flag) → Apply come prima; Foe/Legend/Summon che attaccano un PG con Evasion → blocco Evasion anche lì;
       macro `game.icon.rollEvasion`, `defenseProfile`, `damageMitigation` disponibili.
+
+## Sessione 13 (9 settembre 2026) — Tutti i follow-up delle sessioni 9-12 (versione 1.5.0)
+
+Verificato offline (Node): parser su 32 frasi della Sessione 11 (invariate) + 30 nuove (Gain, promemoria, danno-su-save,
+Showdown), corpus dei pack (8082 testi: 1697 inflict, 383 gain, 2162 promemoria, 115 danni-su-save), difese e reliquie
+(38 controlli: trait condizionali, Rigoletto I/II/III/Aspect, Dodge sul save riuscito, gambit dai 40 testi del pack,
+promemoria di turno), template Handlebars compilati e renderizzati con dati finti.
+
+**Relic follow-up (Sessione 9)**
+- [ ] **Invoke Gambit**: PG con Hermes (o Sleipnir, Byrax II, Mistborn, Chime…) → nella tab Relics, sotto la reliquia,
+      il riquadro viola "✦ Invoke Gambit" con il testo del gambit ("I: Free action: Teleport 2."). In combat, click →
+      card in chat "✦ Invoke (Gambit) — Hermes I · 1/1 used this combat", il bottone diventa "✦ Invoke Gambit · 1/1"
+      disabilitato (tooltip). Fuori combat il click posta la card senza contare ("outside combat — not counted").
+- [ ] **Gambit due volte**: Sleipnir con Aspect sbloccato (o Tower of Barbs Aspect, Ironsoul III) → "0/2", si può
+      invocare due volte. Un nuovo combat azzera il conteggio (il flag è legato all'id del combat).
+- [ ] **Hermes Aspect** riscrive il testo del gambit ("Teleport 1 space, then teleport 1 space…", etichetta "I (Aspect)").
+- [ ] **Rigoletto Aspect**: click su Invoke Gambit durante il proprio turno → card "Evasion is automatically successful
+      … this round"; un Foe che attacca il PG in quel round vede nel blocco Evasion "✦ evaded (Rigoletto Aspect)"
+      senza d6 e "Evasion — sure" nel dialog; al round dopo torna il d6.
+- [ ] **Promemoria di turno**: PG con Erenbrass I → all'inizio del suo turno (tracker) card "Start of turn ✦ Erenbrass I
+      — You may shove an ally 1 space…"; con Erenbrass II anche a fine turno. Storm Lord I / Trollhide I-II → card
+      "End of turn". Scheherezade I / Paleblood I → card "Start of combat" quando il combat parte; Paleblood → card
+      "End of round N" a ogni cambio round. Byrax III → "First turn of combat" solo al round 1. Un PG senza reliquie
+      di questo tipo non riceve card.
+- [ ] **"Applies to"**: sotto ogni reliquia della tab Relics la riga "Applies to: <abilità>" con le abilità
+      equipaggiate che hanno una riga ✦ di quella reliquia (es. Byrax I → le stance). Reliquia senza abilità toccate →
+      niente riga.
+
+**Encounter Designer follow-up (Sessione 10)**
+- [ ] **Titan Armament**: aggiungi un Jotunn (fazione Jotunn, es. Nilfling o Ire Smith) → nella riga compare il bottone
+      "Titan" accanto a "Elite" (assente sui non-Jotunn, disabilitato sui mob). Acceso: costo +1, HP ×1.5 nella riga,
+      turni +1, card in chat "· Titan Armament". 📥/🗺 → l'attore creato ha il trait "Titan Armament", HP max ×1.5 e,
+      nel tracker, un pip in più per round (2 per un foe normale, 3 per un Elite).
+- [ ] **Riserve proposte dal tracker**: deploy con una riserva "R2"; al passaggio dal round 2 al 3 il GM riceve la card
+      sussurrata "Reserves due — end of round 2" con il bottone "👁 Reveal reserves & add to combat" (che rivela e
+      aggiunge al combat); tornando indietro e riavanzando la card NON viene ripostata. Riserve "R3" → card al
+      passaggio 3 → 4. Senza riserve nascoste → nessuna card.
+- [x] **Nilfling**: verificato sul manuale p.449 ("Thinblood: … doesn't have the elite trait like other Jotunn") → il
+      pack è corretto, nessuna modifica.
+
+**Inflict follow-up (Sessione 11)**
+- [ ] **Showdown** (Freelancer): 💬 sulla card non c'è più il bottone "Immobile" nel blocco Inflict; c'è invece il blocco
+      "GAIN" con "Immobile <small>until the end of your current turn</small>" (click → lo status va sul PG) e il
+      blocco "EFFECTS" con il chip "Dash 2".
+- [ ] **Gain**: abilità con "gain evasion until the start of your next turn" (Fool/Spinning Top, Knave/Revenge
+      "Gain unstoppable and counter…") → blocco GAIN con un bottone per status; click → lo status è sul PG, card blu
+      "X is now Evasion". "Allies in range 2 gain sturdy" → bottone "👥 Sturdy" tratteggiato: senza target avvisa,
+      con un alleato targettato lo applica a lui. Foe "Hold the Line!" (Trooper) → "👥 Sturdy", "👥 Counter".
+- [ ] **Effects (promemoria)**: attacco con "shoved 1" / "unable to attack until…" / "+1 curse on all attacks and
+      saves" / "gain 2 vigor" / "dash 2" → blocco "EFFECTS — reminders read from the text" con i chip oro; nessun
+      bottone, nessun effetto applicato. "+1 curse on the save" NON compare come chip (è già nel save).
+- [ ] **Danno sul save (con status)**: Brawler "Haymaker" ("must save or take [D]+fray and become stunned, or just fray
+      damage on a successful save") → bottone "🎲 Stunned 💥". Click → dialog del save → fallito: card blu "Stunned"
+      + card del danno "Haymaker — Failed save" [D]+fray con Apply solo per quel bersaglio; riuscito: niente status +
+      card "Haymaker — Successful save (reduced damage)" con il solo fray.
+- [ ] **Danno sul save (senza status)**: Jotunn "Titanfall" ("must save or take 6 damage, or 3 on a successful save")
+      → bottone rosso "🎲 💥 6 / 3 on a successful save"; click → save → card del danno 6 (fallito) o 3 (riuscito),
+      bottone "✓ failed — damage rolled" / "✓ saved". "take [D]+fray twice" → due card (1/2, 2/2).
+- [ ] **Dodge sul save riuscito**: bersaglio con Dodge che supera il save → sulla card "Successful save" la riga ha
+      "Dodge — immune"; Apply → "no damage — Dodge — immune to damage from successful saves". Sul save fallito il
+      danno passa normalmente.
+- [ ] **Summon**: azione di un summon con save+danno → [D]/fray presi dal summoner.
+
+**Difese follow-up (Sessione 12)**
+- [ ] **Rigoletto II**: PG con Evasion e Rigoletto II che evade → nel blocco Evasion la riga "✦ Rigoletto II (nome):
+      deal 2 damage to <attaccante>". Anche quando evade un alleato entro 2 spazi dal portatore (e non oltre).
+- [ ] **Rigoletto III**: PG "Guard" con Evasion e Rigoletto III; un alleato SENZA Evasion a 1-2 spazi targettato da un
+      Foe → riga "Ally (Rigoletto III of Guard)" con d6 che evade solo con un 6. Un portatore ostile (disposition
+      diversa) non copre. Alleato a 3+ spazi → nessun d6.
+- [ ] **Evasion/Dodge condizionali dei foe**: Bandit "Slippery: Has Evasion while bloodied" → sotto metà HP il chip
+      "Evasion 4+ (Slippery)" e il d6 viene tirato senza mettere lo status; sopra metà HP niente chip e niente d6.
+      Foe "Nimble: Has evasion unless suffering from a status" → d6 finché non ha status negativi. "Sneak: While in
+      stealth, has evasion and dodge" → con Stealth evade e "Dodge (Sneak)" azzera i Miss. Trait "Dodge" puro
+      (Vagabond) → Dodge senza status. Condizione non leggibile ("while inside difficult terrain") → solo chip ⚠.
+- [ ] **Cover dalla mappa**: token adiacente a un muro (o porta chiusa) → chip tratteggiato "Cover? wall" nel dialog
+      e sulla riga della card del danno; Apply NON dimezza (è solo un promemoria). Token lontano dai muri o accanto a
+      una porta aperta → nessun chip. Con lo status Cover il chip "Cover ½" vince.
+
+- [ ] **Regressioni**: card d'attacco senza status/gain/note → invariata; blocco Inflict della Sessione 11 (Demon
+      Cutter, Implode, Swindle) come prima; Encounter Designer senza Jotunn → nessun bottone Titan, deploy come prima;
+      tab Relics con reliquie senza gambit → nessun riquadro viola; tracker senza PG con reliquie → nessuna card in
+      più; nessun errore in console.
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 

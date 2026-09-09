@@ -30,6 +30,7 @@ import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
+import { turnRelicReminders } from "./relic-reminders.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -307,8 +308,10 @@ export class IconCombat extends Combat {
     const type = combatant?.actor?.type;
     if (type === "summon") return 0;
     if (type === "legend") return Math.max(pcCount, 2);
-    if (type === "foe" && combatant?.actor?.system?.isElite) return 2;
-    return 1;
+    // Titan Armament (p.448, Encounter Designer): "take one extra turn a round".
+    const extra = type === "foe" ? (Number(combatant?.actor?.getFlag?.(FLAG_NS, "extraTurns")) || 0) : 0;
+    if (type === "foe" && combatant?.actor?.system?.isElite) return 2 + extra;
+    return 1 + extra;
   }
 
   /**
@@ -800,6 +803,16 @@ export function registerCombatHooks() {
         if (prev?.actor) {
           await rollEndOfTurnSaves(prev);
           await applyEndOfTurnEffects(prev);
+          // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
+          await _postRelicTurnReminders(prev.actor, "end", "End of turn");
+        }
+      }
+
+      /* --- Round advanced: reserves due, "end of round" relic effects --- */
+      if (roundChanged && (options.direction ?? 1) > 0 && combat.started) {
+        await _nudgeReserves(combat);
+        for (const c of combat.combatants) {
+          if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "round-end", `End of round ${Math.max(0, (combat.round ?? 1) - 1)}`);
         }
       }
 
@@ -808,6 +821,12 @@ export function registerCombatHooks() {
       if (turnChanged && current?.actor) {
         /* Record which side acted last (advisory alternation). */
         await combat.setFlag(FLAG_NS, FLAG_LAST, IconCombat.isPC(current) ? "pc" : "npc");
+
+        /* Relic effects "at the start of your turn" (Apophis, Erenbrass, Ironsoul / Cloudpiercer Aspect…). */
+        if (current.actor.type === "icon") {
+          await _postRelicTurnReminders(current.actor, "start", "Start of turn");
+          if ((combat.round ?? 1) === 1) await _postRelicTurnReminders(current.actor, "first-turn", "First turn of combat");
+        }
 
         /* Non-legend foes recharge interrupts at the start of their own
          * turn. Legends recharge at round start (handled in nextRound). */
@@ -958,6 +977,12 @@ export function registerCombatHooks() {
     if (!game.user.isGM) return;
     if (!(combat instanceof IconCombat)) return;
     await combat.setFlag(FLAG_NS, FLAG_RESOLVE, 0);
+    // Relic effects "at the start of combat" (Scheherezade I, Paleblood I, Wyrmtooth Aspect).
+    try {
+      for (const c of combat.combatants) {
+        if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "combat-start", "Start of combat");
+      }
+    } catch (err) { console.error("ICON 1.5 | combat-start relic reminders failed:", err); }
   });
 
   /**
@@ -976,6 +1001,65 @@ export function registerCombatHooks() {
       console.error("ICON 1.5 | Error in renderCombatTracker hook:", err);
     }
   });
+}
+
+/* -------------------------------------------------- */
+/*  Relic turn reminders + reserve nudge               */
+/* -------------------------------------------------- */
+
+/**
+ * Post the relic effects of a PC tied to this moment ("start" / "end" of
+ * their turn, "combat-start", "round-end", "first-turn") as one chat card.
+ * Nothing is posted when the character's relics have no such effect.
+ */
+async function _postRelicTurnReminders(actor, when, title) {
+  try {
+    const lines = turnRelicReminders(actor, when);
+    if (!lines.length) return;
+    const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
+    const rows = lines.map(l => `<div class="icon-chat-relic icon-chat-relic--note"><span class="icon-chat-relic__label">✦ ${esc(l.relic)} ${esc(l.rankLabel)}</span><span class="icon-chat-relic__text">${esc(l.text)}</span></div>`).join("");
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="icon-chat-card icon-chat-card--relic-turn">
+        <div class="icon-chat-card__header"><strong>${esc(title)}</strong><span class="icon-badge icon-badge--invoke">relic</span></div>
+        <div class="icon-chat-relics icon-chat-relics--notes">${rows}</div>
+      </div>`,
+    });
+  } catch (err) { console.warn("ICON 1.5 | relic turn reminder failed:", err); }
+}
+
+/**
+ * Encounter Designer reserves (p.292) "appear at the edge of the map at the
+ * end of round 2 or 3": when the round advances, the GM gets a whispered
+ * card with the "Reveal reserves" button for the hidden tokens that were due
+ * at the end of the round that just finished (posted once per round).
+ */
+async function _nudgeReserves(combat) {
+  try {
+    const scene = combat.scene;
+    if (!scene) return;
+    const ended = Math.max(0, (combat.round ?? 1) - 1);
+    if (!ended) return;
+    const due = scene.tokens.filter(t => t.hidden && Number(t.getFlag(FLAG_NS, "encounterReserve")) === ended);
+    if (!due.length) return;
+    const posted = combat.getFlag(FLAG_NS, "reserveNudge") ?? {};
+    if (posted[ended]) return;
+    await combat.setFlag(FLAG_NS, "reserveNudge", { ...posted, [ended]: true });
+    const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
+    const names = [...new Set(due.map(t => t.name))].map(esc).join(", ");
+    await ChatMessage.create({
+      speaker: { alias: "Encounter Designer" },
+      whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
+      flags: { [FLAG_NS]: { encounterCard: true } },
+      content: `<div class="icon-macro-card icon-macro-combat icon-encounter-card">
+        <div class="icon-macro-header"><i class="fas fa-chess-knight"></i><h3>Reserves due — end of round ${ended}</h3></div>
+        <div class="icon-macro-body">
+          <p class="icon-macro-sub">${due.length} hidden token${due.length > 1 ? "s" : ""} (${names}) enter at the edge of the map now and act from this round (p.292).</p>
+          <button type="button" class="icon-btn icon-btn--add icon-encounter-card__reveal" data-action="revealReserves" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(due.map(t => t.id).join(","))}">👁 Reveal reserves &amp; add to combat</button>
+        </div>
+      </div>`,
+    });
+  } catch (err) { console.warn("ICON 1.5 | reserve nudge failed:", err); }
 }
 
 function _renderIconTracker(app, html, data, combat) {

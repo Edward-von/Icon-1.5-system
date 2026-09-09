@@ -57,6 +57,19 @@
         {{#if relic.invokeEffect}}
           <div class="icon-relic-card__invoke-effect icon-editor-wrap">{{{relic.invokeEffect}}}</div>
         {{/if}}
+        {{!-- Invoke (Gambit): once per combat (p.114), counted on the relic for the current combat --}}
+        {{#if relic.gambit}}
+          <div class="icon-relic-card__gambit">
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--primary icon-relic-card__gambit-btn"
+                    data-action="invokeGambit" data-item-id="{{relic.id}}"
+                    {{#unless relic.gambit.canInvoke}}disabled{{/unless}}
+                    title="Invoke (Gambit): triggered under the listed conditions, once per combat (p.114). Posts the effect to chat and counts the use.">
+              ✦ Invoke Gambit{{#if relic.gambit.combatId}} · {{relic.gambit.used}}/{{relic.gambit.maxUses}}{{/if}}
+            </button>
+            <span class="icon-relic-card__gambit-text"><strong>{{relic.gambit.rankLabel}}:</strong> {{relic.gambit.text}}</span>
+            {{#each relic.gambit.notes}}<small class="icon-relic-card__gambit-note">{{this}}</small>{{/each}}
+          </div>
+        {{/if}}
         <div class="icon-relic-card__ranks-list">
           <div class="icon-relic-card__rank-row {{#unless relic.rank1Unlocked}}icon-relic-card__rank-row--locked{{/unless}}">
             <span class="icon-rank-label">Rank I</span>
@@ -126,6 +139,13 @@
             {{/unless}}{{/if}}
           </div>
         </div>
+        {{!-- The equipped abilities this relic touches (inverse of the ✦ reminder lines) --}}
+        {{#if relic.touches.length}}
+          <div class="icon-relic-card__touches">
+            <span class="icon-relic-card__touches-label">Applies to:</span>
+            {{#each relic.touches}}<span class="icon-tag icon-tag--small">{{this}}</span>{{/each}}
+          </div>
+        {{/if}}
       </div>
     {{/each}}
 

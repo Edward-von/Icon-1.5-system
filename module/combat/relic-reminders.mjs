@@ -378,3 +378,111 @@ export function attackInvokes(actor) {
 export function resolveInvokes(invokes, d20) {
   return (invokes ?? []).map(i => ({ ...i, triggered: Number(d20) >= i.threshold }));
 }
+
+/* -------------------------------------------------- */
+/*  Gambit invokes (p.114: once per combat)            */
+/* -------------------------------------------------- */
+
+const GAMBIT_RE = /invoke\s*\(\s*gambit\s*\)\s*[:\-–—]?\s*(.*)$/i;
+/** Aspect wording that changes the gambit rather than adding one. */
+const GAMBIT_BECOMES_RE = /(?:this\s+relic's\s+)?invoke\s+(?:gambit\s+)?becomes?\s*:?\s*(.*)$/i;
+const GAMBIT_TWICE_RE   = /\b(?:can|may)\s+be\s+(?:used|taken)\s+twice\s+a\s+combat|\bcan't\s+be\s+used\s+more\s+than\s+twice\s+a\s+combat|\btwice\s+a\s+combat\b/i;
+const GAMBIT_REGAIN_RE  = /\bregain\s+your\s+gambit\b[^.]*/i;
+
+/**
+ * The "Invoke (Gambit)" powers a PC's relics give (p.114: "triggered under the
+ * listed conditions, but only once per combat"). One entry per relic that has
+ * one in an unlocked rank; an unlocked Aspect can rewrite it ("This relic's
+ * invoke becomes: …", Hermes) or allow it twice a combat (Sleipnir, Tower of
+ * Barbs); Ironsoul III regains it when bloodied (a note).
+ *
+ * The per-combat use count lives on the relic item as the flag
+ * `icon-system.gambitUses = { combatId, count }` (IconSheet#onInvokeGambit).
+ *
+ * @returns {{ itemId, relic, rankLabel, text, notes:string[], maxUses, used, canInvoke, combatId }[]}
+ */
+export function gambitInvokes(actor) {
+  const out = [];
+  const combat = typeof game !== "undefined" ? game.combat : null;
+  const combatId = combat?.started ? combat.id : null;
+  for (const r of unlockedRelics(actor)) {
+    const s = r.item.system ?? {};
+    const ranks = [[1, s.rank1?.description], [2, s.rank2?.description], [3, s.rank3?.description], [4, s.aspect?.description]];
+    let entry = null;
+    const notes = [];
+    let maxUses = 1;
+    for (const [rank, html] of ranks) {
+      if (rank > r.rank) continue;
+      const plain = _plain(html);
+      const becomes = GAMBIT_BECOMES_RE.exec(plain);
+      if (becomes && entry) { entry.text = becomes[1].trim(); entry.rankLabel = `${entry.rankLabel} (Aspect)`; continue; }
+      const m = GAMBIT_RE.exec(plain);
+      if (m) {
+        const text = m[1].trim();
+        if (!entry) entry = { itemId: r.item.id, relic: r.name, rankLabel: RANK_LABELS[rank], text };
+        else { entry.text += ` — ${RANK_LABELS[rank]}: ${text}`; }   // a second gambit on the same relic (Chime Aspect)
+      }
+      if (GAMBIT_TWICE_RE.test(plain)) maxUses = 2;
+      const rg = GAMBIT_REGAIN_RE.exec(plain);
+      if (rg) notes.push(rg[0].trim());
+    }
+    if (!entry) continue;
+    const f = r.item.getFlag?.("icon-system", "gambitUses") ?? null;
+    const used = combatId && f?.combatId === combatId ? Number(f.count) || 0 : 0;
+    out.push({ ...entry, notes, maxUses, used, combatId, canInvoke: !combatId || used < maxUses });
+  }
+  return out;
+}
+
+/* -------------------------------------------------- */
+/*  Turn reminders                                     */
+/* -------------------------------------------------- */
+
+/**
+ * Relic effects tied to a moment of the combat, posted to chat by the tracker
+ * (IconCombat): "start" / "end" of the character's own turn, "combat-start",
+ * "round-end". `text` may depend on the unlocked rank.
+ */
+export const RELIC_TURN_REMINDERS = {
+  "apophis": [
+    { rank: 1, when: "start", text: "Create a poison pool (dangerous terrain) in a free space adjacent to you." },
+    { rank: 2, when: "start", text: "If you start your turn in dangerous terrain, you may deal 1 piercing damage to all adjacent characters." },
+  ],
+  "erenbrass": [
+    { rank: 1, when: "start", text: ({ rank }) => `You may shove an ally 1 space in any direction${rank >= 3 ? " — or dash / teleport / fly them 1 (+1 if they are bloodied)" : ""}${rank >= 4 ? "; foes in range 3 too" : ""}.` },
+    { rank: 2, when: "end",   text: ({ rank }) => `You may shove an ally 1 space in any direction (a different character than at the start is fine)${rank >= 3 ? " — or dash / teleport / fly them 1 (+1 if bloodied)" : ""}.` },
+  ],
+  "ironsoul":     [{ rank: 4, when: "start", text: "Shove one ally in range 2 one space towards you, even diagonally." }],
+  "cloudpiercer": [{ rank: 4, when: "start", text: "You may set your 'exact range' effects to range 2, 3 or 4 until the start of your next turn." }],
+  "mistborn":     [{ rank: 3, when: "end",   text: "If no other foes or allies are in range 2, gain stealth (if you would already gain stealth, dash 2)." }],
+  "storm lord":   [{ rank: 1, when: "end",   text: "If you didn't attack this turn, gain a combo token or spend one to dash 1." }],
+  "trollhide": [
+    { rank: 1, when: "end", text: "If you didn't attack this turn, gain 4 vigor." },
+    { rank: 2, when: "end", text: "If you didn't attack this turn, +1 boon on saves until the start of your next turn." },
+  ],
+  "byrax":        [{ rank: 3, when: "first-turn", text: "First turn of combat: you may take a stance costing 1 action or less as a free action." }],
+  "scheherezade": [{ rank: 1, when: "combat-start", text: "Gain 2 blessing tokens on yourself." }],
+  "wyrmtooth":    [{ rank: 4, when: "combat-start", text: "You may inflict one or two statuses of your choice on yourself." }],
+  "paleblood": [
+    { rank: 1, when: "combat-start", text: "Gain a d4 power die starting at 1 (Paleblood)." },
+    { rank: 1, when: "round-end",    text: "Tick the Paleblood die up by 1. At 4 you may expend it on any ability (bonus damage + every triggered effect)." },
+  ],
+};
+
+/**
+ * Reminder lines for one actor at a given moment.
+ * @param {Actor}  actor
+ * @param {"start"|"end"|"combat-start"|"round-end"|"first-turn"} when
+ * @returns {{ relic, rankLabel, text }[]}
+ */
+export function turnRelicReminders(actor, when) {
+  const out = [];
+  for (const r of unlockedRelics(actor)) {
+    for (const e of RELIC_TURN_REMINDERS[r.key] ?? []) {
+      if (e.rank > r.rank || e.when !== when) continue;
+      const text = typeof e.text === "function" ? e.text({ rank: r.rank }) : e.text;
+      out.push({ relic: r.name, rankLabel: RANK_LABELS[e.rank], text });
+    }
+  }
+  return out;
+}
