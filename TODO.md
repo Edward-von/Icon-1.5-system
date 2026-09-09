@@ -58,9 +58,9 @@ Prima di riaprirli, chiedere a Maar di aggiornare e riprovare.
       riflettono sulle schede PG. (M)
 
 Emerso dalla Sessione 2 (da fare in un blocco futuro):
-- [ ] Passata sui dati del pack `jobs`: compilare "Tags when unlocked" per le altre abilità i cui talenti/mastery
+- [x] Passata sui dati del pack `jobs`: compilare "Tags when unlocked" per le altre abilità i cui talenti/mastery
       cambiano range/area/tag (script: `icon-compendium-audit/tag-overrides/apply-tag-overrides.mjs`). (M)
-- [ ] `templates/actor/legend-actions.hbs` non è usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`):
+- [x] `templates/actor/legend-actions.hbs` non è usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`):
       rimuoverlo. (S)
 
 ## Sessione 3 — Dati compendium + Rampart (S+S+S+M) — FATTA il 7 settembre 2026
@@ -110,13 +110,29 @@ Emerso dalla Sessione 3 (da fare in un blocco futuro):
       bottone 📐 su PG/Foe/Legend, ⚔ piazza o riusa il template, card con "🗑 area", cleanup a fine combat.)
 
 Emerso dalla Sessione 6 (da fare in un blocco futuro):
-- [ ] Line con larghezza ("Line 4, width 2"), Arc/Line del Combo (es. Death Blossom combo → Arc 4) e le aree
+- [x] Line con larghezza ("Line 4, width 2"), Arc/Line del Combo (es. Death Blossom combo → Arc 4) e le aree
       "Charge: Large Blast" non sono lette dai tag: oggi si piazza il pattern base. (M)
-- [ ] Aura X come template persistente attorno al token che si sposta con lui. (M)
+- [x] Aura X come template persistente attorno al token che si sposta con lui. (M)
 - [ ] Rimuovere automaticamente i template a inizio del turno successivo dell'attore (oggi restano finché
       🗑 area / End encounter). Chiedere a Maar se preferisce così. (S)
 
-## Wishlist alta (una per volta, solo dopo i blocchi sopra)
+## Sessione 7 — Pulizia residui (M+S+M+S) — FATTA il 9 settembre 2026
+
+Raggruppa le voci "emerso dalla Sessione N" qui sopra.
+- [x] Passata "Tags when unlocked" sul pack `jobs` (talenti/mastery che cambiano range, area, tag in modo
+      permanente o "at round 4+"): script `icon-compendium-audit/tag-overrides/apply-tag-overrides.mjs`. (M)
+- [x] Rimuovere `templates/actor/legend-actions.hbs` (inutilizzato). (S)
+- [x] Template di area, varianti: Line con `width-N` (Abomination, Hellhound), aree del Combo/Charge/talento
+      sbloccato lette dal testo (Death Blossom combo → Arc 4, Pandaemonium Charge → Large Blast) con scelta al
+      click su 📐; Aura X come template che segue il token. (M)
+- [x] Tooltip per i tag `width-N`, `interrupt-N`, `no-max-range`, `melee`. (S)
+
+Da chiedere a Maar (non si fanno senza risposta):
+- [ ] Battle Demon e famiglia (Starving, Gaping, Nail, Horn): tutti Heavy come l'Armor Demon?
+- [ ] Template di area: rimuoverli automaticamente all'inizio del turno successivo dell'attore, o lasciarli
+      finché 🗑 area / End encounter (come ora)?
+
+## Sessione 8+ — Wishlist alta (una per volta, in quest'ordine)
 
 - [ ] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M) ← il più abbordabile
       degli "alti": si può fare partendo dal registro status esistente (`module/combat/statuses.mjs`).

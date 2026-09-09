@@ -10,7 +10,8 @@ import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs"
 import { enrichHTML, escapeHTML, parseAbilitySections } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
-import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
+         areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -1289,8 +1290,22 @@ export class IconSheet extends BaseActorSheet {
     event.stopPropagation();
     const ab = await this._getAbilityDetail(target.dataset.itemId);
     if (!ab) return;
-    const area = areaFromTags(ab.tags);
-    if (!area) { ui.notifications.warn(`"${ab.name}" has no Blast / Line / Arc / Burst tag.`); return; }
+    // Base area from the tags + the shapes the combo / charge / unlocked
+    // upgrade texts describe ("Area becomes Arc 4", "Charge: Large Blast")
+    const s = this.document.items.get(ab.id)?.system ?? {};
+    const variants = areaVariants({
+      tags: ab.tags,
+      texts: [
+        ab.hasCombo   ? ["Combo",     s.comboEffect]  : null,
+        s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
+        ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
+        ab.hasTalent2 ? ["Talent II", s.talent2]      : null,
+        ab.hasMastery ? ["Mastery",   s.mastery]      : null,
+      ].filter(Boolean),
+    });
+    if (!variants.length) { ui.notifications.warn(`"${ab.name}" has no Blast / Line / Arc / Burst / Aura tag.`); return; }
+    const area = await chooseAreaVariant(variants, ab.name);
+    if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
     await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id });
   }

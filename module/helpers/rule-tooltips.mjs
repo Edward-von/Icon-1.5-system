@@ -29,6 +29,11 @@ const RULES = {
   /* ==================== RANGE / TEMPLATES ==================== */
   "range":       (n) => `Range ${n}: the ability can target or reach up to ${n} spaces away.`,
   "line":        (n) => `Line ${n}: a straight orthogonal line, ${n} spaces long.`,
+  "width":       (n) => `Width ${n}: the line is ${n} spaces wide instead of 1 (extra width added on either side, p.97).`,
+  "no-max-range":"No maximum range: the ability can target any distance, line of sight permitting.",
+  "melee":       "Melee: the ability only reaches adjacent characters (within 1 space, diagonals included, p.85).",
+  "interrupt":   (n) => n ? `Interrupt ${n}: a reaction usable ${n} time${n > 1 ? "s" : ""} per round, outside your turn, when its trigger happens.`
+                          : "Interrupt: a reaction usable outside your turn when its trigger happens; the number is how many times per round.",
   "arc":         (n) => `Arc ${n}: ${n} contiguous spaces that can bend; no diagonals.`,
   "burst":       (n) => `Burst ${n}: centered on target, ${n} spaces outward; usually excludes the target space.`,
   "blast":       "Blast: fixed template (see diagram).",

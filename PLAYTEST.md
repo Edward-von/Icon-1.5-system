@@ -170,6 +170,30 @@ Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il gi
       testo) e vede i mirini dei target del giocatore.
 - [ ] **Template core intatti**: gli strumenti Cerchio/Cono/Rettangolo/Raggio di Foundry funzionano come prima.
 
+## Sessione 7 (9 settembre 2026) — pulizia residui: tag override, varianti di area, Aura, larghezza Line
+
+- [ ] **Tag override dal pack (re-import)**: Umbra (Shade) importata dopo questa build → spunta la Mastery →
+      chip "Range 6" e "Unerring" in oro con tooltip "From Mastery: Devil Frog Technique…"; Harvest Talent II →
+      "Range 2" in oro; Valkyrie Talent I → "Range 4"; Sturmreiten Mastery → "Arc 5" (e 📐 offre Arc 5);
+      Endless Battlement Mastery → "No Max Range", "Interrupt 2" con tooltip. Le abilità con condizione
+      "round 4+" (Soul Shot Talent II → Line 6) mostrano la condizione nel tooltip del chip.
+- [ ] **Tooltip dei tag nuovi**: chip "Width 2" (Abomination / Hellhound nel pack Foes), "Interrupt 3"
+      (Catapult mastery), "No Max Range", "Melee" (Bleak Mercy) → hover mostra la regola.
+- [ ] **📐 con varianti**: Death Blossom (combo con "Area becomes Arc 4") → il click su 📐 apre un dialog con
+      "Burst 1" e "Combo: Arc 4" (+ "Combo: Arc 8"); Pandaemonium → "Medium Blast" e "Charge: Large Blast";
+      Wicked Sheath con Talent II → compare "Talent II: Line 4". Un'abilità con un solo pattern non chiede
+      nulla. Il dialog chiuso con X non piazza niente.
+- [ ] **Line con larghezza**: Foe Hellhound, azione "Hellish Breath" (line-4, width-2) → 📐 "Line 4 (width 2)":
+      l'anteprima è larga 2; Shift+rotella sposta la colonna extra dall'altro lato; rotella normale ruota.
+      Abomination "Scouring beam" (line 10 width 2) idem.
+- [ ] **Aura che segue il token**: Gran Reversa (aura-2) → nel pannello c'è "📐 Aura 2"; click → nessun
+      piazzamento, template oro 5×5 attorno al token con testo "Aura 2 · Gran Reversa", nessun target. Muovi
+      il token (come GM, o come giocatore con un GM connesso) → il template si sposta con lui. Con un token
+      di taglia 2 l'aura è 6×6. ⚔ Attack Roll su un'abilità che ha SOLO l'aura non chiede piazzamenti.
+      "End encounter" toglie anche le aure.
+- [ ] **Template inutilizzato rimosso**: la scheda Legend si apre e la tab combat funziona come prima
+      (`legend-actions.hbs` non esiste più).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

@@ -32,7 +32,7 @@ const HL_PREVIEW = "icon-area-preview";
 const HL_RANGE   = "icon-area-range";
 
 /** Template colours per pattern (hex strings for the document, ints for PIXI). */
-export const AREA_COLORS = { blast: "#e07a2f", burst: "#c8402f", line: "#3d7fd6", arc: "#8a4fc4" };
+export const AREA_COLORS = { blast: "#e07a2f", burst: "#c8402f", line: "#3d7fd6", arc: "#8a4fc4", aura: "#c4a64f" };
 
 /** Fixed blast patterns as {di, dj} offsets from the centre cell (p.98). */
 const BLAST_SHAPES = {
@@ -67,7 +67,9 @@ const chebyshev = (a, b) => Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
  */
 export function areaFromTags(tags) {
   let area = null;
+  let aura = null;
   let range = 0;
+  let width = 0;
   for (const t of tags ?? []) {
     const raw = String(t?.raw ?? t ?? "").trim().toLowerCase().replace(/\s+/g, "-");
     if (!raw) continue;
@@ -77,25 +79,119 @@ export function areaFromTags(tags) {
     else if ((m = raw.match(/^burst-(\d+)(?:-(self|target))?$/))) area = { kind: "burst", size: Number(m[1]), self: m[2] === "self", target: m[2] === "target" };
     else if ((m = raw.match(/^line(?:-(\d+))?$/)))               area = { kind: "line", size: Number(m[1] ?? 0) };
     else if ((m = raw.match(/^arc(?:-(\d+))?$/)))                area = { kind: "arc", size: Number(m[1] ?? 0) };
+    else if ((m = raw.match(/^aura(?:-(\d+))?$/)))               aura = { kind: "aura", size: Number(m[1] ?? 0), self: true };
+    else if ((m = raw.match(/^width-(\d+)$/)))                   width = Number(m[1]);
     else if ((m = raw.match(/^range-(\d+)\+?$/)))                range = Math.max(range, Number(m[1]));
     else if (raw === "no-max-range")                             range = Infinity;
   }
+  // A stance with both an aura and (say) a line keeps the line as its area;
+  // the aura is a persistent effect around the user.
+  area = area ?? aura;
   if (!area) return null;
   area.range = range;
+  if (area.kind === "line" && width > 1) area.width = width;
   area.label = areaLabel(area);
   return area;
 }
 
-/** Human label for an area spec ("Medium Blast", "Burst 2 (target)", "Line 4"). */
+/** Range from the tags alone: 0 = none (adjacent), Infinity = no maximum range. */
+export function rangeFromTags(tags) {
+  let range = 0;
+  for (const t of tags ?? []) {
+    const raw = String(t?.raw ?? t ?? "").trim().toLowerCase().replace(/\s+/g, "-");
+    const m = raw.match(/^range-(\d+)\+?$/);
+    if (m) range = Math.max(range, Number(m[1]));
+    else if (raw === "no-max-range") range = Infinity;
+  }
+  return range;
+}
+
+/** Human label for an area spec ("Medium Blast", "Burst 2 (target)", "Line 4", "Aura 2"). */
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
     case "blast": return BLAST_LABELS[area.size] ?? "Blast";
     case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : ""}`;
-    case "line":  return area.size ? `Line ${area.size}` : "Line";
+    case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
+    case "aura":  return area.size ? `Aura ${area.size}` : "Aura";
   }
   return "Area";
+}
+
+/**
+ * Every area pattern mentioned in a rules text, in order of appearance:
+ *   "Area becomes Arc 4 … extend the area effect to arc 8" → [Arc 4, Arc 8]
+ *   "Increase area to Large Blast"                        → [Large Blast]
+ * Used for the combo / charge / talent variants of an ability.
+ * @param {string} text
+ * @returns {object[]}  area specs (without range)
+ */
+export function areasInText(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").toLowerCase();
+  const out = [];
+  const seen = new Set();
+  const re = /\b(?:(small|medium|large) blast|line (\d+)|arc (\d+)|burst (\d+)(?: \((self|target)\))?)\b/g;
+  for (const m of plain.matchAll(re)) {
+    let area;
+    if (m[1]) area = { kind: "blast", size: m[1][0] };
+    else if (m[2]) area = { kind: "line", size: Number(m[2]) };
+    else if (m[3]) area = { kind: "arc", size: Number(m[3]) };
+    else if (m[4]) area = { kind: "burst", size: Number(m[4]), self: m[5] === "self", target: m[5] === "target" };
+    else continue;
+    area.label = areaLabel(area);
+    if (seen.has(area.label)) continue;
+    seen.add(area.label);
+    out.push(area);
+  }
+  return out;
+}
+
+/**
+ * The areas an ability can be placed with: the one from its tags first, then
+ * the alternatives its combo / charge / unlocked upgrade texts describe.
+ * @param {object} opts
+ * @param {Array}  opts.tags    ability tags (raw strings or {raw})
+ * @param {Array<[string, string]>} [opts.texts]  [source label, rules text] pairs
+ * @returns {Array<{label:string, source:string, area:object}>}
+ */
+export function areaVariants({ tags, texts = [] }) {
+  const base = areaFromTags(tags);
+  const range = base?.range ?? rangeFromTags(tags);
+  const out = [];
+  const seen = new Set();
+  if (base) { out.push({ label: base.label, source: "", area: base }); seen.add(base.label); }
+  for (const [source, text] of texts) {
+    for (const area of areasInText(text)) {
+      if (seen.has(area.label)) continue;
+      seen.add(area.label);
+      out.push({ label: area.label, source, area: { ...area, range } });
+    }
+  }
+  return out;
+}
+
+/**
+ * Let the user pick one of several area variants (a single variant is
+ * returned straight away). Resolves the chosen area or null.
+ */
+export async function chooseAreaVariant(variants, abilityName = "") {
+  if (!variants?.length) return null;
+  if (variants.length === 1) return variants[0].area;
+  try {
+    const buttons = variants.map((v, i) => ({
+      action: String(i),
+      label: v.source ? `${v.source}: ${v.label}` : v.label,
+      default: i === 0,
+      callback: () => v.area,
+    }));
+    return await foundry.applications.api.DialogV2.wait({
+      window: { title: `${abilityName || "Ability"} — which area?` },
+      content: `<p>This ability can be placed as more than one pattern. Pick the one you are using:</p>`,
+      buttons,
+      rejectClose: false,
+    });
+  } catch { return null; }
 }
 
 /* -------------------------------------------------- */
@@ -114,8 +210,13 @@ export function tokenCells(tokenDoc) {
   return cells;
 }
 
-/** Cells of a blast / burst centred on `center`, or a line starting there. */
-function shapeCells(area, center, { dir = { di: 0, dj: 1 } } = {}) {
+/**
+ * Cells of a blast / burst centred on `center`, or a line starting there.
+ * A line of width W adds the extra columns beside it ("on either side", p.97):
+ * odd widths spread evenly, even widths put the extra column on the `flip`
+ * side (toggled with Shift + wheel while placing).
+ */
+function shapeCells(area, center, { dir = { di: 0, dj: 1 }, flip = false } = {}) {
   const out = [];
   if (area.kind === "blast") {
     for (const o of BLAST_SHAPES[area.size] ?? BLAST_SHAPES.m) out.push({ i: center.i + o.di, j: center.j + o.dj });
@@ -123,7 +224,15 @@ function shapeCells(area, center, { dir = { di: 0, dj: 1 } } = {}) {
     const r = Math.max(0, area.size);
     for (let di = -r; di <= r; di++) for (let dj = -r; dj <= r; dj++) out.push({ i: center.i + di, j: center.j + dj });
   } else if (area.kind === "line") {
-    for (let k = 0; k < Math.max(1, area.size); k++) out.push({ i: center.i + dir.di * k, j: center.j + dir.dj * k });
+    const w = Math.max(1, area.width ?? 1);
+    const perp = { di: dir.dj, dj: -dir.di };                    // 90° to the line
+    const lo = -Math.floor((w - 1) / 2), hi = Math.ceil((w - 1) / 2);
+    for (let k = 0; k < Math.max(1, area.size); k++) {
+      for (let s = lo; s <= hi; s++) {
+        const side = flip ? -s : s;
+        out.push({ i: center.i + dir.di * k + perp.di * side, j: center.j + dir.dj * k + perp.dj * side });
+      }
+    }
   }
   return out;
 }
@@ -195,6 +304,7 @@ class AreaPlacement {
     this.rangeKeys = rangeCells ? new Set(rangeCells.map(cellKey)) : null;   // null = no restriction
     this.rangeCells = rangeCells;
     this.rotation = 0;            // quarter turns applied to a Line
+    this.flip = false;            // side of the extra width of an even-width Line
     this.arcCells = [];           // painted Arc cells
     this.mouseCell = null;
     this.color = Number(foundry.utils.Color.from(AREA_COLORS[area.kind] ?? "#c4a64f"));
@@ -269,7 +379,7 @@ class AreaPlacement {
   /** Cells the current mouse position would produce (blast / burst / line). */
   #previewCells() {
     if (!this.mouseCell) return [];
-    if (this.area.kind === "line") return shapeCells(this.area, this.mouseCell, { dir: this.#autoDirection(this.mouseCell) });
+    if (this.area.kind === "line") return shapeCells(this.area, this.mouseCell, { dir: this.#autoDirection(this.mouseCell), flip: this.flip });
     return shapeCells(this.area, this.mouseCell);
   }
 
@@ -357,7 +467,8 @@ class AreaPlacement {
   #onWheel(ev) {
     if (this.area.kind !== "line") return;
     ev.preventDefault(); ev.stopImmediatePropagation();
-    this.rotation = (this.rotation + (ev.deltaY > 0 ? 1 : 3)) % 4;
+    if (ev.shiftKey) this.flip = !this.flip;                       // Shift + wheel: swap the wide side
+    else this.rotation = (this.rotation + (ev.deltaY > 0 ? 1 : 3)) % 4;
     this.#render();
   }
 }
@@ -381,7 +492,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   if (!token) { ui.notifications.warn(`${actor?.name ?? "The actor"} has no token on this scene — place one to use area templates.`); return null; }
 
   area = { ...area };
-  if ((area.kind === "line" || area.kind === "arc") && !area.size) {
+  if ((area.kind === "line" || area.kind === "arc" || area.kind === "aura") && !area.size) {
     const size = await promptAreaSize(area);
     if (!size) return null;
     area.size = size;
@@ -389,8 +500,10 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   }
 
   const sourceCells = tokenCells(token.document);
+  const isAura = area.kind === "aura";
   let cells, originCell;
-  if (area.kind === "burst" && area.self) {
+  if (isAura || (area.kind === "burst" && area.self)) {
+    // Around the user, no click needed. An aura keeps following the token.
     cells = cellsInRange(sourceCells, area.size).concat(sourceCells);
     originCell = sourceCells[0];
   } else {
@@ -409,8 +522,10 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
     fillColor: color, borderColor: color, hidden: false,
     flags: { [FLAG_NS]: {
-      cells, area: { kind: area.kind, size: area.size, self: !!area.self, label: area.label },
+      cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label },
       actorId: actor.id, actorUuid: actor.uuid, abilityKey, abilityName: abilityName ?? "",
+      // Auras move with their token (updateToken hook in registerAreaTemplates)
+      followTokenId: isAura ? token.id : null,
     } },
   };
   let template = null;
@@ -419,6 +534,14 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   } catch (err) {
     console.warn("[ICON | AreaTemplates] template creation failed (permissions?)", err);
     ui.notifications.warn("Could not create the template on the scene (you may lack the 'Create Measured Template' permission) — targets were still selected.");
+  }
+
+  if (isAura) {
+    // A persistent effect, not an attack: nothing to target.
+    if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
+    _log(`placed ${area.label} for "${abilityName}" — follows token ${token.id}`);
+    ui.notifications.info(`${area.label} placed around ${token.name}; it follows the token.`);
+    return { template, cells, targets: [], area };
   }
 
   const targets = tokensInCells(cells, { exclude: area.kind === "burst" ? [token.id] : [] });
@@ -476,7 +599,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  */
 export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey }) {
   const area = areaFromTags(tags);
-  if (!area) return undefined;
+  if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
   const existing = findAreaTemplates({ actorId: actor.id, abilityKey })[0];
   if (existing) return retargetFromTemplate(existing);
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
@@ -580,9 +703,45 @@ export class IconMeasuredTemplate extends foundry.canvas.placeables.MeasuredTemp
     const c = canvas.grid.getOffset(point);
     return this.iconCells.some(k => k.i === c.i && k.j === c.j);
   }
+
+  /** @override — a new cell set (aura following its token) must redraw everything. */
+  _onUpdate(changed, options, userId) {
+    super._onUpdate(changed, options, userId);
+    if (changed.flags?.[FLAG_NS]?.cells) this.renderFlags.set({ refreshShape: true });
+  }
 }
 
-/** Register the canvas class (call from the init hook). */
+/**
+ * Register the canvas class and the token-following hooks (call from the
+ * init hook). Auras stay glued to their token: when it moves, every area
+ * template flagged `followTokenId` for it is shifted by the same number of
+ * cells. Runs on the active GM's client only (it can update anyone's template).
+ */
 export function registerAreaTemplates() {
   CONFIG.MeasuredTemplate.objectClass = IconMeasuredTemplate;
+  Hooks.on("preUpdateToken", (tokenDoc, changed, options) => {
+    // Remember where the token was so updateToken can compute the cell delta.
+    if ("x" in changed || "y" in changed) options.iconPrevPos = { x: tokenDoc.x, y: tokenDoc.y };
+  });
+  Hooks.on("updateToken", async (tokenDoc, changed, options) => {
+    if (!options?.iconPrevPos) return;
+    if (!canvas?.ready || game.users.activeGM?.id !== game.user.id) return;
+    const scene = tokenDoc.parent;
+    if (!scene || scene.id !== canvas.scene?.id) return;
+    const followers = scene.templates.filter(t => t.flags?.[FLAG_NS]?.followTokenId === tokenDoc.id);
+    if (!followers.length) return;
+    const grid = canvas.grid;
+    const half = grid.size / 2;
+    const before = grid.getOffset({ x: options.iconPrevPos.x + half, y: options.iconPrevPos.y + half });
+    const after  = grid.getOffset({ x: tokenDoc.x + half, y: tokenDoc.y + half });
+    const di = after.i - before.i, dj = after.j - before.j;
+    if (!di && !dj) return;
+    const origin = grid.getCenterPoint(after);   // the token's top-left cell, as when the aura was placed
+    const updates = followers.map(t => {
+      const cells = (t.flags[FLAG_NS].cells ?? []).map(c => ({ i: c.i + di, j: c.j + dj }));
+      return { _id: t.id, x: origin.x, y: origin.y, [`flags.${FLAG_NS}.cells`]: cells };
+    });
+    try { await scene.updateEmbeddedDocuments("MeasuredTemplate", updates); }
+    catch (err) { console.warn("[ICON | AreaTemplates] could not move aura templates", err); }
+  });
 }

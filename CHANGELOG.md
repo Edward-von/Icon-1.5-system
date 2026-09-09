@@ -1,5 +1,29 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 7: tag override dei talenti, varianti di area, Aura, larghezza delle Line
+
+- **"Tags when unlocked" compilati nel pack Jobs** per 21 abilità i cui talenti/mastery cambiano la riga dei tag
+  in modo permanente o "at round 4+" (Umbra → Range 6 + Unerring, Harvest → Range 2, Valkyrie → Range 4,
+  Sturmreiten → Arc 5, Perseus → Line 5, Endless Battlement → No Max Range + Interrupt 2, Sow → Arc 4, le
+  mastery "becomes a free action", ecc.): i chip diventano oro con il testo del talento nel tooltip. Le
+  condizioni Charge/Comeback/Sacrifice/Exceed NON sono tag: le legge il bottone 📐 (sotto). Script
+  `icon-compendium-audit/tag-overrides/apply-tag-overrides.mjs`; vale per i re-import.
+- **📐 con scelta della variante**: prima piazzava solo il pattern dei tag. Ora `areaVariants` legge anche il
+  testo del Combo, del Charge e dei talenti/mastery sbloccati ("Area becomes Arc 4", "Increase area to Large
+  Blast", "Exceed: Draw a line 4…") e, se c'è più di un pattern, un dialog chiede quale usare (Death Blossom:
+  Burst 1 / Combo: Arc 4 / Combo: Arc 8; Pandaemonium: Medium Blast / Charge: Large Blast).
+- **Line con larghezza** (tag `width-N`, p.97: "can gain width, adding it on either side"): Hellish Breath e
+  Scouring beam ora si piazzano larghe; larghezza dispari centrata, pari con la colonna extra da un lato
+  (Shift+rotella la sposta dall'altro).
+- **Aura X come template** (tag `aura-N`, o `aura` con richiesta della taglia): "📐 Aura 2" piazza subito un
+  quadrato oro attorno al token, senza target, e il template segue il token quando si muove (hook
+  `preUpdateToken/updateToken` eseguito dal GM attivo, che può aggiornare i template di tutti). ⚔ ignora le
+  aure. Rimosse a fine combat come gli altri template.
+- **Tooltip mancanti sui tag** `width-N`, `interrupt-N`, `no-max-range`, `melee`.
+- **Rimosso `templates/actor/legend-actions.hbs`**, non usato da nessuna sheet (LegendSheet usa `legend-combat.hbs`).
+- Restano da chiedere a Maar (in TODO): famiglia Battle Demon tutta Heavy? e se i template vanno tolti da soli
+  all'inizio del turno successivo.
+
 ## 9 settembre 2026 — Sessione 6: template Blast / Line / Arc / Burst con auto-target
 
 - **Aree di effetto sulla mappa**: prima i tag "medium-blast", "line 4", "arc 6", "burst 2" erano solo chip
