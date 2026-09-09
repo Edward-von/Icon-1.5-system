@@ -58,6 +58,14 @@ avviso, Level Up completo (6 → 7, XP azzerati, card in chat). Trovati e corret
   Ora sulla riga del proprio combattente i giocatori vedono "▶ Take turn" e, quando attivi, "■ End turn".
   **Da confermare con un giocatore vero** (serve un secondo client).
 
+**Segnalazione di Edoardo dal tracker (stessa sera)**: "il PC picks next ma non ho modo di far andare un player" →
+i pip erano renderizzati ma fuori dalla sidebar (colonna del nome troppo larga, riga larga 300 px con i pip a
+x+296). Corretto via CSS (nome con ellissi, controlli a capo, pip non comprimibili); verificato che il click sul pip
+attivi Asteria e "■" chiuda il turno. Nello stesso giro corretto "Round {round}" nell'intestazione (helper
+`localize` senza parametri).
+- [ ] Da riprovare con la build nuova: tracker con 5+ combattenti (Field Battlemap) → i pip si vedono su ogni riga
+      senza scroll orizzontale; lato giocatore compaiono "▶ Take turn" / "■ End turn".
+
 Note per il prossimo playtest con Claude in Chrome: dopo `scene.activate()` ripetuti `game.user.viewedScene`
 può restare null e i target (T, `setTarget`) vengono ignorati in silenzio → riallineare con
 `game.user.viewedScene = canvas.scene.id`; non chiudere "tutte le applicazioni" con `foundry.applications.instances`

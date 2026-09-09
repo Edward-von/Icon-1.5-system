@@ -145,9 +145,12 @@ export function registerHandlebarsHelpers() {
    * adds a type-guard so non-string values (e.g. accidental object pass-through)
    * never reach game.i18n.localize(), which expects a string.
    */
-  Handlebars.registerHelper("localize", function(key) {
+  Handlebars.registerHelper("localize", function(key, options) {
     if (typeof key !== "string") return "";
-    return game.i18n.localize(key);
+    // Keep core's `{{localize "COMBAT.Round" round=…}}` working: hash params
+    // are format data (without this the tracker header read "Round {round}").
+    const data = options?.hash ?? {};
+    return Object.keys(data).length ? game.i18n.format(key, data) : game.i18n.localize(key);
   });
 
   /**

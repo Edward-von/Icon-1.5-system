@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Tracker: i pip di attivazione erano fuori dalla sidebar; "Round {round}"
+
+- **Nessuno vedeva i pip di attivazione** (segnalazione di Edoardo: "i giocatori non hanno pulsanti per prendere il
+  turno", e nemmeno il GM li aveva): i pip venivano renderizzati ma la colonna del nome, con i badge ⚡ e i
+  controlli, non si restringeva e li spingeva oltre il bordo destro della sidebar (x = 1274 su una riga larga fino
+  a 1278). Ora la colonna del nome può restringersi (nome con ellissi, controlli che vanno a capo) e il blocco dei
+  pip non si comprime. Verificato sul combat di prova: click sul pip → Asteria attiva, "■" → turno chiuso.
+- **"Round {round}" nell'intestazione del tracker**: il nostro helper Handlebars `localize` sovrascriveva quello di
+  Foundry ignorando i parametri (`round=…`). Ora usa `game.i18n.format` quando ci sono parametri.
+
 ## 9 settembre 2026 — Playtest esplorativo: 4 fix e bottoni "Take turn" per i giocatori
 
 - **Crash a fine round**: l'avviso "All activations are spent" usava `combat.combatants.every`, che le Collection di
