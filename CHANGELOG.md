@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Socket di sistema mai attivato: i relay giocatore → GM non hanno mai funzionato
+
+- **`system.json` non aveva `"socket": true`**: Foundry non inoltrava i messaggi `system.icon-system`, quindi tutto ciò
+  che un giocatore manda al GM (Apply Damage su un token non suo, Party Resolve dal tracker, richiesta di
+  attivazione, mark e Hatred su token del GM) arrivava alla notifica "sent to the GM" e poi nel vuoto. Trovato
+  provando da un client Player con il GM collegato. Aggiunto `"socket": true`; versione del sistema → **1.1.0**.
+  **Serve un riavvio di Foundry** (o Return to Setup e riapertura del mondo) perché il manifest venga riletto.
+- **"▶ Take turn" mostrato come chevron** sul client Player: una regola più specifica del CSS dei pip lo
+  riportava a 16×10 px senza testo. Regola dedicata con la stessa specificità.
+- Verificato da Player: "▶ Take turn" attiva il turno e "■ End turn" lo chiude (permesso da Foundry v13 per il
+  proprietario del combattente), dialog d'attacco con la DEF del bersaglio, target card.
+
 ## 9 settembre 2026 — Restyle dei dialog di Attack Roll e Damage Roll
 
 - **Nuovo modulo `module/apps/roll-dialogs.mjs`**, condiviso da PG, Foe e Legend (prima ognuno aveva la sua copia

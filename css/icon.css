@@ -4820,6 +4820,13 @@ ol.chat-log .chat-message,
 .combat-tracker .combatant.icon-faction-pc  .token-initiative button.icon-activation-btn { background: #58a0d8; }
 .combat-tracker .combatant.icon-faction-npc .token-initiative button.icon-activation-btn { background: #d0604c; }
 .combat-tracker .combatant .token-initiative button.icon-activation-btn--stop { background: var(--ic-orange-bright, #e0a020); }
+/* Player-side labelled buttons must beat the chevron sizing above (same selectors + --labelled) */
+#combat .combat-tracker .combatant .token-initiative .icon-activation-btn--labelled,
+.combat-tracker .combatant .token-initiative button.icon-activation-btn--labelled {
+  width: auto; height: auto; padding: 2px 8px; margin: 0 2px; font-size: .78em; line-height: 1.2;
+  clip-path: var(--ic-cut, none); border: 1px solid var(--ic-blue-bright, #58a0d8); color: #fff; font-weight: 600; white-space: nowrap;
+}
+.combat-tracker .combatant .token-initiative button.icon-activation-btn--stop.icon-activation-btn--labelled { border-color: var(--ic-orange-bright, #e0a020); }
 /* combat-top: HP left / stats right on row 1; anything else spans both columns */
 .icon-combat-top > .icon-section--hp    { grid-column: 1; grid-row: 1; }
 .icon-combat-top > .icon-section--stats { grid-column: 2; grid-row: 1; }
