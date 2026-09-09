@@ -109,6 +109,11 @@
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeActionShowInChat" data-action-index="{{action.i}}"
                   title="Post this action to chat">💬</button>
+          {{#if action.areaLabel}}
+          <button type="button" class="icon-btn icon-btn--area"
+                  data-action="placeActionArea" data-action-index="{{action.i}}"
+                  title="Place the {{action.areaLabel}} on the map and target the tokens inside it">📐 {{action.areaLabel}}</button>
+          {{/if}}
           {{#if action.isAttack}}
           <button type="button" class="icon-btn icon-btn--roll"
                   data-action="rollAction" data-action-index="{{action.i}}"

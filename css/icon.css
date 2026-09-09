@@ -2540,6 +2540,22 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-btn--roll  { border-color: var(--ic-blue-bright); color: var(--ic-blue-bright); }
 .icon-btn--roll:hover { background: var(--ic-blue); color: #fff; }
 
+/* 📐 Blast / Line / Arc / Burst placement (area-templates.mjs) */
+.icon-btn--area  { border-color: #e07a2f; color: #e8a060; }
+.icon-btn--area:hover { background: #a3521a; color: #fff; border-color: #e07a2f; }
+.icon-btn-roll.icon-btn--area { color: #e8a060; }
+
+/* Area line on attack cards: "📐 Medium Blast  Goblin, Warrior  [🗑 area]" */
+.icon-chat-card__area {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  margin: 2px 0 4px; padding: 3px 6px;
+  border-left: 3px solid #e07a2f; background: rgba(224, 122, 47, 0.08);
+  font-size: 0.85em;
+}
+.icon-chat-card__area-label { font-weight: 600; color: #e8a060; white-space: nowrap; }
+.icon-chat-card__area-targets { flex: 1 1 auto; }
+.icon-chat-card__area-remove { flex: 0 0 auto; }
+
 .icon-btn--use   { border-color: var(--ic-purple-bright); color: var(--ic-purple-bright); }
 .icon-btn--use:hover { background: var(--ic-purple); color: #fff; }
 

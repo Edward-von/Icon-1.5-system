@@ -2,6 +2,7 @@
  * LegendSheet — ApplicationV2 sheet for Legend (Boss) actors (type: "legend").
  */
 import { combatRoll } from "../../dice/rolls.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
@@ -25,6 +26,7 @@ export class LegendSheet extends BaseActorSheet {
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:     onShowReferenceControl,
       rollAction:        LegendSheet.#onRollAction,
+      placeActionArea:   LegendSheet.#onPlaceActionArea,
       rollLegendDamage:  LegendSheet.#onRollLegendDamage,
       foeTraitShowInChat: LegendSheet.#onFoeTraitShowInChat,
       addTrait:          LegendSheet.#onAddTrait,
@@ -160,6 +162,7 @@ export class LegendSheet extends BaseActorSheet {
         name:        a.name ?? "",
         cost:        a.cost ?? "1action",
         tags:        a.tags ?? [],
+        areaLabel:   areaFromTags(a.tags)?.label ?? "",
         hitEffect:   a.hitEffect  ?? "",
         missEffect:  a.missEffect ?? "",
         areaEffect:  a.areaEffect ?? "",
@@ -298,6 +301,10 @@ export class LegendSheet extends BaseActorSheet {
     _log(`rollAction — actor: "${actor.name}" | action[${idx}]: "${action?.name}"`);
     if (!action) return;
 
+    // Area attack: template on the map + targets before the dialog (null = cancelled)
+    const placement = await ensureAreaTargets({ actor, tags: action.tags, abilityName: action.name, abilityKey: `action:${action.name}` });
+    if (placement === null) return;
+
     const mods = await LegendSheet.#promptAttackMods(action, actor);
     if (!mods) return;
 
@@ -306,8 +313,22 @@ export class LegendSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
+      areaHtml:    areaSummaryHtml(placement),
       actor,
     });
+  }
+
+  /** 📐 Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */
+  static async #onPlaceActionArea(event, target) {
+    event.stopPropagation();
+    const idx    = Number(target.dataset.actionIndex);
+    const actor  = this.document;
+    const action = actor.system.actions[idx];
+    if (!action) return;
+    const area = areaFromTags(action.tags);
+    if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag.`); return; }
+    _log(`placeActionArea — "${action.name}" | ${area.label}`);
+    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}` });
   }
 
   static async #onRollLegendDamage(event, target) {

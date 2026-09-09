@@ -1,5 +1,51 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 6: template Blast / Line / Arc / Burst con auto-target
+
+- **Aree di effetto sulla mappa**: prima i tag "medium-blast", "line 4", "arc 6", "burst 2" erano solo chip
+  informativi e i target andavano scelti a mano. Ora nel pannello di ogni abilità/azione con un tag di area
+  compare il bottone "📐 Medium Blast" (PG, Foe e Legend): il pattern segue il mouse su una griglia evidenziata
+  del colore dell'area, con l'alone blu del range attorno al token (o solo la corona adiacente se l'abilità
+  non ha range, p.97); click per piazzare, tasto destro/Esc per annullare, rotella per ruotare una Line di
+  90°. Le Arc si dipingono una casella alla volta (ortogonali, senza sovrapporsi né passare sul proprio
+  token; Invio/tasto destro chiude prima). I Burst "(self)" si piazzano da soli attorno al token. Forme dal
+  diagramma p.98: Small Blast = croce di 5, Medium = 3×3, Large = 5×5 senza angoli; Burst X = quadrato di
+  raggio X (il range conta le diagonali, p.85).
+- **Un template vero di Foundry, visibile a tutti**: l'area è un `MeasuredTemplate` con le caselle salvate nei
+  flag; la nuova classe `IconMeasuredTemplate` (`module/canvas/area-templates.mjs`, registrata in `init`)
+  disegna contorno, caselle e testo "Medium Blast · Nome" su ogni client; i template classici di Foundry
+  restano invariati. I token nelle caselle diventano i target dell'utente (per i Burst il proprio token è
+  escluso, p.97). Piazzare di nuovo la stessa abilità sostituisce il template precedente; "End encounter"
+  li rimuove tutti.
+- **⚔ Attack Roll integrato**: su un'abilità di area l'attacco chiede prima il piazzamento (o riusa il
+  template già sulla mappa, rileggendo chi c'è dentro), poi apre il dialog con la Defense del target già
+  compilata; la card in chat ha la riga "📐 Medium Blast · nomi dei target" e il bottone "🗑 area" che
+  toglie il template (solo autore o GM). Anche gli autohit (Pandaemonium) passano dal piazzamento.
+- Macro/API: `game.icon.placeAreaTemplate({ actor, area, abilityName, abilityKey })`,
+  `game.icon.areaFromTags(tags)`, `game.icon.deleteAreaTemplates()`.
+
+## 9 settembre 2026 — Sessione 4b: passata sui testi delle abilità, power die per talento, keyword
+
+- **Etichette lunghe del manuale non riconosciute** ("End your turn and create a Terrain Effect:" di Eclipse,
+  "End your turn and gain Delay:" di Morrigan/Aria, "…gain Terrain effect:" di Six Hells Trigram, "End your
+  turn and Mark:" di Intimidate): finivano nel flavour in corsivo. Ora `parseAbilitySections` le conosce e le
+  stampa come blocco; le etichette multi-parola tengono minuscole le parole di mezzo ("While in this Stance").
+- **Flavour mancante nel pack Jobs** (Circle the Oak, Party Favor, Deus Ex Machina, Harrow, Exorcism, Spirit
+  Shrine, Assassinate): ripristinato dal manuale. Spirit Shrine e Assassinate nel libro non hanno etichetta:
+  aggiunto "Effect:" per separare flavour e regole, e per lo Shrine la riga "Object Effect: Aura 2" del libro.
+  Script `icon-compendium-audit/session4b/fix-ability-texts.mjs`; vale per i re-import. Le 4 abilità
+  d'attacco "senza blocchi" del report (Pandaemonium, Harvest, The Tower, Death Blossom) erano corrette: le
+  regole stanno nei campi Hit/Miss/Area.
+- **Power die che cambia con talento/mastery** (Gran Reversa Talent I → d6 da 6; Crimson Bloom Mastery →
+  parte da 3): prima andava cambiato a mano nella scheda. Nuovi campi "Power die when unlocked" sotto Talent
+  1/2/Mastery nella scheda dell'abilità (testo libero tipo "d6 starting at 6"); `powerDieView` applica
+  l'override quando l'upgrade è sbloccato, quindi widget, cap del +, "Set out at N" e badge in chat seguono.
+- **Keyword, falsi positivi**: "counter clockwise" (Strongarm) evidenziava Counter; "hatred of you after this
+  ability resolves…" inghiottiva mezza frase; "wounds heal instantly"/"open wound"/"wounded" evidenziavano
+  Wound; "ongoing effects" evidenziava Ongoing (+). Regex ristrette in `module/helpers/keywords.mjs`.
+- Report rigenerato: `icon-compendium-audit/session4/format-report.md` (restano solo i casi legittimi:
+  tabelle di Monogatari, "The effects:" di Terraforming, Eclipse senza flavour come nel libro).
+
 ## 7 settembre 2026 — Sessione 5: Level Up e Character Creation nello stile della scheda
 
 - **Dialog rifatti con lo stesso linguaggio della scheda PG** ("Ink & Gold × Tactics"): banda diagonale nel

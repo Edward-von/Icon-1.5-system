@@ -192,13 +192,14 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {string}   [opts.critEffect]    Enriched HTML
  * @param {string}   [opts.costLabel]     "1 Action" etc.
  * @param {string[]} [opts.tags]
+ * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
  * @param {Actor}    [opts.actor]
  * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls}>}
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
   hitEffect, missEffect, exceedEffect, critEffect,
-  costLabel, tags = [],
+  costLabel, tags = [], areaHtml = "",
   actor,
 } = {}) {
   const net    = boons - curses;
@@ -227,6 +228,7 @@ export async function combatRoll({
     abilityName:   abilityName ?? "Attack",
     costLabel:     costLabel ?? "",
     tagsHtml:      tags.map(t => `<span class="icon-tag">${t}</span>`).join(""),
+    areaHtml:      areaHtml ?? "",
     d20,
     modifier,
     absModifier,

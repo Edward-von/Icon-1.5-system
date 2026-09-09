@@ -87,13 +87,14 @@ Emerso dalla Sessione 3 (da fare in un blocco futuro):
       `jobs` compilati via `icon-compendium-audit/session4/set-power-dice.mjs`)
 - [x] Riformattazione abilità da combattimento: ordine top→bottom chiaro, keyword in grassetto/link
       con tooltip — **infrastruttura** fatta (parser dei blocchi "Label:" + tooltip sulle keyword nel testo).
-- [ ] **Sessione 4b — passata sui dati**: correggere le abilità formattate male usando il report
+- [x] **Sessione 4b — passata sui dati** (FATTA il 9 settembre 2026): correggere le abilità formattate male usando il report
       `icon-compendium-audit/session4/format-report.md` (etichette minuscole, etichette sconosciute, testi
       senza blocchi). Aggiungere alla lista `SECTION_LABELS` in `module/helpers/enrich.mjs` le etichette
       legittime che mancano. Rifinire la lista keyword in `module/helpers/keywords.mjs` sui falsi positivi
       visti nel playtest. (L)
-- [ ] Gran Reversa: Talent I porta il power die a d6 con 6 cariche → oggi si cambia a mano nella scheda
-      dell'abilità; valutare override del die per talento come per i tag. (S)
+- [x] Gran Reversa: Talent I porta il power die a d6 con 6 cariche → oggi si cambia a mano nella scheda
+      dell'abilità; valutare override del die per talento come per i tag. (S — campi "Power die when unlocked",
+      fatto il 9 settembre 2026 in Sessione 4b; anche Crimson Bloom mastery)
 
 ## Sessione 5 — Level Up / First-time setup UI (L) — FATTA il 7 settembre 2026
 
@@ -101,11 +102,19 @@ Emerso dalla Sessione 3 (da fare in un blocco futuro):
       chrome condiviso `.icon-wizard`: banda di classe con ritratto, rail degli step, card opzione, allocatore
       dei punti, footer sticky; logica di submit invariata)
 
-## Sessione 6+ — Template Blast/Line/Arc (XL)
+## Sessione 6+ — Template Blast/Line/Arc (XL) — FATTA (prima versione) il 9 settembre 2026
 
-- [ ] Prompt al tiro per piazzare il template (MeasuredTemplate) e auto-target dei token dentro.
+- [x] Prompt al tiro per piazzare il template (MeasuredTemplate) e auto-target dei token dentro.
       Maar suggerisce di guardare il modulo Lancer. Rivalutato da "mid" a XL: serve integrazione con
-      MeasuredTemplate, forme Arc non native, targeting cross-client.
+      MeasuredTemplate, forme Arc non native, targeting cross-client. (Fatto: `module/canvas/area-templates.mjs`,
+      bottone 📐 su PG/Foe/Legend, ⚔ piazza o riusa il template, card con "🗑 area", cleanup a fine combat.)
+
+Emerso dalla Sessione 6 (da fare in un blocco futuro):
+- [ ] Line con larghezza ("Line 4, width 2"), Arc/Line del Combo (es. Death Blossom combo → Arc 4) e le aree
+      "Charge: Large Blast" non sono lette dai tag: oggi si piazza il pattern base. (M)
+- [ ] Aura X come template persistente attorno al token che si sposta con lui. (M)
+- [ ] Rimuovere automaticamente i template a inizio del turno successivo dell'attore (oggi restano finché
+      🗑 area / End encounter). Chiedere a Maar se preferisce così. (S)
 
 ## Wishlist alta (una per volta, solo dopo i blocchi sopra)
 

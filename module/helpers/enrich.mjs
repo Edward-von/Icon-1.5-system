@@ -79,10 +79,14 @@ export function splitAbilityDescription(description) {
  * Labels the book uses to start a rules block inside an ability text. Matched
  * case-insensitively at a sentence start (or after an em dash / line break);
  * the first letter must be a capital so "…remove the mark: …" stays prose.
- * Canonical display form = each word capitalised ("Terrain effect" →
- * "Terrain Effect").
+ * Canonical display form = each word capitalised except small words
+ * ("Terrain effect" → "Terrain Effect", "While in this stance" → "While in this Stance").
  */
 const SECTION_LABELS = [
+  // Long "end your turn and …" forms first: the book prints them as one label
+  // (Eclipse, Morrigan, Six Hells Trigram, Intimidate).
+  "End your turn and (?:gain|create) (?:a )?(?:Delay|Terrain Effect)", "End your turn and Mark",
+  "Gain Delay",
   "Effect", "Trigger", "Stance", "Refresh", "Mark", "Terrain Effect", "Summon Effect", "Summon",
   "Special Effect", "Special", "Object Effect", "Object", "Area Effect", "Charge", "Comeback",
   "Collide", "Slay", "Exceed", "Heroic", "Crit", "Finishing Blow", "Free Action", "Delay",
@@ -93,7 +97,10 @@ const SECTION_RE = new RegExp(
   `(?:^|[.!?…)\\]]\\s+|—\\s*|>\\s*|\\n\\s*)(${SECTION_LABELS.join("|")}):\\s*`, "gi",
 );
 
-const _canonLabel = (raw) => raw.trim().replace(/\b[a-z]/g, c => c.toUpperCase());
+/** Words kept lowercase inside a multi-word label ("End your turn and gain Delay"). */
+const _SMALL_WORDS = new Set(["a", "an", "and", "in", "or", "the", "this", "your", "turn", "gain", "create"]);
+const _canonLabel = (raw) => raw.trim().replace(/\b[a-zA-Z]+/g, (w, i) =>
+  (i > 0 && _SMALL_WORDS.has(w.toLowerCase())) ? w.toLowerCase() : w[0].toUpperCase() + w.slice(1));
 
 /**
  * Parse an ability text into its book-layout blocks, in the order they are

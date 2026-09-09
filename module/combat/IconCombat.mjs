@@ -26,6 +26,7 @@
  */
 
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
+import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
@@ -585,6 +586,10 @@ export class IconCombat extends Combat {
         if (dieResets.length) await combatant.actor.updateEmbeddedDocuments("Item", dieResets);
       }
     }
+
+    /* --- Blast / Line / Arc / Burst templates left on the map go with the encounter --- */
+    try { await deleteAreaTemplates({ scene: canvas?.scene }); }
+    catch (err) { console.warn("[ICON | IconCombat] area template cleanup failed", err); }
   }
 
   /* -------------------------------------------------- */

@@ -112,6 +112,64 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
       come card con descrizione. Footer: riepilogo "x/y AP · mastery picked …". "Confirm Level Up" applica
       tutto come prima (livello, AP, item embeddati, messaggio in chat).
 
+## Sessione 4b (9 settembre 2026) — passata sui testi delle abilità, power die per talento, keyword
+
+- [ ] **Testi ripristinati (pack Jobs, re-import)**: importa Circle the Oak, Party Favor, Deus Ex Machina,
+      Harrow, Exorcism → il flavour in corsivo c'è (prima partivano subito dal blocco). Spirit Shrine: flavour
+      + blocchi "Effect:" e "Object Effect:". Assassinate (Shade): flavour + "Effect:".
+- [ ] **Etichette "End your turn and…"**: apri Eclipse, Morrigan, Six Hells Trigram, Intimidate, Aria → il
+      testo è diviso in un blocco con etichetta in oro "End your turn and create a Terrain Effect" / "End your
+      turn and gain Delay" / "End your turn and Mark" (+ gli altri blocchi). Le etichette lunghe restano
+      leggibili (minuscole nelle parole di mezzo).
+- [ ] **Gran Reversa, Talent I → d6**: PG Seer con Gran Reversa importata dopo questa build. Senza talento il
+      widget dice "Power die d4 · Set out at 4"; scegli Talent I nel pannello → "Power die d6 · Set out at 6",
+      il + si ferma a 6. Torna a "none" → d4. Nella scheda dell'abilità, sotto Talent 1, c'è il campo "Power
+      die when unlocked" = "d6 starting at 6" (vuoto su Talent 2 / Mastery).
+- [ ] **Crimson Bloom, Mastery → parte da 3**: Harvester con Crimson Bloom; spunta la mastery → "Set out at 3".
+- [ ] **Keyword, falsi positivi tolti**: Strongarm (Knave) → "counter clockwise" NON è evidenziato; Valiant
+      Talent II → è evidenziato solo "hatred of you" (non "…after this ability resolves"); Gran Reversa flavour
+      "wounds heal instantly" NON evidenziato, Phoenix Rage "take a wound" sì; trait "Static charge" di un
+      Legend → "ongoing effects" NON evidenziato.
+
+## Sessione 6 (9 settembre 2026) — template Blast / Line / Arc / Burst con auto-target
+
+Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il giocatore ha il permesso
+"Create Measured Template" (default sì).
+
+- [ ] **Bottone 📐**: nel pannello di un'abilità con tag di area (Draken Cross con Talent II = Medium Blast,
+      Comet = Line, Harvest = Arc 6, Death Blossom = Burst 1) compare "📐 Medium Blast" ecc. Le abilità senza
+      area non lo hanno. Stesso bottone sulle action dei Foe (Warrior "Cleave"? cerca un'azione con line/blast)
+      e sui Legend (icona 📐 accanto al d20).
+- [ ] **Blast**: premi 📐 su un Medium Blast → attorno al token compare l'alone blu del range; il 3×3 arancione
+      segue il mouse; fuori range è sbiadito e il click avvisa; click dentro → template sul canvas con
+      contorno, testo "Medium Blast · Nome", i token dentro diventano target (mirini), notifica con i nomi.
+      Small Blast = croce di 5, Large Blast = 5×5 senza angoli. Il layer torna ai token e il token resta
+      selezionato.
+- [ ] **Line**: Comet/Demon Cutter (line 3 senza range) → l'alone del range è solo la corona adiacente; la
+      linea parte dalla casella sotto il mouse e punta via dal token; rotella del mouse la ruota di 90° senza
+      zoomare la mappa; Esc o tasto destro annulla (niente template, nessun target).
+- [ ] **Arc**: Harvest (Arc 6) → clic per ogni casella: la prima deve essere adiacente/in range, le seguenti
+      ortogonali all'ultima, non sovrapposte, mai sul proprio token (avviso se sbagli); al 6° click il
+      template si chiude; Invio o tasto destro chiude prima con le caselle già dipinte.
+- [ ] **Burst**: Death Blossom (Burst 1) → quadrato 3×3 centrato sul mouse; i target ESCLUDONO il proprio
+      token. Un'azione "burst 2 (self)" di un Foe/Legend → nessun clic, template subito attorno al token.
+- [ ] **⚔ Attack Roll su abilità di area**: con nessun template sulla mappa, ⚔ chiede prima il piazzamento,
+      poi apre il dialog boons/curses con "🎯 Target: …" già compilato dai token nell'area; la card in chat ha
+      la riga "📐 Medium Blast  Nome1, Nome2  [🗑 area]". Annullando il piazzamento (Esc) non si tira. Un
+      secondo ⚔ sulla stessa abilità riusa il template esistente (sposta un token dentro/fuori → i target
+      cambiano). Pandaemonium (autohit + blast) → piazzamento, poi card Auto-hit con la riga 📐.
+- [ ] **🗑 area in chat**: il bottone toglie il template dalla mappa; per un altro utente non autore è
+      disabilitato; dopo la rimozione un nuovo render della card lo mostra disabilitato.
+- [ ] **Sostituzione**: 📐 due volte sulla stessa abilità → resta un solo template (il vecchio sparisce).
+      Due abilità diverse → due template.
+- [ ] **Fine combat**: con template sulla mappa, "End encounter" → Sì → i template ICON spariscono (i
+      template "core" disegnati con lo strumento di Foundry restano).
+- [ ] **Senza token / griglia**: PG senza token sulla scena → 📐 avvisa e non fa nulla; ⚔ tira normalmente.
+      Scena gridless o esagonale → avviso "square grid".
+- [ ] **Secondo client**: il giocatore piazza un'area → il GM la vede identica (stesse caselle, colore,
+      testo) e vede i mirini dei target del giocatore.
+- [ ] **Template core intatti**: gli strumenti Cerchio/Cono/Rettangolo/Raggio di Foundry funzionano come prima.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

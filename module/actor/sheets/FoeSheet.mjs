@@ -7,6 +7,7 @@
  * drag-drop from the "Foe Abilities" compendium.
  */
 import { combatRoll } from "../../dice/rolls.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -32,6 +33,7 @@ export class FoeSheet extends BaseActorSheet {
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:    onShowReferenceControl,
       rollAction:       FoeSheet.#onRollAction,
+      placeActionArea:  FoeSheet.#onPlaceActionArea,
       rollFoeDamage:    FoeSheet.#onRollFoeDamage,
       foeActionShowInChat: FoeSheet.#onFoeActionShowInChat,
       foeTraitShowInChat:  FoeSheet.#onFoeTraitShowInChat,
@@ -103,6 +105,7 @@ export class FoeSheet extends BaseActorSheet {
         // "Combo 2" with the sequence rule). Kept separate from `tags`,
         // which stays the raw editable array.
         tagChips: (a.tags ?? []).map(formatTag).filter(Boolean),
+        areaLabel: areaFromTags(a.tags)?.label ?? "",
         parsed,
         dealsDamage: parsed.dealsDamage,
         isAttack: isFoeActionAttack(a),
@@ -241,6 +244,10 @@ export class FoeSheet extends BaseActorSheet {
     _log(`rollAction — actor: "${actor.name}" | action[${idx}]: "${action?.name}"`);
     if (!action) return;
 
+    // Area attack: template on the map + targets before the dialog (null = cancelled)
+    const placement = await ensureAreaTargets({ actor, tags: action.tags, abilityName: action.name, abilityKey: `action:${action.name}` });
+    if (placement === null) return;
+
     const mods = await FoeSheet.#promptAttackMods(action, actor);
     if (!mods) return;
 
@@ -249,8 +256,22 @@ export class FoeSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
+      areaHtml:    areaSummaryHtml(placement),
       actor,
     });
+  }
+
+  /** 📐 Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */
+  static async #onPlaceActionArea(event, target) {
+    event.stopPropagation();
+    const idx    = Number(target.dataset.actionIndex);
+    const actor  = this.document;
+    const action = actor.system.actions[idx];
+    if (!action) return;
+    const area = areaFromTags(action.tags);
+    if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag.`); return; }
+    _log(`placeActionArea — "${action.name}" | ${area.label}`);
+    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}` });
   }
 
   /** Post a foe action to chat (name, cost, tags, description, hit/miss/area). */

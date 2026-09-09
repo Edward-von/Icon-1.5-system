@@ -83,6 +83,12 @@ import { showReferenceGuide } from "./module/apps/reference.mjs";
 /* -------------------------------------------------- */
 import { registerTokenStatusHud } from "./module/apps/token-status-hud.mjs";
 
+/* -------------------------------------------------- */
+/*  Canvas — Blast / Line / Arc / Burst templates      */
+/* -------------------------------------------------- */
+import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
+         deleteAreaTemplates } from "./module/canvas/area-templates.mjs";
+
 /* ================================================== */
 /*  init                                              */
 /* ================================================== */
@@ -189,6 +195,9 @@ Hooks.once("init", () => {
   // ---- Status effects ----
   registerStatuses();
 
+  // ---- Area templates (MeasuredTemplate subclass drawing ICON cell sets) ----
+  registerAreaTemplates();
+
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();
 
@@ -215,6 +224,9 @@ Hooks.once("init", () => {
     IconCombat,
     showWelcomeGuide,
     showReferenceGuide,
+    placeAreaTemplate,
+    areaFromTags,
+    deleteAreaTemplates,
   };
 
   console.log("ICON 1.5 | System initialised");
@@ -675,6 +687,29 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
                       : result.isMob   ? "✓ −1 hit"
                       : `✓ Applied ${result.applied}`;
       btn.style.opacity = "0.5";
+    });
+  });
+});
+
+/**
+ * "🗑 area" button on attack cards: removes the Blast / Line / Arc / Burst
+ * template the roll was made with (author or GM only — others just get a
+ * disabled button).
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  const buttons = html.querySelectorAll('[data-action="removeAreaTemplate"]');
+  if (!buttons.length) return;
+  buttons.forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    const scene = game.scenes?.get(btn.dataset.sceneId);
+    const doc   = scene?.templates?.get(btn.dataset.templateId);
+    if (!doc) { btn.disabled = true; btn.title = "Template already removed"; btn.style.opacity = "0.5"; return; }
+    if (!(doc.isOwner || game.user.isGM)) { btn.disabled = true; btn.title = "Only the placer or the GM can remove it"; btn.style.opacity = "0.5"; return; }
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      try { await doc.delete(); } catch (err) { console.warn("ICON 1.5 | area template removal failed", err); return; }
+      btn.disabled = true; btn.textContent = "✓ removed"; btn.style.opacity = "0.5";
     });
   });
 });

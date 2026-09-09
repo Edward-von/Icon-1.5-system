@@ -10,6 +10,7 @@ import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs"
 import { enrichHTML, escapeHTML, parseAbilitySections } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -71,6 +72,7 @@ export class IconSheet extends BaseActorSheet {
       setPrimaryJob:     IconSheet.#onSetPrimaryJob,
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
+      abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
@@ -233,6 +235,8 @@ export class IconSheet extends BaseActorSheet {
         cost:        s.cost ?? "",
         chapter:     s.chapter ?? 1,
         tags:        resolveAbilityTags(s),
+        // "Medium Blast" / "Line 4" / … when the (effective) tags carry an area pattern → 📐 button
+        areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -1058,6 +1062,7 @@ export class IconSheet extends BaseActorSheet {
       cost:        s.cost ?? "",
       chapter:     s.chapter ?? 1,
       tags:        resolveAbilityTags(s),
+      areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -1276,8 +1281,25 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * 📐 Place the ability's Blast / Line / Arc / Burst on the map and target
+   * the tokens inside it (area-templates.mjs). Replaces this actor's previous
+   * template for the same ability.
+   */
+  static async #onAbilityPlaceArea(event, target) {
+    event.stopPropagation();
+    const ab = await this._getAbilityDetail(target.dataset.itemId);
+    if (!ab) return;
+    const area = areaFromTags(ab.tags);
+    if (!area) { ui.notifications.warn(`"${ab.name}" has no Blast / Line / Arc / Burst tag.`); return; }
+    _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
+    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id });
+  }
+
+  /**
    * Prompt for boons/curses/defense, then roll the attack via combatRoll.
    * - If the ability isn't an attack → warn and stop.
+   * - If the ability has an area pattern → place it (or reuse the one already
+   *   on the map) and target the tokens inside before anything else.
    * - If it's an auto-hit → skip the d20 and post a "Auto-hit" chat notice,
    *   then hand off to the damage roll.
    */
@@ -1293,6 +1315,12 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
 
+    // Area attack: Blast / Line / Arc / Burst on the map first, targets from it.
+    // null = the player cancelled the placement → no roll.
+    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id });
+    if (placement === null) return;
+    const areaHtml = areaSummaryHtml(placement);
+
     if (ab.isAutoHit) {
       // Auto-hit: no d20 roll, just announce and (optionally) chain into damage
       await ChatMessage.create({
@@ -1302,6 +1330,7 @@ export class IconSheet extends BaseActorSheet {
                       <strong>${escapeHTML(ab.name)}</strong>
                       <span class="icon-badge icon-badge--primary">Auto-hit</span>
                     </div>
+                    ${areaHtml}
                     <p>This attack ignores the attack roll and goes directly to damage.</p>
                   </div>`,
       });
@@ -1333,6 +1362,7 @@ export class IconSheet extends BaseActorSheet {
       missEffect:   ab.missEffect,
       exceedEffect: ab.exceedEffect,
       critEffect:   ab.critEffect,
+      areaHtml,
       actor:        this.document,
     });
   }

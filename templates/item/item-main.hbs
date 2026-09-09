@@ -178,6 +178,11 @@
               <input type="text" name="system.talent1Tags" value="{{system.talent1Tags}}"
                      placeholder="e.g. attack, range-5, medium-blast">
             </div>
+            <div class="icon-field-row icon-tag-override">
+              <label title="Power die this ability uses once Talent I is unlocked, e.g. &quot;d6 starting at 6&quot; (Gran Reversa). Leave empty if the upgrade doesn't change the die.">Power die when unlocked</label>
+              <input type="text" name="system.talent1PowerDie" value="{{system.talent1PowerDie}}"
+                     placeholder="e.g. d6 starting at 6">
+            </div>
           {{/if}}
         {{/if}}
         {{#if (icon-or system.talent2 isEditable)}}
@@ -190,6 +195,11 @@
               <input type="text" name="system.talent2Tags" value="{{system.talent2Tags}}"
                      placeholder="e.g. attack, range-5, medium-blast">
             </div>
+            <div class="icon-field-row icon-tag-override">
+              <label title="Power die this ability uses once Talent II is unlocked, e.g. &quot;d6 starting at 6&quot; (Gran Reversa). Leave empty if the upgrade doesn't change the die.">Power die when unlocked</label>
+              <input type="text" name="system.talent2PowerDie" value="{{system.talent2PowerDie}}"
+                     placeholder="e.g. d6 starting at 6">
+            </div>
           {{/if}}
         {{/if}}
         {{#if (icon-or system.mastery isEditable)}}
@@ -201,6 +211,11 @@
               <label title="Comma-separated tags that REPLACE the ability's tags once Mastery is unlocked (e.g. attack, range-5, medium-blast). Leave empty if the upgrade doesn't change them.">Tags when unlocked</label>
               <input type="text" name="system.masteryTags" value="{{system.masteryTags}}"
                      placeholder="e.g. attack, range-5, medium-blast">
+            </div>
+            <div class="icon-field-row icon-tag-override">
+              <label title="Power die this ability uses once the Mastery is unlocked, e.g. &quot;d6 starting at 3&quot; (Crimson Bloom). Leave empty if the upgrade doesn't change the die.">Power die when unlocked</label>
+              <input type="text" name="system.masteryPowerDie" value="{{system.masteryPowerDie}}"
+                     placeholder="e.g. d6 starting at 3">
             </div>
           {{/if}}
         {{/if}}

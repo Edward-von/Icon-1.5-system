@@ -595,6 +595,13 @@
                   title="Post the ability to chat for everyone to see">
             💬 Show in Chat
           </button>
+          {{#if ab.areaLabel}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--area"
+                    data-action="abilityPlaceArea" data-item-id="{{ab.id}}"
+                    title="Place the {{ab.areaLabel}} on the map and target the tokens inside it (right-click / Esc cancels)">
+              📐 {{ab.areaLabel}}
+            </button>
+          {{/if}}
           {{#if ab.isAttack}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
                     data-action="abilityAttackRoll" data-item-id="{{ab.id}}"

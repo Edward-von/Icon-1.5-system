@@ -44,6 +44,13 @@ export class AbilityData extends foundry.abstract.TypeDataModel {
       talent1Tags: new StringField({ required: true, initial: "" }),
       talent2Tags: new StringField({ required: true, initial: "" }),
       masteryTags: new StringField({ required: true, initial: "" }),
+      // Optional power-die overrides, same idea as the tag overrides: free
+      // text like "d6 starting at 6" (Gran Reversa Talent I) or "d6 at 3"
+      // (Crimson Bloom mastery). Parsed by parsePowerDieSpec(); when the
+      // matching upgrade is unlocked it replaces `powerDie.faces/start`.
+      talent1PowerDie: new StringField({ required: true, initial: "" }),
+      talent2PowerDie: new StringField({ required: true, initial: "" }),
+      masteryPowerDie: new StringField({ required: true, initial: "" }),
       description: new HTMLField({ required: true, initial: "" }),
 
       // Combo ability — Vagabond (and others) can have a powered-up version that
