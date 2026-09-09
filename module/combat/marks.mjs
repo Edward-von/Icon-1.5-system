@@ -318,6 +318,15 @@ export async function handleMarkSocket(data) {
  *   • a marker that drops to 0 HP loses all their marks (p.103)
  */
 export function registerMarkHooks() {
+  // A mark created/removed by another client (GM relay) must refresh the
+  // marker's open sheet here too — the "🎯 target ✕" chips live on it.
+  for (const hook of ["createActiveEffect", "deleteActiveEffect"]) {
+    Hooks.on(hook, async (effect) => {
+      const mark = effect?.getFlag?.(NS, "mark");
+      if (!mark?.sourceActorUuid) return;
+      try { _refreshSheet(await fromUuid(mark.sourceActorUuid)); } catch { /* actor gone */ }
+    });
+  }
   Hooks.on("updateActor", async (actor, changes) => {
     if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
     const hp = foundry.utils.getProperty(changes, "system.combat.hp.value") ?? foundry.utils.getProperty(changes, "system.hp.value");

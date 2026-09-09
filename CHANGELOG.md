@@ -9,6 +9,9 @@
   **Serve un riavvio di Foundry** (o Return to Setup e riapertura del mondo) perché il manifest venga riletto.
 - **"▶ Take turn" mostrato come chevron** sul client Player: una regola più specifica del CSS dei pip lo
   riportava a 16×10 px senza testo. Regola dedicata con la stessa specificità.
+- **Chip del mark sul client del marcatore**: quando il GM crea o toglie un mark per conto di un giocatore, la scheda
+  del giocatore si aggiorna da sola (hook su create/deleteActiveEffect).
+- Verificato con socket attivo, GM e Player insieme: mark, Apply Damage e Party Resolve da Player arrivano al GM.
 - Verificato da Player: "▶ Take turn" attiva il turno e "■ End turn" lo chiude (permesso da Foundry v13 per il
   proprietario del combattente), dialog d'attacco con la DEF del bersaglio, target card.
 

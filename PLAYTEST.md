@@ -296,7 +296,7 @@ Prerequisito: scena con il token del PG (es. Knave con Intimidate, o Shade con H
 - [ ] **🎯 Mark sulle azioni NPC**: Foe con un'azione taggata mark (es. Snork "Intimidate", o aggiungi il tag
       "mark" a un'azione) → bottone "🎯 Mark" nella riga dell'azione; funziona come sopra con il testo
       dell'azione. Legend: icona 🎯 accanto al d20.
-- [ ] **Giocatore senza permessi**: come utente Player, targetta un Foe del GM e premi 🎯 → notifica "Mark sent
+- [x] **Giocatore senza permessi**: come utente Player, targetta un Foe del GM e premi 🎯 → notifica "Mark sent
       to the GM…", e (con il GM connesso) il mark compare sul Foe; ✕ dal chip del giocatore lo toglie via GM.
 - [x] **Marked generico intatto**: il bottone stackable "Marked: N" nella griglia Negative funziona ancora
       (+1/−1) e non tocca i mark specifici.
@@ -320,6 +320,14 @@ malus dislivello. Non provato: Legend (stesso codice del Foe) e il caso senza be
       il dado mostra il [D] del foe (d6) / della legend (d8) e il suo fray.
 - [ ] **Senza bersaglio**: card tratteggiata "No token targeted — hover a token and press T", Defense vuota,
       anteprima "No Defense: the card shows the total".
+
+## Relay giocatore → GM (9 settembre 2026, sera, dopo il riavvio con socket attivo)
+
+Verificato con GM e Player collegati insieme (due tab, build 1.1.0): 🎯 mark di Esther su Sikutsu → "Mark sent to the
+GM" e il GM crea l'effetto con la card in chat; "Apply" sulla card del danno da Player → "→ Sent to GM" e HP 27 → 21;
+"+" del Party Resolve dal tracker come Player → 0 → 1 sul combat e sui PG. Dati di prova poi ripristinati.
+- [x] Mark relay, Apply Damage relay, Party Resolve relay.
+- [ ] Da riprovare con Maar: richiesta di attivazione di un NPC da Player (chevron → avviso al GM con suono).
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
