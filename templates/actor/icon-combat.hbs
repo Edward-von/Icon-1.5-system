@@ -595,6 +595,18 @@
                   title="Post the ability to chat for everyone to see">
             💬 Show in Chat
           </button>
+          {{#if ab.canMark}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
+                    data-action="abilityMark" data-item-id="{{ab.id}}"
+                    title="Mark the targeted token with this ability (target exactly one token first: hover it and press T)">
+              🎯 Mark target
+            </button>
+            {{#each ab.marks as |m|}}
+              <span class="icon-mark-chip" title="Marked by {{ab.name}}">🎯 {{m.targetName}}
+                <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button>
+              </span>
+            {{/each}}
+          {{/if}}
           {{#if ab.areaLabel}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--area"
                     data-action="abilityPlaceArea" data-item-id="{{ab.id}}"

@@ -89,6 +89,11 @@ import { registerTokenStatusHud } from "./module/apps/token-status-hud.mjs";
 import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
          deleteAreaTemplates } from "./module/canvas/area-templates.mjs";
 
+/* -------------------------------------------------- */
+/*  Hatred of X + ability marks                        */
+/* -------------------------------------------------- */
+import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
+
 /* ================================================== */
 /*  init                                              */
 /* ================================================== */
@@ -198,6 +203,9 @@ Hooks.once("init", () => {
   // ---- Area templates (MeasuredTemplate subclass drawing ICON cell sets) ----
   registerAreaTemplates();
 
+  // ---- Marks end when their marker is defeated ----
+  registerMarkHooks();
+
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();
 
@@ -227,6 +235,9 @@ Hooks.once("init", () => {
     placeAreaTemplate,
     areaFromTags,
     deleteAreaTemplates,
+    applyHatred,
+    applyMark,
+    removeMark,
   };
 
   console.log("ICON 1.5 | System initialised");

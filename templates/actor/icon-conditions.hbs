@@ -92,4 +92,31 @@
       {{/each}}
     </div>
   </div>
+
+  {{!-- Ability-specific marks (marks.mjs): one row per mark, with its text and source --}}
+  <div class="icon-section">
+    <h3 class="icon-section__title">Marks on this character</h3>
+    {{#if marksOnActor.length}}
+      <ul class="icon-mark-list">
+        {{#each marksOnActor as |m|}}
+          <li class="icon-mark-list__item">
+            <div class="icon-mark-list__head">
+              <strong>🎯 {{m.abilityName}}</strong>
+              <span class="icon-mark-list__source">from {{m.sourceName}}</span>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕ End mark</button>
+              {{/if}}
+            </div>
+            {{#if m.text}}<div class="icon-mark-list__text">{{m.text}}</div>{{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="notes" style="font-size:.85em;color:#c0b898;margin:2px 0">
+        No marks. A mark is placed from the marker's sheet: target this token (hover + T), then press
+        🎯 on a Mark ability or action. <strong>Hatred</strong> is applied from the Negative list above and
+        asks who it is of; it ends by itself at the end of the hater's turn.
+      </p>
+    {{/if}}
+  </div>
 </section>

@@ -12,6 +12,7 @@ import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
+import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -74,6 +75,8 @@ export class IconSheet extends BaseActorSheet {
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
+      abilityMark:        IconSheet.#onAbilityMark,
+      removeMark:         IconSheet.#onRemoveMark,
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
@@ -238,6 +241,9 @@ export class IconSheet extends BaseActorSheet {
         tags:        resolveAbilityTags(s),
         // "Medium Blast" / "Line 4" / … when the (effective) tags carry an area pattern → 📐 button
         areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
+        // Mark abilities: 🎯 button + the marks this ability currently has on the scene
+        canMark:     (s.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+        marks:       marksBy(actor.id, a.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -576,6 +582,8 @@ export class IconSheet extends BaseActorSheet {
         e.statuses?.has(s.id) || e.getFlag("core", "statusId") === s.id);
       return {
         ...s,
+        // "Hatred of X": show who it is of (marks.mjs)
+        name: (s.id === "hatred" && effect?.name) ? effect.name : s.name,
         stackable,
         charges,
         ongoing: effect?.getFlag("icon-system", "ongoing") ?? false,
@@ -586,6 +594,7 @@ export class IconSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text }));
     context.conditions = {
       negative: markActive(groups.negative),
       positive: markActive(groups.positive),
@@ -1064,6 +1073,8 @@ export class IconSheet extends BaseActorSheet {
       chapter:     s.chapter ?? 1,
       tags:        resolveAbilityTags(s),
       areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
+      canMark:     (s.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+      marks:       marksBy(this.document.id, item.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -1282,6 +1293,29 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * 🎯 Mark the targeted token with this ability (marks.mjs). Exactly one
+   * token must be targeted; the mark's text is the ability's "Mark:" block.
+   */
+  static async #onAbilityMark(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
+    if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    const sections = parseAbilitySections(item.system.description).sections;
+    const text = sections.find(sec => sec.label === "Mark")?.text
+      ?? sections.map(sec => `${sec.label}: ${sec.text}`).join(" ");
+    _log(`abilityMark — "${item.name}" on ${targets[0].name}`);
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: item.id, abilityName: item.name, text });
+  }
+
+  /** ✕ on a mark chip (ability panel) or in the Conditions tab list. */
+  static async #onRemoveMark(event, target) {
+    event.stopPropagation();
+    if (target.dataset.effectUuid) await removeMark(target.dataset.effectUuid);
+  }
+
+  /**
    * 📐 Place the ability's Blast / Line / Arc / Burst on the map and target
    * the tokens inside it (area-templates.mjs). Replaces this actor's previous
    * template for the same ability.
@@ -1410,7 +1444,7 @@ export class IconSheet extends BaseActorSheet {
     const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
     const comboDefault = !!ab.parsedCombo && (comboToken || comboSpentOn === itemId);
 
-    const mods = await promptDamageMods(ab, combat, { comboDefault });
+    const mods = await promptDamageMods(ab, combat, { comboDefault, actor: this.document });
     if (!mods) return;
 
     const useCombo = !!(mods.useCombo && ab.parsedCombo);
@@ -1428,6 +1462,7 @@ export class IconSheet extends BaseActorSheet {
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
       weakened:    mods.weakened,
+      hatred:      mods.hatred,
       targetName:  mods.targetName,
     });
 
@@ -1501,7 +1536,7 @@ export class IconSheet extends BaseActorSheet {
     const ab = IconSheet.#basicAttackDetail(heavy, IconSheet.#basicAttackRange(this.document));
     const combat = this.document.system.combat;
     _log(`basicDamageRoll — "${ab.name}"`);
-    const mods = await promptDamageMods(ab, combat);
+    const mods = await promptDamageMods(ab, combat, { actor: this.document });
     if (!mods) return;
     await postAbilityDamageCard(this.document, {
       parsed:      ab.parsed,
@@ -1513,6 +1548,7 @@ export class IconSheet extends BaseActorSheet {
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
       weakened:    mods.weakened,
+      hatred:      mods.hatred,
       targetName:  mods.targetName,
     });
   }

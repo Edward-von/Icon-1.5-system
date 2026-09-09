@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 8: Hatred "of X" e Mark per abilità (wishlist Maar)
+
+- **Hatred era uno status anonimo con save a fine turno**: il manuale (p.104) lo definisce "Hatred of X: half
+  damage to all foes other than X, ends at the end of your turn". Ora applicando Hatred (tab Conditions,
+  `game.icon.applyStatus`) un dialog chiede di chi: lista dei token della scena con il target preselezionato,
+  oppure un nome libero. L'effetto si chiama "Hatred of X" (scheda, HUD del token, chat), finisce da solo a
+  fine turno del personaggio (niente save) e il dialog 💥 Damage propone "Hatred (½ vs others)" già spuntato
+  quando il target non è X, con lo step "Hatred (½)" nella card. Nuovo modulo `module/combat/marks.mjs`.
+- **Mark era solo un contatore "Marked: N"**: ora ogni abilità/azione con tag `mark` ha il bottone "🎯 Mark
+  target" (PG, Foe, Legend): targetta un token e premi → sul bersaglio un effetto "Marked — Abilità
+  (Marcatore)" con il testo del blocco "Mark:" (o della descrizione dell'azione), card in chat. Regole p.103
+  applicate: un mark per abilità (ri-marcare un altro bersaglio sposta il mark), un mark per coppia
+  marcatore→bersaglio (il nuovo sostituisce il vecchio), più marcatori diversi possono coesistere; i mark cadono
+  quando il marcatore va a 0 HP e a fine combat. Si vedono come chip "🎯 Bersaglio ✕" sul pannello del
+  marcatore, nella sezione "Marks on this character" della tab Conditions del bersaglio (testo + "End mark")
+  e come righe nell'HUD del token. Il contatore generico "Marked" resta per i casi a mano.
+- **Giocatori senza permessi sul bersaglio**: mark e Hatred passano dal GM attivo via socket (stesso canale
+  del "Apply Damage").
+- API macro: `game.icon.applyHatred(actor, { name, tokenId })`, `game.icon.applyMark({ source, target,
+  abilityKey, abilityName, text })`, `game.icon.removeMark(effectUuid)`.
+
 ## 9 settembre 2026 — Sessione 7: tag override dei talenti, varianti di area, Aura, larghezza delle Line
 
 - **"Tags when unlocked" compilati nel pack Jobs** per 21 abilità i cui talenti/mastery cambiano la riga dei tag

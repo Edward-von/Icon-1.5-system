@@ -8,6 +8,7 @@
  */
 import { combatRoll } from "../../dice/rolls.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
+import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -34,6 +35,8 @@ export class FoeSheet extends BaseActorSheet {
       showReference:    onShowReferenceControl,
       rollAction:       FoeSheet.#onRollAction,
       placeActionArea:  FoeSheet.#onPlaceActionArea,
+      markActionTarget: FoeSheet.#onMarkActionTarget,
+      removeMark:       FoeSheet.#onRemoveMark,
       rollFoeDamage:    FoeSheet.#onRollFoeDamage,
       foeActionShowInChat: FoeSheet.#onFoeActionShowInChat,
       foeTraitShowInChat:  FoeSheet.#onFoeTraitShowInChat,
@@ -106,6 +109,8 @@ export class FoeSheet extends BaseActorSheet {
         // which stays the raw editable array.
         tagChips: (a.tags ?? []).map(formatTag).filter(Boolean),
         areaLabel: areaFromTags(a.tags)?.label ?? "",
+        canMark: (a.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+        marks: marksBy(actor.id, `action:${a.name}`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         parsed,
         dealsDamage: parsed.dealsDamage,
         isAttack: isFoeActionAttack(a),
@@ -137,6 +142,7 @@ export class FoeSheet extends BaseActorSheet {
         e.statuses?.has(s.id) || e.getFlag("core", "statusId") === s.id);
       return {
         ...s,
+        name: (s.id === "hatred" && effect?.name) ? effect.name : s.name,
         stackable,
         charges,
         ongoing: effect?.getFlag("icon-system", "ongoing") ?? false,
@@ -147,6 +153,7 @@ export class FoeSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text }));
     context.conditions = {
       negative: markActive(groups.negative),
       positive: markActive(groups.positive),
@@ -259,6 +266,23 @@ export class FoeSheet extends BaseActorSheet {
       areaHtml:    areaSummaryHtml(placement),
       actor,
     });
+  }
+
+  /** 🎯 Mark the targeted token with this action (marks.mjs); exactly one target. */
+  static async #onMarkActionTarget(event, target) {
+    event.stopPropagation();
+    const action = this.document.system.actions[Number(target.dataset.actionIndex)];
+    if (!action) return;
+    const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
+    if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    _log(`markActionTarget — "${action.name}" on ${targets[0].name}`);
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name, text: action.description ?? "" });
+  }
+
+  /** ✕ on a mark chip or in the Conditions tab list. */
+  static async #onRemoveMark(event, target) {
+    event.stopPropagation();
+    if (target.dataset.effectUuid) await removeMark(target.dataset.effectUuid);
   }
 
   /** 📐 Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */

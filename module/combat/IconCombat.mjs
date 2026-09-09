@@ -27,6 +27,7 @@
 
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
 import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
+import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
@@ -587,6 +588,13 @@ export class IconCombat extends Combat {
       }
     }
 
+    /* --- Hatred and marks don't outlive the encounter (p.103-104) --- */
+    for (const combatant of this.combatants) {
+      if (!combatant.actor) continue;
+      try { await clearCombatEffects(combatant.actor); }
+      catch (err) { console.warn("[ICON | IconCombat] could not clear marks/hatred", err); }
+    }
+
     /* --- Blast / Line / Arc / Burst templates left on the map go with the encounter --- */
     try { await deleteAreaTemplates({ scene: canvas?.scene }); }
     catch (err) { console.warn("[ICON | IconCombat] area template cleanup failed", err); }
@@ -747,6 +755,10 @@ export function registerCombatHooks() {
           chatConfirm: true,
           allowRelay:  false,
         });
+      } else if (data?.type === "markEffect") {
+        /* A player marks / un-marks an actor they don't own, or gains Hatred
+         * on a shared actor — the active GM writes the effect. */
+        await handleMarkSocket(data);
       }
     } catch (err) {
       console.error("ICON 1.5 | combat socket handler failed:", err);

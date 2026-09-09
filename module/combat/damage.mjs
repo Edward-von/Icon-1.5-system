@@ -497,7 +497,7 @@ export async function recoverAction(actor) {
 export async function postAbilityDamageCard(actor, {
   parsed, outcome = "hit", damagedie = "d6", fray = 0, abilityName = "Attack",
   bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
-  targetName = "",
+  hatred = false, targetName = "",
 } = {}) {
   // Select the parsed chunk for the chosen outcome.
   const chunk = outcome === "miss" ? parsed.miss
@@ -564,6 +564,13 @@ export async function postAbilityDamageCard(actor, {
   if (hasActiveStatus(actor, "pacified")) {
     const halved = Math.floor(running / 2);
     steps.push({ label: "Pacified (½)", value: halved - running, isNegative: true });
+    running = halved;
+  }
+  // Hatred of X (p.104): half damage against anyone but the hated foe. Ticked
+  // in the damage dialog (pre-filled from the current targets).
+  if (hatred) {
+    const halved = Math.floor(running / 2);
+    steps.push({ label: "Hatred (½ — not the hated foe)", value: halved - running, isNegative: true });
     running = halved;
   }
   if (weakened) {

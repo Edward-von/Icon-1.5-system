@@ -133,9 +133,22 @@ Decisi con Edoardo il 9 settembre 2026:
       (`icon-compendium-audit/session7/battle-demons-heavy.mjs`).
 - [x] Template di area: si tolgono a mano (🗑 area / End encounter), nessuna rimozione automatica.
 
-## Sessione 8+ — Wishlist alta (una per volta, in quest'ordine)
+## Sessione 8 — Hatred / Mark (M) — FATTA il 9 settembre 2026
 
-- [ ] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M) ← il più abbordabile
+- [x] **Hatred "verso X"**: applicando Hatred (tab Conditions, macro `game.icon.applyStatus`) si sceglie il
+      bersaglio tra i token della scena (o un nome libero) → effetto "Hatred of X"; finisce da solo a fine turno
+      (p.104) invece del save; il dialog del danno propone "Hatred (½ vs others)" già spuntato se il target
+      non è X. (`module/combat/marks.mjs`)
+- [x] **Mark per abilità con testo**: bottone 🎯 sulle abilità/azioni con tag `mark` → un effetto "Marked —
+      Abilità (Marcatore)" sul token bersagliato, con il testo del blocco "Mark:"; un mark per abilità, uno per
+      coppia marcatore→bersaglio (il nuovo sostituisce il vecchio, p.103); chip sul pannello del marcatore,
+      lista "Marks on this character" nella tab Conditions e righe nell'HUD del token con ✕; i mark cadono
+      quando il marcatore va a 0 HP e a fine combat. I giocatori senza permessi sul bersaglio passano dal GM
+      (socket).
+
+## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
+
+- [x] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M — Sessione 8) ← il più abbordabile
       degli "alti": si può fare partendo dal registro status esistente (`module/combat/statuses.mjs`).
 - [ ] **Relic integration**: quando una reliquia modifica un'abilità, aggiungere reminder text
       (es. Byrax 1 → "Whenever you refresh this stance, Dash 1"). (L/XL — serve prima una tabella dati

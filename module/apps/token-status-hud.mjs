@@ -17,6 +17,7 @@ import {
   setStatusCharges, adjustStatusCharges, applyStatus, removeStatus, hasStatus,
 } from "../combat/statuses.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
+import { marksOn, removeMark, getHatred } from "../combat/marks.mjs";
 
 const PANEL_ID = "icon-token-status-hud";
 
@@ -41,7 +42,13 @@ function _statusesFor(actor) {
     let count = 0;
     if (STACKABLE_STATUSES.has(def.id))   count = getStatusCharges(actor, def.id);
     else if (def.id === "elevation")      count = actor.getFlag("icon-system", "elevation") ?? 0;
-    out.push({ id: def.id, name: def.name, img: def.img, count, adjustable: _isAdjustable(def.id) });
+    // "Hatred of X" carries its target in the effect name (marks.mjs)
+    const name = def.id === "hatred" ? (getHatred(actor)?.effect?.name ?? def.name) : def.name;
+    out.push({ id: def.id, name, img: def.img, count, adjustable: _isAdjustable(def.id) });
+  }
+  // Ability-specific marks: one row each, × ends the mark (relayed to the GM if needed)
+  for (const m of marksOn(actor)) {
+    out.push({ id: `mark:${m.uuid}`, name: `${m.abilityName} (${m.sourceName})`, img: m.img, count: 0, adjustable: false, title: m.text ?? "" });
   }
   return out;
 }
@@ -101,6 +108,10 @@ async function _onPanelClick(ev) {
   if (!actor || !statusId || !actor.isOwner) return;
 
   const act       = btn.dataset.act;
+  if (statusId.startsWith("mark:")) {
+    if (act === "remove") await removeMark(statusId.slice(5)).catch(err => console.error("ICON 1.5 | mark removal failed:", err));
+    return;
+  }
   const stackable = STACKABLE_STATUSES.has(statusId);
   const elevation = statusId === "elevation";
 
@@ -151,7 +162,7 @@ export function renderTokenStatusHud() {
           </span>` : "";
         const count = s.adjustable ? `<span class="icon-token-status-hud__count">${s.count}</span>` : "";
         return `
-          <div class="icon-token-status-hud__item" data-status-id="${s.id}">
+          <div class="icon-token-status-hud__item" data-status-id="${escapeHTML(s.id)}" ${s.title ? `title="${escapeHTML(s.title)}"` : ""}>
             <img src="${s.img}" alt="">
             <span class="icon-token-status-hud__name">${escapeHTML(s.name)}</span>
             ${count}

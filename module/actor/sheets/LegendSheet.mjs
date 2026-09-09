@@ -3,6 +3,7 @@
  */
 import { combatRoll } from "../../dice/rolls.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
+import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
@@ -27,6 +28,8 @@ export class LegendSheet extends BaseActorSheet {
       showReference:     onShowReferenceControl,
       rollAction:        LegendSheet.#onRollAction,
       placeActionArea:   LegendSheet.#onPlaceActionArea,
+      markActionTarget:  LegendSheet.#onMarkActionTarget,
+      removeMark:        LegendSheet.#onRemoveMark,
       rollLegendDamage:  LegendSheet.#onRollLegendDamage,
       foeTraitShowInChat: LegendSheet.#onFoeTraitShowInChat,
       addTrait:          LegendSheet.#onAddTrait,
@@ -163,6 +166,8 @@ export class LegendSheet extends BaseActorSheet {
         cost:        a.cost ?? "1action",
         tags:        a.tags ?? [],
         areaLabel:   areaFromTags(a.tags)?.label ?? "",
+        canMark:     (a.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+        marks:       marksBy(actor.id, `action:${a.name}`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         hitEffect:   a.hitEffect  ?? "",
         missEffect:  a.missEffect ?? "",
         areaEffect:  a.areaEffect ?? "",
@@ -230,6 +235,7 @@ export class LegendSheet extends BaseActorSheet {
       const charges   = stackable ? (allCharges[s.id] ?? 0) : 0;
       return {
         ...s,
+        name: s.id === "hatred" ? (actor.effects.find(e => e.statuses?.has("hatred"))?.name ?? s.name) : s.name,
         stackable,
         charges,
         active: s.id === "elevation"
@@ -239,6 +245,7 @@ export class LegendSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text }));
     context.conditions = {
       negative: markActive(groups.negative),
       positive: markActive(groups.positive),
@@ -316,6 +323,23 @@ export class LegendSheet extends BaseActorSheet {
       areaHtml:    areaSummaryHtml(placement),
       actor,
     });
+  }
+
+  /** 🎯 Mark the targeted token with this action (marks.mjs); exactly one target. */
+  static async #onMarkActionTarget(event, target) {
+    event.stopPropagation();
+    const action = this.document.system.actions[Number(target.dataset.actionIndex)];
+    if (!action) return;
+    const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
+    if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    _log(`markActionTarget — "${action.name}" on ${targets[0].name}`);
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name, text: action.description ?? "" });
+  }
+
+  /** ✕ on a mark chip or in the Conditions tab list. */
+  static async #onRemoveMark(event, target) {
+    event.stopPropagation();
+    if (target.dataset.effectUuid) await removeMark(target.dataset.effectUuid);
   }
 
   /** 📐 Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */

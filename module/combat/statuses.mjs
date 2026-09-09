@@ -9,6 +9,7 @@
 
 import { saveRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
+import { promptHatredTarget, applyHatred, endHatred } from "./marks.mjs";
 
 /* ================================================== */
 /*  Status definitions                                 */
@@ -28,7 +29,9 @@ export const ICON_STATUSES = [
   { id: "slashed",       name: "Slashed",       img: `${ICON_STATUSES_BASE}/slashed.svg`,      canSave: true,  ongoing: false },
   { id: "blind",         name: "Blind",         img: `${ICON_STATUSES_BASE}/blind.svg`,        canSave: true,  ongoing: false },
   { id: "dazed",         name: "Dazed",         img: `${ICON_STATUSES_BASE}/dazed.svg`,        canSave: true,  ongoing: false },
-  { id: "hatred",        name: "Hatred",        img: `${ICON_STATUSES_BASE}/hatred.svg`,       canSave: true,  ongoing: false },
+  // Hatred is always "of X" (marks.mjs): it ends at the end of the actor's own
+  // turn (p.104) instead of being saved against.
+  { id: "hatred",        name: "Hatred",        img: `${ICON_STATUSES_BASE}/hatred.svg`,       canSave: false, ongoing: false },
   { id: "pacified",      name: "Pacified",      img: `${ICON_STATUSES_BASE}/pacified.svg`,     canSave: true,  ongoing: false },
   { id: "sealed",        name: "Sealed",        img: `${ICON_STATUSES_BASE}/sealed.svg`,       canSave: true,  ongoing: false },
   { id: "shattered",     name: "Shattered",     img: `${ICON_STATUSES_BASE}/shattered.svg`,    canSave: true,  ongoing: false },
@@ -132,6 +135,10 @@ export function registerStatuses() {
 export async function rollEndOfTurnSaves(combatant) {
   const actor = combatant.actor;
   if (!actor) return;
+
+  // Hatred of X ends at the end of the hater's turn (p.104) — no save.
+  try { await endHatred(actor, "end of turn"); }
+  catch (err) { console.warn("[ICON | statuses] could not end Hatred", err); }
 
   // Saves apply ONLY to negative statuses. Positive effects (isBoon — Defiance,
   // Regeneration, Dodge, …) and special states (isSpecial — Bloodied, Cover,
@@ -267,16 +274,30 @@ function _withStatusLock(actor, fn) {
  * @param {string}  statusId
  * @param {boolean} [ongoing=false]  Mark as ongoing+ (can't save)
  */
-export function applyStatus(actor, statusId, ongoing = false) {
-  return _withStatusLock(actor, () => _applyStatus(actor, statusId, ongoing));
+export function applyStatus(actor, statusId, ongoing = false, opts = {}) {
+  // Hatred asks "of whom?" first — outside the lock, so an open dialog never
+  // blocks other status changes on the same actor.
+  if (statusId === "hatred" && !opts?.target && !hasStatus(actor, statusId)) {
+    return promptHatredTarget(actor).then(target =>
+      target ? _withStatusLock(actor, () => _applyStatus(actor, statusId, ongoing, { ...opts, target })) : null);
+  }
+  return _withStatusLock(actor, () => _applyStatus(actor, statusId, ongoing, opts));
 }
 
-async function _applyStatus(actor, statusId, ongoing = false) {
+async function _applyStatus(actor, statusId, ongoing = false, opts = {}) {
   const def = ICON_STATUSES.find(s => s.id === statusId);
   if (!def) return ui.notifications.warn(`Unknown status: ${statusId}`);
 
   // Don't duplicate
   if (hasStatus(actor, statusId)) return;
+
+  // Hatred is always of someone (p.104): ask who (or take opts.target), then
+  // create the "Hatred of X" effect through marks.mjs.
+  if (statusId === "hatred") {
+    const target = opts?.target ?? await promptHatredTarget(actor);
+    if (!target) return;
+    return applyHatred(actor, target, { ongoing });
+  }
 
   await actor.createEmbeddedDocuments("ActiveEffect", [{
     name:     def.name,

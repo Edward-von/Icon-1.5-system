@@ -197,6 +197,44 @@ Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il gi
       Nail e Horn Demon; importa il Battle Demon → classe Heavy, VIT 10 / Def 6 / Fray 4 / Armor 2, trait Guard
       + Engorge. La cartella Demon › Leader non li contiene più.
 
+## Sessione 8 (9 settembre 2026) — Hatred "of X" e Mark per abilità
+
+Prerequisito: scena con il token del PG (es. Knave con Intimidate, o Shade con Harrow), 2 token nemici, combat avviato.
+
+- [ ] **Hatred "of X" dalla tab Conditions**: sulla scheda di un Foe (o del PG) clicca "Hatred" → dialog "Hatred
+      of…" con la lista dei token della scena (il token targettato è preselezionato con 🎯) e un campo nome
+      libero. Scegli un token → il bottone diventa "Hatred of Nome" attivo, l'icona compare sul token, in chat
+      "X gains Hatred of Nome". Annulla il dialog → nessun effetto applicato. Clic di nuovo → rimosso.
+- [ ] **Hatred nell'HUD e con nome libero**: seleziona il token → il pannello status a destra dice "Hatred of
+      Nome". Riapplica scegliendo "— other —" e scrivendo "the demon" → "Hatred of the demon".
+- [ ] **Hatred finisce a fine turno**: il PG con Hatred attivo chiude il proprio turno nel tracker → in chat
+      "…'s Hatred of Nome ends (end of turn)", effetto sparito, NESSUN tiro di save per Hatred (gli altri
+      status tirano il save come prima).
+- [ ] **Hatred nel dialog del danno**: PG con Hatred of Goblin. Targetta il Warrior e premi 💥 su un'abilità →
+      nel dialog compare la riga "Hatred (½ vs others)" GIÀ spuntata e la nota "Hatred of Goblin: Warrior is
+      not your hated foe → half damage"; la card del danno ha lo step "Hatred (½ — not the hated foe)".
+      Targetta il Goblin → casella NON spuntata, nota "attacking Goblin → full damage". Nessun target → casella
+      vuota con la nota "tick if this isn't Goblin".
+- [ ] **🎯 Mark target (PG)**: pannello di Harrow (Shade) o Intimidate (Knave) → c'è "🎯 Mark target" (assente
+      su abilità senza tag mark). Senza target → avviso "Target exactly one token". Targetta un nemico e premi
+      🎯 → in chat "🎯 PG marks Nemico — Harrow" con il testo del blocco "Mark:"; sul pannello compare il chip
+      "🎯 Nemico ✕"; sul token nemico l'icona del mark; nella tab Conditions del nemico la sezione "Marks on
+      this character" elenca "Harrow from PG" con il testo e "✕ End mark"; nell'HUD del token nemico c'è la
+      riga "Harrow (PG)" con ✕ (hover mostra il testo).
+- [ ] **Un mark per abilità / uno per coppia**: marca il nemico A, poi targetta B e ripremi 🎯 → il mark passa
+      a B (A non ce l'ha più, chip aggiornato). Con due abilità mark diverse (Harrow + Nightmare?) sullo stesso
+      bersaglio dallo stesso PG → resta solo l'ultima. Due PG diversi marcano lo stesso nemico → due mark.
+- [ ] **Rimozione**: ✕ sul chip, "✕ End mark" nella tab Conditions, × nell'HUD → il mark sparisce ovunque con
+      messaggio in chat. Porta il marcatore a 0 HP → i suoi mark cadono ("N marks from PG end (PG is
+      defeated)"). "End encounter" → Sì → spariscono mark e Hatred di tutti.
+- [ ] **🎯 Mark sulle azioni NPC**: Foe con un'azione taggata mark (es. Snork "Intimidate", o aggiungi il tag
+      "mark" a un'azione) → bottone "🎯 Mark" nella riga dell'azione; funziona come sopra con il testo
+      dell'azione. Legend: icona 🎯 accanto al d20.
+- [ ] **Giocatore senza permessi**: come utente Player, targetta un Foe del GM e premi 🎯 → notifica "Mark sent
+      to the GM…", e (con il GM connesso) il mark compare sul Foe; ✕ dal chip del giocatore lo toglie via GM.
+- [ ] **Marked generico intatto**: il bottone stackable "Marked: N" nella griglia Negative funziona ancora
+      (+1/−1) e non tocca i mark specifici.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

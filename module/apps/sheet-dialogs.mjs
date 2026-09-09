@@ -6,6 +6,8 @@
  * can be reused or tested on their own.
  */
 import { getActorStatusMods } from "../combat/status-modifiers.mjs";
+import { hatredDamageHint } from "../combat/marks.mjs";
+import { escapeHTML } from "../helpers/enrich.mjs";
 
 const _log = (...args) => console.debug("[ICON | sheet-dialogs]", ...args);
 
@@ -236,8 +238,17 @@ export async function promptAttackMods(ab, actor) {
 }
 
 /** Minimal dialog for damage-roll modifiers. */
-export async function promptDamageMods(ab, combat, { comboDefault = false } = {}) {
+export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null } = {}) {
   const p = ab.parsed ?? { hit: {}, miss: {}, area: {} };
+  // Hatred of X (p.104): half damage against anyone but X. Pre-ticked when the
+  // current targets include someone else; the note explains the pick.
+  const hatred = actor ? hatredDamageHint(actor) : { active: false };
+  const hatredRow  = hatred.active
+    ? `<label title="Hatred of ${escapeHTML(hatred.name)}: deal half damage to all foes other than ${escapeHTML(hatred.name)} (p.104)."><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}> Hatred (½ vs others)</label>`
+    : "";
+  const hatredNote = hatred.active
+    ? `<p style="margin:0;font-size:.85em;color:#c4a64f;border-left:3px solid #c4a64f;padding-left:6px">⚠ ${escapeHTML(hatred.note)}</p>`
+    : "";
   // Build human-readable formula strings from parsed data
   const fmtChunk = (c, label) => {
     const parts = [];
@@ -285,7 +296,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false } = {}
         <label><input type="checkbox" name="vulnerable"> Vulnerable (+1)</label>
         <label><input type="checkbox" name="resistance"> Resistance (½)</label>
         <label><input type="checkbox" name="weakened"> Weakened (−2)</label>
+        ${hatredRow}
       </div>
+      ${hatredNote}
       <p style="margin:2px 0 0; font-size:0.76em; color:var(--ic-text-dim); line-height:1.4">
         <em>Bonus Damage:</em> add K extra [D] to the pool, then sum the top N
         (where N = base dice count). Example: 2[D] + 1 bonus → roll 3 dice, sum the 2 highest.
@@ -307,6 +320,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false } = {}
             vulnerable: !!root.querySelector('input[name="vulnerable"]')?.checked,
             resistance: !!root.querySelector('input[name="resistance"]')?.checked,
             weakened:   !!root.querySelector('input[name="weakened"]')?.checked,
+            hatred:     !!root.querySelector('input[name="hatred"]')?.checked,
             useCombo:   !!root.querySelector('input[name="useCombo"]')?.checked,
           };
         },

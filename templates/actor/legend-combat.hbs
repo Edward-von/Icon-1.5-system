@@ -139,6 +139,12 @@
                       data-action="foeActionShowInChat" data-action-index="{{action.i}}"
                       title="Post this action to chat">💬</button>
               {{#if ../isEditable}}
+                {{#if action.canMark}}
+                <button type="button" class="icon-btn-roll icon-btn--mark"
+                        data-action="markActionTarget" data-action-index="{{action.i}}"
+                        title="Mark the targeted token with this action (target exactly one token first)">🎯</button>
+                {{#each action.marks as |m|}}<span class="icon-mark-chip">🎯 {{m.targetName}} <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button></span>{{/each}}
+                {{/if}}
                 {{#if action.areaLabel}}
                 <button type="button" class="icon-btn-roll icon-btn--area"
                         data-action="placeActionArea" data-action-index="{{action.i}}"
