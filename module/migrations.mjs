@@ -22,7 +22,7 @@ const SYSTEM_ID = "icon-system";
 const SETTING   = "schemaVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 4;
+export const CURRENT_SCHEMA_VERSION = 5;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -94,6 +94,19 @@ const MIGRATIONS = {
       if (!ids.length) continue;
       await actor.deleteEmbeddedDocuments("Item", ids);
       console.log(`ICON 1.5 | Migration 4: removed ${ids.length} "Rush X" class trait(s) from "${actor.name}"`);
+    }
+  },
+
+  /* 5 — Migration 4 left "Rush X" on at least one PC of the live world (schema
+   * was already at 4 when the playtest of 9 Sept 2026 looked): remove the
+   * trait again, this time by exact name whatever its `source`. */
+  5: async () => {
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const ids = actor.items.filter(i => i.type === "trait" && /^rush x$/i.test((i.name ?? "").trim())).map(i => i.id);
+      if (!ids.length) continue;
+      await actor.deleteEmbeddedDocuments("Item", ids);
+      console.log(`ICON 1.5 | Migration 5: removed ${ids.length} "Rush X" trait(s) from "${actor.name}"`);
     }
   },
 };

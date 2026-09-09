@@ -144,6 +144,15 @@ export function parseAbilitySections(description) {
 /** Human label for a foe/legend action cost key. */
 const NPC_COST_LABELS = { "1action": "1 Action", "2actions": "2 Actions", "free": "Free" };
 
+/** Human label for a PC ability cost key ("2actions" → "2 Actions", "interrupt-1" → "Interrupt 1"). */
+export function abilityCostLabel(cost) {
+  const key = String(cost ?? "").trim();
+  if (!key) return "";
+  const m = key.match(/^interrupt-(\d)$/);
+  if (m) return `Interrupt ${m[1]}`;
+  return { "1action": "1 Action", "2actions": "2 Actions", "free": "Free Action" }[key] ?? key;
+}
+
 /**
  * Post a foe/legend action to chat (name, cost, tags, description,
  * hit/miss/area). Works for non-attack actions too — the card simply omits

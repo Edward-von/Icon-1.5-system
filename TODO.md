@@ -146,6 +146,16 @@ Decisi con Edoardo il 9 settembre 2026:
       quando il marcatore va a 0 HP e a fine combat. I giocatori senza permessi sul bersaglio passano dal GM
       (socket).
 
+## Playtest del 9 settembre 2026 — FATTO (vedi PLAYTEST.md, "Esito playtest")
+
+- [x] 9 bug trovati e corretti nella stessa giornata (tab impilate, targeting v13, click sul ControlIcon, aura,
+      keyword lookup, chip dei mark, testo mark, Rush X → migrazione 5, costo grezzo). Zip nuovo per Maar.
+- [ ] Non provato: secondo client (relay giocatore → GM per mark/hatred e target), scena gridless, Shift+rotella
+      della Line larga, wizard di creazione oltre l'aspetto, reset dei power die a fine combat. Da fare nel
+      prossimo playtest o con Maar.
+- [ ] Maar: le scene della campagna (Enganoka) sono senza griglia → i template di area non funzionano lì.
+      Chiedere se vuole una griglia quadrata sulle mappe di combattimento (Field Battlemap ce l'ha).
+
 ## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
 
 - [x] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M — Sessione 8) ← il più abbordabile

@@ -265,6 +265,16 @@ export function tokensInCells(cells, { exclude = [] } = {}) {
   return canvas.tokens.placeables.filter(t => t.actor && !skip.has(t.id) && tokenCells(t.document).some(c => set.has(cellKey(c))));
 }
 
+/**
+ * Make `tokens` the user's targets (Foundry v13 has no User#updateTokenTargets:
+ * targeting goes through Token#setTarget, which also broadcasts it).
+ */
+function _setUserTargets(tokens) {
+  const keep = new Set(tokens.map(t => t.id));
+  for (const t of Array.from(game.user.targets)) if (!keep.has(t.id)) t.setTarget(false, { releaseOthers: false });
+  for (const t of tokens) if (!t.isTargeted) t.setTarget(true, { releaseOthers: false });
+}
+
 /** The token that represents `actor` on the current scene (controlled first). */
 export function sourceTokenFor(actor) {
   return canvas.tokens?.controlled?.find(t => t.actor?.id === actor?.id)
@@ -334,8 +344,10 @@ class AreaPlacement {
         wheel: (ev) => this.#onWheel(ev),
         ctx:   (ev) => { ev.preventDefault(); },
       };
-      canvas.stage.on("pointermove", this.handlers.move);
-      canvas.stage.on("pointerdown", this.handlers.down);
+      // Capture phase: a click on the control icon of a template already on
+      // the map would otherwise be swallowed by that icon before reaching us.
+      canvas.stage.addEventListener("pointermove", this.handlers.move, { capture: true });
+      canvas.stage.addEventListener("pointerdown", this.handlers.down, { capture: true });
       window.addEventListener("keydown", this.handlers.key, { capture: true });
       window.addEventListener("wheel", this.handlers.wheel, { capture: true, passive: false });
       canvas.app.view.addEventListener("contextmenu", this.handlers.ctx, { capture: true });
@@ -351,8 +363,8 @@ class AreaPlacement {
   #finish(result) {
     if (AreaPlacement.#active !== this) return;
     AreaPlacement.#active = null;
-    canvas.stage.off("pointermove", this.handlers.move);
-    canvas.stage.off("pointerdown", this.handlers.down);
+    canvas.stage.removeEventListener("pointermove", this.handlers.move, { capture: true });
+    canvas.stage.removeEventListener("pointerdown", this.handlers.down, { capture: true });
     window.removeEventListener("keydown", this.handlers.key, { capture: true });
     window.removeEventListener("wheel", this.handlers.wheel, { capture: true });
     canvas.app.view.removeEventListener("contextmenu", this.handlers.ctx, { capture: true });
@@ -429,6 +441,7 @@ class AreaPlacement {
       return this.cancel();
     }
     if (button !== 0) return;
+    ev.stopPropagation();             // the click is ours: don't select whatever lies under the mouse
     const pos = ev.getLocalPosition(canvas.stage);
     this.mouseCell = canvas.grid.getOffset({ x: pos.x, y: pos.y });
     if (this.area.kind === "arc") {
@@ -545,7 +558,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   }
 
   const targets = tokensInCells(cells, { exclude: area.kind === "burst" ? [token.id] : [] });
-  await game.user.updateTokenTargets(targets.map(t => t.id));
+  _setUserTargets(targets);
   // Switching to the template layer released the token: give it back its selection.
   if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
   _log(`placed ${area.label} for "${abilityName}" — ${cells.length} cells, ${targets.length} target(s)`);
@@ -563,7 +576,7 @@ export async function retargetFromTemplate(template) {
   const actorId = template?.getFlag(FLAG_NS, "actorId");
   const own = area.kind === "burst" ? canvas.tokens.placeables.filter(t => t.actor?.id === actorId).map(t => t.id) : [];
   const targets = tokensInCells(cells, { exclude: own });
-  await game.user.updateTokenTargets(targets.map(t => t.id));
+  _setUserTargets(targets);
   return { template, cells, targets, area };
 }
 
@@ -732,8 +745,10 @@ export function registerAreaTemplates() {
     if (!followers.length) return;
     const grid = canvas.grid;
     const half = grid.size / 2;
+    // v13: inside updateToken the document still reports the pre-move x/y
+    // (the movement is applied by the animation) — read the new spot from `changed`.
     const before = grid.getOffset({ x: options.iconPrevPos.x + half, y: options.iconPrevPos.y + half });
-    const after  = grid.getOffset({ x: tokenDoc.x + half, y: tokenDoc.y + half });
+    const after  = grid.getOffset({ x: (changed.x ?? tokenDoc.x) + half, y: (changed.y ?? tokenDoc.y) + half });
     const di = after.i - before.i, dj = after.j - before.j;
     if (!di && !dj) return;
     const origin = grid.getCenterPoint(after);   // the token's top-left cell, as when the aura was placed

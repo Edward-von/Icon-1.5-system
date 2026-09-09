@@ -234,6 +234,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
   }]);
   _log(`${source.name} marks ${target.name} with ${abilityName}`);
   await _chat(source, `<strong>🎯 ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
+  _refreshSheet(source);   // the chip on the marker's panel lives on another actor's sheet
   return effect;
 }
 
@@ -246,7 +247,13 @@ export async function removeMark(effectUuid, { silent = false } = {}) {
   const mark = effect.getFlag(NS, "mark") ?? {};
   await effect.delete();
   if (!silent) await _chat(target, `The mark <strong>${escapeHTML(mark.abilityName ?? effect.name)}</strong> on <strong>${escapeHTML(target?.name ?? "")}</strong> ends.`);
+  if (mark.sourceActorUuid) _refreshSheet(await fromUuid(mark.sourceActorUuid));
   return true;
+}
+
+/** Re-render an actor's open sheet (marks placed by it are shown there as chips). */
+function _refreshSheet(actor) {
+  try { if (actor?.sheet?.rendered) actor.sheet.render(false); } catch { /* sheet gone */ }
 }
 
 /** All marks placed by an actor end (p.103: when the marker is defeated). */

@@ -7,7 +7,7 @@ import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
-import { enrichHTML, escapeHTML, parseAbilitySections } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
@@ -236,7 +236,7 @@ export class IconSheet extends BaseActorSheet {
         name:        a.name,
         jobName:     s.jobName ?? "",
         class:       s.class ?? "",
-        cost:        s.cost ?? "",
+        cost:        abilityCostLabel(s.cost),
         chapter:     s.chapter ?? 1,
         tags:        resolveAbilityTags(s),
         // "Medium Blast" / "Line 4" / … when the (effective) tags carry an area pattern → 📐 button
@@ -1069,7 +1069,7 @@ export class IconSheet extends BaseActorSheet {
       name:        item.name,
       jobName:     s.jobName ?? "",
       class:       s.class ?? "",
-      cost:        s.cost ?? "",
+      cost:        abilityCostLabel(s.cost),
       chapter:     s.chapter ?? 1,
       tags:        resolveAbilityTags(s),
       areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
@@ -1303,7 +1303,7 @@ export class IconSheet extends BaseActorSheet {
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
     const sections = parseAbilitySections(item.system.description).sections;
-    const text = sections.find(sec => sec.label === "Mark")?.text
+    const text = sections.find(sec => /\bMark$/i.test(sec.label))?.text
       ?? sections.map(sec => `${sec.label}: ${sec.text}`).join(" ");
     _log(`abilityMark — "${item.name}" on ${targets[0].name}`);
     await applyMark({ source: this.document, target: targets[0].actor, abilityKey: item.id, abilityName: item.name, text });

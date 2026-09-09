@@ -454,6 +454,9 @@
   padding: var(--ic-pad) 12px;
 }
 .icon-tab[data-tab]:not(.active) { display: none; }
+/* Must beat the AppV2 part reset above (`.icon.sheet [data-application-part]:not(header)`,
+   specificity 0,3,1) — without this every tab section of the sheet is shown stacked. */
+.icon.sheet .icon-tab[data-tab]:not(.active) { display: none; }
 
 /* ============================================================
    8. Sections

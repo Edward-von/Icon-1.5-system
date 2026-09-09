@@ -110,8 +110,8 @@ const KEYWORDS = [
   { re: /power die/i,                         term: "Power Die" },
   { re: /combo(?: token)?/i,                  term: "Combo" },
   { re: /rebound(?:ed)?/i,                    term: "Rebound" },
-  { re: /ongoing(?=\+| status)/i,             term: "Ongoing (+)" },
-  { re: /(?<=\b(?:a|take|takes|taking|last|your|gain|gains|another) )wounds?/i, term: "Wound" },
+  { re: /ongoing(?=\+| status)/i,             term: "Ongoing (+)", lookup: /ongoing/i },
+  { re: /(?<=\b(?:a|take|takes|taking|last|your|gain|gains|another) )wounds?/i, term: "Wound", lookup: /wounds?/i },   // `lookup`: how a bare match is recognised when `re` needs context
   { re: /armor(?: \d+)?/i,                    term: "Armor X" },
   { re: /cover/i,                             term: "Cover" },
 ];
@@ -125,7 +125,7 @@ const COMBINED = new RegExp(
 /** Find the keyword entry a matched string belongs to. */
 function _lookup(match) {
   for (const k of KEYWORDS) {
-    const anchored = new RegExp(`^(?:${k.re.source})$`, "i");
+    const anchored = new RegExp(`^(?:${(k.lookup ?? k.re).source})$`, "i");
     if (anchored.test(match)) return k;
   }
   return null;

@@ -1,5 +1,29 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Playtest sul mondo di Maar: 9 fix
+
+Primo playtest reale (Claude in Chrome sul mondo Jade Regent, scena di test con copie dei PG). Tutto il blocco
+Hatred/Mark, i template di area e i dati delle sessioni 3-7 funzionano; questi i difetti trovati e corretti:
+
+- **Schede con tutte le tab impilate** (Narrative, Combat, Conditions… una sotto l'altra, pre-esistente dal
+  30 agosto): il reset `.icon.sheet [data-application-part]:not(header) { display:block }` aveva specificità più
+  alta della regola che nasconde le tab. Aggiunta `.icon.sheet .icon-tab[data-tab]:not(.active) { display:none }`.
+- **Template di area: targeting rotto in v13** (`game.user.updateTokenTargets` non esiste più): il template veniva
+  creato ma i token non venivano targettati e il flusso si fermava. Ora `Token#setTarget`.
+- **Click di piazzamento perso** se sotto il mouse c'era il ControlIcon di un template già sulla mappa: i listener
+  di piazzamento sono in fase di cattura e fermano la propagazione del click.
+- **Aura che non seguiva il token**: nell'hook `updateToken` di v13 la posizione nuova sta in `changed.x/y`, non
+  in `tokenDoc.x`.
+- **Keyword "take a wound" e "ongoing status" non evidenziate**: la lookup interna testava le regex con
+  lookbehind/lookahead sulla sola parola. Nuovo campo `lookup` per quelle keyword.
+- **Mark**: il chip "🎯 Bersaglio ✕" sul pannello del marcatore compariva solo al re-render (ora la scheda del
+  marcatore si aggiorna da sola); il testo del mark segue anche etichette come "End your turn and Mark:".
+- **"Rush X" ancora sui PG** (migrazione 4 non risultava applicata sul mondo di Maar): migrazione 5 lo rimuove
+  per nome. Schema → 5.
+- **Costo "2actions" grezzo** nei badge delle abilità, nel dialog d'attacco e nella card: ora "2 Actions",
+  "Free Action", "Interrupt 1".
+- Nota per Maar: le scene della campagna sono senza griglia; i template di area richiedono una griglia quadrata.
+
 ## 9 settembre 2026 — Sessione 8: Hatred "of X" e Mark per abilità (wishlist Maar)
 
 - **Hatred era uno status anonimo con save a fine turno**: il manuale (p.104) lo definisce "Hatred of X: half
