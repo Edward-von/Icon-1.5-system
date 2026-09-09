@@ -200,6 +200,7 @@ export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
   hitEffect, missEffect, exceedEffect, critEffect,
   costLabel, tags = [], areaHtml = "",
+  relicInvokes = [], relicNotes = [],
   actor,
 } = {}) {
   const net    = boons - curses;
@@ -243,7 +244,11 @@ export async function combatRoll({
     hitEffect:     hitEffect   ?? "",
     missEffect:    missEffect  ?? "",
     exceedEffect:  exceedEffect ?? "",
-    critEffect:    critEffect  ?? "",
+    critEffect:    critEffect   ?? "",
+    // Relic integration (p.245): attack invokes check the RAW d20; notes are
+    // the relic reminders that apply to this attack.
+    relicInvokeHtml: relicInvokeHtml(relicInvokes, d20),
+    relicNotesHtml:  relicNotesHtml(relicNotes),
   });
 
   const speaker = actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();
@@ -256,6 +261,38 @@ export async function combatRoll({
   });
 
   return { d20, modifier, total, isCrit, isHit, isExceed, rolls };
+}
+
+/* ================================================== */
+/*  Relic blocks for attack cards                      */
+/* ================================================== */
+
+const _esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
+
+/**
+ * "Invoke — Ape God I (17+)" lines: one per attack invoke, lit when the raw
+ * d20 reaches the threshold, dim otherwise. `autoHit` adds the p.245 note
+ * that the d20 was rolled only for the invoke.
+ */
+export function relicInvokeHtml(invokes, d20, { autoHit = false } = {}) {
+  if (!invokes?.length) return "";
+  const rows = invokes.map(i => {
+    const on = Number(d20) >= i.threshold;
+    const notes = on && i.notes?.length ? ` <em>${i.notes.map(_esc).join(" ")}</em>` : "";
+    return `<div class="icon-chat-relic ${on ? "icon-chat-relic--on" : "icon-chat-relic--off"}">
+      <span class="icon-chat-relic__label">${on ? "\u2726 Invoke" : "Invoke"} \u2014 ${_esc(i.relic)} ${_esc(i.rankLabel)} <small>(${i.threshold}+ \u00b7 d20 ${_esc(d20)})</small></span>
+      <span class="icon-chat-relic__text">${on ? _esc(i.effect) : "not triggered"}${notes}</span>
+    </div>`;
+  }).join("");
+  const note = autoHit ? `<p class="icon-chat-relic__note">Auto-hit: 1d20 rolled only to check the relic invoke (p.245).</p>` : "";
+  return `<div class="icon-chat-relics">${rows}${note}</div>`;
+}
+
+/** Relic reminder lines ("Ruin I — Once per attack, trade 1 boon for bonus damage."). */
+export function relicNotesHtml(notes) {
+  if (!notes?.length) return "";
+  const rows = notes.map(n => `<div class="icon-chat-relic icon-chat-relic--note"><span class="icon-chat-relic__label">\u2726 ${_esc(n.relic)} ${_esc(n.rankLabel)}</span><span class="icon-chat-relic__text">${_esc(n.text)}</span></div>`).join("");
+  return `<div class="icon-chat-relics icon-chat-relics--notes">${rows}</div>`;
 }
 
 /* ================================================== */

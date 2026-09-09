@@ -40,6 +40,9 @@
     {{/if}}
   </div>
 
+  {{!-- Relic invokes (raw d20 vs threshold, p.245) --}}
+  {{#if relicInvokeHtml}}{{{relicInvokeHtml}}}{{/if}}
+
   {{!-- Ability effects (shown inline for quick reference) --}}
   {{#if hitEffect}}
     <div class="icon-chat-card__effect-block {{#unless isHit}}icon-chat-card__effect-block--dim{{/unless}}">
@@ -69,4 +72,6 @@
       </div>
     {{/if}}
   {{/if}}
+  {{!-- Relic reminders that apply to this attack --}}
+  {{#if relicNotesHtml}}{{{relicNotesHtml}}}{{/if}}
 </div>

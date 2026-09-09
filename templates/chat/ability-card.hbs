@@ -32,6 +32,7 @@
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
     {{#if ab.hasTalent2}}<p><strong>Talent II:</strong> {{{ab.talent2}}}</p>{{/if}}
     {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}
+    {{#each ab.relicReminders as |rr|}}<p class="icon-ability-relic"><strong class="icon-ability-relic__label" title="From the relic {{rr.relic}}, rank {{rr.rankLabel}}">✦ {{rr.relic}} {{rr.rankLabel}}:</strong> {{{rr.text}}}</p>{{/each}}
   {{else}}
     {{!-- Normal version --}}
     {{#if ab.tags.length}}
@@ -65,5 +66,6 @@
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
     {{#if ab.hasTalent2}}<p><strong>Talent II:</strong> {{{ab.talent2}}}</p>{{/if}}
     {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}
+    {{#each ab.relicReminders as |rr|}}<p class="icon-ability-relic"><strong class="icon-ability-relic__label" title="From the relic {{rr.relic}}, rank {{rr.rankLabel}}">✦ {{rr.relic}} {{rr.rankLabel}}:</strong> {{{rr.text}}}</p>{{/each}}
   {{/if}}
 </div>

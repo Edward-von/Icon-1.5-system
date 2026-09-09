@@ -9,6 +9,8 @@ Come lavorare una sessione:
 3. Fine sessione: **compilare `PLAYTEST.md`** con i test del blocco (NON eseguirli: il playtest è una sessione
    separata con Claude in Chrome), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
    Ogni blocco qui sotto sottintende la voce "[ ] compilare PLAYTEST.md".
+4. **Ogni modifica fatta va segnata in `PLAYTEST.md`**, anche se non è una voce di questo file (fix
+   laterali, ritocchi emersi lavorando): niente cambia nel sistema senza una riga di test corrispondente.
 
 Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione · XL = più sessioni.
 
@@ -173,9 +175,18 @@ Decisi con Edoardo il 9 settembre 2026:
 
 - [x] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M — Sessione 8) ← il più abbordabile
       degli "alti": si può fare partendo dal registro status esistente (`module/combat/statuses.mjs`).
-- [ ] **Relic integration**: quando una reliquia modifica un'abilità, aggiungere reminder text
-      (es. Byrax 1 → "Whenever you refresh this stance, Dash 1"). (L/XL — serve prima una tabella dati
-      reliquia→trigger→testo)
+- [x] **Relic integration** (FATTA il 9 settembre 2026, Sessione 9): quando una reliquia modifica un'abilità,
+      riga "✦ Byrax I: Whenever you refresh this stance, dash 1" sul pannello dell'abilità e sulla card in chat
+      (tabella reliquia→rango→condizione→testo in `module/combat/relic-reminders.mjs`, 40 reliquie del pack);
+      sul tiro d'attacco il check "Invoke (Attack, N+)" sul d20 grezzo (p.245) con l'effetto acceso/spento, anche
+      per gli auto-hit (d20 tirato solo per l'invoke) e gli attacchi base; reminder legati al round (Conquering
+      King, Domain/Skipjack Aspect, Arenheir III) sulla card solo quando il round è raggiunto.
+      Emerso (da fare in un blocco futuro):
+      - [ ] Invoke **Gambit** delle reliquie (Byrax II, Hermes, Sleipnir, Mistborn…): bottone "Invoke" sulla tab
+            Relics con conteggio "usato questo combat" e card in chat; oggi si leggono solo. (M)
+      - [ ] Reliquie con effetti "a inizio/fine turno" (Apophis I, Erenbrass, Storm Lord I, Trollhide I/II,
+            Mistborn III): promemoria in chat al cambio turno del tracker. (S/M)
+      - [ ] Tab Relics: elencare sotto ogni reliquia le abilità equipaggiate che tocca (inverso dei reminder). (S)
 - [ ] **Encounter Designer**: scegli i PG, budget suggerito, pesca da fazioni/roster, toggle elite. (L/XL)
 - [ ] **Automazione effetti/save** offensiva (applica status al target, tira il save con bonus). (XL)
 - [ ] **Automazione difensiva** (Evasion, Cover ½ danno, Dodge). (XL, dipende dalla precedente)

@@ -1,7 +1,7 @@
 /**
  * IconSheet — ApplicationV2 sheet for Player Characters (type: "icon").
  */
-import { narrativeRoll, combatRoll, damageRoll, saveRoll } from "../../dice/rolls.mjs";
+import { narrativeRoll, combatRoll, damageRoll, saveRoll, relicInvokeHtml, relicNotesHtml } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard, recoverAction } from "../../combat/damage.mjs";
 import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
@@ -13,6 +13,7 @@ import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
+import { buildAbilityProfile, abilityRelicReminders, attackInvokes } from "../../combat/relic-reminders.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
@@ -247,6 +248,8 @@ export class IconSheet extends BaseActorSheet {
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
+        // Relic integration: reminder lines the character's relics add to this ability
+        relicReminders: await this._relicRemindersFor(s, parsed),
         // Book-order rules blocks parsed out of the description (Stance, Mark, Effect…)
         sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
@@ -1056,6 +1059,17 @@ export class IconSheet extends BaseActorSheet {
    * Find the enriched ability detail for a given itemId (built in
    * _prepareContext as `abilityDetails`). Returns null if not found.
    */
+  /**
+   * Relic reminder lines for one ability (relic-reminders.mjs), with the
+   * rule keywords enriched like every other block on the card.
+   */
+  async _relicRemindersFor(s, parsed, { forAttackCard = false } = {}) {
+    const tags = resolveAbilityTags(s).map(t => t.raw);
+    const profile = buildAbilityProfile(s, { tags, isAttack: parsed.isAttack, dealsDamage: parsed.dealsDamage });
+    const list = abilityRelicReminders(this.document, profile, { forAttackCard });
+    return Promise.all(list.map(async r => ({ ...r, text: await enrichHTML(r.text) })));
+  }
+
   async _getAbilityDetail(itemId) {
     const item = this.document.items.get(itemId);
     if (!item) return null;
@@ -1078,6 +1092,8 @@ export class IconSheet extends BaseActorSheet {
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
+      relicReminders: await this._relicRemindersFor(s, parsed),
+      relicProfile:   buildAbilityProfile(s, { tags: resolveAbilityTags(s).map(t => t.raw), isAttack: parsed.isAttack, dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage }),
       sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
       hasSections: desc.sections.length > 0,
       isAttack:    parsed.isAttack,
@@ -1370,8 +1386,22 @@ export class IconSheet extends BaseActorSheet {
     if (placement === null) return;
     const areaHtml = areaSummaryHtml(placement);
 
+    // Relic integration: "Invoke (Attack, N+)" checks on the raw d20 and the
+    // relic reminders that apply to this attack (round-gated ones only when
+    // the round is reached).
+    const relicInvokes = attackInvokes(this.document);
+    const relicNotes   = abilityRelicReminders(this.document, ab.relicProfile, { forAttackCard: true });
+
     if (ab.isAutoHit) {
-      // Auto-hit: no d20 roll, just announce and (optionally) chain into damage
+      // Auto-hit: no d20 roll, just announce and (optionally) chain into damage.
+      // With an attack invoke, p.245 says to roll 1d20 anyway just to check it.
+      let invokeHtml = "";
+      const rolls = [];
+      if (relicInvokes.length) {
+        const d20r = await new Roll("1d20").evaluate();
+        rolls.push(d20r);
+        invokeHtml = relicInvokeHtml(relicInvokes, d20r.total, { autoHit: true });
+      }
       await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this.document }),
         content: `<div class="icon-chat-card icon-chat-card--autohit">
@@ -1381,7 +1411,10 @@ export class IconSheet extends BaseActorSheet {
                     </div>
                     ${areaHtml}
                     <p>This attack ignores the attack roll and goes directly to damage.</p>
+                    ${invokeHtml}
+                    ${relicNotesHtml(relicNotes)}
                   </div>`,
+        rolls,
       });
       // Chain into damage if the ability deals damage
       if (ab.dealsDamage) {
@@ -1412,6 +1445,8 @@ export class IconSheet extends BaseActorSheet {
       exceedEffect: ab.exceedEffect,
       critEffect:   ab.critEffect,
       areaHtml,
+      relicInvokes,
+      relicNotes,
       actor:        this.document,
     });
   }
@@ -1517,6 +1552,8 @@ export class IconSheet extends BaseActorSheet {
     _log(`basicAttackRoll — "${ab.name}"`);
     const mods = await promptAttackMods(ab, this.document);
     if (!mods) return;
+    // Basic attacks are attacks too: relic invokes and attack reminders apply.
+    const profile = buildAbilityProfile({ cost: "1action" }, { tags: ab.tags.map(t => t.raw ?? ""), isAttack: true, dealsDamage: true });
     await combatRoll({
       abilityName: ab.name,
       costLabel:   ab.cost,
@@ -1526,6 +1563,8 @@ export class IconSheet extends BaseActorSheet {
       defense:     mods.defense,
       hitEffect:   ab.hitEffect,
       missEffect:  ab.missEffect,
+      relicInvokes: attackInvokes(this.document),
+      relicNotes:   abilityRelicReminders(this.document, profile, { forAttackCard: true }),
       actor:       this.document,
     });
   }

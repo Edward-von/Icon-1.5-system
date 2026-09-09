@@ -2241,6 +2241,33 @@ details[open] > .icon-basic-actions__summary::before {
 /* Rules blocks parsed out of the ability text (Effect / Stance / Mark / Refresh…) */
 .icon-ability-section { padding-left: 8px; border-left: 2px solid rgba(200,150,28,.25); }
 .icon-ability-section strong { color: var(--ic-gold-bright); }
+
+/* Relic reminders on ability cards (sheet panel + chat): a violet-tinted note
+   so they read as "from a relic", not as part of the ability text. */
+.icon-ability-relic {
+  margin: 2px 0;
+  padding: 2px 8px;
+  border-left: 2px solid rgba(155,110,220,.55);
+  background: rgba(155,110,220,.08);
+  border-radius: 0 4px 4px 0;
+}
+.icon-ability-relic__label { color: #b48ee8; cursor: help; }
+
+/* Relic blocks on attack cards: invoke lines (lit when the d20 reaches the
+   threshold) and reminder notes. */
+.icon-chat-relics { margin: 6px 0 2px; display: flex; flex-direction: column; gap: 3px; }
+.icon-chat-relic {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 3px 8px; border-radius: 4px; font-size: .86em;
+  border-left: 3px solid rgba(155,110,220,.5); background: rgba(155,110,220,.08);
+}
+.icon-chat-relic__label { font-weight: 700; color: #b48ee8; }
+.icon-chat-relic__label small { font-weight: 400; opacity: .8; }
+.icon-chat-relic--on  { border-left-color: #c9a54a; background: rgba(201,165,74,.16); box-shadow: inset 0 0 0 1px rgba(201,165,74,.35); }
+.icon-chat-relic--on .icon-chat-relic__label { color: var(--ic-gold-bright, #e8c96a); }
+.icon-chat-relic--off { opacity: .55; }
+.icon-chat-relic--off .icon-chat-relic__text { font-style: italic; }
+.icon-chat-relic__note { margin: 2px 0 0; font-size: .78em; opacity: .7; font-style: italic; }
 .icon-chat-card--ability .icon-chat-card__desc { font-style: italic; }
 
 /* Inline rule keywords with hover tooltip (helpers/keywords.mjs) */

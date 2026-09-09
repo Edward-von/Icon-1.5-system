@@ -709,6 +709,11 @@
         {{#if ab.hasTalent2}}<p><strong>Talent 2:</strong> <span class="icon-ability-preview__effect">{{{ab.talent2}}}</span></p>{{/if}}
         {{#if ab.hasMastery}}<p><strong>Mastery:</strong> <span class="icon-ability-preview__effect">{{{ab.mastery}}}</span></p>{{/if}}
 
+        {{!-- Relic integration: reminder lines from the character's relics (relic-reminders.mjs) --}}
+        {{#each ab.relicReminders as |rr|}}
+          <p class="icon-ability-relic"><strong class="icon-ability-relic__label" data-tooltip="From the relic {{rr.relic}} (rank {{rr.rankLabel}}) — see the Relics tab">✦ {{rr.relic}} {{rr.rankLabel}}:</strong> <span class="icon-ability-preview__effect">{{{rr.text}}}</span></p>
+        {{/each}}
+
         {{!-- Combo block — shown when ability has combo content --}}
         {{#if ab.hasCombo}}
           <div class="icon-ability-preview__combo {{#if ../comboActive}}icon-ability-preview__combo--active{{/if}}">

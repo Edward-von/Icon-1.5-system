@@ -1,5 +1,30 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 9: Relic integration (reminder sulle abilità, Invoke sugli attacchi)
+
+- **Le reliquie stavano solo nella tab Relics e ci si dimenticava di applicarle** (wishlist Maar: "Byrax I →
+  Whenever you refresh this stance, Dash 1"): nuovo modulo `module/combat/relic-reminders.mjs` con una tabella
+  reliquia → rango → condizione → testo per tutte le 40 reliquie del pack. Sul pannello di ogni abilità (tab
+  Combat) e sulla card 💬 in chat compaiono righe viola "✦ Byrax I: Whenever you refresh this stance, dash 1",
+  solo per i ranghi sbloccati (`currentRank`) e solo sulle abilità che c'entrano (tag `stance`, attacchi, testo
+  con "cure"/"shove"/"delay"/"teleport", blocco Charge/Slay/Exceed, versione Combo, range ≥ 3…). Alcuni testi
+  cambiano col rango (Dominus I dash 2 → 4 al III, Huntress "you marked" → "any marked" ad Aspect, Skipjack I
+  "Range N+1" calcolato dal tag).
+- **Invoke (Attack, N+) sul tiro d'attacco** (p.245: conta il d20 grezzo, non il totale): la card del tiro mostra
+  una riga per ogni reliquia con un Invoke d'attacco sbloccato, accesa in oro con l'effetto se il d20 raggiunge
+  la soglia, grigia "not triggered" altrimenti. Le soglie abbassate dall'Aspect (Paleblood 16+ → 12+, Conquering
+  King 18+ → 15+) vengono lette dal testo "becomes (Attack, N+)"; le note dell'Aspect di Ape God / Scheherezade /
+  Silver Rabbit si aggiungono in corsivo quando scatta. Gli attacchi auto-hit tirano comunque 1d20 solo per il
+  check (come dice il manuale) e gli attacchi base hanno le stesse righe.
+- **Reminder legati al round** (Conquering King I/II, Domain e Skipjack Aspect, Arenheir III): sul pannello sono
+  sempre visibili col prefisso "Round 5+"; sulla card del tiro compaiono solo quando il combat è a quel round,
+  con il valore corrente ("Round 3: exceed on 13+, crit on 18+").
+- Tutto è promemoria, niente automazione: i numeri di tiro e danno non cambiano. Foe, Legend e Summon non hanno
+  reliquie → card invariate. Verificato offline (Node) su tutti i 40 relic del pack: 18 Invoke d'attacco letti
+  correttamente ad Aspect, nessuna chiave della tabella fuori dal pack.
+- Emerso, in `TODO.md`: Invoke Gambit con bottone e conteggio, promemoria di inizio/fine turno, elenco delle
+  abilità toccate sotto ogni reliquia.
+
 ## 9 settembre 2026 — Residui del playtest: 2 fix
 
 - **End encounter puliva i template della scena visualizzata**, non di quella del combat: se il GM guardava un'altra

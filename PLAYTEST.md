@@ -339,6 +339,42 @@ danno del Legend (Earth Breaker, banda rossa, [D] d8, fray 3).
 Trovato e corretto: "End encounter" puliva i template della scena **visualizzata** invece di quella del combat; il
 Finalize del wizard accettava abilità di un job diverso se spuntate via DOM (le card nascoste): ora le rifiuta.
 
+## Sessione 9 (9 settembre 2026) — Relic integration: reminder sulle abilità e Invoke (Attack, N+)
+
+Prerequisito: un PG con reliquie dal compendio Relics (drop sulla tab Relics). Suggeriti: **Byrax** (stance),
+**Ape God** (Invoke Attack 17+), **Ruin** (attacchi), **Esper** o **Mercy** (cure), **Skipjack** (range +1),
+**Conquering King** (round). I rank si alzano dalla tab Relics (↑ Upgrade, serve Dust: mettere Dust a 30 nel
+Narrative per provare). Le reliquie NON sono automazione: sono righe di promemoria, i numeri non cambiano.
+
+- [ ] **Reminder sul pannello abilità**: PG con Byrax rango I e un'abilità con tag `stance` (es. un Colossus,
+      o aggiungi il tag "stance" a un'abilità) → nel pannello dell'abilità, dopo Talent/Mastery e prima del
+      blocco COMBO, la riga viola "✦ Byrax I: Whenever you refresh this stance, dash 1." (hover sull'etichetta →
+      tooltip "From the relic Byrax (rank I)"). Un'abilità senza tag stance NON ha la riga.
+- [ ] **Rango che cambia i reminder**: porta Byrax a rango III → sulla stessa stance compaiono anche "Byrax III:
+      On the first turn of combat, you may take this stance as a free action" (solo se costa 1 action o free) e,
+      ad Aspect, "Byrax Aspect: You can hold one more stance than normal". Togli la reliquia (×) → righe sparite.
+- [ ] **Reminder per attacchi / cure / range**: con Ruin I ogni abilità d'attacco ha "✦ Ruin I: Once per attack,
+      trade 1 boon for bonus damage." (abilità non-attacco: niente). Con Esper II un'abilità che dice "cure" ha
+      "Range of cure effects +2". Con Skipjack I un'abilità con tag `range-4` mostra "Range 5 (listed range +1)".
+- [ ] **Card in chat**: 💬 Show in Chat sull'abilità → le stesse righe ✦ in fondo alla card (anche in modalità
+      COMBO). Anche i Foe/Legend restano senza righe (le reliquie sono solo dei PG).
+- [ ] **Invoke (Attack, N+) sul tiro d'attacco**: PG con Ape God I, ⚔ su un attacco → nella card del tiro, sotto
+      HIT/MISS, la riga "Invoke — Ape God I (17+ · d20 N)": se il d20 GREZZO (non il totale con i boon) è ≥ 17 è
+      accesa in oro con "✦ Invoke" e "Stun your attack target."; altrimenti grigia con "not triggered". Ripeti
+      finché escono entrambi i casi. Con Ape God ad Aspect, quando scatta, in corsivo la nota dell'Aspect (bonus
+      damage, shove…). Con due reliquie Invoke Attack (es. + Gloam 14+) → due righe.
+- [ ] **Soglia abbassata dall'Aspect**: Paleblood a rango Aspect → la riga dice "Paleblood II (Aspect) (12+ …)"
+      invece di 16+. Conquering King ad Aspect → UNA sola riga "Conquering King III (Aspect) (15+ …)", non due.
+- [ ] **Auto-hit e attacco base**: un'abilità auto-hit (tag `autohit`) con Ape God → nella card "Auto-hit" compare
+      comunque la riga Invoke con un d20 tirato e la nota "1d20 rolled only to check the relic invoke (p.245)".
+      ⚔ sull'attacco base (Basic/Heavy) → riga Invoke e reminder da attacco (es. Ruin I) presenti.
+- [ ] **Reminder legati al round**: Conquering King I, combat NON avviato → sul pannello "Round 5+: this ability
+      deals bonus damage" (sempre visibile); sulla card del tiro d'attacco la riga NON c'è finché il combat non
+      è al round 5; al round 5+ compare "Round 5: this ability deals bonus damage (Round 5+)". Arenheir III al
+      round 3 → "Round 3: exceed on 13+, crit on 18+".
+- [ ] **Nessun errore in console** aprendo la scheda di un PG senza reliquie, di un PG con reliquie rinominate
+      (es. "Byrax (Edo)": nessuna riga, nessun crash), e tirando un attacco da Foe/Legend/Summon (card invariata).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
