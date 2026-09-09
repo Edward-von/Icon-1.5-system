@@ -1,0 +1,44 @@
+{{!-- encounter/encounter.hbs — step 3: the picks with quantity, Elite toggle, reserve round and cost --}}
+<section class="icon-wizard__step icon-encounter__step icon-encounter__picks {{#if totals.over}}icon-wizard__step--warn{{else if totals.full}}icon-wizard__step--done{{/if}}">
+  <div class="icon-wizard__step-head">
+    <span class="icon-wizard__num">3</span>
+    <h3 class="icon-wizard__step-title">Encounter</h3>
+    <span class="icon-wizard__counter {{#if totals.over}}icon-wizard__counter--over{{else if totals.full}}icon-wizard__counter--full{{/if}}">{{totals.spent}} / {{budget}} pts</span>
+    {{#if hasPicks}}<button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="clearPicks" title="Remove every pick">Clear</button>{{/if}}
+  </div>
+
+  {{#if hasPicks}}
+  <div class="icon-encounter__picklist">
+    {{#each picks}}
+    <div class="icon-encounter__pick {{#if reserve}}icon-encounter__pick--reserve{{/if}}" data-index="{{@index}}" data-uuid="{{uuid}}" data-foe-class="{{cls}}">
+      <span class="icon-encounter__cls">{{clsLabel}}</span>
+      <span class="icon-encounter__row-main">
+        <span class="icon-encounter__name">{{name}}{{#if (icon-eq src "world")}} <span class="icon-badge">world</span>{{/if}}</span>
+        <span class="icon-encounter__meta">{{faction}} · Ch{{chapter}} · {{hpShown}} HP{{#if isMob}} · {{mobMembers}} members{{/if}} · {{turns}} turn{{#unless (icon-eq turns 1)}}s{{/unless}}/round{{#if isLegend}} · scaled for {{../players}} players{{/if}}{{#if reserveLabel}} · <em>{{reserveLabel}}</em>{{/if}}</span>
+      </span>
+      {{#unless isLegend}}
+      <span class="icon-encounter__stepper">
+        <button type="button" class="icon-btn icon-btn--sm" data-action="decPick" title="One less">−</button>
+        <input type="number" name="qty" min="1" max="20" value="{{qty}}">
+        <button type="button" class="icon-btn icon-btn--sm" data-action="incPick" title="One more">+</button>
+      </span>
+      {{/unless}}
+      <button type="button" class="icon-encounter__elite {{#if elite}}icon-encounter__elite--on{{/if}}" data-action="toggleElite" {{#if eliteLocked}}disabled{{/if}}
+              title="{{#if baseElite}}Always Elite (faction template){{else if isMob}}Mobs can't take the Elite template{{else if isLegend}}Legends scale with the party instead{{else}}Elite template (p.299): 2 turns, double HP, 2 points{{/if}}">Elite</button>
+      <select name="reserve" title="Reserves appear at the edge of the map at the end of that round and act from the next one (p.292)">
+        <option value="0" {{#unless reserve}}selected{{/unless}}>On map</option>
+        <option value="2" {{#icon-eq reserve 2}}selected{{/icon-eq}}>Reserve · R2</option>
+        <option value="3" {{#icon-eq reserve 3}}selected{{/icon-eq}}>Reserve · R3</option>
+      </select>
+      <span class="icon-encounter__cost" title="Budget points">{{cost}}</span>
+      <button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="removePick" title="Remove">✕</button>
+    </div>
+    {{/each}}
+  </div>
+  {{else}}
+    <p class="icon-wizard__empty">Add foes from the roster (＋ or double-click) or roll 🎲 Random fill.</p>
+  {{/if}}
+
+  {{#if totals.over}}<p class="icon-wizard__warn">Over budget by {{totals.overBy}} point{{#unless (icon-eq totals.overBy 1)}}s{{/unless}}. Fine for a deliberately hard fight; otherwise move something to the reserve or drop it.</p>{{/if}}
+  {{#if hasLegend}}<p class="icon-wizard__hint">A Legend is worth the whole budget (p.292): it takes one turn per player and its HP scales with the party. Anything on top makes the fight harder than the book intends.</p>{{/if}}
+</section>

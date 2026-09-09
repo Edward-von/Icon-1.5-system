@@ -76,6 +76,7 @@ import { registerMigrationSettings, runMigrations } from "./module/migrations.mj
 /*  Onboarding                                         */
 /* -------------------------------------------------- */
 import { showWelcomeGuide } from "./module/apps/welcome.mjs";
+import { EncounterDesigner } from "./module/apps/EncounterDesigner.mjs";
 import { showReferenceGuide } from "./module/apps/reference.mjs";
 
 /* -------------------------------------------------- */
@@ -145,6 +146,15 @@ Hooks.once("init", () => {
     config: false,
     type:   Boolean,
     default: false,
+  });
+
+  // Encounter Designer — saved encounters (GM only, world-scoped, keyed by name).
+  game.settings.register("icon-system", "encounterDrafts", {
+    name:   "Saved encounters (Encounter Designer)",
+    scope:  "world",
+    config: false,
+    type:   Object,
+    default: {},
   });
 
   // Expose config
@@ -238,6 +248,8 @@ Hooks.once("init", () => {
     applyHatred,
     applyMark,
     removeMark,
+    openEncounterDesigner: () => EncounterDesigner.open(),
+    EncounterDesigner,
   };
 
   console.log("ICON 1.5 | System initialised");
@@ -726,6 +738,52 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
 });
 
 /* ================================================== */
+/*  Encounter Designer — sidebar button + chat card   */
+/* ================================================== */
+
+/**
+ * "Encounter" button in the header of the Actors sidebar (GM only). The
+ * directory is re-rendered often, so the button is only added when missing.
+ */
+Hooks.on("renderActorDirectory", (app, html /*, data */) => {
+  if (!game.user.isGM) return;
+  const root = html instanceof HTMLElement ? html : html?.[0];
+  if (!root) return;
+  const actions = root.querySelector(".header-actions") ?? root.querySelector(".directory-header");
+  if (!actions || actions.querySelector(".icon-encounter-launch")) return;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "icon-encounter-launch";
+  btn.title = "Encounter Designer — budget, roster, Elite, reserves (ICON 1.5 p.292)";
+  btn.innerHTML = '<i class="fa-solid fa-chess-knight"></i> Encounter';
+  btn.addEventListener("click", ev => { ev.preventDefault(); EncounterDesigner.open(); });
+  actions.appendChild(btn);
+});
+
+/**
+ * "Reveal reserves" on the encounter chat card: un-hide the reserve tokens and
+ * add them to the scene's combat (GM only).
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  const buttons = html.querySelectorAll('[data-action="revealReserves"]');
+  if (!buttons.length) return;
+  buttons.forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    if (!game.user.isGM) { btn.disabled = true; btn.style.opacity = "0.5"; return; }
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      const ids = (btn.dataset.tokenIds ?? "").split(",").filter(Boolean);
+      let n = 0;
+      try { n = await EncounterDesigner.revealReserves(btn.dataset.sceneId, ids); }
+      catch (err) { console.error("ICON 1.5 | Reveal reserves failed:", err); ui.notifications.error("Revealing the reserves failed (see console)."); return; }
+      if (!n) return;
+      btn.disabled = true; btn.textContent = `✓ ${n} revealed`; btn.style.opacity = "0.5";
+    });
+  });
+});
+
+/* ================================================== */
 /*  setup — Sheets + Pre-load templates               */
 /* ================================================== */
 
@@ -764,6 +822,7 @@ Hooks.once("setup", async () => {
     "systems/icon-system/templates/chat/bond-power-card.hbs",
     "systems/icon-system/templates/chat/bond-card.hbs",
     "systems/icon-system/templates/chat/foe-action-card.hbs",
+    "systems/icon-system/templates/chat/encounter-card.hbs",
   ];
   await foundry.applications.handlebars.loadTemplates(templates);
   console.log("ICON 1.5 | Templates loaded");

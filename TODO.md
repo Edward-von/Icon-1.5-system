@@ -187,7 +187,20 @@ Decisi con Edoardo il 9 settembre 2026:
       - [ ] Reliquie con effetti "a inizio/fine turno" (Apophis I, Erenbrass, Storm Lord I, Trollhide I/II,
             Mistborn III): promemoria in chat al cambio turno del tracker. (S/M)
       - [ ] Tab Relics: elencare sotto ogni reliquia le abilità equipaggiate che tocca (inverso dei reminder). (S)
-- [ ] **Encounter Designer**: scegli i PG, budget suggerito, pesca da fazioni/roster, toggle elite. (L/XL)
+- [x] **Encounter Designer** (FATTA il 9 settembre 2026, Sessione 10): scegli i PG, budget suggerito, pesca da
+      fazioni/roster, toggle elite. Finestra GM `module/apps/EncounterDesigner.mjs` (bottone "Encounter" nella
+      sidebar Actors, macro, `game.icon.openEncounterDesigner()`): party → budget p.292 (+ one-fight rule,
+      aggiustamento, cap di capitolo), roster filtrato (376 foe + 28 legend + foe del mondo), Elite/riserve/
+      quantità, 🎲 Random fill, salvataggi, uscite 💬 chat / 📥 attori in cartella / 🗺 deploy token + combat con
+      riserve nascoste e "Reveal reserves" dalla card.
+      Emerso (da fare in un blocco futuro):
+      - [ ] **Titan Armament** dei Jotunn (p.448: +1 punto, +50% HP, un turno in più) come opzione per riga. (S)
+      - [ ] **Riserve automatiche**: a fine round 2/3 il tracker propone "Reveal reserves" (oggi solo dal bottone
+            sulla card in chat). (S/M)
+      - [ ] Deploy con "riusa gli attori del mondo" (oggi i foe presi dalla sorgente World vengono comunque
+            copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
+      - [ ] Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
+            passata sul pack (`img` + `prototypeToken.texture`). (M, dati)
 - [ ] **Automazione effetti/save** offensiva (applica status al target, tira il save con bonus). (XL)
 - [ ] **Automazione difensiva** (Evasion, Cover ½ danno, Dodge). (XL, dipende dalla precedente)
 

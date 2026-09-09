@@ -1,0 +1,52 @@
+{{!-- encounter/party.hbs — step 1: pick the PCs, budget rule, manual adjustment, chapter cap --}}
+<section class="icon-wizard__step icon-encounter__step icon-encounter__party">
+  <div class="icon-wizard__step-head">
+    <span class="icon-wizard__num">1</span>
+    <h3 class="icon-wizard__step-title">Party</h3>
+    <span class="icon-wizard__counter" title="Budget = players + 1 (one fight: 2 × players), then the manual adjustment">
+      {{players}} PC{{#unless (icon-eq players 1)}}s{{/unless}} → {{base}}{{#if state.adjust}} {{#if (icon-gt state.adjust 0)}}+{{/if}}{{state.adjust}}{{/if}} = <strong>{{budget}}</strong> pts
+    </span>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="partyScene" title="Select the PCs that have a token on the current scene">On scene</button>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="partyAll" title="Select every PC of the world">All</button>
+  </div>
+
+  <div class="icon-encounter__pcs">
+    {{#each pcs}}
+      <button type="button" class="icon-encounter__pc icon-class--{{cls}} {{#if selected}}icon-encounter__pc--on{{/if}}" data-action="togglePc" data-pc-id="{{id}}" title="{{#if selected}}In the party — click to remove{{else}}Click to add to the party{{/if}}">
+        <img src="{{img}}" alt="">
+        <span class="icon-encounter__pc-text">
+          <span class="icon-encounter__pc-name">{{name}}</span>
+          <small>L{{level}} · Ch{{chapter}}{{#if job}} · {{job}}{{/if}}</small>
+        </span>
+      </button>
+    {{else}}
+      <p class="icon-wizard__empty">No player characters in this world yet.</p>
+    {{/each}}
+  </div>
+
+  <div class="icon-encounter__rules">
+    <label class="icon-encounter__check" title="Points = 2 × players. Normal budget on the map, half the rest at the end of round 2, the rest at the end of round 3 (p.292)">
+      <input type="checkbox" name="oneFight" {{#if state.oneFight}}checked{{/if}}>
+      <span>One-fight rule <small>2 × players, rest in reserve</small></span>
+    </label>
+    <span class="icon-encounter__field">
+      <span class="icon-encounter__label">Adjust</span>
+      <span class="icon-encounter__stepper">
+        <button type="button" class="icon-btn icon-btn--sm" data-action="adjust" data-delta="-1" title="Balance down (p.292: remove 1–2 points)">−</button>
+        <strong>{{#if (icon-gt state.adjust 0)}}+{{/if}}{{state.adjust}}</strong>
+        <button type="button" class="icon-btn icon-btn--sm" data-action="adjust" data-delta="1" title="Balance up (p.292: add 1–2 points)">+</button>
+      </span>
+    </span>
+    <label class="icon-encounter__field">
+      <span class="icon-encounter__label">Chapter cap</span>
+      <select name="chapterCap" title="Foes above this chapter are hidden in the roster">
+        <option value="0" {{#if capAuto}}selected{{/if}}>Auto (party: Ch{{cap}})</option>
+        <option value="1" {{#icon-eq state.chapterCap 1}}selected{{/icon-eq}}>Chapter 1</option>
+        <option value="2" {{#icon-eq state.chapterCap 2}}selected{{/icon-eq}}>Chapter 2</option>
+        <option value="3" {{#icon-eq state.chapterCap 3}}selected{{/icon-eq}}>Chapter 3</option>
+      </select>
+    </label>
+  </div>
+
+  <p class="icon-wizard__hint"><strong>p.292:</strong> mob 1 · foe 1 · elite 2 · Legend = the whole budget. The most important factor is action economy: if the players outnumber the foes, they usually win.</p>
+</section>

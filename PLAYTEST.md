@@ -375,6 +375,63 @@ Narrative per provare). Le reliquie NON sono automazione: sono righe di promemor
 - [ ] **Nessun errore in console** aprendo la scheda di un PG senza reliquie, di un PG con reliquie rinominate
       (es. "Byrax (Edo)": nessuna riga, nessun crash), e tirando un attacco da Foe/Legend/Summon (card invariata).
 
+## Sessione 10 (9 settembre 2026) — Encounter Designer
+
+Prerequisito: GM, un mondo con 2-3 PG (almeno uno con token sulla scena aperta), scena con griglia. Il designer
+si apre dal bottone **"♞ Encounter"** in cima alla sidebar Actors, dalla macro "ICON: Encounter Designer" nel
+compendio Macros, o da console con `game.icon.openEncounterDesigner()`. Regole: ICON 1.5 p.292 (budget =
+giocatori + 1; mob 1, foe 1, elite 2, Legend = tutto il budget), p.298 (mob: 2 membri/giocatore; Legend: 50 HP
+per giocatore, min 100), p.299 (template Elite: 2 turni, HP ×2, 2 punti).
+
+- [ ] **Apertura e party**: bottone "Encounter" visibile solo al GM (da client Player: assente; macro → avviso).
+      All'apertura sono selezionati i PG che hanno un token sulla scena corrente (se nessuno: tutti); con 3 PG
+      la banda dice "0 / 4 points", "3 players", "Chapter ≤ N" con N = capitolo più alto del party.
+      Click su un PG lo toglie/aggiunge → budget aggiornato subito. "On scene" / "All" cambiano la selezione.
+- [ ] **Regole del budget**: spunta "One-fight rule" → budget 2 × giocatori (3 PG: 6) e la banda dice "· one fight";
+      "Adjust" −/+ cambia il totale (3 PG, +1 → 5); "Chapter cap" a "Chapter 1" nasconde nel roster i foe Ch2/Ch3
+      (es. Abomination Ch2 sparisce), "Higher chapters" li rimostra.
+- [ ] **Roster**: con i filtri a zero e sorgente "Compendium" il contatore dice "404 shown" (376 foe + 28 legend);
+      filtro Faction "Jotunn" → solo Jotunn, tutti con badge Elite e costo 2; Class "Mob" → i 13 mob;
+      cercando "guard" mentre si digita il campo NON perde il focus e il contatore scende; sorgente "World" mostra
+      i foe già importati nel mondo (badge "world"), "Both" entrambi; ↻ ricarica; "Clear" azzera i filtri.
+      👁 apre la scheda del foe del compendio (sola lettura).
+- [ ] **Aggiungere**: "+" su Warrior → riga in "Encounter" con "Heavy · Folk · Ch1 · 40 HP · 1 turn/round", costo 1,
+      banda "1 / 4"; di nuovo "+" (o doppio click sulla riga del roster) → quantità 2, costo 2. Il roster NON
+      scorre in cima quando si aggiunge (solo party/encounter/banda si ri-renderizzano). −/+ e il campo numerico
+      cambiano la quantità; − a 1 rimuove la riga; ✕ rimuove; "Clear" svuota tutto.
+- [ ] **Elite**: bottone "Elite" sul Warrior → oro, "80 HP", "2 turns/round", costo 2 per corpo (×2 → 4, banda
+      "4 / 4" in oro e bordo del blocco dorato). Su un Jotunn (es. Aetnir) il bottone è già acceso e disabilitato
+      (tooltip "Always Elite"); su un Mob disabilitato ("Mobs can't…"); con 3 PG il mob dice "6 members".
+- [ ] **Legend**: "+" su Dread Lords → costo = budget (4), "3 turns/round · scaled for 3 players", HP 150; il
+      suggerimento "A Legend is worth the whole budget" compare; un secondo Legend è rifiutato con avviso.
+      Aggiungendo altro si va over budget: contatore rosso, bordo rosso, "Over budget by N".
+- [ ] **Riserve**: select "Reserve · R2" su una riga → riga tratteggiata, "Reserve · end of round 2" nella riga e
+      "X on map · Y in reserve" nella banda; il totale conta anche le riserve.
+- [ ] **🎲 Random fill**: filtro Faction "Folk", budget 4 con 1 punto già speso → il riempimento aggiunge foe
+      Folk per esattamente 3 punti (niente Legend; un elite solo se restano ≥ 2 punti); con budget pieno → avviso.
+- [ ] **Salvataggi**: senza nome "Save" avvisa; con nome "Prova" → compare nel menu; "New" azzera picks/nome
+      tenendo il party; "Load" ripristina picks, riserve, elite e nome; F5 → il salvataggio c'è ancora (world
+      setting); "✕" chiede conferma e cancella.
+- [ ] **💬 Chat**: card "Encounter Designer" sussurrata ai GM (il Player non la vede) con "N / M points", elenco
+      "On the map" con qty × nome, classe, Elite, turni e costo; sezione "Reserve" con "enters at the end of
+      round 2"; footer con la formula.
+- [ ] **📥 Actors**: crea la cartella Actors "Encounter: Prova" (rosso scuro) con un attore per corpo ("Warrior 1",
+      "Warrior 2"); il Warrior elite ha Elite spuntato, HP 80/80 e il trait "Elite" in cima; il mob ha 6 membri
+      e 12 hit; il Legend ha playerScale 3 e HP 150/150; token prototipo ostile e non linkato. Card in chat con
+      "Actors in folder …". Gli attori creati NON compaiono nel roster "World" (flag encounter).
+- [ ] **🗺 Deploy**: con nessuna scena aperta il bottone è disabilitato (tooltip "Open a scene first"); over budget
+      → dialog di conferma. Con una scena con griglia: token disposti in file vicino al centro della vista
+      (i size 2 occupano due celle, seconda fila separata), combat creato/aggiornato con i foe "On map" e — se
+      "+ party" è spuntato — i token dei PG selezionati presenti sulla scena (non duplicati se già dentro); i
+      token in riserva sono NASCOSTI e NON nel combat; avviso "Deployed N token(s) (K hidden in reserve)".
+- [ ] **Reveal reserves**: sulla card del deploy il bottone "👁 Reveal reserves & add to combat" (solo GM:
+      il Player lo vede disabilitato) → i token nascosti diventano visibili e finiscono nel tracker, bottone
+      "✓ K revealed" disabilitato; ripremuto non duplica; se i token sono stati cancellati → avviso.
+- [ ] **Robustezza**: nessun errore in console aprendo/chiudendo/riaprendo il designer (riapertura = stessa
+      finestra portata in primo piano), ridimensionando la finestra (roster e picks scorrono dentro le proprie
+      liste, footer sempre visibile), con un mondo senza PG ("No player characters…"), su scena senza griglia
+      (i token vengono comunque piazzati).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

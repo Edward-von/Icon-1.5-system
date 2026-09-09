@@ -1,0 +1,48 @@
+{{!-- encounter/roster.hbs — step 2: every foe / legend of the compendium (and the world), filtered client-side --}}
+<section class="icon-wizard__step icon-encounter__step icon-encounter__roster">
+  <div class="icon-wizard__step-head">
+    <span class="icon-wizard__num">2</span>
+    <h3 class="icon-wizard__step-title">Roster</h3>
+    <span class="icon-wizard__counter" data-role="roster-count">{{rosterCount}} shown</span>
+    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="randomFill" title="Fill the remaining points with random foes from the rows shown below (filter by faction first)">🎲 Random fill</button>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="clearFilters" title="Reset the filters">Clear</button>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="reloadRoster" title="Re-read the compendium and the world actors">↻</button>
+  </div>
+
+  <div class="icon-encounter__filters">
+    <input type="search" name="search" placeholder="Search name, faction, trait…" value="{{filters.search}}" autocomplete="off">
+    <select name="faction">
+      <option value="">All factions</option>
+      {{#each factions}}<option value="{{this}}" {{#icon-eq this ../filters.faction}}selected{{/icon-eq}}>{{this}}</option>{{/each}}
+    </select>
+    <select name="cls">
+      <option value="">All classes</option>
+      {{#each classes}}<option value="{{value}}" {{#icon-eq value ../filters.cls}}selected{{/icon-eq}}>{{label}}</option>{{/each}}
+    </select>
+    <select name="src" title="Compendium foes get the latest data fixes; world foes are the ones already imported (and edited) in this world">
+      <option value="pack" {{#icon-eq filters.src "pack"}}selected{{/icon-eq}}>Compendium</option>
+      <option value="world" {{#icon-eq filters.src "world"}}selected{{/icon-eq}}>World ({{worldCount}})</option>
+      <option value="all" {{#icon-eq filters.src "all"}}selected{{/icon-eq}}>Both</option>
+    </select>
+    <label class="icon-encounter__check" title="Chapter 2+/3+ variants are stronger versions meant for higher-level parties">
+      <input type="checkbox" name="allChapters" {{#if filters.allChapters}}checked{{/if}}>
+      <span>Higher chapters</span>
+    </label>
+  </div>
+
+  <div class="icon-encounter__list">
+    {{#each roster}}
+    <div class="icon-encounter__row" data-key="{{key}}" data-uuid="{{uuid}}" data-src="{{src}}" data-faction="{{faction}}" data-cls="{{cls}}" data-chapter="{{chapter}}" data-search="{{searchText}}" data-foe-class="{{cls}}" title="Double-click to add">
+      <span class="icon-encounter__cls">{{clsLabel}}</span>
+      <span class="icon-encounter__row-main">
+        <span class="icon-encounter__name">{{name}}{{#if isElite}} <span class="icon-badge icon-badge--primary">Elite</span>{{/if}}{{#if (icon-eq src "world")}} <span class="icon-badge">world</span>{{/if}}</span>
+        <span class="icon-encounter__meta">{{faction}} · Ch{{chapter}}{{#if (icon-gt size 1)}} · Size {{size}}{{/if}}{{#if hpMax}} · {{hpMax}} HP{{/if}}{{#if phases}} · {{phases}} phases{{/if}}{{#if traitsText}} · <em>{{traitsText}}</em>{{/if}}</span>
+      </span>
+      <span class="icon-encounter__cost" title="Budget points">{{costLabel}}</span>
+      <button type="button" class="icon-btn icon-btn--sm" data-action="openSource" title="Open the sheet">👁</button>
+      <button type="button" class="icon-btn icon-btn--sm icon-btn--add" data-action="addPick" title="Add to the encounter">+</button>
+    </div>
+    {{/each}}
+    <p class="icon-wizard__empty" data-role="roster-empty" hidden>Nothing matches these filters.</p>
+  </div>
+</section>

@@ -1,5 +1,33 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Sessione 10: Encounter Designer (versione 1.2.0)
+
+- **Preparare un incontro voleva dire contare a mano i punti del p.292 e importare i foe uno a uno dal compendio**
+  (wishlist Maar: "scegli i PG, budget suggerito, pesca da fazioni/roster, toggle elite"): nuova finestra GM
+  **Encounter Designer** (`module/apps/EncounterDesigner.mjs`, template in `templates/apps/encounter/`), aperta
+  dal bottone "♞ Encounter" in cima alla sidebar Actors, dalla macro "ICON: Encounter Designer" (pack `macros`) o
+  da `game.icon.openEncounterDesigner()`.
+- **Party e budget**: si scelgono i PG (preselezionati quelli con token sulla scena) → budget = giocatori + 1
+  (p.292), con la "one-fight rule" (2 × giocatori, resto in riserva), l'aggiustamento ±1-2 punti e il cap di
+  capitolo (auto = capitolo più alto del party) che nasconde i foe delle varianti Ch2+/Ch3+. La banda mostra
+  punti spesi / budget e i turni NPC contro i turni PG (l'action economy del p.292).
+- **Roster**: tutti i 376 foe e 28 legend del compendio (più i foe già importati nel mondo) filtrati sul client per
+  fazione, classe, capitolo, sorgente e testo (nome, fazione, trait) senza ri-render, quindi la ricerca non perde
+  il focus. Costo in punti su ogni riga, 👁 per aprire la scheda, "+" o doppio click per aggiungere.
+- **Incontro**: quantità per riga, bottone **Elite** (p.299: costo 2, HP ×2, 2 turni; bloccato sui Jotunn già
+  Elite, sui mob e sui Legend), riserva "end of round 2/3", Legend = tutto il budget (uno solo), avvisi over
+  budget. **🎲 Random fill** riempie i punti rimasti pescando a caso dalle righe visibili del roster (prima si
+  filtra la fazione). Salvataggi per nome in un world setting (Save / Load / ✕ / New).
+- **Uscite**: 💬 card sussurrata ai GM con la ripartizione; 📥 attori in una cartella "Encounter: <nome>" con un
+  attore per corpo ("Warrior 1", "Warrior 2"), template Elite applicato (HP ×2, trait "Elite"), membri del mob =
+  2 × giocatori (p.298) e HP del Legend scalati sui giocatori (50/giocatore, min 100); 🗺 Deploy = attori + token
+  disposti in file al centro della vista + combat della scena con i foe "on map" (e i token del party, opzione
+  "+ party"). Le riserve sono token nascosti fuori dal combat: il bottone "👁 Reveal reserves" sulla card li
+  scopre e li mette nel tracker al momento giusto.
+- Verificato offline (Node): formule del budget sugli esempi del p.292 (3 giocatori → 4 foe, 1 elite + 2 foe,
+  1 legend) e compilazione dei sei template Handlebars. Emerso, in `TODO.md`: Titan Armament (+1 punto) come
+  opzione sui Jotunn, riserve automatiche a fine round dal tracker.
+
 ## 9 settembre 2026 — Sessione 9: Relic integration (reminder sulle abilità, Invoke sugli attacchi)
 
 - **Le reliquie stavano solo nella tab Relics e ci si dimenticava di applicarle** (wishlist Maar: "Byrax I →

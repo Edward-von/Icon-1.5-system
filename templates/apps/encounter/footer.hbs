@@ -1,0 +1,29 @@
+{{!-- encounter/footer.hbs — name, saved encounters, outputs (chat / actors / deploy) --}}
+<footer class="icon-wizard__footer icon-encounter__footer">
+  <label class="icon-encounter__namefield">
+    <span class="icon-encounter__label">Name</span>
+    <input type="text" name="encounterName" value="{{name}}" placeholder="e.g. Ambush at the ford" autocomplete="off">
+  </label>
+
+  <div class="icon-encounter__drafts" title="Saved encounters (world setting, GM only)">
+    <select name="draft" {{#unless hasDrafts}}disabled{{/unless}}>
+      {{#each drafts}}<option value="{{this}}">{{this}}</option>{{else}}<option value="">No saved encounters</option>{{/each}}
+    </select>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="loadDraft" {{#unless hasDrafts}}disabled{{/unless}} title="Load the selected encounter">Load</button>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="saveDraft" title="Save this encounter under its name">Save</button>
+    <button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="deleteDraft" {{#unless hasDrafts}}disabled{{/unless}} title="Delete the selected encounter">✕</button>
+    <button type="button" class="icon-btn icon-btn--sm" data-action="newEncounter" title="Start over (keeps the party)">New</button>
+  </div>
+
+  <span class="icon-wizard__summary">
+    {{#if hasPicks}}<strong>{{totals.bodies}}</strong> bod{{#if (icon-eq totals.bodies 1)}}y{{else}}ies{{/if}} · <strong>{{totals.spent}}</strong> / {{budget}} pts{{#if totals.reserve}} · {{totals.reserve}} in reserve{{/if}}{{else}}Nothing picked yet{{/if}}
+  </span>
+
+  <label class="icon-encounter__check" title="Deploy also adds the selected PCs' tokens on this scene to the combat">
+    <input type="checkbox" name="addParty" {{#if addParty}}checked{{/if}}>
+    <span>+ party</span>
+  </label>
+  <button type="button" class="icon-btn" data-action="postChat" {{#unless hasPicks}}disabled{{/unless}} title="Whisper the budget breakdown to the GMs">💬 Chat</button>
+  <button type="button" class="icon-btn" data-action="createActors" {{#unless hasPicks}}disabled{{/unless}}{{#if busy}} disabled{{/if}} title="Import the foes into an “Encounter: …” actor folder (Elite / mob / Legend HP already applied)">📥 Actors</button>
+  <button type="button" class="icon-btn icon-btn--primary" data-action="deploy" {{#unless canDeploy}}disabled{{/unless}} title="{{#if sceneName}}Actors + tokens at the centre of “{{sceneName}}” + combat (reserves hidden){{else}}Open a scene first{{/if}}">🗺 Deploy{{#if busy}}…{{/if}}</button>
+</footer>

@@ -1,0 +1,40 @@
+{{!-- encounter-card.hbs — GM-whispered summary of an encounter built with the Encounter Designer --}}
+<div class="icon-macro-card icon-macro-combat icon-encounter-card">
+  <div class="icon-macro-header">
+    <i class="fas fa-chess-knight"></i>
+    <h3>{{name}}</h3>
+  </div>
+  <div class="icon-macro-body">
+    <p class="icon-encounter-card__budget">
+      <span class="icon-macro-value">{{spent}}</span> / {{budget}} points
+      <span class="icon-macro-sub">{{players}} player{{#unless (icon-eq players 1)}}s{{/unless}}{{#if party.length}} ({{#each party}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}){{/if}} → {{base}}{{#if adjust}} {{#if (icon-gt adjust 0)}}+{{/if}}{{adjust}} adjust{{/if}}{{#if oneFight}} · one-fight rule{{/if}} · {{npcTurns}} NPC turn{{#unless (icon-eq npcTurns 1)}}s{{/unless}} vs {{pcTurns}} PC · ICON 1.5 p.292</span>
+      {{#if over}}<span class="icon-macro-warning">Over budget by {{overBy}}.</span>{{/if}}
+    </p>
+    <h4>On the map{{#if hasReserve}} ({{onMap}} pts){{/if}}</h4>
+    <ul class="icon-macro-list">
+      {{#each rows}}{{#unless reserve}}
+      <li>
+        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}} · {{turns}} turn{{#unless (icon-eq turns 1)}}s{{/unless}}</span></span>
+        <span class="icon-macro-value">{{cost}}</span>
+      </li>
+      {{/unless}}{{/each}}
+    </ul>
+    {{#if hasReserve}}
+    <h4>Reserve ({{reserve}} pts)</h4>
+    <ul class="icon-macro-list">
+      {{#each rows}}{{#if reserve}}
+      <li>
+        <span><span class="icon-macro-pc-name">{{#unless isLegend}}{{qty}} × {{/unless}}{{name}}</span> <span class="icon-macro-sub">{{clsLabel}}{{#if elite}} · Elite{{/if}} · enters at the end of round {{reserve}}</span></span>
+        <span class="icon-macro-value">{{cost}}</span>
+      </li>
+      {{/if}}{{/each}}
+    </ul>
+    <p class="icon-macro-sub">Reserves appear at the edge of the map at the end of the round and act normally from the following round (p.292).</p>
+    {{#if reserveTokenIds}}
+    <button type="button" class="icon-btn icon-btn--add icon-encounter-card__reveal" data-action="revealReserves" data-scene-id="{{sceneId}}" data-token-ids="{{reserveTokenIds}}">👁 Reveal reserves &amp; add to combat</button>
+    {{/if}}
+    {{/if}}
+    {{#if folderName}}<p class="icon-macro-sub">Actors in folder “{{folderName}}”{{#if deployed}}, tokens placed at the centre of the view, combat updated{{/if}}.</p>{{/if}}
+  </div>
+  <div class="icon-macro-footer">Budget: players + 1 · mob 1 · foe 1 · elite 2 · Legend = all</div>
+</div>

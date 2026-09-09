@@ -1,0 +1,18 @@
+{{!-- encounter/hero.hbs — band header of the Encounter Designer: name, party facts, spent / budget --}}
+<header class="icon-wizard__hero icon-encounter__hero">
+  <div class="icon-wizard__notch"><span class="icon-encounter__glyph">⚔</span></div>
+  <div class="icon-wizard__identity">
+    <span class="icon-wizard__kicker">Encounter Designer · ICON 1.5 p.292</span>
+    <h2 class="icon-wizard__title" data-role="hero-title">{{#if name}}{{name}}{{else}}New encounter{{/if}}</h2>
+    <div class="icon-encounter__stats">
+      <span class="icon-badge">{{players}} player{{#unless (icon-eq players 1)}}s{{/unless}}</span>
+      <span class="icon-badge icon-badge--chapter">Chapter ≤ {{cap}}</span>
+      <span class="icon-badge" title="Action economy (p.292): if the party outnumbers the foes it usually wins">{{totals.npcTurns}} NPC turn{{#unless (icon-eq totals.npcTurns 1)}}s{{/unless}} vs {{totals.pcTurns}} PC</span>
+      {{#if totals.reserve}}<span class="icon-badge">{{totals.onMap}} on map · {{totals.reserve}} in reserve</span>{{/if}}
+    </div>
+  </div>
+  <div class="icon-wizard__level">
+    <span class="icon-wizard__level-value {{#if totals.over}}icon-encounter__over{{/if}}">{{totals.spent}} <small>/</small> {{budget}}</span>
+    <span class="icon-wizard__level-label">points{{#if state.oneFight}} · one fight{{/if}}</span>
+  </div>
+</header>
