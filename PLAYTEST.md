@@ -301,6 +301,22 @@ Prerequisito: scena con il token del PG (es. Knave con Intimidate, o Shade con H
 - [x] **Marked generico intatto**: il bottone stackable "Marked: N" nella griglia Negative funziona ancora
       (+1/−1) e non tocca i mark specifici.
 
+## Restyle dei dialog di tiro (9 settembre 2026, sera)
+
+- [ ] **Attack dialog**: PG con un token nemico targettato, ⚔ su un'abilità → banda del colore della classe con
+      ritratto e nome dell'abilità, badge costo e chip dei tag, "d20" a destra; card 🎯 con ritratto/nome/DEF/ARM/HP
+      del bersaglio; chip "⚙ Dazed: +1 curse" se ha Dazed e "⚙ Height advantage" se ha elevation; stepper −/+ per
+      Boons e Curses (non scendono sotto 0); Defense precompilata; l'anteprima cambia mentre modifichi
+      ("1d20 + best of 1d6 vs DEF 6"). "⚔ Roll Attack" in oro; la card in chat è uguale a prima.
+- [ ] **Damage dialog**: 💥 → segmenti Hit / Crit / Miss / Area con la formula; click su Crit → anteprima con un dado
+      in più; chip Vulnerable/Resistance/Weakened attivabili (oro quando attivi); con Hatred attivo il chip rosso
+      "Hatred of X ½" già acceso se il bersaglio non è X; bonus dice con stepper → anteprima "roll 3d8, keep 2".
+      "💥 Roll Damage" → card con gli step giusti e il nome del bersaglio targettato.
+- [ ] **Foe e Legend**: ⚔ e 💥 sulle azioni aprono gli stessi dialog con la banda rossa NPC e il ritratto del foe;
+      il dado mostra il [D] del foe (d6) / della legend (d8) e il suo fray.
+- [ ] **Senza bersaglio**: card tratteggiata "No token targeted — hover a token and press T", Defense vuota,
+      anteprima "No Defense: the card shows the total".
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

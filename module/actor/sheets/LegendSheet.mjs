@@ -2,6 +2,8 @@
  * LegendSheet — ApplicationV2 sheet for Legend (Boss) actors (type: "legend").
  */
 import { combatRoll } from "../../dice/rolls.mjs";
+import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
+import { abilityCostLabel } from "../../helpers/enrich.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
@@ -381,7 +383,7 @@ export class LegendSheet extends BaseActorSheet {
       return;
     }
 
-    const mods = await LegendSheet.#promptLegendDamageMods(action, parsed);
+    const mods = await LegendSheet.#promptLegendDamageMods(action, parsed, actor);
     if (!mods) return;
 
     await postAbilityDamageCard(actor, {
@@ -394,54 +396,16 @@ export class LegendSheet extends BaseActorSheet {
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
       weakened:    mods.weakened,
+      hatred:      mods.hatred,
     });
   }
 
-  static async #promptLegendDamageMods(action, parsed) {
-    const content = `
-      <form>
-        <div class="form-group">
-          <label>Outcome</label>
-          <select name="outcome">
-            <option value="hit"  selected>Hit</option>
-            ${parsed.hit.mult > 0 ? '<option value="crit">Critical (+1 die)</option>' : ""}
-            ${parsed.miss.fray || parsed.miss.flat > 0 ? '<option value="miss">Miss</option>' : ""}
-            ${parsed.area.mult > 0 || parsed.area.flat > 0 || parsed.area.fray ? '<option value="area">Area</option>' : ""}
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Bonus dice</label>
-          <input type="number" name="bonusDice" value="0" min="0">
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="vulnerable"> Target is vulnerable (+1)</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="resistance"> Target has resistance (½)</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="weakened"> Attacker is weakened (−2)</label>
-        </div>
-      </form>
-    `;
-    return foundry.applications.api.DialogV2.wait({
-      window:  { title: `Damage: ${action.name}` },
-      content,
-      buttons: [
-        { action: "roll", label: "Roll Damage", default: true, callback: (_e, btn) => {
-          const f = btn.form;
-          return {
-            outcome:    f.elements.outcome.value,
-            bonusDice:  Number(f.elements.bonusDice.value) || 0,
-            vulnerable: f.elements.vulnerable.checked,
-            resistance: f.elements.resistance.checked,
-            weakened:   f.elements.weakened.checked,
-          };
-        } },
-        { action: "cancel", label: "Cancel", callback: () => null },
-      ],
-      rejectClose: false,
-    });
+  static async #promptLegendDamageMods(action, parsed, actor) {
+    return promptDamageMods(
+      { name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [], parsed, isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
+      { damagedie: actor.system.damagedie || "d8", fray: actor.system.fray ?? 0 },
+      { actor },
+    );
   }
 
   /**
@@ -450,85 +414,7 @@ export class LegendSheet extends BaseActorSheet {
    * the targeted token. Mirrors FoeSheet/IconSheet prompts.
    */
   static async #promptAttackMods(action, actor) {
-    const auto = getActorStatusMods(actor);
-
-    // Auto-detect target defense
-    const targets = Array.from(game.user?.targets ?? []);
-    let autoDefense = "";
-    let targetNote = "";
-    if (targets.length > 0) {
-      const defenses = targets.map(t => {
-        const a = t.actor;
-        return a?.system?.combat?.defense ?? a?.system?.defense ?? null;
-      }).filter(d => d != null);
-      if (defenses.length) {
-        autoDefense = Math.min(...defenses);
-        const names = targets.map(t => t.actor?.name ?? "?").join(", ");
-        targetNote = `<p style="margin:0;font-size:.85em;color:#7fb2ff;border-left:3px solid #7fb2ff;padding-left:6px">🎯 Target: ${names} (DEF ${autoDefense})</p>`;
-      }
-    }
-
-    // Elevation: read actor flag, fall back to token elevation
-    const readEl = (a, tok) => a?.getFlag?.("icon-system", "elevation")
-                              ?? tok?.document?.elevation
-                              ?? 0;
-    const sourceToken = canvas?.tokens?.controlled?.find(t => t.actor?.id === actor.id)
-                     ?? actor.getActiveTokens?.()?.[0]
-                     ?? null;
-    let elevationBoons  = 0;
-    let elevationCurses = 0;
-    let elevationNote = "";
-    if (targets.length > 0) {
-      const srcEl = readEl(actor, sourceToken);
-      const elDiffs = targets.map(t => srcEl - readEl(t.actor, t));
-      const worstDiff = Math.min(...elDiffs);
-      const bestDiff  = Math.max(...elDiffs);
-      if (worstDiff < 0) {
-        elevationCurses = Math.abs(worstDiff);
-        elevationNote = `Height disadvantage Δ${elevationCurses}: +${elevationCurses} curse${elevationCurses > 1 ? "s" : ""}`;
-      } else if (bestDiff > 0) {
-        elevationBoons = bestDiff;
-        elevationNote = `Height advantage Δ${elevationBoons}: +${elevationBoons} boon${elevationBoons > 1 ? "s" : ""}`;
-      }
-    }
-
-    const totalBoons  = auto.boons  + elevationBoons;
-    const totalCurses = auto.curses + elevationCurses;
-    const allNotes = [...auto.notes];
-    if (elevationNote) allNotes.push(elevationNote);
-    const noteHtml = allNotes.length
-      ? `<p style="margin:0;font-size:.85em;color:#c4a64f;border-left:3px solid #c4a64f;padding-left:6px">⚠ Auto-applied: ${allNotes.join(" • ")}</p>`
-      : "";
-
-    const content = `
-      <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
-        <p style="margin:0"><strong>${escapeHTML(action.name)}</strong></p>
-        ${targetNote}
-        ${noteHtml}
-        <label>Boons:  <input type="number" name="boons" value="${totalBoons}" min="0" max="9" style="width:60px"></label>
-        <label>Curses: <input type="number" name="curses" value="${totalCurses}" min="0" max="9" style="width:60px"></label>
-        <label>Target Defense: <input type="number" name="defense" value="${autoDefense}" min="0" placeholder="(optional)" style="width:80px"></label>
-      </div>
-    `;
-    try {
-      return await foundry.applications.api.DialogV2.prompt({
-        window:   { title: `Attack: ${action.name}` },
-        content,
-        ok: {
-          label: "Roll Attack",
-          callback: (_e, button, dialog) => {
-            const root = button?.form ?? dialog?.element ?? dialog;
-            const defenseVal = root.querySelector('input[name="defense"]')?.value;
-            return {
-              boons:   Number(root.querySelector('input[name="boons"]')?.value ?? 0),
-              curses:  Number(root.querySelector('input[name="curses"]')?.value ?? 0),
-              defense: defenseVal ? Number(defenseVal) : null,
-            };
-          },
-        },
-        rejectClose: false,
-      });
-    } catch { return null; }
+    return promptAttackMods({ name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [] }, actor);
   }
 
   /** Toggle a status effect on this legend (Conditions tab buttons). */

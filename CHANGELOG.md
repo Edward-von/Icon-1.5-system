@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 settembre 2026 — Restyle dei dialog di Attack Roll e Damage Roll
+
+- **Nuovo modulo `module/apps/roll-dialogs.mjs`**, condiviso da PG, Foe e Legend (prima ognuno aveva la sua copia
+  con input inline senza stile): banda diagonale del colore della classe (rosso per gli NPC) con ritratto, nome
+  dell'abilità, badge del costo e chip dei tag, e a destra il dado ("d20 · crit 20+ · exceed 15+", oppure
+  "[D] d8 · fray 4").
+- **Card "🎯 Target"** costruita dai token targettati: ritratto, nome, DEF / ARM / HP; con più bersagli si usa la DEF
+  più bassa; senza bersagli un suggerimento ("hover + T").
+- **Attack**: i modificatori automatici (status, dislivello) sono chip "⚙", boons e curses hanno gli stepper −/+,
+  la Defense è precompilata; riga di anteprima live "1d20 + best of 2d6 vs DEF 6 — you need 6 or more…".
+- **Damage**: l'esito è un controllo a segmenti (Hit / Crit / Miss / Area con la formula sotto), la versione Combo è
+  un chip viola, le mitigazioni (Vulnerable +1, Resistance ½, Weakened −2, Hatred ½) sono chip attivabili,
+  stepper per i bonus dice e anteprima "roll 3d8, keep 2 + fray 4 → ½ resistance". Il nome del bersaglio nella
+  card viene dai token targettati (non c'è più il campo di testo).
+- Foe e Legend passano ora dagli stessi dialog (anche con l'hint Hatred); i valori restituiti sono invariati,
+  quindi `combatRoll` e la card del danno non cambiano.
+
 ## 9 settembre 2026 — Tracker: i pip di attivazione erano fuori dalla sidebar; "Round {round}"
 
 - **Nessuno vedeva i pip di attivazione** (segnalazione di Edoardo: "i giocatori non hanno pulsanti per prendere il
