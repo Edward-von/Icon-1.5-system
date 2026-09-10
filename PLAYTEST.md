@@ -117,7 +117,7 @@ suo su `createCombatant` (non nostro).
       e premi "Apply Damage" → "2 blocked by Armor". Atrophic Grave (Relict › Heavy) resta Armor 0.
       Nuovo Foe creato da zero → Armor 2 (default Heavy); cambia classe e premi "Apply base stats" →
       Skirmisher/Leader/Artillery tornano a 0. ✓ 10-11 set: Warrior importato → ARM 2 e ogni Apply dice "2 blocked by Armor"; Atrophic Grave e Foe creato da zero non provati
-- [✗] **Rush X sparito**: apri un PG Stalwart esistente → dopo la migrazione (console: "Migration 4")
+- [x] **Rush X sparito** (✓ 9 set sera: migrazione 5 eseguita sul server, nessun PG ha più Rush X): apri un PG Stalwart esistente → dopo la migrazione (console: "Migration 4")
       il trait "Rush X" non c'è più; restano Armor 2 e Fortify con i pip Vigilance. Crea un nuovo PG
       Stalwart dal wizard → niente Rush X; "Rush X" compare nel dropdown delle regole di classe.
       ✗ 9 set: il PG Hiroshi ha ancora il trait "Rush X" (schema già a 4) → migrazione 5 lo rimuove per nome
