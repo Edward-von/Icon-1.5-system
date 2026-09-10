@@ -205,6 +205,12 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
       - [x] card del save senza status: "Damage: 6 / 3 on a successful save avoided." → frase più naturale;
       - [x] dialog d'attacco dei summon ("Attack: TEST") ancora vecchio stile, non restylato come PG/Foe.
 
+## Playtest della Sessione 14 — FATTO il 10 settembre 2026 (11/11 ok)
+
+- [ ] Cosmetico (S): le card d'attacco di Foe/Legend mostrano i tag grezzi ("true-strike", "line-3") invece delle etichette
+      ("True Strike", "Line 3") come le card PG: mappare i tag con lo stesso helper (`resolveAbilityTags` / label) in
+      FoeSheet/LegendSheet prima di passarli a `combatRoll`.
+
 ## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
 
 - [x] **Hatred / Mark**: mark specifici per abilità con testo, Hatred "verso X". (M — Sessione 8) ← il più abbordabile

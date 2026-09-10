@@ -2,6 +2,8 @@
 
 ## 10 settembre 2026 — Sessione 14: fix dal playtest del 10 settembre (versione 1.5.1)
 
+- **Playtest della Sessione 14** (stessa sera, build 1.5.1 caricata sul server di Maar): 11 caselle su 11 ok, nessun errore in
+  console. Unico residuo cosmetico: le card d'attacco NPC mostrano i tag grezzi ("true-strike") invece dell'etichetta.
 - **Il tag "true strike" di un'abilità non ignorava l'Evasion**: il Warrior con Cleave (true strike) faceva tirare il d6
   al PG → `ignoresEvasion(attacker)` guardava solo lo status sull'attaccante → ora riceve anche i tag dell'attacco
   (`tagKey` normalizza "True Strike" / `true-strike` / oggetti {raw,label}); `combatRoll` e il dialog d'attacco li

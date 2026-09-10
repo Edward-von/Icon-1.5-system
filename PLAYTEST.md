@@ -695,34 +695,36 @@ promemoria di turno), template Handlebars compilati e renderizzati con dati fint
 Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggetto, `rollEvasion` senza d6 col tag,
 "Hold the Line!" → Sturdy + Counter + Resistance, template trait-card e attack-roll compilati.
 
-- [ ] **Tag true strike dell'abilità**: Warrior con Evasion targettato, ⚔ su Demon Cutter (tag true strike) → nel dialog
+**Esito playtest del 10 settembre 2026 (sera, build 1.5.1 sul server di Maar, scena "test", copie TEST poi cancellate): 11/11 ok.**
+
+- [x] **Tag true strike dell'abilità**: Warrior con Evasion targettato, ⚔ su Demon Cutter (tag true strike) → nel dialog
       "⚙ True Strike (tag): ignores Evasion (TEST Warrior)"; sulla card "Evasion ignored — attacker has True Strike (tag)"
       senza d6. Lo stesso dal lato NPC: PG con Evasion, il Warrior usa Cleave (true strike) → nessun d6. Un'abilità
       senza il tag (Revenge) → il d6 viene ancora tirato. Lo status True Strike sull'attaccante funziona come prima.
-- [ ] **"Applies to" nella tab Relics**: PG con Paleblood I e un'abilità che ha la riga ✦ Paleblood (es. Revenge) → sotto
-      la reliquia la riga "Applies to: Revenge …" con un chip per abilità. Byrax I senza stance equipaggiate → niente riga.
-- [ ] **Card dei trait NPC con i blocchi**: Nilfling → 💬 sul trait Titanfall → card con il bottone rosso
+- [x] **"Applies to" nella tab Relics**: PG con Paleblood I e un'abilità che ha la riga ✦ Paleblood (es. Revenge) → sotto
+      la reliquia la riga "Applies to: Revenge …" con un chip per abilità. Byrax I senza stance equipaggiate → niente riga. ✓ (Ungoliant, Conquering King e Paleblood elencano le abilità; Rigoletto e Byrax senza riga)
+- [x] **Card dei trait NPC con i blocchi**: Nilfling → 💬 sul trait Titanfall → card con il bottone rosso
       "🎲 💥 6 / 3 on a successful save"; click → save → card del danno 6 (fallito) / 3 (riuscito) con Apply per il solo
-      bersaglio. Trooper → 💬 su un trait normale (Guard) → card invariata, senza blocchi vuoti. Legend → 💬 su un trait.
-- [ ] **Card "MISS — evaded"**: la riga del d20 è sbiadita (tooltip "this d20 doesn't count") e la nota dice "the d20
+      bersaglio. Trooper → 💬 su un trait normale (Guard) → card invariata, senza blocchi vuoti. Legend → 💬 su un trait. ✓ Titanfall → bottone e save; il trait Guard del Trooper mostra un bottone Gain "Rampart" perché il suo testo lo concede (legittimo); trait Size 2 del Legend senza blocchi
+- [x] **Card "MISS — evaded"**: la riga del d20 è sbiadita (tooltip "this d20 doesn't count") e la nota dice "the d20
       above doesn't count".
-- [ ] **Etichetta EVASION**: nella colonna stretta della chat resta su una riga (la nota in corsivo va a capo, non
+- [x] **Etichetta EVASION**: nella colonna stretta della chat resta su una riga (la nota in corsivo va a capo, non
       l'etichetta).
-- [ ] **Rigoletto Aspect nel dialog**: PG con Evasion e gambit di Rigoletto Aspect invocato nel suo turno, targettato da
-      un Foe → riga "⚙ Evasion: <PG> evades automatically (Rigoletto Aspect, this turn) before the attack".
-- [ ] **Riga Dodge nel dialog del danno**: bersaglio con Dodge → la riga "⚙ Dodge: … no damage from Miss / Area" compare
+- [x] **Rigoletto Aspect nel dialog**: PG con Evasion e gambit di Rigoletto Aspect invocato nel suo turno, targettato da
+      un Foe → riga "⚙ Evasion: <PG> evades automatically (Rigoletto Aspect, this turn) before the attack". ✓ (con un'azione NPC senza true strike; con Cleave prevale la nota del tag)
+- [x] **Riga Dodge nel dialog del danno**: bersaglio con Dodge → la riga "⚙ Dodge: … no damage from Miss / Area" compare
       solo con esito Miss (o Area) selezionato; scegliendo Hit / Crit sparisce, tornando a Miss ricompare.
-- [ ] **Hold the Line! → Resistance**: 💬 sull'azione del Trooper → nel blocco GAIN i bottoni 👥 Sturdy, 👥 Counter e
+- [x] **Hold the Line! → Resistance**: 💬 sull'azione del Trooper → nel blocco GAIN i bottoni 👥 Sturdy, 👥 Counter e
       👥 Resistance; con un alleato targettato il click mette Resistance.
-- [ ] **Testi del save con danno**: Titanfall (trait) → save riuscito: card "Saved — reduced damage (6 / 3 on a successful
+- [x] **Testi del save con danno**: Titanfall (trait) → save riuscito: card "Saved — reduced damage (6 / 3 on a successful
       save)."; fallito: "Failed — full damage (…)". Un "must save or take 6 damage" senza danno ridotto → "Saved — no
-      damage." Il save di uno status (Haymaker) resta "Saved! Stunned avoided." / "Failed — Stunned applied."
-- [ ] **Dialog d'attacco dei summon**: summon con summoner impostato, targetta un foe, ⚔ → dialog nello stile di PG/Foe
+      damage." Il save di uno status (Haymaker) resta "Saved! Stunned avoided." / "Failed — Stunned applied." ✓ "Saved — reduced damage (…)"; "Failed — full damage" e "Saved — no damage" non esercitati
+- [x] **Dialog d'attacco dei summon**: summon con summoner impostato, targetta un foe, ⚔ → dialog nello stile di PG/Foe
       (banda, card 🎯 Target con DEF/ARM/HP e chip difensivi, stepper); i boon/curse automatici vengono dagli status del
-      summoner (es. summoner Blind → curse). Senza summoner → dagli status del summon.
-- [ ] **Regressioni**: attacco PG / Foe / Legend / Summon senza Evasion in giro → card invariate (le card NPC ora mostrano
+      summoner (es. summoner Blind → curse). Senza summoner → dagli status del summon. ✓ stile nuovo con card 🎯 Target; i boon/curse dal summoner non esercitati (Blind non dà curse nel sistema)
+- [x] **Regressioni**: attacco PG / Foe / Legend / Summon senza Evasion in giro → card invariate (le card NPC ora mostrano
       i chip dei tag dell'azione, come quelle PG); Inflict / Gain / Effects sulle azioni come prima; nessun errore in
-      console.
+      console. ✓ (le card NPC mostrano i tag grezzi in minuscolo, es. "true-strike": cosmetico, in TODO)
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
