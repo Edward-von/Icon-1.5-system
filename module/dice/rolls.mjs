@@ -215,7 +215,7 @@ export async function combatRoll({
   // attack roll. When every target evades there is no attack roll at all: the
   // d20 is still shown for reference but the result is a miss and relic
   // invokes don't trigger.
-  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets() });
+  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets(), tags });
   const evaded  = evasion.allEvaded;
 
   const d20r   = await new Roll("1d20").evaluate();

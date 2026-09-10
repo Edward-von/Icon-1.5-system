@@ -1,10 +1,10 @@
 /**
  * SummonSheet — ApplicationV2 sheet for Summon tokens (type: "summon").
  */
-import { enrichHTML, escapeHTML } from "../../helpers/enrich.mjs";
+import { enrichHTML } from "../../helpers/enrich.mjs";
 import { combatRoll } from "../../dice/rolls.mjs";
+import { promptAttackMods } from "../../apps/roll-dialogs.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
-import { getActorStatusMods } from "../../combat/status-modifiers.mjs";
 import { summonStatusEntries } from "../../combat/ability-statuses.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
@@ -94,57 +94,10 @@ export class SummonSheet extends BaseActorSheet {
     const summoner = actor.system.summonerActorId
       ? game.actors?.get(actor.system.summonerActorId)
       : null;
-    const modSource = summoner ?? actor;
-
-    const auto = getActorStatusMods(modSource);
-    const targets = Array.from(game.user?.targets ?? []);
-    let autoDefense = "";
-    let targetNote  = "";
-    if (targets.length > 0) {
-      const defenses = targets.map(t => {
-        const a = t.actor;
-        return a?.system?.combat?.defense ?? a?.system?.defense ?? null;
-      }).filter(d => d != null);
-      if (defenses.length) {
-        autoDefense = Math.min(...defenses);
-        const names = targets.map(t => t.actor?.name ?? "?").join(", ");
-        targetNote = `<p style="margin:0;font-size:.85em;color:#7fb2ff;border-left:3px solid #7fb2ff;padding-left:6px">🎯 Target: ${names} (DEF ${autoDefense})</p>`;
-      }
-    }
-    const noteHtml = auto.notes.length
-      ? `<p style="margin:0;font-size:.85em;color:#c4a64f;border-left:3px solid #c4a64f;padding-left:6px">⚠ Auto-applied: ${auto.notes.join(" • ")}</p>`
-      : "";
     const abilityName = actor.system.sourceAbilityName || actor.name;
-    const content = `
-      <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
-        <p style="margin:0"><strong>${escapeHTML(abilityName)}</strong></p>
-        ${targetNote}
-        ${noteHtml}
-        <label>Boons:  <input type="number" name="boons"  value="${auto.boons}"  min="0" max="9" style="width:60px"></label>
-        <label>Curses: <input type="number" name="curses" value="${auto.curses}" min="0" max="9" style="width:60px"></label>
-        <label>Target Defense: <input type="number" name="defense" value="${autoDefense}" min="0" placeholder="(optional)" style="width:80px"></label>
-      </div>
-    `;
-    let mods;
-    try {
-      mods = await foundry.applications.api.DialogV2.prompt({
-        window: { title: `Attack: ${abilityName}` },
-        content,
-        ok: {
-          label: "Roll Attack",
-          callback: (_e, button, dialog) => {
-            const root = button?.form ?? dialog?.element ?? dialog;
-            const defenseVal = root.querySelector('input[name="defense"]')?.value;
-            return {
-              boons:   Number(root.querySelector('input[name="boons"]')?.value  ?? 0),
-              curses:  Number(root.querySelector('input[name="curses"]')?.value ?? 0),
-              defense: defenseVal ? Number(defenseVal) : null,
-            };
-          },
-        },
-        rejectClose: false,
-      });
-    } catch { return; }
+    // Same restyled dialog as PCs / foes (targets, defensive chips, Evasion note);
+    // boon / curse auto-mods come from the summoner when one is set.
+    const mods = await promptAttackMods({ name: abilityName, cost: "", tags: [] }, actor, { modsActor: summoner ?? actor });
     if (!mods) return;
 
     _log(`rollSummonAttack — summon: "${actor.name}" | ability: "${abilityName}" | summoner: "${summoner?.name ?? "(none)"}"`);

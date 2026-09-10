@@ -174,8 +174,12 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
       boons, curses: prompt.curses, boonNote,
       actor: target,
       subtitle: `${abilityName ? `${abilityName} — ` : ""}${source?.name ?? "?"} → ${target.name}`,
-      successText: when === "success" ? `Saved — ${fullLabel} applies on a successful save.` : `Saved! ${fullLabel} avoided.`,
-      failureText: when === "success" ? `Failed — the failed-save outcome applies instead (see the ability text).` : `Failed — ${fullLabel} applied.`,
+      successText: kind === "save-damage"
+        ? (saveDamage?.success?.deals ? `Saved — reduced damage (${saveDamage?.label ?? ""}).` : `Saved — no damage.`)
+        : when === "success" ? `Saved — ${fullLabel} applies on a successful save.` : `Saved! ${fullLabel} avoided.`,
+      failureText: kind === "save-damage"
+        ? `Failed — full damage (${saveDamage?.label ?? ""}).`
+        : when === "success" ? `Failed — the failed-save outcome applies instead (see the ability text).` : `Failed — ${fullLabel} applied.`,
     });
     success = r.success; total = r.total; rolled = true;
     note = `save ${total}`;

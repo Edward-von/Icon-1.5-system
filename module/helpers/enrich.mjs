@@ -36,7 +36,7 @@ export function escapeHTML(str) {
  * NPC traits are inline schema entries, not embedded Items. `actor` may be
  * null (compendium item view): the card then has no speaker actor.
  */
-export async function postNpcTraitCard(actor, trait, { label } = {}) {
+export async function postNpcTraitCard(actor, trait, { label, statusHtml = "" } = {}) {
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const tr = {
     name:        trait?.name ?? "Trait",
@@ -44,6 +44,8 @@ export async function postNpcTraitCard(actor, trait, { label } = {}) {
     class:       "",
     chapter:     null,
     description: await enrichHTML(trait?.description),
+    // Inflict / Gain / Effects block read from the trait text (ability-statuses.mjs)
+    statusHtml,
   };
   const content = await renderTemplate("systems/icon-system/templates/chat/trait-card.hbs", { tr });
   await ChatMessage.create({

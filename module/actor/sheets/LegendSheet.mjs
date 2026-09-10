@@ -320,6 +320,8 @@ export class LegendSheet extends BaseActorSheet {
 
     await combatRoll({
       abilityName: action.name,
+      // tags of the action: "true strike" / "unerring" make the Evasion check skip (p.117)
+      tags:        action.tags ?? [],
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
@@ -518,7 +520,8 @@ export class LegendSheet extends BaseActorSheet {
     const trait = actor.system.traits[idx];
     if (!trait) return;
     _log(`foeTraitShowInChat — actor: "${actor.name}" | trait[${idx}]: "${trait.name}"`);
-    await postNpcTraitCard(actor, trait);
+    // Traits get the same Inflict / Gain / Effects block as actions (Titanfall, Sneak, Hold the Line…)
+    await postNpcTraitCard(actor, trait, { statusHtml: this.#statusHtmlFor(trait, trait.name) });
   }
 
   static async #onAddTrait(event, target) {

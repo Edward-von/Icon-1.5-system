@@ -9,4 +9,6 @@
   {{#if tr.description}}
     <div class="icon-chat-card__desc">{{{tr.description}}}</div>
   {{/if}}
+  {{!-- Inflict / Gain / Effects read from the trait text (NPC traits only) --}}
+  {{#if tr.statusHtml}}{{{tr.statusHtml}}}{{/if}}
 </div>

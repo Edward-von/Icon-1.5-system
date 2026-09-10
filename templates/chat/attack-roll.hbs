@@ -10,8 +10,8 @@
   </div>
   {{#if areaHtml}}{{{areaHtml}}}{{/if}}
 
-  {{!-- Dice row --}}
-  <div class="icon-chat-card__dice">
+  {{!-- Dice row (dimmed when every target evaded: the d20 doesn't count) --}}
+  <div class="icon-chat-card__dice {{#if evaded}}icon-chat-card__dice--evaded{{/if}}" {{#if evaded}}title="Every target evaded: this d20 doesn't count"{{/if}}>
     <span class="icon-chat-die icon-chat-die--d20 {{#if isCrit}}icon-chat-die--crit{{/if}}">{{d20}}</span>
     {{#if modifierStr}}
       <span class="icon-chat-card__operator">{{#if isPositive}}+{{else}}−{{/if}}</span>
@@ -34,7 +34,7 @@
   <div class="icon-chat-card__result">
     {{#if evaded}}
       <strong class="icon-chat-card__result-label icon-chat-card__result-label--miss">MISS — evaded</strong>
-      <small class="icon-chat-card__result-note">Every target evaded: no attack roll. Effects that don't need a hit still apply.</small>
+      <small class="icon-chat-card__result-note">Every target evaded: the d20 above doesn't count. Effects that don't need a hit still apply.</small>
     {{else if isCrit}}
       <strong class="icon-chat-card__result-label icon-chat-card__result-label--crit">CRITICAL HIT</strong>
     {{else if isHit}}

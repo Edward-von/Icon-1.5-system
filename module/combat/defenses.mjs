@@ -288,8 +288,25 @@ export function currentTargets() {
   }));
 }
 
-/** Why the attacker ignores Evasion ("" when they don't). */
-export function ignoresEvasion(attacker) {
+/**
+ * Normalise an ability / action tag to its key: "True Strike", "true strike",
+ * {raw:"true-strike"} and {label:"True Strike"} all become "true-strike".
+ */
+export function tagKey(t) {
+  const raw = typeof t === "string" ? t : (t?.raw ?? t?.label ?? "");
+  return String(raw).trim().toLowerCase().replace(/[\s_]+/g, "-");
+}
+
+/**
+ * Why the attacker ignores Evasion ("" when they don't): the True Strike /
+ * Unerring status on the attacker, or the same tag on the attack itself
+ * (p.117 — "true strike" is a tag attacks can carry: Demon Cutter, the
+ * Warrior's Cleave, the Trooper's Brutal Strike…).
+ */
+export function ignoresEvasion(attacker, tags = []) {
+  const keys = (Array.isArray(tags) ? tags : []).map(tagKey);
+  if (keys.includes("true-strike") || keys.includes("truestrike")) return "True Strike (tag)";
+  if (keys.includes("unerring")) return "Unerring (tag)";
   if (_has(attacker, "true-strike")) return "True Strike";
   if (_has(attacker, "unerring"))    return "Unerring";
   return "";
@@ -337,9 +354,10 @@ function _rigolettoStrikers(target, allTokens = null) {
  * @param {Actor}  opts.attacker
  * @param {Array}  [opts.targets]   currentTargets() (default: capture now)
  * @param {Array}  [opts.sceneTokens]  tokens to scan for Rigoletto holders (default: the canvas)
+ * @param {Array}  [opts.tags]      tags of the attack ("true strike" / "unerring" ignore Evasion)
  * @returns {Promise<{results:Array, rolls:Roll[], allEvaded:boolean, anyEvaded:boolean, ignored:string, evadedUuids:Set<string>}>}
  */
-export async function rollEvasion({ attacker, targets = null, sceneTokens = null } = {}) {
+export async function rollEvasion({ attacker, targets = null, sceneTokens = null, tags = [] } = {}) {
   const list = targets ?? currentTargets();
   const out  = { results: [], rolls: [], allEvaded: false, anyEvaded: false, ignored: "", evadedUuids: new Set() };
 
@@ -354,7 +372,7 @@ export async function rollEvasion({ attacker, targets = null, sceneTokens = null
   }
   if (!evaders.length) return out;
 
-  out.ignored = ignoresEvasion(attacker);
+  out.ignored = ignoresEvasion(attacker, tags);
   if (out.ignored) {
     out.results = evaders.map(t => ({ ...t, die: null, evaded: false, notes: [] }));
     return out;

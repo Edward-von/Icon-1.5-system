@@ -69,6 +69,7 @@ export const GRANTABLE = [
   { re: "pierce",        id: "pierce",       label: "Pierce" },
   { re: "rampart",       id: "rampart",      label: "Rampart" },
   { re: "regeneration",  id: "regeneration", label: "Regeneration" },
+  { re: "resistance",    id: "resistance",   label: "Resistance" },     // "…are sturdy and have counter and resistance" (Hold the Line!)
   { re: "skirmisher",    id: "skirmisher",   label: "Skirmisher" },
   { re: "stealth",       id: "stealth",      label: "Stealth" },
   { re: "sturdy",        id: "sturdy",       label: "Sturdy" },

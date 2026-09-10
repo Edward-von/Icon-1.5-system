@@ -671,4 +671,63 @@ promemoria di turno), template Handlebars compilati e renderizzati con dati fint
 - [x] **Summon**: azione di un summon con save+danno → [D]/fray presi dal summoner. ✓ 10 set (summon TEST con summoner = PG: d8 + fray 4 del summoner)
 
 **Difese follow-up (Sessione 12)**
-- [x] **Rigoletto II**: PG con Evasion e Rigoletto II che evade → nel blocco Evasion la riga "✦ Rigoletto II (
+- [x] **Rigoletto II**: PG con Evasion e Rigoletto II che evade → nel blocco Evasion la riga "✦ Rigoletto II (nome):
+      deal 2 damage to <attaccante>". Anche quando evade un alleato entro 2 spazi dal portatore (e non oltre).
+- [x] **Rigoletto III**: PG "Guard" con Evasion e Rigoletto III; un alleato SENZA Evasion a 1-2 spazi targettato da un
+      Foe → riga "Ally (Rigoletto III of Guard)" con d6 che evade solo con un 6. Un portatore ostile (disposition
+      diversa) non copre. Alleato a 3+ spazi → nessun d6. ✓ 10 set (nessun chip nel dialog per l'alleato coperto, solo sulla card)
+- [x] **Evasion/Dodge condizionali dei foe**: Bandit "Slippery: Has Evasion while bloodied" → sotto metà HP il chip
+      "Evasion 4+ (Slippery)" e il d6 viene tirato senza mettere lo status; sopra metà HP niente chip e niente d6.
+      Foe "Nimble: Has evasion unless suffering from a status" → d6 finché non ha status negativi. "Sneak: While in
+      stealth, has evasion and dodge" → con Stealth evade e "Dodge (Sneak)" azzera i Miss. Trait "Dodge" puro
+      (Vagabond) → Dodge senza status. Condizione non leggibile ("while inside difficult terrain") → solo chip ⚠. ✓ 10 set Rogue/Slippery, Assassin/Nimble, Skulk/Sneak+Dodge; condizione non leggibile non provata
+- [x] **Cover dalla mappa**: token adiacente a un muro (o porta chiusa) → chip tratteggiato "Cover? wall" nel dialog
+      e sulla riga della card del danno; Apply NON dimezza (è solo un promemoria). Token lontano dai muri o accanto a
+      una porta aperta → nessun chip. Con lo status Cover il chip "Cover ½" vince.
+
+- [x] **Regressioni**: card d'attacco senza status/gain/note → invariata; blocco Inflict della Sessione 11 (Demon
+      Cutter, Implode, Swindle) come prima; Encounter Designer senza Jotunn → nessun bottone Titan, deploy come prima;
+      tab Relics con reliquie senza gambit → nessun riquadro viola; tracker senza PG con reliquie → nessuna card in
+      più; nessun errore in console. ✓ 10 set (nessun errore in console; Encounter Designer senza Jotunn → nessun bottone Titan)
+
+## Sessione 14 (10 settembre 2026) — Fix dal playtest del 10 settembre (versione 1.5.1)
+
+Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggetto, `rollEvasion` senza d6 col tag,
+"Hold the Line!" → Sturdy + Counter + Resistance, template trait-card e attack-roll compilati.
+
+- [ ] **Tag true strike dell'abilità**: Warrior con Evasion targettato, ⚔ su Demon Cutter (tag true strike) → nel dialog
+      "⚙ True Strike (tag): ignores Evasion (TEST Warrior)"; sulla card "Evasion ignored — attacker has True Strike (tag)"
+      senza d6. Lo stesso dal lato NPC: PG con Evasion, il Warrior usa Cleave (true strike) → nessun d6. Un'abilità
+      senza il tag (Revenge) → il d6 viene ancora tirato. Lo status True Strike sull'attaccante funziona come prima.
+- [ ] **"Applies to" nella tab Relics**: PG con Paleblood I e un'abilità che ha la riga ✦ Paleblood (es. Revenge) → sotto
+      la reliquia la riga "Applies to: Revenge …" con un chip per abilità. Byrax I senza stance equipaggiate → niente riga.
+- [ ] **Card dei trait NPC con i blocchi**: Nilfling → 💬 sul trait Titanfall → card con il bottone rosso
+      "🎲 💥 6 / 3 on a successful save"; click → save → card del danno 6 (fallito) / 3 (riuscito) con Apply per il solo
+      bersaglio. Trooper → 💬 su un trait normale (Guard) → card invariata, senza blocchi vuoti. Legend → 💬 su un trait.
+- [ ] **Card "MISS — evaded"**: la riga del d20 è sbiadita (tooltip "this d20 doesn't count") e la nota dice "the d20
+      above doesn't count".
+- [ ] **Etichetta EVASION**: nella colonna stretta della chat resta su una riga (la nota in corsivo va a capo, non
+      l'etichetta).
+- [ ] **Rigoletto Aspect nel dialog**: PG con Evasion e gambit di Rigoletto Aspect invocato nel suo turno, targettato da
+      un Foe → riga "⚙ Evasion: <PG> evades automatically (Rigoletto Aspect, this turn) before the attack".
+- [ ] **Riga Dodge nel dialog del danno**: bersaglio con Dodge → la riga "⚙ Dodge: … no damage from Miss / Area" compare
+      solo con esito Miss (o Area) selezionato; scegliendo Hit / Crit sparisce, tornando a Miss ricompare.
+- [ ] **Hold the Line! → Resistance**: 💬 sull'azione del Trooper → nel blocco GAIN i bottoni 👥 Sturdy, 👥 Counter e
+      👥 Resistance; con un alleato targettato il click mette Resistance.
+- [ ] **Testi del save con danno**: Titanfall (trait) → save riuscito: card "Saved — reduced damage (6 / 3 on a successful
+      save)."; fallito: "Failed — full damage (…)". Un "must save or take 6 damage" senza danno ridotto → "Saved — no
+      damage." Il save di uno status (Haymaker) resta "Saved! Stunned avoided." / "Failed — Stunned applied."
+- [ ] **Dialog d'attacco dei summon**: summon con summoner impostato, targetta un foe, ⚔ → dialog nello stile di PG/Foe
+      (banda, card 🎯 Target con DEF/ARM/HP e chip difensivi, stepper); i boon/curse automatici vengono dagli status del
+      summoner (es. summoner Blind → curse). Senza summoner → dagli status del summon.
+- [ ] **Regressioni**: attacco PG / Foe / Legend / Summon senza Evasion in giro → card invariate (le card NPC ora mostrano
+      i chip dei tag dell'azione, come quelle PG); Inflict / Gain / Effects sulle azioni come prima; nessun errore in
+      console.
+
+## Ancora da verificare con Maar (round 4, 30 agosto)
+
+- [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
+- [ ] Burden/Ambition: click sui segmenti e +1 avanzano il clock giusto.
+- [ ] Heave-Ho mostra il Trigger; Draken Cross mostra Effect dopo Area.
+- [ ] Pannello status del token non copre le tab della sidebar.
+- [ ] Badge "Range N" sugli attacchi base; Aether si azzera a fine combat.

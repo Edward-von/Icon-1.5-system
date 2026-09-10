@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 10 settembre 2026 — Sessione 14: fix dal playtest del 10 settembre (versione 1.5.1)
+
+- **Il tag "true strike" di un'abilità non ignorava l'Evasion**: il Warrior con Cleave (true strike) faceva tirare il d6
+  al PG → `ignoresEvasion(attacker)` guardava solo lo status sull'attaccante → ora riceve anche i tag dell'attacco
+  (`tagKey` normalizza "True Strike" / `true-strike` / oggetti {raw,label}); `combatRoll` e il dialog d'attacco li
+  passano; FoeSheet e LegendSheet passano `action.tags` a `combatRoll` (le card NPC mostrano quindi i chip dei tag).
+  Nota "True Strike (tag)" / "Unerring (tag)" per distinguerlo dallo status (p.117).
+- **"Applies to" nella tab Relics non compariva mai**: la riga cercava `relicReminders` sugli Item grezzi
+  (`context.abilityItems`) → ora usa `context.abilityDetails`, che li hanno.
+- **Card dei trait NPC senza blocco Inflict / Gain / Effects**: Titanfall dei Jotunn è un trait e il bottone "🎲 💥 6 / 3
+  on a successful save" non era raggiungibile → `postNpcTraitCard` accetta `statusHtml`, FoeSheet e LegendSheet lo
+  passano, `trait-card.hbs` lo rende.
+- **Cosmetici del playtest**: etichetta "EVASION" che andava a capo nella chat stretta (`white-space: nowrap`); card
+  "MISS — evaded" con il d20 in vista mentre la nota diceva "no attack roll" → riga dei dadi sbiadita e nota "the d20
+  above doesn't count"; dialog d'attacco con Rigoletto Aspect attivo che diceva "rolls 1d6 (3+)" → "evades
+  automatically (Rigoletto Aspect, this turn)"; riga "⚙ Dodge … no damage from Miss / Area" del dialog del danno ora
+  visibile solo con esito Miss / Area; "Hold the Line!" dà anche Resistance nel blocco Gain (`GRANTABLE`); testi del
+  save con danno ("Saved — reduced damage (…)", "Failed — full damage (…)", "Saved — no damage") al posto di "Damage:
+  … avoided."; dialog d'attacco dei summon riscritto con `promptAttackMods` (stile PG/Foe, boon/curse dal summoner via
+  l'opzione `modsActor`).
+
 ## 10 settembre 2026 — Playtest delle Sessioni 12 e 13 sul mondo di Maar (build 1.5.0)
 
 - **Playtest con Claude in Chrome** su foundry.codrillo.it (scena "test", copie TEST poi cancellate): Sessione 12

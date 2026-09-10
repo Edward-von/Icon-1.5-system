@@ -368,7 +368,8 @@ export class IconSheet extends BaseActorSheet {
         canUpgradeRank3:  currentRank === 2 && (invested + dustPool) >= rank3Cost,
         canUpgradeAspect: currentRank === 3 && (invested + dustPool) >= aspectCost,
         gambit:  gambits.find(g => g.itemId === r.id) ?? null,
-        touches: (context.abilityItems ?? []).filter(a => (a.relicReminders ?? []).some(rr => rr.relic === r.name)).map(a => a.name),
+        // abilityDetails (not the raw Items) carry the ✦ reminder lines.
+        touches: (context.abilityDetails ?? []).filter(a => (a.relicReminders ?? []).some(rr => rr.relic === r.name)).map(a => a.name),
       };
     }));
     context.dustPool = dustPool;

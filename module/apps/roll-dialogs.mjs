@@ -162,8 +162,9 @@ const DIALOG_OPTS = { classes: ["icon-roll-window"], position: { width: 460 } };
  * the elevation difference; Defense from the lowest targeted token.
  * @returns {Promise<{boons:number, curses:number, defense:number|null}|null>}
  */
-export async function promptAttackMods(ab, actor) {
-  const auto    = getActorStatusMods(actor);
+export async function promptAttackMods(ab, actor, { modsActor = null } = {}) {
+  // `modsActor`: whose statuses give the automatic boons / curses (a summon uses its summoner's).
+  const auto    = getActorStatusMods(modsActor ?? actor);
   const targets = _targets();
   const elev    = _elevationMods(actor, targets);
   const defenses = targets.map(t => t.defense).filter(d => d != null);
@@ -176,10 +177,13 @@ export async function promptAttackMods(ab, actor) {
   // that has it — tell the attacker up front.
   const evaders = targets.filter(t => t.defense_?.evasion);
   if (evaders.length) {
-    const ignored = ignoresEvasion(actor);
+    // The attack's own "true strike" / "unerring" tag counts as much as the status (p.117).
+    const ignored = ignoresEvasion(actor, ab.tags ?? []);
     notes.push(ignored
       ? `${ignored}: ignores Evasion (${evaders.map(t => t.name).join(", ")})`
-      : `Evasion: ${evaders.map(t => `${t.name} rolls 1d6 (${t.defense_.evasionThreshold}+ = miss)`).join(", ")} before the attack`);
+      : `Evasion: ${evaders.map(t => t.defense_.sureEvasion
+          ? `${t.name} evades automatically (Rigoletto Aspect, this turn)`
+          : `${t.name} rolls 1d6 (${t.defense_.evasionThreshold}+ = miss)`).join(", ")} before the attack`);
   }
 
   const content = `
@@ -322,7 +326,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           ${hatred.active || autoHalf.length || dodgers.length ? `<div class="icon-roll-auto">
             ${hatred.active ? `<span class="icon-roll-auto__chip">⚠ ${esc(hatred.note)}</span>` : ""}
             ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">⚙ ½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}
-            ${dodgers.length ? `<span class="icon-roll-auto__chip" title="Dodge: immune to damage from missed attacks, successful saves and area effects (p.144)">⚙ Dodge: ${esc(dodgers.join(", "))} — no damage from Miss / Area</span>` : ""}
+            ${dodgers.length ? `<span class="icon-roll-auto__chip" data-dodge-note title="Dodge: immune to damage from missed attacks, successful saves and area effects (p.144)">⚙ Dodge: ${esc(dodgers.join(", "))} — no damage from Miss / Area</span>` : ""}
           </div>` : ""}
           <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note">Armor, Cover and Resistance are applied when the target presses Apply.</span></div>
         </section>
@@ -352,6 +356,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       if (f.elements.weakened?.checked)   tail.push("−2 weakened");
       if (tail.length) txt += `  →  ${tail.join(", ")}`;
       formula.textContent = txt;
+      // The Dodge reminder only matters for the outcomes Dodge cancels (Miss / Area).
+      const dodgeNote = root.querySelector("[data-dodge-note]");
+      if (dodgeNote) dodgeNote.hidden = !(outcome === "miss" || outcome === "area");
     };
     f.querySelectorAll('input').forEach(el => el.addEventListener("input", update));
     f.querySelectorAll('input').forEach(el => el.addEventListener("change", update));

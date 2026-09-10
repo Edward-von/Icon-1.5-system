@@ -180,30 +180,30 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
 
 - [x] Sessione 12: 15/16 ok · Sessione 13: 21/23 ok, sul mondo di Maar con la build 1.5.0.
 
-## Sessione 14 — Fix dal playtest del 10 settembre 2026 (S+S+S + cosmetici)
+## Sessione 14 — Fix dal playtest del 10 settembre 2026 (S+S+S + cosmetici) — FATTA il 10 settembre 2026 (versione 1.5.1)
 
-- [ ] **Tag `true strike` dell'abilità/azione non ignora l'Evasion** (S): `ignoresEvasion(attacker)` in
+- [x] **Tag `true strike` dell'abilità/azione non ignora l'Evasion** (S): `ignoresEvasion(attacker)` in
       `module/combat/defenses.mjs` guarda solo gli status `true-strike` / `unerring` dell'attaccante. Demon Cutter,
       Cleave del Warrior, Brutal Strike del Trooper hanno il tag e fanno comunque tirare il d6. Passare i tag
       dell'abilità (PG: `resolveAbilityTags`; NPC: `action.tags`) a `combatRoll` / al dialog e trattare
       `true-strike` / `unerring` come lo status (p.117).
-- [ ] **"Applies to" nella tab Relics non compare mai** (S): in `IconSheet._prepareContext` la riga
+- [x] **"Applies to" nella tab Relics non compare mai** (S): in `IconSheet._prepareContext` la riga
       `touches: (context.abilityItems ?? []).filter(a => a.relicReminders …)` filtra gli Item grezzi, che non hanno
       `relicReminders`; usare `context.abilityDetails` (già calcolati prima dei relicItems).
-- [ ] **Card dei trait NPC senza blocco Inflict/Gain/Effects** (S): `foeTraitShowInChat` (FoeSheet e LegendSheet)
+- [x] **Card dei trait NPC senza blocco Inflict/Gain/Effects** (S): `foeTraitShowInChat` (FoeSheet e LegendSheet)
       non passa `statusHtml` come fanno azioni/interrupt/round action. Serve per Titanfall dei Jotunn (trait con
       "must save or take 6 damage, or 3 on a successful save"), per i trait tipo "Hold the Line" e "Sneak".
-- [ ] Cosmetici emersi il 10 settembre (S ciascuno):
-      - [ ] etichetta "EVASION" del blocco sulla card va a capo ("EVASIO N") nella colonna stretta della chat;
-      - [ ] card "MISS — evaded": il d20 resta visibile mentre la nota dice "no attack roll" (nascondere il dado o
+- [x] Cosmetici emersi il 10 settembre (S ciascuno):
+      - [x] etichetta "EVASION" del blocco sulla card va a capo ("EVASIO N") nella colonna stretta della chat;
+      - [x] card "MISS — evaded": il d20 resta visibile mentre la nota dice "no attack roll" (nascondere il dado o
             cambiare la nota);
-      - [ ] dialog d'attacco con Rigoletto Aspect attivo: chip "Evasion — sure" ma riga ⚙ "rolls 1d6 (3+ = miss)";
-      - [ ] dialog del danno con Dodge sul bersaglio: la riga "⚙ Dodge: … no damage from Miss / Area" compare anche
+      - [x] dialog d'attacco con Rigoletto Aspect attivo: chip "Evasion — sure" ma riga ⚙ "rolls 1d6 (3+ = miss)";
+      - [x] dialog del danno con Dodge sul bersaglio: la riga "⚙ Dodge: … no damage from Miss / Area" compare anche
             con esito Hit selezionato (informativa, ma può confondere);
-      - [ ] "Hold the Line!": il testo dà "sturdy, counter and resistance" ma i bottoni Gain sono solo Sturdy e
+      - [x] "Hold the Line!": il testo dà "sturdy, counter and resistance" ma i bottoni Gain sono solo Sturdy e
             Counter (resistance è uno status "special": decidere se offrirlo);
-      - [ ] card del save senza status: "Damage: 6 / 3 on a successful save avoided." → frase più naturale;
-      - [ ] dialog d'attacco dei summon ("Attack: TEST") ancora vecchio stile, non restylato come PG/Foe.
+      - [x] card del save senza status: "Damage: 6 / 3 on a successful save avoided." → frase più naturale;
+      - [x] dialog d'attacco dei summon ("Attack: TEST") ancora vecchio stile, non restylato come PG/Foe.
 
 ## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
 
