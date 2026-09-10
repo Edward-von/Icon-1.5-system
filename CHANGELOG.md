@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 11 settembre 2026 — Playtest di chiusura delle Sessioni 9-14 sul mondo di Maar (build 1.5.1)
+
+- Spuntate le ultime caselle aperte dalla Sessione 9 in poi: auto-hit con Invoke (Attack, 17+) di Ape God (d20 tirato
+  solo per l'invoke), relay giocatore → GM del blocco Inflict (già provato il 10 sera), card vecchie (pre-1.3.0) senza
+  errori e Apply su un attore cancellato gestito con una notifica. I tre ✗ delle Sessioni 12-13 sono segnati come
+  corretti dalla Sessione 14. Nessuna modifica al codice.
+
 ## 10 settembre 2026 — Sessione 14: fix dal playtest del 10 settembre (versione 1.5.1)
 
 - **Playtest della Sessione 14** (stessa sera, build 1.5.1 caricata sul server di Maar): 11 caselle su 11 ok, nessun errore in

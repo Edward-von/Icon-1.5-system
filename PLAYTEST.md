@@ -374,9 +374,9 @@ Narrative per provare). Le reliquie NON sono automazione: sono righe di promemor
       damage, shove…). Con due reliquie Invoke Attack (es. + Gloam 14+) → due righe.
 - [x] **Soglia abbassata dall'Aspect**: Paleblood a rango Aspect → la riga dice "Paleblood II (Aspect) (12+ …)"
       invece di 16+. Conquering King ad Aspect → UNA sola riga "Conquering King III (Aspect) (15+ …)", non due.
-- [ ] **Auto-hit e attacco base** (attacco base OK; auto-hit non provato): un'abilità auto-hit (tag `autohit`) con Ape God → nella card "Auto-hit" compare
+- [x] **Auto-hit e attacco base** (attacco base OK; auto-hit non provato): un'abilità auto-hit (tag `autohit`) con Ape God → nella card "Auto-hit" compare
       comunque la riga Invoke con un d20 tirato e la nota "1d20 rolled only to check the relic invoke (p.245)".
-      ⚔ sull'attacco base (Basic/Heavy) → riga Invoke e reminder da attacco (es. Ruin I) presenti.
+      ⚔ sull'attacco base (Basic/Heavy) → riga Invoke e reminder da attacco (es. Ruin I) presenti. ✓ 11 set: TEST Autohit con Ape God I → card "Auto-hit" con "✦ Invoke — Ape God I (17+ · d20 17): Stun your attack target" acceso e spento con 4/10/15; nota "1d20 rolled only to check the relic invoke"
 - [x] **Reminder legati al round**: Conquering King I, combat NON avviato → sul pannello "Round 5+: this ability
       deals bonus damage" (sempre visibile); sulla card del tiro d'attacco la riga NON c'è finché il combat non
       è al round 5; al round 5+ compare "Round 5: this ability deals bonus damage (Round 5+)". Arenheir III al
@@ -522,12 +522,12 @@ combat aperto. Regole: p.94 (save = 1d20, 10+), p.104 (Hatred of X), p.108.
       Immobile di troppo.
 - [x] **Riga "🎯 Current targets"**: card postata senza target → click su un bottone senza token targettato →
       avviso "Target a token first"; con un token targettato → applica; la riga resta usabile (non si disabilita).
-- [ ] **Relay giocatore → GM**: da un client Player, card del proprio PG con un foe (non posseduto) targettato →
+- [x] **Relay giocatore → GM**: da un client Player, card del proprio PG con un foe (non posseduto) targettato →
       click "Dazed" → avviso "sent to the GM", bottone "→ GM"; sul client GM il foe riceve lo status e la card
-      "is now Dazed". Il tiro del save avviene sul client del giocatore. Con Hatred: passa dal relay dei mark.
-- [ ] **Nessun errore in console** aprendo card vecchie (senza blocco), cliccando bottoni su una card il cui
+      "is now Dazed". Il tiro del save avviene sul client del giocatore. Con Hatred: passa dal relay dei mark. ✓ 10 set (sera): dal client "edoardo" bottone "🎲 Stunned 💥" sulla card di Haymaker con il Warrior (non posseduto) targettato → save → bottone "→ GM", Stunned applicato dal GM + card del danno
+- [x] **Nessun errore in console** aprendo card vecchie (senza blocco), cliccando bottoni su una card il cui
       bersaglio è stato cancellato (avviso "no longer exists"), e con Dice So Nice attivo (il d20 del save
-      viene animato).
+      viene animato). ✓ 11 set: 46 card d'attacco e 27 di danno pre-1.3.0 renderizzate senza errori; Apply su una card il cui attore non esiste più → notifica "Could not find target actor for damage application", nessun crash
 - [x] **Regressioni**: card d'attacco senza status (Basic Attack) invariata; save di fine turno del tracker
       (rollEndOfTurnSaves) ancora con "Saved! X cleared." / "Failed — X persists."; mark 🎯 e Hatred dalla tab
       Conditions come prima.
@@ -580,8 +580,8 @@ Cover+Resistance una volta sola, "già dimezzato sul tiro".
       del Warrior nell'Inflict è sbiadita.
 - [x] **Rigoletto I** (corretto in Sessione 13: la reliquia dell'evasion nel pack si chiama Rigoletto): PG con Evasion e la reliquia al rango I equipaggiata, targettato da un Foe:
       chip "Evasion 3+" e riga "evaded (3+)" con un 3.
-- [✗] **True Strike**: metti True Strike sull'attaccante → il dialog dice "True Strike: ignores Evasion (Warrior)"
-      e la card mostra "Evasion ignored — attacker has True Strike (p.117)" senza d6. Lo stesso con Unerring. ✗ 10 set: OK con lo STATUS True Strike sull'attaccante; il TAG `true strike` dell'abilità/azione (Demon Cutter, Cleave, Brutal Strike) NON ignora l'Evasion → TODO Sessione 14
+- [x] **True Strike**: metti True Strike sull'attaccante → il dialog dice "True Strike: ignores Evasion (Warrior)"
+      e la card mostra "Evasion ignored — attacker has True Strike (p.117)" senza d6. Lo stesso con Unerring. ✗ 10 set: OK con lo STATUS True Strike sull'attaccante; il TAG `true strike` dell'abilità/azione (Demon Cutter, Cleave, Brutal Strike) NON ignora l'Evasion → TODO Sessione 14 → corretto in Sessione 14 (tag dell'abilità/azione), verificato il 10 set sera
 - [x] **Auto-hit non passa dall'Evasion**: un'abilità auto-hit contro un bersaglio con Evasion → nessun blocco
       Evasion sulla card Auto-hit (p.113: gli effetti automatici passano).
 - [x] **Cover su Apply**: metti Cover sul Warrior, tira il danno (Hit, 7 punti per esempio) → nella card del danno
@@ -631,9 +631,9 @@ promemoria di turno), template Handlebars compilati e renderizzati con dati fint
       "End of turn". Scheherezade I / Paleblood I → card "Start of combat" quando il combat parte; Paleblood → card
       "End of round N" a ogni cambio round. Byrax III → "First turn of combat" solo al round 1. Un PG senza reliquie
       di questo tipo non riceve card. ✓ 10 set Erenbrass I, Byrax III (solo round 1), Storm Lord I, Paleblood "End of round"; Scheherezade / Trollhide / "Start of combat" non provati
-- [✗] **"Applies to"**: sotto ogni reliquia della tab Relics la riga "Applies to: <abilità>" con le abilità
+- [x] **"Applies to"**: sotto ogni reliquia della tab Relics la riga "Applies to: <abilità>" con le abilità
       equipaggiate che hanno una riga ✦ di quella reliquia (es. Byrax I → le stance). Reliquia senza abilità toccate →
-      niente riga. ✗ 10 set: la riga non compare MAI (Paleblood I ha la riga ✦ su Revenge ma nessun "Applies to") → TODO Sessione 14
+      niente riga. ✗ 10 set: la riga non compare MAI (Paleblood I ha la riga ✦ su Revenge ma nessun "Applies to") → TODO Sessione 14 → corretto in Sessione 14, verificato il 10 set sera
 
 **Encounter Designer follow-up (Sessione 10)**
 - [x] **Titan Armament**: aggiungi un Jotunn (fazione Jotunn, es. Nilfling o Ire Smith) → nella riga compare il bottone
@@ -662,9 +662,9 @@ promemoria di turno), template Handlebars compilati e renderizzati con dati fint
       damage on a successful save") → bottone "🎲 Stunned 💥". Click → dialog del save → fallito: card blu "Stunned"
       + card del danno "Haymaker — Failed save" [D]+fray con Apply solo per quel bersaglio; riuscito: niente status +
       card "Haymaker — Successful save (reduced damage)" con il solo fray.
-- [✗] **Danno sul save (senza status)**: Jotunn "Titanfall" ("must save or take 6 damage, or 3 on a successful save")
+- [x] **Danno sul save (senza status)**: Jotunn "Titanfall" ("must save or take 6 damage, or 3 on a successful save")
       → bottone rosso "🎲 💥 6 / 3 on a successful save"; click → save → card del danno 6 (fallito) o 3 (riuscito),
-      bottone "✓ failed — damage rolled" / "✓ saved". "take [D]+fray twice" → due card (1/2, 2/2). ✗ 10 set: il bottone c'è e funziona su una AZIONE con quel testo, ma Titanfall del Jotunn è un TRAIT e la card dei trait non ha il blocco → TODO Sessione 14
+      bottone "✓ failed — damage rolled" / "✓ saved". "take [D]+fray twice" → due card (1/2, 2/2). ✗ 10 set: il bottone c'è e funziona su una AZIONE con quel testo, ma Titanfall del Jotunn è un TRAIT e la card dei trait non ha il blocco → TODO Sessione 14 → corretto in Sessione 14 (card dei trait con il blocco), verificato il 10 set sera
 - [x] **Dodge sul save riuscito**: bersaglio con Dodge che supera il save → sulla card "Successful save" la riga ha
       "Dodge — immune"; Apply → "no damage — Dodge — immune to damage from successful saves". Sul save fallito il
       danno passa normalmente.
