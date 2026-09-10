@@ -81,9 +81,9 @@ suo su `createCombatant` (non nostro).
 - [x] **Tag delle action NPC sopravvivono all'editing**: apri un Foe con action taggate (es. Warrior,
       Cleave ha "true strike"); cambia HP, poi Vigor, poi il nome, poi la classe nel dropdown → i chip dei
       tag restano su tutte le action. Stesso test su un Legend (action, trait, interrupt).
-- [ ] **PG: jobs e burden non perdono dati**: su una scheda PG con 2 job e un burden con clock
+- [x] **PG: jobs e burden non perdono dati**: su una scheda PG con 2 job e un burden con clock
       parzialmente pieno, cambia un campo qualsiasi della testata → job secondario e segmenti del clock
-      invariati.
+      invariati. ✓ 11 set: copia di Hiroshi (Demon Slayer + Knave) con un burden 3/6, nome cambiato dal form → job e clock invariati
 - [x] **Aether max 6**: PG Wright, premi + sull'Aether oltre 6 → resta 6 e compare l'avviso; − funziona
       fino a 0.
 - [x] **End Encounter**: con un PG ferito, premi "End encounter" nel tracker e rispondi **No** → gli HP
@@ -106,17 +106,17 @@ suo su `createCombatant` (non nostro).
       campo Party Resolve = 2. (b) Su un PG premi "Use Limit Break" (costo ≥ 2) → il banner e l'altro PG
       scendono. (c) Modifica a mano il campo Party Resolve su una scheda → banner e altro PG seguono.
       (d) Come giocatore (secondo client o utente non-GM) premi + nel banner → funziona via GM.
-- [ ] **+1 a inizio round**: passa al round successivo → Party Resolve +1 (setting "Party Resolve +1 at
-      the start of each round" ON di default in Configure Settings → System Settings).
+- [x] **+1 a inizio round**: passa al round successivo → Party Resolve +1 (setting "Party Resolve +1 at
+      the start of each round" ON di default in Configure Settings → System Settings). ✓ 11 set: con l'opzione accesa 0 → 1 → 2 al cambio round. ATTENZIONE: sul mondo di Maar `hrPartyResolveAutoIncrement` è SPENTA (è una house rule, default off): se la vuole va accesa in Configure Settings
 
 ## Sessione 3 (7 settembre 2026) — dati compendium, Rampart/Guard, cartelle
 
 - [x] **Armor Demon**: importalo di nuovo dal compendio Foes (cartella Demon › Heavy) → classe Heavy,
       VIT 10 / Def 6 / Fray 4 / d6 / Armor 2, trait Guard presente oltre a Sturdy.
-- [ ] **Guard → Armor 2**: importa un Heavy qualsiasi (Warrior) → Armor 2. Tira un danno contro di lui
+- [x] **Guard → Armor 2**: importa un Heavy qualsiasi (Warrior) → Armor 2. Tira un danno contro di lui
       e premi "Apply Damage" → "2 blocked by Armor". Atrophic Grave (Relict › Heavy) resta Armor 0.
       Nuovo Foe creato da zero → Armor 2 (default Heavy); cambia classe e premi "Apply base stats" →
-      Skirmisher/Leader/Artillery tornano a 0.
+      Skirmisher/Leader/Artillery tornano a 0. ✓ 10-11 set: Warrior importato → ARM 2 e ogni Apply dice "2 blocked by Armor"; Atrophic Grave e Foe creato da zero non provati
 - [✗] **Rush X sparito**: apri un PG Stalwart esistente → dopo la migrazione (console: "Migration 4")
       il trait "Rush X" non c'è più; restano Armor 2 e Fortify con i pip Vigilance. Crea un nuovo PG
       Stalwart dal wizard → niente Rush X; "Rush X" compare nel dropdown delle regole di classe.
@@ -127,13 +127,13 @@ suo su `createCombatant` (non nostro).
 
 ## Sessione 4 (7 settembre 2026) — power die sulle abilità, formattazione abilità
 
-- [ ] **Power die su Odinforce**: PG Spellblade con Odinforce importato **dopo** questa build (o con "Power
+- [x] **Power die su Odinforce**: PG Spellblade con Odinforce importato **dopo** questa build (o con "Power
       die: d6, starts at 3" impostato a mano nella scheda dell'abilità). Nel pannello dell'abilità compare
       "🎲 Power die d6" con il bottone "Set out at 3" → click → mostra 3 con −/+, 🎲 e Discard. + oltre 6
       resta a 6 con avviso; − fino a 0 → "discarded" e torna il bottone Set out. 🎲 tira 1d6 in chat con il
-      nome dell'abilità e i tick.
-- [ ] **Power die su un trait**: Sealer con Godly Smite → stesso widget sulla card del trait (d6, starts at 1).
-- [ ] **Card in chat**: con il die attivo, 💬 Show in Chat mostra il badge "🎲 d6: N" nella testata.
+      nome dell'abilità e i tick. ✓ 11 set (Odinforce dal pack: d6, starts at 3; + si ferma a 6 senza avviso visibile; − fino a 0 → torna "Set out at 3")
+- [x] **Power die su un trait**: Sealer con Godly Smite → stesso widget sulla card del trait (d6, starts at 1). ✓ 11 set (Godly Smite dal pack: "Set out at 1" sulla card del trait)
+- [x] **Card in chat**: con il die attivo, 💬 Show in Chat mostra il badge "🎲 d6: N" nella testata. ✓ 11 set ("🎲 d6: 6" nella testata)
 - [x] **Reset a fine combat**: die attivo, "End encounter" → Sì → il die torna non attivo.
 - [x] **Blocchi delle abilità**: apri Gran Reversa (Seer) o Soul Blade: il testo è diviso in righe
       "Stance:", "Interrupt 1:", "Effect:", "Refresh:" con etichetta in oro e barra a sinistra; il flavour è
@@ -145,7 +145,7 @@ suo su `createCombatant` (non nostro).
       con la regola del glossario. Vale anche per trait, action dei Foe e card in chat. Controlla che non
       ci siano falsi positivi evidenti (es. "cover" usato in senso comune) e che i link/inline roll di
       Foundry funzionino ancora.
-- [ ] **Scheda item**: abilità e trait hanno la riga "Power die / starts at / current" e salvano.
+- [x] **Scheda item**: abilità e trait hanno la riga "Power die / starts at / current" e salvano. ✓ 9 set (giro esplorativo: la scheda item salva "Power die when unlocked")
 
 ## Sessione 5 (7 settembre 2026) — Level Up e Character Creation nello stile della scheda
 
@@ -230,8 +230,8 @@ Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il gi
       Due abilità diverse → due template.
 - [x] **Fine combat**: con template sulla mappa, "End encounter" → Sì → i template ICON spariscono (i
       template "core" disegnati con lo strumento di Foundry restano).
-- [ ] **Senza token / griglia**: PG senza token sulla scena → 📐 avvisa e non fa nulla; ⚔ tira normalmente.
-      Scena gridless o esagonale → avviso "square grid".
+- [x] **Senza token / griglia**: PG senza token sulla scena → 📐 avvisa e non fa nulla; ⚔ tira normalmente.
+      Scena gridless o esagonale → avviso "square grid". ✓ 9 set (giro esplorativo: scena senza griglia → avviso); il caso "PG senza token" non provato
 - [ ] **Secondo client**: il giocatore piazza un'area → il GM la vede identica (stesse caselle, colore,
       testo) e vede i mirini dei target del giocatore.
 - [ ] **Template core intatti**: gli strumenti Cerchio/Cono/Rettangolo/Raggio di Foundry funzionano come prima.
@@ -293,9 +293,9 @@ Prerequisito: scena con il token del PG (es. Knave con Intimidate, o Shade con H
 - [x] **Rimozione**: ✕ sul chip, "✕ End mark" nella tab Conditions, × nell'HUD → il mark sparisce ovunque con
       messaggio in chat. Porta il marcatore a 0 HP → i suoi mark cadono ("N marks from PG end (PG is
       defeated)"). "End encounter" → Sì → spariscono mark e Hatred di tutti.
-- [ ] **🎯 Mark sulle azioni NPC**: Foe con un'azione taggata mark (es. Snork "Intimidate", o aggiungi il tag
+- [x] **🎯 Mark sulle azioni NPC**: Foe con un'azione taggata mark (es. Snork "Intimidate", o aggiungi il tag
       "mark" a un'azione) → bottone "🎯 Mark" nella riga dell'azione; funziona come sopra con il testo
-      dell'azione. Legend: icona 🎯 accanto al d20.
+      dell'azione. Legend: icona 🎯 accanto al d20. ✓ 9 set (giro esplorativo: foe che marca un PG dalla scheda del token, mark su due token dello stesso foe)
 - [x] **Giocatore senza permessi**: come utente Player, targetta un Foe del GM e premi 🎯 → notifica "Mark sent
       to the GM…", e (con il GM connesso) il mark compare sul Foe; ✕ dal chip del giocatore lo toglie via GM.
 - [x] **Marked generico intatto**: il bottone stackable "Marked: N" nella griglia Negative funziona ancora

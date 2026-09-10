@@ -2,6 +2,10 @@
 
 ## 11 settembre 2026 — Playtest di chiusura delle Sessioni 9-14 sul mondo di Maar (build 1.5.1)
 
+- Chiuse anche le caselle rimaste delle Sessioni 1-8: jobs e burden che sopravvivono al form, Party Resolve +1 a inizio
+  round (funziona; sul mondo di Maar la house rule `hrPartyResolveAutoIncrement` è spenta), Armor 2 del Warrior, power die
+  su Odinforce / Godly Smite / card in chat; mark NPC, scheda item e avviso senza griglia già coperti dal giro esplorativo
+  del 9 settembre. Restano solo i test che servono un secondo client o Maar.
 - Spuntate le ultime caselle aperte dalla Sessione 9 in poi: auto-hit con Invoke (Attack, 17+) di Ape God (d20 tirato
   solo per l'invoke), relay giocatore → GM del blocco Inflict (già provato il 10 sera), card vecchie (pre-1.3.0) senza
   errori e Apply su un attore cancellato gestito con una notifica. I tre ✗ delle Sessioni 12-13 sono segnati come
