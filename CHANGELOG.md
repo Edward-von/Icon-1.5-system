@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 10 settembre 2026 — Playtest delle Sessioni 12 e 13 sul mondo di Maar (build 1.5.0)
+
+- **Playtest con Claude in Chrome** su foundry.codrillo.it (scena "test", copie TEST poi cancellate): Sessione 12
+  15/16 ok, Sessione 13 21/23 ok. Dettagli e caselle in `PLAYTEST.md` ("Esito playtest del 10 settembre 2026").
+- **Bug trovati, non ancora corretti** (TODO Sessione 14): il tag `true strike` di un'abilità/azione non ignora
+  l'Evasion (solo lo status lo fa); la riga "Applies to" della tab Relics non compare mai; le card dei trait NPC
+  (💬 su un trait, es. Titanfall dei Jotunn) non hanno il blocco Inflict/Gain/Effects. Più sette ritocchi cosmetici.
+- Nessuna modifica al codice: la build 1.5.0 caricata sul server è quella del commit di Sessione 13.
+
 ## 9 settembre 2026 — Sessione 13: tutti i follow-up delle sessioni 9-12 (versione 1.5.0)
 
 - **Invoke (Gambit) delle reliquie** (follow-up Sessione 9): nella tab Relics ogni reliquia con "Invoke (Gambit)" in un
