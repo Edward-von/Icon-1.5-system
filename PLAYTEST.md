@@ -1,7 +1,7 @@
-# PLAYTEST — cose da provare in Foundry (sessione separata, con Claude in Chrome)
+# PLAYTEST — cose da provare in Foundry (sessione separata, in una sessione dedicata)
 
 Ogni sessione di sviluppo aggiunge qui i suoi test **senza eseguirli**. Una sessione di playtest
-dedicata (Foundry aperto, Claude in Chrome sul mondo di test) li esegue, spunta le caselle e riporta
+dedicata (Foundry aperto sul mondo di test) li esegue, spunta le caselle e riporta
 i bug in `TODO.md`. Prerequisito: build deployata in `%LOCALAPPDATA%\FoundryVTT\Data\systems\icon-system`
 (ogni sessione la copia a fine lavoro) e F5 nel mondo.
 
@@ -11,7 +11,7 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
-## Esito playtest del 9 settembre 2026 (Claude in Chrome, mondo Jade Regent su foundry.codrillo.it, scena "test")
+## Esito playtest del 9 settembre 2026 (mondo Jade Regent su foundry.codrillo.it, scena "test")
 
 Provato con copie "TEST" dei PG e foe importati dal compendio, poi cancellate; il combat reale della Field
 Battlemap non è stato toccato. Le caselle spuntate qui sotto sono quelle verificate; quelle vuote non sono state
@@ -66,7 +66,7 @@ attivi Asteria e "■" chiuda il turno. Nello stesso giro corretto "Round {round
 - [ ] Da riprovare con la build nuova: tracker con 5+ combattenti (Field Battlemap) → i pip si vedono su ogni riga
       senza scroll orizzontale; lato giocatore compaiono "▶ Take turn" / "■ End turn".
 
-Note per il prossimo playtest con Claude in Chrome: dopo `scene.activate()` ripetuti `game.user.viewedScene`
+Note per il prossimo playtest in una sessione dedicata: dopo `scene.activate()` ripetuti `game.user.viewedScene`
 può restare null e i target (T, `setTarget`) vengono ignorati in silenzio → riallineare con
 `game.user.viewedScene = canvas.scene.id`; non chiudere "tutte le applicazioni" con `foundry.applications.instances`
 (chiude anche la sidebar e la chat sparisce dal DOM); usare la scena `test` **attivata**, non solo vista, perché
@@ -341,7 +341,7 @@ Finalize del wizard accettava abilità di un job diverso se spuntate via DOM (le
 
 ## Sessione 9 (9 settembre 2026) — Relic integration: reminder sulle abilità e Invoke (Attack, N+)
 
-**Esito del playtest del 9 settembre 2026 (sera, Claude in Chrome sul mondo Jade Regent, scena "test", build 1.3.0)**:
+**Esito del playtest del 9 settembre 2026 (sera, sul mondo Jade Regent, scena "test", build 1.3.0)**:
 provato con una copia "TEST Asteria" (Blitz, Odinforce, Atherwand, Sturmreiten) e le reliquie Byrax, Ape God, Ruin,
 Esper, Skipjack, Conquering King, Paleblood, Arenheir dal pack; tutto cancellato a fine prova. Tutto ok: reminder per
 rango (Byrax I → III → Aspect → rimossa), Ruin/Skipjack/Conquering King sulle abilità giuste, Esper II "Range of cure
@@ -459,7 +459,7 @@ per giocatore, min 100), p.299 (template Elite: 2 turni, HP ×2, 2 punti).
 
 ## Sessione 11 (9 settembre 2026) — Status inflitti dal testo: blocco "Inflict" sulle card, save 10+
 
-**Esito del playtest del 9 settembre 2026 (sera, Claude in Chrome sul mondo Jade Regent, scena "test", build 1.3.0)**:
+**Esito del playtest del 9 settembre 2026 (sera, sul mondo Jade Regent, scena "test", build 1.3.0)**:
 provato con copie "TEST" di Hiroshi, Caienna (+ Implode dal pack), Brawler, Armor Demon, Underboss, Hessian e Farmer,
 poi cancellate insieme a combat, token, cartella e 16 messaggi; la Field Battlemap non è stata toccata. Nessun errore
 in console. Le caselle spuntate sono verificate; le altre non sono state provate (relay da un secondo client, card
@@ -532,7 +532,7 @@ combat aperto. Regole: p.94 (save = 1d20, 10+), p.104 (Hatred of X), p.108.
       (rollEndOfTurnSaves) ancora con "Saved! X cleared." / "Failed — X persists."; mark 🎯 e Hatred dalla tab
       Conditions come prima.
 
-## Esito playtest del 10 settembre 2026 (Claude in Chrome, mondo Jade Regent su foundry.codrillo.it, build 1.5.0)
+## Esito playtest del 10 settembre 2026 (mondo Jade Regent su foundry.codrillo.it, build 1.5.0)
 
 Il server aveva ancora la 1.3.0: Edoardo ha caricato la 1.5.0 (cartella `Desktop\icon-system` rigenerata) e il
 playtest è partito dopo. Scena "test" (attiva, griglia 100 px), combat di prova con copie TEST (PG "TEST Hiroshi"

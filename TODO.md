@@ -7,7 +7,7 @@ Come lavorare una sessione:
 1. Sessione nuova (`/clear`), prompt: "Leggi TODO.md e fai la sessione N".
 2. Fare SOLO il blocco indicato. Se qualcosa esce dal blocco → aggiungerlo qui, non farlo.
 3. Fine sessione: **compilare `PLAYTEST.md`** con i test del blocco (NON eseguirli: il playtest è una sessione
-   separata con Claude in Chrome), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
+   separata in una sessione dedicata), voce in CHANGELOG.md, deploy, commit, spuntare le caselle qui.
    Ogni blocco qui sotto sottintende la voce "[ ] compilare PLAYTEST.md".
 4. **Ogni modifica fatta va segnata in `PLAYTEST.md`**, anche se non è una voce di questo file (fix
    laterali, ritocchi emersi lavorando): niente cambia nel sistema senza una riga di test corrispondente.
@@ -405,5 +405,5 @@ vanno pianificate come blocchi a sé. Le dimensioni sono stime (S/M/L/XL come in
 
 ## Note di setup (facoltative, una tantum)
 
-- [x] Creare un `CLAUDE.md` con le convenzioni del progetto (Foundry v13 AppV2, CHANGELOG in italiano,
+- [x] Scrivere le convenzioni del progetto (Foundry v13 AppV2, CHANGELOG in italiano,
       dove stanno gli script di build dei pack, come si testa) → ogni sessione nuova parte informata.

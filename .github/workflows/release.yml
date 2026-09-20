@@ -1,0 +1,63 @@
+# Build a Foundry-installable release whenever a version tag is pushed.
+#
+#   git tag v1.6.0 && git push origin v1.6.0
+#
+# The job zips the system as Foundry expects it (system.json at the root of the
+# archive), then publishes the zip AND a bare system.json as release assets.
+# The manifest URL in the README points at .../releases/latest/download/system.json,
+# so a new release is what tells every installed copy that an update exists.
+#
+# The rulebook (PDF and extracted text) is gitignored and never reaches the
+# repository; the working notes (TODO, PLAYTEST) live in the repo but are left
+# out of the archive — they are not part of the system.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check the tag matches the version in system.json
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          VERSION=$(node -p "require('./system.json').version")
+          echo "tag=$TAG  system.json=$VERSION"
+          if [ "$TAG" != "$VERSION" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match version $VERSION in system.json"
+            exit 1
+          fi
+
+      - name: Build the archive
+        run: |
+          zip -r icon-system.zip . \
+            -x ".git/*" ".github/*" ".gitignore" \
+               "TODO.md" "PLAYTEST.md" \
+               "*.pdf" "ICON 1.5.txt" \
+               "packs/**/LOCK"
+          unzip -l icon-system.zip | head -20
+
+      - name: Publish the release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ICON 1.5 — ${{ github.ref_name }}
+          body: |
+            Install or update in Foundry with this manifest URL:
+
+            ```
+            https://github.com/${{ github.repository }}/releases/latest/download/system.json
+            ```
+
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)
+            for what changed (in Italian).
+          files: |
+            icon-system.zip
+            system.json

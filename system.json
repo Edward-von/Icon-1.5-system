@@ -118,5 +118,12 @@
       "type": "Macro",
       "system": "icon-system"
     }
-  ]
+  ],
+  "url": "https://github.com/Edward-von/Icon-1.5-system",
+  "manifest": "https://github.com/Edward-von/Icon-1.5-system/releases/latest/download/system.json",
+  "download": "https://github.com/Edward-von/Icon-1.5-system/releases/latest/download/icon-system.zip",
+  "readme": "https://github.com/Edward-von/Icon-1.5-system/blob/master/README.md",
+  "changelog": "https://github.com/Edward-von/Icon-1.5-system/blob/master/CHANGELOG.md",
+  "bugs": "https://github.com/Edward-von/Icon-1.5-system/issues",
+  "license": "https://github.com/Edward-von/Icon-1.5-system/blob/master/LICENSE"
 }

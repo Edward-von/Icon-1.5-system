@@ -10,9 +10,6 @@ packs/**/LOCK
 _safety-*/
 _installed-backup-*/
 
-# Claude Code local state
-.claude/scheduled_tasks.lock
-
 # OS noise
 Thumbs.db
 Desktop.ini

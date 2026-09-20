@@ -125,7 +125,7 @@ emersa lavorando. Schema del mondo 8 → 14 (migrazioni 9-14).
 
 ## 10 settembre 2026 — Playtest delle Sessioni 12 e 13 sul mondo di Maar (build 1.5.0)
 
-- **Playtest con Claude in Chrome** su foundry.codrillo.it (scena "test", copie TEST poi cancellate): Sessione 12
+- **Playtest in una sessione dedicata** su foundry.codrillo.it (scena "test", copie TEST poi cancellate): Sessione 12
   15/16 ok, Sessione 13 21/23 ok. Dettagli e caselle in `PLAYTEST.md` ("Esito playtest del 10 settembre 2026").
 - **Bug trovati, non ancora corretti** (TODO Sessione 14): il tag `true strike` di un'abilità/azione non ignora
   l'Evasion (solo lo status lo fa); la riga "Applies to" della tab Relics non compare mai; le card dei trait NPC
@@ -218,7 +218,7 @@ emersa lavorando. Schema del mondo 8 → 14 (migrazioni 9-14).
   ✕) occupavano tutta la larghezza → ora vanno a capo sotto il nome (CSS `flex-wrap`).
 - **Token dei foe creati linkati**: `IconActor._preCreate` linka il token prototipo di ogni nuovo attore, quindi la
   riga `actorLink = false` del designer non aveva effetto; tolta, con un attore per corpo il token linkato è giusto.
-- Playtest (Claude in Chrome sul mondo di Maar, scena "test", copie TEST cancellate a fine prova): Sessione 9 tutta
+- Playtest (sul mondo di Maar, scena "test", copie TEST cancellate a fine prova): Sessione 9 tutta
   verificata (reminder per rango, Invoke acceso su un 17 grezzo, soglie Aspect, attacco base, round 3/5); Sessione 10
   verificata per intero dopo il fix (party, budget, filtri, Elite, Legend, riserve, Random fill, salvataggi, chat,
   attori, deploy, Reveal reserves). Dettagli in `PLAYTEST.md`. Emerso: nel pack `foes` il Nilfling (Jotunn) non è
@@ -257,7 +257,7 @@ emersa lavorando. Schema del mondo 8 → 14 (migrazioni 9-14).
   GM attivo via socket (`type: "inflictStatus"`, stesso canale dei mark; Hatred usa il relay dei mark).
 - API per le macro: `game.icon.parseInflictedStatuses / abilityStatusEntries / npcActionStatusEntries /
   statusBlockHtml / inflictStatus`. Versione 1.3.0.
-- **Playtest della sera stessa** (Claude in Chrome sul mondo di Maar, scena "test"): 14 controlli su 16 passati alla
+- **Playtest della sera stessa** (sul mondo di Maar, scena "test"): 14 controlli su 16 passati alla
   prima prova — applicazione diretta, save fallito/riuscito con carta "Save vs X" e sottotitolo, carica Blessed
   consumata (+2 nel totale), auto-fail sui bloodied con Hatred of <demone>, "pacified on a successful save",
   "Already rolled", upgrade a ongoing, riga "Current targets", gruppo Exceed sbiadito su un 14, nessun falso
@@ -385,7 +385,7 @@ emersa lavorando. Schema del mondo 8 → 14 (migrazioni 9-14).
 
 ## 9 settembre 2026 — Playtest sul mondo di Maar: 9 fix
 
-Primo playtest reale (Claude in Chrome sul mondo Jade Regent, scena di test con copie dei PG). Tutto il blocco
+Primo playtest reale (sul mondo Jade Regent, scena di test con copie dei PG). Tutto il blocco
 Hatred/Mark, i template di area e i dati delle sessioni 3-7 funzionano; questi i difetti trovati e corretti:
 
 - **Schede con tutte le tab impilate** (Narrative, Combat, Conditions… una sotto l'altra, pre-esistente dal
@@ -573,7 +573,7 @@ Hatred/Mark, i template di area e i dati delle sessioni 3-7 funzionano; questi i
   Legends per Fazione. Colori delle fazioni uguali a Foe Abilities. Script
   `icon-compendium-audit/session3/add-pack-folders.mjs` (idempotente).
 - **Nuovo `PLAYTEST.md`**: ogni sessione ci scrive i test da fare, che si eseguono in una sessione di
-  playtest separata con Claude in Chrome (contiene già i test delle Sessioni 1, 2 e 3).
+  playtest separata in una sessione dedicata (contiene già i test delle Sessioni 1, 2 e 3).
 
 ## 7 settembre 2026 — Sessione 2: chat NPC, tag Draken Cross, Party Resolve sincronizzato
 
