@@ -1,7 +1,7 @@
 /**
  * IconSheet — ApplicationV2 sheet for Player Characters (type: "icon").
  */
-import { narrativeRoll, combatRoll, damageRoll, saveRoll, relicInvokeHtml, relicNotesHtml } from "../../dice/rolls.mjs";
+import { narrativeRoll, combatRoll, damageRoll, relicInvokeHtml, relicNotesHtml } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard, recoverAction } from "../../combat/damage.mjs";
 import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
@@ -9,17 +9,23 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
+import { buildAbilityBlocks } from "../../helpers/ability-blocks.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
-         areaVariants, chooseAreaVariant } from "../../canvas/area-templates.mjs";
-import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
-import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes } from "../../combat/relic-reminders.mjs";
+         areaVariants, chooseAreaVariant, abilityArea, areaColor } from "../../canvas/area-templates.mjs";
+import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
+import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
+         relicInvokeRank } from "../../combat/relic-reminders.mjs";
 import { abilityStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
+import { currentTargets, tagKey } from "../../combat/defenses.mjs";
+import { IconActor } from "../IconActor.mjs";
+import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
+import { infusionsOf, armInfusion, cancelInfusion, armedInfusion } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
-         STACKABLE_STATUSES, getStatusCharges,
+         STACKABLE_STATUSES,
          setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
@@ -27,6 +33,9 @@ import { promptNarrativeRoll, promptAttackMods,
          promptDamageMods, promptAbilityConfig } from "../../apps/sheet-dialogs.mjs";
 
 const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
+
+/** Action dots every character starts with: the bond's +2 plus 4 to spend (p.241). */
+const STARTING_ACTION_DOTS = 6;
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
@@ -44,6 +53,7 @@ export class IconSheet extends BaseActorSheet {
     position: { width: 820, height: 700 },
     window:   { resizable: true, controls: [PROTOTYPE_TOKEN_CONTROL, REFERENCE_CONTROL] },
     actions: {
+      rollSave:         BaseActorSheet.onRollSave,   // Conditions tab / save bar
       configurePrototypeToken: onConfigurePrototypeToken,
       rollAction:          IconSheet.#onRollAction,        // legacy alias
       rollNarrativeAction: IconSheet.#onRollNarrativeAction,
@@ -71,6 +81,7 @@ export class IconSheet extends BaseActorSheet {
       openCharCreation: IconSheet.#onOpenCharCreation,
       showHelp:         IconSheet.#onShowHelp,
       showReference:    IconSheet.#onShowReference,
+      abilityStance:    IconSheet.#onAbilityStance,
       removeTraitItem:  IconSheet.#onRemoveTraitItem,
       removeItem:        IconSheet.#onRemoveItem,
       setPrimaryJob:     IconSheet.#onSetPrimaryJob,
@@ -97,6 +108,8 @@ export class IconSheet extends BaseActorSheet {
       spendVigilance:   IconSheet.#onSpendVigilance,
       clearVigilance:   IconSheet.#onClearVigilance,
       clearStance:      IconSheet.#onClearStance,
+      resetAuraColor:   IconSheet.#onResetAuraColor,
+      abilityInfuse:    IconSheet.#onAbilityInfuse,
       toggleComboToken: IconSheet.#onToggleComboToken,
       adjustBlessings:  IconSheet.#onAdjustBlessings,
       clearBlessings:   IconSheet.#onClearBlessings,
@@ -109,7 +122,6 @@ export class IconSheet extends BaseActorSheet {
       toggleStatus:        IconSheet.#onToggleStatus,
       adjustElevation:     IconSheet.#onAdjustElevation,
       adjustStatusCharges: IconSheet.#onAdjustStatusCharges,
-      rollSave:            IconSheet.#onRollSave,
       addPowerDie:      IconSheet.#onAddPowerDie,
       rollPowerDie:     IconSheet.#onRollPowerDie,
       tickPowerDie:     IconSheet.#onTickPowerDie,
@@ -177,6 +189,12 @@ export class IconSheet extends BaseActorSheet {
     const context = await super._prepareContext(options);
     const actor   = this.document;
     const system  = actor.system;
+    // Summons compendium index (cached after the first sheet opens): the
+    // ability panels offer the creatures their text names, ready to drag.
+    await loadSummonIndex();
+    // Aura colour shown in the picker: the character's own, or the colour
+    // their auras are drawn in by default (area-templates.mjs).
+    context.auraColor = areaColor({ kind: "aura" }, actor);
 
     context.actor      = actor;
     context.system     = system;
@@ -192,6 +210,8 @@ export class IconSheet extends BaseActorSheet {
       .filter(i => i.type === "ability")
       .sort((a, b) => a.sort - b.sort);
     context.limitBreakItem = actor.items.find(i => i.type === "limit-break");
+    // "1action" / "free" are storage keys — the panel prints "1 Action" / "Free Action".
+    context.limitBreakCost = abilityCostLabel(context.limitBreakItem?.system?.cost ?? "");
 
     // AP / Mastery spending counters
     // Each owned ability costs 1 AP. Each unlocked talent costs +1 AP.
@@ -212,16 +232,23 @@ export class IconSheet extends BaseActorSheet {
     context.masteryFree      = Math.max(0, masteryTotal - masterySpent);
     context.masteryOverspent = masterySpent > masteryTotal;
 
-    // Skill Rank counter — total pool granted by level-up (action improvements
-    // from advancement table p. 241) vs. dots actually spent across the 10
-    // narrative actions. Editable manually like apTotal/masteries.
-    const skillRanksTotal = system.combat?.skillRanksTotal ?? 0;
+    // Skill Rank counter — dots on the ten narrative actions vs the dots the
+    // character is entitled to. `system.combat.skillRanksTotal` only counts the
+    // action improvements handed out by level ups (LevelUpDialog), but the
+    // dots on the sheet also include the six every character starts with:
+    // the bond's +2 in one action and the 4 to distribute (p.241). Without
+    // those six in the total, a brand-new character reads "Spent 6 / 0 ⚠ OVER"
+    // for ever, which is what it did until now.
+    const skillRanksFromLevels = system.combat?.skillRanksTotal ?? 0;
+    const skillRanksTotal = STARTING_ACTION_DOTS + skillRanksFromLevels;
     const actionsMap      = system.narrative?.actions ?? {};
     const skillRanksSpent = Object.values(actionsMap).reduce((sum, v) => sum + (Number(v) || 0), 0);
-    context.skillRanksTotal     = skillRanksTotal;
-    context.skillRanksSpent     = skillRanksSpent;
-    context.skillRanksFree      = Math.max(0, skillRanksTotal - skillRanksSpent);
-    context.skillRanksOverspent = skillRanksSpent > skillRanksTotal;
+    context.skillRanksBase       = STARTING_ACTION_DOTS;
+    context.skillRanksFromLevels = skillRanksFromLevels;
+    context.skillRanksTotal      = skillRanksTotal;
+    context.skillRanksSpent      = skillRanksSpent;
+    context.skillRanksFree       = Math.max(0, skillRanksTotal - skillRanksSpent);
+    context.skillRanksOverspent  = skillRanksSpent > skillRanksTotal;
 
     // Enriched detail view for each equipped ability — rendered as hidden
     // preview panels under the ability slots grid in the Combat tab. Click on
@@ -234,6 +261,10 @@ export class IconSheet extends BaseActorSheet {
       const parsedCombo = parseComboAbilityDamage(s);
       const desc = parseAbilitySections(s.description);
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
+      // While the combo token is held, a combo ability shows the combo's own
+      // tags (Hades: True Strike + Medium Blast) — flagged as upgraded.
+      const comboArmed = context.comboActive && !!s.isCombo && !!String(s.comboEffect ?? "").trim();
+      const tags = resolveAbilityTags(s, { comboMode: comboArmed });
       return {
         id:          a.id,
         name:        a.name,
@@ -241,11 +272,20 @@ export class IconSheet extends BaseActorSheet {
         class:       s.class ?? "",
         cost:        abilityCostLabel(s.cost),
         chapter:     s.chapter ?? 1,
-        tags:        resolveAbilityTags(s),
-        // "Medium Blast" / "Line 4" / … when the (effective) tags carry an area pattern → 📐 button
-        areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
+        tags,
+        comboArmed,
+        // "Medium Blast" / "Line 4" / … from the tags, or from the ability's own
+        // text when the header has no area (Tsunami, p.233) → 📐 button
+        areaLabel:   abilityArea(tags, s.description)?.label ?? "",
         // Mark abilities: 🎯 button + the marks this ability currently has on the scene
-        canMark:     (s.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+        canMark:     markFromTags(tags).can,
+        // Stance abilities: 🧘 button, lit while this is the stance in play
+        canStance:   tags.some(t => tagKey(t) === "stance"),
+        stanceOn:    IconActor.stanceOf(actor) === a.name,
+        // Summons this ability names: draggable straight onto the map
+        summons:     summonsForAbility(s, s.jobName),
+        // Infuse versions (Wright, p.117): cost, name, and whether one is armed
+        infusions:   infusionsOf(desc.sections, actor, a.id),
         marks:       marksBy(actor.id, a.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         talentSelected,
         masteryUnlocked,
@@ -254,6 +294,9 @@ export class IconSheet extends BaseActorSheet {
         relicReminders: await this._relicRemindersFor(s, parsed),
         // Book-order rules blocks parsed out of the description (Stance, Mark, Effect…)
         sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
+        // Every rules block (Hit/Miss/Area/Charge… + the parsed ones) in reading
+        // order, merged where the book prints one line — see helpers/ability-blocks.mjs
+        blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: enrichHTML }),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still
         // gets a Damage button.
@@ -339,6 +382,10 @@ export class IconSheet extends BaseActorSheet {
         invokeCondition: s.invokeCondition ?? "",
         suggestedForm:   s.suggestedForm ?? "",
         invokeEffect:    await enrichHTML(s.invokeEffect),
+        // Which rank grants the Invoke, and whether this character has it yet
+        invokeRank:      relicInvokeRank(s),
+        invokeRankLabel: ["", "I", "II", "III", "Aspect"][relicInvokeRank(s)] ?? "",
+        invokeLocked:    currentRank < relicInvokeRank(s),
         rank1:           await enrichHTML(s.rank1?.description),
         rank1DustCost:   s.rank1?.dustCost ?? 0,
         rank2:           await enrichHTML(s.rank2?.description),
@@ -611,6 +658,8 @@ export class IconSheet extends BaseActorSheet {
       positive: markActive(groups.positive),
       special:  markActive(groups.special),
     };
+    // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
+    context.saveableStatuses = this._saveableStatuses();
 
     _log(`_prepareContext — done | abilities: ${context.abilityItems.length} | relics: ${context.relicItems.length} | sort: ${this._actionSortMode} | primaryJobClass: "${context.primaryJobClass}"`);
     return context;
@@ -1078,12 +1127,31 @@ export class IconSheet extends BaseActorSheet {
     return Promise.all(list.map(async r => ({ ...r, text: await enrichHTML(r.text) })));
   }
 
-  async _getAbilityDetail(itemId) {
+  /**
+   * Is the combo version of this ability the one in play? True while the combo
+   * token is held, and also right after Show in Chat spent it on this very
+   * ability (the attack and damage rolls come as separate clicks afterwards).
+   */
+  _comboArmed(item) {
+    const s = item?.system ?? {};
+    if (!s.isCombo || !String(s.comboEffect ?? "").trim()) return false;
+    const token = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
+    return token || this.document.getFlag("icon-system", "comboSpentOnItem") === item.id;
+  }
+
+  async _getAbilityDetail(itemId, { comboMode = null } = {}) {
     const item = this.document.items.get(itemId);
     if (!item) return null;
+    await loadSummonIndex();   // chat cards can be posted before any sheet render
     const s = item.system ?? {};
     const parsed = _parseAbilityDamage(s);
     const parsedCombo = parseComboAbilityDamage(s);
+    // Combo version in play: its tags replace the ability's (Hades gains True
+    // Strike and Medium Blast) and its own text says how the attack lands
+    // (auto-hit instead of a roll), so the buttons and the area follow it.
+    const combo  = comboMode ?? this._comboArmed(item);
+    const tags   = resolveAbilityTags(s, { comboMode: combo });
+    const active = combo && parsedCombo ? parsedCombo : parsed;
     const desc = parseAbilitySections(s.description);
     const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
     return {
@@ -1093,20 +1161,26 @@ export class IconSheet extends BaseActorSheet {
       class:       s.class ?? "",
       cost:        abilityCostLabel(s.cost),
       chapter:     s.chapter ?? 1,
-      tags:        resolveAbilityTags(s),
-      areaLabel:   areaFromTags(resolveAbilityTags(s))?.label ?? "",
-      canMark:     (s.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+      tags,
+      areaLabel:   abilityArea(tags, s.description)?.label ?? "",
+      comboArmed:  combo,
+      canMark:     markFromTags(tags).can,
+      canStance:   tags.some(t => tagKey(t) === "stance"),
+      stanceOn:    IconActor.stanceOf(this.document) === item.name,
+      summons:     summonsForAbility(s, s.jobName),
+      infusions:   infusionsOf(desc.sections, this.document, item.id),
       marks:       marksBy(this.document.id, item.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
       relicReminders: await this._relicRemindersFor(s, parsed),
-      relicProfile:   buildAbilityProfile(s, { tags: resolveAbilityTags(s).map(t => t.raw), isAttack: parsed.isAttack, dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage }),
+      relicProfile:   buildAbilityProfile(s, { tags: tags.map(t => t.raw), isAttack: active.isAttack, dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage }),
       sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
+      blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: enrichHTML }),
       hasSections: desc.sections.length > 0,
-      isAttack:    parsed.isAttack,
-      isAutoHit:   parsed.isAutoHit,
-      dealsDamage: parsed.dealsDamage,
+      isAttack:    active.isAttack,
+      isAutoHit:   active.isAutoHit,
+      dealsDamage: active.dealsDamage,
       parsed,
       parsedCombo,
       description:         await enrichHTML(desc.flavor),
@@ -1157,8 +1231,7 @@ export class IconSheet extends BaseActorSheet {
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
 
-    const comboActive = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
-    const comboMode   = comboActive && ab.hasCombo;
+    const comboMode = ab.comboArmed;
     _log(`abilityShowInChat — "${ab.name}" | comboMode: ${comboMode}`);
 
     // Statuses the text inflicts → "Inflict" buttons for the current targets
@@ -1166,8 +1239,19 @@ export class IconSheet extends BaseActorSheet {
     const item = this.document.items.get(itemId);
     const statusHtml = statusBlockHtml(abilityStatusEntries(item?.system, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
 
+    // Combo version: the blocks are rebuilt with the combo text merged in, so
+    // an ability whose combo only ADDS something (Low Blow / The Hook) still
+    // prints in full, with the combo wording marked.
+    const cardAb = comboMode
+      ? { ...ab, blocks: await buildAbilityBlocks(item?.system ?? {}, {
+            sections: parseAbilitySections(item?.system?.description).sections,
+            enrich:   enrichHTML,
+            comboText: item?.system?.comboEffect ?? "",
+          }) }
+      : ab;
+
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
-    const content = await renderTemplate("systems/icon-system/templates/chat/ability-card.hbs", { ab, comboMode, statusHtml });
+    const content = await renderTemplate("systems/icon-system/templates/chat/ability-card.hbs", { ab: cardAb, comboMode, statusHtml });
 
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
@@ -1216,11 +1300,17 @@ export class IconSheet extends BaseActorSheet {
 
     const s = item.system ?? {};
     const currentRank = s.currentRank ?? 1;
+    // The Invoke belongs to one rank of the relic (Riftwalker's is Rank III,
+    // Domain's the Aspect): don't advertise it before it is unlocked.
+    const invokeRank = relicInvokeRank(s);
+    const invokeOn   = currentRank >= invokeRank;
     const rl = {
       name:            item.name,
-      invokeType:      s.invokeType ?? "",
-      invokeCondition: s.invokeCondition ?? "",
-      invokeEffect:    await enrichHTML(s.invokeEffect),
+      invokeRank,
+      invokeRankLabel: ["", "I", "II", "III", "Aspect"][invokeRank] ?? "",
+      invokeType:      invokeOn ? (s.invokeType ?? "") : "",
+      invokeCondition: invokeOn ? (s.invokeCondition ?? "") : "",
+      invokeEffect:    invokeOn ? await enrichHTML(s.invokeEffect) : "",
       currentRank,
       aspectUnlocked:  currentRank >= 4,
       rank1:           currentRank >= 1 ? await enrichHTML(s.rank1?.description) : "",
@@ -1357,6 +1447,25 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * 🧘 Take (or drop) the stance this ability grants. ICON allows one stance at
+   * a time (p.104): taking a new one replaces the old, and pressing the button
+   * again drops it. Writing `system.combat.stance` is enough — IconActor keeps
+   * the marker effect on the token in step.
+   */
+  static async #onAbilityStance(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const current = IconActor.stanceOf(this.document);
+    const next    = current === item.name ? "" : item.name;
+    _log(`abilityStance — "${item.name}" | "${current}" → "${next}"`);
+    await this.document.update({ "system.combat.stance": next });
+    if (next && current && current !== item.name) {
+      ui.notifications.info(`${this.document.name}: "${current}" dropped for "${next}" (one stance at a time, p.104).`);
+    }
+  }
+
+  /**
    * 🎯 Mark the targeted token with this ability (marks.mjs). Exactly one
    * token must be targeted; the mark's text is the ability's "Mark:" block.
    */
@@ -1370,7 +1479,8 @@ export class IconSheet extends BaseActorSheet {
     const text = sections.find(sec => /\bMark$/i.test(sec.label))?.text
       ?? sections.map(sec => `${sec.label}: ${sec.text}`).join(" ");
     _log(`abilityMark — "${item.name}" on ${targets[0].name}`);
-    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: item.id, abilityName: item.name, text });
+    const multi = markFromTags(resolveAbilityTags(item.system, { comboMode: this._comboArmed(item) })).multi;
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: item.id, abilityName: item.name, text, multi });
   }
 
   /** ✕ on a mark chip (ability panel) or in the Conditions tab list. */
@@ -1394,6 +1504,12 @@ export class IconSheet extends BaseActorSheet {
     const variants = areaVariants({
       tags: ab.tags,
       texts: [
+        // Only when the header has no area: the shape is in the prose instead
+        // ("The area is a medium blast terrain effect", p.233).
+        areaFromTags(ab.tags) ? null : ["Text", s.description],
+        // The armed Infuse version can change the shape ("CRYOTIC — Change
+        // area to Line 8", "BIOTIC — increase blast size to medium blast").
+        ...(ab.infusions ?? []).filter(i => i.armed).map(i => [i.label, i.text]),
         ab.hasCombo   ? ["Combo",     s.comboEffect]  : null,
         s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
         ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
@@ -1429,10 +1545,12 @@ export class IconSheet extends BaseActorSheet {
     }
 
     // Area attack: Blast / Line / Arc / Burst on the map first, targets from it.
-    // null = the player cancelled the placement → no roll.
+    // Cancelling the placement (Escape / right click) no longer kills the roll:
+    // the attack is rolled without an area, so the d20 can be thrown before —
+    // or without — putting the arc down. Cancel the dialog to call it off.
     const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id });
-    if (placement === null) return;
-    const areaHtml = areaSummaryHtml(placement);
+    if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
+    const areaHtml = placement ? areaSummaryHtml(placement) : "";
 
     // Relic integration: "Invoke (Attack, N+)" checks on the raw d20 and the
     // relic reminders that apply to this attack (round-gated ones only when
@@ -1440,11 +1558,10 @@ export class IconSheet extends BaseActorSheet {
     const relicInvokes = attackInvokes(this.document);
     const relicNotes   = abilityRelicReminders(this.document, ab.relicProfile, { forAttackCard: true });
 
-    // Combo armed (token held, or spent on this ability via Show in Chat):
-    // the combo text replaces the normal one on the card and for the statuses.
-    const comboToken   = (this.document.system.combat?.classResources?.comboToken?.value ?? 0) === 1;
-    const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
-    const comboArmed   = ab.hasCombo && (comboToken || comboSpentOn === ab.id);
+    // Combo armed (token held, or spent on this ability via Show in Chat): the
+    // combo text replaces the normal one on the card and for the statuses, and
+    // ab.tags / ab.isAutoHit already come from the combo version (_getAbilityDetail).
+    const comboArmed = ab.comboArmed;
     const statusEntries = abilityStatusEntries(this.document.items.get(itemId)?.system, { comboMode: comboArmed, sourceName: this.document.name });
 
     if (ab.isAutoHit) {
@@ -1479,8 +1596,15 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
 
-    const mods = await promptAttackMods(ab, this.document);
+    const mods = await promptAttackMods(ab, this.document, { area: placement?.area ?? null });
     if (!mods) return;
+
+    // With an area on the table the extra tokens only take the area effect:
+    // the d20 (and the Evasion roll) is for the attack target picked in the dialog.
+    const rollTargets = mods.attackTargetId
+      ? currentTargets().filter(t => t.tokenId === mods.attackTargetId)
+      : null;
+    const areaLine = placement ? areaSummaryHtml(placement, { attackTargetId: mods.attackTargetId }) : "";
 
     await combatRoll({
       abilityName:  comboArmed ? `${ab.name} (Combo)` : ab.name,
@@ -1494,10 +1618,11 @@ export class IconSheet extends BaseActorSheet {
       missEffect:   ab.missEffect,
       exceedEffect: ab.exceedEffect,
       critEffect:   ab.critEffect,
-      areaHtml,
+      areaHtml:     areaLine,
       relicInvokes,
       relicNotes,
       statusEntries,
+      targets:      rollTargets?.length ? rollTargets : null,
       actor:        this.document,
     });
   }
@@ -1549,6 +1674,11 @@ export class IconSheet extends BaseActorSheet {
       resistance:  mods.resistance,
       weakened:    mods.weakened,
       hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
       targetName:  mods.targetName,
     });
 
@@ -1639,6 +1769,11 @@ export class IconSheet extends BaseActorSheet {
       resistance:  mods.resistance,
       weakened:    mods.weakened,
       hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
       targetName:  mods.targetName,
     });
   }
@@ -2006,6 +2141,38 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({ "system.combat.classResources.vigilance.value": 0 });
   }
 
+  /**
+   * ✨ Infuse: spend the Aether and arm this version of the ability (p.117 —
+   * "triggers when Aether is spent on an ability"). Pressing the armed one
+   * again gives the Aether back, for when the plan changes before the roll.
+   */
+  static async #onAbilityInfuse(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const label = target.dataset.label ?? "";
+    const armed = armedInfusion(this.document);
+    if (armed && armed.itemId === item.id && armed.label === label) {
+      await cancelInfusion(this.document);
+      ui.notifications.info(`${item.name}: infusion cancelled, Aether returned.`);
+      return;
+    }
+    const sections = parseAbilitySections(item.system?.description ?? "").sections;
+    const infusion = infusionsOf(sections, this.document, item.id).find(i => i.label === label);
+    if (!infusion) return;
+    // Only one infuse effect can be up at a time (rule-tooltips: "only one
+    // infuse effect can trigger at a time"), so a different one is refunded.
+    if (armed) await cancelInfusion(this.document);
+    await armInfusion(this.document, item, infusion);
+  }
+
+  /** Back to the class colour for this character's auras (clears the flag). */
+  static async #onResetAuraColor(event, target) {
+    event.stopPropagation();
+    await this.document.unsetFlag("icon-system", "auraColor");
+    _log(`resetAuraColor — "${this.document.name}" back to the class colour`);
+  }
+
   /** Clear the active stance (also removes the on-token marker via _onUpdate). */
   static async #onClearStance(event, target) {
     _log(`clearStance — actor: "${this.document.name}"`);
@@ -2141,65 +2308,6 @@ export class IconSheet extends BaseActorSheet {
     await item.update({ "system.masteryUnlocked": unlocked });
   }
 
-  /**
-   * Save roll button: prompt for status name and offer to spend a Mendicant
-   * blessing token for +1 boon, then roll a save (1d20 + boons, 10+ = success).
-   * If the actor has no blessing tokens, the checkbox is hidden.
-   */
-  static async #onRollSave(event, target) {
-    const actor = this.document;
-    const blessings = getStatusCharges(actor, "blessed");
-    const blessingHtml = blessings > 0
-      ? `<label style="display:flex;align-items:center;gap:6px;padding:4px 0">
-          <input type="checkbox" name="useBlessing"> Use Blessing (+1 boon, you have ${blessings})
-         </label>`
-      : `<p class="notes" style="margin:0;font-size:.85em;color:#888">Not blessed (apply Blessed in the Conditions tab to gain a charge).</p>`;
-    const content = `
-      <div style="display:flex;flex-direction:column;gap:6px;padding:4px 0">
-        <label>Status: <input type="text" name="statusLabel" value="status" style="width:160px"></label>
-        <label style="display:flex;align-items:center;gap:6px"><input type="checkbox" name="ongoing"> Ongoing+ (auto-fail)</label>
-        ${blessingHtml}
-      </div>
-    `;
-    let result;
-    try {
-      result = await foundry.applications.api.DialogV2.prompt({
-        window: { title: `Save Roll — ${actor.name}` },
-        content,
-        ok: {
-          label: "Roll Save",
-          callback: (_e, button, dialog) => {
-            const root = button?.form ?? dialog?.element ?? dialog;
-            return {
-              statusLabel: root.querySelector('input[name="statusLabel"]')?.value || "status",
-              ongoing:     !!root.querySelector('input[name="ongoing"]')?.checked,
-              useBlessing: !!root.querySelector('input[name="useBlessing"]')?.checked,
-            };
-          },
-        },
-        rejectClose: false,
-      });
-    } catch { return; }
-    if (!result) return;
-
-    let boons = 0;
-    let boonNote = "";
-    if (result.useBlessing && blessings > 0) {
-      boons = 1;
-      boonNote = "blessing";
-      // Consume one Blessed charge — auto-removes the status when count → 0
-      await adjustStatusCharges(actor, "blessed", -1);
-    }
-
-    _log(`rollSave — actor: "${actor.name}" | status: "${result.statusLabel}" | ongoing: ${result.ongoing} | blessing: ${result.useBlessing}`);
-    await saveRoll({
-      statusLabel: result.statusLabel,
-      ongoing:     result.ongoing,
-      boons,
-      boonNote,
-      actor,
-    });
-  }
 
   /** Toggle a status effect on the actor (Conditions tab buttons). */
   static async #onToggleStatus(event, target) {
@@ -2329,11 +2437,11 @@ export class IconSheet extends BaseActorSheet {
 
     const updates = {
       "system.narrative.dust": dust - cost,
-      // All refocus modes refund skill ranks: zero every action dot and
-      // reset the pool so the player re-spends from scratch. skillRanksTotal
-      // is regranted at the next level-up, but a manual-edited value would
-      // be lost on refocus — which matches the refund semantics of AP/Mastery.
-      "system.combat.skillRanksTotal":     0,
+      // All refocus modes refund skill ranks: zero every action dot so the
+      // player re-spends them. `skillRanksTotal` is NOT reset — it is the
+      // pool earned by levelling up (one per action improvement), the same
+      // way apTotal and masteries survive a refocus; zeroing it used to throw
+      // away every improvement the character had ever earned.
       "system.narrative.actions.sneak":    0,
       "system.narrative.actions.traverse": 0,
       "system.narrative.actions.sense":    0,

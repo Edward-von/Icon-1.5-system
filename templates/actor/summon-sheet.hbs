@@ -99,6 +99,23 @@
       {{/if}}
     </div>
 
+    {{#if isEditable}}
+      <div class="icon-section icon-section--saves">
+        <h3 class="icon-section__title">Saves <small>1d20, 10+ clears the status</small></h3>
+        <div class="icon-save-buttons">
+          {{#each saveableStatuses as |st|}}
+            <button type="button" class="icon-btn icon-btn--sm icon-save-btn"
+                    data-action="rollSave" data-effect-uuid="{{st.uuid}}"
+                    title="Roll a save against {{st.name}} — on a 10+ it is removed">🎲 {{st.name}}</button>
+          {{else}}
+            <span class="notes" style="font-size:.85em;color:#c0b898">No status to save against right now.</span>
+          {{/each}}
+          <button type="button" class="icon-btn icon-btn--sm" data-action="rollSave"
+                  title="Roll a save against something else (type the status in the dialog)">🛡 Save vs…</button>
+        </div>
+      </div>
+    {{/if}}
+
     <div class="icon-section">
       <h3 class="icon-section__title">Notes</h3>
       <div class="icon-editor-wrap">{{{enrichedNotes}}}</div>

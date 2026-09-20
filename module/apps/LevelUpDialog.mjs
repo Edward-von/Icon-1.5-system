@@ -20,7 +20,7 @@
  */
 import {
   LEVEL_BENEFITS, chapterForLevel,
-  MAX_EQUIPPED_ABILITIES, XP_PER_LEVEL,
+  MAX_EQUIPPED_ABILITIES, XP_PER_LEVEL, apBudget,
 } from "../helpers/advancement.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections } from "../helpers/enrich.mjs";
 import { ensureClassGambits } from "../helpers/classes.mjs";
@@ -123,7 +123,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // at L4/L8 (handled in submit). We load ability options whenever the level
     // grants any AP or when there's a job choice available.
     const apGranted = (combat.ap ?? 0);
-    const canGainAP = apGranted > 0 || combat.jobChoice;
+    // AP left over from earlier levels can be spent here too, so the ability
+    // and talent pickers open even at a level that grants none of its own.
+    const bankedAp  = apBudget(this.actor).free;
+    const canGainAP = apGranted > 0 || bankedAp > 0 || combat.jobChoice;
 
     // Resolve pending new-job template (if chosen in stage 1) so we can
     // include its abilities in the stage-2 picker and show it in the recap.
@@ -213,8 +216,12 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
 
+    // AP banked from earlier levels (typically the +1 of a halfway mark that
+    // was never spent), read once above as `bankedAp`.
+    const carryAp = bankedAp;
+
     // Max ability picks = AP effectively gained (including new-job bonus)
-    const effectiveMaxPicks = Math.max(effectiveApGain, 0);
+    const effectiveMaxPicks = Math.max(effectiveApGain + carryAp, 0);
 
     return {
       actor:          this.actor,
@@ -244,6 +251,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       improveSlots:   effectiveImproveSlots,
       maxAbilityPicks: effectiveMaxPicks,
       apGranted:      effectiveApGain,
+      carryAp,
+      apBudgetTotal:  effectiveApGain + carryAp,
       masteryGain:    effectiveMasteryGain,
 
       // Wizard state
@@ -258,8 +267,8 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
 
       // Stage-2 pickers visibility (respect stage-1 choices)
       hasBondPower:     showBondPowerField,
-      hasAbilityPicker: canGainAP && this._abilities.length > 0 && effectiveApGain > 0,
-      hasTalentPicker:  canGainAP && this._talentOptions.length > 0 && effectiveApGain > 0,
+      hasAbilityPicker: canGainAP && this._abilities.length > 0 && (effectiveApGain + carryAp) > 0,
+      hasTalentPicker:  canGainAP && this._talentOptions.length > 0 && (effectiveApGain + carryAp) > 0,
       hasMasteryPicker: canGainMastery && this._masteryOptions.length > 0 && effectiveMasteryGain > 0,
       hasRelicPicker:   !!combat.relic,
     };
@@ -551,6 +560,23 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       updates["system.combat.skillRanksTotal"] = (system.combat.skillRanksTotal ?? 0) + improveN;
     }
 
+    // Action improvements and the bond power are spent here or lost: they are
+    // not banked like AP or mastery points. Stop the submit while something is
+    // still unpicked — unless there is genuinely nothing to pick (every action
+    // already at the maximum rating of 4, p.17; no bond power in the list).
+    const emptySlots = Array.from({ length: improveN }, (_, i) => i + 1).filter(i => !data[`improveAction${i}`]).length;
+    const allMaxed   = Object.keys(CONFIG.ICON.actions).every(k => (system.narrative.actions[k] ?? 0) >= 4);
+    if (emptySlots > 0 && !allMaxed) {
+      ui.notifications.error(`${emptySlots} action improvement${emptySlots > 1 ? "s" : ""} still to spend — pick an action for every dot before confirming (they don't carry over).`);
+      _log(`submit BLOCKED — ${emptySlots} empty improveAction slot(s)`);
+      return;
+    }
+    if (pickBondPower && !data.bondPowerUuid && (dialog._bondPowers?.length ?? 0) > 0) {
+      ui.notifications.error("Pick a Bond Power before confirming (it doesn't carry over).");
+      _log(`submit BLOCKED — bond power not picked`);
+      return;
+    }
+
     // Count picks per action so that picking the same action twice stacks
     // (e.g. L4 "+1 to 2 actions" with both slots set to Sneak → +2 Sneak).
     const pickCounts = {};
@@ -757,10 +783,25 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       newJobBlock.hidden = $('input[name="jobChoice"]:checked')?.value !== "newJob";
     };
 
+    /* Stage 2: narrative picks (action improvements + bond power). Unlike AP,
+       which is banked on the sheet, these are lost if the player confirms
+       without choosing, so the counter and the summary keep them in sight. */
+    const improveCounter = $('[data-role="improve-counter"]');
+    const improveSelects = $$('select[name^="improveAction"]');
+    const bondPowerBoxes = $$('input[name="bondPowerUuid"]');
+    const improvesLeft   = () => improveSelects.filter(sel => !sel.value).length;
+    const bondPowerLeft  = () => bondPowerBoxes.length > 0 && !bondPowerBoxes.some(b => b.checked);
+    const syncNarrative = () => {
+      if (!improveCounter) return;
+      const left = improvesLeft();
+      improveCounter.textContent = left ? `${left} to pick` : "all picked";
+      improveCounter.classList.toggle("icon-wizard__counter--full", left === 0);
+    };
+
     /* Stage 2: AP budget = new abilities + talents */
     const apCounter    = $('[data-role="ap-counter"]');
     const abilityBoxes = $$('input[name="abilityPick"]');
-    const budget       = context.apGranted ?? 0;
+    const budget       = context.apBudgetTotal ?? context.apGranted ?? 0;
     const syncAp = () => {
       const abilities = abilityBoxes.filter(b => b.checked).length;
       const talents   = $$('input[name^="talent:"]:checked').filter(r => r.value !== "").length;
@@ -779,7 +820,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
         if ($('input[name="masteryPick"]:checked')?.value) parts.push("mastery picked");
         if ($('input[name="relicUuid"]:checked')) parts.push("relic picked");
         if ($('input[name="bondPowerUuid"]:checked')) parts.push("bond power picked");
+        // What still has to be spent before Confirm will go through.
+        const missing = [];
+        const left = improvesLeft();
+        if (left) missing.push(`<strong>${left}</strong> action improvement${left > 1 ? "s" : ""} to pick`);
+        if (bondPowerLeft()) missing.push("<strong>bond power</strong> to pick");
+        if (missing.length) parts.push(missing.join(" · "));
         summary.innerHTML = parts.join(" · ") || "Make your picks, then confirm.";
+        summary.classList.toggle("icon-wizard__summary--warn", missing.length > 0);
       }
     };
 
@@ -788,9 +836,10 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     (html.querySelector(".icon-wizard") ?? html).addEventListener("change", ev => {
       const name = ev.target?.name ?? "";
       if (name === "jobChoice") syncJobChoice();
-      else syncAp();
+      else { syncNarrative(); syncAp(); }
     });
     syncJobChoice();
+    syncNarrative();
     syncAp();
   }
 

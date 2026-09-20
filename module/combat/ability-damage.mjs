@@ -128,7 +128,7 @@ export function isFoeActionAttack(action) {
   const tags = (a.tags ?? []).map(t => String(t).toLowerCase());
   if (tags.some(t => t === "attack" || t === "melee-attack" || t === "ranged-attack" || /^ranged-attack-\d+$/.test(t))) return true;
   const text = `${a.hitEffect ?? ""} ${a.description ?? ""}`;
-  return /on\s+hit/i.test(text);
+  return /\bon\s+hit\b/i.test(text);
 }
 
 /** @deprecated Old name kept for existing world macros — use parseAbilityDamage. */

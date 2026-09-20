@@ -29,6 +29,7 @@ import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
 import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
+import { handlePromptSocket } from "./remote-prompt.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
@@ -726,6 +727,16 @@ export function registerCombatHooks() {
    */
   game.socket?.on(SOCKET, async (data) => {
     try {
+      /* Questions addressed to one specific user, in either direction: the
+       * Blessed charge on an end-of-turn save and the save behind an Inflict
+       * button belong to the character's own player, so these are handled on
+       * every client (remote-prompt.mjs filters by user id) BEFORE the
+       * GM-only guard below. */
+      if (data?.type === "iconPrompt" || data?.type === "iconPromptResult") {
+        await handlePromptSocket(data);
+        return;
+      }
+
       if (!game.user.isGM) return;
       // Only the designated active GM processes, to avoid double-execution.
       if (game.users.activeGM?.id !== game.user.id) return;

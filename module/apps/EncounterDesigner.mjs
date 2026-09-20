@@ -158,11 +158,13 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     },
   };
 
+  // `scrollable` keeps the scroll position of the lists that scroll on their own:
+  // picking a PC or changing a quantity re-renders the party / encounter parts.
   static PARTS = {
     hero:      { template: `${TPL}hero.hbs` },
-    party:     { template: `${TPL}party.hbs` },
-    roster:    { template: `${TPL}roster.hbs` },
-    encounter: { template: `${TPL}encounter.hbs` },
+    party:     { template: `${TPL}party.hbs`, scrollable: ["", ".icon-encounter__pcs"] },
+    roster:    { template: `${TPL}roster.hbs`, scrollable: [".icon-encounter__list"] },
+    encounter: { template: `${TPL}encounter.hbs`, scrollable: ["", ".icon-encounter__picklist"] },
     footer:    { template: `${TPL}footer.hbs` },
   };
 
@@ -637,13 +639,28 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     const name = this.enc.name.trim();
     if (!name) { ui.notifications.warn("Give the encounter a name first (bottom-left field)."); return; }
     const drafts = foundry.utils.deepClone(game.settings.get("icon-system", DRAFTS_SETTING) ?? {});
+    // Saving under a name that already exists replaces it: ask first, the way
+    // deleting one does. Saving the encounter you just loaded is the normal
+    // way to update it, so the dialog says what is being replaced.
+    const existing = drafts[name];
+    if (existing) {
+      const when = existing.savedAt ? new Date(existing.savedAt).toLocaleString() : "";
+      const ok = await foundry.applications.api.DialogV2.confirm({
+        window: { title: "Replace saved encounter" },
+        content: `<p>An encounter called <strong>${foundry.utils.escapeHTML(name)}</strong> is already saved${when ? ` (${foundry.utils.escapeHTML(when)})` : ""}.</p>
+                  <p>Replace it with the one on screen? Rename it in the field at the bottom to keep both.</p>`,
+        yes: { label: "Replace" },
+        no:  { label: "Cancel" },
+      });
+      if (!ok) { _log(`saveDraft — "${name}" not replaced`); return; }
+    }
     drafts[name] = {
       ...this.enc,
       partyIds: [...(this.enc.partyIds ?? [])],
       savedAt: Date.now(),
     };
     await game.settings.set("icon-system", DRAFTS_SETTING, drafts);
-    ui.notifications.info(`Encounter "${name}" saved.`);
+    ui.notifications.info(`Encounter "${name}" ${existing ? "replaced" : "saved"}.`);
     this.#refresh(["footer"]);
   }
 

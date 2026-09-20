@@ -19,6 +19,7 @@ import { applyHatred } from "./marks.mjs";
 import { saveRoll } from "../dice/rolls.mjs";
 import { postAbilityDamageCard } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
+import { askOwner, registerPromptResponder } from "./remote-prompt.mjs";
 
 const _log = (...a) => console.debug("[ICON | InflictStatus]", ...a);
 const SOCKET = "system.icon-system";
@@ -148,6 +149,17 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
   if (!statusId && kind !== "save-damage") return null;
   const fullLabel = `${label}${ongoing ? "+" : ""}`;
 
+  // Sealed (p.104): "Character cannot inflict statuses." Checked here, at the
+  // click, rather than when the card is built: the seal can land (or be saved
+  // against) after the card is in the log. It stops a status going ONTO a
+  // target; the damage tied to a save is damage, not a status, and "Gain" is
+  // the user or their allies getting something, not inflicting it.
+  if (kind === "inflict" && source && hasStatus(source, "sealed")) {
+    ui.notifications.warn(`${source.name} is Sealed: a sealed character cannot inflict statuses (p.104).`);
+    _log(`BLOCKED — "${abilityName}" → ${fullLabel} on ${target.name}: ${source.name} is Sealed`);
+    return null;
+  }
+
   // "Gain": the user (or the targeted allies) gets the status, no save.
   if (kind === "gain") {
     const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "", gain: true });
@@ -224,7 +236,51 @@ function _isBloodied(actor) {
   return hp.value <= threshold;
 }
 
-async function _promptSave({ target, source, label, when, sentence, abilityName, saveBoons, saveCurses, autoFailIf }) {
+/**
+ * Ask for the save. The character's own player answers it when they are
+ * connected — the Blessed charge is theirs to spend and the roll is theirs to
+ * make — and the click's client only asks locally when nobody owns the
+ * target, they are offline, or they don't answer in time.
+ */
+async function _promptSave(args) {
+  const { target } = args;
+  const remote = await askOwner(target, {
+    kind: "save",
+    payload: {
+      targetUuid:  target.uuid,
+      sourceName:  args.source?.name ?? "",
+      label:       args.label,
+      when:        args.when,
+      sentence:    args.sentence,
+      abilityName: args.abilityName,
+      saveBoons:   args.saveBoons,
+      saveCurses:  args.saveCurses,
+      autoFailIf:  args.autoFailIf,
+    },
+    waitingNote: `${target.name} saves vs ${args.label} — waiting for their player…`,
+  });
+  if (remote.answered) return remote.result ?? null;   // null = they cancelled
+  return _saveDialog(args);
+}
+
+// The player's side: same dialog, on the client that owns the character.
+registerPromptResponder("save", async (payload) => {
+  const target = await fromUuid(payload.targetUuid ?? "");
+  if (!target) return null;
+  return _saveDialog({
+    target,
+    source:      payload.sourceName ? { name: payload.sourceName } : null,
+    label:       payload.label ?? "",
+    when:        payload.when ?? "always",
+    sentence:    payload.sentence ?? "",
+    abilityName: payload.abilityName ?? "",
+    saveBoons:   Number(payload.saveBoons) || 0,
+    saveCurses:  Number(payload.saveCurses) || 0,
+    autoFailIf:  payload.autoFailIf ?? "",
+  });
+});
+
+async function _saveDialog({ target, source, label, when, sentence, abilityName, saveBoons, saveCurses, autoFailIf }) {
   const canEditTarget = target.isOwner || game.user.isGM;
   const blessings = canEditTarget ? getStatusCharges(target, "blessed") : 0;
   const autoFailNow = autoFailIf && (autoFailIf === "bloodied" ? _isBloodied(target) : hasStatus(target, autoFailIf));

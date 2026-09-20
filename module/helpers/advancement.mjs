@@ -56,6 +56,21 @@ export const MAX_EQUIPPED_ABILITIES = 6;
 export const XP_PER_LEVEL = 15;
 
 /**
+ * AP a character has already spent: one per ability they know, one more for
+ * each ability whose talent is unlocked. The same sum the Notes tab shows as
+ * "Spent N / M", used by the level-up dialog to know what is still banked.
+ * @param {Actor} actor
+ * @returns {{ abilities: number, talents: number, spent: number, total: number, free: number }}
+ */
+export function apBudget(actor) {
+  const abilities = (actor?.items ?? []).filter(i => i.type === "ability");
+  const talents   = abilities.filter(a => (a.system?.talentSelected ?? 0) > 0).length;
+  const spent     = abilities.length + talents;
+  const total     = actor?.system?.combat?.apTotal ?? 0;
+  return { abilities: abilities.length, talents, spent, total, free: Math.max(0, total - spent) };
+}
+
+/**
  * Build a plain-text summary of the gear kits belonging to a bond (plus the
  * shared Adventurer's Kit) from the gear-kits compendium. Used by the bond
  * drop handler and the character-creation wizard to list a new character's

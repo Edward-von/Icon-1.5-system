@@ -1,18 +1,30 @@
 /**
  * xp-award.mjs — ICON 1.5 End-of-Session XP Award Macro
  *
- * Tick end-of-session XP triggers and award XP to every PC.
+ * Tick end-of-session XP triggers and award XP to the chosen PCs.
+ *
+ * The dialog lists every PC you own with a checkbox, so a GM can also award
+ * XP to one character alone — catching up a player who missed the end of the
+ * session — instead of the whole table. Tokens selected on the canvas start
+ * ticked; with nothing selected, everyone is.
  */
 
 (async () => {
   // Only actors the current user owns — a player updating a PC they don't own
-  // throws a permission error and aborts the macro. With this filter a GM
-  // awards XP to every PC, while a player awards it to just their own.
-  const pcs = game.actors.filter(a => a.type === "icon" && a.isOwner);
-  if (!pcs.length) {
+  // throws a permission error and aborts the macro. With this filter a GM sees
+  // every PC, while a player sees just their own.
+  const owned = game.actors.filter(a => a.type === "icon" && a.isOwner);
+  if (!owned.length) {
     ui.notifications.warn("XP Award: no Icon (PC) actors you own were found. Ask your GM to award XP, or check actor ownership.");
     return;
   }
+
+  // Pre-tick the PCs whose token is selected on the map, if any.
+  const selected = new Set((canvas?.tokens?.controlled ?? [])
+    .map(t => t.actor?.id).filter(id => owned.some(a => a.id === id)));
+  const pcRowsHtml = owned
+    .map(a => `<label><input type="checkbox" class="icon-xp-pc" value="${a.id}" ${!selected.size || selected.has(a.id) ? "checked" : ""}> ${foundry.utils.escapeHTML(a.name)}</label>`)
+    .join("");
 
   let result;
   try {
@@ -26,8 +38,15 @@
         .icon-xp-dialog input[type=checkbox] { width: 16px; height: 16px; }
         .icon-xp-dialog input[type=number]   { width: 60px; background: #12161e; color: #e0d0b0; border: 1px solid #3a3528; border-radius: 3px; padding: 2px 5px; }
         .icon-xp-dialog .icon-xp-note { font-size: .78em; color: #7a7060; margin-left: 24px; font-style: italic; }
+        .icon-xp-dialog .icon-xp-pcs { max-height: 140px; overflow-y: auto; border: 1px solid #3a3528; border-radius: 3px; padding: 4px 6px; background: #12161e; }
+        .icon-xp-dialog .icon-xp-pick { display: flex; gap: 10px; margin: 2px 0 0 2px; font-size: .78em; }
+        .icon-xp-dialog .icon-xp-pick a { color: #e8b828; cursor: pointer; text-decoration: underline; }
       </style>
       <div class="icon-xp-dialog">
+        <h3>Characters</h3>
+        <div class="icon-xp-pcs">${pcRowsHtml}</div>
+        <div class="icon-xp-pick"><a data-xp-all>All</a><a data-xp-none>None</a>${selected.size ? "<span style='color:#7a7060'>(ticked from the selected tokens)</span>" : ""}</div>
+
         <h3>Ideals</h3>
         <label><input type="checkbox" id="ideal1"> Fulfilled at least 1 Ideal <span style="color:#e8b828">(+1 XP)</span></label>
         <label><input type="checkbox" id="ideal2"> Fulfilled 2+ Ideals <span style="color:#e8b828">(+2 XP total)</span></label>
@@ -64,15 +83,29 @@
         const chalXp   = chal2  ? 2 : chal1  ? 1 : 0;
         const burdenXp = burden ? 1 : 0;
         const total    = idealXp + chalXp + ambXp + burdenXp;
+        const ids = Array.from(root.querySelectorAll(".icon-xp-pc:checked")).map(el => el.value);
 
-        return { idealXp, chalXp, ambXp, burdenXp, total };
+        return { idealXp, chalXp, ambXp, burdenXp, total, ids };
       },
+    },
+    // All / None links over the character list.
+    render: (_event, dialog) => {
+      const root = dialog.element;
+      const boxes = () => root.querySelectorAll(".icon-xp-pc");
+      root.querySelector("[data-xp-all]")?.addEventListener("click", () => boxes().forEach(b => { b.checked = true; }));
+      root.querySelector("[data-xp-none]")?.addEventListener("click", () => boxes().forEach(b => { b.checked = false; }));
     },
     rejectClose: false,
   });
   } catch { return; }
 
   if (!result) return;
+
+  const pcs = owned.filter(a => result.ids.includes(a.id));
+  if (!pcs.length) {
+    ui.notifications.warn("XP Award: no character was ticked — nothing was awarded.");
+    return;
+  }
 
   // End of session: refresh per-session bond power uses on every PC processed,
   // even when 0 XP is awarded — the session still ended.

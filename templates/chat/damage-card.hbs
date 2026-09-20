@@ -29,11 +29,11 @@
       <div class="icon-chat-card__targets-header">
         <span>Targets</span>
         <span class="icon-chat-card__targets-note">
-          {{#if pierce}}Pierce — target Armor ignored{{else}}Apply subtracts the target's Armor{{/if}}
+          {{#if divine}}Divine — nothing reduces this damage (p.104){{else if pierce}}Pierce — target Armor ignored{{else}}Apply subtracts the target's Armor{{/if}}
         </span>
       </div>
       {{#each targets as |t|}}
-        <div class="icon-chat-card__target-row" data-actor-uuid="{{t.actorUuid}}">
+        <div class="icon-chat-card__target-row" data-actor-uuid="{{t.actorUuid}}" data-token-id="{{t.tokenId}}">
           {{#if t.img}}<img class="icon-chat-card__target-img" src="{{t.img}}" alt="" width="28" height="28">{{/if}}
           <span class="icon-chat-card__target-name"><strong>{{t.name}}</strong></span>
           {{#if t.defense}}<span class="icon-chat-card__target-def">DEF {{t.defense}}</span>{{/if}}
@@ -42,17 +42,21 @@
           <button type="button" class="icon-chat-btn icon-chat-btn--apply"
                   data-action="applyDamage"
                   data-actor-uuid="{{t.actorUuid}}"
+                  data-token-id="{{t.tokenId}}"
                   data-amount="{{../finalDamage}}"
                   {{#if ../pierce}}data-pierce="true"{{/if}}
+                  {{#if ../divine}}data-divine="true"{{/if}}
                   title="Apply {{../finalDamage}} damage to {{t.name}}">
             Apply {{../finalDamage}}
           </button>
           <button type="button" class="icon-chat-btn icon-chat-btn--apply-half"
                   data-action="applyDamage"
                   data-actor-uuid="{{t.actorUuid}}"
+                  data-token-id="{{t.tokenId}}"
                   data-amount="{{../finalDamage}}"
                   data-half="true"
                   {{#if ../pierce}}data-pierce="true"{{/if}}
+                  {{#if ../divine}}data-divine="true"{{/if}}
                   title="Apply half ({{../finalDamage}}/2)">
             ½
           </button>

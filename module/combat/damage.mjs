@@ -502,7 +502,15 @@ export async function postAbilityDamageCard(actor, {
   parsed, outcome = "hit", damagedie = "d6", fray = 0, abilityName = "Attack",
   bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
   hatred = false, targetName = "", targetsOverride = null,
+  flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
 } = {}) {
+  // Damage types (p.104). Divine: "cannot be reduced, mitigated, or negated in
+  // any way except immunity (ignores armor, weak, resistance, defiance, and
+  // bypasses vigor)". Pierce: "cannot be reduced by armor or weakened". Armor
+  // and the Cover/Resistance halving happen on Apply (the flags travel with
+  // the card); the reductions rolled here are skipped straight away.
+  if (divine) { resistance = false; weakened = false; }
+  else if (pierce) { weakened = false; }
   // Select the parsed chunk for the chosen outcome. Save-linked damage
   // ("save-fail" / "save-success") is passed as the hit chunk by the caller.
   const chunk = outcome === "miss" ? parsed.miss
@@ -553,8 +561,11 @@ export async function postAbilityDamageCard(actor, {
 
   if (effectiveFray > 0) steps.push({ label: "Fray", value: effectiveFray });
   if (effectiveFlat > 0) steps.push({ label: `Flat (${effectiveFlat})`, value: effectiveFlat });
+  // Flat amount typed into the dialog (Harden's +2 per round, a blessing…).
+  const extraFlat = Math.max(0, Number(flatBonus) || 0);
+  if (extraFlat > 0) steps.push({ label: "Flat bonus", value: extraFlat });
 
-  let running = diceTotal + effectiveFray + effectiveFlat;
+  let running = diceTotal + effectiveFray + effectiveFlat + extraFlat;
   if (vulnerable) { running += 1; steps.push({ label: "Vulnerable", value: 1 }); }
   // NOTE: target Armor is NOT subtracted here. It is applied automatically when
   // the defender presses "Apply Damage" on the card (see icon.mjs), using that
@@ -610,6 +621,8 @@ export async function postAbilityDamageCard(actor, {
     targets,
     hasTargets:  targets.length > 0,
     outcome,
+    pierce: pierce || divine,   // both ignore the target's armor on Apply
+    divine,
   });
 
   const flavor = outcome === "crit" ? `${abilityName} — Critical!`
@@ -635,6 +648,11 @@ export async function postAbilityDamageCard(actor, {
           // The attacker already ticked "Resistance / Cover ½" on the roll:
           // the Apply button must not halve a second time (defenses.mjs).
           halvedOnRoll: !!resistance,
+          // Divine can't be halved by Cover / Resistance on Apply either (p.104);
+          // True Strike ignores the target's Dodge, Unerring its Cover.
+          divine: !!divine,
+          trueStrike: !!trueStrike,
+          unerring:   !!unerring,
           targets: targets.map(t => t.actorUuid),
         },
       },

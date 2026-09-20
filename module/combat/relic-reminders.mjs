@@ -41,6 +41,8 @@
  * whose wording changes with the relic rank or the combat round.
  */
 
+import { parseAbilitySections } from "../helpers/enrich.mjs";
+
 const _log = (...a) => console.debug("[ICON | relic-reminders]", ...a);
 
 export const RANK_LABELS = { 1: "I", 2: "II", 3: "III", 4: "Aspect" };
@@ -237,6 +239,16 @@ export function buildAbilityProfile(system, { tags = [], isAttack = false, deals
   if (_plain(s.collideEffect))       blocks.add("collide");
   if (_plain(s.comebackEffect))      blocks.add("comeback");
   if (_plain(s.finishingBlowEffect)) blocks.add("finish");
+  // A trigger the book writes inline counts too ("Slay or Infuse 3: GRAN
+  // BLITZ…" lives in the description, not in slayEffect), otherwise a relic
+  // that keys off a Slay / Charge block would silently skip that ability.
+  for (const sec of parseAbilitySections(s.description).sections) {
+    for (const word of String(sec.label).toLowerCase().split(" or ")) {
+      const key = { "charge": "charge", "slay": "slay", "exceed": "exceed", "collide": "collide",
+                    "comeback": "comeback", "finishing blow": "finish", "crit": "crit" }[word.trim()];
+      if (key) blocks.add(key);
+    }
+  }
   const raw = tags.map(t => String(t ?? "").trim().toLowerCase()).filter(Boolean);
   let maxRange = 0;
   for (const t of raw) {
@@ -333,6 +345,37 @@ export function abilityRelicReminders(actor, profile, { forAttackCard = false } 
 
 const INVOKE_RE  = /invoke\s*\(\s*attack\s*,?\s*(\d+)\s*\+\s*\)\s*[:\-–—]?\s*(.*)$/i;
 const BECOMES_RE = /becomes?\s*(?:invoke\s*)?\(\s*attack\s*,?\s*(\d+)\s*\+\s*\)/i;
+
+/**
+ * Which rank of a relic grants its Invoke.
+ *
+ * `system.invokeType / invokeCondition / invokeEffect` describe the relic's
+ * invoke as a whole, but the invoke itself is written inside one of the rank
+ * texts — Riftwalker's "Invoke (Attack, 11+)" is Rank III, Domain's is the
+ * Aspect. Without this the chat card advertised an invoke the character has
+ * not unlocked yet.
+ *
+ * @param {object} system  relic system data
+ * @returns {number} 1-4; 1 when the invoke is part of the relic from the start
+ */
+export function relicInvokeRank(system) {
+  const s = system ?? {};
+  const effect = _plain(s.invokeEffect).toLowerCase();
+  const ranks = [[1, s.rank1?.description], [2, s.rank2?.description], [3, s.rank3?.description], [4, s.aspect?.description]];
+  // An explicit "Invoke (…)" line wins, at the lowest rank that spells it out.
+  for (const [rank, html] of ranks) {
+    if (/\binvoke\s*\(/i.test(_plain(html))) return rank;
+  }
+  // Otherwise the rank whose text is the invoke effect (Mercy, Erenbrass: the
+  // invoke restates Rank I).
+  if (effect.length > 12) {
+    for (const [rank, html] of ranks) {
+      const plain = _plain(html).toLowerCase();
+      if (plain && (plain.includes(effect.slice(0, 40)) || effect.includes(plain.slice(0, 40)))) return rank;
+    }
+  }
+  return 1;
+}
 
 /**
  * "Invoke (Attack, N+)" powers the character can trigger on an attack roll.

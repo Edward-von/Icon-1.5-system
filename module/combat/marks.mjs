@@ -12,6 +12,11 @@
  *     to keep); marks end when the marker is defeated or under the ability's
  *     own conditions. Any number of marks from different characters can sit
  *     on one character (p.108).
+ *   Multimark — the tag the foe stat blocks put on marking abilities that keep
+ *     several marks out at once (Fear, Ancient Hatred, Control Limbs, Sisyphus…).
+ *     The mark rule is written as "each ability TYPICALLY places only one mark"
+ *     (p.95): multimark is that exception, so only the one-mark-per-ability
+ *     sweep is lifted. One mark per marker → target pair still holds.
  *
  * Both are ActiveEffects on the affected actor:
  *   Hatred  — the normal "hatred" status effect, named "Hatred of <X>" with the
@@ -26,6 +31,7 @@
  * the system socket (handled by handleMarkSocket, called from IconCombat).
  */
 import { escapeHTML } from "../helpers/enrich.mjs";
+import { tagKey } from "./defenses.mjs";
 
 const _log = (...a) => console.debug("[ICON | Marks]", ...a);
 const NS         = "icon-system";
@@ -47,6 +53,18 @@ function _sceneActors() {
   const seen = new Map();
   for (const t of _sceneTokens()) if (!seen.has(t.actor.uuid)) seen.set(t.actor.uuid, t.actor);
   return [...seen.values()];
+}
+
+/**
+ * Is this a marking ability, and does it mark several characters at once?
+ * `mark` and `multimark` both put the 🎯 button on an ability / foe action;
+ * `multimark` additionally lets the ability hold more than one mark (p.95).
+ * Accepts raw strings or the {raw,label} chips resolveAbilityTags returns.
+ */
+export function markFromTags(tags) {
+  const keys = (Array.isArray(tags) ? tags : []).map(tagKey);
+  const multi = keys.includes("multimark") || keys.includes("multi-mark");
+  return { can: multi || keys.includes("mark"), multi };
 }
 
 /** Can this client write effects on `actor` directly? Otherwise relay to the GM. */
@@ -209,16 +227,19 @@ export function marksBy(actorId, abilityKey = null) {
  * @param {string} opts.abilityKey   item id / action name — one mark per ability
  * @param {string} opts.abilityName
  * @param {string} [opts.text]       the mark's rules text (shown on hover / in chat)
+ * @param {boolean} [opts.multi]     `multimark` ability: it keeps its older marks
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "" }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false }) {
   if (!source || !target) return null;
   if (_needsRelay(target)) {
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text });
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi });
     ui.notifications.info(`Mark sent to the GM to place on "${target.name}".`);
     return null;
   }
-  // One mark per ability: the ability's previous mark (anywhere on the scene) ends.
-  for (const m of marksBy(source.id, abilityKey)) {
+  // One mark per ability: the ability's previous mark (anywhere on the scene)
+  // ends — unless the ability is `multimark`, which is the tag for the foe
+  // abilities that hold several marks at once.
+  if (!multi) for (const m of marksBy(source.id, abilityKey)) {
     if (m.targetActor === target) continue;
     const eff = await fromUuid(m.uuid);
     if (eff) { await eff.delete(); _log(`mark of ${abilityName} moved from ${m.targetName}`); }
@@ -304,7 +325,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi });
       break;
     }
     case "removeMark":

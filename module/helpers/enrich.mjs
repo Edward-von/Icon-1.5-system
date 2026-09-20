@@ -84,16 +84,18 @@ export function splitAbilityDescription(description) {
  * Canonical display form = each word capitalised except small words
  * ("Terrain effect" → "Terrain Effect", "While in this stance" → "While in this Stance").
  */
-const SECTION_LABELS = [
+export const SECTION_LABELS = [
   // Long "end your turn and …" forms first: the book prints them as one label
   // (Eclipse, Morrigan, Six Hells Trigram, Intimidate).
-  "End your turn and (?:gain|create) (?:a )?(?:Delay|Terrain Effect)", "End your turn and Mark",
+  "End your turn and (?:gain|create) (?:a )?(?:Delay|Terrain Effect|Stance)", "End your turn and Mark",
   "Gain Delay",
   "Effect", "Trigger", "Stance", "Refresh", "Mark", "Terrain Effect", "Summon Effect", "Summon",
   "Special Effect", "Special", "Object Effect", "Object", "Area Effect", "Charge", "Comeback",
   "Collide", "Slay", "Exceed", "Heroic", "Crit", "Finishing Blow", "Free Action", "Delay",
   "Gain Stance", "While in this stance", "In this stance", "Interrupt \\d", "Infuse (?:\\d+|X)",
-  "Slay or Infuse \\d", "Talent", "Mastery",
+  // The book writes the pair both ways round: "Slay or Infuse 3" (Blitz,
+  // Nothung) and "Infuse 3 or Slay" (Drifting Leaf, p.227).
+  "Slay or Infuse \\d", "Infuse \\d or Slay", "Talent", "Mastery",
 ];
 const SECTION_RE = new RegExp(
   `(?:^|[.!?…)\\]]\\s+|—\\s*|>\\s*|\\n\\s*)(${SECTION_LABELS.join("|")}):\\s*`, "gi",

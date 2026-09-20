@@ -171,6 +171,17 @@
                 {{#unless system.combat.stance}}disabled{{/unless}}
                 title="Drop the active stance (free action at the start of your turn)">Clear</button>
       {{/if}}
+      {{!-- Aura colour: several characters can hold an aura at once and they
+            all used to be drawn the same gold. Empty = the class colour. --}}
+      <label class="icon-aura-color" title="Colour of this character's aura templates on the map. Leave empty for the class colour.">
+        <span>Aura</span>
+        <input type="color" name="flags.icon-system.auraColor"
+               value="{{auraColor}}" {{#unless isEditable}}disabled{{/unless}}>
+        {{#if isEditable}}
+          <button type="button" class="icon-btn icon-btn--sm" data-action="resetAuraColor"
+                  title="Back to the class colour">↺</button>
+        {{/if}}
+      </label>
     </div>
   </div>
 
@@ -565,7 +576,7 @@
          Clicking a slot above toggles the matching panel. --}}
     {{#each abilityDetails as |ab|}}
       <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ../comboActive ab.hasCombo)}}icon-ability-preview--combo-active{{/if}}"
-           data-ability-id="{{ab.id}}" hidden>
+           data-ability-id="{{ab.id}}" data-toggle-key="ability-{{ab.id}}" hidden>
         {{#if ../isEditable}}{{#unless ../abilitiesLocked}}
           <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner icon-btn--corner-lg"
                   data-action="removeItem" data-item-id="{{ab.id}}"
@@ -595,6 +606,27 @@
                   title="Post the ability to chat for everyone to see">
             💬 Show in Chat
           </button>
+          {{#each ab.infusions as |inf|}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
+                    data-action="abilityInfuse" data-item-id="{{ab.id}}" data-label="{{inf.label}}"
+                    title="{{#if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}. Aether now: {{inf.aether}}">
+              ✨ {{inf.label}}{{#if inf.armed}} — armed{{/if}}
+            </button>
+          {{/each}}
+          {{#each ab.summons as |sm|}}
+            <span class="icon-summon-chip" draggable="true"
+                  data-summon-uuid="{{sm.uuid}}" data-summon-name="{{sm.name}}"
+                  title="Drag {{sm.name}} onto the map to place it (you need permission to create tokens)">
+              <img src="{{sm.img}}" alt="" width="18" height="18"> {{sm.name}}
+            </span>
+          {{/each}}
+          {{#if ab.canStance}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--stance {{#if ab.stanceOn}}icon-btn--stance-on{{/if}}"
+                    data-action="abilityStance" data-item-id="{{ab.id}}"
+                    title="{{#if ab.stanceOn}}You are in this stance — click to drop it{{else}}Take this stance (one at a time, p.104){{/if}}">
+              {{#if ab.stanceOn}}🧘 In stance — drop{{else}}🧘 Take stance{{/if}}
+            </button>
+          {{/if}}
           {{#if ab.canMark}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
                     data-action="abilityMark" data-item-id="{{ab.id}}"
@@ -687,24 +719,13 @@
           <div class="icon-ability-preview__desc">{{{ab.description}}}</div>
         {{/if}}
         {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> <span class="icon-ability-preview__effect">{{{ab.trigger}}}</span></p>{{/if}}
-        {{!-- Book layout: attacks print Hit/Miss/Area first, then the rules blocks (Effect, Stance, Mark…)
-             parsed out of the description in their written order; non-attacks print the blocks first
-             (they usually create the area) and the Area line last. --}}
-        {{#if ab.hasHit}}<p><strong>Hit:</strong> <span class="icon-ability-preview__effect">{{{ab.hitEffect}}}</span></p>{{/if}}
-        {{#if ab.hasMiss}}<p><strong>Miss:</strong> <span class="icon-ability-preview__effect">{{{ab.missEffect}}}</span></p>{{/if}}
-        {{#if ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}{{/if}}
-        {{#each ab.sections as |sec|}}
-          <p class="icon-ability-section"><strong>{{sec.label}}:</strong> <span class="icon-ability-preview__effect">{{{sec.text}}}</span></p>
+        {{!-- Rules blocks in the book's reading order (helpers/ability-blocks.mjs):
+             Hit / Miss / Area, the blocks parsed out of the description text (Effect,
+             Stance, Mark…) and Charge / Heroic / …, reordered by system.blockOrder
+             for the abilities the book prints in a different sequence. --}}
+        {{#each ab.blocks as |b|}}
+          <p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong> <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
         {{/each}}
-        {{#unless ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> <span class="icon-ability-preview__effect">{{{ab.areaEffect}}}</span></p>{{/if}}{{/unless}}
-        {{#if ab.hasCharge}}<p><strong>Charge:</strong> <span class="icon-ability-preview__effect">{{{ab.chargeEffect}}}</span></p>{{/if}}
-        {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> <span class="icon-ability-preview__effect">{{{ab.heroicEffect}}}</span></p>{{/if}}
-        {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> <span class="icon-ability-preview__effect">{{{ab.exceedEffect}}}</span></p>{{/if}}
-        {{#if ab.hasCollide}}<p><strong>Collide:</strong> <span class="icon-ability-preview__effect">{{{ab.collideEffect}}}</span></p>{{/if}}
-        {{#if ab.hasSlay}}<p><strong>Slay:</strong> <span class="icon-ability-preview__effect">{{{ab.slayEffect}}}</span></p>{{/if}}
-        {{#if ab.hasCrit}}<p><strong>Crit:</strong> <span class="icon-ability-preview__effect">{{{ab.critEffect}}}</span></p>{{/if}}
-        {{#if ab.hasFinish}}<p><strong>Finishing Blow:</strong> <span class="icon-ability-preview__effect">{{{ab.finishingBlowEffect}}}</span></p>{{/if}}
-        {{#if ab.hasComeback}}<p><strong>Comeback:</strong> <span class="icon-ability-preview__effect">{{{ab.comebackEffect}}}</span></p>{{/if}}
         {{#if ab.hasTalent1}}<p><strong>Talent 1:</strong> <span class="icon-ability-preview__effect">{{{ab.talent1}}}</span></p>{{/if}}
         {{#if ab.hasTalent2}}<p><strong>Talent 2:</strong> <span class="icon-ability-preview__effect">{{{ab.talent2}}}</span></p>{{/if}}
         {{#if ab.hasMastery}}<p><strong>Mastery:</strong> <span class="icon-ability-preview__effect">{{{ab.mastery}}}</span></p>{{/if}}
@@ -733,7 +754,7 @@
            data-item-id="{{limitBreakItem.id}}">
         <div class="icon-limit-break__header">
           <strong>{{limitBreakItem.name}}</strong>
-          <span class="icon-badge">{{limitBreakItem.system.cost}}</span>
+          <span class="icon-badge">{{limitBreakCost}}</span>
           <span class="icon-badge icon-badge--resolve">{{limitBreakItem.system.resolveCost}} Resolve</span>
           {{#if isEditable}}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"

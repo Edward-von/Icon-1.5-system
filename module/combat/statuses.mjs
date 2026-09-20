@@ -10,6 +10,7 @@
 import { saveRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { promptHatredTarget, applyHatred, endHatred } from "./marks.mjs";
+import { askOwner, registerPromptResponder } from "./remote-prompt.mjs";
 
 /* ================================================== */
 /*  Status definitions                                 */
@@ -132,6 +133,50 @@ export function registerStatuses() {
  *
  * @param {Combatant} combatant  The combatant who just ended their turn
  */
+/** The "spend a Blessed charge?" dialog, shown on whichever client asks. */
+function blessingDialog({ actorName, statusLabel, blessings }) {
+  return foundry.applications.api.DialogV2.confirm({
+    window:  { title: `Save vs ${statusLabel}` },
+    content: `<p><strong>${escapeHTML(actorName)}</strong> is rolling a save vs <strong>${escapeHTML(statusLabel)}</strong>.</p>
+              <p>Spend a Blessed charge for <strong>+1 boon</strong>? You have <strong>${blessings}</strong>.</p>`,
+    modal: true,
+    rejectClose: false,
+  });
+}
+
+/** The owner's answer to "spend a Blessed charge?", or our own when they can't. */
+async function askBlessing(actor, statusLabel, blessings) {
+  const payload = { actorName: actor.name, statusLabel, blessings };
+  const remote = await askOwner(actor, {
+    kind: "blessing", payload,
+    waitingNote: `${actor.name} saves vs ${statusLabel} — waiting for their player to answer about the Blessed charge…`,
+  });
+  if (remote.answered) return !!remote.result;
+  try { return !!(await blessingDialog(payload)); }
+  catch { return false; }                       // dismissed → no blessing
+}
+
+// The player's side of the question above.
+registerPromptResponder("blessing", async (payload) => {
+  try { return !!(await blessingDialog(payload)); }
+  catch { return false; }
+});
+
+/**
+ * The active statuses a character can still save against (p.94): negative,
+ * flagged saveable, and not the ongoing "+" version — those hold until their
+ * source is gone. Shared by the end-of-turn saves and the save buttons on the
+ * Conditions tab of every sheet.
+ * @param {Actor} actor
+ * @returns {ActiveEffect[]}
+ */
+export function saveableStatusEffects(actor) {
+  return (actor?.effects ?? []).filter(effect => {
+    const f = effect.flags?.["icon-system"];
+    return !!f?.isStatus && !f.isBoon && !f.isSpecial && !!f.canSave && !f.ongoing;
+  });
+}
+
 export async function rollEndOfTurnSaves(combatant) {
   const actor = combatant.actor;
   if (!actor) return;
@@ -147,13 +192,7 @@ export async function rollEndOfTurnSaves(combatant) {
     iconFlags?.isStatus && !iconFlags.isBoon && !iconFlags.isSpecial;
 
   // Collect active negative status effects that are saveable
-  const saveableEffects = actor.effects.filter(effect => {
-    const iconFlags = effect.flags?.["icon-system"];
-    if (!isNegativeStatus(iconFlags)) return false;  // boon/special/non-status
-    if (!iconFlags.canSave)           return false;  // not saveable
-    if (iconFlags.ongoing)            return false;  // ongoing+: skip (but log it)
-    return true;
-  });
+  const saveableEffects = saveableStatusEffects(actor);
 
   // Also log ongoing+ negative statuses so players know they can't save
   const ongoingEffects = actor.effects.filter(effect => {
@@ -175,22 +214,16 @@ export async function rollEndOfTurnSaves(combatant) {
     let boonNote = "";
     const blessings = getStatusCharges(actor, "blessed");
     if (blessings > 0) {
-      try {
-        const useBlessing = await foundry.applications.api.DialogV2.confirm({
-          window:  { title: `Save vs ${statusLabel}` },
-          content: `<p><strong>${escapeHTML(actor.name)}</strong> is rolling a save vs <strong>${escapeHTML(statusLabel)}</strong>.</p>
-                    <p>Spend a Blessed charge for <strong>+1 boon</strong>? You have <strong>${blessings}</strong>.</p>`,
-          modal: true,
-          rejectClose: false,
-        });
-        if (useBlessing) {
-          boons = 1;
-          boonNote = "blessing";
-          // Consume one charge — auto-removes the Blessed effect at 0
-          await adjustStatusCharges(actor, "blessed", -1);
-        }
-      } catch (err) {
-        // User dismissed; proceed without blessing
+      // These saves are resolved on the GM's client (the combat hook is
+      // GM-only), but the Blessed charge belongs to the character: ask their
+      // player first and only fall back to a local dialog when nobody owns
+      // them, they're offline, or they don't answer.
+      const useBlessing = await askBlessing(actor, statusLabel, blessings);
+      if (useBlessing) {
+        boons = 1;
+        boonNote = "blessing";
+        // Consume one charge — auto-removes the Blessed effect at 0
+        await adjustStatusCharges(actor, "blessed", -1);
       }
     }
 

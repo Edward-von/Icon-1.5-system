@@ -1,14 +1,14 @@
-2026/09/09-19:44:59.473 473c Recovering log #78
-2026/09/09-19:44:59.483 473c Delete type=0 #78
-2026/09/09-19:44:59.484 473c Delete type=3 #77
-2026/09/09-19:44:59.497 1ee0 Level-0 table #82: started
-2026/09/09-19:44:59.502 1ee0 Level-0 table #82: 1058 bytes OK
-2026/09/09-19:44:59.505 1ee0 Delete type=0 #80
-2026/09/09-19:44:59.506 1ee0 Manual compaction at level-0 from '!' @ 72057594037927935 : 1 .. '~' @ 0 : 0; will stop at '!macros!c443a88608580ded' @ 25 : 1
-2026/09/09-19:44:59.506 1ee0 Compacting 1@0 + 1@1 files
-2026/09/09-19:44:59.514 1ee0 Generated table #83@0: 6 keys, 14241 bytes
-2026/09/09-19:44:59.514 1ee0 Compacted 1@0 + 1@1 files => 14241 bytes
-2026/09/09-19:44:59.517 1ee0 compacted to: files[ 0 1 0 0 0 0 0 ]
-2026/09/09-19:44:59.517 1ee0 Delete type=2 #70
-2026/09/09-19:44:59.517 1ee0 Delete type=2 #82
-2026/09/09-19:44:59.518 1ee0 Manual compaction at level-0 from '!macros!c443a88608580ded' @ 25 : 1 .. '~' @ 0 : 0; will stop at (end)
+2026/09/20-11:25:42.233 6ae0 Recovering log #91
+2026/09/20-11:25:42.241 6ae0 Delete type=0 #91
+2026/09/20-11:25:42.241 6ae0 Delete type=3 #90
+2026/09/20-11:25:42.251 71fc Level-0 table #95: started
+2026/09/20-11:25:42.255 71fc Level-0 table #95: 7918 bytes OK
+2026/09/20-11:25:42.258 71fc Delete type=0 #93
+2026/09/20-11:25:42.258 71fc Manual compaction at level-0 from '!' @ 72057594037927935 : 1 .. '~' @ 0 : 0; will stop at '!macros!rEKWFnNmEMrFSQB1' @ 27 : 1
+2026/09/20-11:25:42.258 71fc Compacting 1@0 + 1@1 files
+2026/09/20-11:25:42.264 71fc Generated table #96@0: 6 keys, 15279 bytes
+2026/09/20-11:25:42.264 71fc Compacted 1@0 + 1@1 files => 15279 bytes
+2026/09/20-11:25:42.267 71fc compacted to: files[ 0 1 0 0 0 0 0 ]
+2026/09/20-11:25:42.267 71fc Delete type=2 #83
+2026/09/20-11:25:42.267 71fc Delete type=2 #95
+2026/09/20-11:25:42.267 71fc Manual compaction at level-0 from '!macros!rEKWFnNmEMrFSQB1' @ 27 : 1 .. '~' @ 0 : 0; will stop at (end)

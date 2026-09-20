@@ -115,7 +115,8 @@
           <div class="icon-dots-row" data-action-key="{{a.key}}">
             <span class="icon-dots-row__label">{{a.label}}</span>
             <span class="icon-action-dots">
-              {{#each (iconRange 4) as |i|}}<span class="icon-dot" data-i="{{i}}"></span>{{/each}}
+              {{!-- Clickable like the dots on the sheet: click dot N to take the action to rating N --}}
+              {{#each (iconRange 4) as |i|}}<span class="icon-dot" data-i="{{i}}" data-role="dot" title="{{#icon-lte i @root.maxRating}}Set this action to {{i}}{{else}}No action can go past {{@root.maxRating}} at level 0{{/icon-lte}}"></span>{{/each}}
             </span>
             <button type="button" class="icon-btn icon-btn--sm icon-dots-row__btn" data-role="dot-minus" title="Remove a dot">−</button>
             <button type="button" class="icon-btn icon-btn--sm icon-dots-row__btn" data-role="dot-plus" title="Add a dot">+</button>

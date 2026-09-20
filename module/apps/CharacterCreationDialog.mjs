@@ -272,6 +272,24 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
       refreshProgress();
     };
 
+    /**
+     * Click on dot N: take the action to rating N, like the dots on the
+     * character sheet (#onSetActionRating). Only the extra dots of this step
+     * can move — the bond's +2 and anything the actor already had are the
+     * floor — so the allocation is set to what's needed to reach N, capped by
+     * the level-0 maximum (p.241) and by the dots still unspent.
+     */
+    const setRowRating = (key, wanted) => {
+      const floor = ratingOf(key) - (alloc[key] ?? 0);   // base + primary: not ours to spend
+      // Clicking the topmost filled dot steps the action back down by one.
+      const target = wanted === ratingOf(key) ? wanted - 1 : wanted;
+      const free   = DISTRIBUTION_DOTS - (totalAlloc() - (alloc[key] ?? 0));
+      const extra  = Math.min(Math.max(0, Math.min(target, L0_MAX_RATING) - floor), free);
+      _log(`dot click — "${key}" → rating ${wanted} | floor ${floor} | extra ${alloc[key] ?? 0} → ${extra}`);
+      if (extra > 0) alloc[key] = extra; else delete alloc[key];
+      syncDots();
+    };
+
     for (const row of rows) {
       const key = row.dataset.actionKey;
       row.querySelector('[data-role="dot-plus"]').addEventListener("click", () => {
@@ -282,6 +300,13 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
         if (!alloc[key]) return;
         alloc[key] -= 1; if (!alloc[key]) delete alloc[key]; syncDots();
       });
+      for (const dot of row.querySelectorAll('[data-role="dot"]')) {
+        dot.addEventListener("click", () => {
+          const i = Number(dot.dataset.i);
+          if (i > L0_MAX_RATING) return;   // the 4th dot is out of reach at level 0
+          setRowRating(key, i);
+        });
+      }
     }
 
     /* ---------- Job → hero colour + abilities ---------- */

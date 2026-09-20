@@ -50,12 +50,14 @@
           {{/if}}
         </div>
         {{#if relic.invokeCondition}}
-          <div class="icon-relic-card__invoke">
+          <div class="icon-relic-card__invoke {{#if relic.invokeLocked}}icon-relic-card__invoke--locked{{/if}}"
+               {{#if relic.invokeLocked}}title="Unlocks with Rank {{relic.invokeRankLabel}} of this relic"{{/if}}>
             <em>{{relic.invokeCondition}}</em>
+            {{#if relic.invokeLocked}}<span class="icon-badge">🔒 Rank {{relic.invokeRankLabel}}</span>{{/if}}
           </div>
         {{/if}}
         {{#if relic.invokeEffect}}
-          <div class="icon-relic-card__invoke-effect icon-editor-wrap">{{{relic.invokeEffect}}}</div>
+          <div class="icon-relic-card__invoke-effect icon-editor-wrap {{#if relic.invokeLocked}}icon-relic-card__invoke--locked{{/if}}">{{{relic.invokeEffect}}}</div>
         {{/if}}
         {{!-- Invoke (Gambit): once per combat (p.114), counted on the relic for the current combat --}}
         {{#if relic.gambit}}

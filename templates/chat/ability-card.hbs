@@ -15,7 +15,10 @@
 
   {{#if comboMode}}
     {{!-- Combo version: tags still apply (they describe the ability, not the
-         normal-vs-combo text), then the combo effect. --}}
+         normal-vs-combo text). The blocks below are the ability's own, with
+         the combo text merged in (⚡ marks what the combo changes or adds) —
+         a combo that only adds to the ability, like Low Blow / The Hook, used
+         to print its addition alone and lose the rest. --}}
     {{#if ab.tags.length}}
       <div class="icon-chat-card__tags">
         {{#each ab.tags as |tag|}}
@@ -24,9 +27,11 @@
         {{/each}}
       </div>
     {{/if}}
-    {{#if ab.comboEffect}}
-      <div class="icon-chat-card__desc">{{{ab.comboEffect}}}</div>
+    {{#if ab.hasDesc}}
+      <div class="icon-chat-card__desc">{{{ab.description}}}</div>
     {{/if}}
+    {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
+    {{#each ab.blocks as |b|}}<p class="{{#if b.combo}}icon-ability-block--combo{{else if b.fromText}}icon-ability-section{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{#if b.combo}}⚡ {{/if}}{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
     {{!-- Talents / mastery are permanent upgrades of the ability — they still
          apply (and must be readable) when the combo version is used. --}}
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
@@ -49,20 +54,10 @@
     {{/if}}
 
     {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
-    {{!-- Same order as the sheet: attacks Hit/Miss/Area then the rules blocks; non-attacks blocks then Area. --}}
-    {{#if ab.hasHit}}<p><strong>Hit:</strong> {{{ab.hitEffect}}}</p>{{/if}}
-    {{#if ab.hasMiss}}<p><strong>Miss:</strong> {{{ab.missEffect}}}</p>{{/if}}
-    {{#if ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> {{{ab.areaEffect}}}</p>{{/if}}{{/if}}
-    {{#each ab.sections as |sec|}}<p class="icon-ability-section"><strong>{{sec.label}}:</strong> {{{sec.text}}}</p>{{/each}}
-    {{#unless ab.hasHit}}{{#if ab.hasArea}}<p><strong>Area:</strong> {{{ab.areaEffect}}}</p>{{/if}}{{/unless}}
-    {{#if ab.hasCharge}}<p><strong>Charge:</strong> {{{ab.chargeEffect}}}</p>{{/if}}
-    {{#if ab.hasHeroic}}<p><strong>Heroic:</strong> {{{ab.heroicEffect}}}</p>{{/if}}
-    {{#if ab.hasExceed}}<p><strong>Exceed (15+):</strong> {{{ab.exceedEffect}}}</p>{{/if}}
-    {{#if ab.hasCollide}}<p><strong>Collide:</strong> {{{ab.collideEffect}}}</p>{{/if}}
-    {{#if ab.hasSlay}}<p><strong>Slay:</strong> {{{ab.slayEffect}}}</p>{{/if}}
-    {{#if ab.hasCrit}}<p><strong>Crit:</strong> {{{ab.critEffect}}}</p>{{/if}}
-    {{#if ab.hasFinish}}<p><strong>Finishing Blow:</strong> {{{ab.finishingBlowEffect}}}</p>{{/if}}
-    {{#if ab.hasComeback}}<p><strong>Comeback:</strong> {{{ab.comebackEffect}}}</p>{{/if}}
+    {{!-- Rules blocks in the book's reading order (helpers/ability-blocks.mjs):
+         Hit/Miss/Area, the blocks parsed out of the text, Charge/Heroic/…,
+         reordered by system.blockOrder when the ability needs it. --}}
+    {{#each ab.blocks as |b|}}<p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong>{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
     {{#if ab.hasTalent2}}<p><strong>Talent II:</strong> {{{ab.talent2}}}</p>{{/if}}
     {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}

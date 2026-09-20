@@ -726,6 +726,471 @@ Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggett
       i chip dei tag dell'azione, come quelle PG); Inflict / Gain / Effects sulle azioni come prima; nessun errore in
       console. ✓ (le card NPC mostrano i tag grezzi in minuscolo, es. "true-strike": cosmetico, in TODO)
 
+## Debug del 13 settembre 2026 (bug segnalati a voce, build 1.5.1+)
+
+- [ ] **Pannello dell'abilità aperto che si richiude a fine turno**: PG in combat, tab Combat, clic su uno slot
+      abilità per aprire il pannello di anteprima; aprire anche "Basic Actions" e un trait. Passare il turno (o
+      farlo passare a un altro combattente) → il pannello dell'abilità deve restare aperto esattamente come
+      Basic Actions e i trait. Provare anche: pannello aperto + modifica di un campo della scheda (submit →
+      re-render) resta aperto; clic sullo stesso slot lo chiude ancora; clic su un altro slot passa all'altra
+      abilità; scheda chiusa e riaperta → tutti i pannelli chiusi (comportamento voluto).
+
+- [ ] **Ordine dei blocchi delle abilità (book order)**: PG con Demon Cutter equipaggiata → il pannello e la card 💬
+      mostrano `Hit / Miss / Effect / Area / Charge or Heroic` (prima l'Area stava sopra l'Effect). Matsuri (Sealer),
+      Bio e Valkyrie → il blocco `Effect:` compare SOPRA la riga d'attacco. Comet (Demon Slayer, senza attacco) →
+      `Area` prima di `Effect`. Ebullient / Pyre → una sola riga "Miss or Area" / "Comeback or Exceed" quando i due
+      testi sono identici (prima erano due righe uguali). Sleight of Hand → `Hit / Effect (pacified) / Area /
+      Effect (summon) / Summon Effect`.
+- [ ] **Abilità non toccate**: una qualsiasi delle altre (es. Revenge, Odinforce) rende i blocchi come prima; le card
+      dei Foe/Legend e dei summon sono invariate.
+- [ ] **Campo "Block Order" nella scheda dell'abilità**: aprire un'abilità → in fondo alla sezione degli effetti c'è
+      il campo; scrivere `sections, hit` su un'abilità qualsiasi sposta i blocchi del testo sopra Hit; svuotarlo
+      ripristina l'ordine standard; un valore inventato ("pippo") non rompe nulla.
+- [ ] **Migrazione 6** (mondo esistente, schema 5 → 6): all'apertura del mondo, le abilità già sulle schede dei PG
+      ricevono l'ordine (console: "Migration 6: block order set on N ability(ies)"), senza toccare quelle con un
+      ordine scritto a mano. Nota: la copia vecchia di Sleight of Hand tiene il testo nel vecchio ordine (per il
+      testo giusto va ritrascinata dal compendio).
+
+- [ ] **Bersagli di un attacco ad area**: PG con un'abilità ad area (Draken Cross, Comet Rain, Geo) e 3 token dentro
+      l'area → ⚔ piazza il template e li targetta tutti; nel dialog ogni riga ha la ✕ e i pallini per scegliere il
+      bersaglio dell'attacco. Il DEF proposto è quello del bersaglio scelto (non più il più basso dei tre), la nota
+      Evasion parla solo di lui, e cambiando pallino cambiano entrambi. La ✕ toglie la riga e de-targetta il token
+      sulla mappa. La card in chat dice "attack: X · area: Y, Z".
+- [ ] **La selezione non viene più sovrascritta**: dopo aver tolto un bersaglio (✕ o Shift+T sulla mappa), premere di
+      nuovo ⚔ sulla stessa abilità NON ri-targetta tutti quelli nell'area; se invece non c'è nessun bersaglio, il
+      template ri-targetta come prima. Il bottone 📐 ri-targetta sempre (è un'azione esplicita).
+- [ ] **Tiro senza area**: ⚔ su un'abilità ad area, poi Escape / tasto destro per annullare il piazzamento → avviso
+      "area not placed" e il dialog d'attacco si apre lo stesso; il tiro parte senza la riga 📐. Annullare il dialog
+      non fa partire nulla.
+- [ ] **Attacchi senza area**: attacco a bersaglio singolo (PG, Foe, Legend) → nessun pallino, solo la ✕; con più
+      bersagli senza area vale ancora il DEF più basso e l'Evasion di tutti, come prima.
+- [ ] **Foe e Legend**: stessa prova con un'azione ad area di un Foe (Abomination) e di un Legend.
+
+- [ ] **Blessed sul save automatico di fine turno (serve un secondo client)**: PG di un giocatore con lo status
+      Blessed (1+ cariche) e uno status negativo salvabile (es. Stunned); il GM chiude il turno di quel PG → la
+      domanda "Spend a Blessed charge?" compare sul client del GIOCATORE, non del GM; il GM vede solo l'avviso
+      "waiting for their player…". Rispondendo Sì la carica viene scalata e il save ha +1 boon (nota "blessing" sulla
+      card); rispondendo No il save parte liscio.
+- [ ] **Fallback**: stesso caso ma con il giocatore disconnesso → la domanda torna al GM come prima. Con un PG senza
+      giocatore assegnato (NPC del GM con Blessed) → dialog sul GM. Se il giocatore non risponde entro 90 secondi →
+      avviso "didn't answer" e la domanda passa al GM.
+- [ ] **Save del blocco Inflict**: il GM preme un bottone rosso "🎲 Stunned" su una card che bersaglia il PG di un
+      giocatore → il dialog del save (boons/curses, "Spend a Blessed charge", "Already rolled") si apre sul client del
+      giocatore; il tiro e l'applicazione dello status restano dal lato di chi ha premuto. Se il giocatore annulla il
+      dialog, non succede niente e il bottone torna cliccabile.
+- [ ] **Regressioni socket**: relay già esistenti ancora funzionanti (mark, Apply Damage, Party Resolve da giocatore,
+      Inflict da giocatore su un NPC), nessun errore in console su nessuno dei due client.
+
+- [ ] **Limit break dei tre job "Free Action"**: creare un PG Harvester (poi Stormbender e Seer) con il wizard di
+      creazione → nessun errore rosso in console ("cost: free is not a valid choice") e nella scheda compare il limit
+      break (Death Sentence / Elemental / High Prophecy) con il badge "Free Action". Gli altri job restano invariati
+      (1 Action / 2 Actions).
+- [ ] **Migrazione 7** (mondo con un Harvester/Stormbender/Seer già creato senza limit break): all'apertura del mondo
+      il limit break viene ricreato dal template del job (console: "Migration 7: restored the limit break …"); i PG che
+      ce l'hanno già non vengono toccati e non si creano doppioni.
+- [ ] **Scheda dell'item limit break**: aprire il limit break → il menu Cost ha anche "Free Action" ed è quello
+      selezionato; cambiarlo e rimetterlo non dà errori.
+
+- [ ] **Combo che si aggiungono all'abilità**: PG Knave con Low Blow e il token Combo attivo → 💬 Show in Chat → la
+      card mostra TUTTA l'abilità (Effect rush 1, Hit, Miss, Effect slashed, Heroic) più la riga "⚡ Combo — The Hook:
+      Gains range 2 and effect: Shove character 1 towards you." Stessa prova con Umbra (Penumbra), Death Blossom
+      (Flying Sleeves), Revenge (Indignation), Bleak Mercy (Sweet Torment), Incubus (Succubus).
+- [ ] **Combo che riscrivono l'abilità**: Sow (REAP), God Hand (DEVIL HAND), Astra (FORTUNA), Open the Gates
+      (CENTER THE TEMPLE), Pandaemonium (PURGATORIO) → i blocchi riscritti dal combo compaiono con ⚡ e il testo della
+      versione combo; i blocchi non citati restano quelli base. Nessun blocco duplicato.
+- [ ] **Senza combo**: la stessa abilità senza token attivo stampa la card normale, invariata; il token viene
+      consumato come prima e il tiro danni propone ancora la versione combo.
+- [ ] **Regex riparate (bug latenti trovati strada facendo)**: azione di un Foe senza tag "attack" ma con "on hit" nel
+      testo → ora viene riconosciuta come attacco (bottone ⚔ sulla riga); testo "must save or take 2[D]+fray, or fray
+      on a successful save" → il blocco Inflict propone il danno ridotto sul save riuscito. Controllare che nessuna
+      azione NPC mostri un ⚔ che prima non aveva senza motivo.
+
+- [ ] **Macro vecchie nel mondo ("LEVEL UP DISPONIBILE")**: nel mondo di Maar la macro "ICON: Award Session XP"
+      trascinata dalla barra è la copia della v1.0.0 (testo in italiano). All'apertura del mondo con la build nuova la
+      macro viene riallineata a quella del compendio (console: "Macro sync: … updated from the compendium", avviso
+      "N macro(s) updated"); rilanciandola la card dice "LEVEL UP AVAILABLE" per tutti i PG. La sincronizzazione gira
+      una volta sola per versione di sistema: riaprendo il mondo non ripete nulla.
+- [ ] **Macro non di sistema**: una macro scritta a mano dall'utente con un nome diverso non viene toccata; le altre
+      macro del compendio (Camp, Interlude, Apply Damage, Encounter Designer) continuano a funzionare.
+
+- [ ] **Tag della versione combo**: PG Chanter con Holy equipaggiata e token Combo attivo → sul pannello e sulla card
+      i chip diventano "Attack | Range 5 | Medium Blast | True Strike | Autohit | Combo" (i tre nuovi evidenziati come
+      upgrade, tooltip "From Combo: …"); senza token tornano "Attack | Range 5 | Combo".
+- [ ] **Area che cambia con il combo**: Death Blossom con token attivo → il bottone 📐 e il ⚔ piazzano un **Arc 4**
+      (senza token: Burst 1 a range 2). Astra con token → Medium Blast a range 5 invece della Line 5.
+- [ ] **Attacco che diventa auto-hit**: Holy / Astra con token attivo → il ⚔ non tira il d20 (card auto-hit); Sow, che
+      è auto-hit di base, con il token attivo torna a tirare il d20 (REAP ha "On hit:"). Senza token, comportamento
+      invariato.
+- [ ] **Tag che spariscono**: Incubus con token attivo → niente bottone 🎯 (Succubus non piazza il mark) e nessun chip
+      "Mark"; Felicity con token → niente Mark. Senza token entrambi tornano marcatori.
+- [ ] **Campo "Tags of the combo version"**: nella scheda dell'abilità, sotto il testo del combo, si può scrivere la
+      lista a mano; svuotandola l'abilità torna a usare i tag base anche in combo.
+- [ ] **Migrazione 8**: mondo con PG che hanno già queste abilità → all'apertura i comboTags vengono compilati
+      (console "Migration 8: combo tags set on N ability(ies)") senza toccare quelli scritti a mano.
+
+- [ ] **Forma del Large Blast**: abilità con tag large blast (o Charge che la porta a large, es. Pandaemonium) → il
+      template piazzato è la croce di 13 caselle del manuale (p.98): 1 al centro, 4 adiacenti, 8 a due passi in croce;
+      NON il quadrato 5×5 smussato di prima (21 caselle). Small blast resta 5 caselle, Medium 3×3 = 9.
+- [ ] **Bersagli e tooltip**: con il large blast i token presi sono solo quelli dentro la croce (provare con un token
+      appena fuori, in diagonale a 2 caselle: prima era dentro, ora è fuori); il tooltip del chip "Large Blast" dice
+      "13 spaces (p.98)".
+
+- [ ] **Save dalle schede NPC**: Foe (es. Warrior) con Stunned e Blind addosso → tab Conditions, in cima la sezione
+      "Saves" con un bottone 🎲 per status: cliccando 🎲 Stunned esce il dialog (boons/curses, ongoing, Blessed se ha
+      cariche), il tiro finisce in chat e con 10+ lo status sparisce dalla scheda e dal token. Stesse prove su un
+      Legend e su un Summon (sezione Saves in fondo alla scheda).
+- [ ] **Nessuno status**: NPC pulito → la sezione dice "No status to save against right now" e resta il bottone
+      "🛡 Save vs…" che chiede il nome a mano (nessuno status viene rimosso).
+- [ ] **Status ongoing +**: applicare uno status con il tasto destro (versione +) → NON compare tra i bottoni 🎲
+      (non è salvabile); scegliendo "Ongoing +" nel dialog il tiro fallisce automaticamente come prima.
+- [ ] **PG invariato**: il bottone 🛡 Save Roll della tab Combat funziona come prima (ora con la tendina degli status
+      attivi e i campi boons/curses); con Blessed la carica viene scalata; i save automatici di fine turno del tracker
+      non cambiano.
+
+- [ ] **Invoke bloccato sulla card della reliquia**: PG con Riftwalker a rango I → 💬 sulla reliquia → la card NON
+      mostra più "11+ / Create a pit space…" (l'invoke è di rango III); portandola a rango III la riga ricompare come
+      "Invoke (III): 11+". Stessa prova con Domain (invoke solo con l'Aspect) e Byrax (rango II).
+- [ ] **Invoke di rango I**: Ape God a rango I → la card mostra l'invoke come prima ("Invoke (I): 17+"); Mercy ed
+      Erenbrass (invoke "passive" che ripete il rango I) restano visibili.
+- [ ] **Tab Relics**: sulla scheda l'invoke non ancora sbloccato resta visibile ma sbiadito e barrato, con il chip
+      "🔒 Rank III" e il tooltip; una volta raggiunto il rango torna normale.
+- [ ] **Regressioni invoke**: il check "Invoke (Attack, N+)" sul tiro d'attacco e il bottone Invoke Gambit continuano
+      a comparire solo per i ranghi sbloccati (erano già corretti) e non sono cambiati.
+
+## Debug del 20 settembre 2026 (bug segnalati da Edoardo, build 1.5.1+)
+
+- [ ] **Encounter Designer con tanti PG**: mondo con molti attori di tipo PG (Edoardo ne ha ~40, usa le schede anche
+      come segnapunti dei giocatori) → aprire l'Encounter Designer (bottone "Encounter" nella sidebar Actors o
+      `game.icon.openEncounterDesigner()`). La lista dei ritratti nel passo 1 "Party" deve fermarsi a circa quattro
+      righe e avere la sua barra di scorrimento; il passo 3 "Encounter" (la lista delle scelte) e il footer con i
+      bottoni devono restare visibili e leggibili senza che nulla finisca fuori dalla finestra.
+- [ ] **La posizione dello scorrimento non salta**: scorrere la lista dei PG fino in fondo e cliccare un ritratto per
+      metterlo/toglierlo dalla party → la lista resta dov'era (prima il re-render la riportava in cima). Stessa prova
+      cambiando la quantità di un foe nel passo 3: la lista delle scelte non torna in cima.
+- [ ] **Finestra ridimensionata**: rimpicciolire la finestra in altezza (trascinando l'angolo) → il passo 3 "Encounter"
+      conserva sempre uno spazio minimo e il footer resta attaccato in basso; la lista dei PG si accorcia e scorre
+      invece di schiacciare tutto il resto.
+- [ ] **Mondo normale invariato**: mondo con 3-5 PG → il passo 1 ha lo stesso aspetto di prima (nessuna barra di
+      scorrimento, nessuno spazio vuoto in più), "On scene" / "All" e il conteggio "N PC → budget" funzionano come
+      prima, e la lista del roster a destra scorre come prima.
+
+- [ ] **Bottone 🎯 sulle abilità multimark**: NPC con un'azione taggata `multimark` (es. Arkenlich → "Fear",
+      Limb Demon → "Control Limbs", Violence Demon → "Ancient Hatred", Deep Snow Aesi → "Biting Cold") → sulla
+      scheda l'azione ha il bottone "🎯 Mark" come le azioni `mark` (prima non compariva). Stessa prova su un
+      Foe del pack (es. Barghest → "Consume", Wildblood → "Bale Curse").
+- [ ] **Il multimark non cancella i mark precedenti**: con la stessa azione multimark marcare il token A, poi il
+      token B → restano DUE chip 🎯 sull'azione (A e B) e due effetti "Marked — …" sui due bersagli. Con
+      un'azione `mark` normale (es. Wisp → "Playful Pricking") marcare A e poi B → resta solo B, come prima.
+- [ ] **Un solo mark per coppia marcatore → bersaglio**: lo stesso NPC marca A con un'azione multimark e poi
+      marca A con un'altra azione → sul bersaglio resta un solo mark (regola p.95, invariata).
+- [ ] **Il chip del tag si spiega**: passando il mouse sul chip "Multimark" dell'azione esce il tooltip che dice
+      che l'abilità tiene più mark insieme.
+- [ ] **Mark dei PG invariato**: PG con un'abilità `mark` (Incubus, Sow, Harrow, Astral Chain) → il 🎯 funziona
+      come prima, un mark alla volta per abilità; i chip e la lista "Marks on this character" nella tab
+      Conditions sono invariati; il relay giocatore → GM funziona ancora (client Player che marca un token non
+      suo).
+- [ ] **Tag del combo**: PG con Incubus e token Combo attivo → il bottone 🎯 sul pannello dell'abilità sparisce
+      (la versione Succubus non piazza il mark); senza token torna. Prima il pannello lo mostrava comunque
+      perché leggeva i tag base invece di quelli effettivi.
+
+- [ ] **Pallini cliccabili nel wizard di creazione**: nuovo PG → "Create character", arrivare al passo 4 "Extra
+      Dots". Cliccare il 3° pallino di Command → l'azione va a rating 3 in un colpo solo e il contatore passa a
+      "1 left" (prima il pallino si illuminava al passaggio del mouse ma non faceva niente).
+- [ ] **Click sul pallino più alto = un passo indietro**: con Command a 3, ri-cliccare il 3° pallino → torna a 2
+      e il contatore risale (stesso comportamento dei pallini sulla scheda del PG).
+- [ ] **I pallini del bond non si possono togliere**: sull'azione primaria (riga dorata, +2 dal bond) cliccare il
+      1° o il 2° pallino → restano 2 pallini pieni e gli eventuali dot extra di quella riga tornano disponibili;
+      cliccare il 3° la porta a 3.
+- [ ] **Cap di livello 0 (p.241)**: il 4° pallino non è cliccabile (cursore "vietato", niente alone al passaggio
+      del mouse, tooltip "No action can go past 3 at level 0"); nessuna azione supera 3.
+- [ ] **Dot finiti**: spesi tutti e 4 i dot, cliccare il 3° pallino di un'azione vuota → si riempie solo per
+      quanti dot restano (zero se non ne resta nessuno) e il contatore resta "all spent"; nessun rating supera
+      il totale di 4 dot distribuiti.
+- [ ] **+ / − invariati**: i bottoni + e − della riga funzionano come prima e si disabilitano quando non ci sono
+      più dot o si è al cap; i campi nascosti `distribution1..4` restano coerenti → completando il wizard il PG
+      nasce con i rating giusti sulla scheda.
+
+- [ ] **Level up: dot d'azione obbligatorio**: PG con XP pieni → "Level up" (un livello che dà un'azione da
+      migliorare, es. L1, L2, L5, L7) → passo "Improve actions": il contatore dice "1 to pick", il riepilogo in
+      basso dice in rosso "1 action improvement to pick" e "Confirm Level Up" NON passa: esce l'errore "1 action
+      improvement still to spend…". Scelta l'azione nella tendina, il contatore diventa "all picked", il
+      riepilogo torna normale e il level up va a buon fine con il dot davvero applicato sulla scheda.
+- [ ] **Bond Power obbligatorio**: stesso livello (L1/L2 danno anche un Bond Power) → confermare senza sceglierne
+      uno dà l'errore "Pick a Bond Power before confirming"; scegliendone uno il level up passa. Se il bond non
+      ha bond power nel compendio (lista vuota) il level up si conferma lo stesso, senza bloccare.
+- [ ] **Fork L4 / L8**: al passo 1 scegliere "Improve 2 Actions" → al passo 2 ci sono due tendine e il contatore
+      dice "2 to pick"; riempirne una sola e confermare → errore, il level up non parte. Scegliendo invece "Bond
+      Power" al passo 1, le tendine non compaiono e vale il controllo del bond power.
+- [ ] **Due dot sulla stessa azione**: L4 con "Improve 2 Actions" e entrambe le tendine su Sneak → Sneak sale di
+      2 (comportamento di prima, invariato).
+- [ ] **Azioni al massimo**: PG con tutte e 10 le azioni a 4 → la tendina mostra tutte le voci "— MAX" disabilitate
+      e il level up si conferma lo stesso (niente blocco impossibile da sbloccare).
+- [ ] **Resto del level up invariato**: contatore AP ("AP 2 left" → "AP all spent"), scelta job/mastery/relic,
+      talenti e abilità funzionano come prima; annullare il dialog non tocca il PG.
+
+- [ ] **Butcher Heavy nel compendio**: compendio Foes → cartella Lowlander → Butcher: la scheda dice Heavy con
+      VIT 10, HP 40, Defense 6, Fray 4, [D] d6, Armor 2, e tra i tratti c'è **Guard** (p.298) al posto di Slip e
+      Aetherwall. Defiance e i tre tratti di fazione (Lowlander Toxin, Pit expert, Suddenly!) e le quattro azioni
+      (Fury Strikes, Wall of Meat, Mancatcher Bolas, Kidnap) sono rimasti come prima.
+- [ ] **Compendio Foe Abilities**: cercando "Butcher —" non ci sono più le voci "Butcher — Slip" e
+      "Butcher — Aetherwall"; c'è "Butcher — Guard"; le altre voci del Butcher sono invariate.
+- [ ] **Migrazione 9** (mondo esistente, schema 8 → 9): mondo in cui il Butcher era già stato importato → all'apertura
+      la console dice "Migration 9: N Butcher foe(s) re-statted from Artillery to Heavy (p.298)" e la scheda
+      dell'attore nel mondo mostra i valori Heavy con Guard. Un Butcher a cui il GM ha cambiato a mano anche una
+      sola statistica (o reso Elite) NON viene toccato. Riaprendo il mondo la migrazione non rigira.
+- [ ] **Resto del pack invariato**: Slab, Mule, Canker, Snork e Slaughterer restano Artillery (scelta di Edoardo del
+      20 settembre: si corregge solo il Butcher); gli altri Lowlander (Clot, Boil Slug, Grub…) invariati.
+- [ ] **Encounter Designer**: il Butcher compare nel roster come "Heavy" e costa 1 punto (2 da Elite), e un deploy
+      lo mette in scena con 40 HP.
+
+- [ ] **Boon del tag sull'attacco (Strafe Shot)**: PG Freelancer con Strafe Shot equipaggiata → ⚔ Attack: il
+      dialog parte con **Boons = 1** e il chip "⚙ This ability: +1 boon (tag)"; l'anteprima dice "1d20 + best of
+      1d6 vs DEF N". Confermando, la card in chat mostra il d20 più il d6 del boon. Lo stesso su Soul Shot,
+      Apex (Warden), Cavaliere e Diablo (Fool), Sidhe (Warden), Incubus e Umbra (Shade), Passage to the
+      Afterlife (Sealer, tag scritto `boon-1`).
+- [ ] **Si somma agli altri modificatori**: stesso attacco con il PG Dazed (+1 curse) e da una casella più in
+      alto del bersaglio (+1 boon) → il dialog mostra i tre chip e i contatori sommati (Boons 2, Curses 1);
+      l'anteprima calcola il netto (+1 boon). Togliendo tutto resta solo il boon del tag.
+- [ ] **NPC**: Foe con un'azione taggata `boon-1` (es. Aeronaut → "Strafe shot", range 4) → ⚔ sulla scheda del
+      foe: dialog con Boons = 1 e lo stesso chip. Un'azione con `curse-2` parte con Curses = 2.
+- [ ] **Chip dei tag uniformi**: sul pannello dell'abilità e sulla card in chat il tag si legge "+1 Boon" sia per
+      i PG (`+1-boon`) sia per gli NPC (`boon-1`, prima scritto "Boon 1"), col tooltip che spiega la regola
+      (p.12) e che il dialog lo compila da solo.
+- [ ] **Abilità senza boon invariate**: un attacco qualsiasi senza il tag (es. Cleave) apre il dialog con Boons 0
+      e la riga "No automatic modifiers (ability tags, statuses, height)" se non ci sono status o dislivello.
+- [ ] **Copie vecchie**: se su un PG la Strafe Shot NON mostra il chip "+1 Boon" fra i tag, quella copia è
+      anteriore al tag nel compendio → va ritrascinata dal compendio Jobs (il fix legge i tag, non li aggiunge).
+
+- [ ] **Rime senza il testo del Salt Sprite**: compendio Jobs → Stormbender → Rime: il blocco "Effect:" finisce
+      con "…summon a salt sprite in any space in range 2 from them." e subito dopo c'è "Infuse 3: DAGON"; non
+      c'è più il paragrafo "Salt Sprites can be summoned in range 2 … Then, remove the sprite." Stessa prova su
+      **Geyser** (finisce con "Infuse 3: VOLCANIC GEYSER … dangerous terrain under foes.").
+- [ ] **Il resto di Rime intatto**: tag (Attack, Line 6, Summon), hit 2[D]+fray, miss/area fray, collide
+      "Summon a Salt Sprite", talenti I e II, mastery MAGNARIME e l'ordine dei blocchi (hit, miss, area, effect,
+      collide, infuse 3) sono come prima; la card 💬 e il pannello mostrano gli stessi blocchi senza il paragrafo
+      di troppo.
+- [ ] **Le regole del Salt Sprite ci sono ancora**: compendio Summons → "Salt Sprite": la scheda mostra Size 1,
+      intangible, immobile, il Summon Effect e la nota "Many stormbender abilities summon a Salt Sprite… maximum
+      of six active Salt Sprites."
+- [ ] **Migrazione 10** (mondo esistente, schema 9 → 10): PG che ha già Rime (o Geyser) sulla scheda → all'apertura
+      del mondo la console dice "Migration 10: Salt Sprite box removed from N ability(ies) of …" e il pannello
+      dell'abilità non mostra più il paragrafo. Un'abilità il cui testo è stato modificato a mano non viene
+      toccata; riaprendo il mondo la migrazione non rigira.
+
+- [ ] **Sealed blocca il blocco Inflict**: dare Sealed al PG (tab Conditions o HUD del token), poi usare
+      un'abilità che infligge uno status (es. una con "foe is dazed") → sulla card il blocco Inflict mostra la
+      riga rossa "⛔ <nome> è Sealed: a sealed character cannot inflict statuses (p.104)" e cliccando il bottone
+      dello status esce l'avviso e **non** viene applicato niente (il bottone resta cliccabile, non si blocca).
+- [ ] **Sealed che arriva dopo**: postare la card **prima** di applicare Sealed, poi sealare il PG e cliccare il
+      bottone → viene comunque rifiutato (il controllo è al click, non alla stampa della card). Togliendo Sealed
+      (save o ✕ nella tab Conditions) lo stesso bottone funziona di nuovo senza ristampare la card.
+- [ ] **Quello che Sealed non blocca**: sulla stessa card i bottoni "🎲 💥" del danno legato al save funzionano
+      (il danno non è uno status) e il blocco "Gain" (status positivi su sé/alleati) resta utilizzabile; anche il
+      bottone 🎯 Mark continua a funzionare (un mark non è uno status, p.95).
+- [ ] **NPC e Legend**: stesso giro con un Foe sealato che usa un'azione con Inflict → stessa riga rossa e stesso
+      rifiuto. Un NPC non sealato non mostra nessuna riga e funziona come prima.
+- [ ] **Giocatore senza permessi**: client Player sealato che clicca uno status su un bersaglio non suo → viene
+      fermato sul suo client, senza mandare niente al GM.
+- [ ] **Nessuna regressione**: PG non sealato → blocco Inflict identico a prima (save 10+, boons/curses, Blessed,
+      "already rolled", relay al GM).
+
+- [ ] **Tsunami, blocchi corretti (p.233)**: PG Stormbender con Tsunami → pannello dell'abilità e card 💬: si
+      vedono TRE blocchi in quest'ordine — "Terrain Effect: Create a huge swell… All your Tsunamis disappear if
+      you use this ability again, or they reach an edge of the map.", "Collide: Character is shattered.",
+      "Infuse 1: STORMLASH (Free Action) — Choose an edge of the map. Your active tsunamis move 2 spaces in that
+      direction."
+- [ ] **Quello che non c'è più**: Collide compare **una volta sola** (prima era stampato due volte, una dalla
+      descrizione e una dal campo); la frase "All your Tsunamis disappear…" NON è più dentro Collide; il blocco
+      "Infuse 1" non è più il solo "STORMLASH —" senza testo e non esiste più un blocco "Free Action" separato.
+- [ ] **Resto di Tsunami invariato**: costo 2 azioni, tag Terrain Effect, talenti I e II, mastery LEGENDARY STORM
+      e il campo Collide nella scheda dell'oggetto sono come prima.
+- [ ] **Migrazione 11** (mondo esistente, schema 10 → 11): PG che ha già Tsunami sulla scheda → all'apertura la
+      console dice "Migration 11: Tsunami rewritten on …" e il pannello mostra i tre blocchi nuovi. Una copia il
+      cui testo è stato modificato a mano (senza più "Infuse 1: STORMLASH — Free Action:") non viene toccata.
+
+- [ ] **Etichette dei blocchi con tooltip**: pannello di un'abilità e card 💬 → passando il mouse su
+      "Finishing Blow:", "Comeback:", "Charge:", "Exceed (15+):", "Collide:", "Slay:", "Crit:", "Stance:",
+      "Mark:", "Infuse 3:", "Interrupt 2:" esce la regola (Finishing Blow dice "triggers when the attack targets
+      a Bloodied foe"); l'etichetta è sottolineata a puntini come le keyword nel testo. "Hit:", "Miss:",
+      "Effect:" restano etichette semplici senza tooltip.
+- [ ] **Encounter Designer, salvataggio**: dare a un incontro il nome di uno già salvato e premere "Save" →
+      esce il dialog "Replace saved encounter" con la data del salvataggio precedente; "Cancel" non tocca nulla
+      (il vecchio resta nella tendina), "Replace" sovrascrive e la notifica dice "replaced". Con un nome nuovo
+      non chiede niente e dice "saved".
+- [ ] **AP a metà barra solo dal livello 1**: PG di livello 0 → portarlo a 7 XP: NON arriva il +1 AP e non
+      compare la card in chat (prima arrivava). Lo stesso PG a livello 1 → a 7 XP il +1 AP e la card ci sono
+      come prima. Il testo di benvenuto (❔ Guide) dice "From level 1 on…".
+- [ ] **Migrazione 12**: mondo con un PG ancora di livello 0 che aveva già preso il bonus → all'apertura la
+      console dice "Migration 12: … halfway AP taken back (AP total N → N-1)" e l'avviso in alto lo segnala; un
+      PG di livello 1+ non viene toccato.
+- [ ] **Skill Ranks non più "OVER"**: PG appena creato col wizard (6 dot spesi: +2 del bond e 4 distribuiti) →
+      tab Notes: "Spent 6 / 6 ✓ all spent" con la nota "(6 from creation + 0 from level ups)", niente ⚠ OVER.
+      Dopo un level up che dà un'azione da migliorare: "Spent 6 / 7 (1 free)", e spendendo il dot torna "all
+      spent". Alzando a mano un'azione oltre il dovuto compare ⚠ OVER come prima.
+- [ ] **Template di Tsunami**: PG Stormbender con Tsunami → sul pannello compare il bottone "📐 Medium Blast"
+      (prima non c'era) e piazza un medium blast sulla mappa. Stessa prova su Fairy Ring (Burst 2), Blood Grove
+      (Medium Blast), Ätherwand (Line 3), Party Favor (Medium Blast), Six Hells Trigram (Burst 2).
+- [ ] **Abilità con l'area nei tag invariate**: Draken Cross, Comet Rain, Holy ecc. → il bottone 📐 mostra la
+      stessa area di prima e non propone varianti nuove prese dal testo.
+- [ ] **Etichette "X or Y" nell'ordine del manuale**: Battering Ram (p.122) → "Collide or Heroic"; Strafe Shot
+      (p.155) → "Finishing Blow or Exceed (15+)"; Valiant, Catapult, Heracule, Great Giorgios → "Collide or
+      Heroic"; Diablo, Cavaliere, Death → "Finishing Blow or Slay"; Valkyrie, Gigaton Whip, Takedown → "Exceed
+      (15+) or Heroic". In tutti i casi la riga resta **una sola** (i due blocchi sono ancora uniti, non stampati
+      due volte).
+- [ ] **Blitz (p.225)**: il blocco Slay compare una volta sola, come "Slay or Infuse 3: GRAN BLITZ — Repeat the
+      first effect."; prima ne comparivano due, il secondo con un testo allungato a mano. Gli altri blocchi
+      (Effect / Hit / Miss / Effect) sono invariati.
+- [ ] **Cryo (p.233-234)**: i blocchi restano "Effect / Hit (auto hit) / Area / Effect / Effect / Infuse 3" —
+      non era da correggere, si vede giusto una volta installata questa build.
+- [ ] **Reliquie che guardano i trigger**: un PG con Blitz e una reliquia che cita gli effetti Slay continua a
+      vedere il promemoria ✦ sull'abilità (il trigger ora viene letto anche dal testo, non solo dal campo).
+- [ ] **Migrazione 13** (schema 12 → 13): mondo con queste abilità già sulle schede → all'apertura la console
+      dice "Migration 13: block layout fixed on N ability(ies) of …"; le copie con un "Block Order" scritto a
+      mano non vengono toccate; riaprendo il mondo non rigira.
+
+## Richieste del 20 settembre 2026 — primo gruppo (le "piccole")
+
+- [ ] **Macro XP su PG scelti**: lanciare "ICON: Award Session XP" → in cima al dialog c'è la lista dei PG con
+      le spunte, tutte attive, e i link "All" / "None". Spuntando un solo PG, l'XP va solo a lui (la card in
+      chat elenca solo quello) e i bond power "usati questa sessione" si azzerano solo su di lui. Togliendo
+      tutte le spunte, esce l'avviso "no character was ticked" e non succede niente.
+- [ ] **Token selezionati**: selezionare sulla mappa i token di due PG e lanciare la macro → solo quei due
+      partono spuntati, con la nota "(ticked from the selected tokens)". Senza token selezionati sono tutti
+      spuntati come prima.
+- [ ] **Macro come giocatore**: un player vede solo i suoi PG nella lista (nessun errore di permessi).
+- [ ] **Reference nella barra strumenti**: nella barra a sinistra (strumenti Token) c'è l'icona 📖 "ICON 1.5 —
+      Rules Reference": cliccandola si apre il riferimento e lo strumento attivo NON cambia (resta Select).
+      Funziona anche per un giocatore, su qualsiasi scena, e il 📖 nel menu "..." della scheda continua a
+      funzionare come prima.
+- [ ] **Tab della scheda più leggibili**: scheda PG → tra Narrative / Combat / Conditions / Relics / Notes c'è
+      una linea di separazione sottile, la tab sotto il mouse si illumina appena e quella attiva ha il suo
+      sfondo dorato smussato in alto. Stessa prova sulle schede Foe / Legend / Summon (stesso stile) e con la
+      finestra stretta (le tab non si accavallano).
+- [ ] **Danno piatto**: ⚔ → 💥 su un'abilità qualsiasi → nel dialog del danno c'è lo stepper "Flat damage";
+      mettendo 2 l'anteprima diventa "…+ 2 flat" e la card mostra la riga "Flat bonus 2" nel conteggio. A 0 la
+      card è identica a prima. Caso d'uso: Harden del Clot (+2 per round).
+- [ ] **Pierce**: spuntando "Pierce" la card dice "Pierce — target Armor ignored" e premendo Apply su un
+      bersaglio con Armor 2 non viene sottratto nulla; la spunta "Weakened" non ha più effetto sul totale
+      (p.104: né armor né weakened).
+- [ ] **Divine**: spuntando "Divine" la card dice "Divine — nothing reduces this damage (p.104)"; su un
+      bersaglio con Armor, Cover o Resistance l'Apply applica il danno pieno, e anche il bottone ½ applica il
+      totale intero. Le spunte Resistance / Weakened del dialog vengono ignorate.
+- [ ] **True Strike**: card con esito Miss (o Area) contro un bersaglio con Dodge → senza la spunta l'Apply dice
+      "no damage — Dodge"; con "True Strike" spuntato il danno viene applicato (p.104: ignora dodge).
+- [ ] **Unerring**: bersaglio con Cover → senza spunta l'Apply dimezza ("½ Cover"); con "Unerring" spuntato non
+      dimezza. Con Resistance invece dimezza lo stesso (Unerring ignora cover, non resistance).
+- [ ] **Nessuna regressione sul danno**: senza nessuna delle nuove spunte, dialog e card sono identici a prima
+      (bonus dice, Vulnerable, Resistance/Cover ½, Weakened, Hatred, armor sottratto su Apply, Dodge su
+      Miss/Area, relay al GM).
+
+## Richieste del 20 settembre 2026 — secondo gruppo (le "medie", parte 1)
+
+- [ ] **AP avanzati al level up**: PG con 1 AP libero (spenderne meno di quelli avuti, es. dopo il bonus di
+      metà livello) → al level up, nel passo "New abilities", c'è la riga rossa "You still have 1 AP from
+      earlier levels…" e il contatore in alto dice "AP {granted+1} left". Si possono scegliere abilità/talenti
+      fino a quel totale; con tutto speso il contatore diventa "AP all spent".
+- [ ] **Livello che non dà AP**: PG con AP avanzati che sale a un livello senza AP (es. L2, che dà solo relic
+      e narrativa) → il passo delle abilità compare lo stesso, con il solo avanzo come budget. Un PG senza AP
+      avanzati a quel livello NON vede il passo (come prima).
+- [ ] **Stance dall'abilità**: PG con un'abilità taggata Stance (Dark Knight, Soul Blade, Endless Battlement) →
+      sul pannello c'è "🧘 Take stance": cliccandolo il campo Stance della tab Combat si riempie col nome
+      dell'abilità, il bottone diventa dorato "🧘 In stance — drop" e sul token compare il marcatore. Ri-cliccando
+      si lascia la stance (campo vuoto, marcatore via).
+- [ ] **Una stance alla volta (p.104)**: con una stance attiva, prendere quella di un'altra abilità → la prima
+      viene sostituita e una notifica dice quale è stata lasciata; sul pannello solo la nuova risulta attiva.
+- [ ] **Stance del bersaglio**: attaccare un PG/NPC che è in stance → nel dialog d'attacco (e in quello del
+      danno) la riga del bersaglio mostra "🧘 <nome stance>" accanto a DEF/ARM/HP. Bersaglio senza stance: niente
+      chip, riga identica a prima.
+- [ ] **Finishing Blow automatico**: PG Vagabond con un'abilità che ha il blocco "Finishing Blow: … bonus
+      damage" → targettare un foe **bloodied** (≤50% HP) e tirare il danno: il dialog parte con "Bonus dice = 1"
+      e il chip "⚙ Finishing Blow: <nome> is bloodied — +1 bonus die added"; la card mostra il dado in più
+      ("roll 2d6, keep 1"). Contro un foe non bloodied il dialog parte da 0 e non mostra il chip.
+- [ ] **Finishing Blow senza bonus damage**: abilità il cui blocco Finishing Blow fa altro (non "bonus damage")
+      → il chip dice solo "the block triggers", senza aggiungere dadi.
+- [ ] **Aetherwall automatico**: foe Artillery (ha il tratto Aetherwall) colpito da un attaccante a più di 2
+      caselle → sulla card del danno la riga del bersaglio mostra il chip "Aetherwall ½" e premendo Apply il
+      danno viene dimezzato con la nota "½ Aetherwall (range N)". Con l'attaccante a 2 caselle o meno non
+      succede nulla.
+- [ ] **Aetherwall e Unerring**: stesso tiro con la spunta "Unerring" nel dialog del danno → niente dimezzamento
+      (p.104: unerring ignora cover e aetherwall). Con un bersaglio che ha anche Cover, Unerring toglie
+      entrambi; con Resistance il dimezzamento resta.
+- [ ] **Aetherwall solo con i token**: foe Artillery senza token sulla scena (card lanciata da scheda) → nessun
+      dimezzamento automatico e nessun chip (non si può misurare la distanza), il bottone ½ resta a mano.
+
+## Richieste del 20 settembre 2026 — terzo gruppo (le ultime cinque)
+
+- [ ] **Summon trascinabili**: PG Stormbender, pannello di Rime o Geyser → c'è il chip "🐾 Salt Sprite";
+      trascinandolo sulla mappa nasce il token del Salt Sprite (preso dal compendio Summons). Stessa prova con
+      Nightmare/Umbral Echo (Shadow, Shade), Carnevale (Bomb, Fool), Chaos Tarot (Wild Card + Master Card, Seer),
+      Stampede (Beast, Warden). Un'abilità che non nomina summon del pack non mostra chip.
+- [ ] **Permessi**: un giocatore che NON può creare token trascina un chip → errore di Foundry, niente token, la
+      scheda non si rompe.
+- [ ] **Colore delle aure**: due PG di classe diversa con un'abilità Aura → le due aure sulla mappa hanno il
+      colore della classe (rosso Stalwart, oro Vagabond, verde Mendicant, blu Wright). Nel riquadro Stance della
+      tab Combat c'è il selettore "Aura": scegliendo un colore, la prossima aura di quel PG usa quello; ↺ torna al
+      colore di classe. Blast/Line/Arc/Burst mantengono i colori di forma di prima.
+- [ ] **Scheda Clock**: creare un attore di tipo **Clock** → si apre la lavagna: "+ Clock" aggiunge un orologio
+      (nome, taglia 4/6/8/10/12, colore, nota). Cliccando un segmento l'orologio si porta lì; ri-cliccando
+      l'ultimo pieno torna indietro di uno; − e + spostano di uno; a pieno compare "FULL" e la card si colora.
+      💬 posta l'orologio in chat con i segmenti disegnati.
+- [ ] **Clock segreti**: 👁/🙈 (solo GM) nasconde un orologio ai giocatori: aprendo la stessa scheda da un client
+      Player quell'orologio non compare, e il suo 💬 arriva solo al GM. Gli altri restano visibili.
+- [ ] **Infuse (Wright)**: PG Stormbender con Cryo → sul pannello c'è "✨ Infuse 3"; premendolo servono 3 Aether:
+      se ce ne sono abbastanza vengono scalati (il contatore Aether scende), esce la card "✨ … infuses Cryo —
+      CRYOTIC" e il bottone resta acceso "✨ Infuse 3 — armed". Ri-premendolo l'Aether torna indietro.
+- [ ] **Infuse senza Aether**: con meno Aether del costo l'avviso dice quanti ne servono e non scala nulla.
+      Su Ätherwand ("Infuse X") esce il dialog "How much Aether?" con il massimo pari all'Aether disponibile.
+- [ ] **Una sola infusione per volta**: armando l'infusione di un'altra abilità, la prima viene rimborsata
+      automaticamente e resta accesa solo la nuova.
+- [ ] **Area della versione infusa**: con "Infuse 3 — armed" su Cryo, il bottone 📐 propone anche "Line 8
+      (Infuse 3)"; su Bio "Medium Blast", su Geo "Arc 8", su Eye of the Storm "Large Blast". Senza infusione
+      armata le scelte sono quelle di prima.
+- [ ] **Piazzamento fuori range (Alt)**: piazzando un'area, l'avviso dice che tenendo **Alt** si può uscire dal
+      raggio consentito; tenendo Alt le caselle fuori raggio diventano valide e il click piazza, rilasciando Alt
+      torna il limite. Senza Alt il comportamento è identico a prima.
+- [ ] **Wild Card del Seer**: piazzare una o più Wild Card sulla mappa (chip 🐾 o compendio), poi lanciare
+      un'abilità ad area di un PG che tocchi lo small blast di una carta → esce il dialog "Wild Card": con "Set it
+      off" l'area si allarga fino a coprire la carta, la carta sparisce dalla mappa, in chat arriva la nota, e i
+      bersagli contati includono chi si trova nell'area estesa. Con "Leave them" non cambia niente.
+- [ ] **Catena di carte**: due carte vicine (a 2 caselle l'una dall'altra) → farne scattare una allarga l'area
+      fino a toccare la seconda, che viene inclusa nello stesso dialog e rimossa anche lei. Una carta lontana
+      resta sul posto. La Master Card si comporta come una Wild Card.
+
+## Pulizia dati del 20 settembre 2026 (punto 3: cose emerse lavorando)
+
+- [ ] **Trigger stampati una volta sola**: sul pannello (e sulla card 💬) Terraforming mostra un solo "Charge:
+      Choose four effects.", Helix Heel un solo "Charge: Shatter any foe damaged by this ability.", Aethershard
+      un solo "Comeback: Reduce sacrifice to 1.", Blazing Bond un solo "Comeback: Reduce partner sacrifice to 1."
+      e Nothung un solo "Slay or Infuse 3: GRAM — …". Prima ognuno ne stampava due, con testi leggermente
+      diversi.
+- [ ] **Tratti senza il box dei summon**: scheda PG con Darkside (Shade), Beast Master (Warden), Cheap Trick
+      (Fool), Gardener of Kin (Harvester) → il testo del tratto finisce dove lo finisce il manuale (es. Darkside:
+      "When you first vacate a space on your turn, you may leave a shadow."), senza il paragrafo su come si
+      evocano le shadow/beast/bomb/thrall. Quelle regole restano nel compendio **Summons** (attori Shadow, Beast,
+      Bomb, Thrall, Plant). Beast Master tiene il suo Great Beast, che è parte del tratto.
+- [ ] **Geo (p.218) e The Tower (p.203)**: il blocco "Terrain Effect:" ora è una riga sua
+      (Geo: Hit | Miss or Area | Terrain Effect | Charge | Infuse 4; The Tower: Hit | Area | Terrain Effect) e
+      non è più incollato in fondo al blocco Area.
+- [ ] **Ordine dei blocchi rimasti**: Raging Wolf (pp.137-138) mostra "Special | Comeback | Heroic | Special"
+      come il manuale; Chaos Tarot "Area | Summon | Summon Effect" con la lista 1-6 dentro il blocco Area;
+      Drifting Leaf finisce con "Infuse 3 or Slay: PHANTOM BLADE"; Ace (p.157) mostra "End your turn and gain
+      Stance" + "Refresh" (prima la prima riga spariva nel testo di apertura). Pandaemonium, Pyre, Lance, Death,
+      Dragon Dive, Fairy Ring e Gran Reversa erano già giusti e non devono cambiare.
+- [ ] **Bifröst e Rampant Nail**: un solo blocco "Infuse 3 or Slay: HEIMDALL / RUINÖS" (prima ne comparivano due,
+      il secondo etichettato solo "Slay").
+- [ ] **Refocus non azzera più gli Skill Rank guadagnati**: PG che ha preso almeno un'azione migliorata a un
+      level up → ↻ Refocus azzera i pallini delle dieci azioni ma il contatore della tab Notes resta
+      "(6 from creation + N from level ups)" con N invariato; prima N tornava a 0.
+- [ ] **Area dal testo anche per gli NPC**: foe/legend con un'azione che descrive l'area solo nel testo (senza
+      tag blast/line/arc) → sulla riga dell'azione compare il bottone 📐 con la forma letta dal testo e la piazza
+      correttamente. Le azioni con il tag mantengono il comportamento di prima.
+- [ ] **Chip dei tag NPC leggibili**: card d'attacco di un Foe/Legend → i chip dicono "True Strike", "Line 3",
+      "+1 Boon" (prima "true-strike", "line-3", "boon-1") e col mouse sopra mostrano la regola, come sulle card
+      dei PG.
+- [ ] **Migrazione 14** (schema 13 → 14): mondo esistente → all'apertura la console dice "Migration 14: N
+      trait(s)/ability(ies) cleaned on …"; i tratti dei PG perdono il box dei summon e le cinque abilità perdono
+      il trigger doppio. Copie modificate a mano non vengono toccate; riaprendo il mondo non rigira.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

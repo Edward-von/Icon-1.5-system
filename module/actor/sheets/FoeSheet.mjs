@@ -8,9 +8,10 @@
  */
 import { combatRoll } from "../../dice/rolls.mjs";
 import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
+import { currentTargets } from "../../combat/defenses.mjs";
 import { abilityCostLabel } from "../../helpers/enrich.mjs";
-import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml } from "../../canvas/area-templates.mjs";
-import { marksOn, marksBy, applyMark, removeMark } from "../../combat/marks.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea } from "../../canvas/area-templates.mjs";
+import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { npcActionStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
@@ -34,6 +35,7 @@ export class FoeSheet extends BaseActorSheet {
     position: { width: 720, height: 680 },
     window:   { resizable: true, controls: [PROTOTYPE_TOKEN_CONTROL, REFERENCE_CONTROL] },
     actions: {
+      rollSave:         BaseActorSheet.onRollSave,   // Conditions tab / save bar
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:    onShowReferenceControl,
       rollAction:       FoeSheet.#onRollAction,
@@ -111,8 +113,10 @@ export class FoeSheet extends BaseActorSheet {
         // "Combo 2" with the sequence rule). Kept separate from `tags`,
         // which stays the raw editable array.
         tagChips: (a.tags ?? []).map(formatTag).filter(Boolean),
-        areaLabel: areaFromTags(a.tags)?.label ?? "",
-        canMark: (a.tags ?? []).some(t => String(t).toLowerCase() === "mark"),
+        areaLabel: abilityArea(a.tags, [a.description, a.hitEffect, a.missEffect, a.areaEffect].join(" "))?.label ?? "",
+        // ^ the shape is usually in the header tags; when it is only in the
+        //   prose (as for several terrain actions) the text is read too.
+        canMark: markFromTags(a.tags).can,
         marks: marksBy(actor.id, `action:${a.name}`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         parsed,
         dealsDamage: parsed.dealsDamage,
@@ -162,6 +166,8 @@ export class FoeSheet extends BaseActorSheet {
       positive: markActive(groups.positive),
       special:  markActive(groups.special),
     };
+    // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
+    context.saveableStatuses = this._saveableStatuses();
 
     _log(`_prepareContext — done | class: ${system.foeClass} | elite: ${system.isElite} | traits: ${system.traits.length} | actions: ${system.actions.length} | interrupts: ${system.interrupts.length}`);
     return context;
@@ -256,10 +262,13 @@ export class FoeSheet extends BaseActorSheet {
 
     // Area attack: template on the map + targets before the dialog (null = cancelled)
     const placement = await ensureAreaTargets({ actor, tags: action.tags, abilityName: action.name, abilityKey: `action:${action.name}` });
-    if (placement === null) return;
+    if (placement === null) ui.notifications.info(`${action.name}: area not placed — rolling the attack only.`);
 
-    const mods = await FoeSheet.#promptAttackMods(action, actor);
+    const mods = await FoeSheet.#promptAttackMods(action, actor, placement?.area ?? null);
     if (!mods) return;
+    const rollTargets = mods.attackTargetId
+      ? currentTargets().filter(t => t.tokenId === mods.attackTargetId)
+      : null;
 
     await combatRoll({
       abilityName: action.name,
@@ -268,7 +277,9 @@ export class FoeSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
-      areaHtml:    areaSummaryHtml(placement),
+      areaHtml:    placement ? areaSummaryHtml(placement, { attackTargetId: mods.attackTargetId }) : "",
+      // Area attacks hit one target, the rest only take the area effect (p.117).
+      targets:     rollTargets?.length ? rollTargets : null,
       statusEntries: npcActionStatusEntries(action, { sourceName: actor.name }),
       actor,
     });
@@ -287,7 +298,8 @@ export class FoeSheet extends BaseActorSheet {
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
     _log(`markActionTarget — "${action.name}" on ${targets[0].name}`);
-    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name, text: action.description ?? "" });
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name,
+                      text: action.description ?? "", multi: markFromTags(action.tags).multi });
   }
 
   /** ✕ on a mark chip or in the Conditions tab list. */
@@ -303,8 +315,10 @@ export class FoeSheet extends BaseActorSheet {
     const actor  = this.document;
     const action = actor.system.actions[idx];
     if (!action) return;
-    const area = areaFromTags(action.tags);
-    if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag.`); return; }
+    // Tags first (the book puts the shape in the action's header), then the
+    // action's own text for the ones that only describe it in prose.
+    const area = abilityArea(action.tags, [action.description, action.hitEffect, action.missEffect, action.areaEffect].join(" "));
+    if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag, and its text names no area.`); return; }
     _log(`placeActionArea — "${action.name}" | ${area.label}`);
     await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}` });
   }
@@ -389,6 +403,11 @@ export class FoeSheet extends BaseActorSheet {
       resistance:  mods.resistance,
       weakened:    mods.weakened,
       hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
     });
   }
 
@@ -448,8 +467,8 @@ export class FoeSheet extends BaseActorSheet {
     }
   }
 
-  static async #promptAttackMods(action, actor) {
-    return promptAttackMods({ name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [] }, actor);
+  static async #promptAttackMods(action, actor, area = null) {
+    return promptAttackMods({ name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [] }, actor, { area });
   }
 
   static async #onApplyBaseStats(event, target) {

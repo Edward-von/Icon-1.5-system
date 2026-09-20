@@ -7,9 +7,10 @@
  *              first space of the line (with range).
  *   Arc X    — X contiguous spaces drawn sequentially in orthogonal steps, no
  *              overlap, never through the user; first space in range.
- *   Blast    — fixed templates (p.98 diagram): Small = cross of 5 spaces,
- *              Medium = 3×3, Large = 5×5 without the corners. Origin/attack
- *              space = the centre.
+ *   Blast    — fixed templates (p.98 diagram): Small = cross of 5 spaces
+ *              (every space 1 step away), Medium = 3×3, Large = every space
+ *              within 2 orthogonal steps, 13 spaces — a bigger cross, not a
+ *              5×5. Origin/attack space = the centre.
  *   Burst X  — a target space in range and every space within X of it (range
  *              counts diagonals, p.85). Does not affect the user unless said.
  *
@@ -34,6 +35,30 @@ const HL_RANGE   = "icon-area-range";
 /** Template colours per pattern (hex strings for the document, ints for PIXI). */
 export const AREA_COLORS = { blast: "#e07a2f", burst: "#c8402f", line: "#3d7fd6", arc: "#8a4fc4", aura: "#c4a64f" };
 
+/** Class colours (same values as the sheet's --stalwart/--vagabond/… tokens). */
+export const CLASS_COLORS = {
+  stalwart: "#c0392b", vagabond: "#d4a017", mendicant: "#27ae60", wright: "#2980b9",
+};
+
+/**
+ * The colour to draw an area in. Auras are the ones that pile up on the map —
+ * several characters can hold one at the same time and they all looked alike —
+ * so an aura takes the character's own colour: the one picked on their sheet
+ * (`flags.icon-system.auraColor`), else their class colour, else the generic
+ * aura gold. Blast / line / arc / burst keep the colour of their shape.
+ * @param {object} area
+ * @param {Actor}  actor
+ * @returns {string} hex colour
+ */
+export function areaColor(area, actor) {
+  if (area?.kind !== "aura") return AREA_COLORS[area?.kind] ?? AREA_COLORS.aura;
+  const picked = String(actor?.getFlag?.("icon-system", "auraColor") ?? "").trim();
+  if (/^#[0-9a-f]{6}$/i.test(picked)) return picked;
+  const cls = String(actor?.system?.combat?.jobs?.find?.(j => j.primary)?.class
+                  ?? actor?.system?.class ?? "").toLowerCase();
+  return CLASS_COLORS[cls] ?? AREA_COLORS.aura;
+}
+
 /** Fixed blast patterns as {di, dj} offsets from the centre cell (p.98). */
 const BLAST_SHAPES = {
   s: [{ di: 0, dj: 0 }, { di: -1, dj: 0 }, { di: 1, dj: 0 }, { di: 0, dj: -1 }, { di: 0, dj: 1 }],
@@ -41,8 +66,11 @@ const BLAST_SHAPES = {
   l: [],
 };
 for (let di = -1; di <= 1; di++) for (let dj = -1; dj <= 1; dj++) BLAST_SHAPES.m.push({ di, dj });
+// Large blast: the diagram on p.98 is the small blast's cross grown by one
+// step — every space at most 2 orthogonal steps from the centre (13 spaces),
+// NOT a 5×5 block (that would be 21 and is what this used to draw).
 for (let di = -2; di <= 2; di++) for (let dj = -2; dj <= 2; dj++) {
-  if (Math.abs(di) === 2 && Math.abs(dj) === 2) continue;   // no corners
+  if (Math.abs(di) + Math.abs(dj) > 2) continue;
   BLAST_SHAPES.l.push({ di, dj });
 }
 const BLAST_LABELS = { s: "Small Blast", m: "Medium Blast", l: "Large Blast" };
@@ -145,6 +173,21 @@ export function areasInText(text) {
     out.push(area);
   }
   return out;
+}
+
+/**
+ * The area to offer for an ability: the one in its tags, or — when the tags
+ * carry none — the first one named in its own rules text. The book prints the
+ * shape of most terrain-effect abilities in the prose rather than the header
+ * ("Tsunami, 2 Actions, Terrain Effect … The area is a medium blast terrain
+ * effect", p.233; the same for Fairy Ring, Ätherwand, Blood Grove, Party
+ * Favor…), so without this they never offered a template at all.
+ * @param {Array} tags
+ * @param {string} [description]  the ability's own text
+ * @returns {object|null}
+ */
+export function abilityArea(tags, description = "") {
+  return areaFromTags(tags) ?? areasInText(description)[0] ?? null;
 }
 
 /**
@@ -312,6 +355,7 @@ class AreaPlacement {
     this.sourceCells = sourceCells;
     this.sourceKeys = new Set(sourceCells.map(cellKey));
     this.rangeKeys = rangeCells ? new Set(rangeCells.map(cellKey)) : null;   // null = no restriction
+    this.freePlacement = false;   // Alt held: ignore the range restriction
     this.rangeCells = rangeCells;
     this.rotation = 0;            // quarter turns applied to a Line
     this.flip = false;            // side of the extra width of an even-width Line
@@ -341,6 +385,7 @@ class AreaPlacement {
         move:  (ev) => this.#onMove(ev),
         down:  (ev) => this.#onDown(ev),
         key:   (ev) => this.#onKey(ev),
+        keyup: (ev) => { if (ev.key === "Alt") this.#setFreePlacement(false); },
         wheel: (ev) => this.#onWheel(ev),
         ctx:   (ev) => { ev.preventDefault(); },
       };
@@ -349,11 +394,13 @@ class AreaPlacement {
       canvas.stage.addEventListener("pointermove", this.handlers.move, { capture: true });
       canvas.stage.addEventListener("pointerdown", this.handlers.down, { capture: true });
       window.addEventListener("keydown", this.handlers.key, { capture: true });
+      window.addEventListener("keyup", this.handlers.keyup, { capture: true });
       window.addEventListener("wheel", this.handlers.wheel, { capture: true, passive: false });
       canvas.app.view.addEventListener("contextmenu", this.handlers.ctx, { capture: true });
+      const free = this.rangeKeys ? " Hold Alt to place it outside the usual range (an Infuse that extends the range, a GM ruling)." : "";
       const hint = this.area.kind === "arc"
-        ? `Paint the ${this.area.label} one space at a time (${this.area.size} spaces, orthogonal steps). Enter or right-click finishes early, Esc cancels.`
-        : `Click to place the ${this.area.label}. ${this.area.kind === "line" ? "Mouse wheel rotates it. " : ""}Right-click or Esc cancels.`;
+        ? `Paint the ${this.area.label} one space at a time (${this.area.size} spaces, orthogonal steps). Enter or right-click finishes early, Esc cancels.${free}`
+        : `Click to place the ${this.area.label}. ${this.area.kind === "line" ? "Mouse wheel rotates it. " : ""}Right-click or Esc cancels.${free}`;
       ui.notifications.info(hint);
     });
   }
@@ -366,6 +413,7 @@ class AreaPlacement {
     canvas.stage.removeEventListener("pointermove", this.handlers.move, { capture: true });
     canvas.stage.removeEventListener("pointerdown", this.handlers.down, { capture: true });
     window.removeEventListener("keydown", this.handlers.key, { capture: true });
+    window.removeEventListener("keyup", this.handlers.keyup, { capture: true });
     window.removeEventListener("wheel", this.handlers.wheel, { capture: true });
     canvas.app.view.removeEventListener("contextmenu", this.handlers.ctx, { capture: true });
     const grid = canvas.interface.grid;
@@ -399,13 +447,13 @@ class AreaPlacement {
   #arcCandidateValid(cell) {
     if (!cell || this.sourceKeys.has(cellKey(cell))) return false;
     if (this.arcCells.some(c => cellKey(c) === cellKey(cell))) return false;
-    if (!this.arcCells.length) return !this.rangeKeys || this.rangeKeys.has(cellKey(cell));
+    if (!this.arcCells.length) return !this.rangeKeys || this.freePlacement || this.rangeKeys.has(cellKey(cell));
     const last = this.arcCells[this.arcCells.length - 1];
     return Math.abs(last.i - cell.i) + Math.abs(last.j - cell.j) === 1;
   }
 
   #inRange(cells) {
-    if (!this.rangeKeys) return true;
+    if (!this.rangeKeys || this.freePlacement) return true;
     return cells.some(c => this.rangeKeys.has(cellKey(c)));
   }
 
@@ -470,7 +518,19 @@ class AreaPlacement {
     this.#finish({ cells: this.arcCells.slice(), origin: this.arcCells[0] });
   }
 
+  /**
+   * Alt releases the range restriction while it is held: the placement rules
+   * are the usual ones, but an Infuse that extends the range (or a ruling at
+   * the table) shouldn't leave the template unplaceable.
+   */
+  #setFreePlacement(on) {
+    if (this.freePlacement === on) return;
+    this.freePlacement = on;
+    this.#render();
+  }
+
   #onKey(ev) {
+    if (ev.key === "Alt") this.#setFreePlacement(true);
     if (ev.key === "Escape") { ev.preventDefault(); ev.stopImmediatePropagation(); this.cancel(); }
     else if (ev.key === "Enter" && this.area.kind === "arc" && this.arcCells.length) {
       ev.preventDefault(); ev.stopImmediatePropagation(); this.#finishArc();
@@ -530,7 +590,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
 
   // Origin = blast/burst centre, first space of a line/arc (control icon + ruler text sit there).
   const origin = canvas.grid.getCenterPoint(originCell);
-  const color = AREA_COLORS[area.kind] ?? "#c4a64f";
+  const color = areaColor(area, actor);
   const data = {
     t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
     fillColor: color, borderColor: color, hidden: false,
@@ -557,6 +617,18 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     return { template, cells, targets: [], area };
   }
 
+  // Seer wild cards (p.200): a card whose small blast this area touches can be
+  // set off, growing the area to cover it — and the cards that reaches in turn.
+  // Asked before the targets are read, so the extension counts for targeting.
+  // Imported here rather than at the top: wild-cards.mjs reads tokenCells from
+  // this module, and a lazy import keeps the two from importing each other.
+  if (template) {
+    try {
+      const { offerWildCards } = await import("./wild-cards.mjs");
+      cells = await offerWildCards(template, cells, { abilityName });
+    } catch (err) { console.error("ICON 1.5 | wild card check failed", err); }
+  }
+
   const targets = tokensInCells(cells, { exclude: area.kind === "burst" ? [token.id] : [] });
   _setUserTargets(targets);
   // Switching to the template layer released the token: give it back its selection.
@@ -567,16 +639,22 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
 }
 
 /**
- * Target the tokens standing in an existing area template (for a second
- * attack roll on the same ability after the tokens moved).
+ * Read the tokens standing in an existing area template (for a second attack
+ * roll on the same ability after the tokens moved).
+ *
+ * `retarget: false` returns who is in the area WITHOUT touching the user's
+ * targets: an ICON area attack has one attack target and the rest only take
+ * the area effect (p.117), so once the player has narrowed the selection by
+ * hand — Shift+T on the map, ✕ in the attack dialog — re-targeting everybody
+ * would undo that choice on every roll.
  */
-export async function retargetFromTemplate(template) {
+export async function retargetFromTemplate(template, { retarget = true } = {}) {
   const cells = template?.getFlag(FLAG_NS, "cells") ?? [];
   const area  = template?.getFlag(FLAG_NS, "area") ?? {};
   const actorId = template?.getFlag(FLAG_NS, "actorId");
   const own = area.kind === "burst" ? canvas.tokens.placeables.filter(t => t.actor?.id === actorId).map(t => t.id) : [];
   const targets = tokensInCells(cells, { exclude: own });
-  _setUserTargets(targets);
+  if (retarget) _setUserTargets(targets);
   return { template, cells, targets, area };
 }
 
@@ -614,16 +692,27 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey }
   const area = areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
   const existing = findAreaTemplates({ actorId: actor.id, abilityKey })[0];
-  if (existing) return retargetFromTemplate(existing);
+  // Reusing a template already on the table: only target from it when the
+  // player has nothing targeted, otherwise their own selection wins.
+  if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
   return placeAreaTemplate({ actor, area, abilityName, abilityKey });
 }
 
-/** Chat summary line for an attack card (safe HTML). */
-export function areaSummaryHtml(placement) {
+/**
+ * Chat summary line for an attack card (safe HTML). With `attackTargetId` the
+ * line separates the one token the attack was rolled against from the ones
+ * that only take the area effect (p.117).
+ */
+export function areaSummaryHtml(placement, { attackTargetId = "" } = {}) {
   if (!placement?.area) return "";
   const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  const names = placement.targets?.length ? placement.targets.map(t => esc(t.name)).join(", ") : "no one";
+  const inArea = placement.targets ?? [];
+  const attacked = attackTargetId ? inArea.find(t => t.id === attackTargetId) : null;
+  const others = attacked ? inArea.filter(t => t.id !== attacked.id) : inArea;
+  const names = attacked
+    ? `attack: ${esc(attacked.name)}${others.length ? ` · area: ${others.map(t => esc(t.name)).join(", ")}` : ""}`
+    : (inArea.length ? inArea.map(t => esc(t.name)).join(", ") : "no one");
   const btn = placement.template
     ? ` <button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${esc(placement.template.id)}" data-scene-id="${esc(placement.template.parent?.id)}" title="Remove the template from the map">🗑 area</button>`
     : "";

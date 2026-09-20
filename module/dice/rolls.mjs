@@ -12,6 +12,7 @@
 /* ================================================== */
 
 import { ICON } from "../config.mjs";
+import { formatTag } from "../helpers/rule-tooltips.mjs";
 import { statusBlockHtml } from "../combat/ability-statuses.mjs";
 import { rollEvasion, evasionBlockHtml, currentTargets } from "../combat/defenses.mjs";
 
@@ -242,7 +243,14 @@ export async function combatRoll({
   const content = await renderTemplate(`${TPLPATH}/attack-roll.hbs`, {
     abilityName:   abilityName ?? "Attack",
     costLabel:     costLabel ?? "",
-    tagsHtml:      tags.map(t => `<span class="icon-tag">${t}</span>`).join(""),
+    // Chips read the same on an NPC card as on a PC one: the raw tag of a foe
+    // action ("true-strike", "boon-1") becomes "True Strike" / "+1 Boon" with
+    // its rule on hover, instead of being printed as stored.
+    tagsHtml:      tags.map(t => {
+      const f = formatTag(typeof t === "string" ? t : (t?.raw ?? t?.label ?? ""));
+      if (!f) return "";
+      return `<span class="icon-tag"${f.tooltip ? ` data-tooltip="${_esc(f.tooltip)}"` : ""}>${_esc(f.label)}</span>`;
+    }).join(""),
     areaHtml:      areaHtml ?? "",
     d20,
     modifier,

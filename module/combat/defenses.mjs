@@ -251,7 +251,7 @@ export function gridDistance(a, b) {
  * "Dodge — immune" on Miss / Area / successful-save cards. Returns "" when
  * there is nothing to show.
  */
-export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, compact = false, tokenId = null } = {}) {
+export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, compact = false, tokenId = null, attacker = null } = {}) {
   const p = defenseProfile(actor);
   const chips = [];
   if (p.evasion) {
@@ -265,6 +265,8 @@ export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, 
   }
   if (p.cover)      chips.push(_chip("cover", halvedOnRoll ? "Cover (already ½)" : "Cover ½", "Cover: half damage (p.92). Applied automatically when the damage is applied.", !halvedOnRoll));
   if (p.resistance) chips.push(_chip("resistance", halvedOnRoll ? "Resistance (already ½)" : "Resistance ½", "Resistance: half damage. Applied automatically when the damage is applied (once, together with Cover).", !halvedOnRoll));
+  const wall = attacker ? aetherwallAgainst(actor, attacker, { targetTokenId: tokenId }) : { active: false };
+  if (wall.active) chips.push(_chip("resistance", halvedOnRoll ? `Aetherwall (already ½)` : `Aetherwall ½`, `Aetherwall (Artillery, p.298): resistance against abilities from characters outside range 2 — the attacker is ${wall.distance} spaces away, so the damage is halved when it is applied.`, !halvedOnRoll));
   if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
   if (p.stealth && !compact)    chips.push(_chip("stealth", "Stealth", "Stealth: cannot be targeted directly except from an adjacent space (p.146)."));
   if (p.intangible && !compact) chips.push(_chip("intangible", "Intangible", "Intangible: see the character's text — usually immune to damage."));
@@ -440,10 +442,41 @@ export function evasionBlockHtml(ev) {
  * @param {boolean} [opts.halvedOnRoll]  the attacker already ticked Resistance / Cover on the roll
  * @returns {{ immune:boolean, immuneReason:string, half:boolean, halfReason:string }}
  */
-export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false } = {}) {
+export function hasAetherwall(actor) {
+  if (!actor) return false;
+  // The Artillery class baseline trait, written onto the foe as data
+  // (apply-class-baseline.mjs), or the class itself for a foe that never got it.
+  const traits = actor.system?.traits;
+  if (Array.isArray(traits) && traits.some(t => /^aetherwall$/i.test(String(t?.name ?? "").trim()))) return true;
+  return String(actor.system?.foeClass ?? "").toLowerCase() === "artillery";
+}
+
+/**
+ * Aetherwall (p.298, Artillery): "Gains resistance against all abilities from
+ * characters that are outside of range 2 from them." Needs both tokens on the
+ * scene; with no token for either side we can't measure, so it stays off
+ * rather than guessing.
+ * @returns {{ active: boolean, distance: number|null }}
+ */
+export function aetherwallAgainst(target, attacker, { attackerTokenId = null, targetTokenId = null } = {}) {
+  if (!hasAetherwall(target)) return { active: false, distance: null };
+  const ta = tokenOf(attacker, attackerTokenId);
+  const tt = tokenOf(target, targetTokenId);
+  if (!ta || !tt) return { active: false, distance: null };
+  const d = gridDistance(ta, tt);
+  return { active: Number.isFinite(d) && d > 2, distance: Number.isFinite(d) ? d : null };
+}
+
+export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false, trueStrike = false, unerring = false, attacker = null, attackerTokenId = null, targetTokenId = null } = {}) {
   const out = { immune: false, immuneReason: "", half: false, halfReason: "" };
   if (!actor) return out;
   const p = defenseProfile(actor);
+  // Damage types the attack was rolled with (p.104): True Strike "ignores
+  // dodge, blind, evasion, and stealth", Unerring "ignores cover and
+  // aetherwall". Evasion and stealth are settled on the attack roll; what
+  // reaches the damage card is the Dodge cancellation and the Cover halving.
+  if (p.dodge && trueStrike) p.dodge = false;
+  if (p.cover && unerring)   p.cover = false;
   if (p.dodge && (outcome === "miss" || outcome === "area" || outcome === "save-success")) {
     out.immune = true;
     const via = p.dodgeVia ? ` (${p.dodgeVia})` : "";
@@ -453,9 +486,14 @@ export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false 
     return out;
   }
   if (halvedOnRoll) return out;   // halve only once (Resistance / Cover, p.92)
-  if (p.cover || p.resistance) {
+  // Aetherwall: a resistance that only exists against attacks from beyond
+  // range 2, so it is measured here rather than read from a status — and
+  // Unerring ignores it, as it ignores cover (p.104).
+  const wall = unerring ? { active: false } : aetherwallAgainst(actor, attacker, { attackerTokenId, targetTokenId });
+  if (p.cover || p.resistance || wall.active) {
     out.half = true;
-    out.halfReason = p.cover && p.resistance ? "Cover + Resistance (½ once)" : p.cover ? "Cover" : "Resistance";
+    const why = [p.cover ? "Cover" : "", p.resistance ? "Resistance" : "", wall.active ? `Aetherwall (range ${wall.distance})` : ""].filter(Boolean);
+    out.halfReason = why.length > 1 ? `${why.join(" + ")} (½ once)` : why[0];
   }
   return out;
 }

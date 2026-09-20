@@ -1,5 +1,94 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 settembre 2026 — Debug + wishlist di Edoardo (versione 1.6.0)
+
+Giornata lunga: dieci bug segnalati uno a uno, le quattordici richieste della wishlist e la pulizia dei dati
+emersa lavorando. Schema del mondo 8 → 14 (migrazioni 9-14).
+
+### Bug
+
+- **Encounter Designer illeggibile con tanti PG**: con ~40 attori di tipo PG la finestra non scorreva e il passo
+  "Encounter" spariva → la riga della party era `auto` nella griglia e la lista dei ritratti non aveva un box di
+  scorrimento (le altre due liste sì), con `overflow: hidden` sulla finestra → i ritratti stanno in un riquadro
+  alto ~4 righe che scorre, la riga dell'incontro ha un minimo garantito, e le posizioni di scorrimento non
+  saltano più al re-render (`scrollable` sulle parti).
+- **Abilità `multimark` senza il bottone 🎯**: 120 azioni di foe/legend non lo mostravano → il controllo cercava
+  solo il tag esatto `mark` → `markFromTags()` riconosce anche `multimark`/`multi mark` e, come dice il manuale
+  (p.95, "each ability typically places only one mark"), un'abilità multimark **non** cancella i mark che ha già
+  piazzato. Tooltip nuovo sul chip.
+- **Pallini del wizard di creazione finti**: si illuminavano al passaggio del mouse ma non facevano niente → la
+  classe `.icon-dot` porta cursore e animazioni da elemento cliccabile, ma nel wizard nessuno li aveva collegati
+  → cliccando il pallino N l'azione va a N (e ri-cliccando l'ultimo pieno torna indietro di uno, come sulla
+  scheda); il 4° pallino è dichiaratamente inerte perché a livello 0 il cap è 3 (p.241).
+- **Level up senza controlli**: si poteva confermare lasciando vuoto il dot d'azione o il Bond Power → il submit
+  saltava i campi vuoti come fa con gli AP, che però sono un serbatoio e si spendono dopo → contatore "1 to pick"
+  live, riepilogo rosso sopra il bottone e Confirm che rifiuta finché manca qualcosa (con eccezione quando non
+  c'è davvero niente da scegliere).
+- **Valori AP più alti di uno**: il bonus di metà barra (7 XP) veniva dato anche a livello 0 → il manuale lo dà
+  "at level 1 and higher" (p.112) → dato solo dal livello 1; la migrazione 12 lo toglie ai PG ancora a livello 0.
+- **Skill Rank sempre "OVER"**: il contatore confrontava tutti i pallini delle azioni con i soli dot dei level up
+  → mancavano i 6 della creazione (2 del bond + 4 da distribuire, p.241) → inclusi nel totale, con la riga
+  "(6 from creation + N from level ups)".
+- **Tsunami senza template**: l'area (medium blast) sta nella prosa e non nei tag → il bottone 📐 leggeva solo i
+  tag → `abilityArea()` legge anche il testo dell'abilità: 20 abilità (Fairy Ring, Ätherwand, Blood Grove, Party
+  Favor…) ora hanno il template.
+- **Tsunami, blocchi sbagliati**: "Infuse 1: STORMLASH" senza testo, la frase "All your Tsunamis disappear…"
+  dentro Collide e Collide stampato due volte → un'unica descrizione lunga in cui "Free Action:" faceva da
+  etichetta e il Collide era scritto sia nel testo sia nel campo → testo di p.233 e `blockOrder` fissato.
+- **Finishing Blow senza tooltip**: le keyword nel testo hanno la regola al passaggio del mouse, le etichette dei
+  blocchi no → i template stampavano l'etichetta nuda → ogni etichetta che è una regola (Finishing Blow, Charge,
+  Exceed, Collide, Slay, Comeback, Stance, Mark, Infuse, Interrupt…) porta la sua spiegazione.
+- **Formattazione di Blitz / Strafe Shot / Cryo / Battering Ram**: Cryo era già giusto (il lavoro sull'ordine dei
+  blocchi non era mai stato rilasciato); Blitz stampava il blocco Slay due volte; Battering Ram e Strafe Shot
+  avevano l'etichetta unita al contrario → il manuale non ha un ordine unico ("Collide or Heroic" su p.122,
+  "Finishing blow or Exceed" su p.155) → 25 abilità riallineate confrontando il testo del manuale, verificando
+  che le coppie restino su una riga sola.
+- **Butcher (Lowlander) Artillery invece che Heavy**: è una variante Chapter 1+ dello Slab (p.430) e aveva
+  ereditato la classe → statline Heavy di p.298 (VIT 10, HP 40, DEF 6, fray 4, d6, armor 2) e tratto Guard al
+  posto di Slip/Aetherwall, specchiato nel pack `foe-abilities`; migrazione 9 per i Butcher già importati.
+- **Testo del Salt Sprite dentro Rime (e Geyser)**: il riquadro "Summons" della job (p.232) era finito nel testo
+  delle due abilità → le sue regole vivono già sull'attore Salt Sprite del pack `summons` → tolto, migrazione 10.
+- **Sealed non bloccava niente**: un personaggio sealato poteva comunque infliggere status dai bottoni →
+  `inflictStatus` guardava solo il bersaglio → controllo al click (p.104) più una riga rossa sulla card. Restano
+  liberi il danno legato al save, i mark (non sono status, p.95) e il blocco "Gain".
+
+### Richieste
+
+- **Macro XP su PG scelti**: lista con le spunte nel dialog (i token selezionati partono spuntati), per
+  aggiornare chi si è perso la fine sessione.
+- **Reference a portata di mano**: bottone 📖 nella barra strumenti Token, per tutti, oltre al menu "..." della
+  scheda.
+- **Tab della scheda separate**: divisori, spazio e tab attiva con il suo sfondo.
+- **Danno piatto** nel dialog del danno (il caso di Harden del Clot) e **tipi di danno**: Pierce, Divine, True
+  Strike e Unerring fanno quello che dice p.104 (niente armor, niente dimezzamenti, ignorare Dodge, ignorare
+  Cover), non sono promemoria.
+- **AP avanzati al level up**: il budget include quelli rimasti dai livelli precedenti, con avviso.
+- **Stance come i mark**: bottone 🧘 sull'abilità (una alla volta, p.104) e stance del bersaglio visibile nei
+  dialog di tiro.
+- **Finishing Blow automatico**: contro un bersaglio bloodied il dialog del danno parte col dado bonus.
+- **Aetherwall automatico**: resistance misurata sulla distanza (p.298), con chip e nota; Unerring la ignora.
+- **Summon trascinabili** dal pannello dell'abilità alla mappa.
+- **Colore delle aure** per personaggio (scelto a mano o colore di classe).
+- **Scheda Clock**: nuovo tipo di attore, lavagna di orologi con segmenti cliccabili, colore, nota, 💬 in chat e
+  orologi segreti per il GM.
+- **Infuse dei Wright**: bottone ✨ che scala l'Aether e arma la versione infusa (con rimborso e una sola attiva
+  per volta), area della versione infusa proposta dal 📐, e **Alt** per piazzare un template fuori dal raggio.
+- **Wild Card del Seer**: una carta toccata da un'area esplode, allarga l'area e sparisce, a catena (p.200).
+
+### Pulizia dati
+
+- Cinque abilità stampavano un trigger due volte (Terraforming, Helix Heel, Aethershard, Blazing Bond, Nothung),
+  più Bifröst e Rampant Nail emersi dopo; **Geo** (p.218) e **The Tower** (p.203) avevano il `Terrain Effect:`
+  incollato dentro il blocco Area; il riquadro "Summons" di altre quattro job stava in coda a un tratto
+  (Darkside, Beast Master, Cheap Trick, Gardener of Kin).
+- I 10 casi lasciati dal report del 13 settembre: nove erano già corretti (il report fondeva combo e talenti
+  nell'abilità), solo **Raging Wolf** era fuori ordine (l'abilità scavalca il salto di pagina 137-138).
+- Il parser riconosce `Infuse N or Slay` e `End your turn and gain Stance:` — senza il secondo, **Ace** perdeva
+  la sua riga principale.
+- **Refocus** non azzera più gli Skill Rank guadagnati salendo di livello; area letta dal testo anche per le
+  azioni NPC; chip dei tag NPC con etichetta e tooltip come quelli dei PG.
+
+
 ## 11 settembre 2026 — Playtest di chiusura delle Sessioni 9-14 sul mondo di Maar (build 1.5.1)
 
 - Chiuse anche le caselle rimaste delle Sessioni 1-8: jobs e burden che sopravvivono al form, Party Resolve +1 a inizio

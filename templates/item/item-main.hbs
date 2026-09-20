@@ -158,10 +158,24 @@
         {{#if isEditable}}<textarea name="system.comebackEffect" class="icon-editor">{{system.comebackEffect}}</textarea>{{/if}}
       {{/if}}
 
+      {{!-- Reading order of the blocks above, only for the abilities the book
+           prints in an unusual sequence (Effect before the attack, Area before
+           the Effect…). Empty = the standard order. --}}
+      {{#if isEditable}}
+        <h4 class="icon-section__title">Block Order <small>(leave empty for the standard order: hit, miss, area, sections, charge, heroic, exceed, collide, slay, crit, finish, comeback — "sections" = the "Label:" blocks written in the description)</small></h4>
+        <input type="text" name="system.blockOrder" value="{{system.blockOrder}}"
+               placeholder="e.g. sections, hit, miss — the listed ones come first">
+      {{/if}}
+
       {{#if (icon-or system.comboEffect isEditable)}}
         <h4 class="icon-section__title">⚡ Combo Effect <small>(replaces the ability when a Combo token is spent; requires the Combo checkbox above)</small></h4>
         <div class="icon-editor-wrap">{{{enriched.comboEffect}}}</div>
         {{#if isEditable}}<textarea name="system.comboEffect" class="icon-editor">{{system.comboEffect}}</textarea>{{/if}}
+        {{#if isEditable}}
+          <label title="Comma-separated tags that REPLACE the ability's tags while the combo version is used (e.g. attack, true-strike, medium-blast). Leave empty if the combo doesn't change them.">Tags of the combo version</label>
+          <input type="text" name="system.comboTags" value="{{system.comboTags}}"
+                 placeholder="e.g. attack, true-strike, medium-blast">
+        {{/if}}
       {{/if}}
     </div>
 
@@ -240,6 +254,8 @@
         <select name="system.cost" {{#unless isEditable}}disabled{{/unless}}>
           <option value="1action"  {{#icon-eq system.cost "1action"}}selected{{/icon-eq}}>1 Action</option>
           <option value="2actions" {{#icon-eq system.cost "2actions"}}selected{{/icon-eq}}>2 Actions</option>
+          {{!-- Death Sentence, Elemental and High Prophecy are Free Actions --}}
+          <option value="free"     {{#icon-eq system.cost "free"}}selected{{/icon-eq}}>Free Action</option>
         </select>
         <label>Resolve Cost</label>
         <input type="number" name="system.resolveCost" value="{{system.resolveCost}}" min="1"

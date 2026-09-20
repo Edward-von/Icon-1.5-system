@@ -34,6 +34,15 @@ export class AbilityData extends foundry.abstract.TypeDataModel {
       finishingBlowEffect: new HTMLField({ required: true, initial: "" }),   // Vagabond
       comebackEffect:      new HTMLField({ required: true, initial: "" }),   // user bloodied
 
+      // Reading order of the rules blocks, when it differs from the usual book
+      // layout (Hit, Miss, Area, then the "Label:" blocks of the description,
+      // then Charge/Heroic/…). Comma-separated keys of helpers/ability-blocks.mjs
+      // — "sections" stands for the description blocks. The keys listed here go
+      // first, the others keep their default order behind them, so
+      // "sections" alone is enough for "Effect: … then the attack".
+      // Empty = default order.
+      blockOrder: new StringField({ required: true, initial: "" }),
+
       talent1:     new HTMLField({ required: true, initial: "" }),
       talent2:     new HTMLField({ required: true, initial: "" }),
       mastery:     new HTMLField({ required: true, initial: "" }),
@@ -58,6 +67,13 @@ export class AbilityData extends foundry.abstract.TypeDataModel {
       // token is set, the sheet shows the combo version instead of normal effects.
       isCombo:     new BooleanField({ required: true, initial: false }),
       comboEffect: new HTMLField({ required: true, initial: "" }),
+      // Tags of the combo version, when it changes them ("HADES — Gains True
+      // Strike and Medium Blast", "The Hook: Gains range 2"). Same shape as
+      // talent1Tags: a comma-separated list that REPLACES `tags` while the
+      // combo version is used — area templates, the attack dialog and the
+      // chat card all read the resolved list. Empty = the combo keeps the
+      // ability's own tags.
+      comboTags:   new StringField({ required: true, initial: "" }),
 
       // Which talent (if any) the character has unlocked for this ability.
       // 0 = no talent chosen, 1 = Talent I locked in, 2 = Talent II locked in.

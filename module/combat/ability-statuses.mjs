@@ -449,7 +449,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         let success = _dmgChunk(successText);
         // "…or be shoved 3, or just 1 on a successful save": a bare number only means
         // damage when the failed-save branch deals damage too.
-        if (!fail.deals && !/\[d\]|fray|damage/i.test(successText)) success = { deals: false };
+        if (!fail.deals && !/\[d\]|\bfray\b|\bdamage\b/i.test(successText)) success = { deals: false };
         if (fail.deals || success.deals) {
           const saveDamage = { fail, success: success.deals ? success : null, label: `${_dmgLabel(fail)}${success.deals ? ` / ${_dmgLabel(success)} on a successful save` : ""}` };
           const gated = blockEntries.filter(e => e._sentenceIndex === si && !e.kind && e.when !== "always");
@@ -582,6 +582,10 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
   const gains   = entries.filter(e => e.kind === "gain");
   const notes   = entries.filter(e => e.kind === "note");
   const sourceTokenId = source.getActiveTokens?.()?.[0]?.id ?? "";
+  // Sealed (p.104) — a plain read, so this module stays free of imports from
+  // the Foundry side. Only a warning here: the seal may well be gone by the
+  // time anyone clicks, and inflict-status.mjs checks again at that moment.
+  const sealed = !!source.statuses?.has?.("sealed");
   const parts = [];
 
   const groupsOf = (list) => {
@@ -636,6 +640,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
     const hasDmg = inflict.some(e => e.saveDamage);
     parts.push(`<div class="icon-chat-statuses" data-ability="${esc(abilityName)}">
       <div class="icon-chat-statuses__header"><span>Inflict</span><span class="icon-chat-statuses__note">click to apply · 🎲 = save first (10+)${hasDmg ? " · 💥 = damage rolled after the save" : ""}</span></div>
+      ${sealed ? `<div class="icon-chat-statuses__sealed">⛔ <strong>${esc(source.name)}</strong> is <strong>Sealed</strong>: a sealed character cannot inflict statuses (p.104).${hasDmg ? " The 💥 damage rows still work." : ""}</div>` : ""}
       ${rowsHtml}
     </div>`);
   }

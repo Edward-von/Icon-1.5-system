@@ -20,6 +20,11 @@ export class IconActor extends Actor {
    * Grant +1 AP when XP crosses the halfway mark (7/15) for the first time
    * in a given level. The flag `system.narrative.xp.halfwayBonusClaimed` is
    * set to true on the same update so the bonus is never granted twice.
+   *
+   * Level 0 is excluded: "At level 1 and higher, once you hit 7 xp, you gain
+   * an ability point" (p.112, repeated on p.240: "At level 1 and every level
+   * afterwards"). A level-0 character reaching 7 xp gains nothing — the first
+   * AP of the game are the +2 of the level-up to 1.
    * @override
    */
   async _preUpdate(changed, options, user) {
@@ -31,9 +36,10 @@ export class IconActor extends Actor {
 
     const oldXp    = this.system.narrative?.xp?.value ?? 0;
     const claimed  = this.system.narrative?.xp?.halfwayBonusClaimed ?? false;
+    const level    = this.system.combat?.level ?? 0;
     const HALFWAY  = 7;
 
-    if (!claimed && oldXp < HALFWAY && newXp >= HALFWAY) {
+    if (level >= 1 && !claimed && oldXp < HALFWAY && newXp >= HALFWAY) {
       const currentAp = this.system.combat?.apTotal ?? 0;
       foundry.utils.setProperty(changed, "system.combat.apTotal", currentAp + 1);
       foundry.utils.setProperty(changed, "system.narrative.xp.halfwayBonusClaimed", true);
@@ -62,6 +68,18 @@ export class IconActor extends Actor {
     const stance = foundry.utils.getProperty(changed, "system.combat.stance");
     if (stance === undefined) return;          // stance not part of this update
     await this._syncStanceMarker(stance);
+  }
+
+  /**
+   * The stance a character is currently in, "" when none. Reads the field a
+   * PC keeps it in; foes and legends have no stance field, so they answer "".
+   * One place to ask, so the ability panel, the roll dialogs and the token HUD
+   * all show the same thing.
+   * @param {Actor} actor
+   * @returns {string}
+   */
+  static stanceOf(actor) {
+    return String(actor?.system?.combat?.stance ?? "").trim();
   }
 
   /**

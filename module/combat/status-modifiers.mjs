@@ -4,10 +4,15 @@
  * Used by combatRoll and damageRoll prompts to pre-fill the boon/curse fields
  * and show a transparent breakdown ("Dazed: +1 curse on attacks").
  *
- * Sources: ICON 1.5 manual pp. 103–105.
+ * Two sources feed those fields: the statuses on the actor, and the boons an
+ * ability carries in its own tag line (p.12: "many character abilities will
+ * give boons built in" — Strafe Shot is "1 action, Attack, Range 3, +1 boon").
+ *
+ * Sources: ICON 1.5 manual pp. 103–105, boons/curses p.12.
  */
 
 import { ICON_STATUSES } from "./statuses.mjs";
+import { tagKey } from "./defenses.mjs";
 
 /**
  * Per-status modifier definitions. Only includes statuses that have a
@@ -77,4 +82,36 @@ export function groupStatusesForUI() {
     else               groups.negative.push(entry);
   }
   return groups;
+}
+
+/* -------------------------------------------------- */
+/*  Boons / curses written into an ability's tags      */
+/* -------------------------------------------------- */
+
+// The packs spell them two ways: "+1-boon" on the job abilities, "boon-1" /
+// "curse-2" on foes, legends and the foe-ability library.
+const TAG_N_FIRST = /^\+?(\d+)-(boons?|curses?)$/;
+const TAG_N_LAST  = /^(boons?|curses?)-(\d+)$/;
+
+/**
+ * Boons and curses an ability grants itself through its tags (p.12).
+ * Accepts raw strings or the {raw,label} chips resolveAbilityTags returns, so
+ * a talent that adds "+1 boon" is picked up once its tags are resolved.
+ * @returns {{boons:number, curses:number, notes:string[]}}
+ */
+export function getTagRollMods(tags) {
+  const out = { boons: 0, curses: 0, notes: [] };
+  for (const tag of Array.isArray(tags) ? tags : []) {
+    const key = tagKey(tag);
+    const first = TAG_N_FIRST.exec(key);
+    const last  = first ? null : TAG_N_LAST.exec(key);
+    const kind  = first ? first[2] : last?.[1];
+    const n     = Number(first ? first[1] : last?.[2]);
+    if (!kind || !Number.isFinite(n) || n <= 0) continue;
+    if (kind.startsWith("boon")) out.boons += n; else out.curses += n;
+  }
+  const label = (n, word) => `${n} ${word}${n > 1 ? "s" : ""}`;
+  if (out.boons)  out.notes.push(`This ability: +${label(out.boons, "boon")} (tag)`);
+  if (out.curses) out.notes.push(`This ability: +${label(out.curses, "curse")} (tag)`);
+  return out;
 }

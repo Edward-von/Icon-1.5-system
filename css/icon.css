@@ -722,6 +722,37 @@
   background: var(--ic-gold);
 }
 
+/* --- Clock board (actor type "clock") --------------------------------- */
+/* Each card sets --clock-color, so several clocks on one board stay apart. */
+.icon-clock-card { --clock-color: var(--ic-gold); }
+.icon-clock-card .icon-clock-seg--filled {
+  background: var(--clock-color);
+  border-color: var(--clock-color);
+  box-shadow: 0 0 3px color-mix(in srgb, var(--clock-color) 60%, transparent);
+}
+.icon-clock-card .icon-clock-seg:hover { border-color: var(--clock-color); }
+.icon-clock-board { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+.icon-clock-board__head { display: flex; align-items: center; gap: 8px; }
+.icon-clock-board__name { flex: 1 1 auto; font-family: var(--ic-display); font-size: 1.2em; background: transparent; border: none; color: var(--ic-text-bright); }
+.icon-clock-board__name:focus { background: var(--ic-bg-field); border-radius: var(--ic-radius-sm); }
+.icon-clock-card {
+  padding: 8px; border-radius: var(--ic-radius);
+  background: var(--ic-bg-panel);
+  border: 1px solid var(--ic-border-subtle);
+  border-left: 4px solid var(--clock-color);
+}
+.icon-clock-card--full { background: color-mix(in srgb, var(--clock-color) 12%, var(--ic-bg-panel)); }
+.icon-clock-card__head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+.icon-clock-card__head input[type="text"] { flex: 1 1 auto; min-width: 0; }
+.icon-clock-card__head input[type="color"] { width: 26px; height: 24px; padding: 0; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: none; cursor: pointer; }
+.icon-clock-card__count { font-family: var(--ic-display); color: var(--ic-text-bright); white-space: nowrap; }
+.icon-clock-card__note { width: 100%; margin-top: 6px; font-size: .84em; }
+.icon-clock-row { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
+.icon-btn--secret-on { background: var(--ic-bg-deep); border-color: var(--ic-gold); color: var(--ic-gold); }
+/* The clock posted to chat. */
+.icon-chat-card--clock .icon-clock-seg { width: 16px; height: 16px; cursor: default; }
+.icon-chat-card--clock .icon-clock-seg--filled { background: var(--clock-color, var(--ic-gold)); border-color: var(--clock-color, var(--ic-gold)); }
+
 /* ============================================================
    16. XP Bar
    ============================================================ */
@@ -2274,6 +2305,10 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-kw { border-bottom: 1px dotted var(--ic-gold-dim); cursor: help; }
 .icon-kw--status { font-weight: 600; color: var(--ic-gold-bright); border-bottom-color: var(--ic-gold); }
 .icon-kw:hover { background: rgba(200,150,28,.12); }
+/* Same hint on a rules block's heading (Finishing Blow:, Charge:, Exceed:…),
+   which carries the rule as a tooltip like the keywords in the text do. */
+.icon-kw-label { border-bottom: 1px dotted var(--ic-gold-dim); cursor: help; }
+.icon-kw-label:hover { background: rgba(200,150,28,.12); }
 
 /* Power die tracked on an ability / trait item */
 .icon-power-die-widget { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 4px 0 6px; padding: 4px 6px; border-radius: var(--ic-radius-sm); background: rgba(0,0,0,.08); }
@@ -2574,6 +2609,29 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-btn--mark  { border-color: var(--ic-purple-bright); color: var(--ic-purple-bright); }
 .icon-btn--mark:hover { background: var(--ic-purple); color: #fff; }
 .icon-btn-roll.icon-btn--mark { color: var(--ic-purple-bright); }
+/* Take / drop stance, on abilities tagged Stance (one at a time, p.104). */
+.icon-btn--stance { border-color: var(--ic-gold-dim); color: var(--ic-gold); }
+.icon-btn--stance:hover { background: var(--ic-gold-dim); color: #1a1408; }
+.icon-btn--stance-on { background: var(--ic-gold); color: #1a1408; border-color: var(--ic-gold); font-weight: 600; }
+/* Infuse buttons (Wright): spend Aether to arm a version of the ability. */
+.icon-btn--infuse { border-color: #2980b9; color: #7fc4f0; }
+.icon-btn--infuse:hover { background: #2980b9; color: #fff; }
+.icon-btn--infuse-on { background: #2980b9; color: #fff; font-weight: 600; }
+/* Aura colour picker, next to the stance row. */
+.icon-aura-color { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; font-size: .74em; color: var(--ic-text-dim); }
+.icon-aura-color input[type="color"] { width: 26px; height: 22px; padding: 0; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: none; cursor: pointer; }
+/* Summon chips on the ability panel: drag one onto the map to place it. */
+.icon-summon-chip {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 3px;
+  font-size: .78em; color: var(--ic-text-bright); cursor: grab;
+  background: rgba(80,48,160,.14); border: 1px dashed var(--ic-purple-bright);
+  border-radius: 999px;
+}
+.icon-summon-chip:hover { background: rgba(80,48,160,.28); }
+.icon-summon-chip:active { cursor: grabbing; }
+.icon-summon-chip img { border-radius: 50%; background: #000; }
+/* The stance a target is in, on the roll dialogs' target rows. */
+.icon-roll-target__stance { color: var(--ic-gold-bright); white-space: nowrap; }
 .icon-mark-chip {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 1px 6px; font-size: 0.78em; border-radius: var(--ic-radius-sm);
@@ -3375,6 +3433,12 @@ ol.chat-log .chat-message,
   text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px;
 }
 .icon-chat-statuses__note { color: var(--ic-text-dim); text-transform: none; letter-spacing: normal; font-style: italic; }
+/* The acting character is Sealed (p.104): the status buttons below will refuse. */
+.icon-chat-statuses__sealed {
+  font-size: .78em; line-height: 1.3; margin: 2px 0 4px; padding: 3px 6px;
+  color: #ffb4a0; background: rgba(122,31,46,.25);
+  border: 1px solid rgba(122,31,46,.6); border-radius: 3px;
+}
 .icon-chat-statuses__row {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   padding: 4px 6px; margin: 3px 0;
@@ -4534,6 +4598,14 @@ ol.chat-log .chat-message,
   border: 1px solid #8060c0;
 }
 
+/* A block the combo version rewrites or adds, on the combo chat card. */
+.icon-ability-block--combo {
+  padding-left: 8px;
+  border-left: 2px solid #8060c0;
+  background: rgba(80, 48, 160, .12);
+}
+.icon-ability-block--combo strong { color: #d0b0ff; }
+
 /* ============================================================
    Clock +/- buttons (burden / ambition)
    ============================================================ */
@@ -4742,9 +4814,35 @@ ol.chat-log .chat-message,
 .icon-sheet .icon-setup-banner { margin-top: 8px; }
 
 /* --- Tabs --- */
-.icon.sheet .tabs { border-bottom-color: var(--ic-border-subtle); padding: 0 8px; }
-.icon.sheet .tabs .item { padding: 10px 12px; font-size: .86em; letter-spacing: .02em; text-transform: none; }
-.icon.sheet .tabs .item.active { color: var(--ic-gold-bright); border-bottom-color: var(--ic-gold-bright); font-weight: 600; }
+/* The five tabs used to run together as one strip of words. Each one now sits
+   in its own cell: a hairline divider between them, a little breathing room,
+   and the active one lifted out of the bar with its own background. */
+.icon.sheet .tabs { border-bottom-color: var(--ic-border-subtle); padding: 0 6px; gap: 0; }
+.icon.sheet .tabs .item {
+  position: relative;
+  padding: 10px 14px;
+  font-size: .86em;
+  letter-spacing: .02em;
+  text-transform: none;
+  border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
+}
+/* Divider between two tabs (not before the first one). */
+.icon.sheet .tabs .item + .item::before {
+  content: "";
+  position: absolute; left: 0; top: 22%; bottom: 22%;
+  width: 1px;
+  background: var(--ic-border-subtle);
+}
+.icon.sheet .tabs .item:hover { background: rgba(200,150,28,.07); }
+.icon.sheet .tabs .item.active {
+  color: var(--ic-gold-bright);
+  border-bottom-color: var(--ic-gold-bright);
+  font-weight: 600;
+  background: linear-gradient(to bottom, rgba(200,150,28,.16), rgba(200,150,28,.04));
+}
+/* The divider disappears around the active tab, so its card reads as one piece. */
+.icon.sheet .tabs .item.active::before,
+.icon.sheet .tabs .item.active + .item::before { background: transparent; }
 
 /* --- Sections & cards --- */
 .icon-section { background: #161c26; border-color: var(--ic-border-subtle); }
@@ -5123,10 +5221,13 @@ ol.chat-log .chat-message,
 .icon-dots-row { display: flex; align-items: center; gap: 6px; padding: 3px 6px; border-radius: var(--ic-radius-sm); background: var(--ic-bg-panel); border: 1px solid var(--ic-border-faint, var(--ic-border-subtle)); }
 .icon-dots-row--primary { border-color: rgba(200,150,28,.5); background: rgba(200,150,28,.08); }
 .icon-dots-row__label { flex: 1 1 auto; font-size: .84em; font-weight: 600; color: var(--ic-text-bright); text-transform: capitalize; }
-.icon-dots-row .icon-action-dots .icon-dot { cursor: default; }
+/* The dots are click-to-set, like the ones on the sheet (they inherit the
+   .icon-dot pointer + hover glow); only the ones past the level-0 cap are inert. */
 .icon-dots-row .icon-dot.base { background: var(--ic-gold-dim); border-color: var(--ic-gold-dim); }
 .icon-dots-row .icon-dot.alloc { background: var(--ic-gold); }
-.icon-dots-row .icon-dot.capped { border-color: rgba(255,255,255,.12); }
+.icon-dots-row .icon-dot.capped { border-color: rgba(255,255,255,.12); cursor: not-allowed; }
+.icon-dots-row .icon-dot.capped:hover { background: transparent; box-shadow: none; }
+.icon-dots-row .icon-dot.capped:active { transform: none; }
 .icon-dots-row__btn { width: 20px; height: 20px; padding: 0; line-height: 1; font-size: .9em; }
 .icon-dots-row__btn:disabled { opacity: .3; cursor: not-allowed; }
 
@@ -5142,6 +5243,9 @@ ol.chat-log .chat-message,
 .icon-wizard__footer .icon-btn--primary:disabled { opacity: .45; cursor: not-allowed; }
 .icon-wizard__summary { flex: 1 1 auto; font-size: .8em; color: var(--ic-text-dim); }
 .icon-wizard__summary strong { color: var(--ic-gold-bright); }
+/* Something still has to be picked before Confirm goes through (level up: the
+   action improvements and the bond power are lost if they aren't spent). */
+.icon-wizard__summary--warn { color: #ffb4a0; }
 
 /* Level-up recap card */
 .icon-wizard__recap { background: rgba(200,150,28,.05); border-left-color: var(--ic-gold); }
@@ -5236,6 +5340,10 @@ ol.chat-log .chat-message,
 .icon-roll-chip--combo input:checked + span { background: var(--ic-purple); color: #fff; border-color: var(--ic-purple-bright); }
 .icon-roll-chip--combo input:checked + span small { color: rgba(255,255,255,.75); }
 .icon-roll-chip--hatred span { border-color: var(--ic-red-bright); }
+/* Damage types (Pierce / Divine, p.104): they remove reductions instead of
+   adding a modifier, so they read differently from the other chips. */
+.icon-roll-chip--type span { border-color: rgba(200,150,28,.55); }
+.icon-roll-chip--type input:checked + span { background: rgba(200,150,28,.2); color: var(--ic-gold-bright); }
 
 /* live preview */
 .icon-roll-preview { margin-top: 2px; padding: 6px 10px; background: rgba(200,150,28,.08); border: 1px solid rgba(200,150,28,.3); border-radius: var(--ic-radius-sm); display: flex; flex-direction: column; gap: 2px; }
@@ -5253,12 +5361,12 @@ ol.chat-log .chat-message,
   padding: 0; height: 100%; overflow: hidden;
   display: grid; gap: 0 10px;
   grid-template-columns: minmax(360px, 5fr) minmax(340px, 6fr);
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto minmax(84px, auto) minmax(140px, 1fr) auto;
   grid-template-areas: "hero hero" "party roster" "encounter roster" "footer footer";
   background: var(--ic-bg-dark); color: var(--ic-text-normal);
 }
 .icon.encounter-designer [data-application-part="hero"]      { grid-area: hero; }
-.icon.encounter-designer [data-application-part="party"]     { grid-area: party; margin-left: 10px; }
+.icon.encounter-designer [data-application-part="party"]     { grid-area: party; margin-left: 10px; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; }
 .icon.encounter-designer [data-application-part="roster"]    { grid-area: roster; margin-right: 10px; min-height: 0; display: flex; flex-direction: column; }
 .icon.encounter-designer [data-application-part="encounter"] { grid-area: encounter; margin-left: 10px; min-height: 0; display: flex; flex-direction: column; }
 .icon.encounter-designer [data-application-part="footer"]    { grid-area: footer; }
@@ -5273,7 +5381,12 @@ ol.chat-log .chat-message,
 .icon-encounter__over { color: #ff8a8a; }
 
 /* Party */
-.icon-encounter__pcs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.icon-encounter__pcs {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px;
+  /* Worlds can hold dozens of PC actors (sheets used as trackers): cap the chip list and
+     scroll it, otherwise the auto party row eats the encounter row and nothing scrolls. */
+  flex: 0 1 auto; min-height: 44px; max-height: 176px; overflow-y: auto; padding-right: 2px;
+}
 .icon-encounter__pc {
   display: flex; align-items: center; gap: 8px; padding: 4px 10px 4px 4px; cursor: pointer;
   background: var(--ic-bg-panel); color: var(--ic-text-dim); border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius);
@@ -5389,9 +5502,33 @@ ol.chat-log .chat-message,
 }
 .icon-def-chip--on { background: rgba(36,104,56,.28); border-color: rgba(52,160,88,.6); color: #b0e8c0; font-weight: 600; }
 .icon-def-chip--trait { background: rgba(200,150,28,.12); border-color: rgba(200,150,28,.4); color: var(--ic-gold-bright); }
+/* An Invoke the character has not unlocked yet, on the Relics tab: visible
+   (it is part of the relic's path) but clearly not usable. */
+.icon-relic-card__invoke--locked { opacity: .55; }
+.icon-relic-card__invoke--locked em { text-decoration: line-through; }
+
+/* Save buttons on the Conditions tab (one per status that can still be saved). */
+.icon-save-buttons { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.icon-save-btn { border-color: rgba(200,150,28,.5); }
+.icon-save-dialog { display: flex; flex-direction: column; gap: 6px; padding: 4px 0; }
+.icon-save-dialog label { display: flex; align-items: center; gap: 6px; }
+.icon-save-dialog__mods { display: flex; gap: 12px; }
+.icon-save-dialog__mods input { width: 60px; }
+
 .icon-def-chip--stealth, .icon-def-chip--intangible { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.18); color: #c0c0b8; }
 .icon-roll-target { flex-wrap: wrap; }
 .icon-roll-target__defs { display: flex; flex-wrap: wrap; gap: 3px; flex-basis: 100%; padding-left: 36px; }
+
+/* Attack dialog target rows: pick the attack target of an area attack (the
+   others only take the area effect) and drop a target with the ✕. */
+.icon-roll-target__pick { display: flex; align-items: center; }
+.icon-roll-target__pick input { accent-color: var(--ic-gold-bright); cursor: pointer; }
+.icon-roll-target__role { font-size: .68em; letter-spacing: .08em; text-transform: uppercase; color: var(--ic-text-dim);
+                          border: 1px solid var(--ic-border-vis); border-radius: var(--ic-radius-sm); padding: 0 4px; }
+.icon-roll-target--attack .icon-roll-target__role { visibility: hidden; }
+.icon-roll-target--attack .icon-roll-target__name { color: var(--ic-gold-bright); }
+.icon-roll-target__drop { opacity: .55; }
+.icon-roll-target__drop:hover { opacity: 1; }
 .icon-chat-card__target-defs { display: inline-flex; flex-wrap: wrap; gap: 3px; }
 .icon-chat-card--dodged { border-left-color: rgba(46,132,216,.7); }
 

@@ -5,8 +5,10 @@
     <span class="icon-badge icon-badge--rank">Rank {{rl.currentRank}}{{#if rl.aspectUnlocked}} (Aspected){{/if}}</span>
     {{#if rl.invokeType}}<span class="icon-badge icon-badge--invoke">{{rl.invokeType}}</span>{{/if}}
   </div>
+  {{!-- Invoke: only when the rank that grants it is unlocked (IconSheet strips
+       the fields otherwise), tagged with that rank so it reads unambiguously. --}}
   {{#if rl.invokeCondition}}
-    <p><em>{{rl.invokeCondition}}</em></p>
+    <p><em>Invoke{{#if rl.invokeRankLabel}} ({{rl.invokeRankLabel}}){{/if}}: {{rl.invokeCondition}}</em></p>
   {{/if}}
   {{#if rl.invokeEffect}}
     <div class="icon-chat-card__desc">{{{rl.invokeEffect}}}</div>

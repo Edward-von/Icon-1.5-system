@@ -154,8 +154,13 @@
         <div class="icon-wizard__step-head">
           <span class="icon-wizard__num">1</span>
           <h3 class="icon-wizard__step-title">New abilities</h3>
-          <span class="icon-wizard__counter" data-role="ap-counter">AP {{apGranted}} left</span>
+          <span class="icon-wizard__counter" data-role="ap-counter">AP {{apBudgetTotal}} left</span>
         </div>
+        {{#if carryAp}}
+          <p class="icon-wizard__warn">You still have <strong>{{carryAp}} AP</strong> from earlier levels
+            (the +1 at the halfway mark is easy to forget). They are included in the budget above — spend them
+            here, or later from the Combat tab.</p>
+        {{/if}}
         <p class="icon-wizard__hint">
           From <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em>, chapter ≤ {{actorChapter}}. Each ability costs <strong>1 AP</strong>,
           the same pool as the talents below. At least half of your equipped abilities must match <span class="icon-badge icon-class--{{primaryClass}}">{{primaryClass}}</span>
@@ -308,8 +313,10 @@
         <div class="icon-wizard__step-head">
           <span class="icon-wizard__num">6</span>
           <h3 class="icon-wizard__step-title">Improve actions</h3>
-          <span class="icon-wizard__counter">+{{improveSlots.length}} dot{{#icon-gt improveSlots.length 1}}s{{/icon-gt}}</span>
+          <span class="icon-wizard__counter" data-role="improve-counter">{{improveSlots.length}} to pick</span>
         </div>
+        <p class="icon-wizard__hint">Each dot raises one action by 1 (max rating 4, p.17). They have to be spent now:
+          the level up won't confirm while a slot is empty.</p>
         <div class="icon-wizard__fields">
           {{#each improveSlots as |slot|}}
             <label class="icon-wizard__field">

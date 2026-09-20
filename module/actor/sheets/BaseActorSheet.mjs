@@ -9,16 +9,124 @@
  * `this.element` persists across re-renders in ApplicationV2 — rebinding on
  * every render would stack N duplicate listeners.
  */
-import { applyStatus, removeStatus, hasStatus,
-         adjustStatusCharges, cycleOngoingStatus } from "../../combat/statuses.mjs";
+import { applyStatus, removeStatus, hasStatus, getStatusCharges,
+         adjustStatusCharges, cycleOngoingStatus, saveableStatusEffects } from "../../combat/statuses.mjs";
+import { saveRoll } from "../../dice/rolls.mjs";
 import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
 export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
 
+  /** Actions every sheet gets. Subclasses list `rollSave: BaseActorSheet.onRollSave`
+   *  in their own DEFAULT_OPTIONS as well, so the button works whether or not
+   *  ApplicationV2 merges the base class's options. */
+  static DEFAULT_OPTIONS = {
+    actions: {
+      rollSave: BaseActorSheet.onRollSave,
+    },
+  };
+
   _log(...args) {
     console.debug(`[ICON | ${this.constructor.name}]`, ...args);
+  }
+
+  /* -------------------------------------------------- */
+  /*  Saves                                              */
+  /* -------------------------------------------------- */
+
+  /** The statuses on this actor that a save can still clear (p.94). */
+  _saveableStatuses() {
+    return saveableStatusEffects(this.document).map(e => ({
+      uuid: e.uuid,
+      name: e.name,
+      img:  e.img,
+      id:   e.statuses?.first?.() ?? e.getFlag("core", "statusId") ?? "",
+    }));
+  }
+
+  /**
+   * Roll a save (1d20 + boons − curses, 10+ succeeds, p.94). Shared by every
+   * sheet: a foe or a legend saves exactly like a character, and the button on
+   * the Conditions tab passes the status it is rolling against
+   * (`data-effect-uuid`), so a successful save removes it. The generic button
+   * (no uuid) asks which status by hand.
+   */
+  static async onRollSave(event, target) {
+    event?.stopPropagation?.();
+    const actor = this.document;
+    const list  = this._saveableStatuses();
+    const picked = target?.dataset?.effectUuid
+      ? list.find(s => s.uuid === target.dataset.effectUuid)
+      : null;
+
+    const blessings = getStatusCharges(actor, "blessed");
+    const options = list.map(s => `<option value="${s.uuid}"${picked?.uuid === s.uuid ? " selected" : ""}>${s.name}</option>`).join("");
+    const content = `
+      <div class="icon-save-dialog">
+        ${list.length
+          ? `<label>Status <select name="effectUuid">${options}<option value="">— other (type it) —</option></select></label>`
+          : `<p class="notes">No status on ${actor.name} can be saved against right now — type one below to roll anyway.</p>`}
+        <label>Or a status by name <input type="text" name="statusLabel" value="${picked ? "" : "status"}" placeholder="status"></label>
+        <label><input type="checkbox" name="ongoing"> Ongoing + (automatic failure)</label>
+        ${blessings > 0
+          ? `<label><input type="checkbox" name="useBlessing"> Spend a Blessed charge for +1 boon (${blessings} left)</label>`
+          : `<p class="notes">Not blessed.</p>`}
+        <div class="icon-save-dialog__mods">
+          <label>Boons <input type="number" name="boons" value="0" min="0" max="9"></label>
+          <label>Curses <input type="number" name="curses" value="0" min="0" max="9"></label>
+        </div>
+      </div>`;
+
+    let result;
+    try {
+      result = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `Save — ${actor.name}` },
+        content,
+        ok: {
+          label: "🎲 Roll Save",
+          callback: (_e, button, dialog) => {
+            const root = button?.form ?? dialog?.element ?? dialog;
+            const q = (n) => root.querySelector(`[name="${n}"]`);
+            return {
+              effectUuid:  q("effectUuid")?.value ?? "",
+              statusLabel: q("statusLabel")?.value?.trim() ?? "",
+              ongoing:     !!q("ongoing")?.checked,
+              useBlessing: !!q("useBlessing")?.checked,
+              boons:       Math.max(0, Number(q("boons")?.value) || 0),
+              curses:      Math.max(0, Number(q("curses")?.value) || 0),
+            };
+          },
+        },
+        rejectClose: false,
+      });
+    } catch { return; }
+    if (!result) return;
+
+    const effect = result.effectUuid ? list.find(s => s.uuid === result.effectUuid) : null;
+    const label  = effect?.name || result.statusLabel || "status";
+
+    let boons = result.boons, boonNote = "";
+    if (result.useBlessing && blessings > 0) {
+      boons += 1;
+      boonNote = "blessing";
+      await adjustStatusCharges(actor, "blessed", -1);   // clears Blessed at 0
+    }
+
+    this._log(`rollSave — "${label}" | ongoing: ${result.ongoing} | boons: ${boons} | curses: ${result.curses}`);
+    const { success } = await saveRoll({
+      statusLabel: label,
+      ongoing:     result.ongoing,
+      boons, boonNote,
+      curses:      result.curses,
+      actor,
+    });
+
+    // A successful save clears the status it was rolled against.
+    if (success && effect?.uuid && !result.ongoing) {
+      try { await (await fromUuid(effect.uuid))?.delete(); }
+      catch (err) { console.warn("[ICON | BaseActorSheet] could not remove the saved status", err); }
+    }
   }
 
   _onRender(context, options) {
@@ -41,6 +149,12 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
    * rules, bond details, foe "Edit Effects"…) snapped shut whenever anyone
    * ended their turn. Keyed by `data-details-key` when present, otherwise by
    * position within the part.
+   *
+   * The same goes for panels that aren't `<details>` but are shown/hidden by
+   * our own JS (the equipped-ability preview opened by clicking a slot): the
+   * template always re-renders them with the `hidden` attribute, so their
+   * open state has to be carried over too. Those carry a stable
+   * `data-toggle-key`; anything without one is left alone.
    * @override
    */
   _preSyncPartState(partId, newElement, priorElement, state) {
@@ -49,17 +163,29 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
       key:  d.dataset.detailsKey ?? String(i),
       open: d.open,
     }));
+    state.togglePanels = Array.from(priorElement.querySelectorAll("[data-toggle-key]")).map(el => ({
+      key:    el.dataset.toggleKey,
+      hidden: el.hidden,
+    }));
   }
 
   /** @override */
   _syncPartState(partId, newElement, priorElement, state) {
     super._syncPartState(partId, newElement, priorElement, state);
-    if (!state.openDetails?.length) return;
-    const byKey = new Map(state.openDetails.map(s => [s.key, s.open]));
-    newElement.querySelectorAll("details").forEach((d, i) => {
-      const key = d.dataset.detailsKey ?? String(i);
-      if (byKey.has(key)) d.open = byKey.get(key);
-    });
+    if (state.openDetails?.length) {
+      const byKey = new Map(state.openDetails.map(s => [s.key, s.open]));
+      newElement.querySelectorAll("details").forEach((d, i) => {
+        const key = d.dataset.detailsKey ?? String(i);
+        if (byKey.has(key)) d.open = byKey.get(key);
+      });
+    }
+    if (state.togglePanels?.length) {
+      const byKey = new Map(state.togglePanels.map(s => [s.key, s.hidden]));
+      newElement.querySelectorAll("[data-toggle-key]").forEach(el => {
+        const key = el.dataset.toggleKey;
+        if (byKey.has(key)) el.hidden = byKey.get(key);
+      });
+    }
   }
 
   /**
@@ -100,6 +226,18 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
       html.dataset.iconDropBound = "true";
       html.addEventListener("dragover", ev => ev.preventDefault());
       html.addEventListener("drop",     ev => this._onDropSheet(ev));
+      // Summon chips: dragging one onto the canvas drops the compendium actor
+      // there, which is how Foundry places a token. Delegated, so the chips of
+      // every re-render are covered by this single listener.
+      html.addEventListener("dragstart", ev => {
+        const chip = ev.target?.closest?.("[data-summon-uuid]");
+        if (!chip) return;
+        ev.dataTransfer?.setData("text/plain", JSON.stringify({
+          type: "Actor", uuid: chip.dataset.summonUuid,
+        }));
+        ev.dataTransfer.effectAllowed = "copy";
+        this._log?.(`summon drag — "${chip.dataset.summonName}"`);
+      });
     }
 
     // Portrait img picker — V2 sheets don't auto-bind data-edit="img" the way

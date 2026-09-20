@@ -29,6 +29,7 @@ export class SummonSheet extends BaseActorSheet {
     position: { width: 500, height: 420 },
     window:   { resizable: true, controls: [PROTOTYPE_TOKEN_CONTROL, REFERENCE_CONTROL] },
     actions: {
+      rollSave:         BaseActorSheet.onRollSave,   // Conditions tab / save bar
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:     onShowReferenceControl,
       toggleIntangible:  SummonSheet.#onToggleIntangible,
@@ -74,6 +75,9 @@ export class SummonSheet extends BaseActorSheet {
     } else {
       context.summonerName = "—";
     }
+
+    // Save buttons: a summon carries statuses like anyone else (BaseActorSheet#rollSave)
+    context.saveableStatuses = this._saveableStatuses();
 
     _log(`_prepareContext — done | intangible: ${system.intangible}`);
     return context;

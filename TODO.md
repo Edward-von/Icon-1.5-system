@@ -207,9 +207,134 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
 
 ## Playtest della Sessione 14 — FATTO il 10 settembre 2026 (11/11 ok)
 
-- [ ] Cosmetico (S): le card d'attacco di Foe/Legend mostrano i tag grezzi ("true-strike", "line-3") invece delle etichette
+- [x] Cosmetico (S): le card d'attacco di Foe/Legend mostrano i tag grezzi ("true-strike", "line-3") invece delle etichette
       ("True Strike", "Line 3") come le card PG: mappare i tag con lo stesso helper (`resolveAbilityTags` / label) in
       FoeSheet/LegendSheet prima di passarli a `combatRoll`.
+
+## Debug del 13 settembre 2026 — emerso lavorando (da valutare in un blocco futuro)
+
+- [x] **Ordine dei blocchi, casi rimasti** (S ciascuno): il report
+      `icon-compendium-audit/block-order/report.md` elenca 10 abilità in cui l'estrazione del PDF ripete un blocco e
+      l'ordine va deciso a mano (Pandaemonium, Raging Wolf, Dragon Dive, Fairy Ring, Chaos Tarot, Gran Reversa,
+      Tsunami, Chastise, Dervish, Lance — le ultime tre risultano già giuste) e 6 abilità il cui testo non si trova
+      nel .txt del manuale (Ace, Growing Season, Ätherwand, Bifröst, Heave-Ho, Waterspout): vanno confrontate a mano
+      col PDF.
+- [x] **Geo (Geomancer)**: nel manuale (p.218) ha un blocco `Terrain Effect:` ("crea un masso alto 1 nell'area dopo
+      l'attacco") che nel pack non esiste — non è un problema d'ordine ma di dati mancanti. Controllare se altre
+      abilità hanno perso un blocco nella conversione. (M, dati)
+
+## Debug del 20 settembre 2026 — emerso lavorando (da valutare in un blocco futuro)
+
+- [ ] **Filtro nella lista PG dell'Encounter Designer** (S): con ~40 attori di tipo PG nel mondo (schede usate come
+      segnapunti) la lista dei ritratti ora scorre, ma trovare i 4 giocatori veri resta scomodo. Una casella di
+      ricerca come quella del roster, o un ordinamento "prima i selezionati", renderebbe il passo 1 più rapido.
+      Oggi si tira via con i bottoni "On scene" / "All".
+
+- [ ] **Mark che si impilano** (M): "Battalion of Limbs" del Royal Guard (p.332) dice "This mark can be placed more
+      than once and stacks indefinitely" e ogni stack aggiunge +3 danni. Oggi un secondo mark dello stesso
+      marcatore sullo stesso bersaglio sostituisce il primo (regola generale p.95), quindi gli stack non si
+      contano: servirebbe un contatore sul mark per le poche abilità che lo dicono esplicitamente.
+
+- [ ] **Level up, "← Back" perde le scelte del passo 2** (S/M): tornando al passo 1 e ripremendo "Next →" le
+      tendine delle azioni, le abilità spuntate, il relic e il bond power si azzerano (`_captureForm` viene
+      chiamato solo in `#onNextStage`, quindi salva solo i campi del passo 1). Si nota di più ora che il passo 2
+      è obbligatorio: basterebbe catturare il form anche in `#onPrevStage` e ripopolare i campi dal `savedData`.
+
+- [x] **Classi dei Lowlander** — CHIUSO da Edoardo il 20 settembre 2026: va bene così. Il Butcher resta Heavy
+      (corretto il 20 settembre), la sua base Slab e le altre varianti restano Artillery; niente passata sulla
+      fazione. Resta agli atti che il manuale non dà classi ai foe unici dei Lowlander (pp.428-448) e che 20 dei
+      40 nel pack sono artillery.
+
+- [x] **Box "Summons" delle altre job finito nel posto sbagliato** (M, dati): stesso difetto di estrazione del
+      Salt Sprite (corretto il 20 settembre su Rime e Geyser). Il box di fazione/job è finito in coda a un
+      **tratto** invece che a un'abilità in quattro job — Shade → "Darkside", Warden → "Beast Master",
+      Fool → "Cheap Trick", Harvester → "Gardener of Kin" — e nel Seer sta in coda all'abilità **Astra**
+      ("Many seer abilities summon a wild card…"). I tratti vivono anche come copie sulle schede dei PG, quindi
+      serve una migrazione come la 10. Da controllare anche se Chaos Tarot e Sleight of Hand (Seer) devono
+      davvero contenere il blocco "Wild Card — Size 1…" (nel manuale il riquadro del summon è stampato sotto
+      l'abilità, quindi lì probabilmente è giusto).
+
+- [x] **Sealed e gli status positivi** — DECISO da Edoardo il 20 settembre 2026: vale quello che dice il testo
+      dell'abilità. Se l'abilità dice che *infligge* uno status, Sealed lo blocca (blocco Inflict); se dice che
+      il personaggio o un alleato *guadagna* uno status, non è infliggere e passa (blocco Gain). Nessuna modifica
+      al codice: è il comportamento già in `module/combat/inflict-status.mjs`.
+
+- [x] **Trigger scritti due volte** (S, dati): `icon-compendium-audit/block-format/scan-duplicate-blocks.mjs`
+      trova 5 abilità in cui lo stesso trigger è sia nel campo sia nel testo, quindi il pannello lo stampa due
+      volte: Terraforming e Helix Heel (Geomancer, Charge), Aethershard e Blazing Bond (Enochian, Comeback),
+      Nothung (Spellblade, Slay). Blitz e Tsunami sono stati corretti il 20 settembre; per queste cinque serve
+      confrontare col PDF quale delle due versioni tenere.
+- [x] **Refocus e gli Skill Rank dei level up** (S): `↻ Refocus` azzera `skillRanksTotal`, quindi i dot
+      guadagnati con i level up passati spariscono e il contatore torna a "6 dalla creazione". Andrebbe azzerata
+      solo la spesa (le dieci azioni), lasciando il totale.
+- [x] **Area nel testo per NPC** (S): il fallback "area letta dal testo dell'abilità" del 20 settembre vale solo
+      per le abilità dei PG. Le azioni di foe/legend prendono l'area dai tag dell'intestazione: se qualcuna ha
+      la forma solo nel testo, il bottone 📐 non compare nemmeno lì.
+
+## Richieste di Edoardo — 20 settembre 2026 (wishlist, NON bug)
+
+Mandate come lista di desideri durante la sessione di debug del 20 settembre. Nessuna è stata fatta:
+vanno pianificate come blocchi a sé. Le dimensioni sono stime (S/M/L/XL come in legenda).
+
+**Piccole / rapide**
+
+- [x] **Macro XP su attori scelti** (S): `macros/xp-award.mjs` prende `game.actors.filter(a => a.type === "icon"
+      && a.isOwner)`, cioè TUTTI i PG posseduti. Serve al GM per aggiornare la scheda di chi si è dimenticato:
+      aggiungere al dialog una lista di PG con le spunte (o usare gli attori selezionati sul canvas), default
+      "tutti" per non cambiare l'uso attuale. Ricordare `macro-sync` dopo la modifica.
+- [x] **Reference più raggiungibile per i giocatori** (S): oggi 📖 Reference sta nel menu "..." della finestra
+      della scheda (`REFERENCE_CONTROL` in `module/apps/reference.mjs`, registrato in `window.controls`).
+      Metterlo anche come bottone visibile (tab Notes c'è già, ma serve qualcosa di più evidente: bottone nella
+      barra strumenti, voce di menu del gioco, o macro nel pack).
+- [x] **Separazione visiva delle tab della scheda** (S): Narrative / Combat / Conditions / Relics / Notes hanno
+      poco stacco. Ritocco CSS alla `.icon-tabs` (bordo inferiore, divisori, tab attiva più marcata).
+- [x] **Danno piatto nel dialog del danno** (S): `promptDamageMods` (`module/apps/roll-dialogs.mjs`) ha solo lo
+      stepper "Bonus dice" e le spunte Vulnerable / Resistance / Weakened / Hatred. Aggiungere un campo "+N
+      danno piatto" per casi come Harden del Clot (+2 per round).
+- [x] **Spunte per tipo di danno nel dialog del danno** (S/M): Divine / Pierce / True Strike / Unerring come
+      toggle, per i tratti tipo le benedizioni del Mendicant. Da decidere quali hanno effetto meccanico
+      (Pierce e Divine cambiano come si applica armor/riduzioni, p.117) e quali restano promemoria sulla card.
+
+**Medie**
+
+- [x] **Prompt per l'AP non speso** (S/M): al level up, se il PG ha AP liberi da prima (tipico dopo il bonus di
+      metà livello), avvisare nel dialog e proporre di spenderli lì. Il conteggio "AP N left" c'è già in
+      `LevelUpDialog._onRender`; serve leggere anche l'avanzo precedente (`apTotal - apSpent` dalla scheda).
+- [x] **Stance come i mark** (M): oggi la stance è un campo (`system.combat.stance`) con un marcatore sul token
+      (`IconActor`), ma non si vede targettando un altro personaggio né sul pannello dell'abilità. Rifarla sul
+      modello di `module/combat/marks.mjs`: chip sul pannello, riga nella tab Conditions, voce nell'HUD del
+      token, e "stance attiva" visibile a chi targetta.
+- [x] **Automazione Finishing Blow** (M): il blocco Finishing Blow (Vagabond) scatta se il bersaglio è bloodied
+      (≤50% HP). Sulla card d'attacco il blocco è già lì ma spento/acceso a mano: si può accendere da solo
+      leggendo gli HP del bersaglio al momento del tiro, come fa `_blockOn` con l'esito del d20.
+- [x] **Aetherwall automatico** (M): tratto di classe Artillery (p.298) — "Gains resistance against all abilities
+      from characters that are outside of range 2 from them (Cover halves ranged damage)". **Nota**: il manuale
+      dà *resistance*, non cover. Si può applicare il dimezzamento da solo su Apply, come già fanno Cover e
+      Resistance in `module/combat/defenses.mjs`, misurando la distanza attaccante → bersaglio.
+- [x] **Summon trascinabili dalla scheda** (M): poter trascinare un summon dal pannello dell'abilità (o dalla
+      tab Combat) sulla mappa per piazzare il token, se l'utente ha i permessi. Il pack `summons` ha già gli
+      attori; serve un handler dragstart sulla scheda + drop sul canvas.
+- [x] **Colori delle aure scegliibili** (M): le aure si somigliano troppo. Prompt/impostazione per il colore
+      (per attore o per aura) nei template di `module/canvas/area-templates.mjs`. Edoardo usa il modulo "Grid
+      Aware Auras" per questo.
+- [x] **Scheda "clock"** (M/L): un tipo di attore (o journal) per gli orologi di campagna, visto che il modulo
+      Lancer Clocks non funziona più dall'ultimo aggiornamento. ICON ha già i clock narrativi (burden/ambition)
+      sulla scheda PG: si può riusare quel widget in un attore a sé, con condivisione in chat e permessi.
+
+**Grandi**
+
+- [x] **Infuse dei Wright** (L): implementare le versioni Infuse delle abilità (Infuse 1/2/3/X) con scalo
+      automatico dell'Aether dal power die quando si usa quella versione; oggi il testo Infuse è solo un blocco
+      stampato. Include: scelta della versione al tiro (come il combo token), tag/area della versione infusa
+      (Tsunami → Stormlash, Cryo → CRYOTIC Line 8, Rime → DAGON range 6), e **override del piazzamento dei
+      template** quando l'infuse cambia range/area (oggi `placeAreaTemplate` impone le regole di piazzamento e
+      non c'è modo di forzarlo).
+- [x] **Sistema "mazzo" del Seer** (L): il Seer non ha un mazzo di carte in mano — le sue abilità piazzano
+      **Wild Card** sul campo (p.200): summon size 1 intangibili con un small blast inattivo che, toccato
+      dall'area di un'abilità propria o di un alleato, esplode ed estende quell'area; le wild card si possono
+      innescare a catena, e non estendono gli effetti persistenti (terreno). C'è anche la **Master Card**. Gli
+      attori esistono già nel pack `summons`. Serve: piazzamento rapido dal pannello, conteggio delle carte
+      attive, e il collegamento "area che tocca una carta → estendi l'area". Da leggere prima: pp.197-200.
 
 ## Sessione 9+ — Wishlist alta (una per volta, in quest'ordine)
 

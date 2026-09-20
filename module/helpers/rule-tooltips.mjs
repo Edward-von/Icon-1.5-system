@@ -37,9 +37,9 @@ const RULES = {
   "arc":         (n) => `Arc ${n}: ${n} contiguous spaces that can bend; no diagonals.`,
   "burst":       (n) => `Burst ${n}: centered on target, ${n} spaces outward; usually excludes the target space.`,
   "blast":       "Blast: fixed template (see diagram).",
-  "blast-s":     "Small Blast: fixed-shape area centered on origin (small template).",
-  "blast-m":     "Medium Blast: fixed-shape area centered on origin (medium template).",
-  "blast-l":     "Large Blast: fixed-shape area centered on origin (large template).",
+  "blast-s":     "Small Blast: the centre space and the 4 next to it — 5 spaces (p.98).",
+  "blast-m":     "Medium Blast: the 3×3 block around the centre — 9 spaces (p.98).",
+  "blast-l":     "Large Blast: every space within 2 orthogonal steps of the centre — 13 spaces (p.98).",
   "aura":        (n) => n ? `Aura ${n}: continuous ongoing effect that affects all characters within ${n} spaces of the origin (usually the user). Only affects characters while inside.`
                            : "Aura: continuous ongoing effect that affects all characters within the specified range of an origin point. Only affects characters while inside.",
 
@@ -74,8 +74,11 @@ const RULES = {
     ? `Combo (step ${n}): foe combo abilities are a sequence, not a token — each part must be used in order, on different turns, looping back to the start after the last part (p.290).`
     : "Combo: actions with Combo have a base and combo version. Using the base grants a Combo token. The next Combo ability consumes the token and uses its combo version instead. Max one token at a time; all tokens are discarded at combat end.",
   "mark":        "Mark: place a mark on a specific character. Each ability only places one mark at a time; a character can only have one mark per marking ability. Marks persist and are hard for foes to remove.",
+  "multimark":   "Multimark: a mark that isn't limited to one character. The ability keeps every mark it places (marking someone new doesn't end the previous one); a character can still carry only one mark from the same marker at a time (p.95).",
   "summon":      "Summon: places a character under your control. Summons are Intangible and don't count as foes or allies for ability purposes. They act via a summon action on their summoner's turn, or have a passive summon effect. Removed when the summoner is defeated.",
   "rebound":     "Rebound: a rebounded ability bounces off a target character and is redirected from their space as the new origin, respecting cover and line-of-sight from there. Effects tied to the original user (sacrificing HP, moving) still apply. Does not stack.",
+  "boon":        (n) => `Boon${n && Number(n) > 1 ? ` ${n}` : ""}: the attack rolls ${n || 1} extra d6 and adds the highest to the d20 (p.12). The dialog fills it in for you; boons and curses cancel 1 to 1.`,
+  "curse":       (n) => `Curse${n && Number(n) > 1 ? ` ${n}` : ""}: the roll subtracts the highest of ${n || 1} d6 from the d20 (p.12). The dialog fills it in for you; boons and curses cancel 1 to 1.`,
   "power-die":   "Power Die: a d6 tracker tied to a specific ability that ticks up or down based on conditions. Each power die is unique to its ability. Discarded when ticked to 0.",
   "stack-dice":  "Stack Dice (Fool): save a d6 result to influence a future gamble roll, including bomb summons.",
   "stance":      "Stance: an ongoing positive effect. You can only have one stance at a time; taking a new stance drops the old one (or drop as a free action at start of your turn). Refreshes regain its effects.",
@@ -198,6 +201,14 @@ export function explainTag(tag) {
 export function formatTag(tag) {
   const raw = String(tag ?? "").trim();
   if (!raw) return null;
+  // The packs write the same thing two ways ("+1-boon" on job abilities,
+  // "boon-1" on foes): show one label, so the NPC cards read like the PC ones.
+  const bc = /^\+?(\d+)-(boons?|curses?)$/i.exec(raw) ?? (m => m && [m[0], m[2], m[1]])(/^(boons?|curses?)-(\d+)$/i.exec(raw));
+  if (bc) {
+    const n = Number(bc[1]);
+    const word = String(bc[2]).toLowerCase().replace(/s$/, "");
+    return { raw, label: `+${n} ${word[0].toUpperCase()}${word.slice(1)}${n > 1 ? "s" : ""}`, tooltip: explainTag(`${word}-${n}`) };
+  }
   const label = raw
     .split("-")
     .map(w => w ? w[0].toUpperCase() + w.slice(1) : w)
@@ -217,14 +228,20 @@ function _plainText(html) {
 
 /**
  * Resolve the tags an ability currently shows, applying the talent / mastery
- * tag overrides the character has unlocked (see AbilityData.talent1Tags etc).
- * Each active override replaces the whole list; the mastery override wins
- * over the talent one. Tags that were not in the base list are flagged
- * `upgraded` and carry the source (e.g. "Talent II") in their tooltip.
+ * tag overrides the character has unlocked (see AbilityData.talent1Tags etc)
+ * and, with `comboMode`, the combo version's own tags (comboTags): the book's
+ * combo versions change the area, the range or how the attack lands ("HADES —
+ * Gains True Strike and Medium Blast", "The Hook: Gains range 2").
+ * Each active override replaces the whole list; the combo override wins over
+ * mastery, which wins over the talents. Tags that were not in the base list
+ * are flagged `upgraded` and carry the source (e.g. "Talent II") in their
+ * tooltip.
  * @param {object} system  ability system data
+ * @param {object} [options]
+ * @param {boolean} [options.comboMode]  the combo version is the one being used
  * @returns {Array<{raw:string,label:string,tooltip:string|null,upgraded:boolean}>}
  */
-export function resolveAbilityTags(system) {
+export function resolveAbilityTags(system, { comboMode = false } = {}) {
   const s = system ?? {};
   const base = (s.tags ?? []).map(t => String(t ?? "").trim()).filter(Boolean);
   const selected = Number(s.talentSelected ?? 0);
@@ -233,6 +250,7 @@ export function resolveAbilityTags(system) {
   if (selected === 1 && String(s.talent1Tags ?? "").trim()) layers.push({ tags: _parseTagList(s.talent1Tags), source: "Talent I",  text: s.talent1 });
   if (selected === 2 && String(s.talent2Tags ?? "").trim()) layers.push({ tags: _parseTagList(s.talent2Tags), source: "Talent II", text: s.talent2 });
   if (s.masteryUnlocked && String(s.masteryTags ?? "").trim()) layers.push({ tags: _parseTagList(s.masteryTags), source: "Mastery", text: s.mastery });
+  if (comboMode && String(s.comboTags ?? "").trim()) layers.push({ tags: _parseTagList(s.comboTags), source: "Combo", text: s.comboEffect });
 
   let current = base;
   const origin = new Map();   // raw tag → layer that introduced it

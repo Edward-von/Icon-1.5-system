@@ -12,6 +12,7 @@ import { ICON } from "./module/config.mjs";
 /* -------------------------------------------------- */
 import { IconData   } from "./module/data/actor/IconData.mjs";
 import { SummonData } from "./module/data/actor/SummonData.mjs";
+import { ClockData } from "./module/data/actor/ClockData.mjs";
 import { FoeData    } from "./module/data/actor/FoeData.mjs";
 import { LegendData } from "./module/data/actor/LegendData.mjs";
 
@@ -39,6 +40,7 @@ import { IconItem  } from "./module/item/IconItem.mjs";
 /* -------------------------------------------------- */
 import { IconSheet    } from "./module/actor/sheets/IconSheet.mjs";
 import { SummonSheet  } from "./module/actor/sheets/SummonSheet.mjs";
+import { ClockSheet   } from "./module/actor/sheets/ClockSheet.mjs";
 import { FoeSheet     } from "./module/actor/sheets/FoeSheet.mjs";
 import { LegendSheet  } from "./module/actor/sheets/LegendSheet.mjs";
 import { IconItemSheet } from "./module/item/IconItemSheet.mjs";
@@ -70,7 +72,7 @@ import { registerHandlebarsHelpers } from "./module/helpers/handlebars.mjs";
 /* -------------------------------------------------- */
 /*  Data migrations                                    */
 /* -------------------------------------------------- */
-import { registerMigrationSettings, runMigrations } from "./module/migrations.mjs";
+import { registerMigrationSettings, runMigrations, syncWorldMacros } from "./module/migrations.mjs";
 
 /* -------------------------------------------------- */
 /*  Onboarding                                         */
@@ -178,6 +180,7 @@ Hooks.once("init", () => {
     summon: SummonData,
     foe:    FoeData,
     legend: LegendData,
+    clock:  ClockData,
   };
 
   // ---- Token resource bars ----
@@ -208,6 +211,7 @@ Hooks.once("init", () => {
   foundry.documents.collections.Actors.registerSheet("icon-system", FoeSheet,    { types: ["foe"],     makeDefault: true });
   foundry.documents.collections.Actors.registerSheet("icon-system", LegendSheet, { types: ["legend"],  makeDefault: true });
   foundry.documents.collections.Actors.registerSheet("icon-system", SummonSheet, { types: ["summon"],  makeDefault: true });
+  foundry.documents.collections.Actors.registerSheet("icon-system", ClockSheet,  { types: ["clock"],   makeDefault: true });
   foundry.documents.collections.Items.registerSheet("icon-system",  IconItemSheet, { makeDefault: true });
 
   // ---- Status effects ----
@@ -318,6 +322,14 @@ Hooks.once("ready", async () => {
     await runMigrations();
   } catch (err) {
     console.error("ICON 1.5 | Data migration failed:", err);
+  }
+
+  /* Macros dragged into the world are copies and never update by themselves —
+   * refresh the ones that came from our compendium, once per system version. */
+  try {
+    await syncWorldMacros();
+  } catch (err) {
+    console.error("ICON 1.5 | Macro sync failed:", err);
   }
 
   /* Selected-token status panel (top-right, PF2e-style). */
@@ -684,6 +696,14 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   const dmgFlags     = message?.flags?.["icon-system"]?.damage ?? {};
   const outcome      = dmgFlags.outcome ?? "hit";
   const halvedOnRoll = !!dmgFlags.halvedOnRoll;
+  // Damage types ticked on the roll (p.104): they switch off some of the
+  // target's defences when the damage is applied.
+  const trueStrike   = !!dmgFlags.trueStrike;
+  const unerring     = !!dmgFlags.unerring;
+  // Who threw it: Aetherwall only halves attacks from beyond range 2 (p.298),
+  // so the attacker's token has to be known when the damage is applied.
+  let attackerActor = null;
+  try { attackerActor = dmgFlags.sourceActorUuid ? fromUuidSync(dmgFlags.sourceActorUuid) : null; } catch { attackerActor = null; }
 
   // Defensive chips on each target row (Dodge / Cover ½ / Resistance ½ …),
   // read from the target's CURRENT statuses — cover is determined when the
@@ -694,7 +714,10 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     let actor = null;
     try { actor = fromUuidSync(row.dataset.actorUuid); } catch { actor = null; }
     if (!actor) return;
-    const chips = defenseChipsHtml(actor, { outcome, halvedOnRoll, compact: true });
+    const chips = defenseChipsHtml(actor, {
+      outcome, halvedOnRoll, compact: true,
+      tokenId: row.dataset.tokenId ?? null, attacker: attackerActor,
+    });
     if (!chips) return;
     const holder = document.createElement("span");
     holder.className = "icon-chat-card__target-defs";
@@ -714,6 +737,11 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       const amount = Number(btn.dataset.amount) || 0;
       let   half   = btn.dataset.half === "true";
       const pierce = btn.dataset.pierce === "true";
+      // Divine (p.104): can't be reduced, mitigated or negated in any way
+      // except immunity — so no armor and no Cover / Resistance halving, not
+      // even the ½ button.
+      const divine = btn.dataset.divine === "true";
+      if (divine) half = false;
       let   halfReason = half ? "manual ½" : "";
 
       if (!uuid || amount <= 0) return;
@@ -727,8 +755,11 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       // Defensive automation on the full "Apply" button (the ½ button stays a
       // manual override): Dodge → no damage from a Miss / Area card; Cover or
       // Resistance → ½ once, unless the roll was already halved.
-      if (!half) {
-        const mit = damageMitigation(actor, { outcome, halvedOnRoll });
+      if (!half && !divine) {
+        const mit = damageMitigation(actor, {
+          outcome, halvedOnRoll, trueStrike, unerring,
+          attacker: attackerActor, targetTokenId: btn.dataset.tokenId ?? null,
+        });
         if (mit.immune) {
           await ChatMessage.create({
             speaker: { alias: "Damage Applied" },
@@ -751,7 +782,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       let result;
       try {
         result = await applyDamageToActor(actor, amount, {
-          applyArmor:  !pierce,
+          applyArmor:  !pierce && !divine,
           half,
           halfReason,
           chatConfirm: true,
@@ -851,6 +882,27 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   });
 });
 
+/**
+ * Rules reference in the scene controls (everyone, not just the GM).
+ *
+ * The reference used to be reachable only from the "..." menu of a character
+ * sheet, where players never look. A 📖 button in the token toolbar puts it
+ * one click away for everyone, on any scene.
+ */
+Hooks.on("getSceneControlButtons", (controls) => {
+  const tokens = controls.tokens ?? controls.token;
+  if (!tokens?.tools) return;
+  tokens.tools.iconReference = {
+    name:    "iconReference",
+    order:   Object.keys(tokens.tools).length + 1,
+    title:   "ICON 1.5 — Rules Reference",
+    icon:    "fa-solid fa-book",
+    button:  true,                    // fires and goes back to the active tool
+    visible: true,
+    onChange: (event, active) => { if (active !== false) showReferenceGuide(); },
+  };
+});
+
 /* ================================================== */
 /*  setup — Sheets + Pre-load templates               */
 /* ================================================== */
@@ -865,6 +917,8 @@ Hooks.once("setup", async () => {
     "systems/icon-system/templates/actor/icon-combat.hbs",
     "systems/icon-system/templates/actor/icon-relics.hbs",
     "systems/icon-system/templates/actor/icon-notes.hbs",
+    // Actor — Clock board
+    "systems/icon-system/templates/actor/clock-sheet.hbs",
     // Actor — Foe
     "systems/icon-system/templates/actor/foe-header.hbs",
     "systems/icon-system/templates/actor/foe-main.hbs",
