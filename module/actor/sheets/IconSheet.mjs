@@ -22,7 +22,8 @@ import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
-import { buildBondKitsNote } from "../../helpers/advancement.mjs";
+import { buildBondKitsNote, expectedApTotal, expectedSkillRanksFromLevels,
+         STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES,
@@ -34,8 +35,6 @@ import { promptNarrativeRoll, promptAttackMods,
 
 const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
 
-/** Action dots every character starts with: the bond's +2 plus 4 to spend (p.241). */
-const STARTING_ACTION_DOTS = 6;
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
@@ -118,6 +117,8 @@ export class IconSheet extends BaseActorSheet {
       upgradeRelic:     IconSheet.#onUpgradeRelic,
       infuseRelic:      IconSheet.#onInfuseRelic,
       refocus:          IconSheet.#onRefocus,
+      fixPhantomAp:     IconSheet.#onFixPhantomAp,
+      fixSkillRanks:    IconSheet.#onFixSkillRanks,
       toggleAbilitiesLock: IconSheet.#onToggleAbilitiesLock,
       toggleStatus:        IconSheet.#onToggleStatus,
       adjustElevation:     IconSheet.#onAdjustElevation,
@@ -227,6 +228,13 @@ export class IconSheet extends BaseActorSheet {
     context.apTotal          = apTotal;
     context.apFree           = Math.max(0, apTotal - context.apSpent);
     context.apOverspent      = context.apSpent > apTotal;
+    // The halfway XP bonus used to be handed out at level 0 as well, which the
+    // book does not do (p.112). Migration 15 takes that point back, but it runs
+    // once per world: a character imported from an older world afterwards still
+    // carries it. Flag the exact signature — one more AP than everything this
+    // system grants adds up to — so it can be corrected whenever it turns up.
+    context.apPhantomHalfway = (system.combat?.level ?? 0) >= 1
+      && apTotal === expectedApTotal(actor) + 1;
     context.masterySpent     = masterySpent;
     context.masteryTotal     = masteryTotal;
     context.masteryFree      = Math.max(0, masteryTotal - masterySpent);
@@ -239,7 +247,16 @@ export class IconSheet extends BaseActorSheet {
     // the bond's +2 in one action and the 4 to distribute (p.241). Without
     // those six in the total, a brand-new character reads "Spent 6 / 0 ⚠ OVER"
     // for ever, which is what it did until now.
-    const skillRanksFromLevels = system.combat?.skillRanksTotal ?? 0;
+    // `system.combat.skillRanksTotal` is an accumulator: only LevelUpDialog
+    // ever adds to it. A character who did not earn every level through that
+    // dialog — imported from another world, built by hand, level typed into
+    // the field — has a pool that stopped growing, and reads OVER for ever
+    // however many dots they legitimately hold. So take the larger of what was
+    // accumulated and what the advancement table grants at this level; a GM
+    // who raised the field by hand keeps their number.
+    const skillRanksStored   = system.combat?.skillRanksTotal ?? 0;
+    const skillRanksEarned   = expectedSkillRanksFromLevels(actor);
+    const skillRanksFromLevels = Math.max(skillRanksStored, skillRanksEarned);
     const skillRanksTotal = STARTING_ACTION_DOTS + skillRanksFromLevels;
     const actionsMap      = system.narrative?.actions ?? {};
     const skillRanksSpent = Object.values(actionsMap).reduce((sum, v) => sum + (Number(v) || 0), 0);
@@ -249,6 +266,10 @@ export class IconSheet extends BaseActorSheet {
     context.skillRanksSpent      = skillRanksSpent;
     context.skillRanksFree       = Math.max(0, skillRanksTotal - skillRanksSpent);
     context.skillRanksOverspent  = skillRanksSpent > skillRanksTotal;
+    // The field is behind the level: offer to bring it up to date, so the
+    // stored number and the counter stop disagreeing.
+    context.skillRanksBehind     = skillRanksStored < skillRanksEarned;
+    context.skillRanksEarned     = skillRanksEarned;
 
     // Enriched detail view for each equipped ability — rendered as hidden
     // preview panels under the ability slots grid in the Combat tab. Click on
@@ -2375,6 +2396,55 @@ export class IconSheet extends BaseActorSheet {
     const next    = Math.max(0, current + delta);
     _log(`adjustDust — actor: "${this.document.name}" | ${current} → ${next}`);
     await this.document.update({ "system.narrative.dust": next });
+  }
+
+  /**
+   * Take back the level-0 halfway ability point on a character that still
+   * carries it. Same correction migration 15 makes, offered on the sheet for
+   * characters that arrive after the migration has already run (imported from
+   * an older world, or copied from one).
+   */
+  static async #onFixPhantomAp(event, target) {
+    const actor   = this.document;
+    const apTotal = actor.system.combat?.apTotal ?? 0;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window:  { title: "AP Total" },
+      content: `<p><strong>${escapeHTML(actor.name)}</strong> has <strong>${apTotal}</strong> AP, one more than
+                   everything this system grants adds up to.</p>
+                <p class="notes">The halfway ability point (7 XP) used to be handed out at level 0 as well.
+                   The book gives it "at level 1 and higher" (p.112), so that first one was never earned.
+                   Set AP Total to <strong>${apTotal - 1}</strong>?</p>`,
+      rejectClose: false,
+    });
+    if (!ok) { _log(`phantom AP — cancelled`); return; }
+    await actor.update({ "system.combat.apTotal": apTotal - 1 });
+    ui.notifications.info(`${actor.name}: AP Total ${apTotal} → ${apTotal - 1}.`);
+  }
+
+  /**
+   * Bring `skillRanksTotal` up to the number of action improvements the
+   * advancement table has granted by this character's level. Only ever raises
+   * it: a GM who handed out extra dots keeps them.
+   */
+  static async #onFixSkillRanks(event, target) {
+    const actor  = this.document;
+    const stored = actor.system.combat?.skillRanksTotal ?? 0;
+    const earned = expectedSkillRanksFromLevels(actor);
+    if (earned <= stored) { _log(`skill ranks — already up to date`); return; }
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window:  { title: "Skill Ranks" },
+      content: `<p><strong>${escapeHTML(actor.name)}</strong> is level <strong>${actor.system.combat?.level ?? 0}</strong>,
+                   which grants <strong>${earned}</strong> action improvement${earned === 1 ? "" : "s"}, but the field
+                   holds <strong>${stored}</strong>.</p>
+                <p class="notes">That happens when the levels were not taken through the level-up wizard — an
+                   imported sheet, or a level typed in by hand. Set the field to <strong>${earned}</strong>?
+                   The pool becomes ${STARTING_ACTION_DOTS + earned} dots with the ${STARTING_ACTION_DOTS} from
+                   character creation (p.46).</p>`,
+      rejectClose: false,
+    });
+    if (!ok) { _log(`skill ranks — cancelled`); return; }
+    await actor.update({ "system.combat.skillRanksTotal": earned });
+    ui.notifications.info(`${actor.name}: Skill Ranks from level ups ${stored} → ${earned}.`);
   }
 
   /**

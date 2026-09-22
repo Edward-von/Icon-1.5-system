@@ -731,10 +731,14 @@
   box-shadow: 0 0 3px color-mix(in srgb, var(--clock-color) 60%, transparent);
 }
 .icon-clock-card .icon-clock-seg:hover { border-color: var(--clock-color); }
+/* A viewer who cannot write gets no pointer and no hover: the segments told
+   players they were clickable and then refused the update. */
+.icon-clock-seg:not([data-action]) { cursor: default; }
+.icon-clock-seg:not([data-action]):hover,
+.icon-clock-card .icon-clock-seg:not([data-action]):hover { border-color: var(--ic-border-vis); background: var(--ic-bg-field); }
+.icon-clock-seg--filled:not([data-action]):hover,
+.icon-clock-card .icon-clock-seg--filled:not([data-action]):hover { background: var(--clock-color, var(--ic-gold-dim)); border-color: var(--clock-color, var(--ic-gold)); }
 .icon-clock-board { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
-.icon-clock-board__head { display: flex; align-items: center; gap: 8px; }
-.icon-clock-board__name { flex: 1 1 auto; font-family: var(--ic-display); font-size: 1.2em; background: transparent; border: none; color: var(--ic-text-bright); }
-.icon-clock-board__name:focus { background: var(--ic-bg-field); border-radius: var(--ic-radius-sm); }
 .icon-clock-card {
   padding: 8px; border-radius: var(--ic-radius);
   background: var(--ic-bg-panel);
@@ -2061,6 +2065,20 @@ details[open] > .icon-basic-actions__summary::before {
   font-weight: 600;
   text-align: center;
   padding: 4px 6px;
+}
+/* Correction offered inside a management block (the level-0 halfway AP). Sized
+   to sit under the counter without stretching the block. */
+.icon-management-block .icon-btn--tiny {
+  padding: 3px 8px;
+  font-size: 0.8em;
+  line-height: 1.3;
+  border-color: rgba(216,48,48,0.5);
+  color: #ffb0b0;
+  background: rgba(216,48,48,0.15);
+}
+.icon-management-block .icon-btn--tiny:hover {
+  background: rgba(216,48,48,0.3);
+  color: #fff;
 }
 .icon-management-actions {
   display: flex;
@@ -4814,35 +4832,50 @@ ol.chat-log .chat-message,
 .icon-sheet .icon-setup-banner { margin-top: 8px; }
 
 /* --- Tabs --- */
-/* The five tabs used to run together as one strip of words. Each one now sits
-   in its own cell: a hairline divider between them, a little breathing room,
-   and the active one lifted out of the bar with its own background. */
-.icon.sheet .tabs { border-bottom-color: var(--ic-border-subtle); padding: 0 6px; gap: 0; }
+/* Three goes at this. The tabs first ran together as one strip of words; then
+   they got a hairline between them, which still read as one bar. Now each name
+   sits in its own box: a real border on all four sides, its own background, and
+   a gap between boxes, so the strip reads as five separate things at a glance.
+   The active one is filled, gold-bordered and capped with a gold bar. */
+.icon.sheet .tabs {
+  align-items: flex-end;
+  gap: 5px;
+  padding: 7px 8px 0;
+  border-bottom: 1px solid var(--ic-gold-dim);
+}
 .icon.sheet .tabs .item {
   position: relative;
-  padding: 10px 14px;
-  font-size: .86em;
-  letter-spacing: .02em;
+  padding: 6px 13px;
+  font-size: .84em;
+  letter-spacing: .03em;
   text-transform: none;
+  color: var(--ic-text-dim);
+  background: var(--ic-bg-light);
+  border: 1px solid var(--ic-border-vis);
   border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
+  transition: color .15s, background .15s, border-color .15s;
 }
-/* Divider between two tabs (not before the first one). */
-.icon.sheet .tabs .item + .item::before {
+/* The gold cap: transparent on an inactive tab so nothing shifts when it lights up. */
+.icon.sheet .tabs .item::before {
   content: "";
-  position: absolute; left: 0; top: 22%; bottom: 22%;
-  width: 1px;
-  background: var(--ic-border-subtle);
+  position: absolute; left: -1px; right: -1px; top: -1px;
+  height: 2px;
+  border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
+  background: transparent;
 }
-.icon.sheet .tabs .item:hover { background: rgba(200,150,28,.07); }
+.icon.sheet .tabs .item:hover {
+  color: var(--ic-text-normal);
+  background: var(--ic-bg-panel);
+  border-color: var(--ic-gold-dim);
+}
 .icon.sheet .tabs .item.active {
   color: var(--ic-gold-bright);
-  border-bottom-color: var(--ic-gold-bright);
   font-weight: 600;
-  background: linear-gradient(to bottom, rgba(200,150,28,.16), rgba(200,150,28,.04));
+  background: linear-gradient(to bottom, rgba(200,150,28,.22), rgba(200,150,28,.06));
+  border-color: var(--ic-gold);
+  border-bottom-color: var(--ic-gold);
 }
-/* The divider disappears around the active tab, so its card reads as one piece. */
-.icon.sheet .tabs .item.active::before,
-.icon.sheet .tabs .item.active + .item::before { background: transparent; }
+.icon.sheet .tabs .item.active::before { background: var(--ic-gold-bright); }
 
 /* --- Sections & cards --- */
 .icon-section { background: #161c26; border-color: var(--ic-border-subtle); }
@@ -5045,7 +5078,7 @@ ol.chat-log .chat-message,
 .icon-band ~ * { position: relative; z-index: 1; }
 
 /* Shared header-on-band pieces */
-.foe-header, .legend-header, .summon-header, .icon-item-header {
+.foe-header, .legend-header, .summon-header, .icon-item-header, .clock-header {
   display: grid; grid-template-rows: auto auto; gap: 8px 12px; padding: 12px;
   background: var(--ic-bg-deep); border: none; border-radius: 0; margin: 0; overflow: hidden;
 }
@@ -5053,8 +5086,10 @@ ol.chat-log .chat-message,
 .summon-header .icon-sheet__portrait, .icon-item-header .icon-sheet__portrait { grid-row: 1; grid-column: 1; border-color: rgba(255,215,122,.6); }
 .foe-header .icon-sheet__identity, .legend-header .icon-sheet__identity,
 .summon-header .icon-sheet__identity, .icon-item-header .icon-sheet__identity { grid-row: 1; grid-column: 2; }
+.clock-header .icon-sheet__identity { grid-row: 1; grid-column: 1; }
 .icon.sheet .foe-header input.icon-sheet__name, .icon.sheet .legend-header input.icon-sheet__name,
-.icon.sheet .summon-header input.icon-sheet__name, .icon.sheet .icon-item-header input.icon-sheet__name {
+.icon.sheet .summon-header input.icon-sheet__name, .icon.sheet .icon-item-header input.icon-sheet__name,
+.icon.sheet .clock-header input.icon-sheet__name {
   font-family: var(--ic-display); font-weight: normal; color: #fff7e0; height: auto; padding: 0;
   background: transparent !important; border: none !important; text-shadow: 0 1px 0 rgba(0,0,0,.4);
 }
@@ -5087,6 +5122,16 @@ ol.chat-log .chat-message,
 .legend-header .icon-badge input[type="number"] { width: 38px; padding: 1px 3px; }
 .legend-header .icon-badge--phase-active { background: var(--ic-red); border-color: var(--ic-red-bright); }
 .legend-phase-bar .icon-hp-bar { height: 16px; }
+
+/* Clocks: the deep purple board header — identity on the left, "+ Clock" on the right, both over
+   the band. The band's padding-bottom pushes the diagonal cut below the text,
+   the same trick .foe-header uses. */
+.clock-header { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.clock-header .icon-band { padding-bottom: 18px; }
+.clock-header .icon-sheet__identity { padding-bottom: 8px; }
+.icon.sheet .clock-header input.icon-sheet__name { font-size: 1.5em; }
+.clock-header__count { display: block; color: rgba(255,240,210,.85); font-size: .82em; }
+.clock-header__add { grid-row: 1; grid-column: 2; align-self: center; margin-bottom: 8px; }
 
 /* Summon: blue band */
 .summon-header { --band: #1f5fa0; grid-template-columns: 64px minmax(0, 1fr); grid-template-rows: auto; }
@@ -5215,6 +5260,18 @@ ol.chat-log .chat-message,
 .icon-grant__icon { font-size: 1.25em; flex: 0 0 auto; }
 .icon-grant__value { font-family: var(--ic-display); font-size: 1.35em; color: var(--ic-gold-bright); line-height: 1; }
 .icon-grant--fork { border-style: dashed; }
+/* Points carried in from an earlier level: gold rather than red, because it is
+   a reminder to spend something, not a mistake to correct. */
+.icon-grant--carry { background: rgba(200,150,28,.16); border-color: var(--ic-gold); }
+.icon-wizard__warn--carry {
+  color: var(--ic-gold-bright);
+  padding: 7px 10px;
+  margin-top: 8px;
+  background: rgba(200,150,28,.1);
+  border-left: 3px solid var(--ic-gold);
+  border-radius: 0 var(--ic-radius) var(--ic-radius) 0;
+}
+.icon-wizard__warn--carry strong { color: #fff7e0; }
 
 /* --- Dots allocator (action ratings) --- */
 .icon-dots-allocator { display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 4px 12px; }

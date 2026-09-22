@@ -1,6 +1,8 @@
 /**
  * IconActor — Base Actor document class for ICON 1.5.
  */
+import { apBudget } from "../helpers/advancement.mjs";
+
 export class IconActor extends Actor {
 
   /**
@@ -44,12 +46,20 @@ export class IconActor extends Actor {
       foundry.utils.setProperty(changed, "system.combat.apTotal", currentAp + 1);
       foundry.utils.setProperty(changed, "system.narrative.xp.halfwayBonusClaimed", true);
 
-      // Post a chat message so the player notices the bonus
+      // Post a chat message so the player notices the bonus. The halfway point
+      // is the one people forget to spend — it arrives mid-level, with no
+      // wizard to walk them through it — so say how many are unspent in total
+      // and where they can be spent, not just that one was granted.
+      const free = Math.max(0, currentAp + 1 - apBudget(this).spent);
       ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this }),
         content: `<div class="icon-chat-levelup">
                     <strong>${this.name}</strong> has reached the halfway mark (${HALFWAY} XP)!
                     <br><em>+1 AP granted.</em>
+                    ${free > 0
+                      ? `<br><small>${free} ability point${free > 1 ? "s" : ""} unspent — spend on a new ability or a
+                           talent from the Combat tab, or keep ${free > 1 ? "them" : "it"} for the next level up.</small>`
+                      : ""}
                   </div>`,
       });
     }

@@ -18,12 +18,15 @@
  * current schema. World-side compendia created by the GM are swept too.
  */
 
+import { expectedApTotal, expectedSkillRanksFromLevels,
+         STARTING_ACTION_DOTS } from "./helpers/advancement.mjs";
+
 const SYSTEM_ID = "icon-system";
 const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 14;
+export const CURRENT_SCHEMA_VERSION = 16;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -590,6 +593,95 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 14: ${n} copy/copies cleaned (Summons boxes, duplicated triggers)`);
+  },
+
+  /* 15 — The other half of migration 12. The halfway XP bonus used to be
+   * granted at level 0 too, which the book does not do ("At level 1 and
+   * higher, once you hit 7 xp, you gain an ability point", p.112, repeated in
+   * the advancement rules on p.240). Migration 12 could only give that point
+   * back to characters still sitting at level 0, because a level up clears
+   * `halfwayBonusClaimed` and with it the only trace of the mistake. Everyone
+   * who had already levelled kept an ability point they never earned, which is
+   * the "every level except 0 is one too high" Edoardo is still seeing.
+   *
+   * The trace is gone, but the right number is not: a character's AP total is
+   * the sum of things this system granted, so it can be rebuilt.
+   *   2   the pair the character creation wizard hands out for the two
+   *       starting abilities (p.241: level 0 picks a job and two abilities —
+   *       the system charges 1 AP per known ability, so it pre-pays them)
+   *   +   the table on p.241, via LEVEL_BENEFITS: +2 at level 1, +1 at 5, +1 at 11
+   *   +   2 per extra job, i.e. each level 4 / 8 fork where the player took
+   *       "new job and two bonus ap" instead of the mastery point — the job
+   *       is in `system.combat.jobs`, so it counts itself
+   *   +   one halfway point per level already completed (levels 1..L-1), plus
+   *       the current level's if it has been claimed
+   * A character carrying exactly one more than that has the phantom point and
+   * loses it. Anything else — a GM who already corrected the sheet by hand
+   * after migration 12 said to, a hand-built character, AP given as a reward,
+   * a level set by hand rather than earned — does not match, and is left
+   * alone and reported in the console rather than guessed at. Being wrong in
+   * the safe direction matters more here than catching every case. */
+  15: async () => {
+    let fixed = 0;
+    const skipped = [];
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const c = actor.system.combat ?? {};
+      const level = c.level ?? 0;
+      if (level < 1) continue;                          // migration 12's job
+      const apTotal  = c.apTotal ?? 0;
+      const expected = expectedApTotal(actor);
+      if (apTotal === expected + 1) {
+        await actor.update({ "system.combat.apTotal": apTotal - 1 });
+        fixed++;
+        console.log(`ICON 1.5 | Migration 15: "${actor.name}" (level ${level}) — halfway AP of level 0 taken back (AP total ${apTotal} → ${apTotal - 1})`);
+      } else if (apTotal !== expected) {
+        skipped.push(`${actor.name} (level ${level}): AP total ${apTotal}, expected ${expected}`);
+      }
+    }
+    if (fixed) ui.notifications.info(`ICON 1.5 — ${fixed} character(s) gave back the level-0 halfway AP (it starts at level 1, p.112).`);
+    if (skipped.length) {
+      console.warn(`ICON 1.5 | Migration 15: ${skipped.length} character(s) left alone — their AP total does not match what the system granted, so check the Notes tab by hand:\n  ${skipped.join("\n  ")}`);
+      ui.notifications.warn(`ICON 1.5 — ${skipped.length} character(s) have an AP total the system cannot account for and were left untouched: see the console (F12) and check AP Total on their Notes tab.`);
+    }
+  },
+
+  /* 16 — Skill Ranks stuck at "OVER".
+   *
+   * The Skill Rank counter compares the dots on the ten narrative actions
+   * against `system.combat.skillRanksTotal` plus the six of character creation
+   * (the bond's +2 and the 4 to spread, p.46). But that field is a running
+   * total that only LevelUpDialog ever adds to, so it reflects the level ups
+   * taken *inside this system* rather than the character's level. A sheet that
+   * arrived any other way — imported from another world, built by hand before
+   * the wizard existed, or a level typed straight into the field — is stuck at
+   * whatever it was when it arrived, usually zero, and reads "⚠ OVER" for ever
+   * no matter how few dots the player actually spends.
+   *
+   * The advancement table (p.241) says how many improvements a level is worth,
+   * and expectedSkillRanksFromLevels() reads the level 4 / 8 "bond power or
+   * two actions" fork off the bond powers on the sheet. Raise the field to
+   * that; never lower it, because a GM may have granted dots on purpose and a
+   * fork read the cautious way costs the player nothing. */
+  16: async () => {
+    let n = 0;
+    const generous = [];
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const stored = actor.system.combat?.skillRanksTotal ?? 0;
+      const earned = expectedSkillRanksFromLevels(actor);
+      if (stored < earned) {
+        await actor.update({ "system.combat.skillRanksTotal": earned });
+        n++;
+        console.log(`ICON 1.5 | Migration 16: "${actor.name}" (level ${actor.system.combat?.level ?? 0}) — Skill Ranks from level ups ${stored} → ${earned} (pool ${STARTING_ACTION_DOTS + earned} with the ${STARTING_ACTION_DOTS} from creation)`);
+      } else if (stored > earned) {
+        generous.push(`${actor.name} (level ${actor.system.combat?.level ?? 0}): field ${stored}, table grants ${earned}`);
+      }
+    }
+    if (n) ui.notifications.info(`ICON 1.5 — ${n} character(s) had their Skill Rank pool brought up to their level (p.241).`);
+    if (generous.length) {
+      console.log(`ICON 1.5 | Migration 16: ${generous.length} character(s) hold more Skill Ranks than the table grants and were left as they are:\n  ${generous.join("\n  ")}`);
+    }
   },
 };
 

@@ -444,16 +444,27 @@ export function evasionBlockHtml(ev) {
  */
 export function hasAetherwall(actor) {
   if (!actor) return false;
+  const named = t => /^aetherwall$/i.test(String(t?.name ?? "").trim());
   // The Artillery class baseline trait, written onto the foe as data
   // (apply-class-baseline.mjs), or the class itself for a foe that never got it.
   const traits = actor.system?.traits;
-  if (Array.isArray(traits) && traits.some(t => /^aetherwall$/i.test(String(t?.name ?? "").trim()))) return true;
-  return String(actor.system?.foeClass ?? "").toLowerCase() === "artillery";
+  if (Array.isArray(traits) && traits.some(named)) return true;
+  if (String(actor.system?.foeClass ?? "").toLowerCase() === "artillery") return true;
+  // Aetherwall is a WRIGHT trait too, in the same words (p.113 — "Wrights gain
+  // resistance against all abilities from characters that are outside of
+  // range 2 from them"). A character carries it as an embedded trait item
+  // (helpers/classes.mjs), not in system.traits, so checking only the foe
+  // shape left every Wright player character out of the automation.
+  return (actor.items ?? []).some(i => i.type === "trait" && named(i));
 }
 
 /**
- * Aetherwall (p.298, Artillery): "Gains resistance against all abilities from
- * characters that are outside of range 2 from them." Needs both tokens on the
+ * Aetherwall (p.298 for the Artillery foe class, p.113 for the Wright class):
+ * "Gains resistance against all abilities from characters that are outside of
+ * range 2 from them." It is RESISTANCE, not Cover: it halves every kind of
+ * damage from beyond range 2, not only ranged attacks — the "(Cover halves
+ * ranged damage)" beside it on p.298 is a reminder of what Cover does, not
+ * part of the trait. Needs both tokens on the
  * scene; with no token for either side we can't measure, so it stays off
  * rather than guessing.
  * @returns {{ active: boolean, distance: number|null }}
@@ -471,9 +482,10 @@ export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false,
   const out = { immune: false, immuneReason: "", half: false, halfReason: "" };
   if (!actor) return out;
   const p = defenseProfile(actor);
-  // Damage types the attack was rolled with (p.104): True Strike "ignores
-  // dodge, blind, evasion, and stealth", Unerring "ignores cover and
-  // aetherwall". Evasion and stealth are settled on the attack roll; what
+  // Damage types the attack was rolled with: True Strike "ignores dodge,
+  // blind, evasion, and stealth" (p.117), Unerring "ignores cover and
+  // aetherwall" (glossary, p.105). Evasion and stealth are settled on the
+  // attack roll; what
   // reaches the damage card is the Dodge cancellation and the Cover halving.
   if (p.dodge && trueStrike) p.dodge = false;
   if (p.cover && unerring)   p.cover = false;
@@ -488,7 +500,8 @@ export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false,
   if (halvedOnRoll) return out;   // halve only once (Resistance / Cover, p.92)
   // Aetherwall: a resistance that only exists against attacks from beyond
   // range 2, so it is measured here rather than read from a status — and
-  // Unerring ignores it, as it ignores cover (p.104).
+  // Unerring ignores it by name (glossary, p.105: "Ignores cover and
+  // aetherwall").
   const wall = unerring ? { active: false } : aetherwallAgainst(actor, attacker, { attackerTokenId, targetTokenId });
   if (p.cover || p.resistance || wall.active) {
     out.half = true;

@@ -78,6 +78,12 @@
               ({{apSpentAbilities}}a + {{apSpentTalents}}t)
             </small>
           </div>
+          {{#if apPhantomHalfway}}
+            <button type="button" class="icon-btn icon-btn--tiny" data-action="fixPhantomAp"
+                    title="The halfway ability point (7 XP) used to be granted at level 0 too. The book gives it from level 1 on (p.112), so this sheet carries one AP it never earned.">
+              ⚠ one AP too many — fix
+            </button>
+          {{/if}}
         </div>
 
         {{!-- Masteries --}}
@@ -111,10 +117,16 @@
             {{else}}
               <small>({{skillRanksFree}} free)</small>
             {{/icon-eq}}{{/if}}
-            <small title="6 dots come with character creation (the bond's +2 and the 4 you distribute, p.241); the field above counts only the action improvements from levelling up.">
+            <small title="6 dots come with character creation (the bond's +2 and the 4 you distribute, p.46); the field above counts only the action improvements from levelling up.">
               ({{skillRanksBase}} from creation + {{skillRanksFromLevels}} from level ups)
             </small>
           </div>
+          {{#if skillRanksBehind}}
+            <button type="button" class="icon-btn icon-btn--tiny" data-action="fixSkillRanks"
+                    title="The field only grows when a level is taken through the level-up wizard. This character's level grants more improvements than it holds — imported or hand-built sheets end up here.">
+              ⚠ behind the level — set to {{skillRanksEarned}}
+            </button>
+          {{/if}}
         </div>
       </div>
 

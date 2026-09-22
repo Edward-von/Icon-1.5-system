@@ -3,14 +3,21 @@
       a note, the GM's "secret" toggle and a 💬 button to post it to chat. --}}
 <div class="icon-sheet clock-sheet">
 
-  <header class="icon-band icon-clock-board__head" style="--band:#3a2a5e">
-    <div class="icon-band__text">
-      <input type="text" class="icon-clock-board__name" name="name" value="{{actor.name}}"
+  {{!-- `.icon-band` is the diagonal backdrop, not a container: it is an EMPTY
+        grid item behind the header (pointer-events: none, clip-path, negative
+        margins). The real content goes beside it, as in foe-header.hbs. --}}
+  <header class="icon-sheet__header clock-header" style="--band:#3a2a5e">
+    <div class="icon-band"></div>
+
+    <div class="icon-sheet__identity">
+      <input class="icon-sheet__name" type="text" name="name" value="{{actor.name}}"
              placeholder="Clocks" {{#unless isEditable}}disabled{{/unless}}>
-      <small>{{clocks.length}} clock{{#unless (icon-eq clocks.length 1)}}s{{/unless}}</small>
+      <small class="clock-header__count">{{clocks.length}} clock{{#unless (icon-eq clocks.length 1)}}s{{/unless}}</small>
     </div>
+
     {{#if isEditable}}
-      <button type="button" class="icon-btn icon-btn--sm" data-action="addClock" title="Add a clock">+ Clock</button>
+      <button type="button" class="icon-btn icon-btn--sm clock-header__add"
+              data-action="addClock" title="Add a clock">+ Clock</button>
     {{/if}}
   </header>
 
@@ -21,7 +28,7 @@
           <input type="text" name="system.clocks.{{c.i}}.name" value="{{c.name}}"
                  placeholder="Clock name" {{#unless ../isEditable}}disabled{{/unless}}>
           <select name="system.clocks.{{c.i}}.max" class="icon-clock-size" {{#unless ../isEditable}}disabled{{/unless}}>
-            {{#each ../sizes as |sz|}}
+            {{#each c.sizes as |sz|}}
               <option value="{{sz}}" {{#icon-eq c.max sz}}selected{{/icon-eq}}>{{sz}}</option>
             {{/each}}
           </select>
@@ -50,8 +57,8 @@
           {{/if}}
           {{#each c.segments as |s|}}
             <span class="icon-clock-seg {{#if s.on}}icon-clock-seg--filled{{/if}}"
-                  data-action="setClockValue" data-index="{{c.i}}" data-segment="{{s.n}}"
-                  title="Set to {{s.n}} (click the last filled one to step back)"></span>
+                  {{#if ../../isEditable}}data-action="setClockValue" data-index="{{c.i}}" data-segment="{{s.n}}"
+                  title="Set to {{s.n}} (click the last filled one to step back)"{{/if}}></span>
           {{/each}}
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--sm icon-clock-adjust"

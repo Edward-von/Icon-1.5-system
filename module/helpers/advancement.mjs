@@ -71,6 +71,69 @@ export function apBudget(actor) {
 }
 
 /**
+ * The AP total this system has granted a character by the time they reached
+ * their current level, rebuilt from the things that grant AP:
+ *   2   the character creation wizard's pair, which pre-pays the two starting
+ *       abilities of level 0 (p.241) — the sheet charges 1 AP per ability known
+ *   +   the advancement table on p.241 (LEVEL_BENEFITS): +2 at level 1,
+ *       +1 at level 5, +1 at level 11
+ *   +   2 for every extra job, i.e. each level 4 / 8 fork where the player took
+ *       "a new job and two bonus ap" rather than the mastery point
+ *   +   the halfway ability point of every level already completed (levels
+ *       1..L-1), plus the current level's once it has been claimed. The book
+ *       gives it "at level 1 and higher" (p.112), so level 0 contributes none.
+ *
+ * It is a reconstruction, not a record: a character whose level was set by
+ * hand, or who was handed AP as a reward, will legitimately not match. Use it
+ * to spot a total that is off, never to overwrite one silently.
+ * @param {Actor} actor
+ * @returns {number}
+ */
+export function expectedApTotal(actor) {
+  const c = actor?.system?.combat ?? {};
+  const level = c.level ?? 0;
+  let ap = 2;
+  for (let l = 1; l <= level; l++) ap += LEVEL_BENEFITS[l]?.combat?.ap ?? 0;
+  ap += 2 * Math.max(0, (c.jobs ?? []).length - 1);
+  ap += Math.max(0, level - 1);
+  if (actor?.system?.narrative?.xp?.halfwayBonusClaimed ?? false) ap += 1;
+  return ap;
+}
+
+/** Action dots every character starts with: the bond's +2 and the 4 to spread (p.46, p.241). */
+export const STARTING_ACTION_DOTS = 6;
+
+/**
+ * Action improvements the advancement table has granted a character by their
+ * current level — the level-up half of the Skill Rank pool, without the six
+ * of character creation.
+ *
+ * Levels 4 and 8 offer "a Bond power OR improve two actions" (p.241), so the
+ * count is not fixed by level alone. The choice leaves a trace: a bond power
+ * taken at the fork is an extra `bond-power` item on the sheet, over the one
+ * from creation (p.46) and the ones the table hands out outright. Counting
+ * those tells us which way each fork went; anything that does not add up is
+ * read as "the fork went to actions", which is the larger pool and so never
+ * accuses the player of overspending on our own guess.
+ * @param {Actor} actor
+ * @returns {number}
+ */
+export function expectedSkillRanksFromLevels(actor) {
+  const level = actor?.system?.combat?.level ?? 0;
+  let improvements = 0, bondPowers = 0, forks = 0;
+  for (let l = 1; l <= level; l++) {
+    const n = LEVEL_BENEFITS[l]?.narrative ?? {};
+    improvements += n.actionImprovements ?? 0;
+    bondPowers   += n.bondPowers ?? 0;
+    if (n.bondPowerOrActions) forks += 1;
+  }
+  const owned = (actor?.items ?? []).filter(i => i.type === "bond-power").length;
+  const extra = owned - 1 - bondPowers;             // -1: the one from creation
+  const forksAsBondPower = Math.min(Math.max(extra, 0), forks);
+  return improvements + 2 * (forks - forksAsBondPower);
+}
+
+/**
  * Build a plain-text summary of the gear kits belonging to a bond (plus the
  * shared Adventurer's Kit) from the gear-kits compendium. Used by the bond
  * drop handler and the character-creation wizard to list a new character's

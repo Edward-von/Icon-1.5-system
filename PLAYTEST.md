@@ -1191,6 +1191,133 @@ Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggett
       trait(s)/ability(ies) cleaned on …"; i tratti dei PG perdono il box dei summon e le cinque abilità perdono
       il trigger doppio. Copie modificate a mano non vengono toccate; riaprendo il mondo non rigira.
 
+## Debug del 22 settembre 2026 (bug segnalati da Edoardo, build 1.6.0+)
+
+- [ ] **Butcher nella cartella giusta del compendio**: aprire il compendio **Foes** → cartella `Lowlander` →
+      il Butcher sta in `Heavy`, non più in `Artillery`. `Lowlander / Heavy` passa da 3 a 4 foe (Butcher più i
+      tre di prima) e `Lowlander / Artillery` da 22 a 21; Slab, Mule, Canker, Snork e Slaughterer restano in
+      `Artillery` (è la scelta del 20 settembre: solo il Butcher cambia classe).
+- [ ] **Scheda del Butcher invariata**: aprirlo → sempre Heavy, VIT 10, HP 40, Difesa 6, Fray 4, [D] d6,
+      Armor 2, tratti Defiance / Guard / Lowlander Toxin / Pit expert / Suddenly! (niente Slip né Aetherwall).
+      Il fix di oggi tocca solo dove è archiviato, non i numeri.
+- [ ] **Guard del Butcher tra i tratti**: compendio **Foe Abilities** → `Lowlander` → `Traits` contiene
+      "Butcher — Guard"; la cartella `Actions` dello stesso Lowlander NON lo contiene più (lì restano Wall of
+      Meat, Kidnap, Mancatcher Bolas, Fury Strikes).
+- [ ] **Encounter Designer**: aprire l'Encounter Designer, cercare "Butcher" nel roster → la riga lo dà come
+      **Heavy** di fazione Lowlander, e il budget lo conta come Heavy. (Legge `system.foeClass`, quindi era già
+      giusto prima: serve solo a controllare che lo spostamento di cartella non abbia rotto nulla.)
+- [ ] **Import**: trascinare il Butcher dal compendio nel mondo → l'attore arriva con la scheda Heavy e le sue
+      abilità. Un Butcher importato **prima** di oggi non cambia (i foe già nel mondo non si aggiornano mai):
+      se ce n'è uno vecchio in giro, va reimportato.
+
+- [ ] **Migrazione 15** (schema 14 → 15): aprire un mondo esistente → la console dice `Migration 15: "<nome>"
+      (level N) — halfway AP of level 0 taken back (AP total X → X-1)` per ogni PG di livello ≥1 che aveva il
+      punto di troppo, più la notifica "N character(s) gave back the level-0 halfway AP". I PG a livello 0 non
+      vengono toccati (li aveva già sistemati la migrazione 12). Riaprendo il mondo non rigira.
+- [ ] **AP Total giusto sulla tab Notes**: dopo la migrazione, su un PG di livello 1 appena salito il totale è
+      **4** (2 della creazione + 2 del livello 1) e non 5; a livello 2 è **5**; a livello 5 con un solo job è
+      **9**; con due job (fork "new job" al livello 4) è **11**. Il conteggio "Spent N / M" e "(N free)" si
+      aggiornano di conseguenza.
+- [ ] **PG lasciati stare**: se un PG ha un AP Total che non torna con i conti (livello messo a mano, AP dati
+      dal GM, sheet già corretto a mano dopo la migrazione 12) la console lo elenca con `left alone — their AP
+      total does not match what the system granted` e una notifica gialla, **senza** cambiargli i numeri.
+- [ ] **Bottone "⚠ one AP too many — fix"**: importare in un mondo già migrato un PG vecchio di livello ≥1 col
+      punto di troppo → sulla tab Notes, sotto AP Total, compare il bottone rosso; cliccandolo chiede conferma
+      ("has X AP, one more than everything this system grants adds up to") e porta il totale a X-1. Su un PG
+      con i conti giusti il bottone **non** deve comparire.
+- [ ] **Il bonus di metà barra resta corretto**: PG a livello 0 che passa da 6 a 7 XP → nessun AP, nessuna card
+      in chat. Lo stesso PG portato a livello 1 e poi da 6 a 7 XP → +1 AP e la card "has reached the halfway
+      mark". (Era già così dal 20 settembre: serve a controllare che la migrazione non abbia toccato la regola.)
+
+- [ ] **Skill Rank non più "OVER" per sempre**: PG importato/costruito a mano (quindi con il campo Skill Ranks
+      a 0) di livello ≥1 → la riga "Spent N / M" ora conta anche i dot che il livello concede, non solo i 6
+      della creazione. A livello 4 il totale è **10** se al livello 4 ha preso "migliora due azioni", **8** se
+      ha preso il bond power. Prima diceva sempre `/ 6` con la bandiera ⚠ OVER.
+- [ ] **Migrazione 16** (schema 15 → 16): aprire un mondo esistente → la console dice `Migration 16: "<nome>"
+      (level N) — Skill Ranks from level ups X → Y (pool Z with the 6 from creation)` per ogni PG rimasto
+      indietro, più la notifica "N character(s) had their Skill Rank pool brought up to their level". Chi ha
+      **più** dot di quelli della tabella (dati dal GM apposta) viene lasciato stare e solo elencato in console.
+      Riaprendo il mondo non rigira.
+- [ ] **Bottone "⚠ behind the level — set to N"**: importare in un mondo già migrato un PG vecchio di livello
+      ≥1 col campo Skill Ranks indietro → sulla tab Notes compare il bottone; il dialog spiega livello,
+      quanto concede la tabella e quanto c'è nel campo, e conferma porta il campo al valore giusto. Su un PG
+      creato e salito di livello dentro il sistema il bottone **non** deve comparire.
+- [ ] **Il fork del livello 4/8 letto dai bond power**: due PG di livello 4, uno che al livello 4 ha preso il
+      bond power (4 bond power sulla scheda contando quello della creazione) e uno che ha preso le due azioni
+      (3 bond power) → il primo mostra `/ 8`, il secondo `/ 10`.
+- [ ] **Level up normale invariato**: PG salito di livello con il wizard → il campo cresce di 1 (o di 2 ai
+      livelli 4/8 se sceglie le azioni) come prima, il bottone non compare, e i dot spesi nel wizard finiscono
+      sulle azioni scelte.
+- [ ] **Caso di Edoardo (16 dot a livello 4)**: verificare quanti dot ha davvero quel PG sulla tab Narrative
+      (somma delle dieci azioni) e a che livello è. Dopo il fix il totale sarà 8 o 10: se la somma resta 16 il
+      ⚠ OVER è **giusto** e sulla scheda ci sono 6 dot di troppo da togliere — 16 è esattamente il massimo di
+      un personaggio di livello 12, quindi vale la pena controllare da che scheda è stato copiato.
+
+- [ ] **Testata della scheda Clock leggibile e viva**: creare un attore **Clock** e aprirlo → il nome si legge
+      per intero (prima era tagliato a sinistra, "ctor" al posto di "Actor"), sotto c'è "0 clocks", e la banda
+      viola sta *dietro* al testo con il taglio diagonale sotto, come sulle schede Foe/Legend/Summon.
+      Ridimensionando la finestra non si taglia più niente.
+- [ ] **"+ Clock" funziona**: premere **+ Clock** → compare una riga "New clock" 0/6. Prima il bottone era
+      dentro la banda, che ha `pointer-events: none`, quindi i click non arrivavano: nessun pulsante della
+      testata rispondeva (nemmeno il campo del nome, mentre le Notes più in basso funzionavano).
+- [ ] **Nome della lavagna**: cliccare sul nome nella testata, scriverlo e uscire dal campo → il nome
+      dell'attore cambia davvero (prima il campo non prendeva nemmeno il fuoco).
+- [ ] **Clock segreti non spariscono più**: da GM fare tre orologi e marcare **segreto** quello di mezzo
+      (🙈). Dare a un giocatore il permesso **Owner** sull'attore, farsi aprire la scheda da lui e fargli
+      cambiare il nome della lavagna o di un orologio → tornando sul client del GM i tre orologi ci sono
+      ancora, nello stesso ordine, e quello segreto è ancora segreto. Prima l'orologio nascosto veniva
+      cancellato e quelli dopo scalavano di un posto.
+- [ ] **Segmenti non cliccabili per chi non può scrivere**: con un giocatore in sola lettura (Observer) i
+      segmenti non hanno più la manina né l'effetto al passaggio del mouse, e cliccandoli non succede niente
+      (prima sembravano cliccabili e l'aggiornamento veniva rifiutato per permessi).
+- [ ] **Taglia fuori elenco**: un orologio con una taglia non standard (es. 24, messa via console) → la
+      tendina la mostra tra le altre e cambiando un altro campo la taglia resta 24. Prima tornava a 4.
+
+- [ ] **Tab in scatoletta**: aprire una scheda PG → Narrative / Combat / Conditions / Relics / Notes sono cinque
+      riquadri distinti, ognuno con il suo bordo su tutti e quattro i lati, sfondo proprio e 5px di stacco fra
+      uno e l'altro. Quella attiva è dorata (bordo oro, riempimento sfumato, testo chiaro, barretta oro sopra).
+      Passando il mouse su una inattiva si schiarisce senza spostarsi di un pixel.
+- [ ] **Stesso trattamento sulle altre schede**: Foe, Legend e la scheda degli oggetti usano tutte
+      `.icon.sheet .tabs`, quindi le loro tab devono avere lo stesso aspetto a scatoletta (prima erano
+      allineate come testo corrido anche lì).
+- [ ] **Nessuno scatto cambiando tab**: cliccando da una tab all'altra la riga non "salta" in altezza — il
+      cappuccio dorato c'è anche sulle inattive, solo trasparente.
+
+- [ ] **AP avanzati, avviso al passo 1**: PG con almeno 1 AP libero (tab Notes: "(N free)") e 15 XP → aprire
+      Level Up → **già nel passo 1** compare il riquadro "+N AP still unspent" nella griglia dei guadagni e
+      sotto il paragrafo dorato "<nome> has N ability point(s) left over…". Prima l'avviso esisteva solo nel
+      passo 2, dentro la sezione delle abilità, quindi non si vedeva aprendo il wizard.
+- [ ] **Riepilogo del passo 2**: premendo "Next →" la lista "Level N — your choices" ha la riga "N AP carried
+      over from earlier levels — M to spend in total", anche ai livelli che non danno AP di loro (2, 3, 6, 9,
+      10, 12). Prima la riga "+N AP to spend" spariva del tutto a quei livelli.
+- [ ] **Avviso anche senza abilità da prendere**: PG con 6 abilità equipaggiate (o senza abilità nuove
+      disponibili) e AP liberi → nel passo 2 il paragrafo dorato c'è lo stesso, sopra i selettori. Prima stava
+      dentro la sezione "New abilities" e spariva con essa.
+- [ ] **Colore giusto**: l'avviso è dorato con la barretta a sinistra, non rosso (il rosso è per gli errori
+      tipo "hai speso più AP di quelli guadagnati").
+- [ ] **Card di metà barra**: PG di livello ≥1 che passa da 6 a 7 XP → la card in chat dice "+1 AP granted" e
+      sotto "N ability point(s) unspent — spend on a new ability or a talent from the Combat tab, o keep…".
+      Se il PG ha già speso tutto (free 0) la riga in più non compare. A livello 0 non compare nessuna card.
+- [ ] **Nessun doppio conteggio**: spendendo gli AP avanzati nel wizard, il contatore "AP N left" scende da
+      N+guadagnati e Confirm accetta; il totale sulla tab Notes dopo il level up torna coerente con "Spent/Total".
+
+- [ ] **Aetherwall anche per i PG Wright**: PG di classe Wright (tratto "Aetherwall" sulla tab Combat) con il
+      token in scena, colpito da un attaccante a **più di 2 caselle** → sulla card del danno compare il chip
+      "Aetherwall ½" e premendo Apply il danno è dimezzato. Prima funzionava solo sui foe Artillery: il
+      controllo leggeva `system.traits` (che esiste solo sugli NPC) e la classe del foe, quindi sui PG non
+      scattava mai.
+- [ ] **Entro range 2 non scatta**: stesso PG con l'attaccante a 2 caselle o meno → niente chip, danno pieno.
+      A 3 caselle riparte.
+- [ ] **È resistance, non cover**: lo stesso dimezzamento vale anche per un'**area effect** o per un attacco
+      in mischia da oltre range 2, non solo per gli attacchi a distanza (p.298 / p.113: "resistance against
+      all abilities from characters that are outside of range 2").
+- [ ] **Unerring lo ignora**: attacco con il tag **unerring** contro lo stesso PG da oltre range 2 → nessun
+      dimezzamento (glossario p.105: "Unerring — Ignores cover and aetherwall").
+- [ ] **Mai doppio dimezzamento**: se sulla card del tiro era già spuntato Resistance/Cover, il chip dice
+      "Aetherwall (already ½)" e Apply dimezza una volta sola.
+- [ ] **Senza token non indovina**: PG Wright senza token in scena (o attaccante senza token) → nessun chip e
+      nessun dimezzamento automatico, perché la distanza non è misurabile.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

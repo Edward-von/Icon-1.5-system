@@ -51,7 +51,6 @@ export class ClockSheet extends BaseActorSheet {
     context.system     = actor.system;
     context.isEditable = this.isEditable;
     context.isGM       = isGM;
-    context.sizes      = CLOCK_SIZES;
     context.enrichedNotes = await enrichHTML(actor.system.notes ?? "");
 
     // Segments carry their own index so the template stays a flat loop, and a
@@ -62,10 +61,44 @@ export class ClockSheet extends BaseActorSheet {
       full:     c.max > 0 && c.value >= c.max,
       percent:  c.max > 0 ? Math.round((Math.min(c.value, c.max) / c.max) * 100) : 0,
       segments: Array.from({ length: c.max }, (_, k) => ({ n: k + 1, on: k + 1 <= c.value })),
+      // The size dropdown must be able to show a size the board already holds,
+      // or picking any other field would silently rewrite it to the first
+      // option. The schema allows 1-24; CLOCK_SIZES is only the book's list.
+      sizes:    CLOCK_SIZES.includes(c.max) ? CLOCK_SIZES : [...CLOCK_SIZES, c.max].sort((a, b) => a - b),
     })).filter(c => !c.hidden);
 
     _log(`_prepareContext — "${actor.name}" | ${context.clocks.length} clock(s) shown`);
     return context;
+  }
+
+  /**
+   * Keep the clocks a viewer cannot see.
+   *
+   * A secret clock is not rendered for a player, so their form carries a gap —
+   * `{0: …, 2: …}` for a board of three. ArrayField casts that to a
+   * two-element array, so the hidden clock is deleted and everything after it
+   * shifts up a place: the GM's secret clock disappears the moment a player
+   * with edit rights renames the board. Start from what is stored and overlay
+   * only the indices the form actually sent.
+   * @override
+   */
+  _processFormData(event, form, formData) {
+    const submitData = super._processFormData(event, form, formData);
+    const sub = submitData?.system;
+    if (!sub || sub.clocks === undefined || sub.clocks === null) return submitData;
+
+    const live = this.document.system.toObject().clocks ?? [];
+    const rebuilt = foundry.utils.deepClone(live);
+    let overlaid = 0;
+    for (const [k, el] of Object.entries(sub.clocks)) {
+      const i = Number(k);
+      if (!Number.isInteger(i) || !rebuilt[i] || foundry.utils.getType(el) !== "Object") continue;
+      rebuilt[i] = foundry.utils.mergeObject(rebuilt[i], el, { inplace: false });
+      overlaid++;
+    }
+    if (overlaid < live.length) this._log(`_processFormData — form carried ${overlaid} of ${live.length} clock(s); the rest kept as stored`);
+    sub.clocks = rebuilt;
+    return submitData;
   }
 
   /* -------------------------------------------------- */

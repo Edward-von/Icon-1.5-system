@@ -1,5 +1,53 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 settembre 2026 — Debug di Edoardo (versione 1.6.1)
+
+Sette segnalazioni in fila: tre cose date per fatte che non lo erano del tutto, la lavagna degli orologi che
+non si poteva usare e un ritocco alle tab. Schema del mondo 14 → 16 (migrazioni 15 e 16).
+
+### Bug
+
+- **Butcher nella cartella sbagliata**: il compendio Foes lo elencava ancora sotto `Lowlander / Artillery`
+  pur avendo la scheda da Heavy → la correzione del 20 settembre aveva cambiato i dati dell'attore ma non il
+  campo `folder`, e il pack è ordinato per fazione/classe → spostato in `Lowlander / Heavy`; il tratto Guard
+  creato da quello script, finito in `Actions` perché copiava la cartella del primo item del Butcher, è
+  passato in `Traits`. Lo script ora controlla i due pack da cima a fondo: unico attore fuori posto su 376.
+- **Valori AP ancora più alti di uno oltre il livello 0**: la migrazione 12 poteva restituire il punto di metà
+  barra solo ai PG rimasti a livello 0, perché il level up azzera il flag che lo registrava → il totale viene
+  ricostruito da quello che il sistema concede davvero (2 della creazione, tabella p.241, +2 per ogni job in
+  più, un punto per ogni livello completato) e chi ne ha esattamente uno in più lo restituisce (migrazione 15);
+  chi non torna con i conti viene elencato in console e lasciato stare. Bottone sulla tab Notes per le schede
+  importate dopo la migrazione.
+- **Skill Rank sempre "OVER"**: il contatore confrontava i pallini spesi con `skillRanksTotal`, un accumulatore
+  che cresce **solo** dentro il wizard del level up → un PG importato o costruito a mano restava fermo a 0 e
+  leggeva "over" per sempre → il monte punti ora viene dal livello secondo la tabella p.241, con il bivio dei
+  livelli 4/8 dedotto dai bond power sulla scheda; la migrazione 16 allinea i PG esistenti (non abbassa mai).
+- **Scheda Clock inutilizzabile**: la testata non rispondeva ai click e il testo era tagliato a sinistra →
+  `.icon-band` è lo sfondo diagonale (ha `pointer-events: none`, un `clip-path` e margini negativi di 12px) e
+  il template ci aveva messo dentro titolo e bottone invece che sopra → testata rifatta come quelle di
+  Foe/Legend/Summon. Nello stesso giro: gli orologi **segreti** non vengono più cancellati quando un giocatore
+  con permesso di modifica tocca la lavagna (la sua form arrivava con dei buchi e l'ArrayField li leggeva come
+  "cancellati"), i segmenti non sembrano più cliccabili a chi è in sola lettura, e una taglia fuori dalle
+  standard non viene più riscritta.
+- **Aetherwall mai attivo sui PG**: il dimezzamento automatico oltre range 2 scattava solo sui foe Artillery →
+  il controllo leggeva `system.traits` e `foeClass`, che esistono solo sugli NPC, mentre Aetherwall è anche un
+  tratto della classe **Wright** (p.113) e sui PG vive come item → ora riconosce entrambi. È *resistance*, non
+  cover: dimezza qualsiasi cosa arrivi da oltre range 2, non solo gli attacchi a distanza. Verificato col
+  de-columniser che il glossario (p.105) dice davvero "Unerring — Ignores cover and aetherwall": citazioni di
+  pagina corrette (erano p.104, True Strike è p.117).
+- **Avviso degli AP non spesi invisibile**: l'avviso c'era ma viveva dentro la sezione "New abilities" del
+  passo 2 del wizard, che si apre sul passo 1 e che si nasconde quando non c'è più niente da prendere → ora
+  compare nel passo 1 (riquadro nella griglia dei guadagni + paragrafo), nel riepilogo del passo 2 anche ai
+  livelli che non danno AP, e sopra i selettori. La card di metà barra (7 XP) dice quanti punti restano in
+  totale e dove spenderli, invece del solo "+1 AP granted".
+
+### Interfaccia
+
+- **Tab della scheda**: la linea sottile fra i nomi si leggeva ancora come una barra unica → ogni nome sta in
+  una scatoletta con bordo su quattro lati, sfondo proprio e stacco fra una e l'altra; l'attiva è dorata con
+  una barretta sopra, presente ma trasparente sulle inattive così non salta nulla cambiando tab. Vale per le
+  schede PG, Foe, Legend e oggetti.
+
 ## 20 settembre 2026 — Debug + wishlist di Edoardo (versione 1.6.0)
 
 Giornata lunga: dieci bug segnalati uno a uno, le quattordici richieste della wishlist e la pulizia dei dati

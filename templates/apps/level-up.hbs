@@ -44,7 +44,17 @@
         {{#if narrative.actionImprovements}}<div class="icon-grant"><span class="icon-grant__value">+{{narrative.actionImprovements}}</span> Action improvement{{#icon-gt narrative.actionImprovements 1}}s{{/icon-gt}}</div>{{/if}}
         {{#if combat.jobChoice}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> New job <em>or</em> +1 Mastery</div>{{/if}}
         {{#if narrative.bondPowerOrActions}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> Bond Power <em>or</em> +1 to 2 actions</div>{{/if}}
+        {{#if carryAp}}<div class="icon-grant icon-grant--carry"><span class="icon-grant__value">+{{carryAp}}</span> AP still unspent</div>{{/if}}
       </div>
+
+      {{#if carryAp}}
+        <p class="icon-wizard__warn icon-wizard__warn--carry">
+          <strong>{{actor.name}} has {{carryAp}} ability point{{#icon-gt carryAp 1}}s{{/icon-gt}} left over</strong> from earlier levels —
+          the +1 at the halfway mark of the XP bar (p.112) is the easy one to forget. It is added to this
+          level's budget, so you can spend it in step 2 along with anything gained here. Nothing is lost if
+          you don't: AP keeps until you use it, from this wizard or the Combat tab.
+        </p>
+      {{/if}}
     </section>
 
     {{!-- L4/L8 combat fork --}}
@@ -131,6 +141,7 @@
       </div>
       <ul>
         {{#if apGranted}}<li>+{{apGranted}} AP to spend</li>{{/if}}
+        {{#if carryAp}}<li><strong>{{carryAp}} AP carried over</strong> from earlier levels — {{apBudgetTotal}} to spend in total</li>{{/if}}
         {{#if masteryGain}}<li>+{{masteryGain}} Mastery Point{{#icon-gt masteryGain 1}}s{{/icon-gt}}</li>{{/if}}
         {{#if combat.limitBreak}}<li>Limit Break unlocked</li>{{/if}}
         {{#if combat.relic}}<li>Relic #{{combat.relicNumber}}</li>{{/if}}
@@ -147,6 +158,12 @@
       </ul>
     </section>
 
+    {{#if carryAp}}
+      <p class="icon-wizard__warn icon-wizard__warn--carry">You still have <strong>{{carryAp}} AP</strong> from earlier
+        levels (the +1 at the halfway mark is easy to forget). They are in the budget below — spend them here on a
+        new ability or a talent, or later from the Combat tab. They are not lost either way.</p>
+    {{/if}}
+
     {{!-- COMBAT PICKERS ------------------------------------------------ --}}
 
     {{#if hasAbilityPicker}}
@@ -156,11 +173,6 @@
           <h3 class="icon-wizard__step-title">New abilities</h3>
           <span class="icon-wizard__counter" data-role="ap-counter">AP {{apBudgetTotal}} left</span>
         </div>
-        {{#if carryAp}}
-          <p class="icon-wizard__warn">You still have <strong>{{carryAp}} AP</strong> from earlier levels
-            (the +1 at the halfway mark is easy to forget). They are included in the budget above — spend them
-            here, or later from the Combat tab.</p>
-        {{/if}}
         <p class="icon-wizard__hint">
           From <em>{{#each unlockedJobNames}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</em>, chapter ≤ {{actorChapter}}. Each ability costs <strong>1 AP</strong>,
           the same pool as the talents below. At least half of your equipped abilities must match <span class="icon-badge icon-class--{{primaryClass}}">{{primaryClass}}</span>
