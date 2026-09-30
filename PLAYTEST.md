@@ -1449,6 +1449,16 @@ alla cartella "Foe Summons").
       "Heavy (class) — Guard" e le altre voci "(class)", e "Universal Template — Elite". Le stesse regole di
       fazione si trovano nel compendio Foe Templates.
 
+## AP avanzati spendibili al level up (30 settembre 2026, versione 1.8.3)
+
+- [ ] **Caso di Maar**: PG di livello ≥1 con 1 AP libero (preso a metà barra e non speso; tab Notes "(1 free)"),
+      portarlo a 15 XP e fare Level Up verso un livello che non dà AP (es. 2, 3, 6) → nel passo 2 spuntare una
+      abilità nuova → Confirm **accetta**, l'abilità è sulla scheda, la tab Notes dice "(0 free)".
+- [ ] **Talento con l'AP avanzato**: stesso caso ma scegliendo un Talento invece dell'abilità → accetta.
+- [ ] **Ancora bloccato se si esagera**: con 1 AP avanzato e 0 dal livello, spuntare due abilità → errore "…only have
+      1 AP to spend (0 from this level + 1 carried over)" e il level up non avviene.
+- [ ] **Livello che dà AP**: livello 5 (+1 AP) con 1 avanzato → si possono prendere 2 abilità, non 3.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

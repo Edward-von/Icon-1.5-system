@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — AP avanzati spendibili al level up (versione 1.8.3)
+
+### Bug
+
+- **Gli AP avanzati non si potevano spendere al level up** (segnalazione di Maar): PG che a metà barra prende l'AP
+  di metà livello, non lo spende e poi sale di livello → il wizard lo segnala giustamente come "carried over",
+  lascia spuntare l'abilità e il contatore "AP N left" lo conta, ma premendo Confirm compariva "You spent 1 AP
+  (1 new abilities + 0 talents) but only earned 0 AP this level" e il level up si bloccava → il 22 settembre
+  il riporto era stato aggiunto ai selettori e al contatore ma non al controllo finale, che confrontava la spesa
+  solo con gli AP di questo livello → il controllo ora usa gli AP del livello più quelli avanzati, e l'errore
+  (se si spende davvero troppo) dice quanti sono gli uni e gli altri.
+
 ## 30 settembre 2026 — Titan Armament completo, Foe Abilities senza doppioni, avviso di aggiornamento (versione 1.8.2)
 
 - **Avviso dopo ogni aggiornamento** (richiesta di Edoardo): foe, legend, summon e item trascinati dai compendi

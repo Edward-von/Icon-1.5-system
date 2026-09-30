@@ -611,11 +611,18 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       }
     }
 
+    // The budget is this level's AP plus the AP banked from earlier levels
+    // (e.g. a halfway point never spent): the pickers and the "AP N left"
+    // counter already offer those, so the check must count them too.
+    // apBudget reads the actor BEFORE this level's update, and spending is
+    // derived from the abilities/talents on the sheet, so nothing else to track.
+    const bankedAp     = apBudget(actor).free;
     const totalApSpent = pickedAbilityUuids.length + talentPicks.length;
-    if (totalApSpent > apGain) {
-      ui.notifications.error(`You spent ${totalApSpent} AP (${pickedAbilityUuids.length} new abilities + ${talentPicks.length} talents) but only earned ${apGain} AP this level.`);
+    if (totalApSpent > apGain + bankedAp) {
+      ui.notifications.error(`You spent ${totalApSpent} AP (${pickedAbilityUuids.length} new abilities + ${talentPicks.length} talents) but only have ${apGain + bankedAp} AP to spend (${apGain} from this level + ${bankedAp} carried over).`);
       return;
     }
+    _log(`AP check — spent ${totalApSpent} of ${apGain} (this level) + ${bankedAp} (carried over)`);
 
     // Enforce max-equipped cap
     const currentEquipped = actor.items.filter(i => i.type === "ability").length;
