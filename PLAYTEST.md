@@ -1318,6 +1318,42 @@ Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggett
 - [ ] **Senza token non indovina**: PG Wright senza token in scena (o attaccante senza token) → nessun chip e
       nessun dimezzamento automatico, perché la distanza non è misurabile.
 
+## Debug del 30 settembre 2026 — classi dei foe e compendio riordinato (versione 1.6.2)
+
+Solo compendi: i foe già importati nel mondo NON cambiano. Provare sempre importando una copia nuova dal
+compendio (poi cancellarla).
+
+- [ ] **Cartelle del compendio Foes**: aprendo il compendio ogni fazione (Relict, Hob, Jotunn…) ha le cartelle
+      Artillery / Heavy / Leader / Skirmisher / Mobs / Uniques, e dentro Uniques la sottocartella Elites. Folk ha
+      solo Mobs e Uniques; Lowlander ha in più "Legend Adds" (Cultist, Vile Darter, Giant Insect, Lesser Clot).
+      Basic Jobs ha "Mobs" al posto di "Mob". Nessuna cartella vuota.
+- [ ] **Wight → Heavy**: importare Wight (Relict / Heavy) → classe Heavy, Defense 6, Fray 4, [D] d6, Armor 2,
+      HP 40; tratto Guard presente; azione Diaga assente. Stesso controllo veloce su Tomb Guard o Legionary.
+- [ ] **Wraith → Artillery**: importare Wraith o Chain Wraith (Relict / Artillery) → classe Artillery, VIT 8,
+      HP 32, Defense 7, [D] d8; tratti Slip e Aetherwall; niente Diaga.
+- [ ] **Unique Elite con HP stampato**: Arkitek (Relict / Uniques / Elites) → Leader, Elite, VIT 10, **HP 64**
+      (non 80), Diaga presente, Guard assente. Kinfisher (Ruin Beast / Uniques / Elites) → Heavy, Elite, HP 64,
+      Guard. Megacrab (Ruin Beast / Uniques) → Heavy con **Armor 10**.
+- [ ] **Diventati Elite**: Atrophic Grave (Relict / Uniques / Elites) e Churn Baron (Scavenger / Uniques / Elites)
+      → Elite spuntato, HP 80, due attivazioni nel tracker quando entrano in combattimento.
+- [ ] **Mob nuovi**: Goons (Scavenger / Mobs) e Villager (Folk / Mobs) → classe Mob, la scheda mostra il
+      contatore dei membri al posto degli HP, tratto Mob; Goons senza Slip/Aetherwall, Villager senza Diaga.
+- [ ] **Non più mob**: Red Worm (Ruin Beast / Artillery) e Shinobi (Folk / Uniques) → HP normali (32 e 28),
+      nessun contatore membri, tratto Mob assente.
+- [ ] **Fedeli del Fetid Idol**: Cultist → Skirmisher con HP 15, Defense 10, **[D] d8 e Fray 3** (quelli
+      dell'idolo, p.440); Vile Darter → Artillery HP 15; Giant Insect → Heavy HP 20.
+- [ ] **Rimossi dal compendio Foes**: cercando "Automaton", "Munition", "Reticle", "Torpedo", "Soul Fragment",
+      "Lord", "Guilder", "Islander", "Leggio" nel compendio Foes non esce niente. Nel compendio Legends
+      Veridian Weapon, Azurian Weapon, Crimson Weapon, Arkenlich e Dread Lords ci sono ancora e descrivono i loro
+      summon / Lord.
+- [ ] **Foe Abilities allineato**: nel compendio Foe Abilities esiste "Wight — Guard" e non esiste più
+      "Wight — Diaga"; non esiste nessuna voce "Torpedo — …" o "Guilder — …"; esistono ancora
+      "Faction: Folk — Great Culture: Strive (Guilder)" e le altre Great Culture.
+- [ ] **Encounter Designer**: il roster mostra Wight come Heavy e Wraith come Artillery; filtrando per classe
+      "Mob" compaiono Goons e Villager; il totale dei foe da compendio scende (362 invece di 376).
+- [ ] **Mondo non toccato**: un Wight già importato nel mondo prima dell'aggiornamento resta Leader (normale:
+      le correzioni ai compendi valgono solo per i nuovi import).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

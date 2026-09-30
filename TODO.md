@@ -271,6 +271,39 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
       per le abilità dei PG. Le azioni di foe/legend prendono l'area dai tag dell'intestazione: se qualcuna ha
       la forma solo nel testo, il bottone 📐 non compare nemmeno lì.
 
+## Debug del 30 settembre 2026 — lista foe di Maar — FATTO (versione 1.6.2)
+
+Decisioni di Edoardo (30 settembre): in questo round solo i dati; template e summon sulla scheda NPC in
+blocchi futuri; Legends e Summons restano compendi separati.
+
+- [x] **Classi dei foe** (L, dati): 122 foe corretti in base al colore dell'intestazione nel PDF (p.112
+      "same class (color)"); tutta la lista di Maar confermata, più 6 casi trovati dal confronto automatico.
+      Questo **supera la decisione del 20 settembre sulle classi dei Lowlander** (Slab e varianti ora Heavy):
+      quella decisione partiva dal presupposto che il manuale non desse le classi.
+- [x] **Mob**: Goons e Villager → mob; Red Worm → Artillery, Shinobi → Skirmisher.
+- [x] **Tolti dal compendio Foes**: 8 summon, i 3 Dread Lords, Guilder / Islander / Leggio.
+- [x] **Atrophic Grave e Churn Baron Elite**.
+- [x] **Cartelle**: Fazione → Artillery / Heavy / Leader / Skirmisher / Mobs / Uniques / Uniques → Elites.
+
+Emerso lavorando (da fare in blocchi futuri):
+
+- [ ] **Template trascinabili sulla scheda NPC** (L/XL, richiesta di Maar, alta priorità per lui): un tipo di item
+      "template" che, trascinato su un foe, aggiunge tratti/azioni/stat (template di fazione p.314, Kin +
+      Great Culture dei Folk p.315, e le famiglie di job tipo "Wight" per dare base e stato a un NPC qualsiasi),
+      con una conferma se sostituisce un template già applicato. Cartella "Templates" per fazione nel compendio
+      Foes (o un compendio a parte). È il modo in cui il libro vuole i Folk: "use basic foes and apply the Kin
+      template and Great Culture trait of your choice". Oggi le Great Culture esistono solo come voci
+      "Faction: Folk — Great Culture: …" in Foe Abilities (mancano quelle di Yeokin e forse altre: verificare).
+- [ ] **Summon dei foe sulla scheda NPC** (L, richiesta di Maar): invece che nel compendio, i summon di un foe/legend
+      agganciati alla sua scheda con un gettone trascinabile sulla mappa, come fanno già le abilità dei PG
+      (`module/helpers/summons.mjs`). Nel capitolo dei foe ci sono circa 60 riquadri di summon (tinte chiare nel
+      PDF); oggi vivono solo come testo dentro l'azione che li evoca.
+- [ ] **Token di dimensione sbagliata** (S, dati): `validate-packs.mjs` segnala 20 foe con `size` diverso dal
+      `prototypeToken` (18 Jotunn size 2 con token 1×1, Bouncer e Scrapper size 1 con token 2×2).
+      C'era già prima del 30 settembre (verificato sul backup).
+- [ ] **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
+      libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
+
 ## Richieste di Edoardo — 20 settembre 2026 (wishlist, NON bug)
 
 Mandate come lista di desideri durante la sessione di debug del 20 settembre. Nessuna è stata fatta:

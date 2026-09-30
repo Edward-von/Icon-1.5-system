@@ -1,5 +1,53 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Classi dei foe e compendio riordinato (versione 1.6.2)
+
+Lista di Maar: tanti foe con la classe sbagliata, summon e pezzi di legend trattati da foe, e il compendio
+difficile da usare. Solo dati: nessun file di codice cambia, niente migrazione (i foe già importati nei mondi
+restano come sono; valgono i re-import). Script e analisi in `icon-compendium-audit/foe-classes-2026-09/`.
+
+### Bug
+
+- **Classi sbagliate su 122 foe**: Wight e varianti erano Leader, la famiglia Wraith Leader, i Jotunn unici
+  Artillery, e così via → il manuale non scrive mai a parole la classe di un job di fazione: la indica con il
+  **colore dell'intestazione**, gli stessi colori delle classi dei PG (p.112, "same class (color)"): rosso
+  Heavy, arancio Skirmisher, verde Leader, blu Artillery, grigio Mob. Il testo estratto perde i colori, quindi
+  le classi erano state dedotte a occhio, e le varianti avevano seguito la base sbagliata → letto il colore
+  sotto ognuna delle 775 intestazioni del capitolo (pp.287-501) e confrontato con i 376 foe del pack. Tutte le
+  correzioni della lista di Maar sono confermate dal colore; in più sei casi che non aveva elencato (Brawler
+  Heavy; Imperial Demolitionist e Imperial Spy Skirmisher; Cultist, Vile Darter e Giant Insect del Fetid Idol).
+  Ogni foe che cambia classe prende le stat base della nuova (p.298), i tratti base (Guard / Skirmisher e Dodge
+  / Slip e Aetherwall / Mob, e l'azione Diaga dei Leader) e perde quelli della vecchia; le voci specchiate nel
+  compendio Foe Abilities seguono. Restano i valori stampati nel libro: HP (Arkitek 64, Kinfisher 64, i Jotunn
+  Elite 56/80), Armor 10 del Megacrab, le stat proprie dei fedeli del Fetid Idol (che usano d8 e fray 3
+  dell'idolo, p.440). Il VIT invece è sempre quello della classe (p.290). La regola "variante = classe della
+  base" di luglio resta valida (p.314): era sbagliata la classe di molte basi. Controprova: dopo la
+  correzione ognuna delle nove fazioni ha **esattamente 6 foe per classe** (il job e le sue 5 varianti), come
+  dice p.314 ("a unique job for each class. Each has a number of variants"); prima gli Hob avevano 17
+  Artillery e 2 Heavy.
+  **Nota**: questo cambia anche la famiglia Slab dei Lowlander (Slab, Mule, Canker, Snork, Slaughterer →
+  Heavy), che il 20 settembre si era deciso di lasciare Artillery perché "il manuale non dà le classi": il
+  colore rosso delle intestazioni dice Heavy. Backup in `icon-compendium-audit/backups/foes.1790777974704`.
+- **Goons e Villager erano foe normali** → sono mob (intestazione grigia, p.371 e p.322); Red Worm e Shinobi
+  erano mob e sono Artillery e Skirmisher.
+- **Summon nel compendio Foes**: Combat / Repair / Shield / Turret Automaton, Munition, Targeting Reticle,
+  Torpedo e Soul Fragment sono riquadri di summon delle legend Veridian, Crimson e Azurian Weapon e
+  Arkenlich, non job → tolti; il loro testo completo è già nella legend (controllato frase per frase).
+- **Lord Evictor, Prelictor e Vexator** doppioni della legend **Dread Lords** (p.341), che li contiene già → tolti.
+- **Guilder, Islander, Leggio non sono foe**: sono Great Culture dei Folk, da mettere su un foe base (p.315,
+  "use basic foes and apply the Kin template and Great Culture trait of your choice") → tolti; le loro regole
+  restano nel compendio Foe Abilities come "Faction: Folk — Great Culture: …".
+- **Atrophic Grave e Churn Baron non erano Elite** pur stando nella sezione "Unique Elites" → Elite, HP 80
+  stampato.
+
+### Riorganizzazione
+
+- **Compendio Foes per fazione**: ogni fazione ora ha Artillery / Heavy / Leader / Skirmisher (i job e le loro
+  varianti), **Mobs**, **Uniques** (i foe unici con nome) e **Uniques / Elites**, come nello schema proposto da
+  Maar. I Folk sono tutti unici (p.315) e stanno in Folk / Uniques; i fedeli del Fetid Idol in Lowlander /
+  Legend Adds; Basic Jobs ed Elite Foes tengono le cartelle per classe ("Mob" diventa "Mobs"). Legends e Summons
+  restano nei loro compendi. 376 → 362 foe.
+
 ## 22 settembre 2026 — Debug di Edoardo (versione 1.6.1)
 
 Sette segnalazioni in fila: tre cose date per fatte che non lo erano del tutto, la lavagna degli orologi che
