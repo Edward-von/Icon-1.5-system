@@ -5724,3 +5724,17 @@ ol.chat-log .chat-message,
 .icon-update-notice ul { margin: 0 0 8px 18px; padding: 0; }
 .icon-update-notice li { margin: 0 0 4px; line-height: 1.4; }
 .icon-update-notice__note { font-size: 0.88em; opacity: 0.8; }
+
+/* Clock board: chip that drags a clock onto the map (module/canvas/clock-tokens.mjs) */
+.icon-clock-card__drag {
+  cursor: grab;
+  padding: 0 6px;
+  border: 1px solid var(--clock-color, var(--ic-gold-dim));
+  border-radius: 10px;
+  font-size: 0.75em;
+  color: var(--ic-text-normal);
+  user-select: none;
+  white-space: nowrap;
+}
+.icon-clock-card__drag:hover { color: var(--ic-gold-bright); border-color: var(--ic-gold-bright); }
+.icon-clock-card__drag:active { cursor: grabbing; }

@@ -20,6 +20,9 @@ export class ClockData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       clocks: new ArrayField(new SchemaField({
+        // Stable identity of a clock (a map token points at it; the index moves
+        // when a clock above is removed). Given on creation and by migration 17.
+        id:    new StringField({ required: true, initial: "" }),
         name:  new StringField({ required: true, initial: "New clock" }),
         value: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
         max:   new NumberField({ required: true, initial: 6, min: 1, max: 24, integer: true }),

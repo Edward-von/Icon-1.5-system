@@ -30,7 +30,9 @@ function _isAdjustable(id) {
 function _controlledActor() {
   const tokens = canvas?.tokens?.controlled ?? [];
   if (!tokens.length) return null;
-  return tokens[tokens.length - 1]?.actor ?? null;
+  const actor = tokens[tokens.length - 1]?.actor ?? null;
+  // A clock token (module/canvas/clock-tokens.mjs) belongs to the clock board: no statuses.
+  return actor?.type === "clock" ? null : actor;
 }
 
 /** Active ICON statuses on an actor, with a count for stackable / elevation. */

@@ -1,5 +1,30 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Orologi sulla mappa (versione 1.9.0)
+
+Richiesta di Maar: poter trascinare un orologio dalla lavagna degli orologi sulla scena e avere lì un orologio
+visivo che si aggiorna insieme al foglio. Schema del mondo 16 → 17 (migrazione 17).
+
+### Nuovo
+
+- **Gettone "⤓ Map" su ogni orologio** della lavagna (solo per il GM): trascinato sulla scena crea un token 2×2
+  che disegna l'orologio — un disco diviso in tanti spicchi quanti sono i segmenti, quelli riempiti nel colore
+  dell'orologio, "valore/massimo" al centro, bordo dorato più acceso quando è pieno — con il nome dell'orologio
+  sotto.
+- **Si aggiorna da solo**: spostando l'orologio sul foglio (clic sui segmenti, + / −, cambio di taglia o di colore)
+  il disegno sulla mappa cambia subito per tutti. Rinominando l'orologio cambia il nome del token; un orologio
+  segreto (🙈) ha il token nascosto ai giocatori e torna visibile quando lo si rivela; togliendo l'orologio dalla
+  lavagna spariscono anche i suoi token. Si possono mettere più token dello stesso orologio, anche su scene
+  diverse. Doppio clic sul token apre la lavagna.
+- **Ogni orologio ha un identificativo stabile** (migrazione 17 per quelli esistenti), così il token resta legato
+  al suo orologio anche se ne vengono tolti altri sopra di lui nella lista.
+
+### Richiesta già soddisfatta
+
+- **Stacco visivo fra le tab della scheda** (Narrative / Combat / Conditions…): fatto nelle versioni 1.6.0
+  (divisori e spazio) e 1.6.1 (ogni tab in una scatoletta con bordo, l'attiva dorata). Chi la chiede ancora ha
+  una build precedente alla 1.6.1.
+
 ## 30 settembre 2026 — Unerring che ignora davvero Aetherwall (versione 1.8.4)
 
 ### Bug

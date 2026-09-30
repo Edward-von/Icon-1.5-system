@@ -1476,6 +1476,33 @@ Bersaglio: un foe Artillery (Aetherwall) con il token a **più di 2 caselle** da
 - [ ] **Foe e Legend**: stesso controllo tirando il danno dalla scheda di un foe con lo status Unerring contro un PG
       Wright (Aetherwall).
 
+## Orologi sulla mappa (30 settembre 2026, versione 1.9.0)
+
+Da provare come GM con un secondo client giocatore collegato. Prima: F5, la migrazione 17 dà un id agli orologi
+esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano).
+
+- [ ] **Gettone sul foglio**: aprire una lavagna orologi → ogni orologio ha "⤓ Map" accanto a "N/M". Il giocatore
+      non lo vede.
+- [ ] **Trascinare**: trascinare "⤓ Map" sulla scena → compare un token 2×2 con il disco a spicchi (tanti quanti i
+      segmenti), i segmenti pieni nel colore dell'orologio, "N/M" al centro, il nome sotto.
+- [ ] **Aggiornamento dal vivo**: con il foglio aperto cliccare un segmento, poi "+" e "−" → il disco sulla mappa
+      cambia subito, anche sullo schermo del giocatore. Riempiendolo tutto il bordo diventa più acceso.
+- [ ] **Taglia e colore**: cambiare la taglia (4 → 8) e il colore sul foglio → il disco ha 8 spicchi e il nuovo
+      colore.
+- [ ] **Nome**: rinominare l'orologio → il nome sotto il token cambia.
+- [ ] **Segreto**: 🙈 sull'orologio → il token diventa nascosto (semitrasparente per il GM, invisibile al
+      giocatore); 👁 → torna visibile. Un orologio già segreto trascinato sulla mappa nasce nascosto.
+- [ ] **Più token / più scene**: due token dello stesso orologio, uno per scena → entrambi seguono il foglio.
+- [ ] **Togliere l'orologio**: ✕ sull'orologio nel foglio e conferma → i suoi token spariscono da tutte le scene;
+      gli altri orologi e i loro token restano giusti (niente scambi di orologio).
+- [ ] **Doppio clic** sul token → si apre la lavagna degli orologi.
+- [ ] **Nessun pannello status**: selezionando il token orologio non compare il pannello degli status in alto a
+      destra.
+- [ ] **Giocatore che trascina**: se un giocatore riesce a trascinare (non dovrebbe vedere il gettone) → avviso
+      "Only the GM can place a clock on the map."
+- [ ] **Tab della scheda (richiesta di Maar)**: già fatto nella 1.6.1 — verificare che Maar abbia almeno quella build
+      (le tab sono scatolette separate, l'attiva dorata).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

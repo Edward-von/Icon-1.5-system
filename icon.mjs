@@ -99,6 +99,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 /* -------------------------------------------------- */
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
 import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
+import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
@@ -230,6 +231,9 @@ Hooks.once("init", () => {
 
   // ---- Foe / legend summons dragged from the sheet onto the canvas ----
   registerFoeSummonHooks();
+
+  // ---- Campaign clocks dragged from the clock board onto the canvas ----
+  registerClockTokenHooks();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();

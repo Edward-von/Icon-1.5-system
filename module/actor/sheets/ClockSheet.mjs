@@ -115,7 +115,7 @@ export class ClockSheet extends BaseActorSheet {
   static async #onAddClock(event) {
     event.preventDefault();
     const clocks = this.#clocks();
-    clocks.push({ name: "New clock", value: 0, max: 6, color: "#c8961c", note: "", secret: false });
+    clocks.push({ id: foundry.utils.randomID(), name: "New clock", value: 0, max: 6, color: "#c8961c", note: "", secret: false });
     _log(`addClock — now ${clocks.length}`);
     await this.#writeClocks(clocks);
   }

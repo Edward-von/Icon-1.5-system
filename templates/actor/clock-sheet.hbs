@@ -35,6 +35,10 @@
           <input type="color" name="system.clocks.{{c.i}}.color" value="{{c.color}}"
                  title="Colour of this clock" {{#unless ../isEditable}}disabled{{/unless}}>
           <span class="icon-clock-card__count">{{c.value}}/{{c.max}}</span>
+          {{#if ../isGM}}
+            <span class="icon-clock-card__drag" draggable="true" data-clock-drag-index="{{c.i}}"
+                  title="Drag onto the map: a clock token that follows this clock live">⤓ Map</span>
+          {{/if}}
           <button type="button" class="icon-btn icon-btn--sm" data-action="postClock" data-index="{{c.i}}"
                   title="Post this clock to chat{{#if c.secret}} (whispered to the GM){{/if}}">💬</button>
           {{#if ../isGM}}

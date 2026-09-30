@@ -26,7 +26,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 16;
+export const CURRENT_SCHEMA_VERSION = 17;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -682,6 +682,23 @@ const MIGRATIONS = {
     if (generous.length) {
       console.log(`ICON 1.5 | Migration 16: ${generous.length} character(s) hold more Skill Ranks than the table grants and were left as they are:\n  ${generous.join("\n  ")}`);
     }
+  },
+
+  /* 17 — every campaign clock gets a stable id.
+   * A clock dragged onto the map becomes a token that follows it
+   * (module/canvas/clock-tokens.mjs); it must find its clock again after
+   * clocks above it are removed, so it points at an id, not an index. Clocks
+   * made from now on get one when added; this gives one to the existing ones. */
+  17: async () => {
+    let n = 0;
+    for (const actor of game.actors) {
+      if (actor.type !== "clock") continue;
+      const clocks = foundry.utils.deepClone(actor.system.toObject().clocks ?? []);
+      let changed = false;
+      for (const c of clocks) if (!c.id) { c.id = foundry.utils.randomID(); changed = true; n++; }
+      if (changed) await actor.update({ "system.clocks": clocks });
+    }
+    if (n) console.log(`ICON 1.5 | Migration 17: ${n} clock(s) given a stable id`);
   },
 };
 

@@ -14,6 +14,7 @@ import { applyStatus, removeStatus, hasStatus, getStatusCharges,
 import { saveRoll } from "../../dice/rolls.mjs";
 import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
 import { foeSummonDragData } from "../foe-summons.mjs";
+import { clockDragData } from "../../canvas/clock-tokens.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -233,6 +234,15 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
       html.addEventListener("dragstart", ev => {
         // A foe's / legend's own summon (system.summons): the canvas drop hook
         // in foe-summons.mjs builds the Summon actor and its token.
+        // A campaign clock (clock board): the canvas drop hook in clock-tokens.mjs
+        // places a token that shows the clock and follows it live.
+        const clockChip = ev.target?.closest?.("[data-clock-drag-index]");
+        if (clockChip) {
+          ev.dataTransfer?.setData("text/plain", JSON.stringify(clockDragData(this.document, clockChip.dataset.clockDragIndex)));
+          ev.dataTransfer.effectAllowed = "copy";
+          this._log?.(`clock drag — index ${clockChip.dataset.clockDragIndex}`);
+          return;
+        }
         const own = ev.target?.closest?.("[data-foe-summon-index]");
         if (own) {
           ev.dataTransfer?.setData("text/plain", JSON.stringify(foeSummonDragData(this.document, own.dataset.foeSummonIndex)));
