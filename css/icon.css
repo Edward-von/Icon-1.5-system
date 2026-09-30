@@ -492,7 +492,7 @@
   display: flex;
   flex-shrink: 0;
 }
-.icon.sheet .tabs .item {
+.icon.sheet .tabs > [data-tab] {
   padding: 7px 14px;
   font-size: 0.82em;
   text-transform: uppercase;
@@ -503,8 +503,8 @@
   transition: color .15s, border-color .15s;
   user-select: none;
 }
-.icon.sheet .tabs .item:hover { color: var(--ic-text-normal); }
-.icon.sheet .tabs .item.active {
+.icon.sheet .tabs > [data-tab]:hover { color: var(--ic-text-normal); }
+.icon.sheet .tabs > [data-tab].active {
   color: var(--ic-gold);
   border-bottom-color: var(--ic-gold);
 }
@@ -4894,18 +4894,31 @@ ol.chat-log .chat-message,
 .icon-sheet .icon-setup-banner { margin-top: 8px; }
 
 /* --- Tabs --- */
-/* Three goes at this. The tabs first ran together as one strip of words; then
+/* The tab strip is core's templates/generic/tab-navigation.hbs: its entries
+   are <a data-tab> with NO "item" class, so the old ".tabs .item" rules never
+   matched anything (the 20 and 22 Sept rounds shipped CSS that never applied;
+   found 30 Sept). Target [data-tab]. Core's own tab styles live in cascade
+   layers, so these unlayered rules win without !important.
+   Three goes at this. The tabs first ran together as one strip of words; then
    they got a hairline between them, which still read as one bar. Now each name
    sits in its own box: a real border on all four sides, its own background, and
    a gap between boxes, so the strip reads as five separate things at a glance.
    The active one is filled, gold-bordered and capped with a gold bar. */
 .icon.sheet .tabs {
+  /* Above the header: the PC hero band is clipped diagonally and pulled 6px
+     down over this strip (margin-bottom: -6px), and being positioned it would
+     paint over the top of the boxes. The top padding clears that overlap. */
+  position: relative;
+  z-index: 2;
   align-items: flex-end;
+  justify-content: flex-start;   /* core: space-evenly */
   gap: 5px;
-  padding: 7px 8px 0;
+  padding: 12px 8px 0;
+  line-height: normal;           /* core: 2.5 */
+  border-top: none;
   border-bottom: 1px solid var(--ic-gold-dim);
 }
-.icon.sheet .tabs .item {
+.icon.sheet .tabs > [data-tab] {
   position: relative;
   padding: 6px 13px;
   font-size: .84em;
@@ -4915,29 +4928,32 @@ ol.chat-log .chat-message,
   background: var(--ic-bg-light);
   border: 1px solid var(--ic-border-vis);
   border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
+  /* Sit ON the strip's gold line rather than on top of it: the box's bottom
+     edge replaces the line instead of doubling it. */
+  margin-bottom: -1px;
   transition: color .15s, background .15s, border-color .15s;
 }
 /* The gold cap: transparent on an inactive tab so nothing shifts when it lights up. */
-.icon.sheet .tabs .item::before {
+.icon.sheet .tabs > [data-tab]::before {
   content: "";
   position: absolute; left: -1px; right: -1px; top: -1px;
   height: 2px;
   border-radius: var(--ic-radius-sm) var(--ic-radius-sm) 0 0;
   background: transparent;
 }
-.icon.sheet .tabs .item:hover {
+.icon.sheet .tabs > [data-tab]:hover {
   color: var(--ic-text-normal);
   background: var(--ic-bg-panel);
   border-color: var(--ic-gold-dim);
 }
-.icon.sheet .tabs .item.active {
+.icon.sheet .tabs > [data-tab].active {
   color: var(--ic-gold-bright);
   font-weight: 600;
   background: linear-gradient(to bottom, rgba(200,150,28,.22), rgba(200,150,28,.06));
   border-color: var(--ic-gold);
   border-bottom-color: var(--ic-gold);
 }
-.icon.sheet .tabs .item.active::before { background: var(--ic-gold-bright); }
+.icon.sheet .tabs > [data-tab].active::before { background: var(--ic-gold-bright); }
 
 /* --- Sections & cards --- */
 .icon-section { background: #161c26; border-color: var(--ic-border-subtle); }

@@ -1,5 +1,25 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Tab separate davvero, nomi dei tipi (versione 1.9.1)
+
+### Bug
+
+- **Le tab della scheda erano ancora attaccate** (richiesta di Maar, verificata da Edoardo in locale): le correzioni
+  del 20 e del 22 settembre (divisori, poi una scatoletta per tab) non si erano mai viste → la barra delle tab è il
+  template core di Foundry v13, le cui voci sono `<a data-tab>` **senza** la classe `item`, e il CSS colpiva
+  `.tabs .item`: nessuna regola veniva applicata, restava lo stile core con le parole distribuite su tutta la
+  riga → selettore `.tabs > [data-tab]`; tolti anche la distribuzione su tutta la larghezza, l'interlinea alta e il
+  bordo superiore del core. Le schede PG, Foe, Legend e degli oggetti hanno ora le tab in scatolette separate,
+  l'attiva dorata.
+- **Tab coperte dalla banda dell'intestazione del PG**: la banda colorata della classe scende di 6px sulla barra e
+  ne copriva la parte alta con il suo bordo diagonale → la barra delle tab sta sopra l'intestazione, con più spazio
+  in alto; le scatolette poggiano sulla linea dorata invece di raddoppiarla.
+
+### Piccole cose
+
+- **Nomi leggibili dei tipi** nel menu "Create Actor / Create Item": "Clock Board" invece di "clock" (la lavagna degli
+  orologi era difficile da trovare), "Player Character", "Foe Template" e così via.
+
 ## 30 settembre 2026 — Orologi sulla mappa (versione 1.9.0)
 
 Richiesta di Maar: poter trascinare un orologio dalla lavagna degli orologi sulla scena e avere lì un orologio

@@ -1503,6 +1503,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Tab della scheda (richiesta di Maar)**: già fatto nella 1.6.1 — verificare che Maar abbia almeno quella build
       (le tab sono scatolette separate, l'attiva dorata).
 
+## Tab separate davvero, nomi dei tipi (30 settembre 2026, versione 1.9.1)
+
+- [x] **Tab in scatolette** (verificato da Edoardo in locale il 30 settembre): scheda PG → le cinque tab sono riquadri
+      separati allineati a sinistra, l'attiva dorata.
+- [ ] **Nessuna sovrapposizione con la banda**: la parte alta delle scatolette non è tagliata dalla banda colorata
+      dell'intestazione del PG (provare con una classe dal colore chiaro).
+- [ ] **Foe, Legend, oggetti**: stesse tab a scatoletta.
+- [ ] **Create Actor**: il menu dei tipi mostra "Clock Board", "Player Character", "Foe", "Legend", "Summon";
+      Create Item mostra "Foe Template", "Foe Ability", ecc.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

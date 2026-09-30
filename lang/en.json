@@ -232,5 +232,21 @@
 
   "ICON.SaveSuccess": "Save Success — status cleared.",
   "ICON.SaveFailure": "Save Failed — status persists.",
-  "ICON.SaveOngoing": "Ongoing — cannot be saved while source persists."
+  "ICON.SaveOngoing": "Ongoing — cannot be saved while source persists.",
+
+  "TYPES.Actor.icon":          "Player Character",
+  "TYPES.Actor.foe":           "Foe",
+  "TYPES.Actor.legend":        "Legend",
+  "TYPES.Actor.summon":        "Summon",
+  "TYPES.Actor.clock":         "Clock Board",
+  "TYPES.Item.ability":        "Ability",
+  "TYPES.Item.limit-break":    "Limit Break",
+  "TYPES.Item.trait":          "Trait",
+  "TYPES.Item.relic":          "Relic",
+  "TYPES.Item.bond":           "Bond",
+  "TYPES.Item.bond-power":     "Bond Power",
+  "TYPES.Item.gear-kit":       "Gear Kit",
+  "TYPES.Item.foe-ability":    "Foe Ability",
+  "TYPES.Item.job-template":   "Job Template",
+  "TYPES.Item.foe-template":   "Foe Template"
 }
