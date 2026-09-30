@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Unerring che ignora davvero Aetherwall (versione 1.8.4)
+
+### Bug
+
+- **Unerring non ignorava Aetherwall** (segnalazione di Maar): un personaggio con lo status **Unerring** (o un
+  attacco con il tag unerring) colpiva un bersaglio con Aetherwall da oltre range 2 e il danno veniva dimezzato
+  lo stesso → il calcolo all'Apply sa ignorare Aetherwall (glossario p.105: "Ignores cover and aetherwall"), ma
+  lo sapeva solo se nel dialog del danno era stata spuntata a mano la casella "Unerring": né il tag
+  dell'abilità né lo status sull'attaccante la spuntavano → ora il dialog apre con **Unerring** (e **True
+  Strike**, stesso difetto contro Dodge) già spuntato quando l'abilità ha il tag o chi attacca ha lo status, con
+  scritto il perché ("from the ability's tag" / "from your Unerring status"); in più la card del danno controlla
+  di nuovo lo status di chi attacca, così vale anche se la casella è stata tolta per errore.
+
 ## 30 settembre 2026 — AP avanzati spendibili al level up (versione 1.8.3)
 
 ### Bug

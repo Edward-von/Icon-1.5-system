@@ -15,7 +15,7 @@
 import { ICON } from "../config.mjs";
 import { damageRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
-import { getStatusCharges, setStatusCharges } from "./statuses.mjs";
+import { getStatusCharges, setStatusCharges, hasStatus } from "./statuses.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
@@ -511,6 +511,11 @@ export async function postAbilityDamageCard(actor, {
   // the card); the reductions rolled here are skipped straight away.
   if (divine) { resistance = false; weakened = false; }
   else if (pierce) { weakened = false; }
+  // An attacker with the Unerring / True Strike status makes the attack so even
+  // when the box wasn't ticked (glossary p.105: Unerring "Ignores cover and
+  // aetherwall"); the flags below are what Apply reads.
+  if (!unerring   && hasStatus(actor, "unerring"))    unerring = true;
+  if (!trueStrike && hasStatus(actor, "true-strike")) trueStrike = true;
   // Select the parsed chunk for the chosen outcome. Save-linked damage
   // ("save-fail" / "save-success") is passed as the hit chunk by the caller.
   const chunk = outcome === "miss" ? parsed.miss

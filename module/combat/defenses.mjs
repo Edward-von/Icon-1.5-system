@@ -315,6 +315,22 @@ export function ignoresEvasion(attacker, tags = []) {
 }
 
 /**
+ * Whether an attack is True Strike and/or Unerring, and why: the tag on the
+ * attack itself, or the status on the attacker (a character who "gains
+ * unerring" makes every attack unerring while it lasts). Used to pre-tick the
+ * damage dialog and on the damage card, so Apply ignores Dodge (True Strike)
+ * and Cover / Aetherwall (Unerring, glossary p.105) either way.
+ * @returns {{ trueStrike: string, unerring: string }} reasons, "" when not
+ */
+export function attackIgnores(attacker, tags = []) {
+  const keys = (Array.isArray(tags) ? tags : []).map(tagKey);
+  return {
+    trueStrike: keys.includes("true-strike") || keys.includes("truestrike") ? "tag" : _has(attacker, "true-strike") ? "status" : "",
+    unerring:   keys.includes("unerring") ? "tag" : _has(attacker, "unerring") ? "status" : "",
+  };
+}
+
+/**
  * Rigoletto III: a PC with Evasion and the relic at rank III also rolls
  * evasion for allies in range 2 (on a 6). Find such a holder near a token.
  * `allTokens` lets tests inject the scene's tokens.

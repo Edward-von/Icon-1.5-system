@@ -1459,6 +1459,23 @@ alla cartella "Foe Summons").
       1 AP to spend (0 from this level + 1 carried over)" e il level up non avviene.
 - [ ] **Livello che dà AP**: livello 5 (+1 AP) con 1 avanzato → si possono prendere 2 abilità, non 3.
 
+## Unerring che ignora davvero Aetherwall (30 settembre 2026, versione 1.8.4)
+
+Bersaglio: un foe Artillery (Aetherwall) con il token a **più di 2 caselle** dall'attaccante.
+
+- [ ] **Status Unerring sull'attaccante**: dare lo status Unerring al PG (tab Conditions), tirare il danno di un
+      attacco qualsiasi → nel dialog la casella "Unerring" è già spuntata con scritto "from your Unerring status";
+      sulla card niente chip "Aetherwall ½" e Apply toglie il danno pieno.
+- [ ] **Tag unerring**: un'abilità con il tag unerring (es. Death Blossom) senza lo status → casella spuntata "from
+      the ability's tag", danno pieno.
+- [ ] **Senza Unerring**: stesso attacco senza tag né status → casella vuota, "Aetherwall ½" come prima.
+- [ ] **Casella tolta a mano con lo status attivo**: togliere la spunta nel dialog → il danno resta pieno lo stesso
+      (lo status vale comunque).
+- [ ] **True Strike**: status True Strike sull'attaccante contro un bersaglio con Dodge, risultato Miss → casella
+      "True Strike" già spuntata, Dodge non annulla il danno.
+- [ ] **Foe e Legend**: stesso controllo tirando il danno dalla scheda di un foe con lo status Unerring contro un PG
+      Wright (Aetherwall).
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

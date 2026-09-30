@@ -15,7 +15,7 @@
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
-import { defenseChipsHtml, defenseProfile, ignoresEvasion } from "../combat/defenses.mjs";
+import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 
@@ -382,6 +382,11 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // halved so Apply won't halve twice.
   const autoHalf = targets.filter(t => t.defense_?.cover || t.defense_?.resistance).map(t => t.name);
   const dodgers  = targets.filter(t => t.defense_?.dodge).map(t => t.name);
+  // True Strike / Unerring from the attack's tags or the attacker's status:
+  // start ticked, so Apply ignores Dodge / Cover / Aetherwall without the
+  // player having to remember (the checkbox can still be unticked).
+  const ignores = attackIgnores(actor, ab.tags ?? []);
+  const whyTick = (r, name) => r === "tag" ? "from the ability's tag" : r === "status" ? `from your ${name} status` : "";
 
   // Finishing Blow (Vagabond): the block triggers when the ability targets a
   // bloodied foe — at or under 50% HP (p.104). When its text grants bonus
@@ -442,8 +447,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip"><input type="checkbox" name="weakened"><span>Weakened <small>−2</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Pierce (p.104): damage cannot be reduced by armor or weakened."><input type="checkbox" name="pierce"><span>Pierce <small>no armor</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Divine (p.104): damage cannot be reduced, mitigated or negated in any way except immunity — ignores armor, weakened, resistance and defiance, and bypasses vigor."><input type="checkbox" name="divine"><span>Divine <small>nothing reduces it</small></span></label>
-            <label class="icon-roll-chip icon-roll-chip--type" title="True Strike (p.104): ignores dodge, blind, evasion and stealth. On the damage card it stops Dodge cancelling a Miss / Area result."><input type="checkbox" name="trueStrike"><span>True Strike <small>ignores Dodge</small></span></label>
-            <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply the target's Cover no longer halves the damage."><input type="checkbox" name="unerring"><span>Unerring <small>ignores Cover</small></span></label>
+            <label class="icon-roll-chip icon-roll-chip--type" title="True Strike (p.104): ignores dodge, blind, evasion and stealth. On the damage card it stops Dodge cancelling a Miss / Area result."><input type="checkbox" name="trueStrike" ${ignores.trueStrike ? "checked" : ""}><span>True Strike <small>${ignores.trueStrike ? esc(whyTick(ignores.trueStrike, "True Strike")) : "ignores Dodge"}</small></span></label>
+            <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply neither the target's Cover nor its Aetherwall halves the damage."><input type="checkbox" name="unerring" ${ignores.unerring ? "checked" : ""}><span>Unerring <small>${ignores.unerring ? esc(whyTick(ignores.unerring, "Unerring")) : "ignores Cover / Aetherwall"}</small></span></label>
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
           ${hatred.active || autoHalf.length || dodgers.length || fbNote ? `<div class="icon-roll-auto">
