@@ -17,7 +17,7 @@
  * Applying and removing lives in module/actor/foe-templates.mjs; this is the
  * data only. Stat fields left null leave the foe's value alone.
  */
-import { traitSchema, actionSchema, interruptSchema, roundActionSchema } from "../actor/FoeData.mjs";
+import { traitSchema, actionSchema, interruptSchema, roundActionSchema, summonSchema } from "../actor/FoeData.mjs";
 
 const { SchemaField, StringField, NumberField, BooleanField, ArrayField, HTMLField } = foundry.data.fields;
 
@@ -56,6 +56,7 @@ export class FoeTemplateData extends foundry.abstract.TypeDataModel {
       actions:      new ArrayField(actionSchema(),      { initial: [] }),
       interrupts:   new ArrayField(interruptSchema(),   { initial: [] }),
       roundActions: new ArrayField(roundActionSchema(), { initial: [] }),
+      summons:      new ArrayField(summonSchema(),      { initial: [] }),   // job templates: the job's summons
 
       source:      new StringField({ required: true, initial: "" }),   // "p.324"
       description: new HTMLField({ required: true, initial: "" }),

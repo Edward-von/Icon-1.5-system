@@ -13,6 +13,7 @@ import { applyStatus, removeStatus, hasStatus, getStatusCharges,
          adjustStatusCharges, cycleOngoingStatus, saveableStatusEffects } from "../../combat/statuses.mjs";
 import { saveRoll } from "../../dice/rolls.mjs";
 import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
+import { foeSummonDragData } from "../foe-summons.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -230,6 +231,15 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
       // there, which is how Foundry places a token. Delegated, so the chips of
       // every re-render are covered by this single listener.
       html.addEventListener("dragstart", ev => {
+        // A foe's / legend's own summon (system.summons): the canvas drop hook
+        // in foe-summons.mjs builds the Summon actor and its token.
+        const own = ev.target?.closest?.("[data-foe-summon-index]");
+        if (own) {
+          ev.dataTransfer?.setData("text/plain", JSON.stringify(foeSummonDragData(this.document, own.dataset.foeSummonIndex)));
+          ev.dataTransfer.effectAllowed = "copy";
+          this._log?.(`foe summon drag — "${own.dataset.summonName}"`);
+          return;
+        }
         const chip = ev.target?.closest?.("[data-summon-uuid]");
         if (!chip) return;
         ev.dataTransfer?.setData("text/plain", JSON.stringify({

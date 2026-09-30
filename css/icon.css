@@ -5689,3 +5689,32 @@ ol.chat-log .chat-message,
 .icon-foe-template-summary__src { color: var(--ic-text-dim); font-size: 0.9em; }
 .icon-foe-template-summary__block { margin: 0 0 6px; line-height: 1.4; }
 .icon-foe-template-summary__block p { display: inline; margin: 0; }
+
+/* Foe / legend summons & objects (templates/actor/npc-summons.hbs) — chip drags onto the map */
+.icon-npc-summons__hint { margin: 0 0 6px; font-size: 0.74em; font-style: italic; color: var(--ic-text-dim); }
+.icon-npc-summon {
+  margin: 0 0 6px;
+  padding: 5px 7px;
+  border: 1px solid var(--ic-border-subtle);
+  border-left: 3px solid var(--ic-purple-bright);
+  border-radius: 3px;
+  background: var(--ic-bg-field);
+}
+.icon-npc-summon[data-kind="object"] { border-left-color: var(--ic-gold-dim); }
+.icon-npc-summon__header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.icon-npc-summon__chip {
+  cursor: grab;
+  padding: 1px 8px;
+  border: 1px solid var(--ic-gold-dim);
+  border-radius: 10px;
+  background: var(--ic-bg-panel);
+  color: var(--ic-text-bright);
+  font-weight: 600;
+  font-size: 0.85em;
+  user-select: none;
+}
+.icon-npc-summon__chip:hover { border-color: var(--ic-gold-bright); color: var(--ic-gold-bright); }
+.icon-npc-summon__chip:active { cursor: grabbing; }
+.icon-npc-summon__desc { flex: 1 1 auto; font-size: 0.78em; color: var(--ic-text-dim); font-style: italic; }
+.icon-npc-summon__rules { margin-top: 4px; font-size: 0.85em; line-height: 1.4; }
+.icon-npc-summon__rules p { margin: 0 0 3px; }

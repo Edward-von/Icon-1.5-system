@@ -1395,6 +1395,37 @@ Usare una copia nuova di un foe base (compendio Foes → Basic Jobs, es. Brute),
 - [ ] **Encounter Designer**: il filtro fazione non ha più voci doppie tipo "relict" e "Relict" per i foe
       sistemati come sopra.
 
+## Summon dei foe sulla loro scheda (30 settembre 2026, versione 1.8.0)
+
+Da provare come GM su una scena con griglia, con foe importati di nuovo dal compendio (poi cancellarli insieme
+alla cartella "Foe Summons").
+
+- [ ] **Sezione sulla scheda**: importare Wraith (Relict / Artillery) → in fondo alla tab Stats & Abilities c'è
+      "Summons & Objects" con Soul Spark: gettone "⤓ Soul Spark", riga "Summon, size 1, intangible · p.329", testo
+      delle regole. Un foe senza summon (es. Wight) non ha la sezione.
+- [ ] **Varianti**: Arc Spectre, Chain Wraith, Rift Wraith, Abomination, Blasphemy hanno anche loro Soul Spark.
+- [ ] **Trascinare sulla mappa**: dal gettone di Soul Spark trascinare sulla scena → compare un token Soul Spark
+      dove si è lasciato il mouse, allineato alla griglia; nella barra degli attori c'è la cartella "Foe Summons"
+      con l'attore Soul Spark. Notifica "Soul Spark placed (Wraith)".
+- [ ] **Più copie**: trascinare altre due volte → tre token, un solo attore nella cartella.
+- [ ] **Scheda del summon**: aprire il token → scheda Summon con Summoner = Wraith, testo dell'effetto, intangibile.
+      Per un summon con azione (es. Junk Golem dell'Hoarder, o Combat Automaton della Veridian Weapon) il tiro di
+      danno usa il [D] e il fray del foe.
+- [ ] **HP propri**: Combat Automaton (Veridian Weapon, legend) → token con barra HP 5/5, difesa 5; danneggiarne uno
+      non tocca gli altri.
+- [ ] **Taglia**: Everforge (Keeper of the Eldflame) → token 2×2.
+- [ ] **Oggetti**: Temple Bell (Bell Warden) e Cauldron (Troll) compaiono come oggetti (bordo dorato nella sezione),
+      velocità 0 sulla scheda del token.
+- [ ] **Legend**: sulla Majesty Demon, tab Combat, ci sono i cinque summon della corte (Sycophant, Scepter Bearer,
+      Shrouded Lady, Maiden, Flagellant Knight) con HP e difesa del libro.
+- [ ] **💬**: il bottone chat sul summon manda in chat nome, riga descrittiva e regole, con il foe come speaker.
+- [ ] **Giocatore**: un giocatore che trascina il gettone (se vede la scheda) riceve "Only the GM can place a foe's
+      summons." e non si crea niente.
+- [ ] **Casi fissati a mano**: lo Shopkeep ha solo "Shop" (non Bomb né Mushroom); gli Hob con "Snatch Memory" non
+      hanno il summon Memory; Battle Wagon e Azurian Weapon hanno ognuno il suo Torpedo (testi diversi).
+- [ ] **Job template con summon**: trascinare il template "Wraith" su un Brute → compare la sezione con Soul Spark;
+      ✕ sul template → la sezione sparisce.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

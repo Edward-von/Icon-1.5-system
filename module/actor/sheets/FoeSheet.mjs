@@ -59,6 +59,7 @@ export class FoeSheet extends BaseActorSheet {
       removeRoundAction:FoeSheet.#onRemoveRoundAction,
       tickInterrupt:    FoeSheet.#onTickInterrupt,
       removeTemplate:   FoeSheet.#onRemoveTemplate,
+      npcSummonShowInChat: FoeSheet.#onNpcSummonShowInChat,
       openTemplate:     FoeSheet.#onOpenTemplate,
       toggleStatus:        FoeSheet.#onToggleStatus,
       adjustElevation:     FoeSheet.#onAdjustElevation,
@@ -135,6 +136,10 @@ export class FoeSheet extends BaseActorSheet {
     context.enrichedRoundActions = await Promise.all(system.roundActions.map(async (r, i) => ({
       ...r, i,
       enrichedEffect: await enrich(r.effect),
+    })));
+    // Summons & objects this foe puts on the map (templates/actor/npc-summons.hbs)
+    context.enrichedSummons = await Promise.all((system.summons ?? []).map(async (sm, i) => ({
+      ...sm, i, enrichedRules: await enrich(sm.rules),
     })));
 
     // Foe templates on this foe (faction / Great Culture / job / special), in the order applied.
@@ -635,6 +640,15 @@ export class FoeSheet extends BaseActorSheet {
         _log(`dropFoeAbility — WARN: unknown abilityType "${s.abilityType}"`);
     }
     ui.notifications.info(`"${cleanName}" added.`);
+  }
+
+  /** 💬 on a summon: post its rules to chat, the foe as speaker. */
+  static async #onNpcSummonShowInChat(event, target) {
+    event.stopPropagation();
+    const sm = this.document.system.summons?.[Number(target.dataset.summonIndex)];
+    if (!sm) return;
+    _log(`npcSummonShowInChat — actor: "${this.document.name}" | summon: "${sm.name}"`);
+    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${sm.rules}` });
   }
 
   /** ✕ on an applied template: undo what it did (module/actor/foe-templates.mjs). */

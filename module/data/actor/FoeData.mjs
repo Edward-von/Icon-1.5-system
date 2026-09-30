@@ -130,6 +130,30 @@ export function roundActionSchema() {
   });
 }
 
+/**
+ * A summon or object a foe / legend puts on the battlefield (the boxed
+ * "Summon" / "Object" entries of the Book of Foes: Soul Spark, Temple Bell,
+ * Crony…). Kept on the actor that creates it; the sheet's chip drags it onto
+ * the map as a Summon actor (module/actor/foe-summons.mjs). Shared with
+ * LegendData.
+ */
+export function summonSchema() {
+  return new SchemaField({
+    name:       new StringField({ required: true, initial: "" }),
+    kind:       new StringField({ required: true, initial: "summon", choices: ["summon", "object"] }),
+    descriptor: new StringField({ required: true, initial: "" }),   // "Summon, size 1, intangible"
+    size:       new NumberField({ required: true, initial: 1, min: 1, max: 3, integer: true }),
+    intangible: new BooleanField({ required: true, initial: false }),
+    flying:     new BooleanField({ required: true, initial: false }),
+    immobile:   new BooleanField({ required: true, initial: false }),
+    hp:         new NumberField({ required: true, initial: 0, min: 0, integer: true }),
+    defense:    new NumberField({ required: true, initial: 0, min: 0, integer: true }),
+    action:     new HTMLField({ required: true, initial: "" }),     // "Summon Action:" text, if any
+    rules:      new HTMLField({ required: true, initial: "" }),     // the whole rules text
+    source:     new StringField({ required: true, initial: "" }),   // "p.329"
+  });
+}
+
 /* ---------- main model ---------- */
 
 export class FoeData extends foundry.abstract.TypeDataModel {
@@ -185,6 +209,7 @@ export class FoeData extends foundry.abstract.TypeDataModel {
       actions:      new ArrayField(actionSchema(),      { initial: [] }),
       interrupts:   new ArrayField(interruptSchema(),   { initial: [] }),
       roundActions: new ArrayField(roundActionSchema(), { initial: [] }),
+      summons:      new ArrayField(summonSchema(),      { initial: [] }),
 
       // Foe templates applied from the "Foe Templates" compendium
       // (module/actor/foe-templates.mjs). Each entry remembers what it added

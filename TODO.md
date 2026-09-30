@@ -301,10 +301,15 @@ Emerso lavorando (da fare in blocchi futuri):
             Unique (Iron Soldat, Silent One…) restano solo come attori nel compendio Foes.
       - [ ] **Foe Abilities "Faction: …"** (S, dati): le vecchie voci parafrasate "Faction: X — Y" in Foe Abilities
             ora sono doppioni meno precisi dei template; decidere se toglierle.
-- [ ] **Summon dei foe sulla scheda NPC** (L, richiesta di Maar): invece che nel compendio, i summon di un foe/legend
-      agganciati alla sua scheda con un gettone trascinabile sulla mappa, come fanno già le abilità dei PG
-      (`module/helpers/summons.mjs`). Nel capitolo dei foe ci sono circa 60 riquadri di summon (tinte chiare nel
-      PDF); oggi vivono solo come testo dentro l'azione che li evoca.
+- [x] **Summon dei foe sulla scheda NPC** — FATTO il 30 settembre 2026 (versione 1.8.0): 59 summon e oggetti letti
+      dal libro, 85 agganci su 71 foe e legend, sezione "Summons & Objects" sulle schede con gettone da
+      trascinare sulla mappa (crea l'attore Summon nella cartella "Foe Summons" e un token), anche nei job
+      template. Resta, da valutare:
+      - [ ] **Foe già importati** (S): i foe già nei mondi non hanno i summon (non si aggiornano dai compendi). Si
+            può reimportarli, oppure una macro "copia i summon dal compendio ai foe del mondo con lo stesso nome".
+      - [ ] **Immagini dei summon** (S): tutti usano `mystery-man.svg`, come i foe.
+      - [ ] **Summon dei giocatori** (S): solo il GM può piazzare i summon dei foe (crea attori); se Maar lascia i
+            foe a un giocatore co-GM servirebbe un relay via socket come per le altre azioni GM.
 - [ ] **Token di dimensione sbagliata** (S, dati): `validate-packs.mjs` segnala 20 foe con `size` diverso dal
       `prototypeToken` (18 Jotunn size 2 con token 1×1, Bouncer e Scrapper size 1 con token 2×2).
       C'era già prima del 30 settembre (verificato sul backup).

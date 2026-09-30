@@ -712,6 +712,12 @@
         {{#each foeTemplate.roundActions as |r|}}<div class="icon-foe-template-summary__block"><b>{{r.name}}:</b> {{{r.html}}}</div>{{/each}}
       </div>
     {{/if}}
+    {{#if foeTemplate.summons.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Summons &amp; Objects</h4>
+        {{#each foeTemplate.summons as |m|}}<div class="icon-foe-template-summary__block"><b>{{m.name}}</b> <span class="icon-foe-template-summary__src">({{m.descriptor}})</span>: {{{m.html}}}</div>{{/each}}
+      </div>
+    {{/if}}
     {{#if enriched.description}}
       <div class="icon-item-section">
         <h4 class="icon-section__title">Notes</h4>

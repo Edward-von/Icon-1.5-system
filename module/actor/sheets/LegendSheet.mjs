@@ -32,6 +32,7 @@ export class LegendSheet extends BaseActorSheet {
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:     onShowReferenceControl,
       rollAction:        LegendSheet.#onRollAction,
+      npcSummonShowInChat: LegendSheet.#onNpcSummonShowInChat,
       placeActionArea:   LegendSheet.#onPlaceActionArea,
       markActionTarget:  LegendSheet.#onMarkActionTarget,
       removeMark:        LegendSheet.#onRemoveMark,
@@ -209,6 +210,11 @@ export class LegendSheet extends BaseActorSheet {
       enrichedDesc:   await enrich(r.description),
     })));
 
+    // Summons & objects this legend puts on the map (templates/actor/npc-summons.hbs)
+    context.enrichedSummons = await Promise.all((system.summons ?? []).map(async (sm, i) => ({
+      ...sm, i, enrichedRules: await enrich(sm.rules),
+    })));
+
     context.enrichedRoundActions = await Promise.all(system.roundActions.map(async (r, i) => ({
       i,
       name:        r.name ?? "",
@@ -310,6 +316,15 @@ export class LegendSheet extends BaseActorSheet {
   /* -------------------------------------------------- */
   /*  Actions                                            */
   /* -------------------------------------------------- */
+
+  /** 💬 on a summon: post its rules to chat, the legend as speaker. */
+  static async #onNpcSummonShowInChat(event, target) {
+    event.stopPropagation();
+    const sm = this.document.system.summons?.[Number(target.dataset.summonIndex)];
+    if (!sm) return;
+    _log(`npcSummonShowInChat — actor: "${this.document.name}" | summon: "${sm.name}"`);
+    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${sm.rules}` });
+  }
 
   static async #onRollAction(event, target) {
     const idx    = Number(target.dataset.actionIndex);

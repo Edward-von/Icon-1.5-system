@@ -6,7 +6,7 @@
  * some fields (faction, class and statline for a job, Elite and size for the
  * Jotunn, HP for Titan Armament). Everything it does is written down in the
  * foe's `system.templates` entry:
- *   added   — names of the blocks it added (blocks the foe already had by that
+ *   added   — names of the blocks it added, summons included (blocks the foe already had by that
  *             name are skipped, so the Wight job and the Relict faction don't
  *             both add Legion of the Dead);
  *   removed — the old class's baseline traits / Diaga that a class change took
@@ -26,7 +26,7 @@ import { CLASS_BASELINE, getFoeBaseStats } from "../data/actor/FoeData.mjs";
 
 const _log = (...a) => console.debug("[ICON | FoeTemplates]", ...a);
 
-const BLOCK_TYPES = ["traits", "actions", "interrupts", "roundActions"];
+const BLOCK_TYPES = ["traits", "actions", "interrupts", "roundActions", "summons"];
 const SCALARS = ["foeClass", "isElite", "faction", "chapter", "size", "vit", "defense", "speed", "fray", "armor", "damagedie"];
 const { getProperty, setProperty, deepClone } = foundry.utils;
 

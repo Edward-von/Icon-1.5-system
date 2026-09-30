@@ -97,6 +97,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 /*  Hatred of X + ability marks                        */
 /* -------------------------------------------------- */
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
+import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
@@ -224,6 +225,9 @@ Hooks.once("init", () => {
 
   // ---- Marks end when their marker is defeated ----
   registerMarkHooks();
+
+  // ---- Foe / legend summons dragged from the sheet onto the canvas ----
+  registerFoeSummonHooks();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();
@@ -929,6 +933,8 @@ Hooks.once("setup", async () => {
     "systems/icon-system/templates/actor/legend-header.hbs",
     "systems/icon-system/templates/actor/legend-combat.hbs",
     "systems/icon-system/templates/actor/legend-notes.hbs",
+    // Actor — Foe / Legend summons (partial shared by both sheets)
+    "systems/icon-system/templates/actor/npc-summons.hbs",
     // Actor — Summon
     "systems/icon-system/templates/actor/summon-sheet.hbs",
     // Item

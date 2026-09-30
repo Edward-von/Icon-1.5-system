@@ -1,0 +1,25 @@
+{{!-- npc-summons.hbs — summons & objects of a foe / legend (system.summons, module/actor/foe-summons.mjs).
+     Read-only: the text comes from the book. The chip drags onto the map. --}}
+{{#if enrichedSummons.length}}
+  <div class="icon-section icon-npc-summons">
+    <div class="icon-section__header">
+      <h3 class="icon-section__title">Summons &amp; Objects</h3>
+    </div>
+    <p class="icon-npc-summons__hint">Drag a chip onto the map to place it (GM). Each drop is a new token of the
+      same summon actor, kept in the <em>Foe Summons</em> folder.</p>
+    {{#each enrichedSummons as |sm|}}
+      <div class="icon-npc-summon" data-kind="{{sm.kind}}">
+        <div class="icon-npc-summon__header">
+          <span class="icon-npc-summon__chip" draggable="true"
+                data-foe-summon-index="{{sm.i}}" data-summon-name="{{sm.name}}"
+                title="Drag onto the map to place {{sm.name}}">⤓ {{sm.name}}</span>
+          <span class="icon-npc-summon__desc">{{sm.descriptor}}{{#if sm.source}} · {{sm.source}}{{/if}}</span>
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                  data-action="npcSummonShowInChat" data-summon-index="{{sm.i}}"
+                  title="Post this summon to chat">💬</button>
+        </div>
+        <div class="icon-npc-summon__rules">{{{sm.enrichedRules}}}</div>
+      </div>
+    {{/each}}
+  </div>
+{{/if}}

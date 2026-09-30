@@ -3,6 +3,7 @@
  * Legends have multiple actions, enhanced interrupts, phases, and round actions.
  */
 import { combatStatsSchema, prepareCombatStats } from "./common.mjs";
+import { summonSchema } from "./FoeData.mjs";
 
 const {
   SchemaField, StringField, NumberField, BooleanField,
@@ -110,6 +111,8 @@ export class LegendData extends foundry.abstract.TypeDataModel {
       actions:      new ArrayField(actionSchema(),      { initial: [] }),
       interrupts:   new ArrayField(interruptSchema(),   { initial: [] }),
       roundActions: new ArrayField(roundActionSchema(), { initial: [] }),
+      // Summons / objects this legend puts on the map (see FoeData summonSchema).
+      summons:      new ArrayField(summonSchema(),      { initial: [] }),
 
       resolvePool: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
 

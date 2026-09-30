@@ -1,5 +1,32 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Summon dei foe sulla loro scheda (versione 1.8.0)
+
+Richiesta di Maar: i summon dei nemici attaccati alla scheda del foe che li evoca, invece che sparsi in un
+compendio. Fino a oggi vivevano solo come testo dentro l'azione (Soul Spark nel Wraith, Scrap Turret nel
+Junker…), e bisognava crearli a mano per metterli sulla mappa.
+
+### Nuovo
+
+- **Summon e oggetti letti dal libro**: 59 riquadri "Summon" / "Object" del Book of Foes (Soul Spark, Temple
+  Bell, Crony, Cauldron, gli Automaton della Veridian Weapon, la corte della Majesty Demon…), con taglia,
+  intangibile, HP e difesa quando il libro li dà, e il testo delle regole. Gli interrupt che nel PDF hanno la
+  stessa grafica (Roppo, Decoy dello Scout…) sono esclusi.
+- **Agganciati a chi li crea**: ogni summon va ai foe e alle legend della sua fazione che lo nominano nelle loro
+  azioni, così anche le varianti hanno il summon della base (Arc Spectre, Chain Wraith… hanno Soul Spark). I
+  casi ambigui sono fissati a mano (i due Torpedo diversi della Battle Wagon e dell'Azurian Weapon; "Memory"
+  dell'Aesi, da non confondere con "Snatch Memory" degli Hob; la Bomb e il Mushroom dei Folk, che non sono
+  quelli in vendita nel negozio dello Shopkeep). In tutto 85 agganci su 71 foe e legend.
+- **Sezione "Summons & Objects"** in fondo alla scheda Foe (tab Stats & Abilities) e Legend (tab Combat): per ogni
+  summon un gettone ⤓ da **trascinare sulla mappa**, la riga descrittiva con la pagina, il testo e il 💬 per
+  mandarlo in chat. Il trascinamento (solo GM) crea l'attore Summon nella cartella "Foe Summons", con il foe
+  come evocatore (la scheda del summon tira con il [D] e il fray del foe), e posa un token non collegato: più
+  copie dello stesso summon hanno ognuna i propri HP. Il secondo trascinamento riusa lo stesso attore.
+- **I job template portano i loro summon**: trascinare "Wraith" su un NPC aggiunge anche Soul Spark; togliendo
+  il template sparisce.
+
+Solo i nuovi import dal compendio hanno la sezione: i foe già nei mondi non cambiano.
+
 ## 30 settembre 2026 — Template da trascinare sui foe (versione 1.7.0)
 
 Richiesta di Maar (lista del 30 settembre, prima voce ad alta priorità): il libro costruisce la maggior parte

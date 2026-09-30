@@ -183,6 +183,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
                           html: await _enrich(a.description) }))),
           interrupts:   await Promise.all((system.interrupts ?? []).map(async r => ({ name: r.name, limit: r.limit, trigger: r.trigger, html: await _enrich(r.effect || r.description) }))),
           roundActions: await Promise.all((system.roundActions ?? []).map(async r => ({ name: r.name, html: await _enrich(r.effect || r.description) }))),
+          summons:      await Promise.all((system.summons ?? []).map(async m => ({ name: m.name, descriptor: m.descriptor, html: await _enrich(m.rules) }))),
         };
         context.enriched = { description: await _enrich(system.description) };
         break;
