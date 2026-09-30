@@ -1,5 +1,45 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Template da trascinare sui foe (versione 1.7.0)
+
+Richiesta di Maar (lista del 30 settembre, prima voce ad alta priorità): il libro costruisce la maggior parte
+dei foe mettendo dei template su un foe base (p.289, e p.315 per i Folk: *"use basic foes and apply the Kin
+template and Great Culture trait of your choice"*), ma nel sistema bisognava ricopiare i tratti a mano, uno per
+uno, dal compendio Foe Abilities.
+
+### Nuovo
+
+- **Compendio "Foe Templates"** (nuovo tipo di item `foe-template`), ordinato come il compendio Foes, con una
+  cartella per fazione:
+  - **9 template di fazione** (Folk, Relict, Ruin Beast, Scavenger, Imperial, Demon, Lowlander, Jotunn, Hob):
+    le righe Kin / Monsters con motivazioni e fuga, più la meccanica di fazione (Legion of the Dead, Enrage,
+    Valuables / Greed / Cut and Run, Chain of Command, Abyssal Legion con Devour, Blightland Survivalists,
+    Legacy of the Titans, Nature Spirits). Il Jotunn rende anche Elite (HP doppi) e porta la taglia a 2, come
+    dice p.448.
+  - **6 Great Culture dei Folk** (Chronicler, Churner, Guilder, Islander, Leggio, Yeokin), p.315-322.
+  - **2 template speciali che si sommano agli altri**: Imperial Officer (p.387) e Titan Armament (p.448, HP
+    +50%; il terzo turno non è automatizzato).
+  - **192 template di job**: ogni job di fazione e ogni sua variante (Wight, Arc Spectre, Troll…), con classe,
+    statistiche e tutti i tratti e le azioni. Trascinato su un NPC qualsiasi lo trasforma in quel job; i
+    tratti base della vecchia classe (Guard, Skirmisher/Dodge, Slip/Aetherwall, Mob, Diaga) vengono tolti.
+  I testi di Kin / Monsters, Great Culture e Imperial Officer sono presi dal libro; tratti e azioni di fazione
+  sono copiati dal compendio Foes, così un template di fazione e un job della stessa fazione non aggiungono
+  due volte la stessa cosa.
+- **Drop sulla scheda Foe**: nel riquadro Foe Builder c'è la riga **Templates** con i template applicati
+  (colore per tipo). Un template può esserci una volta sola per tipo: una fazione, una Great Culture, un job
+  (gli speciali si sommano). Se si trascina un secondo template dello stesso tipo, il sistema chiede conferma
+  prima di sostituire il primo. La **✕** su un template lo toglie e rimette com'erano i campi che aveva
+  cambiato, a meno che nel frattempo siano stati modificati a mano. Il nome apre l'item del template.
+  Provato fuori da Foundry sui dati veri: applicare e poi togliere riporta il foe identico.
+
+### Bug
+
+- **La fazione dei foe importati spariva alla prima modifica**: la tendina Faction delle schede Foe e Legend
+  salvava una chiave (`relict`) mentre il compendio, l'Encounter Designer e ora i template usano il nome
+  (`Relict`) → un foe importato mostrava "—" e al primo salvataggio della scheda la fazione diventava vuota →
+  la tendina salva il nome, riconosce le vecchie chiavi (e le riscrive come nome al salvataggio) e mantiene
+  un valore fuori elenco come "Basic Jobs". Emerso lavorando ai template, che scrivono la fazione.
+
 ## 30 settembre 2026 — Classi dei foe e compendio riordinato (versione 1.6.2)
 
 Lista di Maar: tanti foe con la classe sbagliata, summon e pezzi di legend trattati da foe, e il compendio

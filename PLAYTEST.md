@@ -1354,6 +1354,47 @@ compendio (poi cancellarla).
 - [ ] **Mondo non toccato**: un Wight già importato nel mondo prima dell'aggiornamento resta Leader (normale:
       le correzioni ai compendi valgono solo per i nuovi import).
 
+## Template da trascinare sui foe (30 settembre 2026, versione 1.7.0)
+
+Usare una copia nuova di un foe base (compendio Foes → Basic Jobs, es. Brute), poi cancellarla.
+
+- [ ] **Compendio**: nella barra dei compendi c'è "Foe Templates". Dentro, una cartella per fazione; in ogni
+      fazione il template di fazione, e le sottocartelle Artillery / Heavy / Leader / Skirmisher con i job.
+      Folk ha il template Folk e la sottocartella Great Cultures (6); Imperial ha anche Imperial Officer,
+      Jotunn anche Titan Armament.
+- [ ] **Scheda del template**: aprendo "Wight" si vede "Faction job · Relict · Heavy · p.325", la riga delle
+      statistiche (VIT 10, HP 40, DEF 6…) e l'elenco di tratti e azioni con il loro testo. Aprendo "Relict" si
+      vedono Monsters e Legion of the Dead.
+- [ ] **Template di fazione**: trascinare "Relict" sulla scheda del Brute → notifica "Relict applied…", nella
+      riga Templates del Foe Builder compare il gettone "FACTION Relict", la tendina Faction dice Relict, tra i
+      tratti ci sono Monsters e Legion of the Dead. Statistiche invariate.
+- [ ] **Togliere**: ✕ sul gettone Relict → i due tratti spariscono, la fazione torna com'era, il gettone sparisce.
+- [ ] **Template di job**: trascinare "Wraith" (Relict / Artillery) sul Brute → classe Artillery, VIT 8, HP 32,
+      DEF 7, [D] d8, Armor 0; Guard sparisce; compaiono Phasing, Flying, Legion of the Dead, Slip, Aetherwall e le
+      azioni Unstable Charge, Chain Lightning, Soul Spark; le azioni del Brute restano. ✕ → torna Heavy con
+      Guard, HP 40, come prima.
+- [ ] **Sostituzione con conferma**: Folk + "Guilder" sul Brute (compare l'azione Strive), poi trascinare
+      "Leggio" → finestra "Replace template?" che nomina Guilder. Confermando: Strive sparisce, compare
+      Acrobatics, i gettoni sono Folk e Leggio. Ripetendo con "Islander" e premendo annulla, non cambia niente.
+- [ ] **Niente doppioni**: sul Brute pulito trascinare "Wight" e poi "Relict" → Legion of the Dead c'è una
+      sola volta (Relict aggiunge solo Monsters). Poi trascinare "Wraith" → chiede di sostituire Wight;
+      confermando, Legion of the Dead c'è ancora una volta sola.
+- [ ] **Jotunn**: trascinare "Jotunn" sul Brute → Elite spuntato, HP da 40 a 80, taglia 2, tratti Kin,
+      Titanblood, Titanfall. Poi "Titan Armament" → HP 120. Togliere Titan Armament → 80; togliere Jotunn →
+      40, non Elite, taglia com'era.
+- [ ] **Speciali che si sommano**: Imperial + Imperial Officer sullo stesso foe → nessuna richiesta di
+      sostituzione, due gettoni, tratti Promotion e Imperial Command Aura.
+- [ ] **Click sul nome del gettone**: apre l'item del template dal compendio.
+- [ ] **Giocatore senza permessi**: con una scheda in sola lettura il drop non fa niente e non c'è la ✕.
+
+- [ ] **Tendina Faction (fix)**: importare dal compendio un foe qualsiasi (es. Wight) → la tendina Faction dice
+      "Relict", non "—". Cambiare un altro campo (es. Chapter) e riaprire → la fazione è ancora Relict. Un foe dei
+      Basic Jobs mostra "Basic Jobs" come voce della tendina. Un foe con la vecchia chiave (fazione scelta con la
+      tendina prima di oggi, es. "relict") mostra Relict e al salvataggio diventa "Relict". Stesso controllo sulla
+      scheda di una Legend.
+- [ ] **Encounter Designer**: il filtro fazione non ha più voci doppie tipo "relict" e "Relict" per i foe
+      sistemati come sopra.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

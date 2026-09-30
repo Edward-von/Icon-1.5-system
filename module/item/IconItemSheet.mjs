@@ -2,7 +2,7 @@
  * IconItemSheet — ApplicationV2 sheet for all ICON item types.
  * Renders type-specific fields via conditional HBS blocks.
  */
-import { enrichHTML, postNpcTraitCard } from "../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -158,6 +158,35 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
           description: await _enrich(system.description),
         };
         break;
+      case "foe-template": {
+        // Read-only summary: what the template sets and what it adds (module/actor/foe-templates.mjs).
+        const KIND = { faction: "Faction template", culture: "Great Culture", job: "Faction job", special: "Special template (stacks)" };
+        const CLS  = { heavy: "Heavy", skirmisher: "Skirmisher", leader: "Leader", artillery: "Artillery", mob: "Mob" };
+        const st = system.stats ?? {};
+        context.foeTemplate = {
+          kindLabel:  KIND[system.kind] ?? system.kind,
+          classLabel: CLS[system.foeClass] ?? "",
+          statline: system.kind === "job" ? [
+            ["VIT", st.vit], ["HP", st.hp], ["DEF", st.defense], ["SPD", st.speed],
+            ["Fray", st.fray], ["[D]", st.damagedie], ["Armor", st.armor], ["Size", st.size],
+          ].filter(([, v]) => v !== null && v !== undefined && v !== "").map(([label, value]) => ({ label, value })) : [],
+          elite: system.kind === "job" ? !!st.isElite : !!system.makeElite,
+          effects: [
+            system.makeElite ? "Becomes Elite (double HP if it wasn't)" : "",
+            system.minSize ? `Size at least ${system.minSize}` : "",
+            system.hpMultiplier && system.hpMultiplier !== 1 ? `HP ×${system.hpMultiplier}` : "",
+          ].filter(Boolean),
+          traits:       await Promise.all((system.traits ?? []).map(async t => ({ name: t.name, html: await _enrich(t.description) }))),
+          actions:      await Promise.all((system.actions ?? []).map(async a => ({
+                          name: a.name, costLabel: abilityCostLabel(a.cost), tags: (a.tags ?? []).join(", "),
+                          // Foe actions keep their full rules text in `description` (FOE-ANATOMY convention).
+                          html: await _enrich(a.description) }))),
+          interrupts:   await Promise.all((system.interrupts ?? []).map(async r => ({ name: r.name, limit: r.limit, trigger: r.trigger, html: await _enrich(r.effect || r.description) }))),
+          roundActions: await Promise.all((system.roundActions ?? []).map(async r => ({ name: r.name, html: await _enrich(r.effect || r.description) }))),
+        };
+        context.enriched = { description: await _enrich(system.description) };
+        break;
+      }
       case "job-template":
         context.enriched = {
           description: await _enrich(system.description),

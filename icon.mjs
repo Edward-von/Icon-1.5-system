@@ -28,6 +28,7 @@ import { BondPowerData  } from "./module/data/item/BondPowerData.mjs";
 import { GearKitData    } from "./module/data/item/GearKitData.mjs";
 import { FoeAbilityData } from "./module/data/item/FoeAbilityData.mjs";
 import { JobTemplateData } from "./module/data/item/JobTemplateData.mjs";
+import { FoeTemplateData } from "./module/data/item/FoeTemplateData.mjs";
 
 /* -------------------------------------------------- */
 /*  Actor & Item Documents                             */
@@ -204,6 +205,7 @@ Hooks.once("init", () => {
     "gear-kit":    GearKitData,
     "foe-ability":  FoeAbilityData,
     "job-template": JobTemplateData,
+    "foe-template": FoeTemplateData,
   };
 
   // ---- Register sheets ----

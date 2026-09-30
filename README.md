@@ -24,8 +24,9 @@ Foundry will offer updates from the same URL whenever a new release is published
 
 - **Character sheets** for player characters, foes, legends and summons, plus a board of campaign
   clocks, all laid out in the book's own order.
-- **Compendia**: jobs and abilities, foes and legends, foe abilities, bonds and bond powers, relics,
-  gear kits, summons, and the system's macros.
+- **Compendia**: jobs and abilities, foes and legends, foe abilities, foe templates (faction,
+  Great Culture and job templates to drop on a foe), bonds and bond powers, relics, gear kits,
+  summons, and the system's macros.
 - **Rolls that follow the rules**: attacks with boons and curses (including the ones an ability
   carries in its own tag line), evasion rolled before the d20, damage with armor, cover, resistance,
   dodge, pierce and divine applied where the book applies them.

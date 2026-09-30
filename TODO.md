@@ -287,13 +287,20 @@ blocchi futuri; Legends e Summons restano compendi separati.
 
 Emerso lavorando (da fare in blocchi futuri):
 
-- [ ] **Template trascinabili sulla scheda NPC** (L/XL, richiesta di Maar, alta priorità per lui): un tipo di item
-      "template" che, trascinato su un foe, aggiunge tratti/azioni/stat (template di fazione p.314, Kin +
-      Great Culture dei Folk p.315, e le famiglie di job tipo "Wight" per dare base e stato a un NPC qualsiasi),
-      con una conferma se sostituisce un template già applicato. Cartella "Templates" per fazione nel compendio
-      Foes (o un compendio a parte). È il modo in cui il libro vuole i Folk: "use basic foes and apply the Kin
-      template and Great Culture trait of your choice". Oggi le Great Culture esistono solo come voci
-      "Faction: Folk — Great Culture: …" in Foe Abilities (mancano quelle di Yeokin e forse altre: verificare).
+- [x] **Template trascinabili sulla scheda NPC** — FATTO il 30 settembre 2026 (versione 1.7.0): compendio a parte
+      "Foe Templates" (un compendio Foundry contiene un solo tipo di documento, quindi non può stare dentro Foes),
+      9 fazioni + 6 Great Culture + 2 speciali + 192 job; drop sulla scheda Foe con conferma di sostituzione e ✕
+      per togliere. Emerso lavorando e corretto nello stesso giro: la tendina Faction che cancellava la fazione.
+      Resta, da valutare:
+      - [ ] **Titan Armament, turno in più** (S/M): il template dà +50% HP ma il tracker dà comunque 2 turni a un
+            Elite; p.448 dice "take one extra turn a round". Servirebbe un campo "turni extra" letto da
+            `IconCombat.turnsFor()`.
+      - [ ] **Template sulle Legend** (S): la scheda Legend non accetta il drop dei template (il libro non lo
+            chiede, ma Maar potrebbe volerlo per i Jotunn legend).
+      - [ ] **Template dei Unique** (S, dati): oggi i job template coprono solo i job di fazione e le varianti; gli
+            Unique (Iron Soldat, Silent One…) restano solo come attori nel compendio Foes.
+      - [ ] **Foe Abilities "Faction: …"** (S, dati): le vecchie voci parafrasate "Faction: X — Y" in Foe Abilities
+            ora sono doppioni meno precisi dei template; decidere se toglierle.
 - [ ] **Summon dei foe sulla scheda NPC** (L, richiesta di Maar): invece che nel compendio, i summon di un foe/legend
       agganciati alla sua scheda con un gettone trascinabile sulla mappa, come fanno già le abilità dei PG
       (`module/helpers/summons.mjs`). Nel capitolo dei foe ci sono circa 60 riquadri di summon (tinte chiare nel

@@ -77,16 +77,29 @@ export function getFoeBaseStats(foeClass, isElite = false) {
   };
 }
 
+/**
+ * What each class brings on top of its stats (Glossary of Foes, p.298): the
+ * class traits, and the Diaga action of leaders. A foe that changes class
+ * swaps these; its other traits and actions are its own.
+ */
+export const CLASS_BASELINE = {
+  heavy:      { traits: ["Guard"],                actions: [] },
+  skirmisher: { traits: ["Skirmisher", "Dodge"],  actions: [] },
+  leader:     { traits: [],                       actions: ["Diaga"] },
+  artillery:  { traits: ["Slip", "Aetherwall"],   actions: [] },
+  mob:        { traits: ["Mob"],                  actions: [] },
+};
+
 /* ---------- sub-schemas ---------- */
 
-function traitSchema() {
+export function traitSchema() {
   return new SchemaField({
     name:        new StringField({ required: true, initial: "" }),
     description: new HTMLField({ required: true, initial: "" }),
   });
 }
 
-function actionSchema() {
+export function actionSchema() {
   return new SchemaField({
     name:        new StringField({ required: true, initial: "" }),
     cost:        new StringField({ required: true, initial: "1action" }),
@@ -98,7 +111,7 @@ function actionSchema() {
   });
 }
 
-function interruptSchema() {
+export function interruptSchema() {
   return new SchemaField({
     name:        new StringField({ required: true, initial: "" }),
     limit:       new NumberField({ required: true, initial: 1, min: 0, integer: true }),
@@ -108,7 +121,7 @@ function interruptSchema() {
   });
 }
 
-function roundActionSchema() {
+export function roundActionSchema() {
   return new SchemaField({
     name:        new StringField({ required: true, initial: "" }),
     roundNumber: new NumberField({ required: true, initial: 1, min: 1, integer: true }),
@@ -173,7 +186,23 @@ export class FoeData extends foundry.abstract.TypeDataModel {
       interrupts:   new ArrayField(interruptSchema(),   { initial: [] }),
       roundActions: new ArrayField(roundActionSchema(), { initial: [] }),
 
-      defeat:      new HTMLField({ required: true, initial: "" }),
+      // Foe templates applied from the "Foe Templates" compendium
+      // (module/actor/foe-templates.mjs). Each entry remembers what it added
+      // and what it overwrote, so it can be taken off again. `slot` is what
+      // makes two templates exclusive ("faction", "culture", "job", or
+      // "special:<name>" for the ones that stack, like Imperial Officer).
+      // Never rendered as form inputs, so the whole-array submit trap doesn't reach it.
+      templates: new ArrayField(new SchemaField({
+        slot:    new StringField({ required: true, initial: "" }),
+        kind:    new StringField({ required: true, initial: "" }),
+        name:    new StringField({ required: true, initial: "" }),
+        uuid:    new StringField({ required: true, initial: "" }),
+        added:   new foundry.data.fields.ObjectField(),   // { traits: [names], actions: [...], interrupts: [...], roundActions: [...] }
+        removed: new foundry.data.fields.ObjectField(),   // { traits: [blocks], actions: [blocks] } — old class baseline
+        prev:    new foundry.data.fields.ObjectField(),   // system fields as they were before
+      }), { initial: [] }),
+
+      defeat:     new HTMLField({ required: true, initial: "" }),
       loot:        new HTMLField({ required: true, initial: "" }),
       tactics:     new HTMLField({ required: true, initial: "" }),
       description: new HTMLField({ required: true, initial: "" }),

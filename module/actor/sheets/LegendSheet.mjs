@@ -131,6 +131,7 @@ export class LegendSheet extends BaseActorSheet {
     context.actor      = actor;
     context.system     = system;
     context.config     = CONFIG.ICON;
+    context.factionOptions = CONFIG.ICON.factionOptions(system.faction);
     context.isEditable = this.isEditable;
     context.tabs       = this._buildTabs();
 

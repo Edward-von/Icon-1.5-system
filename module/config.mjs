@@ -116,6 +116,26 @@ ICON.factions = {
   hob:        "ICON.FactionHob",
 };
 
+/**
+ * Options for the Faction dropdown of the Foe / Legend sheets. The stored
+ * value is the faction's NAME ("Relict", "Ruin Beast"), the spelling the
+ * compendiums, the foe templates and the Encounter Designer use. The dropdown
+ * used to store the key ("relict"), which matched nothing in the compendium:
+ * an imported foe showed "—" and lost its faction at the next edit. A key left
+ * over from then still selects its faction (and is rewritten as the name on
+ * save); any other value ("Basic Jobs") is kept as an extra option.
+ * @param {string} current  the actor's system.faction
+ */
+ICON.factionOptions = function (current = "") {
+  const cur = String(current ?? "");
+  const opts = Object.entries(ICON.factions).map(([key, labelKey]) => {
+    const name = game.i18n.localize(labelKey);
+    return { value: name, label: name, selected: cur === name || cur.toLowerCase() === key || cur.toLowerCase() === name.toLowerCase() };
+  });
+  if (cur && !opts.some(o => o.selected)) opts.push({ value: cur, label: cur, selected: true });
+  return opts;
+};
+
 /* -------------------------------------------------- */
 /*  Chapters                                           */
 /* -------------------------------------------------- */

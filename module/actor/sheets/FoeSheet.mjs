@@ -25,6 +25,7 @@ import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { applyFoeTemplate, removeFoeTemplate } from "../foe-templates.mjs";
 
 const _log = (...args) => console.debug("[ICON | FoeSheet]", ...args);
 
@@ -57,6 +58,8 @@ export class FoeSheet extends BaseActorSheet {
       addRoundAction:   FoeSheet.#onAddRoundAction,
       removeRoundAction:FoeSheet.#onRemoveRoundAction,
       tickInterrupt:    FoeSheet.#onTickInterrupt,
+      removeTemplate:   FoeSheet.#onRemoveTemplate,
+      openTemplate:     FoeSheet.#onOpenTemplate,
       toggleStatus:        FoeSheet.#onToggleStatus,
       adjustElevation:     FoeSheet.#onAdjustElevation,
       adjustStatusCharges: FoeSheet.#onAdjustStatusCharges,
@@ -88,6 +91,7 @@ export class FoeSheet extends BaseActorSheet {
     context.actor      = actor;
     context.system     = system;
     context.config     = CONFIG.ICON;
+    context.factionOptions = CONFIG.ICON.factionOptions(system.faction);
     context.isEditable = this.isEditable;
     context.tabs       = this._buildTabs();
 
@@ -132,6 +136,10 @@ export class FoeSheet extends BaseActorSheet {
       ...r, i,
       enrichedEffect: await enrich(r.effect),
     })));
+
+    // Foe templates on this foe (faction / Great Culture / job / special), in the order applied.
+    const KIND = { faction: "Faction", culture: "Great Culture", job: "Job", special: "Special" };
+    context.appliedTemplates = (system.templates ?? []).map((t, i) => ({ i, name: t.name, uuid: t.uuid, kindLabel: KIND[t.kind] ?? t.kind, kind: t.kind }));
 
     context.foeClassLabel = FOE_CLASS_LABELS[system.foeClass] ?? "Heavy";
     context.foeClassChoices = FOE_CLASS_LABELS;
@@ -570,6 +578,11 @@ export class FoeSheet extends BaseActorSheet {
       if (!item) { _log(`drop — ERROR: could not resolve item`); return; }
 
       _log(`drop — item: "${item.name}" | type: "${item.type}"`);
+      if (item.type === "foe-template") {
+        if (!this.isEditable) return;
+        await applyFoeTemplate(this.document, item);
+        return;
+      }
       if (item.type !== "foe-ability") {
         _log(`drop — WARN: expected foe-ability, got "${item.type}"`);
         return ui.notifications.warn(`Cannot drop item type "${item.type}" on a Foe.`);
@@ -622,6 +635,22 @@ export class FoeSheet extends BaseActorSheet {
         _log(`dropFoeAbility — WARN: unknown abilityType "${s.abilityType}"`);
     }
     ui.notifications.info(`"${cleanName}" added.`);
+  }
+
+  /** ✕ on an applied template: undo what it did (module/actor/foe-templates.mjs). */
+  static async #onRemoveTemplate(event, target) {
+    event.stopPropagation();
+    const idx = Number(target.dataset.index);
+    _log(`removeTemplate — actor: "${this.document.name}" | idx: ${idx}`);
+    await removeFoeTemplate(this.document, idx);
+  }
+
+  /** Click on an applied template's name: open the template item, if it still exists. */
+  static async #onOpenTemplate(event, target) {
+    const item = target.dataset.uuid ? await fromUuid(target.dataset.uuid) : null;
+    _log(`openTemplate — uuid: "${target.dataset.uuid}" | found: ${!!item}`);
+    if (item) item.sheet.render(true);
+    else ui.notifications.warn("That template is no longer in its compendium.");
   }
 
   /** Track interrupt uses during combat. Uses a flag (not persisted to DB via update). */

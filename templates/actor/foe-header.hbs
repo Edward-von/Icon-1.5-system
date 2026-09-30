@@ -46,10 +46,8 @@
         <select class="icon-badge-select" name="system.faction"
                 {{#unless isEditable}}disabled{{/unless}}>
           <option value="">—</option>
-          {{#each config.factions as |labelKey key|}}
-            <option value="{{key}}" {{#icon-eq key ../system.faction}}selected{{/icon-eq}}>
-              {{localize labelKey}}
-            </option>
+          {{#each factionOptions as |f|}}
+            <option value="{{f.value}}" {{#if f.selected}}selected{{/if}}>{{f.label}}</option>
           {{/each}}
         </select>
       </label>

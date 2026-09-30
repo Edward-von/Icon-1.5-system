@@ -18,6 +18,24 @@
       Foe Builder table. Drag traits &amp; actions from the <em>Foe Abilities</em>
       compendium, or use the [+ Add] buttons below.
     </p>
+    {{!-- Foe templates (module/actor/foe-templates.mjs): drop one from the Foe Templates compendium --}}
+    <div class="icon-foe-templates">
+      <span class="icon-foe-templates__label">Templates</span>
+      {{#each appliedTemplates as |t|}}
+        <span class="icon-foe-template-chip" data-kind="{{t.kind}}">
+          <span class="icon-foe-template-chip__kind">{{t.kindLabel}}</span>
+          <a class="icon-foe-template-chip__name" data-action="openTemplate" data-uuid="{{t.uuid}}"
+             title="Open the template">{{t.name}}</a>
+          {{#if ../isEditable}}
+            <button type="button" class="icon-foe-template-chip__remove" data-action="removeTemplate" data-index="{{t.i}}"
+                    title="Take {{t.name}} off: remove what it added and put back what it changed">✕</button>
+          {{/if}}
+        </span>
+      {{else}}
+        <span class="icon-foe-templates__empty">None — drag a faction, Great Culture, job or special template here
+          from the <em>Foe Templates</em> compendium.</span>
+      {{/each}}
+    </div>
   </div>
 
   {{!-- Stats Row --}}

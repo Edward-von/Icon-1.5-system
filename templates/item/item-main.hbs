@@ -664,6 +664,63 @@
   {{/icon-eq}}
 
   {{!-- ====================================================
+       FOE TEMPLATE — drag onto a Foe (module/actor/foe-templates.mjs)
+       ==================================================== --}}
+  {{#icon-eq itemType "foe-template"}}
+    <div class="icon-item-section icon-item-section--meta icon-foe-template-summary">
+      <p class="icon-foe-template-summary__line">
+        <strong>{{foeTemplate.kindLabel}}</strong>
+        {{#if system.faction}} · {{system.faction}}{{/if}}
+        {{#if foeTemplate.classLabel}} · {{foeTemplate.classLabel}}{{/if}}
+        {{#if foeTemplate.elite}} · Elite{{/if}}
+        {{#if system.source}} · <span class="icon-foe-template-summary__src">{{system.source}}</span>{{/if}}
+      </p>
+      {{#if foeTemplate.statline.length}}
+        <p class="icon-foe-template-summary__stats">
+          {{#each foeTemplate.statline as |s|}}<span><b>{{s.label}}</b> {{s.value}}</span>{{/each}}
+        </p>
+      {{/if}}
+      {{#each foeTemplate.effects as |e|}}<p class="icon-foe-template-summary__effect">• {{e}}</p>{{/each}}
+      <p class="icon-foe-template-summary__hint">Drag onto a Foe sheet to apply. The ✕ on the foe's template chip takes it
+        off again.</p>
+    </div>
+    {{#if foeTemplate.traits.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Traits</h4>
+        {{#each foeTemplate.traits as |t|}}<div class="icon-foe-template-summary__block"><b>{{t.name}}:</b> {{{t.html}}}</div>{{/each}}
+      </div>
+    {{/if}}
+    {{#if foeTemplate.actions.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Actions</h4>
+        {{#each foeTemplate.actions as |a|}}
+          <div class="icon-foe-template-summary__block"><b>{{a.name}}</b> <span class="icon-foe-template-summary__src">({{a.costLabel}}{{#if a.tags}}, {{a.tags}}{{/if}})</span>: {{{a.html}}}</div>
+        {{/each}}
+      </div>
+    {{/if}}
+    {{#if foeTemplate.interrupts.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Interrupts</h4>
+        {{#each foeTemplate.interrupts as |r|}}
+          <div class="icon-foe-template-summary__block"><b>{{r.name}}</b> <span class="icon-foe-template-summary__src">(Interrupt {{r.limit}})</span>{{#if r.trigger}} — <em>{{r.trigger}}</em>{{/if}}: {{{r.html}}}</div>
+        {{/each}}
+      </div>
+    {{/if}}
+    {{#if foeTemplate.roundActions.length}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Round Actions</h4>
+        {{#each foeTemplate.roundActions as |r|}}<div class="icon-foe-template-summary__block"><b>{{r.name}}:</b> {{{r.html}}}</div>{{/each}}
+      </div>
+    {{/if}}
+    {{#if enriched.description}}
+      <div class="icon-item-section">
+        <h4 class="icon-section__title">Notes</h4>
+        <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      </div>
+    {{/if}}
+  {{/icon-eq}}
+
+  {{!-- ====================================================
        JOB TEMPLATE — drag onto an Icon PC to import job data
        ==================================================== --}}
   {{#icon-eq itemType "job-template"}}
