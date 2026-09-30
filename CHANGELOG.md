@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Token della taglia giusta (versione 1.8.1)
+
+### Bug
+
+- **Jotunn con il token 1×1**: 18 Jotunn del compendio erano taglia 2 ma il loro token era di una casella → la
+  taglia era giusta (Titanblood, p.448: "Increase size to 2 if not already 2"), il token non era stato
+  allineato → token 2×2.
+- **Bouncer e Scrapper con il token 2×2 a taglia 1** → per il Bouncer il libro dice "Prodigious size: Size 2"
+  (p.367), quindi era sbagliata la taglia (ora 2, token già 2×2); lo Scrapper non ha nessuna riga di taglia,
+  quindi era sbagliato il token (ora 1×1). Il controllo dei compendi non segnala più nessun errore grave
+  (erano questi 20). I job template di questi foe sono stati ricostruiti con la taglia giusta. Solo i nuovi
+  import: i token già sulle scene non cambiano.
+
 ## 30 settembre 2026 — Summon dei foe sulla loro scheda (versione 1.8.0)
 
 Richiesta di Maar: i summon dei nemici attaccati alla scheda del foe che li evoca, invece che sparsi in un

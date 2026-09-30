@@ -310,9 +310,8 @@ Emerso lavorando (da fare in blocchi futuri):
       - [ ] **Immagini dei summon** (S): tutti usano `mystery-man.svg`, come i foe.
       - [ ] **Summon dei giocatori** (S): solo il GM può piazzare i summon dei foe (crea attori); se Maar lascia i
             foe a un giocatore co-GM servirebbe un relay via socket come per le altre azioni GM.
-- [ ] **Token di dimensione sbagliata** (S, dati): `validate-packs.mjs` segnala 20 foe con `size` diverso dal
-      `prototypeToken` (18 Jotunn size 2 con token 1×1, Bouncer e Scrapper size 1 con token 2×2).
-      C'era già prima del 30 settembre (verificato sul backup).
+- [x] **Token di dimensione sbagliata** — FATTO il 30 settembre 2026 (versione 1.8.1): 18 Jotunn token 2×2, Bouncer
+      taglia 2 (p.367 "Prodigious size: Size 2"), Scrapper token 1×1. `validate-packs.mjs`: HIGH 0.
 - [ ] **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 

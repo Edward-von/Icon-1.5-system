@@ -1426,6 +1426,14 @@ alla cartella "Foe Summons").
 - [ ] **Job template con summon**: trascinare il template "Wraith" su un Brute → compare la sezione con Soul Spark;
       ✕ sul template → la sezione sparisce.
 
+## Token della taglia giusta (30 settembre 2026, versione 1.8.1)
+
+- [ ] **Jotunn**: importare Troll (Jotunn / Leader) e trascinarlo sulla scena → token di 2×2 caselle. Stessa cosa
+      per un Jotunn unico (es. Bale Troll).
+- [ ] **Bouncer**: importare Bouncer (Scavenger) → Size 2 nell'intestazione della scheda, token 2×2.
+- [ ] **Scrapper**: importare Scrapper (Scavenger / Heavy) → Size 1, token di una casella.
+- [ ] **Job template**: trascinare il template "Bouncer" su un foe di taglia 1 → la taglia diventa 2.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
