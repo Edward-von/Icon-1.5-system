@@ -1434,6 +1434,21 @@ alla cartella "Foe Summons").
 - [ ] **Scrapper**: importare Scrapper (Scavenger / Heavy) → Size 1, token di una casella.
 - [ ] **Job template**: trascinare il template "Bouncer" su un foe di taglia 1 → la taglia diventa 2.
 
+## Titan Armament completo, Foe Abilities senza doppioni, avviso di aggiornamento (30 settembre 2026, versione 1.8.2)
+
+- [ ] **Avviso di aggiornamento**: al primo avvio del mondo di Maar con la 1.8.2, il GM vede "ICON 1.5 updated to
+      1.8.2" con la spiegazione di reimportare foe, legend e item (e che le macro si aggiornano da sole). "Got it"
+      la chiude; ricaricando (F5) non ricompare. Un giocatore connesso non la vede.
+- [ ] **Mondo nuovo**: creando un mondo vuoto con il sistema, l'avviso non compare (compare la guida di benvenuto).
+
+- [ ] **Terzo turno**: importare un Jotunn Elite (es. Troll), trascinarci sopra il template "Titan Armament" →
+      HP ×1.5; metterlo in combattimento e passare al round successivo → nel tracker ha 3 attivazioni invece di 2.
+      Togliere il template (✕) e passare al round dopo → di nuovo 2. La scheda del template mostra
+      "+1 turn a round".
+- [ ] **Foe Abilities**: nel compendio non c'è più nessuna voce che inizia con "Faction:"; ci sono ancora
+      "Heavy (class) — Guard" e le altre voci "(class)", e "Universal Template — Elite". Le stesse regole di
+      fazione si trovano nel compendio Foe Templates.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

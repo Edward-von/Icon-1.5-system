@@ -79,6 +79,7 @@ import { registerMigrationSettings, runMigrations, syncWorldMacros } from "./mod
 /*  Onboarding                                         */
 /* -------------------------------------------------- */
 import { showWelcomeGuide } from "./module/apps/welcome.mjs";
+import { registerUpdateNoticeSetting, showUpdateNotice } from "./module/apps/update-notice.mjs";
 import { EncounterDesigner } from "./module/apps/EncounterDesigner.mjs";
 import { showReferenceGuide } from "./module/apps/reference.mjs";
 
@@ -145,6 +146,7 @@ Hooks.once("init", () => {
 
   // World data schema version — drives the migration framework (migrations.mjs).
   registerMigrationSettings();
+  registerUpdateNoticeSetting();
 
   // First-launch onboarding guide — shown once per user (client-scoped flag).
   game.settings.register("icon-system", "welcomeShown", {
@@ -337,6 +339,11 @@ Hooks.once("ready", async () => {
   } catch (err) {
     console.error("ICON 1.5 | Macro sync failed:", err);
   }
+
+  /* Compendium copies in the world don't update: after a system update, tell
+   * the GM to re-import foes / legends / items (once per version). Not awaited,
+   * so the dialog doesn't hold up the rest of the ready hook. */
+  showUpdateNotice().catch(err => console.error("ICON 1.5 | Update notice failed:", err));
 
   /* Selected-token status panel (top-right, PF2e-style). */
   try {

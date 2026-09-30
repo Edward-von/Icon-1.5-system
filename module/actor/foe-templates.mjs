@@ -4,7 +4,7 @@
  *
  * A template adds traits / actions / interrupts / round actions and may change
  * some fields (faction, class and statline for a job, Elite and size for the
- * Jotunn, HP for Titan Armament). Everything it does is written down in the
+ * Jotunn, HP and an extra turn a round for Titan Armament). Everything it does is written down in the
  * foe's `system.templates` entry:
  *   added   — names of the blocks it added, summons included (blocks the foe already had by that
  *             name are skipped, so the Wight job and the Relict faction don't
@@ -41,6 +41,8 @@ function workingCopy(actor) {
   const work = { hp: { value: s.hp.value, max: s.hp.max }, mob: { ...s.mob }, templates: deepClone(s.templates ?? []) };
   for (const k of SCALARS) work[k] = s[k];
   for (const t of BLOCK_TYPES) work[t] = deepClone(s[t] ?? []);
+  // Extra turns a round live in a flag (IconCombat.turnsFor), not in system.
+  work.extraTurns = Number(actor.getFlag("icon-system", "extraTurns")) || 0;
   return work;
 }
 
@@ -48,6 +50,7 @@ function workingCopy(actor) {
 function toUpdate(work) {
   const u = {};
   for (const k of [...SCALARS, ...BLOCK_TYPES, "hp", "mob", "templates"]) u[`system.${k}`] = work[k];
+  u["flags.icon-system.extraTurns"] = work.extraTurns;
   return u;
 }
 
@@ -127,6 +130,8 @@ function apply(work, item) {
   if (t.minSize && (work.size ?? 1) < t.minSize) set("size", t.minSize);
   // Titan Armament: "they have 50% more hp".
   if (t.hpMultiplier && t.hpMultiplier !== 1) set("hp.max", Math.round(work.hp.max * t.hpMultiplier));
+  // … "and take one extra turn a round" (same flag the Encounter Designer sets).
+  if (t.extraTurns) set("extraTurns", work.extraTurns + t.extraTurns);
 
   if ("hp/max" in entry.prev) set("hp.value", work.hp.max);
 

@@ -51,6 +51,8 @@ export class FoeTemplateData extends foundry.abstract.TypeDataModel {
       makeElite:    new BooleanField({ required: true, initial: false }),
       minSize:      nullableInt({ min: 1, max: 3 }),
       hpMultiplier: new NumberField({ required: true, initial: 1, min: 0.5, max: 3 }),
+      // Titan Armament (p.448): "take one extra turn a round" — the `extraTurns` flag IconCombat.turnsFor() reads.
+      extraTurns:   new NumberField({ required: true, initial: 0, min: 0, max: 3, integer: true }),
 
       traits:       new ArrayField(traitSchema(),       { initial: [] }),
       actions:      new ArrayField(actionSchema(),      { initial: [] }),

@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 30 settembre 2026 — Titan Armament completo, Foe Abilities senza doppioni, avviso di aggiornamento (versione 1.8.2)
+
+- **Avviso dopo ogni aggiornamento** (richiesta di Edoardo): foe, legend, summon e item trascinati dai compendi
+  sono copie e non ricevono le correzioni e le novità dei compendi (per esempio le classi corrette e i summon
+  di oggi) → al primo avvio del mondo con una versione nuova, il GM vede una finestra "ICON 1.5 updated to X"
+  che spiega di reimportare dai compendi foe, legend e item; le macro prese dal compendio si aggiornano già da
+  sole. Compare una volta per versione; in un mondo nuovo e vuoto non compare.
+
+- **Titan Armament dava gli HP ma non il turno in più**: il template aggiungeva il +50% di HP ma il tracker dava
+  comunque 2 turni a un Jotunn Elite, mentre p.448 dice "take one extra turn a round" → il template ora imposta
+  lo stesso segnale che già usava l'Encounter Designer (il tracker lo legge a ogni inizio round: un Jotunn Elite
+  armato ha 3 turni); togliendo il template torna a 2.
+- **Voci "Faction: …" tolte da Foe Abilities**: 39 voci (Kin/Monsters, meccaniche di fazione, Great Culture,
+  Imperial Officer, Legacy of the Titans) con testo riassunto, doppioni meno precisi del compendio Foe
+  Templates, che ha le stesse regole con il testo del libro → eliminate, insieme al file da cui erano state
+  generate (`macros/faction-rules-data.mjs`, non era una macro e nessuno lo leggeva). Restano le voci generiche
+  "<Classe> (class) — …" e "Universal Template — Elite".
+
 ## 30 settembre 2026 — Token della taglia giusta (versione 1.8.1)
 
 ### Bug

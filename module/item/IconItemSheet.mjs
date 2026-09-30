@@ -175,6 +175,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
             system.makeElite ? "Becomes Elite (double HP if it wasn't)" : "",
             system.minSize ? `Size at least ${system.minSize}` : "",
             system.hpMultiplier && system.hpMultiplier !== 1 ? `HP ×${system.hpMultiplier}` : "",
+            system.extraTurns ? `+${system.extraTurns} turn${system.extraTurns > 1 ? "s" : ""} a round` : "",
           ].filter(Boolean),
           traits:       await Promise.all((system.traits ?? []).map(async t => ({ name: t.name, html: await _enrich(t.description) }))),
           actions:      await Promise.all((system.actions ?? []).map(async a => ({

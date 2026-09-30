@@ -292,14 +292,14 @@ Emerso lavorando (da fare in blocchi futuri):
       9 fazioni + 6 Great Culture + 2 speciali + 192 job; drop sulla scheda Foe con conferma di sostituzione e ✕
       per togliere. Emerso lavorando e corretto nello stesso giro: la tendina Faction che cancellava la fazione.
       Resta, da valutare:
-      - [ ] **Titan Armament, turno in più** (S/M): il template dà +50% HP ma il tracker dà comunque 2 turni a un
+      - [x] **Titan Armament, turno in più** — FATTO il 30 settembre 2026 (1.8.2): il template dà +50% HP ma il tracker dà comunque 2 turni a un
             Elite; p.448 dice "take one extra turn a round". Servirebbe un campo "turni extra" letto da
             `IconCombat.turnsFor()`.
       - [ ] **Template sulle Legend** (S): la scheda Legend non accetta il drop dei template (il libro non lo
             chiede, ma Maar potrebbe volerlo per i Jotunn legend).
       - [ ] **Template dei Unique** (S, dati): oggi i job template coprono solo i job di fazione e le varianti; gli
             Unique (Iron Soldat, Silent One…) restano solo come attori nel compendio Foes.
-      - [ ] **Foe Abilities "Faction: …"** (S, dati): le vecchie voci parafrasate "Faction: X — Y" in Foe Abilities
+      - [x] **Foe Abilities "Faction: …"** — TOLTE il 30 settembre 2026 (1.8.2), 39 voci: le vecchie voci parafrasate "Faction: X — Y" in Foe Abilities
             ora sono doppioni meno precisi dei template; decidere se toglierle.
 - [x] **Summon dei foe sulla scheda NPC** — FATTO il 30 settembre 2026 (versione 1.8.0): 59 summon e oggetti letti
       dal libro, 85 agganci su 71 foe e legend, sezione "Summons & Objects" sulle schede con gettone da

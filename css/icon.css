@@ -5718,3 +5718,9 @@ ol.chat-log .chat-message,
 .icon-npc-summon__desc { flex: 1 1 auto; font-size: 0.78em; color: var(--ic-text-dim); font-style: italic; }
 .icon-npc-summon__rules { margin-top: 4px; font-size: 0.85em; line-height: 1.4; }
 .icon-npc-summon__rules p { margin: 0 0 3px; }
+
+/* Update notice (module/apps/update-notice.mjs) */
+.icon-update-notice p { margin: 0 0 8px; line-height: 1.45; }
+.icon-update-notice ul { margin: 0 0 8px 18px; padding: 0; }
+.icon-update-notice li { margin: 0 0 4px; line-height: 1.4; }
+.icon-update-notice__note { font-size: 0.88em; opacity: 0.8; }
