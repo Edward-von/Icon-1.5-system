@@ -17,8 +17,11 @@
   reagisce al **movimento** (p.88); "+" come boon si scrive +1D e funziona diversamente in combattimento e in
   narrativa (p.12). Sulla domanda degli AP: la colonna "Total AP" di p.115 conta un AP di metà livello già al livello
   0, la regola di p.15 no — la scheda ha ragione.
-- **Ricerca** della guida estesa alle FAQ; mentre si cerca restano visibili solo le righe trovate.
-- **Barra di navigazione** in cima alla guida: Turn · Areas · Glossary · FAQ.
+- **Guida divisa in schede** (richiesta di Edoardo, stesso giorno): con aree e FAQ la finestra era diventata un
+  unico scroll lunghissimo → quattro schede, **Turn · Areas · Glossary · FAQ**, una visibile alla volta, con
+  un'altezza fissa così la finestra non cambia misura passando dall'una all'altra. La guida si riapre sull'ultima
+  scheda usata. La **ricerca** vale per glossario e FAQ insieme: mentre si scrive mostra solo le righe trovate di
+  entrambi; svuotandola si torna alla scheda di prima. Da macro: `game.icon.showReferenceGuide({ tab: "faq" })`.
 - **Bottone "Quick Guide"** in alto a destra nella banda dell'intestazione della scheda PG, sopra il livello.
   Il bottone in Notes → Character Management si chiama ora "📖 Quick Guide"; tour First Steps e The Character Sheet
   aggiornati (un passo nuovo per il bottone).

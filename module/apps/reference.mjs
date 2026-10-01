@@ -274,85 +274,88 @@ function glossaryHTML() {
   }).join("");
 }
 
-function referenceHTML() {
+/** The guide's tabs, in order. */
+const TABS = [
+  { id: "turn",     icon: "fa-clock-rotate-left", label: "Turn",     title: "How a turn works" },
+  { id: "areas",    icon: "fa-vector-square",     label: "Areas",    title: "Areas" },
+  { id: "glossary", icon: "fa-book",              label: "Glossary", title: "Glossary" },
+  { id: "faq",      icon: "fa-circle-question",   label: "FAQ",      title: "FAQ" },
+];
+
+/** Tab shown when the guide opens: the last one used in this browser session. */
+let lastTab = "turn";
+
+function referenceHTML(active) {
   const subH = `color:${GOLD};margin:4px 0 8px;font-size:1.05em`;
+  const body = { turn: turnSchemaHTML(), areas: areaDiagramsHTML(), glossary: glossaryHTML(), faq: faqHTML() };
+  const tabs = TABS.map(t => `
+  <a class="${t.id === active ? "active" : ""}" data-ref-tab="${t.id}"><i class="fas ${t.icon}"></i> ${t.label}</a>`).join("");
+  const panes = TABS.map(t => `
+  <section class="icon-ref-pane" data-ref-pane="${t.id}" ${t.id === active ? "" : "hidden"}>
+    <h2 style="${subH}"><i class="fas ${t.icon}"></i> ${t.title}</h2>
+    ${body[t.id]}
+  </section>`).join("");
   return `
-<nav class="icon-ref-nav">
-  <a data-ref-jump="turn"><i class="fas fa-clock-rotate-left"></i> Turn</a>
-  <a data-ref-jump="areas"><i class="fas fa-vector-square"></i> Areas</a>
-  <a data-ref-jump="glossary"><i class="fas fa-book"></i> Glossary</a>
-  <a data-ref-jump="faq"><i class="fas fa-circle-question"></i> FAQ</a>
+<nav class="icon-ref-nav">${tabs}
 </nav>
 <input type="text" class="icon-ref-search" placeholder="Search the glossary and FAQ (e.g. comeback, vigor, summons, armor)…"
        style="width:100%;box-sizing:border-box;margin:0 0 6px;padding:5px 8px;background:#1c1812;border:1px solid ${BORDER};border-radius:4px;color:${TEXT}">
-<div class="icon-reference" style="font-size:.92em;line-height:1.5;color:${TEXT};max-height:60vh;overflow:auto;padding-right:6px">
-  <div class="icon-ref-static">
-    <h2 style="${subH}" data-ref-anchor="turn"><i class="fas fa-clock-rotate-left"></i> How a turn works</h2>
-    ${turnSchemaHTML()}
-
-    <h2 style="${subH}; margin-top:14px" data-ref-anchor="areas"><i class="fas fa-vector-square"></i> Areas</h2>
-    ${areaDiagramsHTML()}
-  </div>
-
-  <h2 style="${subH}; margin-top:14px" data-ref-anchor="glossary"><i class="fas fa-book"></i> Glossary</h2>
-  <div class="icon-ref-glossary">
-    ${glossaryHTML()}
-  </div>
-
-  <h2 style="${subH}; margin-top:14px" data-ref-anchor="faq"><i class="fas fa-circle-question"></i> FAQ</h2>
-  <div class="icon-ref-faq">
-    ${faqHTML()}
-  </div>
+<div class="icon-reference" style="font-size:.92em;line-height:1.5;color:${TEXT};height:60vh;overflow:auto;padding-right:6px">
+  ${panes}
   <p class="icon-ref-empty" style="display:none;color:${DIM};font-style:italic;margin:8px 0">Nothing matches your search.</p>
 </div>`;
 }
 
-/** Section links at the top: scroll the reference body to that heading. */
-function attachNav(root) {
-  const body = root?.querySelector(".icon-reference");
-  if (!body) return;
-  for (const link of root.querySelectorAll("[data-ref-jump]")) {
-    link.addEventListener("click", ev => {
-      ev.preventDefault();
-      const input = root.querySelector(".icon-ref-search");
-      if (input?.value) { input.value = ""; input.dispatchEvent(new Event("input")); }
-      const target = body.querySelector(`[data-ref-anchor="${link.dataset.refJump}"]`);
-      if (target) body.scrollTo({ top: target.offsetTop - body.offsetTop, behavior: "smooth" });
-    });
-  }
-}
-
-/** Wire up the live search filter once the dialog has rendered. */
-function attachSearch(root) {
+/**
+ * Tabs and search. A tab shows one pane. Typing in the search box shows the
+ * matching rows of the Glossary and FAQ together (no tab lit); clearing it
+ * goes back to the tab that was open.
+ */
+function attachTabs(root) {
   if (!root) return;
+  const body  = root.querySelector(".icon-reference");
   const input = root.querySelector(".icon-ref-search");
-  if (!input) return;
-  const terms    = Array.from(root.querySelectorAll(".icon-ref-term"));
-  const sections = Array.from(root.querySelectorAll(".icon-ref-section"));
-  const empty    = root.querySelector(".icon-ref-empty");
+  const links = Array.from(root.querySelectorAll("[data-ref-tab]"));
+  const panes = Array.from(root.querySelectorAll("[data-ref-pane]"));
+  const terms = Array.from(root.querySelectorAll(".icon-ref-term"));
+  const empty = root.querySelector(".icon-ref-empty");
+  if (!body || !input) return;
+
+  const show = id => {
+    lastTab = id;
+    for (const a of links) a.classList.toggle("active", a.dataset.refTab === id);
+    for (const p of panes) p.hidden = p.dataset.refPane !== id;
+    for (const el of terms) el.style.display = "";
+    for (const sec of root.querySelectorAll(".icon-ref-section")) sec.style.display = "";
+    if (empty) empty.style.display = "none";
+    body.scrollTop = 0;
+  };
+
+  for (const a of links) a.addEventListener("click", ev => {
+    ev.preventDefault();
+    if (input.value) input.value = "";
+    show(a.dataset.refTab);
+  });
+
   input.addEventListener("input", () => {
     const q = input.value.trim().toLowerCase();
-    let anyVisible = false;
+    if (!q) return show(lastTab);
+    for (const a of links) a.classList.remove("active");
+    let any = false;
     for (const el of terms) {
-      const match = !q || el.dataset.term.includes(q) || el.textContent.toLowerCase().includes(q);
+      const match = el.dataset.term.includes(q) || el.textContent.toLowerCase().includes(q);
       el.style.display = match ? "" : "none";
-      if (match) anyVisible = true;
+      if (match) any = true;
     }
-    // Hide a section header if all its terms are filtered out.
-    for (const sec of sections) {
-      const visible = sec.querySelector(".icon-ref-term:not([style*='display: none'])");
-      sec.style.display = visible ? "" : "none";
+    // Hide a glossary category whose terms are all filtered out.
+    for (const sec of root.querySelectorAll(".icon-ref-section")) {
+      sec.style.display = sec.querySelector(".icon-ref-term:not([style*='display: none'])") ? "" : "none";
     }
-    // While searching, show only matching rows: hide the turn schema and the
-    // area pictures, and the Glossary / FAQ headings with nothing left under them.
-    const statics = root.querySelector(".icon-ref-static");
-    if (statics) statics.style.display = q ? "none" : "";
-    for (const [anchor, box] of [["glossary", ".icon-ref-glossary"], ["faq", ".icon-ref-faq"]]) {
-      const h = root.querySelector(`[data-ref-anchor="${anchor}"]`);
-      const has = root.querySelector(`${box} .icon-ref-term:not([style*='display: none'])`);
-      if (h) h.style.display = has ? "" : "none";
+    // Only the searchable panes, and only those with something left in them.
+    for (const p of panes) {
+      p.hidden = !p.querySelector(".icon-ref-term:not([style*='display: none'])");
     }
-    if (empty) empty.style.display = anyVisible ? "none" : "";
+    if (empty) empty.style.display = any ? "none" : "";
   });
 }
 
@@ -376,19 +379,20 @@ export function onShowReferenceControl(event) {
 }
 
 /**
- * Show the quick guide (turn schema, areas, glossary, FAQ). Safe to call any time;
+ * Show the quick guide (tabs: turn schema, areas, glossary, FAQ), on `tab` or
+ * the last tab used. Safe to call any time;
  * never throws.
  * @returns {Promise<unknown>}
  */
-export function showReferenceGuide() {
+export function showReferenceGuide({ tab } = {}) {
+  const active = TABS.some(t => t.id === tab) ? tab : lastTab;
   return foundry.applications.api.DialogV2.prompt({
     window:  { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open" },
-    content: referenceHTML(),
+    content: referenceHTML(active),
     position: { width: 680 },
     render: (_event, dialog) => {
       const root = dialog?.element ?? dialog?.window?.content ?? null;
-      attachSearch(root);
-      attachNav(root);
+      attachTabs(root);
     },
     ok: { label: "Close", icon: "fa-solid fa-check", callback: () => true },
     rejectClose: false,

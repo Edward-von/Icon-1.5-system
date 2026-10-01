@@ -5780,7 +5780,7 @@ ol.chat-log .chat-message,
 .icon-hero .icon-hero__guide:hover { background: rgba(0,0,0,.5); border-color: #fff7e0; box-shadow: none; }
 .icon-hero .icon-hero__guide i { margin-right: 3px; }
 
-/* Section links above the guide body. */
+/* Tabs above the guide body (one pane shown at a time). */
 .icon-ref-nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
 .icon-ref-nav a {
   padding: 2px 10px;
@@ -5792,6 +5792,8 @@ ol.chat-log .chat-message,
   cursor: pointer;
 }
 .icon-ref-nav a:hover { border-color: var(--ic-gold-bright); color: var(--ic-gold-bright); text-shadow: none; }
+.icon-ref-nav a.active { border-color: var(--ic-gold-bright); background: var(--ic-gold-dim); color: #fff7e0; }
+.icon-ref-pane[hidden] { display: none !important; }
 
 /* Area pictures: one card per pattern. */
 .icon-area-cards {

@@ -327,6 +327,8 @@ Testo originale: "Expansion / Further attention being brought to the quick-guide
       Scelta di Edoardo (1 ottobre): disegni animati dal codice, niente GIF.
 - [x] **Guida rapida in cima alla scheda PG** (S): un bottone ben visibile nell'intestazione della scheda che apre la
       guida. Oggi la Reference sta nel menu ⋮ della finestra e nel 📖 dei controlli token.
+- [x] **Guida divisa in schede** (richiesta di Edoardo, stesso giorno): Turn / Areas / Glossary / FAQ, ricerca
+      comune a glossario e FAQ.
 - [x] **FAQ dei casi limite** (M): 11 domande e risposte di Maar, incollate da Edoardo, controllate sul manuale.
       Tutte confermate; quattro risposte riformulate col testo del libro (vedi CHANGELOG 1.11.0).
 

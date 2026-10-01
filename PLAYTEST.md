@@ -1550,8 +1550,11 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       il livello.
 - [ ] **Altri accessi**: il 📖 nei controlli token e il menu ⋮ di Foe / Legend / Summon / Clock aprono la stessa
       finestra; in Notes il bottone si chiama "📖 Quick Guide".
-- [ ] **Navigazione**: Turn / Areas / Glossary / FAQ scorrono alla sezione giusta (anche con del testo nella ricerca,
-      che viene svuotata).
+- [ ] **Schede**: Turn / Areas / Glossary / FAQ mostrano una sezione alla volta, la scheda attiva è dorata, la
+      finestra non cambia altezza passando dall'una all'altra; cliccare una scheda con del testo nella ricerca la
+      svuota.
+- [ ] **Ultima scheda**: chiudere la guida su FAQ e riaprirla (dalla scheda PG o dal 📖) → si riapre su FAQ.
+- [ ] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
 - [ ] **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
       Aura 2) disposti in griglia senza scroll orizzontale; caselle che si accendono in sequenza e ricominciano;
       la casella d'attacco dei Blast e del Burst target è evidenziata; il Large Blast è una croce di 13 caselle
@@ -1560,8 +1563,9 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       confrontare con i disegni (stessa forma, stesso colore).
 - [ ] **Animazioni ridotte** (Windows: Impostazioni → Accessibilità → Effetti visivi → Effetti di animazione spenti):
       le caselle sono ferme e tutte visibili.
-- [ ] **Ricerca**: "summon" mostra la FAQ sui summon (e le voci del glossario che ne parlano), nasconde turno e
-      aree; "zzz" mostra "Nothing matches your search."; svuotando la ricerca torna tutto.
+- [ ] **Ricerca**: da qualsiasi scheda, "summon" mostra insieme le righe del glossario e la FAQ sui summon (nessuna
+      scheda accesa); "armor" idem; "zzz" mostra "Nothing matches your search."; svuotando la ricerca si torna
+      alla scheda di prima, con tutte le righe.
 - [ ] **FAQ**: 11 domande in fondo, ognuna con la pagina citata; le virgolette nelle domande si vedono bene.
 - [ ] **Tooltip delle parole chiave** sulle schede (glossario) funzionano come prima.
 - [ ] **Tour**: First Steps, passo "Quick Guide" con il testo nuovo; The Character Sheet, passo "Quick Guide" che
