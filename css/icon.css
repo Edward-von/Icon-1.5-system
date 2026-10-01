@@ -442,6 +442,14 @@
   font-style: italic;
   color: var(--ic-text-dim);
 }
+.icon-foe-templates__note {
+  margin: 6px 0 0;
+  padding: 4px 8px;
+  font-size: 0.78em;
+  color: var(--ic-text-normal);
+  border-left: 3px solid var(--ic-gold-dim);
+  background: rgba(200,150,28,.06);
+}
 .icon-foe-template-chip {
   --chip: var(--ic-gold-dim);
   display: inline-flex;

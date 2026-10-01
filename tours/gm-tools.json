@@ -29,7 +29,7 @@
       "sheetTab": "main",
       "tooltipDirection": "DOWN",
       "title": "Templates",
-      "content": "Drag a faction, Great Culture, job or special template from the <strong>Foe Templates</strong> compendium onto the sheet: its traits and actions are added, and the chip here takes them away again with ✕.\nSingle traits and actions come from the <strong>Foe Abilities</strong> compendium, or the + buttons."
+      "content": "Drag a faction, Great Culture, job or special template from the <strong>Foe Templates</strong> compendium onto the sheet: its traits and actions are added, and the chip here takes them away again with ✕.\nA <strong>Folk</strong> foe also takes the Great Culture of one of the six cultures (p.302): none of the compendium's Folk foes has it yet, so drag the culture's template (Yeokin, Islander…); the sheet reminds you until you do.\nSingle traits and actions come from the <strong>Foe Abilities</strong> compendium, or the + buttons."
     },
     {
       "id": "foe-actions",

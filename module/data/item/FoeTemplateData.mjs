@@ -30,8 +30,9 @@ export class FoeTemplateData extends foundry.abstract.TypeDataModel {
       kind: new StringField({ required: true, initial: "faction", choices: ["faction", "culture", "job", "special"] }),
       // Written onto the foe when set ("Relict", "Folk"…, same spelling as the Foes compendium).
       faction: new StringField({ required: true, initial: "" }),
-      // Job templates only: the class the foe becomes ("" = keep the foe's class).
-      foeClass: new StringField({ required: true, initial: "", choices: ["", "heavy", "skirmisher", "leader", "artillery", "mob"] }),
+      // Job templates only: the class the foe becomes ("" = keep the foe's class;
+      // `blank` must be explicit, or faction / culture templates fail validation).
+      foeClass: new StringField({ required: true, blank: true, initial: "", choices: ["", "heavy", "skirmisher", "leader", "artillery", "mob"] }),
       // Job templates: the job's own statline. Null = keep the foe's.
       stats: new SchemaField({
         vit:       nullableInt({ min: 0 }),

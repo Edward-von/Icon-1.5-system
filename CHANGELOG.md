@@ -50,6 +50,16 @@
   lavoro), che compare quando i PG sono più di 6. Chi è già nel party resta sempre in lista, e il testo cercato
   resta anche quando si aggiunge o toglie un PG.
 
+- **I template di fazione e di cultura non si potevano applicare** (trovato provando il Villager): trascinando
+  "Yeokin" o "Folk" dal compendio Foe Templates su un foe non succedeva niente, e in console c'era "foeClass: may
+  not be a blank string" → nei dati del template il campo classe era vuoto per tutti i template che non cambiano
+  classe (fazioni, Great Culture), e Foundry lo rifiutava → il campo accetta ora il valore vuoto. Provato in
+  Foundry: Yeokin aggiunge Camaraderie, Folk aggiunge Kin, ✕ li toglie. Era così dalla 1.7.0, mai provata al tavolo.
+- **Promemoria Great Culture sui foe Folk**: per p.302 un foe Folk è un foe base più il template Kin più la Great
+  Culture di una delle sei culture, e nessun foe Folk del compendio ce l'ha già (Villager, Farmer, Acrobat…) → sulla
+  scheda di un foe Folk senza template di cultura compare un riquadro che lo ricorda e dice di trascinare il template
+  da Foe Templates; sparisce appena la cultura c'è. Anche il tour "Foes & Encounters" lo spiega.
+
 ### Chiuso senza lavoro
 
 - FAQ: le quattro risposte riformulate vanno bene perché vengono dal manuale. Gli otto fix del 30 agosto sono

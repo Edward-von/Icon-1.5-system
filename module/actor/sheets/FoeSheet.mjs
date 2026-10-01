@@ -145,6 +145,11 @@ export class FoeSheet extends BaseActorSheet {
     // Foe templates on this foe (faction / Great Culture / job / special), in the order applied.
     const KIND = { faction: "Faction", culture: "Great Culture", job: "Job", special: "Special" };
     context.appliedTemplates = (system.templates ?? []).map((t, i) => ({ i, name: t.name, uuid: t.uuid, kindLabel: KIND[t.kind] ?? t.kind, kind: t.kind }));
+    // p.302: a Folk foe is a basic foe + the Kin template + a Great Culture
+    // trait. None of the pack's Folk foes carries one (Villager, Farmer,
+    // Acrobat…): remind the GM until a culture template is on the sheet.
+    context.needsGreatCulture = String(system.faction ?? "").toLowerCase() === "folk"
+      && !(system.templates ?? []).some(t => t.kind === "culture");
 
     context.foeClassLabel = FOE_CLASS_LABELS[system.foeClass] ?? "Heavy";
     context.foeClassChoices = FOE_CLASS_LABELS;

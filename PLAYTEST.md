@@ -1617,6 +1617,11 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       restano i PG che corrispondono più quelli già nel party; cliccare un PG non svuota la ricerca; testo che
       non trova niente → "No PC matches the search" solo se nessuno è nel party. Con 6 PG o meno la casella non c'è.
 
+- [ ] **Template di fazione e cultura**: trascinare "Folk" e poi "Yeokin" da Foe Templates su un foe → arrivano i
+      tratti Kin e Camaraderie e i due chip; ✕ su un chip toglie il suo tratto. Nessun errore in console.
+- [ ] **Promemoria Great Culture**: foe con fazione Folk e nessuna cultura → riquadro "Folk foe without a Great
+      Culture" sotto i template; applicata una cultura sparisce; foe di altre fazioni non lo mostrano.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [x] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
