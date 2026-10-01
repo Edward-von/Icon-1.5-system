@@ -1,13 +1,16 @@
 /**
- * reference.mjs — In-system rules reference (the "quick guide"): a
+ * reference.mjs — In-system rules reference (the "Quick Guide"): a
  * turn-structure schema, animated pictures of the area patterns
  * (area-diagrams.mjs), a searchable glossary of ICON 1.5 combat/narrative
  * keywords (Comeback, Exceed, statuses, triggered effects, resources, …) and
  * an FAQ of table edge cases.
  *
+ * Built like the actor sheets (same window classes, banded header, core tab
+ * strip, `.icon-section` panels), so it shares their look and CSS.
+ *
  * Opened from the Quick Guide button in the PC sheet header, the 📖 tool in
- * the token controls, and the header menu of every actor sheet
- * (`showReference` action).
+ * the token controls, the header menu of every actor sheet (`showReference`
+ * action) and the once-per-update prompt (`promptQuickGuide`).
  *
  * Definitions are condensed from the ICON 1.5 rulebook glossary. Content is
  * kept in English to match the rest of the in-system UI.
@@ -15,10 +18,8 @@
 
 import { areaDiagramsHTML } from "./area-diagrams.mjs";
 
-const GOLD   = "#e8b828";
-const TEXT    = "#d8c9a8";
-const DIM     = "#a89878";
-const BORDER  = "#3a3528";
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+const _log = (...a) => console.debug("[ICON | QuickGuide]", ...a);
 
 /** Glossary data — grouped by category. Each entry: [term, definition].
  *  Also the single source of the inline keyword tooltips (helpers/keywords.mjs). */
@@ -183,37 +184,35 @@ export const GLOSSARY = [
 
 /** Build the visual turn-structure schema. */
 function turnSchemaHTML() {
-  const step = `background:#241f17;border:1px solid ${BORDER};border-radius:6px;padding:7px 10px;margin:0`;
-  const arrow = `text-align:center;color:${GOLD};font-size:1.1em;margin:2px 0`;
-  const tag = `display:inline-block;background:#2e2818;border:1px solid ${BORDER};border-radius:4px;padding:1px 7px;margin:2px 3px 0 0;color:${GOLD};font-weight:bold;font-size:.9em`;
   return `
-  <div style="margin:0 0 6px">
-    <div style="${step}">
-      <strong style="color:${GOLD}">Round</strong> — turns <strong>alternate</strong> between sides; a <strong>player character always goes first</strong>. When everyone has acted, the round ends and the next one starts with the opposite side.
-    </div>
-    <div style="${arrow}">↓ on your turn</div>
-    <div style="${step}">
-      <span style="${tag}">1 Standard Move</span><span style="${tag}">+ 2 Actions</span>
-      <div style="margin-top:5px;color:${TEXT}">Spend your two actions on abilities, in any order. Move at any point during your turn.</div>
-    </div>
-    <div style="${arrow}">↓</div>
-    <div style="${step}">
-      <strong style="color:${GOLD}">Limits</strong>
-      <ul style="margin:4px 0 0;padding-left:18px;color:${TEXT}">
-        <li>Only <strong>one attack ability</strong> per turn.</li>
-        <li>Each ability only <strong>once</strong> per turn (no duplicates).</li>
-        <li>Some abilities cost <strong>both</strong> actions; some cost <strong>none</strong>.</li>
-        <li><strong>Free actions</strong> don't spend an action but can't be repeated.</li>
-      </ul>
-    </div>
-    <div style="${arrow}">↓</div>
-    <div style="${step}">
-      <strong style="color:${GOLD}">End turn</strong> → pass to the next character on the other side.
-    </div>
-    <p style="margin:7px 0 0;font-size:.85em;color:${DIM}">
-      💡 <strong>Slow turn:</strong> you may skip your turn to act after everyone else (useful to react). <strong>Charge</strong> effects trigger on a slow turn.
-    </p>
-  </div>`;
+  <section class="icon-section">
+    <h3 class="icon-section__title">Round</h3>
+    <p class="icon-guide-text">Turns <strong>alternate</strong> between sides; a <strong>player character always goes
+      first</strong>. When everyone has acted, the round ends and the next one starts with the opposite side.</p>
+  </section>
+  <div class="icon-guide-arrow">↓ on your turn</div>
+  <section class="icon-section">
+    <h3 class="icon-section__title">Your turn</h3>
+    <div class="icon-guide-chips"><span class="icon-tag">1 Standard Move</span><span class="icon-tag">+ 2 Actions</span></div>
+    <p class="icon-guide-text">Spend your two actions on abilities, in any order. Move at any point during your turn.</p>
+  </section>
+  <div class="icon-guide-arrow">↓</div>
+  <section class="icon-section">
+    <h3 class="icon-section__title">Limits</h3>
+    <ul class="icon-guide-list">
+      <li>Only <strong>one attack ability</strong> per turn.</li>
+      <li>Each ability only <strong>once</strong> per turn (no duplicates).</li>
+      <li>Some abilities cost <strong>both</strong> actions; some cost <strong>none</strong>.</li>
+      <li><strong>Free actions</strong> don't spend an action but can't be repeated.</li>
+    </ul>
+  </section>
+  <div class="icon-guide-arrow">↓</div>
+  <section class="icon-section">
+    <h3 class="icon-section__title">End turn</h3>
+    <p class="icon-guide-text">Pass to the next character on the other side.</p>
+  </section>
+  <p class="icon-guide-note"><strong>Slow turn:</strong> you may skip your turn to act after everyone else (useful to
+    react). <strong>Charge</strong> effects trigger on a slow turn.</p>`;
 }
 
 /**
@@ -249,114 +248,120 @@ export const FAQ = [
 /** FAQ entries — same filterable rows as the glossary. */
 function faqHTML() {
   const rows = FAQ.map(([q, a]) => `
-    <div class="icon-ref-term" data-term="${q.toLowerCase().replace(/"/g, "")}" style="margin:0 0 9px;padding-left:2px">
-      <strong style="color:${TEXT}">${q}</strong>
-      <div style="color:${DIM};margin-top:2px">${a}</div>
+    <div class="icon-ref-term icon-guide-faq" data-term="${q.toLowerCase().replace(/"/g, "")}">
+      <strong class="icon-guide-faq__q">${q}</strong>
+      <div class="icon-guide-faq__a">${a}</div>
     </div>`).join("");
-  return `<section class="icon-ref-section">${rows}</section>`;
+  return `<section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Edge cases from the table</h3>
+    ${rows}
+  </section>`;
 }
 
-/** Build the glossary HTML (sectioned; each term is a filterable row). */
+/** Build the glossary HTML (one panel per category; each term is a filterable row). */
 function glossaryHTML() {
-  const sectionH = `color:${GOLD};margin:14px 0 5px;font-size:.95em;border-bottom:1px solid ${BORDER};padding-bottom:3px`;
   return GLOSSARY.map(sec => {
     const rows = sec.terms.map(([term, def]) => `
-      <div class="icon-ref-term" data-term="${term.toLowerCase()}" style="margin:0 0 5px;padding-left:2px">
-        <strong style="color:${TEXT}">${term}</strong>
-        <span style="color:${DIM}"> — ${def}</span>
+      <div class="icon-ref-term icon-guide-term" data-term="${term.toLowerCase()}">
+        <strong>${term}</strong> <span>— ${def}</span>
       </div>`).join("");
-    const noteHTML = sec.note ? `<p style="margin:0 0 6px;font-size:.85em;color:${DIM};font-style:italic">${sec.note}</p>` : "";
-    return `<section class="icon-ref-section">
-      <h3 style="${sectionH}">${sec.title}</h3>
+    const noteHTML = sec.note ? `<p class="icon-guide-note">${sec.note}</p>` : "";
+    return `<section class="icon-section icon-ref-section">
+      <h3 class="icon-section__title">${sec.title}</h3>
       ${noteHTML}
       ${rows}
     </section>`;
   }).join("");
 }
 
-/** The guide's tabs, in order. */
-const TABS = [
-  { id: "turn",     icon: "fa-clock-rotate-left", label: "Turn",     title: "How a turn works" },
-  { id: "areas",    icon: "fa-vector-square",     label: "Areas",    title: "Areas" },
-  { id: "glossary", icon: "fa-book",              label: "Glossary", title: "Glossary" },
-  { id: "faq",      icon: "fa-circle-question",   label: "FAQ",      title: "FAQ" },
+/** The guide's tabs, in order; `searchable` panes take part in the search. */
+const PANES = [
+  { id: "turn",     icon: "fa-solid fa-clock-rotate-left", label: "Turn",     html: () => turnSchemaHTML() },
+  { id: "areas",    icon: "fa-solid fa-vector-square",     label: "Areas",    html: () => `<section class="icon-section">${areaDiagramsHTML()}</section>` },
+  { id: "glossary", icon: "fa-solid fa-book",              label: "Glossary", html: () => glossaryHTML(), searchable: true },
+  { id: "faq",      icon: "fa-solid fa-circle-question",   label: "FAQ",      html: () => faqHTML(),      searchable: true },
 ];
 
 /** Tab shown when the guide opens: the last one used in this browser session. */
 let lastTab = "turn";
 
-function referenceHTML(active) {
-  const subH = `color:${GOLD};margin:4px 0 8px;font-size:1.05em`;
-  const body = { turn: turnSchemaHTML(), areas: areaDiagramsHTML(), glossary: glossaryHTML(), faq: faqHTML() };
-  const tabs = TABS.map(t => `
-  <a class="${t.id === active ? "active" : ""}" data-ref-tab="${t.id}"><i class="fas ${t.icon}"></i> ${t.label}</a>`).join("");
-  const panes = TABS.map(t => `
-  <section class="icon-ref-pane" data-ref-pane="${t.id}" ${t.id === active ? "" : "hidden"}>
-    <h2 style="${subH}"><i class="fas ${t.icon}"></i> ${t.title}</h2>
-    ${body[t.id]}
-  </section>`).join("");
-  return `
-<nav class="icon-ref-nav">${tabs}
-</nav>
-<input type="text" class="icon-ref-search" placeholder="Search the glossary and FAQ (e.g. comeback, vigor, summons, armor)…"
-       style="width:100%;box-sizing:border-box;margin:0 0 6px;padding:5px 8px;background:#1c1812;border:1px solid ${BORDER};border-radius:4px;color:${TEXT}">
-<div class="icon-reference" style="font-size:.92em;line-height:1.5;color:${TEXT};height:60vh;overflow:auto;padding-right:6px">
-  ${panes}
-  <p class="icon-ref-empty" style="display:none;color:${DIM};font-style:italic;margin:8px 0">Nothing matches your search.</p>
-</div>`;
-}
-
 /**
- * Tabs and search. A tab shows one pane. Typing in the search box shows the
- * matching rows of the Glossary and FAQ together (no tab lit); clearing it
- * goes back to the tab that was open.
+ * The Quick Guide window. One instance at a time; `showReferenceGuide` brings
+ * it to the front (and switches tab) when it is already open.
  */
-function attachTabs(root) {
-  if (!root) return;
-  const body  = root.querySelector(".icon-reference");
-  const input = root.querySelector(".icon-ref-search");
-  const links = Array.from(root.querySelectorAll("[data-ref-tab]"));
-  const panes = Array.from(root.querySelectorAll("[data-ref-pane]"));
-  const terms = Array.from(root.querySelectorAll(".icon-ref-term"));
-  const empty = root.querySelector(".icon-ref-empty");
-  if (!body || !input) return;
+export class QuickGuide extends HandlebarsApplicationMixin(ApplicationV2) {
 
-  const show = id => {
-    lastTab = id;
-    for (const a of links) a.classList.toggle("active", a.dataset.refTab === id);
-    for (const p of panes) p.hidden = p.dataset.refPane !== id;
-    for (const el of terms) el.style.display = "";
-    for (const sec of root.querySelectorAll(".icon-ref-section")) sec.style.display = "";
-    if (empty) empty.style.display = "none";
-    body.scrollTop = 0;
+  static DEFAULT_OPTIONS = {
+    id: "icon-quick-guide",
+    classes: ["icon", "sheet", "icon-quick-guide"],
+    position: { width: 720, height: 720 },
+    window: { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open", resizable: true },
   };
 
-  for (const a of links) a.addEventListener("click", ev => {
-    ev.preventDefault();
-    if (input.value) input.value = "";
-    show(a.dataset.refTab);
-  });
+  static PARTS = {
+    header:   { template: "systems/icon-system/templates/apps/quick-guide/header.hbs" },
+    tabs:     { template: "templates/generic/tab-navigation.hbs" },
+    turn:     { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
+    areas:    { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
+    glossary: { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
+    faq:      { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
+    empty:    { template: "systems/icon-system/templates/apps/quick-guide/empty.hbs" },
+  };
 
-  input.addEventListener("input", () => {
-    const q = input.value.trim().toLowerCase();
-    if (!q) return show(lastTab);
-    for (const a of links) a.classList.remove("active");
-    let any = false;
-    for (const el of terms) {
-      const match = el.dataset.term.includes(q) || el.textContent.toLowerCase().includes(q);
-      el.style.display = match ? "" : "none";
-      if (match) any = true;
+  static TABS = {
+    primary: { tabs: PANES.map(({ id, icon, label }) => ({ id, icon, label })), initial: "turn" },
+  };
+
+  async _preparePartContext(partId, context, options) {
+    context = await super._preparePartContext(partId, context, options);
+    const pane = PANES.find(p => p.id === partId);
+    if (pane) context.pane = { id: pane.id, html: pane.html(), cssClass: context.tabs?.[pane.id]?.cssClass ?? "" };
+    return context;
+  }
+
+  changeTab(tab, group, options = {}) {
+    super.changeTab(tab, group, options);
+    lastTab = tab;
+    // Picking a tab ends a search.
+    const input = this.element?.querySelector(".icon-guide-search");
+    if (input?.value && !options.fromSearch) { input.value = ""; this.#filter(""); }
+    this.element?.querySelector(".window-content")?.scrollTo(0, 0);
+  }
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+    _log(`rendered on "${this.tabGroups.primary}"`);
+    const input = this.element.querySelector(".icon-guide-search");
+    input?.addEventListener("input", () => this.#filter(input.value));
+  }
+
+  /**
+   * Search: show the matching rows of every searchable pane together (no tab
+   * lit); an empty query goes back to the tab that was open.
+   */
+  #filter(raw) {
+    const root = this.element;
+    const q = raw.trim().toLowerCase();
+    root.classList.toggle("is-searching", !!q);
+    for (const a of root.querySelectorAll(".tabs > [data-tab]")) a.classList.toggle("active", !q && a.dataset.tab === lastTab);
+    for (const el of root.querySelectorAll(".icon-ref-term")) {
+      el.hidden = !!q && !(el.dataset.term.includes(q) || el.textContent.toLowerCase().includes(q));
     }
-    // Hide a glossary category whose terms are all filtered out.
     for (const sec of root.querySelectorAll(".icon-ref-section")) {
-      sec.style.display = sec.querySelector(".icon-ref-term:not([style*='display: none'])") ? "" : "none";
+      sec.hidden = !!q && !sec.querySelector(".icon-ref-term:not([hidden])");
     }
-    // Only the searchable panes, and only those with something left in them.
-    for (const p of panes) {
-      p.hidden = !p.querySelector(".icon-ref-term:not([style*='display: none'])");
+    let any = false;
+    for (const pane of PANES) {
+      const el = root.querySelector(`.tab[data-tab="${pane.id}"]`);
+      if (!el) continue;
+      const show = !!pane.searchable && !!el.querySelector(".icon-ref-term:not([hidden])");
+      el.classList.toggle("is-match", !!q && show);
+      if (show) any = true;
     }
-    if (empty) empty.style.display = any ? "none" : "";
-  });
+    const empty = root.querySelector(".icon-guide-empty");
+    if (empty) empty.hidden = !q || any;
+    if (!q) this.changeTab(lastTab, "primary", { force: true, fromSearch: true });
+  }
 }
 
 /**
@@ -380,25 +385,65 @@ export function onShowReferenceControl(event) {
 
 /**
  * Show the quick guide (tabs: turn schema, areas, glossary, FAQ), on `tab` or
- * the last tab used. Safe to call any time;
- * never throws.
- * @returns {Promise<unknown>}
+ * the last tab used. Safe to call any time; never throws.
+ * @returns {Promise<QuickGuide|void>}
  */
-export function showReferenceGuide({ tab } = {}) {
-  const active = TABS.some(t => t.id === tab) ? tab : lastTab;
-  // A string content goes through foundry.utils.cleanHTML, which strips the
-  // inline <svg> of the area pictures; a bare <div> is taken as-is.
-  const content = document.createElement("div");
-  content.innerHTML = referenceHTML(active);
-  return foundry.applications.api.DialogV2.prompt({
-    window:  { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open" },
-    content,
-    position: { width: 680 },
-    render: (_event, dialog) => {
-      const root = dialog?.element ?? dialog?.window?.content ?? null;
-      attachTabs(root);
-    },
-    ok: { label: "Close", icon: "fa-solid fa-check", callback: () => true },
+export async function showReferenceGuide({ tab } = {}) {
+  try {
+    const target = PANES.some(p => p.id === tab) ? tab : lastTab;
+    const open = foundry.applications.instances.get("icon-quick-guide");
+    if (open?.rendered) {
+      open.changeTab(target, "primary", { force: true });
+      open.bringToFront();
+      return open;
+    }
+    const app = new QuickGuide();
+    app.tabGroups.primary = target;
+    return await app.render({ force: true });
+  } catch (err) {
+    console.error("[ICON | QuickGuide] could not open the guide", err);
+  }
+}
+
+/* -------------------------------------------------- */
+/*  Once-per-update prompt                             */
+/* -------------------------------------------------- */
+
+const PROMPT_SETTING = "quickGuidePromptVersion";
+
+/** Register the client setting holding the last version the prompt was shown for. Call from init. */
+export function registerQuickGuidePromptSetting() {
+  game.settings.register("icon-system", PROMPT_SETTING, {
+    name:    "Quick Guide prompt shown for version",
+    scope:   "client",
+    config:  false,
+    type:    String,
+    default: "",
+  });
+}
+
+/**
+ * Ask every user, once per system version, whether they want to open the
+ * Quick Guide. `stampOnly` records the version without asking (used on a
+ * first launch, where the welcome guide is already on screen).
+ */
+export async function promptQuickGuide({ stampOnly = false } = {}) {
+  const version = game.system.version ?? "";
+  const seen = game.settings.get("icon-system", PROMPT_SETTING) ?? "";
+  _log(`prompt: version ${version} | last shown for "${seen || "(never)"}"`);
+  if (seen === version) return;
+  await game.settings.set("icon-system", PROMPT_SETTING, version);
+  if (stampOnly) return;
+
+  const open = await foundry.applications.api.DialogV2.confirm({
+    window:  { title: `ICON 1.5 — version ${version}`, icon: "fa-solid fa-book-open" },
+    content: `<p>The ICON 1.5 system has been updated to <strong>${version}</strong>.</p>
+      <p>Do you want to open the <strong>Quick Guide</strong>? It covers how a turn works, every area pattern, the
+      glossary and an FAQ of edge cases. You can open it any time from the Quick Guide button on your character
+      sheet or the <i class="fa-solid fa-book"></i> book in the token controls.</p>`,
+    yes: { label: "Open the Quick Guide", icon: "fa-solid fa-book-open", default: true },
+    no:  { label: "Not now", icon: "fa-solid fa-xmark" },
     rejectClose: false,
-  }).catch(() => {});
+  }).catch(() => false);
+  if (open) showReferenceGuide({ tab: "turn" });
 }

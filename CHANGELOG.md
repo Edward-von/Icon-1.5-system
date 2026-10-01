@@ -18,6 +18,15 @@
   dall'origine: anello dopo anello per Blast, Burst e Aura, casella dopo casella per Line e Arc. Ogni onda si accende
   di colpo, l'area intera resta accesa, poi si spegne tutta insieme e ricomincia. Niente dissolvenze; colori opachi
   e smorzati (ocra, mattone, ardesia, viola), a piena copertura.
+- **Guida con la stessa grafica delle schede** (Edoardo, stesso pomeriggio): la guida era una finestra di dialogo
+  generica, con colori e riquadri suoi → ora è una finestra costruita come le schede di PG e nemici: banda diagonale
+  dorata nell'intestazione con titolo e ricerca, le stesse linguette (Turn · Areas · Glossary · FAQ), i contenuti
+  nei riquadri delle sezioni. Si può ridimensionare; se è già aperta, riaprirla la porta in primo piano invece di
+  aprirne una seconda.
+- **Popup "vuoi aprire la Quick Guide?"** (Edoardo, stesso pomeriggio): a ogni aggiornamento del sistema, la prima
+  volta che una persona (GM o giocatore) entra nel mondo le viene chiesto se vuole aprire la guida: "Open the Quick
+  Guide" o "Not now". Esce una sola volta per versione, per ogni persona. Al primissimo ingresso c'è già la finestra
+  di benvenuto, quindi il popup non esce e il benvenuto ha un bottone **Quick Guide** in più.
 - **FAQ dei casi limite**: 11 domande e risposte di Maar in fondo alla guida, ognuna con la pagina del manuale. Le
   ho controllate tutte sul PDF: le pagine sono giuste. Quattro risposte sono riformulate per stare al testo del libro:
   ordine del danno (le aggiunte dell'attaccante vengono **prima**, non "nell'ordine che si preferisce", p.106); il

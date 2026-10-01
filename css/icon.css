@@ -5756,7 +5756,7 @@ ol.chat-log .chat-message,
 .icon-clock-card__drag:active { cursor: grabbing; }
 
 /* ============================================================
-   Quick Guide (rules reference) — header button, section nav,
+   Quick Guide (rules reference) — header button, guide window,
    animated area pictures (module/apps/area-diagrams.mjs)
    ============================================================ */
 
@@ -5780,20 +5780,66 @@ ol.chat-log .chat-message,
 .icon-hero .icon-hero__guide:hover { background: rgba(0,0,0,.5); border-color: #fff7e0; box-shadow: none; }
 .icon-hero .icon-hero__guide i { margin-right: 3px; }
 
-/* Tabs above the guide body (one pane shown at a time). */
-.icon-ref-nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
-.icon-ref-nav a {
-  padding: 2px 10px;
-  border: 1px solid var(--ic-border-vis);
-  border-radius: 4px;
-  color: var(--ic-text-bright);
-  background: #241f17;
-  font-size: .88em;
-  cursor: pointer;
+/* The guide window is built like the actor sheets (.icon.sheet): banded
+   header, core tab strip, .icon-section panels. Only what is specific to the
+   guide lives here. */
+.icon-guide-header { --band: #8a6814; grid-template-columns: 56px minmax(0, 1fr); }
+.icon-guide-header .icon-band { padding-bottom: 22px; }
+.icon-guide-header__emblem {
+  grid-row: 1; grid-column: 1; align-self: start;
+  width: 56px; height: 56px; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.6em; color: #fff7e0;
+  background: rgba(0,0,0,.3);
+  border: 2px solid rgba(255,215,122,.6);
+  border-radius: var(--ic-radius);
 }
-.icon-ref-nav a:hover { border-color: var(--ic-gold-bright); color: var(--ic-gold-bright); text-shadow: none; }
-.icon-ref-nav a.active { border-color: var(--ic-gold-bright); background: var(--ic-gold-dim); color: #fff7e0; }
-.icon-ref-pane[hidden] { display: none !important; }
+.icon-guide-header .icon-sheet__identity { grid-row: 1; grid-column: 2; padding-bottom: 12px; gap: 2px; }
+.icon.sheet .icon-guide-header__title {
+  margin: 0; padding: 0; border: none;
+  font-family: var(--ic-display); font-weight: normal; font-size: 1.9em; line-height: 1.05;
+  color: #fff7e0; text-shadow: 0 1px 0 rgba(0,0,0,.4);
+}
+.icon-guide-header__sub {
+  font-size: .7em; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
+  color: rgba(255,240,210,.8);
+}
+.icon-guide-header__search {
+  grid-row: 2; grid-column: 1 / -1;
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 8px;
+  background: var(--ic-bg-field);
+  border: 1px solid var(--ic-border-vis);
+  border-radius: var(--ic-radius-sm);
+  color: var(--ic-text-dim);
+}
+.icon-guide-header__search:focus-within { border-color: var(--ic-gold); }
+.icon.sheet .icon-guide-header__search input {
+  flex: 1; height: 28px; padding: 0;
+  background: transparent; border: none; box-shadow: none;
+  color: var(--ic-text-bright);
+}
+
+.icon-guide-pane { font-size: .92em; line-height: 1.5; }
+.icon-guide-text { margin: 0; color: var(--ic-text-normal); }
+.icon-guide-text strong, .icon-guide-list strong, .icon-guide-term strong { color: var(--ic-text-bright); }
+.icon-guide-chips { display: flex; gap: 4px; margin: 0 0 6px; }
+.icon-guide-list { margin: 0; padding-left: 18px; color: var(--ic-text-normal); }
+.icon-guide-arrow { margin: -4px 0 6px; text-align: center; color: var(--ic-gold); font-size: .85em; letter-spacing: .06em; }
+.icon-guide-note { margin: 0 0 8px; font-size: .88em; font-style: italic; color: var(--ic-text-dim); }
+.icon-guide-term { margin: 0 0 5px; color: var(--ic-text-dim); }
+.icon-guide-term > span { color: var(--ic-text-normal); }
+.icon-guide-faq { padding: 7px 0; border-top: 1px solid var(--ic-border-faint); }
+.icon-guide-faq:first-of-type { border-top: none; padding-top: 0; }
+.icon-guide-faq__q { color: var(--ic-text-bright); }
+.icon-guide-faq__a { margin-top: 2px; color: var(--ic-text-normal); }
+.icon-guide-empty { margin: 0; padding: 4px 12px 10px; font-style: italic; color: var(--ic-text-dim); }
+
+/* Search: every searchable pane with a hit is shown at once. */
+.icon-quick-guide [hidden] { display: none !important; }
+.icon.sheet.icon-quick-guide.is-searching .icon-tab[data-tab] { display: none; }
+.icon.sheet.icon-quick-guide.is-searching .icon-tab[data-tab].is-match { display: block; }
+.icon.sheet.icon-quick-guide.is-searching .icon-tab[data-tab].is-match + .icon-tab.is-match { padding-top: 0; }
 
 /* Area pictures: one card per pattern. */
 .icon-area-cards {
@@ -5804,18 +5850,18 @@ ol.chat-log .chat-message,
 .icon-area-card {
   margin: 0;
   padding: 6px 8px 8px;
-  background: #241f17;
-  border: 1px solid #3a3528;
-  border-radius: 6px;
+  background: var(--ic-bg-dark);
+  border: 1px solid var(--ic-border-subtle);
+  border-radius: var(--ic-radius);
   display: flex; flex-direction: column; align-items: center;
 }
 .icon-area-card__title { color: var(--ic-gold-bright); font-weight: bold; font-size: .95em; margin-bottom: 4px; }
-.icon-area-card__text { margin: 5px 0 0; font-size: .8em; line-height: 1.35; color: #a89878; text-align: left; }
+.icon-area-card__text { margin: 5px 0 0; font-size: .8em; line-height: 1.35; color: var(--ic-text-normal); text-align: left; }
 .icon-area-svg { display: block; max-width: 100%; height: auto; }
-.icon-area-grid { fill: #15120d; stroke: #3a3528; stroke-width: 1; }
+.icon-area-grid { fill: var(--ic-bg-deep); stroke: #2b3342; stroke-width: 1; }
 .icon-area-range { fill: rgba(232,184,40,.12); stroke: rgba(232,184,40,.25); stroke-width: 1; }
 .icon-area-user { fill: #2a3549; stroke: var(--ic-gold-bright); stroke-width: 2; }
-.icon-area-cell { opacity: 0; stroke: #15120d; stroke-width: 1; animation: none 3.6s step-end infinite both; }
+.icon-area-cell { opacity: 0; stroke: var(--ic-bg-deep); stroke-width: 1; animation: none 3.6s step-end infinite both; }
 .icon-area-cell--focus { stroke: #e2d4b0; stroke-width: 1.5; }
 /* One keyframe per wave: wave N switches on 0.22s after wave N-1 (hard cut, no
    fade), everything clears together at 3s, 0.6s of empty grid, repeat. */
@@ -5836,11 +5882,11 @@ ol.chat-log .chat-message,
 @media (prefers-reduced-motion: reduce) {
   .icon-area-cell { animation: none !important; opacity: 1; }
 }
-.icon-area-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 6px; font-size: .82em; color: #a89878; }
+.icon-area-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 8px; font-size: .82em; color: var(--ic-text-dim); }
 .icon-area-legend i {
   display: inline-block; width: 11px; height: 11px; margin-right: 4px; vertical-align: -1px; border-radius: 2px;
 }
 .icon-area-legend__user  { background: #2a3549; border: 2px solid var(--ic-gold-bright); border-radius: 50% !important; }
 .icon-area-legend__range { background: rgba(232,184,40,.12); border: 1px solid rgba(232,184,40,.25); }
 .icon-area-legend__focus { background: #b0662e; border: 1.5px solid #e2d4b0; }
-.icon-area-note { margin: 7px 0 0; font-size: .85em; color: #a89878; }
+.icon-area-note { margin: 8px 0 0; font-size: .85em; color: var(--ic-text-dim); }

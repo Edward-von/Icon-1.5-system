@@ -81,7 +81,7 @@ import { registerMigrationSettings, runMigrations, syncWorldMacros } from "./mod
 import { showWelcomeGuide } from "./module/apps/welcome.mjs";
 import { registerUpdateNoticeSetting, showUpdateNotice } from "./module/apps/update-notice.mjs";
 import { EncounterDesigner } from "./module/apps/EncounterDesigner.mjs";
-import { showReferenceGuide } from "./module/apps/reference.mjs";
+import { showReferenceGuide, registerQuickGuidePromptSetting, promptQuickGuide } from "./module/apps/reference.mjs";
 import { registerIconTours, startIconTour } from "./module/apps/tours.mjs";
 
 /* -------------------------------------------------- */
@@ -149,6 +149,7 @@ Hooks.once("init", () => {
   // World data schema version — drives the migration framework (migrations.mjs).
   registerMigrationSettings();
   registerUpdateNoticeSetting();
+  registerQuickGuidePromptSetting();
 
   // First-launch onboarding guide — shown once per user (client-scoped flag).
   game.settings.register("icon-system", "welcomeShown", {
@@ -373,10 +374,16 @@ Hooks.once("ready", async () => {
    * their first load and never again automatically; it can be reopened any
    * time from the Character Management section of the PC sheet. */
   try {
-    if (!game.settings.get("icon-system", "welcomeShown")) {
+    const firstLaunch = !game.settings.get("icon-system", "welcomeShown");
+    if (firstLaunch) {
       showWelcomeGuide();
       await game.settings.set("icon-system", "welcomeShown", true);
     }
+    /* Once per system version, every user is asked whether to open the Quick
+     * Guide. On a first launch the welcome guide (which has its own Quick
+     * Guide button) is already up, so the version is only recorded. */
+    promptQuickGuide({ stampOnly: firstLaunch })
+      .catch(err => console.warn("ICON 1.5 | Quick Guide prompt failed:", err));
   } catch (err) {
     console.warn("ICON 1.5 | Welcome guide failed:", err);
   }

@@ -1555,6 +1555,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       svuota.
 - [ ] **Ultima scheda**: chiudere la guida su FAQ e riaprirla (dalla scheda PG o dal 📖) → si riapre su FAQ.
 - [ ] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
+- [ ] **Grafica come le schede**: banda diagonale dorata con "Quick Guide", sottotitolo e casella di ricerca; sotto,
+      le linguette con lo stesso aspetto di quelle della scheda PG/Foe; contenuti in riquadri. Finestra
+      ridimensionabile; con la guida già aperta, il 📖 la porta davanti (non ne apre una seconda) e cambia scheda se
+      chiamata da macro con `{ tab }`.
+- [ ] **Ricerca**: scrivendo, le linguette si spengono e restano solo i riquadri con risultati (glossario e FAQ
+      insieme); svuotando si torna alla linguetta di prima; cliccare una linguetta durante la ricerca la svuota.
+- [ ] **Popup a ogni aggiornamento**: dopo l'update, primo F5 → "ICON 1.5 — version X" con "Open the Quick Guide" /
+      "Not now"; Open apre la guida su Turn; al secondo F5 il popup non esce più. Da provare anche come giocatore
+      (ognuno lo vede una volta). Mondo/utente nuovo: esce solo il benvenuto, con il bottone "Quick Guide" che apre
+      la guida.
 - [ ] **Disegni presenti** (fix del 1 ottobre pomeriggio): in Areas ogni riquadro ha la sua griglia disegnata tra
       il titolo e il testo (prima c'erano solo titolo e testo).
 - [ ] **Propagazione**: ogni area parte dall'origine (casella d'attacco per i Blast e il Burst target, il PG per i

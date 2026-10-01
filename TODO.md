@@ -329,6 +329,8 @@ Testo originale: "Expansion / Further attention being brought to the quick-guide
       guida. Oggi la Reference sta nel menu ⋮ della finestra e nel 📖 dei controlli token.
 - [x] **Guida divisa in schede** (richiesta di Edoardo, stesso giorno): Turn / Areas / Glossary / FAQ, ricerca
       comune a glossario e FAQ.
+- [x] **Guida con la grafica delle schede** (Edoardo, 1 ottobre pomeriggio): finestra come le schede, banda, linguette.
+- [x] **Popup una volta per aggiornamento** che chiede se aprire la Quick Guide (Edoardo, 1 ottobre pomeriggio).
 - [x] **FAQ dei casi limite** (M): 11 domande e risposte di Maar, incollate da Edoardo, controllate sul manuale.
       Tutte confermate; quattro risposte riformulate col testo del libro (vedi CHANGELOG 1.11.0).
 
