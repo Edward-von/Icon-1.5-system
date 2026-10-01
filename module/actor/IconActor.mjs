@@ -31,6 +31,18 @@ export class IconActor extends Actor {
    */
   async _preUpdate(changed, options, user) {
     await super._preUpdate(changed, options, user);
+
+    // Foes and legends: the token follows the size, whatever changed it (the
+    // Size field, a job template such as Bouncer, Jotunn's Titanblood).
+    if (this.type === "foe" || this.type === "legend") {
+      const size = Number(foundry.utils.getProperty(changed, "system.size"));
+      if (size >= 1 && size !== this.system.size) {
+        foundry.utils.setProperty(changed, "prototypeToken.width", size);
+        foundry.utils.setProperty(changed, "prototypeToken.height", size);
+        options.iconResizeTokens = size;
+      }
+      return;
+    }
     if (this.type !== "icon") return;
 
     const newXp = foundry.utils.getProperty(changed, "system.narrative.xp.value");
@@ -73,6 +85,16 @@ export class IconActor extends Actor {
    */
   async _onUpdate(changed, options, userId) {
     super._onUpdate(changed, options, userId);
+    // A resized foe / legend (see _preUpdate): its linked tokens already on the
+    // scenes take the new size too.
+    if (options.iconResizeTokens && userId === game.user.id) {
+      const size = options.iconResizeTokens;
+      for (const scene of game.scenes) {
+        const updates = scene.tokens.filter(t => t.actorLink && t.actorId === this.id && (t.width !== size || t.height !== size))
+          .map(t => ({ _id: t.id, width: size, height: size }));
+        if (updates.length) await scene.updateEmbeddedDocuments("Token", updates);
+      }
+    }
     if (this.type !== "icon") return;
     if (userId !== game.user.id) return;
     const stance = foundry.utils.getProperty(changed, "system.combat.stance");

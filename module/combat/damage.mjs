@@ -259,7 +259,9 @@ export async function applyDamageToActor(actor, amount, {
   const armor        = applyArmor ? getActorArmor(actor) : 0;
   const afterArmor   = Math.max(0, amount - armor);
   const armorBlocked = amount - afterArmor;
-  const applied      = half ? Math.floor(afterArmor / 2) : afterArmor;
+  // Halves round up (p.86: "Round up to the nearest whole number"; the worked
+  // example on p.106 takes 1.5 to 2).
+  const applied      = half ? Math.ceil(afterArmor / 2) : afterArmor;
 
   /* --- Vigor absorbs first, then HP — one atomic update --- */
   const curVigor      = cont.vigor?.value ?? 0;
@@ -576,21 +578,21 @@ export async function postAbilityDamageCard(actor, {
   // the defender presses "Apply Damage" on the card (see icon.mjs), using that
   // actor's own armor value, so it can never be forgotten in the attacker dialog.
   if (resistance) {
-    const halved = Math.floor(running / 2);
+    const halved = Math.ceil(running / 2);   // rounded up (p.86)
     steps.push({ label: "Resistance (halved)", value: halved - running, isNegative: true });
     running = halved;
   }
   // Pacified (attacker): "deal half damage". Auto-applied from the attacker's
   // own status so it can't be forgotten — previously this status had no effect.
   if (hasActiveStatus(actor, "pacified")) {
-    const halved = Math.floor(running / 2);
+    const halved = Math.ceil(running / 2);   // rounded up (p.86)
     steps.push({ label: "Pacified (½)", value: halved - running, isNegative: true });
     running = halved;
   }
   // Hatred of X (p.104): half damage against anyone but the hated foe. Ticked
   // in the damage dialog (pre-filled from the current targets).
   if (hatred) {
-    const halved = Math.floor(running / 2);
+    const halved = Math.ceil(running / 2);   // rounded up (p.86)
     steps.push({ label: "Hatred (½ — not the hated foe)", value: halved - running, isNegative: true });
     running = halved;
   }

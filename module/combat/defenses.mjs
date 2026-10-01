@@ -248,10 +248,12 @@ export function gridDistance(a, b) {
 /**
  * Chips for a defender: "Evasion 4+", "Dodge", "Cover ½", "Resistance ½",
  * "Stealth", "Cover? wall". `outcome` (damage cards) turns the Dodge chip into
- * "Dodge — immune" on Miss / Area / successful-save cards. Returns "" when
+ * "Dodge — immune" on Miss / Area / successful-save cards. `trueStrike` /
+ * `unerring` (the damage card's flags) show the defences the attack ignores as
+ * "ignored", the way damageMitigation treats them on Apply. Returns "" when
  * there is nothing to show.
  */
-export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, compact = false, tokenId = null, attacker = null } = {}) {
+export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, compact = false, tokenId = null, attacker = null, trueStrike = false, unerring = false } = {}) {
   const p = defenseProfile(actor);
   const chips = [];
   if (p.evasion) {
@@ -259,14 +261,17 @@ export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, 
     const label = p.sureEvasion ? "Evasion — sure" : `Evasion ${p.evasionThreshold}+${via}`;
     chips.push(_chip("evasion", label, `Evasion: a d6 is rolled when this character is targeted by an attack; ${p.evasionThreshold}+ = the attack misses them (p.146)${p.evasionThreshold === 3 ? " — Rigoletto I" : ""}${p.sureEvasion ? " — Rigoletto Aspect: always successful this turn" : ""}${p.evasionVia ? ` — from the trait ${p.evasionVia}` : ""}.`, p.sureEvasion));
   }
-  if (p.dodge) {
+  if (p.dodge && trueStrike) chips.push(_chip("dodge", "Dodge — ignored (True Strike)", "True Strike ignores Dodge (p.117): the damage is applied in full."));
+  else if (p.dodge) {
     const on = outcome === "miss" || outcome === "area" || outcome === "save-success";
     chips.push(_chip("dodge", on ? "Dodge — immune" : `Dodge${p.dodgeVia ? ` (${p.dodgeVia})` : ""}`, `Dodge: immune to all damage from missed attacks, successful saves and area effects (p.144)${p.dodgeVia ? ` — from the trait ${p.dodgeVia}` : ""}.`, on));
   }
-  if (p.cover)      chips.push(_chip("cover", halvedOnRoll ? "Cover (already ½)" : "Cover ½", "Cover: half damage (p.92). Applied automatically when the damage is applied.", !halvedOnRoll));
+  if (p.cover && unerring) chips.push(_chip("cover", "Cover — ignored (Unerring)", "Unerring ignores Cover (p.105): the damage is not halved for it."));
+  else if (p.cover) chips.push(_chip("cover", halvedOnRoll ? "Cover (already ½)" : "Cover ½", "Cover: half damage (p.92). Applied automatically when the damage is applied.", !halvedOnRoll));
   if (p.resistance) chips.push(_chip("resistance", halvedOnRoll ? "Resistance (already ½)" : "Resistance ½", "Resistance: half damage. Applied automatically when the damage is applied (once, together with Cover).", !halvedOnRoll));
   const wall = attacker ? aetherwallAgainst(actor, attacker, { targetTokenId: tokenId }) : { active: false };
-  if (wall.active) chips.push(_chip("resistance", halvedOnRoll ? `Aetherwall (already ½)` : `Aetherwall ½`, `Aetherwall (Artillery, p.298): resistance against abilities from characters outside range 2 — the attacker is ${wall.distance} spaces away, so the damage is halved when it is applied.`, !halvedOnRoll));
+  if (wall.active && unerring) chips.push(_chip("resistance", "Aetherwall — ignored (Unerring)", "Unerring ignores Aetherwall (p.105): the damage is not halved for it."));
+  else if (wall.active) chips.push(_chip("resistance", halvedOnRoll ? `Aetherwall (already ½)` : `Aetherwall ½`, `Aetherwall (Artillery, p.298): resistance against abilities from characters outside range 2 — the attacker is ${wall.distance} spaces away, so the damage is halved when it is applied.`, !halvedOnRoll));
   if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
   if (p.stealth && !compact)    chips.push(_chip("stealth", "Stealth", "Stealth: cannot be targeted directly except from an adjacent space (p.146)."));
   if (p.intangible && !compact) chips.push(_chip("intangible", "Intangible", "Intangible: see the character's text — usually immune to damage."));

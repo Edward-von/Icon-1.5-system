@@ -745,7 +745,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     try { actor = fromUuidSync(row.dataset.actorUuid); } catch { actor = null; }
     if (!actor) return;
     const chips = defenseChipsHtml(actor, {
-      outcome, halvedOnRoll, compact: true,
+      outcome, halvedOnRoll, compact: true, trueStrike, unerring,
       tokenId: row.dataset.tokenId ?? null, attacker: attackerActor,
     });
     if (!chips) return;

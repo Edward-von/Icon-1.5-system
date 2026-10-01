@@ -477,7 +477,7 @@ export async function damageRoll({
 
   /* --- Resistance / Cover --- */
   if (resistance) {
-    running = Math.floor(running / 2);
+    running = Math.ceil(running / 2);   // rounded up (p.86)
     steps.push({ label: "Resistance (halved)", value: running, isFinal: false });
   }
 

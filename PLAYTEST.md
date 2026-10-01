@@ -1318,38 +1318,55 @@ Verificato offline (Node): `ignoresEvasion` con tag stringa / etichetta / oggett
 - [ ] **Senza token non indovina**: PG Wright senza token in scena (o attaccante senza token) → nessun chip e
       nessun dimezzamento automatico, perché la distanza non è misurabile.
 
+## Esito playtest locale del 1 ottobre 2026 (Foundry locale, mondo "test", build 1.12.0)
+
+Richiesto da Edoardo in locale invece che sul server. Eseguite le prove dalla 1.6.2 alla 1.12.0 come GM ("Gamemaster" 2),
+con attori ZzT temporanei, una scena e un combat di prova; tutto cancellato alla fine e il combat del mondo rimesso attivo.
+Le voci spuntate qui sotto sono passate. Restano aperte quelle che chiedono un giocatore collegato o un mondo diverso:
+giocatore senza permessi sui template / summon / orologi, tour visti da giocatore, Junk Golem col [D] del foe, popup e
+avviso al vero cambio di versione (Foundry va riavviato per leggere la 1.12.0: in locale diceva ancora 1.11.0), macro
+Interlude (non lanciata: cura e toglie gli status a tutti i PG del mondo), cambio di lavoro al passo 1 del level up.
+
+Difetti trovati e corretti durante il playtest (dettagli nel CHANGELOG 1.12.0):
+- [x] Template di fazione e cultura rifiutati ("foeClass: may not be a blank string") → si applicano.
+- [x] Il token non seguiva la taglia del foe (template Bouncer / Jotunn, campo Size) → prototipo e token sulle scene seguono.
+- [x] Carta del danno con "Aetherwall ½" / "Cover ½" / Dodge accesi anche con Unerring / True Strike → mostrati come "ignored".
+- [x] Dimezzamenti arrotondati per difetto (Resistance, Cover, Aetherwall, Pacified, Hatred) → per eccesso (p.86, esempio p.106).
+- [x] (trovato registrando le clip) L'aura non seguiva il token se il GM attivo guardava un'altra scena → la segue (verificato col
+      client di Edoardo su "test").
+
 ## Debug del 30 settembre 2026 — classi dei foe e compendio riordinato (versione 1.6.2)
 
 Solo compendi: i foe già importati nel mondo NON cambiano. Provare sempre importando una copia nuova dal
 compendio (poi cancellarla).
 
-- [ ] **Cartelle del compendio Foes**: aprendo il compendio ogni fazione (Relict, Hob, Jotunn…) ha le cartelle
+- [x] **Cartelle del compendio Foes**: aprendo il compendio ogni fazione (Relict, Hob, Jotunn…) ha le cartelle
       Artillery / Heavy / Leader / Skirmisher / Mobs / Uniques, e dentro Uniques la sottocartella Elites. Folk ha
       solo Mobs e Uniques; Lowlander ha in più "Legend Adds" (Cultist, Vile Darter, Giant Insect, Lesser Clot).
       Basic Jobs ha "Mobs" al posto di "Mob". Nessuna cartella vuota.
-- [ ] **Wight → Heavy**: importare Wight (Relict / Heavy) → classe Heavy, Defense 6, Fray 4, [D] d6, Armor 2,
+- [x] **Wight → Heavy**: importare Wight (Relict / Heavy) → classe Heavy, Defense 6, Fray 4, [D] d6, Armor 2,
       HP 40; tratto Guard presente; azione Diaga assente. Stesso controllo veloce su Tomb Guard o Legionary.
-- [ ] **Wraith → Artillery**: importare Wraith o Chain Wraith (Relict / Artillery) → classe Artillery, VIT 8,
+- [x] **Wraith → Artillery**: importare Wraith o Chain Wraith (Relict / Artillery) → classe Artillery, VIT 8,
       HP 32, Defense 7, [D] d8; tratti Slip e Aetherwall; niente Diaga.
-- [ ] **Unique Elite con HP stampato**: Arkitek (Relict / Uniques / Elites) → Leader, Elite, VIT 10, **HP 64**
+- [x] **Unique Elite con HP stampato**: Arkitek (Relict / Uniques / Elites) → Leader, Elite, VIT 10, **HP 64**
       (non 80), Diaga presente, Guard assente. Kinfisher (Ruin Beast / Uniques / Elites) → Heavy, Elite, HP 64,
       Guard. Megacrab (Ruin Beast / Uniques) → Heavy con **Armor 10**.
-- [ ] **Diventati Elite**: Atrophic Grave (Relict / Uniques / Elites) e Churn Baron (Scavenger / Uniques / Elites)
+- [x] **Diventati Elite**: Atrophic Grave (Relict / Uniques / Elites) e Churn Baron (Scavenger / Uniques / Elites)
       → Elite spuntato, HP 80, due attivazioni nel tracker quando entrano in combattimento.
-- [ ] **Mob nuovi**: Goons (Scavenger / Mobs) e Villager (Folk / Mobs) → classe Mob, la scheda mostra il
+- [x] **Mob nuovi**: Goons (Scavenger / Mobs) e Villager (Folk / Mobs) → classe Mob, la scheda mostra il
       contatore dei membri al posto degli HP, tratto Mob; Goons senza Slip/Aetherwall, Villager senza Diaga.
-- [ ] **Non più mob**: Red Worm (Ruin Beast / Artillery) e Shinobi (Folk / Uniques) → HP normali (32 e 28),
+- [x] **Non più mob**: Red Worm (Ruin Beast / Artillery) e Shinobi (Folk / Uniques) → HP normali (32 e 28),
       nessun contatore membri, tratto Mob assente.
-- [ ] **Fedeli del Fetid Idol**: Cultist → Skirmisher con HP 15, Defense 10, **[D] d8 e Fray 3** (quelli
+- [x] **Fedeli del Fetid Idol**: Cultist → Skirmisher con HP 15, Defense 10, **[D] d8 e Fray 3** (quelli
       dell'idolo, p.440); Vile Darter → Artillery HP 15; Giant Insect → Heavy HP 20.
-- [ ] **Rimossi dal compendio Foes**: cercando "Automaton", "Munition", "Reticle", "Torpedo", "Soul Fragment",
+- [x] **Rimossi dal compendio Foes**: cercando "Automaton", "Munition", "Reticle", "Torpedo", "Soul Fragment",
       "Lord", "Guilder", "Islander", "Leggio" nel compendio Foes non esce niente. Nel compendio Legends
       Veridian Weapon, Azurian Weapon, Crimson Weapon, Arkenlich e Dread Lords ci sono ancora e descrivono i loro
       summon / Lord.
-- [ ] **Foe Abilities allineato**: nel compendio Foe Abilities esiste "Wight — Guard" e non esiste più
+- [x] **Foe Abilities allineato**: nel compendio Foe Abilities esiste "Wight — Guard" e non esiste più
       "Wight — Diaga"; non esiste nessuna voce "Torpedo — …" o "Guilder — …"; esistono ancora
       "Faction: Folk — Great Culture: Strive (Guilder)" e le altre Great Culture.
-- [ ] **Encounter Designer**: il roster mostra Wight come Heavy e Wraith come Artillery; filtrando per classe
+- [x] **Encounter Designer**: il roster mostra Wight come Heavy e Wraith come Artillery; filtrando per classe
       "Mob" compaiono Goons e Villager; il totale dei foe da compendio scende (362 invece di 376).
 - [ ] **Mondo non toccato**: un Wight già importato nel mondo prima dell'aggiornamento resta Leader (normale:
       le correzioni ai compendi valgono solo per i nuovi import).
@@ -1358,41 +1375,41 @@ compendio (poi cancellarla).
 
 Usare una copia nuova di un foe base (compendio Foes → Basic Jobs, es. Brute), poi cancellarla.
 
-- [ ] **Compendio**: nella barra dei compendi c'è "Foe Templates". Dentro, una cartella per fazione; in ogni
+- [x] **Compendio**: nella barra dei compendi c'è "Foe Templates". Dentro, una cartella per fazione; in ogni
       fazione il template di fazione, e le sottocartelle Artillery / Heavy / Leader / Skirmisher con i job.
       Folk ha il template Folk e la sottocartella Great Cultures (6); Imperial ha anche Imperial Officer,
       Jotunn anche Titan Armament.
-- [ ] **Scheda del template**: aprendo "Wight" si vede "Faction job · Relict · Heavy · p.325", la riga delle
+- [x] **Scheda del template**: aprendo "Wight" si vede "Faction job · Relict · Heavy · p.325", la riga delle
       statistiche (VIT 10, HP 40, DEF 6…) e l'elenco di tratti e azioni con il loro testo. Aprendo "Relict" si
       vedono Monsters e Legion of the Dead.
-- [ ] **Template di fazione**: trascinare "Relict" sulla scheda del Brute → notifica "Relict applied…", nella
+- [x] **Template di fazione**: trascinare "Relict" sulla scheda del Brute → notifica "Relict applied…", nella
       riga Templates del Foe Builder compare il gettone "FACTION Relict", la tendina Faction dice Relict, tra i
       tratti ci sono Monsters e Legion of the Dead. Statistiche invariate.
-- [ ] **Togliere**: ✕ sul gettone Relict → i due tratti spariscono, la fazione torna com'era, il gettone sparisce.
-- [ ] **Template di job**: trascinare "Wraith" (Relict / Artillery) sul Brute → classe Artillery, VIT 8, HP 32,
+- [x] **Togliere**: ✕ sul gettone Relict → i due tratti spariscono, la fazione torna com'era, il gettone sparisce.
+- [x] **Template di job**: trascinare "Wraith" (Relict / Artillery) sul Brute → classe Artillery, VIT 8, HP 32,
       DEF 7, [D] d8, Armor 0; Guard sparisce; compaiono Phasing, Flying, Legion of the Dead, Slip, Aetherwall e le
       azioni Unstable Charge, Chain Lightning, Soul Spark; le azioni del Brute restano. ✕ → torna Heavy con
       Guard, HP 40, come prima.
-- [ ] **Sostituzione con conferma**: Folk + "Guilder" sul Brute (compare l'azione Strive), poi trascinare
+- [x] **Sostituzione con conferma**: Folk + "Guilder" sul Brute (compare l'azione Strive), poi trascinare
       "Leggio" → finestra "Replace template?" che nomina Guilder. Confermando: Strive sparisce, compare
       Acrobatics, i gettoni sono Folk e Leggio. Ripetendo con "Islander" e premendo annulla, non cambia niente.
-- [ ] **Niente doppioni**: sul Brute pulito trascinare "Wight" e poi "Relict" → Legion of the Dead c'è una
+- [x] **Niente doppioni**: sul Brute pulito trascinare "Wight" e poi "Relict" → Legion of the Dead c'è una
       sola volta (Relict aggiunge solo Monsters). Poi trascinare "Wraith" → chiede di sostituire Wight;
       confermando, Legion of the Dead c'è ancora una volta sola.
-- [ ] **Jotunn**: trascinare "Jotunn" sul Brute → Elite spuntato, HP da 40 a 80, taglia 2, tratti Kin,
+- [x] **Jotunn**: trascinare "Jotunn" sul Brute → Elite spuntato, HP da 40 a 80, taglia 2, tratti Kin,
       Titanblood, Titanfall. Poi "Titan Armament" → HP 120. Togliere Titan Armament → 80; togliere Jotunn →
       40, non Elite, taglia com'era.
-- [ ] **Speciali che si sommano**: Imperial + Imperial Officer sullo stesso foe → nessuna richiesta di
+- [x] **Speciali che si sommano**: Imperial + Imperial Officer sullo stesso foe → nessuna richiesta di
       sostituzione, due gettoni, tratti Promotion e Imperial Command Aura.
-- [ ] **Click sul nome del gettone**: apre l'item del template dal compendio.
+- [x] **Click sul nome del gettone**: apre l'item del template dal compendio.
 - [ ] **Giocatore senza permessi**: con una scheda in sola lettura il drop non fa niente e non c'è la ✕.
 
-- [ ] **Tendina Faction (fix)**: importare dal compendio un foe qualsiasi (es. Wight) → la tendina Faction dice
+- [x] **Tendina Faction (fix)**: importare dal compendio un foe qualsiasi (es. Wight) → la tendina Faction dice
       "Relict", non "—". Cambiare un altro campo (es. Chapter) e riaprire → la fazione è ancora Relict. Un foe dei
       Basic Jobs mostra "Basic Jobs" come voce della tendina. Un foe con la vecchia chiave (fazione scelta con la
       tendina prima di oggi, es. "relict") mostra Relict e al salvataggio diventa "Relict". Stesso controllo sulla
       scheda di una Legend.
-- [ ] **Encounter Designer**: il filtro fazione non ha più voci doppie tipo "relict" e "Relict" per i foe
+- [x] **Encounter Designer**: il filtro fazione non ha più voci doppie tipo "relict" e "Relict" per i foe
       sistemati come sopra.
 
 ## Summon dei foe sulla loro scheda (30 settembre 2026, versione 1.8.0)
@@ -1400,39 +1417,39 @@ Usare una copia nuova di un foe base (compendio Foes → Basic Jobs, es. Brute),
 Da provare come GM su una scena con griglia, con foe importati di nuovo dal compendio (poi cancellarli insieme
 alla cartella "Foe Summons").
 
-- [ ] **Sezione sulla scheda**: importare Wraith (Relict / Artillery) → in fondo alla tab Stats & Abilities c'è
+- [x] **Sezione sulla scheda**: importare Wraith (Relict / Artillery) → in fondo alla tab Stats & Abilities c'è
       "Summons & Objects" con Soul Spark: gettone "⤓ Soul Spark", riga "Summon, size 1, intangible · p.329", testo
       delle regole. Un foe senza summon (es. Wight) non ha la sezione.
-- [ ] **Varianti**: Arc Spectre, Chain Wraith, Rift Wraith, Abomination, Blasphemy hanno anche loro Soul Spark.
-- [ ] **Trascinare sulla mappa**: dal gettone di Soul Spark trascinare sulla scena → compare un token Soul Spark
+- [x] **Varianti**: Arc Spectre, Chain Wraith, Rift Wraith, Abomination, Blasphemy hanno anche loro Soul Spark.
+- [x] **Trascinare sulla mappa**: dal gettone di Soul Spark trascinare sulla scena → compare un token Soul Spark
       dove si è lasciato il mouse, allineato alla griglia; nella barra degli attori c'è la cartella "Foe Summons"
       con l'attore Soul Spark. Notifica "Soul Spark placed (Wraith)".
-- [ ] **Più copie**: trascinare altre due volte → tre token, un solo attore nella cartella.
-- [ ] **Scheda del summon**: aprire il token → scheda Summon con Summoner = Wraith, testo dell'effetto, intangibile.
+- [x] **Più copie**: trascinare altre due volte → tre token, un solo attore nella cartella.
+- [x] **Scheda del summon**: aprire il token → scheda Summon con Summoner = Wraith, testo dell'effetto, intangibile.
       Per un summon con azione (es. Junk Golem dell'Hoarder, o Combat Automaton della Veridian Weapon) il tiro di
       danno usa il [D] e il fray del foe.
-- [ ] **HP propri**: Combat Automaton (Veridian Weapon, legend) → token con barra HP 5/5, difesa 5; danneggiarne uno
+- [x] **HP propri**: Combat Automaton (Veridian Weapon, legend) → token con barra HP 5/5, difesa 5; danneggiarne uno
       non tocca gli altri.
-- [ ] **Taglia**: Everforge (Keeper of the Eldflame) → token 2×2.
-- [ ] **Oggetti**: Temple Bell (Bell Warden) e Cauldron (Troll) compaiono come oggetti (bordo dorato nella sezione),
+- [x] **Taglia**: Everforge (Keeper of the Eldflame) → token 2×2.
+- [x] **Oggetti**: Temple Bell (Bell Warden) e Cauldron (Troll) compaiono come oggetti (bordo dorato nella sezione),
       velocità 0 sulla scheda del token.
-- [ ] **Legend**: sulla Majesty Demon, tab Combat, ci sono i cinque summon della corte (Sycophant, Scepter Bearer,
+- [x] **Legend**: sulla Majesty Demon, tab Combat, ci sono i cinque summon della corte (Sycophant, Scepter Bearer,
       Shrouded Lady, Maiden, Flagellant Knight) con HP e difesa del libro.
-- [ ] **💬**: il bottone chat sul summon manda in chat nome, riga descrittiva e regole, con il foe come speaker.
+- [x] **💬**: il bottone chat sul summon manda in chat nome, riga descrittiva e regole, con il foe come speaker.
 - [ ] **Giocatore**: un giocatore che trascina il gettone (se vede la scheda) riceve "Only the GM can place a foe's
       summons." e non si crea niente.
-- [ ] **Casi fissati a mano**: lo Shopkeep ha solo "Shop" (non Bomb né Mushroom); gli Hob con "Snatch Memory" non
+- [x] **Casi fissati a mano**: lo Shopkeep ha solo "Shop" (non Bomb né Mushroom); gli Hob con "Snatch Memory" non
       hanno il summon Memory; Battle Wagon e Azurian Weapon hanno ognuno il suo Torpedo (testi diversi).
-- [ ] **Job template con summon**: trascinare il template "Wraith" su un Brute → compare la sezione con Soul Spark;
+- [x] **Job template con summon**: trascinare il template "Wraith" su un Brute → compare la sezione con Soul Spark;
       ✕ sul template → la sezione sparisce.
 
 ## Token della taglia giusta (30 settembre 2026, versione 1.8.1)
 
-- [ ] **Jotunn**: importare Troll (Jotunn / Leader) e trascinarlo sulla scena → token di 2×2 caselle. Stessa cosa
+- [x] **Jotunn**: importare Troll (Jotunn / Leader) e trascinarlo sulla scena → token di 2×2 caselle. Stessa cosa
       per un Jotunn unico (es. Bale Troll).
-- [ ] **Bouncer**: importare Bouncer (Scavenger) → Size 2 nell'intestazione della scheda, token 2×2.
-- [ ] **Scrapper**: importare Scrapper (Scavenger / Heavy) → Size 1, token di una casella.
-- [ ] **Job template**: trascinare il template "Bouncer" su un foe di taglia 1 → la taglia diventa 2.
+- [x] **Bouncer**: importare Bouncer (Scavenger) → Size 2 nell'intestazione della scheda, token 2×2.
+- [x] **Scrapper**: importare Scrapper (Scavenger / Heavy) → Size 1, token di una casella.
+- [x] **Job template**: trascinare il template "Bouncer" su un foe di taglia 1 → la taglia diventa 2.
 
 ## Titan Armament completo, Foe Abilities senza doppioni, avviso di aggiornamento (30 settembre 2026, versione 1.8.2)
 
@@ -1441,11 +1458,11 @@ alla cartella "Foe Summons").
       la chiude; ricaricando (F5) non ricompare. Un giocatore connesso non la vede.
 - [ ] **Mondo nuovo**: creando un mondo vuoto con il sistema, l'avviso non compare (compare la guida di benvenuto).
 
-- [ ] **Terzo turno**: importare un Jotunn Elite (es. Troll), trascinarci sopra il template "Titan Armament" →
+- [x] **Terzo turno**: importare un Jotunn Elite (es. Troll), trascinarci sopra il template "Titan Armament" →
       HP ×1.5; metterlo in combattimento e passare al round successivo → nel tracker ha 3 attivazioni invece di 2.
       Togliere il template (✕) e passare al round dopo → di nuovo 2. La scheda del template mostra
       "+1 turn a round".
-- [ ] **Foe Abilities**: nel compendio non c'è più nessuna voce che inizia con "Faction:"; ci sono ancora
+- [x] **Foe Abilities**: nel compendio non c'è più nessuna voce che inizia con "Faction:"; ci sono ancora
       "Heavy (class) — Guard" e le altre voci "(class)", e "Universal Template — Elite". Le stesse regole di
       fazione si trovano nel compendio Foe Templates.
 
@@ -1454,26 +1471,26 @@ alla cartella "Foe Summons").
 - [ ] **Caso di Maar**: PG di livello ≥1 con 1 AP libero (preso a metà barra e non speso; tab Notes "(1 free)"),
       portarlo a 15 XP e fare Level Up verso un livello che non dà AP (es. 2, 3, 6) → nel passo 2 spuntare una
       abilità nuova → Confirm **accetta**, l'abilità è sulla scheda, la tab Notes dice "(0 free)".
-- [ ] **Talento con l'AP avanzato**: stesso caso ma scegliendo un Talento invece dell'abilità → accetta.
-- [ ] **Ancora bloccato se si esagera**: con 1 AP avanzato e 0 dal livello, spuntare due abilità → errore "…only have
+- [x] **Talento con l'AP avanzato**: stesso caso ma scegliendo un Talento invece dell'abilità → accetta.
+- [x] **Ancora bloccato se si esagera**: con 1 AP avanzato e 0 dal livello, spuntare due abilità → errore "…only have
       1 AP to spend (0 from this level + 1 carried over)" e il level up non avviene.
-- [ ] **Livello che dà AP**: livello 5 (+1 AP) con 1 avanzato → si possono prendere 2 abilità, non 3.
+- [x] **Livello che dà AP**: livello 5 (+1 AP) con 1 avanzato → si possono prendere 2 abilità, non 3.
 
 ## Unerring che ignora davvero Aetherwall (30 settembre 2026, versione 1.8.4)
 
 Bersaglio: un foe Artillery (Aetherwall) con il token a **più di 2 caselle** dall'attaccante.
 
-- [ ] **Status Unerring sull'attaccante**: dare lo status Unerring al PG (tab Conditions), tirare il danno di un
+- [x] **Status Unerring sull'attaccante**: dare lo status Unerring al PG (tab Conditions), tirare il danno di un
       attacco qualsiasi → nel dialog la casella "Unerring" è già spuntata con scritto "from your Unerring status";
       sulla card niente chip "Aetherwall ½" e Apply toglie il danno pieno.
 - [ ] **Tag unerring**: un'abilità con il tag unerring (es. Death Blossom) senza lo status → casella spuntata "from
       the ability's tag", danno pieno.
-- [ ] **Senza Unerring**: stesso attacco senza tag né status → casella vuota, "Aetherwall ½" come prima.
-- [ ] **Casella tolta a mano con lo status attivo**: togliere la spunta nel dialog → il danno resta pieno lo stesso
+- [x] **Senza Unerring**: stesso attacco senza tag né status → casella vuota, "Aetherwall ½" come prima.
+- [x] **Casella tolta a mano con lo status attivo**: togliere la spunta nel dialog → il danno resta pieno lo stesso
       (lo status vale comunque).
-- [ ] **True Strike**: status True Strike sull'attaccante contro un bersaglio con Dodge, risultato Miss → casella
+- [x] **True Strike**: status True Strike sull'attaccante contro un bersaglio con Dodge, risultato Miss → casella
       "True Strike" già spuntata, Dodge non annulla il danno.
-- [ ] **Foe e Legend**: stesso controllo tirando il danno dalla scheda di un foe con lo status Unerring contro un PG
+- [x] **Foe e Legend**: stesso controllo tirando il danno dalla scheda di un foe con lo status Unerring contro un PG
       Wright (Aetherwall).
 
 ## Orologi sulla mappa (30 settembre 2026, versione 1.9.0)
@@ -1481,22 +1498,22 @@ Bersaglio: un foe Artillery (Aetherwall) con il token a **più di 2 caselle** da
 Da provare come GM con un secondo client giocatore collegato. Prima: F5, la migrazione 17 dà un id agli orologi
 esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano).
 
-- [ ] **Gettone sul foglio**: aprire una lavagna orologi → ogni orologio ha "⤓ Map" accanto a "N/M". Il giocatore
+- [x] **Gettone sul foglio**: aprire una lavagna orologi → ogni orologio ha "⤓ Map" accanto a "N/M". Il giocatore
       non lo vede.
-- [ ] **Trascinare**: trascinare "⤓ Map" sulla scena → compare un token 2×2 con il disco a spicchi (tanti quanti i
+- [x] **Trascinare**: trascinare "⤓ Map" sulla scena → compare un token 2×2 con il disco a spicchi (tanti quanti i
       segmenti), i segmenti pieni nel colore dell'orologio, "N/M" al centro, il nome sotto.
-- [ ] **Aggiornamento dal vivo**: con il foglio aperto cliccare un segmento, poi "+" e "−" → il disco sulla mappa
+- [x] **Aggiornamento dal vivo**: con il foglio aperto cliccare un segmento, poi "+" e "−" → il disco sulla mappa
       cambia subito, anche sullo schermo del giocatore. Riempiendolo tutto il bordo diventa più acceso.
-- [ ] **Taglia e colore**: cambiare la taglia (4 → 8) e il colore sul foglio → il disco ha 8 spicchi e il nuovo
+- [x] **Taglia e colore**: cambiare la taglia (4 → 8) e il colore sul foglio → il disco ha 8 spicchi e il nuovo
       colore.
-- [ ] **Nome**: rinominare l'orologio → il nome sotto il token cambia.
-- [ ] **Segreto**: 🙈 sull'orologio → il token diventa nascosto (semitrasparente per il GM, invisibile al
+- [x] **Nome**: rinominare l'orologio → il nome sotto il token cambia.
+- [x] **Segreto**: 🙈 sull'orologio → il token diventa nascosto (semitrasparente per il GM, invisibile al
       giocatore); 👁 → torna visibile. Un orologio già segreto trascinato sulla mappa nasce nascosto.
-- [ ] **Più token / più scene**: due token dello stesso orologio, uno per scena → entrambi seguono il foglio.
-- [ ] **Togliere l'orologio**: ✕ sull'orologio nel foglio e conferma → i suoi token spariscono da tutte le scene;
+- [x] **Più token / più scene**: due token dello stesso orologio, uno per scena → entrambi seguono il foglio.
+- [x] **Togliere l'orologio**: ✕ sull'orologio nel foglio e conferma → i suoi token spariscono da tutte le scene;
       gli altri orologi e i loro token restano giusti (niente scambi di orologio).
-- [ ] **Doppio clic** sul token → si apre la lavagna degli orologi.
-- [ ] **Nessun pannello status**: selezionando il token orologio non compare il pannello degli status in alto a
+- [x] **Doppio clic** sul token → si apre la lavagna degli orologi.
+- [x] **Nessun pannello status**: selezionando il token orologio non compare il pannello degli status in alto a
       destra.
 - [ ] **Giocatore che trascina**: se un giocatore riesce a trascinare (non dovrebbe vedere il gettone) → avviso
       "Only the GM can place a clock on the map."
@@ -1507,84 +1524,84 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 - [x] **Tab in scatolette** (verificato da Edoardo in locale il 30 settembre): scheda PG → le cinque tab sono riquadri
       separati allineati a sinistra, l'attiva dorata.
-- [ ] **Nessuna sovrapposizione con la banda**: la parte alta delle scatolette non è tagliata dalla banda colorata
+- [x] **Nessuna sovrapposizione con la banda**: la parte alta delle scatolette non è tagliata dalla banda colorata
       dell'intestazione del PG (provare con una classe dal colore chiaro).
-- [ ] **Foe, Legend, oggetti**: stesse tab a scatoletta.
-- [ ] **Create Actor**: il menu dei tipi mostra "Clock Board", "Player Character", "Foe", "Legend", "Summon";
+- [x] **Foe, Legend, oggetti**: stesse tab a scatoletta.
+- [x] **Create Actor**: il menu dei tipi mostra "Clock Board", "Player Character", "Foe", "Legend", "Summon";
       Create Item mostra "Foe Template", "Foe Ability", ecc.
 
 ## Tour guidati (1 ottobre 2026, versione 1.10.0)
 
-- [ ] **Elenco**: Settings → Tours mostra una sezione "ICON 1.5" con quattro tour per il GM (First Steps, The
+- [x] **Elenco**: Settings → Tours mostra una sezione "ICON 1.5" con quattro tour per il GM (First Steps, The
       Character Sheet, Combat, House Rules) e tre per i giocatori; console senza errori `Tour "..." failed to register`.
-- [ ] **First Steps** da GM: tutti i 9 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
+- [x] **First Steps** da GM: tutti i 9 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
       apre da sola su Actors, Compendium, Combat, Chat; il passo "Encounter Designer" evidenzia il bottone.
 - [ ] **First Steps** da giocatore: i passi "Encounter Designer" e "House rules" non compaiono (7 passi invece di 9).
 - [ ] **First Steps** con la sidebar chiusa e senza scena attiva: nessun passo blocca il tour (quelli senza
       bersaglio compaiono al centro dello schermo).
 - [ ] **The Character Sheet** in un mondo senza PG: il tour non si avvia (bottone non attivo o avviso "Create a
       player character first").
-- [ ] **The Character Sheet** con un PG: la scheda si apre da sola e cambia tab (Narrative → Combat → Conditions →
+- [x] **The Character Sheet** con un PG: la scheda si apre da sola e cambia tab (Narrative → Combat → Conditions →
       Relics → Notes); ogni passo evidenzia la sezione giusta, anche dopo uno scroll lungo nella tab Combat.
-- [ ] **The Character Sheet** con un PG senza Limit Break: il passo "Limit Break and Resolve" evidenzia la riga
+- [x] **The Character Sheet** con un PG senza Limit Break: il passo "Limit Break and Resolve" evidenzia la riga
       Resolve invece di fermarsi.
 - [ ] **Combat** senza combat attivo: i passi del tracker evidenziano la tab Combat intera, il passo degli status
       compare al centro; con un combat iniziato evidenziano banner, pallini delle attivazioni e "⏸ Slow".
 - [ ] **Tasti ← →** per avanzare/indietreggiare, **✕** per uscire; "Resume" riprende dal passo lasciato.
-- [ ] **Fine First Steps**: Foundry propone di continuare con il tour della scheda.
+- [x] **Fine First Steps**: Foundry propone di continuare con il tour della scheda.
 - [ ] **Guida di benvenuto** (❔ Guide in Notes → Character Management): bottone **Take the tour** avvia First Steps;
       **Got it** chiude come prima.
 - [ ] **Macro/console**: `game.icon.startTour("combat")` riparte da capo il tour Combat.
-- [ ] **House Rules** da GM: si apre Configure Settings direttamente sulla sezione ICON 1.5; i passi evidenziano
+- [x] **House Rules** da GM: si apre Configure Settings direttamente sulla sezione ICON 1.5; i passi evidenziano
       una per una le tre impostazioni (Party Resolve +1, Dust to heal Burdens, Heroic / Routine).
 - [ ] **House Rules** con Configure Settings già aperto su un'altra sezione (es. Core): il tour passa da solo a
       ICON 1.5.
 - [ ] **House Rules** da giocatore: non compare in Settings → Tours; `game.icon.startTour("house-rules")` mostra
       l'avviso "This tour is for the GM only."
-- [ ] **First Steps** da GM: il passo "House rules" sta prima di "Next steps" e rimanda al tour House Rules.
+- [x] **First Steps** da GM: il passo "House rules" sta prima di "Next steps" e rimanda al tour House Rules.
 
 ## Quick Guide: aree, FAQ, bottone (1 ottobre 2026, versione 1.11.0)
 
-- [ ] **Bottone sulla scheda PG**: "Quick Guide" in alto a destra nella banda colorata, sopra il numero del livello,
+- [x] **Bottone sulla scheda PG**: "Quick Guide" in alto a destra nella banda colorata, sopra il numero del livello,
       leggibile con ogni colore di classe; clic → si apre la finestra "ICON 1.5 — Quick Guide". Non sposta né taglia
       il livello.
-- [ ] **Altri accessi**: il 📖 nei controlli token e il menu ⋮ di Foe / Legend / Summon / Clock aprono la stessa
+- [x] **Altri accessi**: il 📖 nei controlli token e il menu ⋮ di Foe / Legend / Summon / Clock aprono la stessa
       finestra; in Notes il bottone si chiama "📖 Quick Guide".
-- [ ] **Schede**: Turn / Areas / Glossary / FAQ mostrano una sezione alla volta, la scheda attiva è dorata, la
+- [x] **Schede**: Turn / Areas / Glossary / FAQ mostrano una sezione alla volta, la scheda attiva è dorata, la
       finestra non cambia altezza passando dall'una all'altra; cliccare una scheda con del testo nella ricerca la
       svuota.
-- [ ] **Ultima scheda**: chiudere la guida su FAQ e riaprirla (dalla scheda PG o dal 📖) → si riapre su FAQ.
-- [ ] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
-- [ ] **Grafica come le schede**: banda diagonale dorata con "Quick Guide", sottotitolo e casella di ricerca; sotto,
+- [x] **Ultima scheda**: chiudere la guida su FAQ e riaprirla (dalla scheda PG o dal 📖) → si riapre su FAQ.
+- [x] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
+- [x] **Grafica come le schede**: banda diagonale dorata con "Quick Guide", sottotitolo e casella di ricerca; sotto,
       le linguette con lo stesso aspetto di quelle della scheda PG/Foe; contenuti in riquadri. Finestra
       ridimensionabile; con la guida già aperta, il 📖 la porta davanti (non ne apre una seconda) e cambia scheda se
       chiamata da macro con `{ tab }`.
-- [ ] **Ricerca**: scrivendo, le linguette si spengono e restano solo i riquadri con risultati (glossario e FAQ
+- [x] **Ricerca**: scrivendo, le linguette si spengono e restano solo i riquadri con risultati (glossario e FAQ
       insieme); svuotando si torna alla linguetta di prima; cliccare una linguetta durante la ricerca la svuota.
-- [ ] **Popup a ogni aggiornamento**: dopo l'update, primo F5 → "ICON 1.5 — version X" con "Open the Quick Guide" /
+- [x] **Popup a ogni aggiornamento**: dopo l'update, primo F5 → "ICON 1.5 — version X" con "Open the Quick Guide" /
       "Not now"; Open apre la guida su Turn; al secondo F5 il popup non esce più. Da provare anche come giocatore
       (ognuno lo vede una volta). Mondo/utente nuovo: esce solo il benvenuto, con il bottone "Quick Guide" che apre
       la guida.
-- [ ] **Disegni presenti** (fix del 1 ottobre pomeriggio): in Areas ogni riquadro ha la sua griglia disegnata tra
+- [~] (superata: i disegni sono diventati le clip registrate) **Disegni presenti** (fix del 1 ottobre pomeriggio): in Areas ogni riquadro ha la sua griglia disegnata tra
       il titolo e il testo (prima c'erano solo titolo e testo).
-- [ ] **Propagazione**: ogni area parte dall'origine (casella d'attacco per i Blast e il Burst target, il PG per i
+- [~] (superata: i disegni sono diventati le clip registrate) **Propagazione**: ogni area parte dall'origine (casella d'attacco per i Blast e il Burst target, il PG per i
       Burst self e l'Aura, la casella accanto al PG per Line e Arc) e si allarga a onde; accensione secca, niente
       dissolvenze; tutta l'area si spegne nello stesso istante, breve pausa a griglia vuota, poi ricomincia. Colori
       opachi, non fluo.
-- [ ] **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
+- [~] (superata: i disegni sono diventati le clip registrate) **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
       Aura 2) disposti in griglia senza scroll orizzontale; caselle che si accendono in sequenza e ricominciano;
       la casella d'attacco dei Blast e del Burst target è evidenziata; il Large Blast è una croce di 13 caselle
       come a p.98, non un quadrato.
-- [ ] **Aree, confronto con la mappa**: piazzare in una scena un Medium Blast e un Burst 1 (self) da un'abilità e
+- [~] (superata: i disegni sono diventati le clip registrate) **Aree, confronto con la mappa**: piazzare in una scena un Medium Blast e un Burst 1 (self) da un'abilità e
       confrontare con i disegni (stessa forma, stesso colore).
-- [ ] **Animazioni ridotte** (Windows: Impostazioni → Accessibilità → Effetti visivi → Effetti di animazione spenti):
+- [~] (superata: i disegni sono diventati le clip registrate) **Animazioni ridotte** (Windows: Impostazioni → Accessibilità → Effetti visivi → Effetti di animazione spenti):
       le caselle sono ferme e tutte visibili.
-- [ ] **Ricerca**: da qualsiasi scheda, "summon" mostra insieme le righe del glossario e la FAQ sui summon (nessuna
+- [x] **Ricerca**: da qualsiasi scheda, "summon" mostra insieme le righe del glossario e la FAQ sui summon (nessuna
       scheda accesa); "armor" idem; "zzz" mostra "Nothing matches your search."; svuotando la ricerca si torna
       alla scheda di prima, con tutte le righe.
-- [ ] **FAQ**: 11 domande in fondo, ognuna con la pagina citata; le virgolette nelle domande si vedono bene.
-- [ ] **Tooltip delle parole chiave** sulle schede (glossario) funzionano come prima.
-- [ ] **Tour**: First Steps, passo "Quick Guide" con il testo nuovo; The Character Sheet, passo "Quick Guide" che
+- [x] **FAQ**: 11 domande in fondo, ognuna con la pagina citata; le virgolette nelle domande si vedono bene.
+- [x] **Tooltip delle parole chiave** sulle schede (glossario) funzionano come prima.
+- [x] **Tour**: First Steps, passo "Quick Guide" con il testo nuovo; The Character Sheet, passo "Quick Guide" che
       evidenzia il bottone.
 
 ## Mark, level up, tour GM, aree a tempo (1 ottobre 2026, versione 1.12.0)
@@ -1592,34 +1609,34 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Dust sui Burden**: Configure Settings → ICON 1.5, la voce si chiama "Dust to heal Burdens during an
       Interlude (RAW, p.42)" ed è spuntata in un mondo nuovo; la macro Interlude chiede quanti segmenti in più.
       Tour House Rules: il passo Dust dice che non è una house rule.
-- [ ] **Mark che si impilano**: Royal Guard, target su un PG, 🎯 Mark su Battalion of Limbs due volte → in chat
+- [x] **Mark che si impilano**: Royal Guard, target su un PG, 🎯 Mark su Battalion of Limbs due volte → in chat
       "now has 2 stacks"; chip "🎯 Nome ×2" sulla scheda del Royal Guard; nella scheda del PG, Conditions →
       "Battalion of Limbs ×2"; ✕ lo toglie tutto. Un mark normale (senza "stacks") rifatto sullo stesso
       bersaglio resta uno solo, come prima.
-- [ ] **Level up ← Back**: al passo 2 scegliere azioni, un'abilità, un talento, relic / bond power → ← Back →
+- [x] **Level up ← Back**: al passo 2 scegliere azioni, un'abilità, un talento, relic / bond power → ← Back →
       Next → tutto è ancora scelto, contatore AP e riepilogo giusti. Cambiando lavoro al passo 1, le abilità del
       lavoro vecchio non restano spuntate.
-- [ ] **Tour Foes & Encounters** (GM): Settings → Tours → parte; apre scheda foe, poi legend, poi Encounter
+- [x] **Tour Foes & Encounters** (GM): Settings → Tours → parte; apre scheda foe, poi legend, poi Encounter
       Designer, poi Clock Board, ogni fumetto accanto alla parte giusta. Mondo senza legend o senza Clock Board:
       quei passi compaiono al centro, il tour non si interrompe. Non compare ai giocatori.
-- [ ] **Aree a tempo**: combat iniziato, un PG piazza un Blast (📐 o attacco) → passa il turno agli altri → al
+- [x] **Aree a tempo**: combat iniziato, un PG piazza un Blast (📐 o attacco) → passa il turno agli altri → al
       suo turno successivo l'area sparisce. Un'aura (stance con Aura) e un'abilità "terrain effect" (es. Tsunami)
       restano. Due goblin uguali: l'area del primo non sparisce al turno del secondo. ⏪ indietro di un turno:
       nessuna area cancellata.
 
-- [ ] **Clip delle aree nella guida**: Quick Guide → Areas, 11 riquadri con la registrazione in loop (Small /
+- [x] **Clip delle aree nella guida**: Quick Guide → Areas, 11 riquadri con la registrazione in loop (Small /
       Medium / Large Blast, Burst 1 target, Burst 1 e 2 self, Line 5, Arc 3 / 4 / 5, Aura 2), testo sotto ognuna,
       tre per riga. Con "riduci animazioni" del sistema operativo: clip ferme con i comandi del player.
-- [ ] **Aura con il GM su un'altra scena**: GM su scena A, giocatore su scena B con un'aura piazzata → il
+- [x] **Aura con il GM su un'altra scena**: GM su scena A, giocatore su scena B con un'aura piazzata → il
       giocatore muove il token → l'aura lo segue.
 
-- [ ] **Ricerca PG nell'Encounter Designer** (mondo con più di 6 PG): scrivere parte di un nome o di un lavoro →
+- [x] **Ricerca PG nell'Encounter Designer** (mondo con più di 6 PG): scrivere parte di un nome o di un lavoro →
       restano i PG che corrispondono più quelli già nel party; cliccare un PG non svuota la ricerca; testo che
       non trova niente → "No PC matches the search" solo se nessuno è nel party. Con 6 PG o meno la casella non c'è.
 
-- [ ] **Template di fazione e cultura**: trascinare "Folk" e poi "Yeokin" da Foe Templates su un foe → arrivano i
+- [x] **Template di fazione e cultura**: trascinare "Folk" e poi "Yeokin" da Foe Templates su un foe → arrivano i
       tratti Kin e Camaraderie e i due chip; ✕ su un chip toglie il suo tratto. Nessun errore in console.
-- [ ] **Promemoria Great Culture**: foe con fazione Folk e nessuna cultura → riquadro "Folk foe without a Great
+- [x] **Promemoria Great Culture**: foe con fazione Folk e nessuna cultura → riquadro "Folk foe without a Great
       Culture" sotto i template; applicata una cultura sparisce; foe di altre fazioni non lo mostrano.
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)

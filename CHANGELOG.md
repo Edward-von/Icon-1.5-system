@@ -60,6 +60,19 @@
   scheda di un foe Folk senza template di cultura compare un riquadro che lo ricorda e dice di trascinare il template
   da Foe Templates; sparisce appena la cultura c'è. Anche il tour "Foes & Encounters" lo spiega.
 
+- **Il token non seguiva la taglia del foe** (trovato nel playtest locale): trascinando il template Bouncer su uno
+  Scrapper, o Jotunn su un foe di taglia 1, la taglia passava a 2 ma il token restava di una casella; idem cambiando
+  Size a mano → la dimensione del token non veniva mai allineata (la 1.8.1 aveva corretto solo i dati del
+  compendio) → quando cambia la taglia di un foe o di un legend cambiano anche il suo token di base e i suoi token
+  già sulle scene. Provato: Bouncer 1×1 → 2×2 e ritorno, Size 3 → 3×3.
+- **La carta del danno diceva "½" quando il danno non veniva dimezzato** (playtest locale): con Unerring il chip
+  "Aetherwall ½" restava acceso anche se Apply toglieva il danno pieno (lo stesso per Cover con Unerring e Dodge con
+  True Strike) → quei chip ora dicono "Aetherwall — ignored (Unerring)", "Dodge — ignored (True Strike)", spenti.
+- **I dimezzamenti arrotondavano per difetto** (playtest locale): 11 danni contro Aetherwall toglievano 5 HP → il
+  manuale arrotonda sempre per eccesso (p.86, "Round up to the nearest whole number"; Resistance "rounded up";
+  l'esempio di p.106 porta 1.5 a 2) → Cover, Resistance, Aetherwall, Pacified e Hatred arrotondano per eccesso:
+  11 dimezzato fa 6.
+
 ### Chiuso senza lavoro
 
 - FAQ: le quattro risposte riformulate vanno bene perché vengono dal manuale. Gli otto fix del 30 agosto sono
