@@ -1,6 +1,6 @@
 {
   "title": "ICON 1.5 — First Steps",
-  "description": "Where the ICON tools live: rules reference, characters, compendiums, combat and chat.",
+  "description": "Where the ICON tools live: quick guide, characters, compendiums, combat and chat.",
   "canBeResumed": true,
   "display": true,
   "suggestedNextTours": ["icon-system.character-sheet", "icon-system.combat"],
@@ -17,8 +17,8 @@
       "fallback": "#scene-controls",
       "control": "tokens",
       "tooltipDirection": "RIGHT",
-      "title": "Rules Reference",
-      "content": "The <i class='fa-solid fa-book'></i> book in the token controls opens the <strong>ICON rules reference</strong>: actions, statuses, tags and keywords, always one click away.\nThe same reference is in the header menu (⋮) of every actor sheet."
+      "title": "Quick Guide",
+      "content": "The <i class='fa-solid fa-book'></i> book in the token controls opens the <strong>ICON Quick Guide</strong>: how a turn works, pictures of every area (blasts, bursts, lines, arcs, auras), the glossary and an FAQ of edge cases.\nIt is also at the top of every character sheet, and in the header menu (⋮) of every actor sheet."
     },
     {
       "id": "actors",

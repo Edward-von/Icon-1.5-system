@@ -5754,3 +5754,82 @@ ol.chat-log .chat-message,
 }
 .icon-clock-card__drag:hover { color: var(--ic-gold-bright); border-color: var(--ic-gold-bright); }
 .icon-clock-card__drag:active { cursor: grabbing; }
+
+/* ============================================================
+   Quick Guide (rules reference) — header button, section nav,
+   animated area pictures (module/apps/area-diagrams.mjs)
+   ============================================================ */
+
+/* "Quick Guide" pill at the top right of the PC hero band. */
+.icon-hero .icon-hero__guide {
+  flex: 0 0 auto;
+  width: auto;
+  margin: 8px 0 4px;
+  padding: 2px 10px;
+  line-height: 1.6;
+  font-size: .72em;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff7e0;
+  background: rgba(0,0,0,.3);
+  border: 1px solid rgba(255,247,224,.45);
+  border-radius: 999px;
+  cursor: pointer;
+}
+.icon-hero .icon-hero__guide:hover { background: rgba(0,0,0,.5); border-color: #fff7e0; box-shadow: none; }
+.icon-hero .icon-hero__guide i { margin-right: 3px; }
+
+/* Section links above the guide body. */
+.icon-ref-nav { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 8px; }
+.icon-ref-nav a {
+  padding: 2px 10px;
+  border: 1px solid var(--ic-border-vis);
+  border-radius: 4px;
+  color: var(--ic-text-bright);
+  background: #241f17;
+  font-size: .88em;
+  cursor: pointer;
+}
+.icon-ref-nav a:hover { border-color: var(--ic-gold-bright); color: var(--ic-gold-bright); text-shadow: none; }
+
+/* Area pictures: one card per pattern. */
+.icon-area-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+}
+.icon-area-card {
+  margin: 0;
+  padding: 6px 8px 8px;
+  background: #241f17;
+  border: 1px solid #3a3528;
+  border-radius: 6px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.icon-area-card__title { color: var(--ic-gold-bright); font-weight: bold; font-size: .95em; margin-bottom: 4px; }
+.icon-area-card__text { margin: 5px 0 0; font-size: .8em; line-height: 1.35; color: #a89878; text-align: left; }
+.icon-area-svg { display: block; max-width: 100%; height: auto; }
+.icon-area-grid { fill: #15120d; stroke: #3a3528; stroke-width: 1; }
+.icon-area-range { fill: rgba(232,184,40,.12); stroke: rgba(232,184,40,.25); stroke-width: 1; }
+.icon-area-user { fill: #2a3549; stroke: var(--ic-gold-bright); stroke-width: 2; }
+.icon-area-cell { opacity: 0; fill-opacity: .7; animation: icon-area-place 4s ease-out infinite both; }
+.icon-area-cell--focus { fill-opacity: 1; stroke: #fff7e0; stroke-width: 1.5; }
+@keyframes icon-area-place {
+  0%   { opacity: 0; }
+  6%   { opacity: 1; }
+  78%  { opacity: 1; }
+  90%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .icon-area-cell { animation: none; opacity: 1; }
+}
+.icon-area-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 6px; font-size: .82em; color: #a89878; }
+.icon-area-legend i {
+  display: inline-block; width: 11px; height: 11px; margin-right: 4px; vertical-align: -1px; border-radius: 2px;
+}
+.icon-area-legend__user  { background: #2a3549; border: 2px solid var(--ic-gold-bright); border-radius: 50% !important; }
+.icon-area-legend__range { background: rgba(232,184,40,.12); border: 1px solid rgba(232,184,40,.25); }
+.icon-area-legend__focus { background: #e07a2f; border: 1.5px solid #fff7e0; }
+.icon-area-note { margin: 7px 0 0; font-size: .85em; color: #a89878; }

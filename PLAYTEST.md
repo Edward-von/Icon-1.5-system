@@ -1543,6 +1543,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       l'avviso "This tour is for the GM only."
 - [ ] **First Steps** da GM: il passo "House rules" sta prima di "Next steps" e rimanda al tour House Rules.
 
+## Quick Guide: aree, FAQ, bottone (1 ottobre 2026, versione 1.11.0)
+
+- [ ] **Bottone sulla scheda PG**: "Quick Guide" in alto a destra nella banda colorata, sopra il numero del livello,
+      leggibile con ogni colore di classe; clic → si apre la finestra "ICON 1.5 — Quick Guide". Non sposta né taglia
+      il livello.
+- [ ] **Altri accessi**: il 📖 nei controlli token e il menu ⋮ di Foe / Legend / Summon / Clock aprono la stessa
+      finestra; in Notes il bottone si chiama "📖 Quick Guide".
+- [ ] **Navigazione**: Turn / Areas / Glossary / FAQ scorrono alla sezione giusta (anche con del testo nella ricerca,
+      che viene svuotata).
+- [ ] **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
+      Aura 2) disposti in griglia senza scroll orizzontale; caselle che si accendono in sequenza e ricominciano;
+      la casella d'attacco dei Blast e del Burst target è evidenziata; il Large Blast è una croce di 13 caselle
+      come a p.98, non un quadrato.
+- [ ] **Aree, confronto con la mappa**: piazzare in una scena un Medium Blast e un Burst 1 (self) da un'abilità e
+      confrontare con i disegni (stessa forma, stesso colore).
+- [ ] **Animazioni ridotte** (Windows: Impostazioni → Accessibilità → Effetti visivi → Effetti di animazione spenti):
+      le caselle sono ferme e tutte visibili.
+- [ ] **Ricerca**: "summon" mostra la FAQ sui summon (e le voci del glossario che ne parlano), nasconde turno e
+      aree; "zzz" mostra "Nothing matches your search."; svuotando la ricerca torna tutto.
+- [ ] **FAQ**: 11 domande in fondo, ognuna con la pagina citata; le virgolette nelle domande si vedono bene.
+- [ ] **Tooltip delle parole chiave** sulle schede (glossario) funzionano come prima.
+- [ ] **Tour**: First Steps, passo "Quick Guide" con il testo nuovo; The Character Sheet, passo "Quick Guide" che
+      evidenzia il bottone.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

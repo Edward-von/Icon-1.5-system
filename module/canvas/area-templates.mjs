@@ -259,7 +259,7 @@ export function tokenCells(tokenDoc) {
  * odd widths spread evenly, even widths put the extra column on the `flip`
  * side (toggled with Shift + wheel while placing).
  */
-function shapeCells(area, center, { dir = { di: 0, dj: 1 }, flip = false } = {}) {
+export function shapeCells(area, center, { dir = { di: 0, dj: 1 }, flip = false } = {}) {
   const out = [];
   if (area.kind === "blast") {
     for (const o of BLAST_SHAPES[area.size] ?? BLAST_SHAPES.m) out.push({ i: center.i + o.di, j: center.j + o.dj });
@@ -288,7 +288,7 @@ function distanceToCells(cell, cells) {
 }
 
 /** Every cell within `range` of the source cells (source cells excluded). */
-function cellsInRange(sourceCells, range) {
+export function cellsInRange(sourceCells, range) {
   const src = new Set(sourceCells.map(cellKey));
   const out = [];
   let i0 = Infinity, i1 = -Infinity, j0 = Infinity, j1 = -Infinity;

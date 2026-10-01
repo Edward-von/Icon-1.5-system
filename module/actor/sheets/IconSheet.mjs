@@ -1123,7 +1123,7 @@ export class IconSheet extends BaseActorSheet {
     showWelcomeGuide();
   }
 
-  /** Open the rules reference (turn schema + glossary of triggers/keywords). */
+  /** Open the quick guide (turn schema, areas, glossary, FAQ). */
   static async #onShowReference(event, target) {
     _log(`showReference — opening rules reference`);
     showReferenceGuide();

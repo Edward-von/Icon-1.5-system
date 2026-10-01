@@ -21,6 +21,15 @@
       "content": "Name, portrait, jobs (the ★ primary job sets your class, base stats, traits and Limit Break), level and chapter.\nA brand-new character shows a <i class='fas fa-wand-magic-sparkles'></i> <strong>Character Setup Wizard</strong> button here until it has a job."
     },
     {
+      "id": "quick-guide",
+      "selector": ".icon-hero__guide",
+      "fallback": ".icon-sheet__header",
+      "sheetTab": "narrative",
+      "tooltipDirection": "DOWN",
+      "title": "Quick Guide",
+      "content": "Opens the ICON Quick Guide: how a turn works, animated pictures of every area (blasts, bursts, lines, arcs, auras), the searchable glossary and an FAQ of edge cases."
+    },
+    {
       "id": "tabs",
       "selector": "nav.tabs",
       "sheetTab": "narrative",

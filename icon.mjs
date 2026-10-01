@@ -914,7 +914,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
   tokens.tools.iconReference = {
     name:    "iconReference",
     order:   Object.keys(tokens.tools).length + 1,
-    title:   "ICON 1.5 — Rules Reference",
+    title:   "ICON 1.5 — Quick Guide (rules reference)",
     icon:    "fa-solid fa-book",
     button:  true,                    // fires and goes back to the active tool
     visible: true,

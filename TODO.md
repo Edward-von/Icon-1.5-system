@@ -315,6 +315,25 @@ Emerso lavorando (da fare in blocchi futuri):
 - [ ] **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Richieste di Maar — guida rapida (ricevute il 1 ottobre 2026) — FATTA il 1 ottobre 2026 (versione 1.11.0)
+
+Testo originale: "Expansion / Further attention being brought to the quick-guide". "Quick-guide" è la **Rules Reference**
+(📖, `module/apps/reference.mjs`), confermato da Edoardo il 1 ottobre.
+
+- [x] **Elenco illustrato delle aree** (M/L): Small / Medium / Large Blast, Burst 1-2 (self / target), Line N,
+      Arc 3/4/5, Aura N, disegnate come appaiono sulla griglia del VTT, "preferibilmente animate" mentre vengono
+      piazzate. Idea: disegni SVG generati con `shapeCells` di `module/canvas/area-templates.mjs` (le stesse caselle
+      del piazzamento vero, quindi non possono essere diverse), con un'animazione CSS delle caselle che si accendono.
+      Scelta di Edoardo (1 ottobre): disegni animati dal codice, niente GIF.
+- [x] **Guida rapida in cima alla scheda PG** (S): un bottone ben visibile nell'intestazione della scheda che apre la
+      guida. Oggi la Reference sta nel menu ⋮ della finestra e nel 📖 dei controlli token.
+- [x] **FAQ dei casi limite** (M): 11 domande e risposte di Maar, incollate da Edoardo, controllate sul manuale.
+      Tutte confermate; quattro risposte riformulate col testo del libro (vedi CHANGELOG 1.11.0).
+
+Emerso (da valutare in un blocco futuro):
+- [ ] Dire a Maar le quattro riformulazioni delle FAQ (danno, engagement, remove-and-place, "(+)" come boon), nel
+      caso non sia d'accordo. (S)
+
 ## Richiesta di Edoardo — 1 ottobre 2026: tour guidati — FATTA il 1 ottobre 2026 (versione 1.10.0)
 
 - [x] **Tour guidati del sistema** (M): usare il framework "Tours" di Foundry (Settings → Tours) per spiegare

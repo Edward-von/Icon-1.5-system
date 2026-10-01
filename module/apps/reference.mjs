@@ -1,14 +1,19 @@
 /**
- * reference.mjs — In-system rules reference: a turn-structure schema plus a
- * searchable glossary of ICON 1.5 combat/narrative keywords (Comeback, Exceed,
- * statuses, triggered effects, resources, …).
+ * reference.mjs — In-system rules reference (the "quick guide"): a
+ * turn-structure schema, animated pictures of the area patterns
+ * (area-diagrams.mjs), a searchable glossary of ICON 1.5 combat/narrative
+ * keywords (Comeback, Exceed, statuses, triggered effects, resources, …) and
+ * an FAQ of table edge cases.
  *
- * Re-openable any time from the 📖 Reference button in the Character
- * Management section of the PC sheet (Notes tab → `showReference` action).
+ * Opened from the Quick Guide button in the PC sheet header, the 📖 tool in
+ * the token controls, and the header menu of every actor sheet
+ * (`showReference` action).
  *
  * Definitions are condensed from the ICON 1.5 rulebook glossary. Content is
  * kept in English to match the rest of the in-system UI.
  */
+
+import { areaDiagramsHTML } from "./area-diagrams.mjs";
 
 const GOLD   = "#e8b828";
 const TEXT    = "#d8c9a8";
@@ -211,6 +216,46 @@ function turnSchemaHTML() {
   </div>`;
 }
 
+/**
+ * Edge cases that come up at the table, as [question, answer]. Collected by
+ * the playtest group (October 2026) and checked against the rulebook; page
+ * numbers are the PDF's "N of 501".
+ */
+export const FAQ = [
+  ["When are interrupts reset?",
+   "At the start of each of your turns. Each interrupt can be used as many times as its tag says (Interrupt 1, Interrupt 2…) between your turns, and only one interrupt per turn, yours or anyone else's (p.91, Interrupts)."],
+  ["What are the engagement rules?",
+   "Leaving a space adjacent to a foe costs +1 space of movement. A dash ignores engagement, and so does flying (p.88, Movement penalties; Dash, rush, fly, and teleport). But a space affected by Rampart can't be entered or left by dashing, flying or teleporting (p.104, Rampart)."],
+  ["Can in-combat abilities be used out of combat?",
+   "Not by the book: narrative play and tactical combat have separate rules with next to no overlap (p.11, Two modes of play). Some house rules to ask your GM about: use each ability once per combat or per session for a bonus on a related roll (+1 boon, increased effect…), use it for flavour only, or open a combat with it as a \"first strike\" that doesn't spend actions on your turn."],
+  ["In what order do the effects of an ability resolve?",
+   "In the order they are listed, unless the ability says otherwise; some effects happen before the attack even though they are written after it, for ease of formatting (p.108, Order of operations)."],
+  ["Are summons allies?",
+   "No. Summons count as neither foes nor allies: they can only be targeted by abilities that can target any character, or that name summons specifically (p.92, Targeting)."],
+  ["Cover or Resistance together with Armor: which comes first?",
+   "First the attacker's additions and multiplications (bonus damage and the like), then the defender's Armor and other reductions, then the defender's multiplications and divisions, such as Resistance. Example: 5 damage against 2 Armor and Resistance → 5 − 2 = 3, halved to 1.5, rounded up to 2. Vigor takes damage before HP, and Armor and Resistance apply to it normally (p.106, Damage order). The Apply button on damage cards follows this order."],
+  ["I'm on a height 3 object and my target is next to me, down in a pit. Can a Range 2 ability hit them?",
+   "Yes, and so can a melee attack. ICON doesn't track vertical space: height and elevation don't count for range or adjacency, and even flying characters can be reached in melee (p.106, Height). Think of areas (auras, blasts…) as columns, not spheres."],
+  ["The sheet says I have 5 AP at level 2, but the book says 6!",
+   "The sheet is right. The +1 AP at 7 XP starts at level 1 (p.15, Character Advancement), so there is none between level 0 and level 1. The Total AP column of the advancement table (p.115) counts it anyway, which puts every total one AP too high."],
+  ["Why can't I save against Immobile?",
+   "Immobile is a special state, not a status, so it can't be saved against (p.94, Special States)."],
+  ["What does (+) mean?",
+   "On a status or effect it means ongoing: it can't be saved against, removed or ignored until whatever causes it is lifted (p.94, Ongoing (+)). Elsewhere a \"+\" may stand for a boon, written +1D: in combat roll a d6 per boon and add the highest to the d20; in narrative play add a d6 to the pool per boon (p.12, Boons and curses)."],
+  ["Is \"remove from the battlefield and place\" the same as teleporting?",
+   "No. A character who is picked up and placed doesn't count as moving, so it doesn't trigger effects, interrupts or abilities that trigger off movement, and it isn't stopped by Rampart or Vigilance (p.88, Removing and placing characters)."],
+];
+
+/** FAQ entries — same filterable rows as the glossary. */
+function faqHTML() {
+  const rows = FAQ.map(([q, a]) => `
+    <div class="icon-ref-term" data-term="${q.toLowerCase().replace(/"/g, "")}" style="margin:0 0 9px;padding-left:2px">
+      <strong style="color:${TEXT}">${q}</strong>
+      <div style="color:${DIM};margin-top:2px">${a}</div>
+    </div>`).join("");
+  return `<section class="icon-ref-section">${rows}</section>`;
+}
+
 /** Build the glossary HTML (sectioned; each term is a filterable row). */
 function glossaryHTML() {
   const sectionH = `color:${GOLD};margin:14px 0 5px;font-size:.95em;border-bottom:1px solid ${BORDER};padding-bottom:3px`;
@@ -232,18 +277,49 @@ function glossaryHTML() {
 function referenceHTML() {
   const subH = `color:${GOLD};margin:4px 0 8px;font-size:1.05em`;
   return `
-<div class="icon-reference" style="font-size:.92em;line-height:1.5;color:${TEXT};max-height:64vh;overflow:auto;padding-right:6px">
-  <h2 style="${subH}"><i class="fas fa-clock-rotate-left"></i> How a turn works</h2>
-  ${turnSchemaHTML()}
+<nav class="icon-ref-nav">
+  <a data-ref-jump="turn"><i class="fas fa-clock-rotate-left"></i> Turn</a>
+  <a data-ref-jump="areas"><i class="fas fa-vector-square"></i> Areas</a>
+  <a data-ref-jump="glossary"><i class="fas fa-book"></i> Glossary</a>
+  <a data-ref-jump="faq"><i class="fas fa-circle-question"></i> FAQ</a>
+</nav>
+<input type="text" class="icon-ref-search" placeholder="Search the glossary and FAQ (e.g. comeback, vigor, summons, armor)…"
+       style="width:100%;box-sizing:border-box;margin:0 0 6px;padding:5px 8px;background:#1c1812;border:1px solid ${BORDER};border-radius:4px;color:${TEXT}">
+<div class="icon-reference" style="font-size:.92em;line-height:1.5;color:${TEXT};max-height:60vh;overflow:auto;padding-right:6px">
+  <div class="icon-ref-static">
+    <h2 style="${subH}" data-ref-anchor="turn"><i class="fas fa-clock-rotate-left"></i> How a turn works</h2>
+    ${turnSchemaHTML()}
 
-  <h2 style="${subH}; margin-top:14px"><i class="fas fa-book"></i> Glossary</h2>
-  <input type="text" class="icon-ref-search" placeholder="Search any term (e.g. comeback, exceed, vigor, save, shove)…"
-         style="width:100%;box-sizing:border-box;margin:0 0 6px;padding:5px 8px;background:#1c1812;border:1px solid ${BORDER};border-radius:4px;color:${TEXT}">
+    <h2 style="${subH}; margin-top:14px" data-ref-anchor="areas"><i class="fas fa-vector-square"></i> Areas</h2>
+    ${areaDiagramsHTML()}
+  </div>
+
+  <h2 style="${subH}; margin-top:14px" data-ref-anchor="glossary"><i class="fas fa-book"></i> Glossary</h2>
   <div class="icon-ref-glossary">
     ${glossaryHTML()}
   </div>
-  <p class="icon-ref-empty" style="display:none;color:${DIM};font-style:italic;margin:8px 0">No terms match your search.</p>
+
+  <h2 style="${subH}; margin-top:14px" data-ref-anchor="faq"><i class="fas fa-circle-question"></i> FAQ</h2>
+  <div class="icon-ref-faq">
+    ${faqHTML()}
+  </div>
+  <p class="icon-ref-empty" style="display:none;color:${DIM};font-style:italic;margin:8px 0">Nothing matches your search.</p>
 </div>`;
+}
+
+/** Section links at the top: scroll the reference body to that heading. */
+function attachNav(root) {
+  const body = root?.querySelector(".icon-reference");
+  if (!body) return;
+  for (const link of root.querySelectorAll("[data-ref-jump]")) {
+    link.addEventListener("click", ev => {
+      ev.preventDefault();
+      const input = root.querySelector(".icon-ref-search");
+      if (input?.value) { input.value = ""; input.dispatchEvent(new Event("input")); }
+      const target = body.querySelector(`[data-ref-anchor="${link.dataset.refJump}"]`);
+      if (target) body.scrollTo({ top: target.offsetTop - body.offsetTop, behavior: "smooth" });
+    });
+  }
 }
 
 /** Wire up the live search filter once the dialog has rendered. */
@@ -267,6 +343,15 @@ function attachSearch(root) {
       const visible = sec.querySelector(".icon-ref-term:not([style*='display: none'])");
       sec.style.display = visible ? "" : "none";
     }
+    // While searching, show only matching rows: hide the turn schema and the
+    // area pictures, and the Glossary / FAQ headings with nothing left under them.
+    const statics = root.querySelector(".icon-ref-static");
+    if (statics) statics.style.display = q ? "none" : "";
+    for (const [anchor, box] of [["glossary", ".icon-ref-glossary"], ["faq", ".icon-ref-faq"]]) {
+      const h = root.querySelector(`[data-ref-anchor="${anchor}"]`);
+      const has = root.querySelector(`${box} .icon-ref-term:not([style*='display: none'])`);
+      if (h) h.style.display = has ? "" : "none";
+    }
     if (empty) empty.style.display = anyVisible ? "none" : "";
   });
 }
@@ -279,7 +364,7 @@ function attachSearch(root) {
 export const REFERENCE_CONTROL = {
   action: "showReference",
   icon: "fa-solid fa-book",
-  label: "ICON 1.5 — Rules Reference",
+  label: "ICON 1.5 — Quick Guide",
 };
 
 /**
@@ -291,18 +376,19 @@ export function onShowReferenceControl(event) {
 }
 
 /**
- * Show the rules reference (turn schema + glossary). Safe to call any time;
+ * Show the quick guide (turn schema, areas, glossary, FAQ). Safe to call any time;
  * never throws.
  * @returns {Promise<unknown>}
  */
 export function showReferenceGuide() {
   return foundry.applications.api.DialogV2.prompt({
-    window:  { title: "ICON 1.5 — Rules Reference", icon: "fa-solid fa-book" },
+    window:  { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open" },
     content: referenceHTML(),
     position: { width: 680 },
     render: (_event, dialog) => {
       const root = dialog?.element ?? dialog?.window?.content ?? null;
       attachSearch(root);
+      attachNav(root);
     },
     ok: { label: "Close", icon: "fa-solid fa-check", callback: () => true },
     rejectClose: false,

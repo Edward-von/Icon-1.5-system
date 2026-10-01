@@ -1,5 +1,28 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 1 ottobre 2026 — Quick Guide: aree illustrate, FAQ, bottone sulla scheda (versione 1.11.0)
+
+### Novità (richieste di Maar)
+
+- **Aree illustrate**: la guida (ex "Rules Reference", ora **Quick Guide**) ha una sezione **Areas** con un disegno
+  per ogni area: Small / Medium / Large Blast, Burst 1 (target), Burst 1 e 2 (self), Line 5, Arc 3 / 4 / 5, Aura 2.
+  Le caselle si accendono una dopo l'altra, come se l'area venisse piazzata, e ricominciano. I disegni usano le
+  stesse funzioni e gli stessi colori del piazzamento sulla mappa, quindi non possono essere diversi da quello che si
+  vede al tavolo; la casella d'attacco (Blast, Burst) è evidenziata, il raggio d'azione è in giallo tenue. Chi ha
+  chiesto al sistema operativo di ridurre le animazioni le vede ferme.
+- **FAQ dei casi limite**: 11 domande e risposte di Maar in fondo alla guida, ognuna con la pagina del manuale. Le
+  ho controllate tutte sul PDF: le pagine sono giuste. Quattro risposte sono riformulate per stare al testo del libro:
+  ordine del danno (le aggiunte dell'attaccante vengono **prima**, non "nell'ordine che si preferisce", p.106); il
+  Rampart blocca anche volo e teletrasporto, non solo il dash (p.104); remove-and-place non fa scattare ciò che
+  reagisce al **movimento** (p.88); "+" come boon si scrive +1D e funziona diversamente in combattimento e in
+  narrativa (p.12). Sulla domanda degli AP: la colonna "Total AP" di p.115 conta un AP di metà livello già al livello
+  0, la regola di p.15 no — la scheda ha ragione.
+- **Ricerca** della guida estesa alle FAQ; mentre si cerca restano visibili solo le righe trovate.
+- **Barra di navigazione** in cima alla guida: Turn · Areas · Glossary · FAQ.
+- **Bottone "Quick Guide"** in alto a destra nella banda dell'intestazione della scheda PG, sopra il livello.
+  Il bottone in Notes → Character Management si chiama ora "📖 Quick Guide"; tour First Steps e The Character Sheet
+  aggiornati (un passo nuovo per il bottone).
+
 ## 1 ottobre 2026 — Tour guidati (versione 1.10.0)
 
 ### Novità
