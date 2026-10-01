@@ -312,7 +312,7 @@ Emerso lavorando (da fare in blocchi futuri):
             foe a un giocatore co-GM servirebbe un relay via socket come per le altre azioni GM.
 - [x] **Token di dimensione sbagliata** — FATTO il 30 settembre 2026 (versione 1.8.1): 18 Jotunn token 2×2, Bouncer
       taglia 2 (p.367 "Prodigious size: Size 2"), Scrapper token 1×1. `validate-packs.mjs`: HIGH 0.
-- [ ] **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
+- [x] (CHIUSO da Edoardo il 1 ottobre 2026: p.302 dice che la Great Culture la applica il GM; nessun Unique la ha nel pack, si aggiunge trascinando il template "Yeokin" da Foe Templates) **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
 ## Richieste di Maar — guida rapida (ricevute il 1 ottobre 2026) — FATTA il 1 ottobre 2026 (versione 1.11.0)
