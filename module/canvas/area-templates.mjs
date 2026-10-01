@@ -25,6 +25,12 @@
  * mouse wheel rotates a Line. Arcs are painted one space at a time (Enter or
  * right click finishes a shorter arc). The range of the ability is shown
  * around the user's token while placing.
+ *
+ * Lifetime: a template is cleared at the start of its user's next turn
+ * (clearExpiredAreaTemplates, called by IconCombat), since the area has
+ * already done its work. Two kinds stay until removed by hand or the end of
+ * the encounter: auras, which follow their token, and terrain effects, which
+ * last on the battlefield (p.96) — flagged `lasting` when placed.
  */
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
 
@@ -120,6 +126,18 @@ export function areaFromTags(tags) {
   if (area.kind === "line" && width > 1) area.width = width;
   area.label = areaLabel(area);
   return area;
+}
+
+/**
+ * Does the area stay on the battlefield after the turn it was used in? True
+ * for terrain effects (p.96: they persist, even when their creator is
+ * defeated), told by a "terrain" tag or "terrain effect" in the ability's text.
+ * @param {Array<string|{raw:string}>} tags
+ * @param {string} [text]  every rules text of the ability
+ */
+export function areaLasts(tags, text = "") {
+  const keys = (tags ?? []).map(t => String(t?.raw ?? t ?? "").toLowerCase());
+  return keys.some(k => k.includes("terrain")) || /terrain effect/i.test(String(text ?? ""));
 }
 
 /** Range from the tags alone: 0 = none (adjacent), Infinity = no maximum range. */
@@ -557,8 +575,9 @@ class AreaPlacement {
  * @param {string} opts.abilityName   shown on the template and in chat
  * @param {string} opts.abilityKey    identifies the ability (item id / action name) for replace & reuse
  * @param {boolean} [opts.replace=true]  delete this actor's previous template for the same ability
+ * @param {boolean} [opts.lasting=false] a terrain effect: not cleared at the user's next turn (areaLasts)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -596,7 +615,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     fillColor: color, borderColor: color, hidden: false,
     flags: { [FLAG_NS]: {
       cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label },
-      actorId: actor.id, actorUuid: actor.uuid, abilityKey, abilityName: abilityName ?? "",
+      actorId: actor.id, actorUuid: actor.uuid, tokenId: token.id, abilityKey, abilityName: abilityName ?? "",
+      lasting: !!lasting || isAura,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
       followTokenId: isAura ? token.id : null,
     } },
@@ -688,7 +708,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false }) {
   const area = areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
   const existing = findAreaTemplates({ actorId: actor.id, abilityKey })[0];
@@ -696,7 +716,29 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey }
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting });
+}
+
+/**
+ * Start of a combatant's turn: clear the areas it placed earlier, except the
+ * lasting ones (auras, terrain effects). Matched on the token when the
+ * template knows it, so two copies of the same foe don't clear each other's.
+ * @param {Combatant} combatant
+ * @returns {Promise<number>} templates removed
+ */
+export async function clearExpiredAreaTemplates(combatant) {
+  const scene = combatant?.parent?.scene ?? canvas?.scene;
+  const actorId = combatant?.actor?.id;
+  if (!scene || !actorId) return 0;
+  const docs = scene.templates.filter(t => {
+    const f = t.flags?.[FLAG_NS];
+    if (!f?.cells || f.lasting || f.followTokenId) return false;
+    return f.tokenId ? f.tokenId === combatant.tokenId : f.actorId === actorId;
+  });
+  if (!docs.length) return 0;
+  await scene.deleteEmbeddedDocuments("MeasuredTemplate", docs.map(d => d.id));
+  _log(`start of ${combatant.name}'s turn: cleared ${docs.length} area template(s)`);
+  return docs.length;
 }
 
 /**

@@ -26,7 +26,7 @@
  */
 
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
-import { deleteAreaTemplates } from "../canvas/area-templates.mjs";
+import { deleteAreaTemplates, clearExpiredAreaTemplates } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
@@ -832,6 +832,13 @@ export function registerCombatHooks() {
       if (turnChanged && current?.actor) {
         /* Record which side acted last (advisory alternation). */
         await combat.setFlag(FLAG_NS, FLAG_LAST, IconCombat.isPC(current) ? "pc" : "npc");
+
+        /* The areas this character placed on its last turn have done their
+         * work: clear them (auras and terrain effects stay). Not on an undo. */
+        if (!options._iconSkipEndOfTurn) {
+          try { await clearExpiredAreaTemplates(current); }
+          catch (err) { console.warn("[ICON | IconCombat] could not clear area templates", err); }
+        }
 
         /* Relic effects "at the start of your turn" (Apophis, Erenbrass, Ironsoul / Cloudpiercer Aspect…). */
         if (current.actor.type === "icon") {

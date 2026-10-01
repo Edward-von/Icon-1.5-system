@@ -1,5 +1,44 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 1 ottobre 2026 — Mark che si impilano, level up, tour del GM, aree che si tolgono da sole (versione 1.12.0)
+
+### Decisioni di Edoardo
+
+- **Dust sui Burden: è regola del libro, non house rule**: l'impostazione la chiamava house rule ed era spenta →
+  rileggendo il manuale, p.42 lo dice proprio nel paragrafo Heal Burdens ("You may also spend dust to tick
+  additional segments on a burden clock… 2 dust will buy you 1 segment"), e p.242 lo ripete. La nota del TODO che
+  parlava di un manuale incoerente era sbagliata: il testo estratto dal PDF è su due colonne, e la frase era stata
+  attribuita al paragrafo delle Ambition → l'impostazione si chiama ora "Dust to heal Burdens during an Interlude
+  (RAW, p.42)" ed è **accesa** di default, come Party Resolve. Nei mondi dove il GM l'aveva già salvata spenta,
+  resta spenta. Il tour House Rules lo spiega così.
+
+### Novità
+
+- **Mark che si impilano**: il secondo mark di "Battalion of Limbs" (Royal Guard, p.332) sullo stesso personaggio
+  sostituiva il primo, quindi gli stack (+3 danni l'uno) non si contavano → i mark il cui testo dice che si
+  impilano ("stacks indefinitely", "for each stack of the mark": Battalion of Limbs, la Malice del Vessel Knight)
+  ora aggiungono uno stack al mark che c'è già. Il numero si vede nel nome del mark (**Marked ×3 — …**), nei
+  chip 🎯 sulla scheda di chi marca e nella lista dei mark della scheda Conditions. ✕ toglie il mark con tutti
+  gli stack, come il tiro salvezza del libro.
+- **Level up, "← Back" non cancella più le scelte del passo 2**: tornando al passo 1 e poi di nuovo avanti, le
+  tendine delle azioni, le abilità e i talenti spuntati, la mastery, il relic e il bond power si azzeravano (si
+  salvavano solo i campi del passo 1) → "← Back" ora si ricorda anche le scelte del passo 2 e le rimette al
+  ritorno. Se nel passo 1 si cambia lavoro e un'abilità scelta non c'è più, quella scelta cade.
+- **Tour per il GM "Foes & Encounters"** (Settings → Tours, solo GM): apre da solo la scheda di un foe (Class /
+  Elite / Chapter, Foe Templates, azioni con Attack / Mark / area, Conditions), di un legend (fasi),
+  l'Encounter Designer (party e budget, roster, salvataggio e Deploy) e la Clock Board (⤓ Map). Usa gli attori
+  già nel mondo; se ne manca uno il passo compare al centro con la spiegazione.
+- **Le aree si tolgono da sole**: i template delle aree restavano sulla mappa finché qualcuno non premeva
+  🗑 area o finiva l'incontro → all'inizio del turno successivo di chi l'ha piazzata, l'area sparisce. Restano
+  invece le **aure** (seguono il token) e gli **effetti terreno** (p.96: restano sul campo), riconosciuti dal tag
+  o dalla scritta "terrain effect" nel testo dell'abilità. Copie dello stesso foe non si cancellano le aree a
+  vicenda. Tornare indietro di un turno nel tracker non cancella niente.
+
+### Chiuso senza lavoro
+
+- FAQ: le quattro risposte riformulate vanno bene perché vengono dal manuale. Gli otto fix del 30 agosto sono
+  confermati. Scene senza griglia: non le usate, nessun lavoro.
+
 ## 1 ottobre 2026 — Quick Guide: aree illustrate, FAQ, bottone sulla scheda (versione 1.11.0)
 
 ### Novità (richieste di Maar)

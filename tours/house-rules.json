@@ -35,7 +35,7 @@
       "settingsTab": "system",
       "tooltipDirection": "LEFT",
       "title": "Dust to heal Burdens",
-      "content": "During an Interlude each character unticks 3 Burden segments (p.42). With this rule on, the <strong>Interlude</strong> macro also asks how many extra segments to heal at <strong>2 Dust each</strong>.\nThe book is not consistent here: p.42 lists the 2-Dust trade only for Ambition clocks, the Dust list on p.242 names Burden clocks too. Turn it on if your table reads it the p.242 way."
+      "content": "Not a house rule either: during an Interlude each character unticks 3 Burden segments and may buy more at <strong>2 Dust each</strong> (p.42, repeated on p.242), so it starts <strong>on</strong>. The <strong>Interlude</strong> macro asks how many extra segments to heal.\nTurn it off only if your table doesn't trade Dust for Burden segments."
     },
     {
       "id": "difficulty",

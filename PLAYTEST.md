@@ -1587,10 +1587,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Tour**: First Steps, passo "Quick Guide" con il testo nuovo; The Character Sheet, passo "Quick Guide" che
       evidenzia il bottone.
 
+## Mark, level up, tour GM, aree a tempo (1 ottobre 2026, versione 1.12.0)
+
+- [ ] **Dust sui Burden**: Configure Settings → ICON 1.5, la voce si chiama "Dust to heal Burdens during an
+      Interlude (RAW, p.42)" ed è spuntata in un mondo nuovo; la macro Interlude chiede quanti segmenti in più.
+      Tour House Rules: il passo Dust dice che non è una house rule.
+- [ ] **Mark che si impilano**: Royal Guard, target su un PG, 🎯 Mark su Battalion of Limbs due volte → in chat
+      "now has 2 stacks"; chip "🎯 Nome ×2" sulla scheda del Royal Guard; nella scheda del PG, Conditions →
+      "Battalion of Limbs ×2"; ✕ lo toglie tutto. Un mark normale (senza "stacks") rifatto sullo stesso
+      bersaglio resta uno solo, come prima.
+- [ ] **Level up ← Back**: al passo 2 scegliere azioni, un'abilità, un talento, relic / bond power → ← Back →
+      Next → tutto è ancora scelto, contatore AP e riepilogo giusti. Cambiando lavoro al passo 1, le abilità del
+      lavoro vecchio non restano spuntate.
+- [ ] **Tour Foes & Encounters** (GM): Settings → Tours → parte; apre scheda foe, poi legend, poi Encounter
+      Designer, poi Clock Board, ogni fumetto accanto alla parte giusta. Mondo senza legend o senza Clock Board:
+      quei passi compaiono al centro, il tour non si interrompe. Non compare ai giocatori.
+- [ ] **Aree a tempo**: combat iniziato, un PG piazza un Blast (📐 o attacco) → passa il turno agli altri → al
+      suo turno successivo l'area sparisce. Un'aura (stance con Aura) e un'abilità "terrain effect" (es. Tsunami)
+      restano. Due goblin uguali: l'area del primo non sparisce al turno del secondo. ⏪ indietro di un turno:
+      nessuna area cancellata.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
-- [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
-- [ ] Burden/Ambition: click sui segmenti e +1 avanzano il clock giusto.
-- [ ] Heave-Ho mostra il Trigger; Draken Cross mostra Effect dopo Area.
-- [ ] Pannello status del token non copre le tab della sidebar.
-- [ ] Badge "Range N" sugli attacchi base; Aether si azzera a fine combat.
+- [x] Dropdown `<details>` delle schede PG restano aperti al cambio turno.
+- [x] Burden/Ambition: click sui segmenti e +1 avanzano il clock giusto.
+- [x] Heave-Ho mostra il Trigger; Draken Cross mostra Effect dopo Area.
+- [x] Pannello status del token non copre le tab della sidebar.
+- [x] Badge "Range N" sugli attacchi base; Aether si azzera a fine combat.

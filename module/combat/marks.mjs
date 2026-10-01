@@ -17,6 +17,11 @@
  *     The mark rule is written as "each ability TYPICALLY places only one mark"
  *     (p.95): multimark is that exception, so only the one-mark-per-ability
  *     sweep is lifted. One mark per marker → target pair still holds.
+ *   Stacking marks — a few foe marks say so in their text ("This mark can be
+ *     placed more than once and stacks indefinitely", Royal Guard's Battalion
+ *     of Limbs p.332; Malice, Vessel Knight). Placing such a mark again on the
+ *     same character adds a stack to the existing mark instead of replacing
+ *     it; the count is `mark.stacks` and shows in the mark's name and chips.
  *
  * Both are ActiveEffects on the affected actor:
  *   Hatred  — the normal "hatred" status effect, named "Hatred of <X>" with the
@@ -198,9 +203,20 @@ export function hatredDamageHint(actor) {
 
 /** Marks currently on `actor` (effects carrying flags.icon-system.mark). */
 export function marksOn(actor) {
-  return (actor?.effects ?? []).filter(e => e.getFlag(NS, "mark")).map(e => ({
-    id: e.id, uuid: e.uuid, name: e.name, img: e.img, ...e.getFlag(NS, "mark"),
-  }));
+  return (actor?.effects ?? []).filter(e => e.getFlag(NS, "mark")).map(e => {
+    const mark = e.getFlag(NS, "mark");
+    return { id: e.id, uuid: e.uuid, name: e.name, img: e.img, ...mark, stacks: Math.max(1, Number(mark.stacks) || 1) };
+  });
+}
+
+/** Does a mark's rules text say it stacks ("stacks indefinitely", "for each stack of the mark")? */
+export function markStacks(text) {
+  return /\bstacks?\s+indefinitely\b|\bfor each stack\b|\bstacks? of (?:the |this )?mark\b/i.test(String(text ?? ""));
+}
+
+/** Effect name of a mark, with its stack count when it has more than one. */
+function _markName(abilityName, sourceName, stacks) {
+  return `Marked${stacks > 1 ? ` ×${stacks}` : ""} — ${abilityName} (${sourceName})`;
 }
 
 /**
@@ -228,13 +244,28 @@ export function marksBy(actorId, abilityKey = null) {
  * @param {string} opts.abilityName
  * @param {string} [opts.text]       the mark's rules text (shown on hover / in chat)
  * @param {boolean} [opts.multi]     `multimark` ability: it keeps its older marks
+ * @param {string} [opts.stackText]  every text of the ability, read to tell whether the mark stacks
+ *                                   (defaults to `text`)
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null }) {
   if (!source || !target) return null;
   if (_needsRelay(target)) {
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi });
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText });
     ui.notifications.info(`Mark sent to the GM to place on "${target.name}".`);
     return null;
+  }
+  // A stacking mark placed again on the same character: one more stack.
+  if (markStacks(stackText ?? text)) {
+    const same = marksOn(target).find(m => m.sourceActorId === source.id && m.abilityKey === abilityKey);
+    const eff = same && await fromUuid(same.uuid);
+    if (eff) {
+      const stacks = same.stacks + 1;
+      await eff.update({ name: _markName(abilityName, source.name, stacks), [`flags.${NS}.mark.stacks`]: stacks });
+      _log(`${source.name} stacks ${abilityName} on ${target.name}: ${stacks}`);
+      await _chat(source, `<strong>🎯 ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> again — <strong>${escapeHTML(abilityName)}</strong> now has <strong>${stacks} stacks</strong>.`);
+      _refreshSheet(source);
+      return eff;
+    }
   }
   // One mark per ability: the ability's previous mark (anywhere on the scene)
   // ends — unless the ability is `multimark`, which is the tag for the foe
@@ -251,12 +282,12 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
   }
   const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   const [effect] = await target.createEmbeddedDocuments("ActiveEffect", [{
-    name: `Marked — ${abilityName} (${source.name})`,
+    name: _markName(abilityName, source.name, 1),
     img:  MARK_IMG,
     description: plain,
     flags: { [NS]: { isStatus: false, isMark: true, mark: {
       sourceActorId: source.id, sourceActorUuid: source.uuid, sourceName: source.name,
-      abilityKey, abilityName, text: plain,
+      abilityKey, abilityName, text: plain, stacks: 1,
     } } },
   }]);
   _log(`${source.name} marks ${target.name} with ${abilityName}`);
@@ -325,7 +356,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null });
       break;
     }
     case "removeMark":

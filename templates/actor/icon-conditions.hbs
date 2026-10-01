@@ -125,7 +125,7 @@
         {{#each marksOnActor as |m|}}
           <li class="icon-mark-list__item">
             <div class="icon-mark-list__head">
-              <strong>🎯 {{m.abilityName}}</strong>
+              <strong>🎯 {{m.abilityName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}</strong>
               <span class="icon-mark-list__source">from {{m.sourceName}}</span>
               {{#if ../isEditable}}
                 <button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕ End mark</button>

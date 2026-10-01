@@ -1,0 +1,106 @@
+{
+  "title": "ICON 1.5 — Foes & Encounters",
+  "description": "GM only. The foe and legend sheets, the Encounter Designer and the clock board.",
+  "restricted": true,
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "The GM's tools",
+      "content": "This tour opens a foe sheet, a legend sheet, the Encounter Designer and the clock board one after the other.\nIt uses the actors already in your world: import a foe and a legend from the compendiums first (Compendium tab → Foes, Legends) to see every step. Missing ones are explained in the middle of the screen."
+    },
+    {
+      "id": "foe-builder",
+      "selector": ".foe-header .foe-builder-row",
+      "fallback": ".foe-header",
+      "actorType": "foe",
+      "sheetTab": "main",
+      "tooltipDirection": "DOWN",
+      "title": "Building a foe",
+      "content": "Class, Elite, Chapter, Faction and Size live in the header. Changing the class or Elite fills in the base stats of the manual's foe table; <strong>⟳ Apply Base Stats</strong> in the Foe Builder panel does it again by hand."
+    },
+    {
+      "id": "foe-templates",
+      "selector": ".icon-foe-templates",
+      "fallback": ".icon-foe-builder",
+      "actorType": "foe",
+      "sheetTab": "main",
+      "tooltipDirection": "DOWN",
+      "title": "Templates",
+      "content": "Drag a faction, Great Culture, job or special template from the <strong>Foe Templates</strong> compendium onto the sheet: its traits and actions are added, and the chip here takes them away again with ✕.\nSingle traits and actions come from the <strong>Foe Abilities</strong> compendium, or the + buttons."
+    },
+    {
+      "id": "foe-actions",
+      "selector": ".icon-tab--foe-main [data-action='rollAction']",
+      "fallback": ".icon-tab--foe-main",
+      "actorType": "foe",
+      "sheetTab": "main",
+      "tooltipDirection": "LEFT",
+      "title": "Actions",
+      "content": "Target the characters first (hover a token and press T), then <strong>⚔ Attack</strong> rolls against each target's Defense and <strong>💥 Damage</strong> rolls the damage.\nWhere the action has them: <strong>🎯 Mark</strong> marks the one targeted token, <strong>📐</strong> places the action's area on the map and targets everyone inside, <strong>💬</strong> posts the text to chat."
+    },
+    {
+      "id": "foe-conditions",
+      "selector": ".icon-tab--conditions",
+      "actorType": "foe",
+      "sheetTab": "conditions",
+      "tooltipDirection": "LEFT",
+      "title": "Statuses and saves",
+      "content": "The same Conditions tab as the player characters: click a status to apply or remove it, roll its save from here. The marks placed on this foe are listed at the bottom."
+    },
+    {
+      "id": "legend-phases",
+      "selector": ".legend-phase",
+      "fallback": ".icon-tab--legend-main",
+      "actorType": "legend",
+      "sheetTab": "main",
+      "tooltipDirection": "RIGHT",
+      "title": "Legends and their phases",
+      "content": "A legend is a boss with phases. Each phase has an HP threshold: when the legend's HP drops to it, that phase becomes <strong>ACTIVE</strong>, and the actions of the phase are the ones to use."
+    },
+    {
+      "id": "encounter-party",
+      "selector": ".icon-encounter__step:first-of-type",
+      "fallback": "#icon-encounter-designer",
+      "openApp": "encounter-designer",
+      "tooltipDirection": "RIGHT",
+      "title": "Encounter Designer: the party",
+      "content": "Tick the player characters who are fighting: the budget at the top right is 2 points per player (spent / budget). A regular foe or a mob costs 1, an Elite 2, a legend the whole budget."
+    },
+    {
+      "id": "encounter-roster",
+      "selector": ".icon-encounter__roster",
+      "fallback": "#icon-encounter-designer",
+      "openApp": "encounter-designer",
+      "tooltipDirection": "LEFT",
+      "title": "The roster",
+      "content": "The foes and legends to pick from: from the compendiums, from the world (the ones already imported) or both. Filter by faction, class or name and add the ones you want; <strong>🎲 Random fill</strong> fills what is left of the budget from the rows shown."
+    },
+    {
+      "id": "encounter-deploy",
+      "selector": ".icon-encounter__footer",
+      "fallback": "#icon-encounter-designer",
+      "openApp": "encounter-designer",
+      "tooltipDirection": "UP",
+      "title": "Save and deploy",
+      "content": "Save the encounter under a name to use it later. <strong>📥 Actors</strong> imports the foes into a folder; <strong>🗺 Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden."
+    },
+    {
+      "id": "clock-board",
+      "selector": ".icon-clock-board",
+      "fallback": ".clock-sheet",
+      "actorType": "clock",
+      "tooltipDirection": "LEFT",
+      "title": "The clock board",
+      "content": "Campaign clocks, all on one actor (Create Actor → Clock Board). Click the segments to fill them, hide a clock from the players, post it to chat.\nDrag <strong>⤓ Map</strong> onto the scene to put the clock on the map: the token follows the board live."
+    },
+    {
+      "id": "end",
+      "selector": "",
+      "title": "That's all",
+      "content": "You can run this tour again from <strong>Settings → Tours</strong>. The <strong>Quick Guide</strong> (📖 in the token controls) has the rules at a glance."
+    }
+  ]
+}

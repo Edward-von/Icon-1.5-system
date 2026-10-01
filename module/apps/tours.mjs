@@ -14,6 +14,11 @@
  *               then looked up inside the sheet
  *   settingsTab open Configure Settings on that category ("system" for the
  *               ICON 1.5 settings); `selector` is then looked up inside it
+ *   actorType   open the sheet of a world actor of that type ("foe",
+ *               "legend", "clock"), on `sheetTab` if given; `selector` is
+ *               then looked up inside it. No such actor → centred step
+ *   openApp     open a system window ("encounter-designer"); `selector` is
+ *               then looked up inside it
  *   fallback    selector to highlight when `selector` matches nothing (an
  *               empty combat, a character without a Limit Break, ...)
  * A step whose target is missing and has no usable fallback is shown centred
@@ -30,6 +35,7 @@ const TOURS = [
   { id: "character-sheet", file: "character-sheet.json", requiresCharacter: true },
   { id: "combat",          file: "combat.json" },
   { id: "house-rules",     file: "house-rules.json" },
+  { id: "gm-tools",        file: "gm-tools.json" },
 ];
 
 /**
@@ -41,6 +47,18 @@ function tourCharacter() {
   const own = game.user.character;
   if (own?.type === "icon" && own.isOwner) return own;
   return game.actors.find(a => a.type === "icon" && a.isOwner) ?? null;
+}
+
+/**
+ * A world actor of `type` for the GM tour: an open sheet first, else (for
+ * foes and legends) one with actions to show, else the first by name.
+ * @returns {Actor|null}
+ */
+function tourActor(type) {
+  const all = game.actors.filter(a => a.type === type && a.isOwner).sort((a, b) => a.name.localeCompare(b.name));
+  return all.find(a => a.sheet?.rendered)
+      ?? all.find(a => (a.system.actions?.length ?? 0) > 0)
+      ?? all[0] ?? null;
 }
 
 export class IconTour extends foundry.nue.Tour {
@@ -89,7 +107,17 @@ export class IconTour extends foundry.nue.Tour {
     }
 
     this.#app = null;
-    if (step.sheetTab) {
+    if (step.actorType) {
+      const sheet = tourActor(step.actorType)?.sheet;
+      if (sheet) this.#app = await this.#openOnTab(sheet, step.sheetTab, "primary");
+    }
+    else if (step.openApp === "encounter-designer") {
+      const app = game.icon?.openEncounterDesigner?.();
+      // The designer loads the compendium roster before its first paint.
+      for (let i = 0; app && !app.rendered && i < 40; i++) await new Promise(r => setTimeout(r, 100));
+      this.#app = app ?? null;
+    }
+    else if (step.sheetTab) {
       const sheet = tourCharacter()?.sheet;
       if (sheet) this.#app = await this.#openOnTab(sheet, step.sheetTab, "primary");
     }
@@ -108,7 +136,7 @@ export class IconTour extends foundry.nue.Tour {
   async #openOnTab(app, tab, group) {
     if (!app.rendered) await app.render({ force: true });
     app.bringToFront?.();
-    if (app.tabGroups?.[group] !== tab) app.changeTab(tab, group);
+    if (tab && app.tabGroups?.[group] !== tab) app.changeTab(tab, group);
     return app;
   }
 
@@ -171,7 +199,7 @@ export async function registerIconTours() {
   }
 }
 
-/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "house-rules"). */
+/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "house-rules", "gm-tools"). */
 export function startIconTour(id = "welcome") {
   const tour = game.tours.get(`${NAMESPACE}.${id}`);
   if (!tour) return ui.notifications.warn(`Tour "${id}" is not available.`);

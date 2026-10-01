@@ -5,7 +5,7 @@ import { combatRoll } from "../../dice/rolls.mjs";
 import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
 import { currentTargets } from "../../combat/defenses.mjs";
 import { abilityCostLabel } from "../../helpers/enrich.mjs";
-import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea } from "../../canvas/area-templates.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea, areaLasts } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
@@ -176,7 +176,7 @@ export class LegendSheet extends BaseActorSheet {
         // ^ the shape is usually in the header tags; when it is only in the
         //   prose (as for several terrain actions) the text is read too.
         canMark:     markFromTags(a.tags).can,
-        marks:       marksBy(actor.id, `action:${a.name}`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
+        marks:       marksBy(actor.id, `action:${a.name}`).map(m => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks })),
         hitEffect:   a.hitEffect  ?? "",
         missEffect:  a.missEffect ?? "",
         areaEffect:  a.areaEffect ?? "",
@@ -259,7 +259,7 @@ export class LegendSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
-    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text }));
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
     context.conditions = {
       negative: markActive(groups.negative),
       positive: markActive(groups.positive),
@@ -334,7 +334,8 @@ export class LegendSheet extends BaseActorSheet {
     if (!action) return;
 
     // Area attack: template on the map + targets before the dialog (null = cancelled)
-    const placement = await ensureAreaTargets({ actor, tags: action.tags, abilityName: action.name, abilityKey: `action:${action.name}` });
+    const placement = await ensureAreaTargets({ actor, tags: action.tags, abilityName: action.name, abilityKey: `action:${action.name}`,
+      lasting: areaLasts(action.tags, [action.description, action.hitEffect, action.missEffect, action.areaEffect].join(" ")) });
     if (placement === null) ui.notifications.info(`${action.name}: area not placed — rolling the attack only.`);
 
     const mods = await LegendSheet.#promptAttackMods(action, actor, placement?.area ?? null);
@@ -372,7 +373,8 @@ export class LegendSheet extends BaseActorSheet {
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
     _log(`markActionTarget — "${action.name}" on ${targets[0].name}`);
     await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name,
-                      text: action.description ?? "", multi: markFromTags(action.tags).multi });
+                      text: action.description ?? "", multi: markFromTags(action.tags).multi,
+                      stackText: [action.description, action.hitEffect, action.missEffect, action.areaEffect].join(" ") });
   }
 
   /** ✕ on a mark chip or in the Conditions tab list. */
@@ -390,10 +392,11 @@ export class LegendSheet extends BaseActorSheet {
     if (!action) return;
     // Tags first (the book puts the shape in the action's header), then the
     // action's own text for the ones that only describe it in prose.
-    const area = abilityArea(action.tags, [action.description, action.hitEffect, action.missEffect, action.areaEffect].join(" "));
+    const text = [action.description, action.hitEffect, action.missEffect, action.areaEffect].join(" ");
+    const area = abilityArea(action.tags, text);
     if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag, and its text names no area.`); return; }
     _log(`placeActionArea — "${action.name}" | ${area.label}`);
-    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}` });
+    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}`, lasting: areaLasts(action.tags, text) });
   }
 
   static async #onRollLegendDamage(event, target) {

@@ -16,20 +16,20 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
-## ⚠️ Già fatto nel round 4 (commit e87b2d8, 30 agosto) — da VERIFICARE con Maar
+## ⚠️ Già fatto nel round 4 (commit e87b2d8, 30 agosto) — CONFERMATI da Edoardo il 1 ottobre 2026
 
 Maar li elenca ancora come bug il 5 settembre: o usa una build vecchia, o il fix non copre il suo caso.
 Prima di riaprirli, chiedere a Maar di aggiornare e riprovare.
 
-- [ ] Dropdown delle schede PG che si chiudono a ogni fine turno (fix: stato `<details>` preservato)
-- [ ] Interrupt NPC non stampabili in chat (fix: bottone 💬 sugli interrupt Foe/Legend)
-- [ ] Burden/Ambition non avanzano cliccando le caselle o +1 (fix: lookup block-param nel `#each`)
-- [ ] Heave-Ho senza trigger (fix: split Trigger/Effect)
-- [ ] Draken Cross: effetto nel posto sbagliato (fix: Effect dopo Area per gli attacchi) — il pezzo
+- [x] Dropdown delle schede PG che si chiudono a ogni fine turno (fix: stato `<details>` preservato)
+- [x] Interrupt NPC non stampabili in chat (fix: bottone 💬 sugli interrupt Foe/Legend)
+- [x] Burden/Ambition non avanzano cliccando le caselle o +1 (fix: lookup block-param nel `#each`)
+- [x] Heave-Ho senza trigger (fix: split Trigger/Effect)
+- [x] Draken Cross: effetto nel posto sbagliato (fix: Effect dopo Area per gli attacchi) — il pezzo
       "talento → tag Medium Blast" è fatto in Sessione 2
-- [ ] Overlay status sopra le tab della sidebar (fix: HUD ancorato alla sidebar reale)
-- [ ] Range degli attacchi base come promemoria (fix: badge "Range N")
-- [ ] Testo Aether "persists across combats" (fix: reset a fine combat + testo corretto)
+- [x] Overlay status sopra le tab della sidebar (fix: HUD ancorato alla sidebar reale)
+- [x] Range degli attacchi base come promemoria (fix: badge "Range N")
+- [x] Testo Aether "persists across combats" (fix: reset a fine combat + testo corretto)
 
 ---
 
@@ -115,7 +115,7 @@ Emerso dalla Sessione 6 (da fare in un blocco futuro):
 - [x] Line con larghezza ("Line 4, width 2"), Arc/Line del Combo (es. Death Blossom combo → Arc 4) e le aree
       "Charge: Large Blast" non sono lette dai tag: oggi si piazza il pattern base. (M)
 - [x] Aura X come template persistente attorno al token che si sposta con lui. (M)
-- [ ] Rimuovere automaticamente i template a inizio del turno successivo dell'attore (oggi restano finché
+- [x] (FATTO 1 ottobre 2026, 1.12.0: restano aure ed effetti terreno) Rimuovere automaticamente i template a inizio del turno successivo dell'attore (oggi restano finché
       🗑 area / End encounter). Chiedere a Maar se preferisce così. (S)
 
 ## Sessione 7 — Pulizia residui (M+S+M+S) — FATTA il 9 settembre 2026
@@ -168,7 +168,7 @@ Decisi con Edoardo il 9 settembre 2026:
       funziona: relay al GM via socket anche per il proprio combattente.
 - [x] Residui provati il 9 settembre sera: secondo client (relay), scena gridless (avviso), Shift+rotella della Line
       larga, wizard di creazione completo, reset dei power die a fine combat, dialog danno senza bersaglio e Legend.
-- [ ] Maar: le scene della campagna (Enganoka) sono senza griglia → i template di area non funzionano lì.
+- [x] (CHIUSO 1 ottobre 2026: quelle scene non si usano) Maar: le scene della campagna (Enganoka) sono senza griglia → i template di area non funzionano lì.
       Chiedere se vuole una griglia quadrata sulle mappe di combattimento (Field Battlemap ce l'ha).
 
 ## Sessione 13 — Tutti i follow-up delle sessioni 9-12 — FATTA il 9 settembre 2026 (versione 1.5.0)
@@ -230,12 +230,12 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
       ricerca come quella del roster, o un ordinamento "prima i selezionati", renderebbe il passo 1 più rapido.
       Oggi si tira via con i bottoni "On scene" / "All".
 
-- [ ] **Mark che si impilano** (M): "Battalion of Limbs" del Royal Guard (p.332) dice "This mark can be placed more
+- [x] **Mark che si impilano** (M) — FATTO 1 ottobre 2026 (1.12.0): "Battalion of Limbs" del Royal Guard (p.332) dice "This mark can be placed more
       than once and stacks indefinitely" e ogni stack aggiunge +3 danni. Oggi un secondo mark dello stesso
       marcatore sullo stesso bersaglio sostituisce il primo (regola generale p.95), quindi gli stack non si
       contano: servirebbe un contatore sul mark per le poche abilità che lo dicono esplicitamente.
 
-- [ ] **Level up, "← Back" perde le scelte del passo 2** (S/M): tornando al passo 1 e ripremendo "Next →" le
+- [x] **Level up, "← Back" perde le scelte del passo 2** (S/M) — FATTO 1 ottobre 2026 (1.12.0): tornando al passo 1 e ripremendo "Next →" le
       tendine delle azioni, le abilità spuntate, il relic e il bond power si azzerano (`_captureForm` viene
       chiamato solo in `#onNextStage`, quindi salva solo i campi del passo 1). Si nota di più ora che il passo 2
       è obbligatorio: basterebbe catturare il form anche in `#onPrevStage` e ripopolare i campi dal `savedData`.
@@ -337,7 +337,7 @@ Testo originale: "Expansion / Further attention being brought to the quick-guide
 Emerso (da valutare in un blocco futuro):
 - [ ] Colori del piazzamento delle aree **sulla mappa** (`AREA_COLORS` in area-templates.mjs): sono gli stessi
       arancio/rosso/blu accesi tolti dai disegni della guida. Valutare se smorzarli anche lì. (S)
-- [ ] Dire a Maar le quattro riformulazioni delle FAQ (danno, engagement, remove-and-place, "(+)" come boon), nel
+- [x] (CHIUSO da Edoardo: vengono dal manuale) Dire a Maar le quattro riformulazioni delle FAQ (danno, engagement, remove-and-place, "(+)" come boon), nel
       caso non sia d'accordo. (S)
 
 ## Richiesta di Edoardo — 1 ottobre 2026: tour guidati — FATTA il 1 ottobre 2026 (versione 1.10.0)
@@ -351,12 +351,12 @@ Emerso (da valutare in un blocco futuro):
       evidenzia Party Resolve +1 (RAW), Dust per i Burden, Heroic/Routine.
 
 Emerso (da valutare in un blocco futuro):
-- [ ] **Dust sui Burden: è davvero una house rule?** Il suggerimento dell'impostazione `hrInterludeDustHealing`
+- [x] (FATTO 1 ottobre 2026, 1.12.0: è RAW, p.42 lo dice nel paragrafo Heal Burdens; ora attiva di default) **Dust sui Burden: è davvero una house rule?** Il suggerimento dell'impostazione `hrInterludeDustHealing`
       dice "in RAW la Dust per segmento esiste solo per le Ambition", ma il manuale non è coerente: p.42 (Heal
       Burdens / Pursue Ambitions) cita i 2 Dust per segmento solo per le Ambition, mentre l'elenco degli usi della
       Dust a p.242 dice "ambition or burden clock (2 dust for 1 tick)". Decidere con Maar se lasciarla opzionale
       (e correggere il testo del suggerimento) o renderla RAW. Il tour lo spiega già così. (S)
-- [ ] Tour per il GM sugli strumenti dei foe (Foe/Legend sheet, Encounter Designer aperto, Clock Board). (M)
+- [x] Tour per il GM sugli strumenti dei foe (Foe/Legend sheet, Encounter Designer aperto, Clock Board). (M) — FATTO 1 ottobre 2026 (1.12.0), tour "Foes & Encounters"
 - [ ] I testi dei tour sono in inglese hardcoded come il resto: se un giorno si localizza, spostarli in
       `lang/en.json` (il formato dei tour accetta già chiavi di traduzione). (S)
 

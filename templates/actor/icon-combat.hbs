@@ -634,7 +634,7 @@
               🎯 Mark target
             </button>
             {{#each ab.marks as |m|}}
-              <span class="icon-mark-chip" title="Marked by {{ab.name}}">🎯 {{m.targetName}}
+              <span class="icon-mark-chip" title="Marked by {{ab.name}}">🎯 {{m.targetName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}
                 <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button>
               </span>
             {{/each}}

@@ -12,7 +12,7 @@ import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks } from "../../helpers/ability-blocks.mjs";
 import { powerDieView } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
-         areaVariants, chooseAreaVariant, abilityArea, areaColor } from "../../canvas/area-templates.mjs";
+         areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -307,7 +307,7 @@ export class IconSheet extends BaseActorSheet {
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions:   infusionsOf(desc.sections, actor, a.id),
-        marks:       marksBy(actor.id, a.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
+        marks:       marksBy(actor.id, a.id).map(m => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks })),
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -673,7 +673,7 @@ export class IconSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
-    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text }));
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
     context.conditions = {
       negative: markActive(groups.negative),
       positive: markActive(groups.positive),
@@ -1190,7 +1190,7 @@ export class IconSheet extends BaseActorSheet {
       stanceOn:    IconActor.stanceOf(this.document) === item.name,
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf(desc.sections, this.document, item.id),
-      marks:       marksBy(this.document.id, item.id).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
+      marks:       marksBy(this.document.id, item.id).map(m => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks })),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -1515,6 +1515,13 @@ export class IconSheet extends BaseActorSheet {
    * the tokens inside it (area-templates.mjs). Replaces this actor's previous
    * template for the same ability.
    */
+  /** Is this ability's area a terrain effect, kept past the next turn? (area-templates.mjs areaLasts) */
+  #areaLasts(ab) {
+    const s = this.document.items.get(ab.id)?.system ?? {};
+    const text = Object.values(s).filter(v => typeof v === "string").join(" ");
+    return areaLasts(ab.tags, text);
+  }
+
   static async #onAbilityPlaceArea(event, target) {
     event.stopPropagation();
     const ab = await this._getAbilityDetail(target.dataset.itemId);
@@ -1542,7 +1549,7 @@ export class IconSheet extends BaseActorSheet {
     const area = await chooseAreaVariant(variants, ab.name);
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
-    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id });
+    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab) });
   }
 
   /**
@@ -1569,7 +1576,7 @@ export class IconSheet extends BaseActorSheet {
     // Cancelling the placement (Escape / right click) no longer kills the roll:
     // the attack is rolled without an area, so the d20 can be thrown before —
     // or without — putting the arc down. Cancel the dialog to call it off.
-    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id });
+    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab) });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
     const areaHtml = placement ? areaSummaryHtml(placement) : "";
 

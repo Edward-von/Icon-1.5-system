@@ -126,17 +126,21 @@ Hooks.once("init", () => {
     default: true,
   });
 
-  // ---- House rules (opt-in) ----
-  // Off by default: divergences from the ICON 1.5 RAW manual.
-  // Enabled by the GM in Configure Settings → System Settings.
+  // Dust for extra Burden segments is RAW too (p.42, Heal Burdens: "2 dust will
+  // buy you 1 segment"; p.242 lists it again), so it is ON by default; the key
+  // keeps its historical "hr" name so existing worlds keep their stored choice.
   game.settings.register("icon-system", "hrInterludeDustHealing", {
-    name: "House Rule — Dust to heal Burdens during an Interlude",
-    hint: "If enabled, during an Interlude PCs may spend 2 Dust for each extra Burden segment healed (beyond the base 3). House rule: in RAW, spending Dust per segment exists only for Ambition clocks, not Burdens.",
+    name: "Dust to heal Burdens during an Interlude (RAW, p.42)",
+    hint: "During an Interlude PCs may spend 2 Dust for each extra Burden segment healed, beyond the base 3. The Interlude macro asks how many. Turn off only if your table doesn't use it.",
     scope: "world",
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
   });
+
+  // ---- House rules (opt-in) ----
+  // Off by default: divergences from the ICON 1.5 RAW manual.
+  // Enabled by the GM in Configure Settings → System Settings.
   game.settings.register("icon-system", "hrNarrativeDifficultyVariants", {
     name: "House Rule — Heroic / Routine narrative difficulties",
     hint: "If enabled, the narrative-roll prompt lets you choose between Standard, Heroic (harder) and Routine (easier). House rule: the RAW manual only provides the Standard difficulty.",

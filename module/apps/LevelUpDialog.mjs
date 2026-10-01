@@ -54,6 +54,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
     // Wizard state
     this._stage = 1;          // 1 = review & forks, 2 = pickers
     this._savedFormData = {}; // stage-1 values captured on "Next" for re-population + submission
+    this._stage2FormData = null; // stage-2 picks saved on "← Back", put back on the next "Next →"
   }
 
   static DEFAULT_OPTIONS = {
@@ -845,9 +846,33 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       if (name === "jobChoice") syncJobChoice();
       else { syncNarrative(); syncAp(); }
     });
+    if (this._stage === 2) this.#restoreStage2(html);
     syncJobChoice();
     syncNarrative();
     syncAp();
+  }
+
+  /**
+   * Put back the stage-2 picks saved by "← Back" (`_stage2FormData`): the
+   * page is rebuilt from scratch on every render, so without this the action
+   * improvements, abilities, talents, mastery, relic and bond power all reset
+   * when the player goes back to stage 1 and forward again. Only fields that
+   * still exist are touched: changing the new job in stage 1 can change the
+   * ability list, and picks that no longer apply are simply dropped.
+   */
+  #restoreStage2(html) {
+    const saved = this._stage2FormData;
+    if (!saved || !Object.keys(saved).length) return;
+    const values = name => [saved[name]].flat().filter(v => v != null).map(String);
+    let restored = 0;
+    for (const el of html.querySelectorAll("input[name], select[name], textarea[name]")) {
+      if (el.type === "hidden" || !(el.name in saved)) continue;
+      const vals = values(el.name);
+      if (el.type === "checkbox" || el.type === "radio") el.checked = vals.includes(el.value);
+      else el.value = vals[0] ?? "";
+      restored++;
+    }
+    _log(`restored ${restored} stage-2 fields`);
   }
 
   /**
@@ -857,6 +882,12 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
    */
   _captureForm() {
     if (!this.element) return;
+    this._savedFormData = this.#readForm();
+    _log(`captured form:`, this._savedFormData);
+  }
+
+  /** The form's current values as { name: value | value[] }. */
+  #readForm() {
     const fd = new FormData(this.element);
     const data = {};
     for (const [k, v] of fd.entries()) {
@@ -864,8 +895,7 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
       else if (Array.isArray(data[k])) data[k].push(v);
       else data[k] = [data[k], v];
     }
-    this._savedFormData = data;
-    _log(`captured form:`, data);
+    return data;
   }
 
   /** "Next →" — save stage-1 form values and advance to stage 2. */
@@ -880,6 +910,14 @@ export class LevelUpDialog extends HandlebarsApplicationMixin(ApplicationV2) {
   /** "← Back" — return to stage 1; previous values are re-applied on render. */
   static async #onPrevStage(event, target) {
     event.preventDefault();
+    // Keep the stage-2 picks for when the player comes forward again. A
+    // checkbox group with nothing ticked is absent from FormData: record it
+    // as empty so the restore unticks it.
+    const picks = this.#readForm();
+    for (const el of this.element?.querySelectorAll("input[type=checkbox][name], input[type=radio][name]") ?? []) {
+      if (!(el.name in picks)) picks[el.name] = [];
+    }
+    this._stage2FormData = picks;
     this._stage = 1;
     _log(`return to stage 1`);
     await this.render();
