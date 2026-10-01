@@ -5528,6 +5528,8 @@ ol.chat-log .chat-message,
   border-left: 4px solid var(--class-color, var(--ic-border-vis)); opacity: .6; font: inherit; line-height: 1.15; text-align: left;
   transition: background .15s, opacity .15s, box-shadow .15s;
 }
+.icon-encounter__pc[hidden] { display: none; }
+.icon.encounter-designer input.icon-encounter__pc-search { width: 100%; margin: 0 0 6px; }
 .icon-encounter__pc:hover { background: var(--ic-bg-hover); opacity: .9; }
 .icon-encounter__pc--on { opacity: 1; color: var(--ic-text-bright); background: rgba(200,150,28,.14); border-color: var(--ic-gold); box-shadow: inset 0 0 0 1px var(--ic-gold); }
 .icon-encounter__pc img { width: 30px; height: 30px; object-fit: cover; border-radius: var(--ic-radius-sm); border: 1px solid var(--ic-border-subtle); background: #000; }

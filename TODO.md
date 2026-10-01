@@ -225,7 +225,7 @@ Dettagli nel CHANGELOG; test in PLAYTEST.md "Sessione 13".
 
 ## Debug del 20 settembre 2026 — emerso lavorando (da valutare in un blocco futuro)
 
-- [ ] **Filtro nella lista PG dell'Encounter Designer** (S): con ~40 attori di tipo PG nel mondo (schede usate come
+- [x] **Filtro nella lista PG dell'Encounter Designer** (S) — FATTO 1 ottobre 2026 (1.12.0): casella di ricerca, chi è nel party resta visibile: con ~40 attori di tipo PG nel mondo (schede usate come
       segnapunti) la lista dei ritratti ora scorre, ma trovare i 4 giocatori veri resta scomodo. Una casella di
       ricerca come quella del roster, o un ordinamento "prima i selezionati", renderebbe il passo 1 più rapido.
       Oggi si tira via con i bottoni "On scene" / "All".

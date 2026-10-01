@@ -10,9 +10,13 @@
     <button type="button" class="icon-btn icon-btn--sm" data-action="partyAll" title="Select every PC of the world">All</button>
   </div>
 
+  {{#if (icon-gt pcs.length 6)}}
+    <input type="search" name="pcSearch" class="icon-encounter__pc-search" value="{{state.pcSearch}}"
+           placeholder="Find a PC by name or job (the ones in the party always stay listed)…" autocomplete="off">
+  {{/if}}
   <div class="icon-encounter__pcs">
     {{#each pcs}}
-      <button type="button" class="icon-encounter__pc icon-class--{{cls}} {{#if selected}}icon-encounter__pc--on{{/if}}" data-action="togglePc" data-pc-id="{{id}}" title="{{#if selected}}In the party — click to remove{{else}}Click to add to the party{{/if}}">
+      <button type="button" class="icon-encounter__pc icon-class--{{cls}} {{#if selected}}icon-encounter__pc--on{{/if}}" data-action="togglePc" data-pc-id="{{id}}" data-search="{{search}}" title="{{#if selected}}In the party — click to remove{{else}}Click to add to the party{{/if}}">
         <img src="{{img}}" alt="">
         <span class="icon-encounter__pc-text">
           <span class="icon-encounter__pc-name">{{name}}</span>
@@ -22,6 +26,7 @@
     {{else}}
       <p class="icon-wizard__empty">No player characters in this world yet.</p>
     {{/each}}
+    <p class="icon-wizard__empty" data-role="pc-empty" hidden>No PC matches the search.</p>
   </div>
 
   <div class="icon-encounter__rules">

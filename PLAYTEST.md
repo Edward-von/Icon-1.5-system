@@ -1613,6 +1613,10 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Aura con il GM su un'altra scena**: GM su scena A, giocatore su scena B con un'aura piazzata → il
       giocatore muove il token → l'aura lo segue.
 
+- [ ] **Ricerca PG nell'Encounter Designer** (mondo con più di 6 PG): scrivere parte di un nome o di un lavoro →
+      restano i PG che corrispondono più quelli già nel party; cliccare un PG non svuota la ricerca; testo che
+      non trova niente → "No PC matches the search" solo se nessuno è nel party. Con 6 PG o meno la casella non c'è.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [x] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

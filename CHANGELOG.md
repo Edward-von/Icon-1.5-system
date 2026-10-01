@@ -45,6 +45,11 @@
   schermo → l'aura restava indietro ogni volta che il GM era su un'altra scena mentre un giocatore si muoveva → il
   calcolo usa ora la griglia della scena del token, qualunque scena il GM stia guardando.
 
+- **Ricerca nella lista PG dell'Encounter Designer** (TODO del 20 settembre): con decine di schede PG nel mondo
+  trovare i giocatori veri nel passo 1 era scomodo → sopra i ritratti c'è una casella di ricerca (per nome o
+  lavoro), che compare quando i PG sono più di 6. Chi è già nel party resta sempre in lista, e il testo cercato
+  resta anche quando si aggiunge o toglie un PG.
+
 ### Chiuso senza lavoro
 
 - FAQ: le quattro risposte riformulate vanno bene perché vengono dal manuale. Gli otto fix del 30 agosto sono

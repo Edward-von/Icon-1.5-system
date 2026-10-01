@@ -114,6 +114,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     return {
       name:       "",
       partyIds:   null,          // null → initialise from the scene on first prepare
+      pcSearch:   "",            // party step: filter the PC list by name / job
       oneFight:   false,
       adjust:     0,
       chapterCap: 0,             // 0 = auto (highest chapter in the party)
@@ -337,7 +338,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       totals,
       cap,
       capAuto:  !this.enc.chapterCap,
-      pcs:      this._pcs.map(pc => ({ ...pc, selected: this.enc.partyIds.has(pc.id) })),
+      pcs:      this._pcs.map(pc => ({ ...pc, selected: this.enc.partyIds.has(pc.id), search: `${pc.name} ${pc.job}`.toLowerCase() })),
       roster:   this._roster,
       rosterCount: this._roster.length,
       worldCount,
@@ -380,6 +381,14 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
   }
 
   #bindParty(el) {
+    // Worlds keep dozens of PC sheets (NPC stand-ins, retired characters):
+    // the search narrows the list without a re-render, so the box keeps focus.
+    const search = el.querySelector('[name="pcSearch"]');
+    search?.addEventListener("input", () => {
+      this.enc.pcSearch = search.value;
+      this.#applyPcFilter(el);
+    });
+    this.#applyPcFilter(el);
     el.addEventListener("change", ev => {
       const t = ev.target;
       if (t.name === "oneFight") { this.enc.oneFight = !!t.checked; this.#refresh(); }
@@ -439,6 +448,23 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     el.addEventListener("change", ev => {
       if (ev.target.name === "addParty") this.enc.addParty = !!ev.target.checked;
     });
+  }
+
+  /**
+   * Party step: show the PCs whose name or job contains the search text. The
+   * ones already in the party always stay visible, so a search never hides
+   * who is fighting.
+   */
+  #applyPcFilter(el) {
+    const q = (this.enc.pcSearch ?? "").trim().toLowerCase();
+    let shown = 0;
+    for (const btn of el.querySelectorAll("[data-pc-id]")) {
+      const ok = !q || this.enc.partyIds?.has(btn.dataset.pcId) || (btn.dataset.search ?? "").includes(q);
+      btn.hidden = !ok;
+      if (ok) shown++;
+    }
+    const empty = el.querySelector('[data-role="pc-empty"]');
+    if (empty) empty.hidden = shown > 0;
   }
 
   /**
