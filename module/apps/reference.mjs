@@ -386,9 +386,13 @@ export function onShowReferenceControl(event) {
  */
 export function showReferenceGuide({ tab } = {}) {
   const active = TABS.some(t => t.id === tab) ? tab : lastTab;
+  // A string content goes through foundry.utils.cleanHTML, which strips the
+  // inline <svg> of the area pictures; a bare <div> is taken as-is.
+  const content = document.createElement("div");
+  content.innerHTML = referenceHTML(active);
   return foundry.applications.api.DialogV2.prompt({
     window:  { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open" },
-    content: referenceHTML(active),
+    content,
     position: { width: 680 },
     render: (_event, dialog) => {
       const root = dialog?.element ?? dialog?.window?.content ?? null;

@@ -1555,6 +1555,8 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       svuota.
 - [ ] **Ultima scheda**: chiudere la guida su FAQ e riaprirla (dalla scheda PG o dal 📖) → si riapre su FAQ.
 - [ ] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
+- [ ] **Disegni presenti** (fix del 1 ottobre pomeriggio): in Areas ogni riquadro ha la sua griglia disegnata tra
+      il titolo e il testo (prima c'erano solo titolo e testo).
 - [ ] **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
       Aura 2) disposti in griglia senza scroll orizzontale; caselle che si accendono in sequenza e ricominciano;
       la casella d'attacco dei Blast e del Burst target è evidenziata; il Large Blast è una croce di 13 caselle

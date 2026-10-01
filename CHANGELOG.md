@@ -10,6 +10,9 @@
   stesse funzioni e gli stessi colori del piazzamento sulla mappa, quindi non possono essere diversi da quello che si
   vede al tavolo; la casella d'attacco (Blast, Burst) è evidenziata, il raggio d'azione è in giallo tenue. Chi ha
   chiesto al sistema operativo di ridurre le animazioni le vede ferme.
+- **Disegni delle aree che non comparivano** (segnalato da Edoardo il pomeriggio stesso): nella scheda Areas si
+  vedevano solo titoli e testi → la guida passava il contenuto a Foundry come testo, e Foundry lo "ripulisce"
+  togliendo i disegni SVG → ora il contenuto gli arriva già costruito, e Foundry lo lascia com'è.
 - **FAQ dei casi limite**: 11 domande e risposte di Maar in fondo alla guida, ognuna con la pagina del manuale. Le
   ho controllate tutte sul PDF: le pagine sono giuste. Quattro risposte sono riformulate per stare al testo del libro:
   ordine del danno (le aggiunte dell'attaccante vengono **prima**, non "nell'ordine che si preferisce", p.106); il
