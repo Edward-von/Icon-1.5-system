@@ -63,6 +63,13 @@
       "content": "Rolls, abilities, traits and relics are posted here as cards.\nAttack and damage cards list your <strong>targeted</strong> tokens. A damage card has an <strong>Apply</strong> button per target that takes Armor, Vigor, Cover and Resistance into account for you."
     },
     {
+      "id": "house-rules",
+      "selector": "",
+      "restricted": true,
+      "title": "House rules",
+      "content": "<strong>GM only.</strong> ICON 1.5 plays by the book by default. The optional rules (Dust to heal Burdens, Heroic / Routine rolls) are in Configure Settings → ICON 1.5; the <strong>House Rules</strong> tour walks you through them."
+    },
+    {
       "id": "outro",
       "selector": "",
       "title": "Next steps",

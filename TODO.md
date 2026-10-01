@@ -322,8 +322,15 @@ Emerso lavorando (da fare in blocchi futuri):
       (scheda PG tab per tab, apre la scheda da solo), *Combat* (tracker, attivazioni, slow turn, Resolve,
       status, Apply). Codice in `module/apps/tours.mjs`, passi in `tours/*.json`.
 - [x] Bottone **Take the tour** nella guida di benvenuto.
+- [x] Quarto tour **House Rules** (solo GM, chiesto lo stesso giorno): apre Configure Settings → ICON 1.5 ed
+      evidenzia Party Resolve +1 (RAW), Dust per i Burden, Heroic/Routine.
 
 Emerso (da valutare in un blocco futuro):
+- [ ] **Dust sui Burden: è davvero una house rule?** Il suggerimento dell'impostazione `hrInterludeDustHealing`
+      dice "in RAW la Dust per segmento esiste solo per le Ambition", ma il manuale non è coerente: p.42 (Heal
+      Burdens / Pursue Ambitions) cita i 2 Dust per segmento solo per le Ambition, mentre l'elenco degli usi della
+      Dust a p.242 dice "ambition or burden clock (2 dust for 1 tick)". Decidere con Maar se lasciarla opzionale
+      (e correggere il testo del suggerimento) o renderla RAW. Il tour lo spiega già così. (S)
 - [ ] Tour per il GM sugli strumenti dei foe (Foe/Legend sheet, Encounter Designer aperto, Clock Board). (M)
 - [ ] I testi dei tour sono in inglese hardcoded come il resto: se un giorno si localizza, spostarli in
       `lang/en.json` (il formato dei tour accetta già chiavi di traduzione). (S)

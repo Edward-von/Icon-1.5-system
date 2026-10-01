@@ -1515,11 +1515,11 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 ## Tour guidati (1 ottobre 2026, versione 1.10.0)
 
-- [ ] **Elenco**: Settings → Tours mostra una sezione "ICON 1.5" con tre tour (First Steps, The Character Sheet,
-      Combat); console senza errori `Tour "..." failed to register`.
-- [ ] **First Steps** da GM: tutti gli 8 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
+- [ ] **Elenco**: Settings → Tours mostra una sezione "ICON 1.5" con quattro tour per il GM (First Steps, The
+      Character Sheet, Combat, House Rules) e tre per i giocatori; console senza errori `Tour "..." failed to register`.
+- [ ] **First Steps** da GM: tutti i 9 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
       apre da sola su Actors, Compendium, Combat, Chat; il passo "Encounter Designer" evidenzia il bottone.
-- [ ] **First Steps** da giocatore: il passo "Encounter Designer" non compare (7 passi invece di 8).
+- [ ] **First Steps** da giocatore: i passi "Encounter Designer" e "House rules" non compaiono (7 passi invece di 9).
 - [ ] **First Steps** con la sidebar chiusa e senza scena attiva: nessun passo blocca il tour (quelli senza
       bersaglio compaiono al centro dello schermo).
 - [ ] **The Character Sheet** in un mondo senza PG: il tour non si avvia (bottone non attivo o avviso "Create a
@@ -1535,6 +1535,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Guida di benvenuto** (❔ Guide in Notes → Character Management): bottone **Take the tour** avvia First Steps;
       **Got it** chiude come prima.
 - [ ] **Macro/console**: `game.icon.startTour("combat")` riparte da capo il tour Combat.
+- [ ] **House Rules** da GM: si apre Configure Settings direttamente sulla sezione ICON 1.5; i passi evidenziano
+      una per una le tre impostazioni (Party Resolve +1, Dust to heal Burdens, Heroic / Routine).
+- [ ] **House Rules** con Configure Settings già aperto su un'altra sezione (es. Core): il tour passa da solo a
+      ICON 1.5.
+- [ ] **House Rules** da giocatore: non compare in Settings → Tours; `game.icon.startTour("house-rules")` mostra
+      l'avviso "This tour is for the GM only."
+- [ ] **First Steps** da GM: il passo "House rules" sta prima di "Next steps" e rimanda al tour House Rules.
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 

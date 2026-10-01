@@ -11,6 +11,11 @@
   alternati p.87, attivazioni, slow turn, Party Resolve p.99, pannello degli status, Apply del danno). Se un elemento
   non c'è (niente combat in corso, PG senza Limit Break, sidebar chiusa) il passo ripiega su un riquadro più grande o
   compare al centro, invece di interrompere il tour come fa Foundry di serie.
+- **Tour House Rules** (solo GM, chiesto lo stesso giorno): apre da solo Configure Settings sulla sezione ICON 1.5 e
+  spiega una per una le regole opzionali: Party Resolve +1 a round (che è RAW, p.99, ed è acceso di serie), Dust per
+  curare i Burden nell'Interlude, tiri Heroic / Routine. Per la Dust il tour dice che il manuale non è coerente
+  (p.42 contro p.242) invece di ripetere che non è RAW. Il tour First Steps ha un passo in più, solo per il GM, che
+  rimanda qui.
 - **Take the tour** nella guida di benvenuto (quella del primo avvio e del bottone ❔ Guide) avvia il primo tour.
 
 ## 30 settembre 2026 — Tab separate davvero, nomi dei tipi (versione 1.9.1)

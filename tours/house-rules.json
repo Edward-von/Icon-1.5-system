@@ -1,0 +1,56 @@
+{
+  "title": "ICON 1.5 — House Rules",
+  "description": "GM only. The optional rules of the system: where to turn them on and what they change at the table.",
+  "restricted": true,
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "House rules",
+      "content": "ICON 1.5 follows the book (RAW) by default. A few optional rules can be turned on for your table: this tour shows where they are and what each one changes.\nThey are world settings, so only the GM can change them, and they apply to everyone."
+    },
+    {
+      "id": "settings",
+      "selector": ".tab[data-tab='system']",
+      "settingsTab": "system",
+      "tooltipDirection": "LEFT",
+      "title": "Where they live",
+      "content": "<strong>Game Settings → Configure Settings → ICON 1.5</strong>. The rules marked <em>House Rule</em> are off until you tick them; press <strong>Save Changes</strong> at the bottom to apply."
+    },
+    {
+      "id": "party-resolve",
+      "selector": ".form-group:has([name$='hrPartyResolveAutoIncrement'])",
+      "fallback": ".tab[data-tab='system']",
+      "settingsTab": "system",
+      "tooltipDirection": "LEFT",
+      "title": "Party Resolve +1 per round",
+      "content": "Not a house rule: this is the book (p.99), so it starts <strong>on</strong>. At the start of every round Party Resolve goes up by 1 and every PC sheet follows.\nTurn it off only if your table prefers to track Resolve by hand with the − / + in the combat tracker."
+    },
+    {
+      "id": "dust-healing",
+      "selector": ".form-group:has([name$='hrInterludeDustHealing'])",
+      "fallback": ".tab[data-tab='system']",
+      "settingsTab": "system",
+      "tooltipDirection": "LEFT",
+      "title": "Dust to heal Burdens",
+      "content": "During an Interlude each character unticks 3 Burden segments (p.42). With this rule on, the <strong>Interlude</strong> macro also asks how many extra segments to heal at <strong>2 Dust each</strong>.\nThe book is not consistent here: p.42 lists the 2-Dust trade only for Ambition clocks, the Dust list on p.242 names Burden clocks too. Turn it on if your table reads it the p.242 way."
+    },
+    {
+      "id": "difficulty",
+      "selector": ".form-group:has([name$='hrNarrativeDifficultyVariants'])",
+      "fallback": ".tab[data-tab='system']",
+      "settingsTab": "system",
+      "tooltipDirection": "LEFT",
+      "title": "Heroic and Routine rolls",
+      "content": "The book has one result table for narrative rolls: 1-3 fail, 4-5 partial, 6 success. With this rule on, the narrative roll dialog gets a <strong>Roll Type</strong> menu:\n<strong>Heroic</strong> (harder): 1-4 fail, 5 partial, 6 success.\n<strong>Routine</strong> (easier): 1-2 fail, 3-4 partial, 5-6 success.\nThe chat card shows which type was rolled."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "Changing your mind",
+      "content": "You can switch these on and off at any time, even mid-campaign: nothing on the characters changes, only how the next roll or Interlude works.\nTell your players which ones you use — they don't see this page."
+    }
+  ]
+}

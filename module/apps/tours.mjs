@@ -12,6 +12,8 @@
  *   control     activate a scene control group ("tokens") before the step
  *   sheetTab    open the tour's character sheet on that tab; `selector` is
  *               then looked up inside the sheet
+ *   settingsTab open Configure Settings on that category ("system" for the
+ *               ICON 1.5 settings); `selector` is then looked up inside it
  *   fallback    selector to highlight when `selector` matches nothing (an
  *               empty combat, a character without a Limit Break, ...)
  * A step whose target is missing and has no usable fallback is shown centred
@@ -27,6 +29,7 @@ const TOURS = [
   { id: "welcome",         file: "welcome.json" },
   { id: "character-sheet", file: "character-sheet.json", requiresCharacter: true },
   { id: "combat",          file: "combat.json" },
+  { id: "house-rules",     file: "house-rules.json" },
 ];
 
 /**
@@ -45,8 +48,8 @@ export class IconTour extends foundry.nue.Tour {
   /** Set on tours that need a player character (the sheet tour). */
   requiresCharacter = false;
 
-  /** The character sheet opened by `sheetTab` steps. */
-  #sheet = null;
+  /** The window the current step looks its selector up in (character sheet or settings). */
+  #app = null;
 
   /** True while the current step is being shown centred because its target is missing. */
   #centred = false;
@@ -58,6 +61,11 @@ export class IconTour extends foundry.nue.Tour {
 
   /** @override */
   async start() {
+    // Settings → Tours already hides GM-only tours from players; this covers game.icon.startTour().
+    if (this.config.restricted && !game.user.isGM) {
+      ui.notifications.warn("This tour is for the GM only.");
+      return;
+    }
     if (this.requiresCharacter && !tourCharacter()) {
       ui.notifications.warn("Create a player character first (Actors tab → Create Actor → Player Character), then start this tour again.");
       return;
@@ -80,14 +88,13 @@ export class IconTour extends foundry.nue.Tour {
       ui.controls.activate({ control: step.control, tool: step.tool });
     }
 
+    this.#app = null;
     if (step.sheetTab) {
-      const actor = tourCharacter();
-      if (actor) {
-        this.#sheet = actor.sheet;
-        if (!this.#sheet.rendered) await this.#sheet.render({ force: true });
-        this.#sheet.bringToFront?.();
-        if (this.#sheet.tabGroups?.primary !== step.sheetTab) this.#sheet.changeTab(step.sheetTab, "primary");
-      }
+      const sheet = tourCharacter()?.sheet;
+      if (sheet) this.#app = await this.#openOnTab(sheet, step.sheetTab, "primary");
+    }
+    else if (step.settingsTab) {
+      this.#app = await this.#openOnTab(game.settings.sheet, step.settingsTab, "categories");
     }
 
     // Let the DOM settle (sidebar slide, sheet render) before measuring the target.
@@ -95,13 +102,24 @@ export class IconTour extends foundry.nue.Tour {
   }
 
   /**
-   * Look the selector up inside the open sheet for sheet steps, fall back to
+   * Render an application (if closed), bring it to the front and switch it to a tab.
+   * @returns {Promise<foundry.applications.api.ApplicationV2>}
+   */
+  async #openOnTab(app, tab, group) {
+    if (!app.rendered) await app.render({ force: true });
+    app.bringToFront?.();
+    if (app.tabGroups?.[group] !== tab) app.changeTab(tab, group);
+    return app;
+  }
+
+  /**
+   * Look the selector up inside the open sheet or settings window for sheet steps, fall back to
    * `step.fallback`, and as a last resort show the step centred.
    * @override
    */
   _getTargetElement(selector) {
     const step = this.currentStep;
-    const root = (step.sheetTab && this.#sheet?.element) ? this.#sheet.element : document;
+    const root = this.#app?.element ?? document;
     // getClientRects is empty for display:none (closed sidebar tabs), but not for fixed panels.
     const visible = el => !!el && el.getClientRects().length > 0;
     let el = root.querySelector(selector);
@@ -153,7 +171,7 @@ export async function registerIconTours() {
   }
 }
 
-/** Start one of the system's tours by id ("welcome", "character-sheet", "combat"). */
+/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "house-rules"). */
 export function startIconTour(id = "welcome") {
   const tour = game.tours.get(`${NAMESPACE}.${id}`);
   if (!tour) return ui.notifications.warn(`Tour "${id}" is not available.`);
