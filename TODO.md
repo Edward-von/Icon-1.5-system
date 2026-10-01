@@ -333,6 +333,8 @@ Testo originale: "Expansion / Further attention being brought to the quick-guide
       Tutte confermate; quattro risposte riformulate col testo del libro (vedi CHANGELOG 1.11.0).
 
 Emerso (da valutare in un blocco futuro):
+- [ ] Colori del piazzamento delle aree **sulla mappa** (`AREA_COLORS` in area-templates.mjs): sono gli stessi
+      arancio/rosso/blu accesi tolti dai disegni della guida. Valutare se smorzarli anche lì. (S)
 - [ ] Dire a Maar le quattro riformulazioni delle FAQ (danno, engagement, remove-and-place, "(+)" come boon), nel
       caso non sia d'accordo. (S)
 

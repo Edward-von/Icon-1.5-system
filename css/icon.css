@@ -5815,17 +5815,26 @@ ol.chat-log .chat-message,
 .icon-area-grid { fill: #15120d; stroke: #3a3528; stroke-width: 1; }
 .icon-area-range { fill: rgba(232,184,40,.12); stroke: rgba(232,184,40,.25); stroke-width: 1; }
 .icon-area-user { fill: #2a3549; stroke: var(--ic-gold-bright); stroke-width: 2; }
-.icon-area-cell { opacity: 0; fill-opacity: .7; animation: icon-area-place 4s ease-out infinite both; }
-.icon-area-cell--focus { fill-opacity: 1; stroke: #fff7e0; stroke-width: 1.5; }
-@keyframes icon-area-place {
-  0%   { opacity: 0; }
-  6%   { opacity: 1; }
-  78%  { opacity: 1; }
-  90%  { opacity: 0; }
-  100% { opacity: 0; }
-}
+.icon-area-cell { opacity: 0; stroke: #15120d; stroke-width: 1; animation: none 3.6s step-end infinite both; }
+.icon-area-cell--focus { stroke: #e2d4b0; stroke-width: 1.5; }
+/* One keyframe per wave: wave N switches on 0.22s after wave N-1 (hard cut, no
+   fade), everything clears together at 3s, 0.6s of empty grid, repeat. */
+@keyframes icon-area-wave-0 { 0% { opacity: 0; } 4.17% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w0 { animation-name: icon-area-wave-0; }
+@keyframes icon-area-wave-1 { 0% { opacity: 0; } 10.28% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w1 { animation-name: icon-area-wave-1; }
+@keyframes icon-area-wave-2 { 0% { opacity: 0; } 16.39% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w2 { animation-name: icon-area-wave-2; }
+@keyframes icon-area-wave-3 { 0% { opacity: 0; } 22.5% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w3 { animation-name: icon-area-wave-3; }
+@keyframes icon-area-wave-4 { 0% { opacity: 0; } 28.61% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w4 { animation-name: icon-area-wave-4; }
+@keyframes icon-area-wave-5 { 0% { opacity: 0; } 34.72% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w5 { animation-name: icon-area-wave-5; }
+@keyframes icon-area-wave-6 { 0% { opacity: 0; } 40.83% { opacity: 1; } 83.33% { opacity: 0; } }
+.icon-area-cell--w6 { animation-name: icon-area-wave-6; }
 @media (prefers-reduced-motion: reduce) {
-  .icon-area-cell { animation: none; opacity: 1; }
+  .icon-area-cell { animation: none !important; opacity: 1; }
 }
 .icon-area-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 6px; font-size: .82em; color: #a89878; }
 .icon-area-legend i {
@@ -5833,5 +5842,5 @@ ol.chat-log .chat-message,
 }
 .icon-area-legend__user  { background: #2a3549; border: 2px solid var(--ic-gold-bright); border-radius: 50% !important; }
 .icon-area-legend__range { background: rgba(232,184,40,.12); border: 1px solid rgba(232,184,40,.25); }
-.icon-area-legend__focus { background: #e07a2f; border: 1.5px solid #fff7e0; }
+.icon-area-legend__focus { background: #b0662e; border: 1.5px solid #e2d4b0; }
 .icon-area-note { margin: 7px 0 0; font-size: .85em; color: #a89878; }

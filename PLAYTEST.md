@@ -1557,6 +1557,10 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Macro**: `game.icon.showReferenceGuide({ tab: "areas" })` apre direttamente le aree.
 - [ ] **Disegni presenti** (fix del 1 ottobre pomeriggio): in Areas ogni riquadro ha la sua griglia disegnata tra
       il titolo e il testo (prima c'erano solo titolo e testo).
+- [ ] **Propagazione**: ogni area parte dall'origine (casella d'attacco per i Blast e il Burst target, il PG per i
+      Burst self e l'Aura, la casella accanto al PG per Line e Arc) e si allarga a onde; accensione secca, niente
+      dissolvenze; tutta l'area si spegne nello stesso istante, breve pausa a griglia vuota, poi ricomincia. Colori
+      opachi, non fluo.
 - [ ] **Aree**: 11 riquadri (Small, Medium, Large Blast; Burst 1 target; Burst 1 e 2 self; Line 5; Arc 3, 4, 5;
       Aura 2) disposti in griglia senza scroll orizzontale; caselle che si accendono in sequenza e ricominciano;
       la casella d'attacco dei Blast e del Burst target è evidenziata; il Large Blast è una croce di 13 caselle

@@ -13,6 +13,11 @@
 - **Disegni delle aree che non comparivano** (segnalato da Edoardo il pomeriggio stesso): nella scheda Areas si
   vedevano solo titoli e testi → la guida passava il contenuto a Foundry come testo, e Foundry lo "ripulisce"
   togliendo i disegni SVG → ora il contenuto gli arriva già costruito, e Foundry lo lascia com'è.
+- **Animazione delle aree rifatta** (Edoardo, stesso pomeriggio): le caselle comparivano e sparivano ognuna per
+  conto suo, con dissolvenze e colori accesi semitrasparenti, tipo luci da discoteca → ora l'area si **propaga**
+  dall'origine: anello dopo anello per Blast, Burst e Aura, casella dopo casella per Line e Arc. Ogni onda si accende
+  di colpo, l'area intera resta accesa, poi si spegne tutta insieme e ricomincia. Niente dissolvenze; colori opachi
+  e smorzati (ocra, mattone, ardesia, viola), a piena copertura.
 - **FAQ dei casi limite**: 11 domande e risposte di Maar in fondo alla guida, ognuna con la pagina del manuale. Le
   ho controllate tutte sul PDF: le pagine sono giuste. Quattro risposte sono riformulate per stare al testo del libro:
   ordine del danno (le aggiunte dell'attaccante vengono **prima**, non "nell'ordine che si preferisce", p.106); il
