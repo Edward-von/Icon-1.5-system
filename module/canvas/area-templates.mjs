@@ -859,7 +859,8 @@ export class IconMeasuredTemplate extends foundry.canvas.placeables.MeasuredTemp
  * Register the canvas class and the token-following hooks (call from the
  * init hook). Auras stay glued to their token: when it moves, every area
  * template flagged `followTokenId` for it is shifted by the same number of
- * cells. Runs on the active GM's client only (it can update anyone's template).
+ * cells. Runs on the active GM's client only (it can update anyone's template),
+ * whichever scene that GM is looking at.
  */
 export function registerAreaTemplates() {
   CONFIG.MeasuredTemplate.objectClass = IconMeasuredTemplate;
@@ -869,12 +870,14 @@ export function registerAreaTemplates() {
   });
   Hooks.on("updateToken", async (tokenDoc, changed, options) => {
     if (!options?.iconPrevPos) return;
-    if (!canvas?.ready || game.users.activeGM?.id !== game.user.id) return;
+    if (game.users.activeGM?.id !== game.user.id) return;
     const scene = tokenDoc.parent;
-    if (!scene || scene.id !== canvas.scene?.id) return;
+    if (!scene) return;
     const followers = scene.templates.filter(t => t.flags?.[FLAG_NS]?.followTokenId === tokenDoc.id);
     if (!followers.length) return;
-    const grid = canvas.grid;
+    // The token's own scene grid: the active GM may be looking at another
+    // scene (it used to bail out then, and the aura stayed behind).
+    const grid = scene.grid;
     const half = grid.size / 2;
     // v13: inside updateToken the document still reports the pre-move x/y
     // (the movement is applied by the animation) — read the new spot from `changed`.

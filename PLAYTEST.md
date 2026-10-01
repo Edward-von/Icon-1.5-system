@@ -1607,6 +1607,12 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       restano. Due goblin uguali: l'area del primo non sparisce al turno del secondo. ⏪ indietro di un turno:
       nessuna area cancellata.
 
+- [ ] **Clip delle aree nella guida**: Quick Guide → Areas, 11 riquadri con la registrazione in loop (Small /
+      Medium / Large Blast, Burst 1 target, Burst 1 e 2 self, Line 5, Arc 3 / 4 / 5, Aura 2), testo sotto ognuna,
+      tre per riga. Con "riduci animazioni" del sistema operativo: clip ferme con i comandi del player.
+- [ ] **Aura con il GM su un'altra scena**: GM su scena A, giocatore su scena B con un'aura piazzata → il
+      giocatore muove il token → l'aura lo segue.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [x] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

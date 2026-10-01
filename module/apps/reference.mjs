@@ -1,6 +1,6 @@
 /**
  * reference.mjs — In-system rules reference (the "Quick Guide"): a
- * turn-structure schema, animated pictures of the area patterns
+ * turn-structure schema, screen recordings of the area patterns
  * (area-diagrams.mjs), a searchable glossary of ICON 1.5 combat/narrative
  * keywords (Comeback, Exceed, statuses, triggered effects, resources, …) and
  * an FAQ of table edge cases.
@@ -16,7 +16,7 @@
  * kept in English to match the rest of the in-system UI.
  */
 
-import { areaDiagramsHTML } from "./area-diagrams.mjs";
+import { areaDiagramsHTML, startAreaClips } from "./area-diagrams.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const _log = (...a) => console.debug("[ICON | QuickGuide]", ...a);
@@ -333,6 +333,7 @@ export class QuickGuide extends HandlebarsApplicationMixin(ApplicationV2) {
     _log(`rendered on "${this.tabGroups.primary}"`);
     const input = this.element.querySelector(".icon-guide-search");
     input?.addEventListener("input", () => this.#filter(input.value));
+    startAreaClips(this.element);
   }
 
   /**

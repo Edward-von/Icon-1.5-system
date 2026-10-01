@@ -5333,7 +5333,7 @@ ol.chat-log .chat-message,
 .icon-option--match { border-top-color: var(--ic-gold); }
 
 /* --- Grant cards (level benefits) --- */
-.icon-grant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px; }
+.icon-grant-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
 .icon-grant { display: flex; align-items: center; gap: 8px; padding: 7px 10px; background: rgba(200,150,28,.07); border: 1px solid rgba(200,150,28,.25); border-radius: var(--ic-radius); font-size: .88em; }
 .icon-grant__icon { font-size: 1.25em; flex: 0 0 auto; }
 .icon-grant__value { font-family: var(--ic-display); font-size: 1.35em; color: var(--ic-gold-bright); line-height: 1; }
@@ -5757,7 +5757,7 @@ ol.chat-log .chat-message,
 
 /* ============================================================
    Quick Guide (rules reference) — header button, guide window,
-   animated area pictures (module/apps/area-diagrams.mjs)
+   recorded area clips (module/apps/area-diagrams.mjs)
    ============================================================ */
 
 /* "Quick Guide" pill at the top right of the PC hero band. */
@@ -5844,7 +5844,7 @@ ol.chat-log .chat-message,
 /* Area pictures: one card per pattern. */
 .icon-area-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 8px;
 }
 .icon-area-card {
@@ -5857,36 +5857,7 @@ ol.chat-log .chat-message,
 }
 .icon-area-card__title { color: var(--ic-gold-bright); font-weight: bold; font-size: .95em; margin-bottom: 4px; }
 .icon-area-card__text { margin: 5px 0 0; font-size: .8em; line-height: 1.35; color: var(--ic-text-normal); text-align: left; }
-.icon-area-svg { display: block; max-width: 100%; height: auto; }
-.icon-area-grid { fill: var(--ic-bg-deep); stroke: #2b3342; stroke-width: 1; }
-.icon-area-range { fill: rgba(232,184,40,.12); stroke: rgba(232,184,40,.25); stroke-width: 1; }
-.icon-area-user { fill: #2a3549; stroke: var(--ic-gold-bright); stroke-width: 2; }
-.icon-area-cell { opacity: 0; stroke: var(--ic-bg-deep); stroke-width: 1; animation: none 3.6s step-end infinite both; }
-.icon-area-cell--focus { stroke: #e2d4b0; stroke-width: 1.5; }
-/* One keyframe per wave: wave N switches on 0.22s after wave N-1 (hard cut, no
-   fade), everything clears together at 3s, 0.6s of empty grid, repeat. */
-@keyframes icon-area-wave-0 { 0% { opacity: 0; } 4.17% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w0 { animation-name: icon-area-wave-0; }
-@keyframes icon-area-wave-1 { 0% { opacity: 0; } 10.28% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w1 { animation-name: icon-area-wave-1; }
-@keyframes icon-area-wave-2 { 0% { opacity: 0; } 16.39% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w2 { animation-name: icon-area-wave-2; }
-@keyframes icon-area-wave-3 { 0% { opacity: 0; } 22.5% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w3 { animation-name: icon-area-wave-3; }
-@keyframes icon-area-wave-4 { 0% { opacity: 0; } 28.61% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w4 { animation-name: icon-area-wave-4; }
-@keyframes icon-area-wave-5 { 0% { opacity: 0; } 34.72% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w5 { animation-name: icon-area-wave-5; }
-@keyframes icon-area-wave-6 { 0% { opacity: 0; } 40.83% { opacity: 1; } 83.33% { opacity: 0; } }
-.icon-area-cell--w6 { animation-name: icon-area-wave-6; }
-@media (prefers-reduced-motion: reduce) {
-  .icon-area-cell { animation: none !important; opacity: 1; }
-}
-.icon-area-legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 0 0 8px; font-size: .82em; color: var(--ic-text-dim); }
-.icon-area-legend i {
-  display: inline-block; width: 11px; height: 11px; margin-right: 4px; vertical-align: -1px; border-radius: 2px;
-}
-.icon-area-legend__user  { background: #2a3549; border: 2px solid var(--ic-gold-bright); border-radius: 50% !important; }
-.icon-area-legend__range { background: rgba(232,184,40,.12); border: 1px solid rgba(232,184,40,.25); }
-.icon-area-legend__focus { background: #b0662e; border: 1.5px solid #e2d4b0; }
+.icon-area-clip { display: block; width: 100%; aspect-ratio: 480 / 452; background: var(--ic-bg-deep); border-radius: var(--ic-radius-sm); }
+.icon-area-legend { margin: 0 0 8px; font-size: .85em; color: var(--ic-text-dim); }
+.icon-area-legend__range { color: #7fa6d9; font-weight: 600; }
 .icon-area-note { margin: 8px 0 0; font-size: .85em; color: var(--ic-text-dim); }

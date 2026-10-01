@@ -34,6 +34,17 @@
   o dalla scritta "terrain effect" nel testo dell'abilità. Copie dello stesso foe non si cancellano le aree a
   vicenda. Tornare indietro di un turno nel tracker non cancella niente.
 
+- **Aree della Quick Guide registrate dal vero** (richiesta di Edoardo, stesso giorno): al posto dei disegni
+  animati, ogni area ha una breve registrazione dello schermo di Foundry col piazzamento vero del sistema: il range
+  in blu, l'anteprima che segue il mouse, il clic, i nemici dentro che diventano bersagli. La Line gira col mouse,
+  gli Arc si dipingono una casella alla volta, l'Aura segue il PG mentre si muove. 11 clip WebM in loop, senza
+  audio, circa 30 KB l'una (330 KB in tutto), in `assets/guide/areas/`. Chi ha chiesto al sistema operativo di
+  ridurre le animazioni le vede ferme, con i comandi per farle partire. Approvate una per una da Edoardo.
+- **Le aure non seguivano il token se il GM guardava un'altra scena** (trovato registrando le clip): l'aura viene
+  spostata dal client del GM attivo, che però si fermava se la scena del token non era quella aperta sul suo
+  schermo → l'aura restava indietro ogni volta che il GM era su un'altra scena mentre un giocatore si muoveva → il
+  calcolo usa ora la griglia della scena del token, qualunque scena il GM stia guardando.
+
 ### Chiuso senza lavoro
 
 - FAQ: le quattro risposte riformulate vanno bene perché vengono dal manuale. Gli otto fix del 30 agosto sono
