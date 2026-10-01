@@ -1,0 +1,63 @@
+{
+  "title": "ICON 1.5 — Combat",
+  "description": "How a fight runs in the ICON combat tracker: alternating turns, activations, slow turns, Resolve and statuses.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Combat in ICON",
+      "content": "ICON has no initiative. A player character always goes first (the players choose who), then the GM picks a foe, then a player again, and so on, alternating (p.87).\nThe tracker follows this for you. The tour is clearer with a combat already started, but it works without one too."
+    },
+    {
+      "id": "tracker",
+      "selector": "#combat",
+      "sidebarTab": "combat",
+      "tooltipDirection": "LEFT",
+      "title": "The tracker",
+      "content": "Add tokens to combat from their token HUD, then <strong>Begin Combat</strong>. Every combatant is a row; the ones who still have to act are on top, the spent ones at the bottom."
+    },
+    {
+      "id": "banner",
+      "selector": "#combat .icon-combat-banner",
+      "fallback": "#combat",
+      "sidebarTab": "combat",
+      "tooltipDirection": "LEFT",
+      "title": "Round, side and Party Resolve",
+      "content": "The banner shows the round and whose side picks next (<strong>PC PICKS NEXT</strong> / <strong>NPC PICKS NEXT</strong>).\n<strong>Party Resolve</strong> goes up by 1 at the start of each round and empties when combat ends (p.99); − / + adjust it by hand."
+    },
+    {
+      "id": "activations",
+      "selector": "#combat .icon-activations",
+      "fallback": "#combat",
+      "sidebarTab": "combat",
+      "tooltipDirection": "LEFT",
+      "title": "Taking a turn",
+      "content": "Each row has one pip per activation left: click a pip to start that character's turn, and the stop button to end it.\nFoes and legends with several activations get several pips. The GM's right-click menu can add, remove or undo an activation."
+    },
+    {
+      "id": "slow",
+      "selector": "#combat .icon-slow-btn",
+      "fallback": "#combat",
+      "sidebarTab": "combat",
+      "tooltipDirection": "LEFT",
+      "title": "Slow turns",
+      "content": "A player can skip their turn and take a <strong>slow turn</strong> later in the round instead. <strong>⏸ Slow</strong> marks it, and the character moves after the normal turns."
+    },
+    {
+      "id": "statuses",
+      "selector": "#icon-token-status-hud",
+      "title": "Statuses on the selected token",
+      "content": "Select a token that has statuses and a panel opens at the top right, next to the sidebar, listing them in large type.\nOn tokens you own you can adjust stacks (Blessed, power dice, Vigilance, Elevation) with − / + and remove a status with ×."
+    },
+    {
+      "id": "damage",
+      "selector": "#chat",
+      "sidebarTab": "chat",
+      "tooltipDirection": "LEFT",
+      "title": "Attack, damage, Apply",
+      "content": "Target the enemies, then roll from the sheet. The attack card checks each target's Defense; the damage card has <strong>Apply</strong> and <strong>half</strong> buttons for each target, with Armor, Vigor, Cover and Resistance worked out on the spot.\nStatuses an ability inflicts get their own buttons on the card."
+    }
+  ]
+}

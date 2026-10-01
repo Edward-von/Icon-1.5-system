@@ -1,0 +1,122 @@
+{
+  "title": "ICON 1.5 — The Character Sheet",
+  "description": "A walk through the player character sheet, tab by tab. Needs a player character you own.",
+  "canBeResumed": true,
+  "display": true,
+  "suggestedNextTours": ["icon-system.combat"],
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "sheetTab": "narrative",
+      "title": "Your character sheet",
+      "content": "This tour opens your character sheet and walks through it tab by tab.\nNothing is changed on your character: the tour only shows where things are."
+    },
+    {
+      "id": "header",
+      "selector": ".icon-sheet__header",
+      "sheetTab": "narrative",
+      "tooltipDirection": "DOWN",
+      "title": "Header",
+      "content": "Name, portrait, jobs (the ★ primary job sets your class, base stats, traits and Limit Break), level and chapter.\nA brand-new character shows a <i class='fas fa-wand-magic-sparkles'></i> <strong>Character Setup Wizard</strong> button here until it has a job."
+    },
+    {
+      "id": "tabs",
+      "selector": "nav.tabs",
+      "sheetTab": "narrative",
+      "tooltipDirection": "DOWN",
+      "title": "Tabs",
+      "content": "<strong>Narrative</strong> for life outside the fight, <strong>Combat</strong> for the tactical game, <strong>Conditions</strong> for statuses and saves, <strong>Relics</strong>, and <strong>Notes</strong> with the character management tools."
+    },
+    {
+      "id": "xp",
+      "selector": ".icon-xp-section",
+      "sheetTab": "narrative",
+      "tooltipDirection": "UP",
+      "title": "XP and Level Up",
+      "content": "Click the pips or use − / + to track XP. At <strong>15 XP</strong> press <i class='fas fa-arrow-up'></i> <strong>Level Up</strong>: the wizard offers exactly the choices your new level gives (abilities, talents, masteries, relics, bond powers).\nThe <i class='fas fa-wand-magic-sparkles'></i> wand reopens the creation wizard for a level 0 character."
+    },
+    {
+      "id": "narrative-left",
+      "selector": ".icon-narrative-col--left",
+      "sheetTab": "narrative",
+      "tooltipDirection": "RIGHT",
+      "title": "Bond, Burdens, Ambitions, Gear",
+      "content": "Your Bond and its powers, Burdens and Ambitions (click a clock segment to fill it), Gear Kit, Dust, Effort and Strain."
+    },
+    {
+      "id": "narrative-actions",
+      "selector": ".icon-actions-section",
+      "sheetTab": "narrative",
+      "tooltipDirection": "LEFT",
+      "title": "Narrative Actions",
+      "content": "Your narrative actions and their ratings. Click an action's name to roll it: a dialog asks for difficulty and any extra dice, then the result goes to chat."
+    },
+    {
+      "id": "hp",
+      "selector": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "HP, Vigor and class resources",
+      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens, Aether or power dice."
+    },
+    {
+      "id": "basic-actions",
+      "selector": ".icon-basic-actions",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Basic actions",
+      "content": "Attacks and actions every character has (p.85). <i class='fas fa-dice-d20'></i> rolls the attack against your targets; the range is shown as a reminder."
+    },
+    {
+      "id": "stats",
+      "selector": ".icon-section--stats",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Stats and saves",
+      "content": "Vitality, Defense, Speed, Armor, Fray and your damage die, worked out from your job and level. The save bar rolls a save (1d20, 10+)."
+    },
+    {
+      "id": "abilities",
+      "selector": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Equipped abilities",
+      "content": "Drag abilities into the slots. Click one to see its details, double-click to open it; the buttons on each slot roll the attack or the damage, or post it to chat.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
+    },
+    {
+      "id": "limit-break",
+      "selector": ".icon-section:has(.icon-limit-break)",
+      "fallback": ".icon-section--row",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Limit Break and Resolve",
+      "content": "From level 2 your Limit Break lives here. <strong>Use Limit Break</strong> spends Resolve, any mix of your personal Resolve and the party pool (p.99) — the party pool is shared, so ask your team first."
+    },
+    {
+      "id": "conditions",
+      "selector": ".icon-tab--conditions",
+      "sheetTab": "conditions",
+      "tooltipDirection": "LEFT",
+      "title": "Conditions",
+      "content": "Click a status to apply or remove it; the ones marked <em>auto</em> change your rolls by themselves. Active negative statuses get a <strong>Save</strong> button here."
+    },
+    {
+      "id": "relics",
+      "selector": ".icon-tab--relics",
+      "sheetTab": "relics",
+      "tooltipDirection": "LEFT",
+      "title": "Relics",
+      "content": "Drag relics here from the Relics compendium. Each card shows its rank and lets you upgrade it with Dust."
+    },
+    {
+      "id": "management",
+      "selector": ".icon-notes-section--danger",
+      "fallback": ".icon-tab--notes",
+      "sheetTab": "notes",
+      "tooltipDirection": "UP",
+      "title": "Character Management",
+      "content": "AP, masteries and skill ranks spent against what your levels have earned, with a warning if you overspend. <strong>↻ Refocus</strong> refunds everything so you can rebuild; <strong>❔ Guide</strong> reopens the character building guide."
+    }
+  ]
+}

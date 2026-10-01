@@ -1,0 +1,72 @@
+{
+  "title": "ICON 1.5 — First Steps",
+  "description": "Where the ICON tools live: rules reference, characters, compendiums, combat and chat.",
+  "canBeResumed": true,
+  "display": true,
+  "suggestedNextTours": ["icon-system.character-sheet", "icon-system.combat"],
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Welcome to ICON 1.5",
+      "content": "This short tour shows where the ICON tools are in Foundry.\nUse the arrows at the bottom (or the ← → keys) to move between steps, and the ✕ to leave at any time. You can replay every tour from <strong>Settings → Tours</strong>."
+    },
+    {
+      "id": "reference",
+      "selector": "#scene-controls-tools button[data-tool='iconReference']",
+      "fallback": "#scene-controls",
+      "control": "tokens",
+      "tooltipDirection": "RIGHT",
+      "title": "Rules Reference",
+      "content": "The <i class='fa-solid fa-book'></i> book in the token controls opens the <strong>ICON rules reference</strong>: actions, statuses, tags and keywords, always one click away.\nThe same reference is in the header menu (⋮) of every actor sheet."
+    },
+    {
+      "id": "actors",
+      "selector": "#actors",
+      "sidebarTab": "actors",
+      "tooltipDirection": "LEFT",
+      "title": "Characters",
+      "content": "Player characters, foes, legends, summons and clock boards live in the <strong>Actors</strong> tab.\nTo make a character: <strong>Create Actor → Player Character</strong>, then open it and follow the <i class='fas fa-wand-magic-sparkles'></i> Character Setup Wizard."
+    },
+    {
+      "id": "encounter",
+      "selector": "#actors .icon-encounter-launch",
+      "fallback": "#actors",
+      "sidebarTab": "actors",
+      "tooltipDirection": "LEFT",
+      "restricted": true,
+      "title": "Encounter Designer",
+      "content": "<strong>GM only.</strong> The <i class='fa-solid fa-chess-knight'></i> <strong>Encounter</strong> button builds a fight within the encounter budget (p.292): pick foes, Elites and reserves, then place them on the scene in one go."
+    },
+    {
+      "id": "compendium",
+      "selector": "#compendium",
+      "sidebarTab": "compendium",
+      "tooltipDirection": "LEFT",
+      "title": "Compendiums",
+      "content": "Everything from the book is here, ready to drag: <strong>Jobs</strong>, Bonds and Bond Powers, Gear Kits, Relics, Foes, Legends, Summons, Foe Abilities and the system Macros.\nDrag a Job Template onto a character sheet to give it that job."
+    },
+    {
+      "id": "combat",
+      "selector": "#combat",
+      "sidebarTab": "combat",
+      "tooltipDirection": "LEFT",
+      "title": "Combat Tracker",
+      "content": "ICON has no initiative: sides alternate, and the players choose who goes first (p.87). Each row shows one pip per activation left — click it to take the turn.\nThe <strong>Combat</strong> tour explains the tracker in detail."
+    },
+    {
+      "id": "chat",
+      "selector": "#chat",
+      "sidebarTab": "chat",
+      "tooltipDirection": "LEFT",
+      "title": "Chat Cards",
+      "content": "Rolls, abilities, traits and relics are posted here as cards.\nAttack and damage cards list your <strong>targeted</strong> tokens. A damage card has an <strong>Apply</strong> button per target that takes Armor, Vigor, Cover and Resistance into account for you."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "Next steps",
+      "content": "That's the map. Next, take the <strong>Character Sheet</strong> tour (it needs a player character to exist) and the <strong>Combat</strong> tour.\nAll of them are in <strong>Settings → Tours</strong>, under ICON 1.5."
+    }
+  ]
+}

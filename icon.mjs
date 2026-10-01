@@ -82,6 +82,7 @@ import { showWelcomeGuide } from "./module/apps/welcome.mjs";
 import { registerUpdateNoticeSetting, showUpdateNotice } from "./module/apps/update-notice.mjs";
 import { EncounterDesigner } from "./module/apps/EncounterDesigner.mjs";
 import { showReferenceGuide } from "./module/apps/reference.mjs";
+import { registerIconTours, startIconTour } from "./module/apps/tours.mjs";
 
 /* -------------------------------------------------- */
 /*  Token status HUD (PF2e-style selected-token panel) */
@@ -265,6 +266,7 @@ Hooks.once("init", () => {
     IconCombat,
     showWelcomeGuide,
     showReferenceGuide,
+    startTour: startIconTour,
     placeAreaTemplate,
     areaFromTags,
     deleteAreaTemplates,
@@ -925,6 +927,9 @@ Hooks.on("getSceneControlButtons", (controls) => {
 /* ================================================== */
 
 Hooks.once("setup", async () => {
+
+  // ---- Guided tours (Settings → Tours) ----
+  registerIconTours();
 
   // ---- Pre-load templates ----
   const templates = [

@@ -6,6 +6,8 @@
  * Management section of the PC sheet (the ❔ Guide button → `showHelp` action).
  */
 
+import { startIconTour } from "./tours.mjs";
+
 const GOLD = "#e8b828";
 const H3 = `color:${GOLD};margin:14px 0 4px;font-size:1em;border-bottom:1px solid #3a3528;padding-bottom:3px;`;
 
@@ -30,6 +32,7 @@ const WELCOME_HTML = `
 
   <p style="margin:14px 0 0;font-size:.85em;color:#a89878;border-top:1px solid #3a3528;padding-top:8px">
     💡 You can reopen this guide any time from the <strong>❔ Guide</strong> button in the <em>Character Management</em> section (Notes tab).
+    For a guided walk through the interface, press <strong>Take the tour</strong> below, or open <strong>Settings → Tours</strong>.
   </p>
 </div>`;
 
@@ -38,11 +41,16 @@ const WELCOME_HTML = `
  * @returns {Promise<unknown>}
  */
 export function showWelcomeGuide() {
-  return foundry.applications.api.DialogV2.prompt({
+  return foundry.applications.api.DialogV2.wait({
     window:  { title: "ICON 1.5 — How to Build Your Character", icon: "fa-solid fa-wand-magic-sparkles" },
     content: WELCOME_HTML,
     position: { width: 660 },
-    ok: { label: "Got it", icon: "fa-solid fa-check", callback: () => true },
+    buttons: [
+      { action: "tour", label: "Take the tour", icon: "fa-solid fa-route" },
+      { action: "ok",   label: "Got it",        icon: "fa-solid fa-check", default: true },
+    ],
     rejectClose: false,
+  }).then(choice => {
+    if (choice === "tour") return startIconTour("welcome");
   }).catch(() => {});
 }

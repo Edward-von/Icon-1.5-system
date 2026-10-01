@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 1 ottobre 2026 — Tour guidati (versione 1.10.0)
+
+### Novità
+
+- **Tour guidati dell'interfaccia** (richiesta di Edoardo): Foundry ha già un sistema di "tour" (Settings → Tours)
+  che evidenzia un pezzo dello schermo alla volta con un fumetto di spiegazione, ma il sistema non ne aveva → tre tour
+  nella sezione "ICON 1.5": **First Steps** (Rules Reference, Actors, Encounter Designer per il GM, compendi, tracker,
+  chat), **The Character Sheet** (apre da solo la scheda del proprio PG e la percorre tab per tab), **Combat** (turni
+  alternati p.87, attivazioni, slow turn, Party Resolve p.99, pannello degli status, Apply del danno). Se un elemento
+  non c'è (niente combat in corso, PG senza Limit Break, sidebar chiusa) il passo ripiega su un riquadro più grande o
+  compare al centro, invece di interrompere il tour come fa Foundry di serie.
+- **Take the tour** nella guida di benvenuto (quella del primo avvio e del bottone ❔ Guide) avvia il primo tour.
+
 ## 30 settembre 2026 — Tab separate davvero, nomi dei tipi (versione 1.9.1)
 
 ### Bug

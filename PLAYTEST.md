@@ -1513,6 +1513,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Create Actor**: il menu dei tipi mostra "Clock Board", "Player Character", "Foe", "Legend", "Summon";
       Create Item mostra "Foe Template", "Foe Ability", ecc.
 
+## Tour guidati (1 ottobre 2026, versione 1.10.0)
+
+- [ ] **Elenco**: Settings → Tours mostra una sezione "ICON 1.5" con tre tour (First Steps, The Character Sheet,
+      Combat); console senza errori `Tour "..." failed to register`.
+- [ ] **First Steps** da GM: tutti gli 8 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
+      apre da sola su Actors, Compendium, Combat, Chat; il passo "Encounter Designer" evidenzia il bottone.
+- [ ] **First Steps** da giocatore: il passo "Encounter Designer" non compare (7 passi invece di 8).
+- [ ] **First Steps** con la sidebar chiusa e senza scena attiva: nessun passo blocca il tour (quelli senza
+      bersaglio compaiono al centro dello schermo).
+- [ ] **The Character Sheet** in un mondo senza PG: il tour non si avvia (bottone non attivo o avviso "Create a
+      player character first").
+- [ ] **The Character Sheet** con un PG: la scheda si apre da sola e cambia tab (Narrative → Combat → Conditions →
+      Relics → Notes); ogni passo evidenzia la sezione giusta, anche dopo uno scroll lungo nella tab Combat.
+- [ ] **The Character Sheet** con un PG senza Limit Break: il passo "Limit Break and Resolve" evidenzia la riga
+      Resolve invece di fermarsi.
+- [ ] **Combat** senza combat attivo: i passi del tracker evidenziano la tab Combat intera, il passo degli status
+      compare al centro; con un combat iniziato evidenziano banner, pallini delle attivazioni e "⏸ Slow".
+- [ ] **Tasti ← →** per avanzare/indietreggiare, **✕** per uscire; "Resume" riprende dal passo lasciato.
+- [ ] **Fine First Steps**: Foundry propone di continuare con il tour della scheda.
+- [ ] **Guida di benvenuto** (❔ Guide in Notes → Character Management): bottone **Take the tour** avvia First Steps;
+      **Got it** chiude come prima.
+- [ ] **Macro/console**: `game.icon.startTour("combat")` riparte da capo il tour Combat.
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [ ] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

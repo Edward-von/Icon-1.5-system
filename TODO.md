@@ -315,6 +315,19 @@ Emerso lavorando (da fare in blocchi futuri):
 - [ ] **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Richiesta di Edoardo — 1 ottobre 2026: tour guidati — FATTA il 1 ottobre 2026 (versione 1.10.0)
+
+- [x] **Tour guidati del sistema** (M): usare il framework "Tours" di Foundry (Settings → Tours) per spiegare
+      l'interfaccia di ICON. Fatti tre tour: *First Steps* (dove stanno gli strumenti), *The Character Sheet*
+      (scheda PG tab per tab, apre la scheda da solo), *Combat* (tracker, attivazioni, slow turn, Resolve,
+      status, Apply). Codice in `module/apps/tours.mjs`, passi in `tours/*.json`.
+- [x] Bottone **Take the tour** nella guida di benvenuto.
+
+Emerso (da valutare in un blocco futuro):
+- [ ] Tour per il GM sugli strumenti dei foe (Foe/Legend sheet, Encounter Designer aperto, Clock Board). (M)
+- [ ] I testi dei tour sono in inglese hardcoded come il resto: se un giorno si localizza, spostarli in
+      `lang/en.json` (il formato dei tour accetta già chiavi di traduzione). (S)
+
 ## Richieste di Edoardo — 20 settembre 2026 (wishlist, NON bug)
 
 Mandate come lista di desideri durante la sessione di debug del 20 settembre. Nessuna è stata fatta:
