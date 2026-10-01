@@ -1325,7 +1325,11 @@ con attori ZzT temporanei, una scena e un combat di prova; tutto cancellato alla
 Le voci spuntate qui sotto sono passate. Restano aperte quelle che chiedono un giocatore collegato o un mondo diverso:
 giocatore senza permessi sui template / summon / orologi, tour visti da giocatore, Junk Golem col [D] del foe, popup e
 avviso al vero cambio di versione (Foundry va riavviato per leggere la 1.12.0: in locale diceva ancora 1.11.0), macro
-Interlude (non lanciata: cura e toglie gli status a tutti i PG del mondo), cambio di lavoro al passo 1 del level up.
+cambio di lavoro al passo 1 del level up. Fatte dopo, su richiesta di Edoardo: macro Interlude (copia di tutti i PG prima,
+ripristinati identici dopo: HP pieni, ferite / strain / vigor / Resolve a 0, Effort pieno, status tolti, Burden 0/6 → 4/6
+con 1 segmento comprato a 2 Dust) e nuova abilità con l'AP avanzato (PG con 5 abilità, livello 5 → 6: accettata, 0 AP
+liberi). Nota: il PG "Actor" del mondo locale non rispetta la regola di classe (primaria Enochian, abilità quasi tutte
+Stalwart), quindi il level up lo rifiuta: è la regola, non un difetto.
 
 Difetti trovati e corretti durante il playtest (dettagli nel CHANGELOG 1.12.0):
 - [x] Template di fazione e cultura rifiutati ("foeClass: may not be a blank string") → si applicano.
@@ -1468,7 +1472,7 @@ alla cartella "Foe Summons").
 
 ## AP avanzati spendibili al level up (30 settembre 2026, versione 1.8.3)
 
-- [ ] **Caso di Maar**: PG di livello ≥1 con 1 AP libero (preso a metà barra e non speso; tab Notes "(1 free)"),
+- [x] **Caso di Maar**: PG di livello ≥1 con 1 AP libero (preso a metà barra e non speso; tab Notes "(1 free)"),
       portarlo a 15 XP e fare Level Up verso un livello che non dà AP (es. 2, 3, 6) → nel passo 2 spuntare una
       abilità nuova → Confirm **accetta**, l'abilità è sulla scheda, la tab Notes dice "(0 free)".
 - [x] **Talento con l'AP avanzato**: stesso caso ma scegliendo un Talento invece dell'abilità → accetta.
@@ -1606,7 +1610,7 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 ## Mark, level up, tour GM, aree a tempo (1 ottobre 2026, versione 1.12.0)
 
-- [ ] **Dust sui Burden**: Configure Settings → ICON 1.5, la voce si chiama "Dust to heal Burdens during an
+- [x] **Dust sui Burden**: Configure Settings → ICON 1.5, la voce si chiama "Dust to heal Burdens during an
       Interlude (RAW, p.42)" ed è spuntata in un mondo nuovo; la macro Interlude chiede quanti segmenti in più.
       Tour House Rules: il passo Dust dice che non è una house rule.
 - [x] **Mark che si impilano**: Royal Guard, target su un PG, 🎯 Mark su Battalion of Limbs due volte → in chat
