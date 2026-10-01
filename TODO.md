@@ -357,7 +357,7 @@ Emerso (da valutare in un blocco futuro):
       Dust a p.242 dice "ambition or burden clock (2 dust for 1 tick)". Decidere con Maar se lasciarla opzionale
       (e correggere il testo del suggerimento) o renderla RAW. Il tour lo spiega già così. (S)
 - [x] Tour per il GM sugli strumenti dei foe (Foe/Legend sheet, Encounter Designer aperto, Clock Board). (M) — FATTO 1 ottobre 2026 (1.12.0), tour "Foes & Encounters"
-- [ ] I testi dei tour sono in inglese hardcoded come il resto: se un giorno si localizza, spostarli in
+- [x] (RIMANDATA da Edoardo il 1 ottobre 2026: si fa solo insieme a una traduzione completa del sistema) I testi dei tour sono in inglese hardcoded come il resto: se un giorno si localizza, spostarli in
       `lang/en.json` (il formato dei tour accetta già chiavi di traduzione). (S)
 
 ## Richieste di Edoardo — 20 settembre 2026 (wishlist, NON bug)
