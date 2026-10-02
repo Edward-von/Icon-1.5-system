@@ -306,6 +306,7 @@ function _withStatusLock(actor, fn) {
  * @param {Actor}   actor
  * @param {string}  statusId
  * @param {boolean} [ongoing=false]  Mark as ongoing+ (can't save)
+ * @param {object}  [opts]  { target } for Hatred; { flags } extra icon-system flags on the effect
  */
 export function applyStatus(actor, statusId, ongoing = false, opts = {}) {
   // Hatred asks "of whom?" first — outside the lock, so an open dialog never
@@ -344,6 +345,9 @@ async function _applyStatus(actor, statusId, ongoing = false, opts = {}) {
         ongoing:   ongoing || (def.ongoing ?? false),
         isBoon:    def.isBoon   ?? false,
         isSpecial: def.isSpecial ?? false,
+        // Extra system flags from the caller (tracker-statuses.mjs marks the
+        // statuses it mirrors from a PC's sheet trackers)
+        ...(opts?.flags ?? {}),
       },
     },
   }]);

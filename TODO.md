@@ -315,6 +315,23 @@ Emerso lavorando (da fare in blocchi futuri):
 - [x] (CHIUSO da Edoardo il 1 ottobre 2026: p.302 dice che la Great Culture la applica il GM; nessun Unique la ha nel pack, si aggiunge trascinando il template "Yeokin" da Foe Templates) **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Richiesta di Maar — status doppioni dei tracker (ricevuta il 2 ottobre 2026) — FATTA il 2 ottobre 2026 (versione 1.14.0)
+
+Testo di Maar: "Old status methods of tracking (Vigilance, Power Die, Bonus Damage, Marked, etc) seem redundant with
+current systems in place on the combat sheet … maybe making them hidden from the status menus and tying them directly
+to the player character trackers? This doesn't apply to blessed". Scelte di Edoardo: nascondere solo sui PG (foe e
+legend non hanno tracker), Bonus Damage nascosto anche lui sui PG, il token del PG mostra i valori della scheda.
+File: `module/combat/tracker-statuses.mjs`.
+
+- [x] **Marked nascosto per tutti** (S): c'è il sistema dei mark per abilità (`marks.mjs`), usato anche da foe e legend.
+- [x] **Vigilance, Power Die, Bonus Damage nascosti sui PG** (S): via dalla tavolozza dell'HUD del token e dalla tab
+      Conditions; foe e legend li tengono. Uno status ancora attivo "alla vecchia" resta visibile per poterlo togliere.
+- [x] **Token legato ai tracker** (M): Vigilance e Power Die sul token del PG compaiono/spariscono seguendo i tracker
+      della scheda; nel pannello degli status il numero è quello della scheda (Vigilance con +/−, Power Die solo lettura
+      con i nomi dei dadi). "Gain vigilance" dalle card aggiunge 1 al tracker.
+- [x] **Migrazione 19** (S): i PG con questi status li passano ai tracker (Vigilance, Power Die) o li perdono (Bonus
+      Damage, Marked).
+
 ## Bug di Maar — power die (ricevuti il 2 ottobre 2026) — FATTO il 2 ottobre 2026 (versione 1.13.0)
 
 Testo di Maar: "Ability to add power die onto the combat sheet for ease-of-use" — poi: "this is on the sheet for

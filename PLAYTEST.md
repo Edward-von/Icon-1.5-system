@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [ ] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Status doppioni nascosti sui PG, token legato ai tracker (2 ottobre 2026, versione 1.14.0)
+
+- [ ] **HUD del token, PG**: tasto destro sul token di un PG → tavolozza degli status: niente Vigilance, Power Die, Bonus
+      Damage, Marked; Blessed c'è.
+- [ ] **HUD del token, foe/legend**: Vigilance, Power Die, Bonus Damage ci sono; Marked no.
+- [ ] **Tab Conditions**: PG senza i quattro status e con la frase d'aiuto che rimanda alla tab Combat; foe e legend
+      con Vigilance / Power Die / Bonus Damage, senza Marked.
+- [ ] **Vigilance sul token**: Stalwart, alza la Vigilance in scheda da 0 a 2 → sul token compare l'icona Vigilance;
+      il pannello degli status (token selezionato) dice 2; + e − del pannello cambiano il tracker in scheda; a 0
+      l'icona sparisce dal token.
+- [ ] **Power die sul token**: "+ Die" su un PG qualsiasi → icona Power Die sul token; nel pannello "Power Dice ×N" con
+      i nomi nel tooltip, senza +/− né ×; scartato l'ultimo dado l'icona sparisce.
+- [ ] **Fine combat**: "End encounter" svuota i tracker → le icone Vigilance / Power Die spariscono dai token dei PG.
+- [ ] **Gain vigilance**: card di un'abilità con "gain vigilance" → bottone Gain sul PG → in chat "gains Vigilance +1
+      (now N)", tracker +1 (max 6), nessuno status separato. Da giocatore su un alleato: passa dal GM e funziona uguale.
+- [ ] **Bonus Damage su un foe**: messo dalla tab Conditions del foe, il tiro del danno lo aggiunge e lo consuma come prima.
+- [ ] **Migrazione 19**: un PG che prima dell'aggiornamento aveva Vigilance 3 come status e un Power Die 2 → dopo il
+      caricamento (GM) tracker Vigilance 3 e un "Power die d6" a 2; Bonus Damage e Marked tolti; console "Migration 19".
+- [ ] **Marked vecchio su un foe**: un foe che aveva Marked come status lo vede ancora nella tab Conditions (per
+      toglierlo); tolto, non ricompare.
+
 ## Power die per tutte le classi, Godly Smite (2 ottobre 2026, versione 1.13.0)
 
 - [ ] **Tracker per ogni classe**: tab Combat di un PG Stalwart, uno Vagabond, uno Mendicant e uno Wright → sotto le

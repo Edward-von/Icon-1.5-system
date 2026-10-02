@@ -88,6 +88,7 @@ import { registerIconTours, startIconTour } from "./module/apps/tours.mjs";
 /*  Token status HUD (PF2e-style selected-token panel) */
 /* -------------------------------------------------- */
 import { registerTokenStatusHud } from "./module/apps/token-status-hud.mjs";
+import { registerTrackerStatuses } from "./module/combat/tracker-statuses.mjs";
 
 /* -------------------------------------------------- */
 /*  Canvas — Blast / Line / Arc / Burst templates      */
@@ -359,6 +360,7 @@ Hooks.once("ready", async () => {
   /* Selected-token status panel (top-right, PF2e-style). */
   try {
     registerTokenStatusHud();
+    registerTrackerStatuses();
   } catch (err) {
     console.warn("ICON 1.5 | Token status HUD failed to register:", err);
   }

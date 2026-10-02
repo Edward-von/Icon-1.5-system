@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 2 ottobre 2026 — Status doppioni nascosti sui PG, il token segue i tracker della scheda (versione 1.14.0)
+
+### Richiesta di Maar
+
+- **Status doppioni**: Vigilance, Power Die, Bonus Damage e Marked esistevano sia come status sia nei sistemi della
+  scheda, con due conteggi slegati → ora sui PG Vigilance, Power Die e Bonus Damage spariscono dalla tavolozza
+  dell'HUD del token e dalla tab Conditions (si usano il tracker della tab Combat e il campo "Bonus dice" del dialog
+  del danno); Marked sparisce per tutti, perché i mark per abilità lo sostituiscono. Foe e legend tengono Vigilance,
+  Power Die e Bonus Damage: non hanno un tracker. Blessed resta per tutti.
+- **Token legato alla scheda**: l'icona Vigilance / Power Die sul token del PG compare e sparisce da sola seguendo i
+  tracker; nel pannello degli status i numeri sono quelli della scheda (Vigilance si cambia anche da lì). Il bottone
+  "Gain" di un'abilità che dà vigilance aggiunge 1 al tracker invece di mettere uno status a parte.
+- **Migrazione 19**: i PG che avevano questi status li ritrovano nei tracker (Vigilance, Power Die come "Power die
+  d6"); Bonus Damage e Marked vengono tolti dai PG.
+
 ## 2 ottobre 2026 — Power die per tutte le classi, con nome; Godly Smite ha il suo dado (versione 1.13.0)
 
 ### Bug e richieste di Maar

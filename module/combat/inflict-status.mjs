@@ -16,6 +16,7 @@
  */
 import { applyStatus, hasStatus, getStatusCharges, adjustStatusCharges, toggleOngoing } from "./statuses.mjs";
 import { applyHatred } from "./marks.mjs";
+import { gainPcVigilance } from "./tracker-statuses.mjs";
 import { saveRoll } from "../dice/rolls.mjs";
 import { postAbilityDamageCard } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
@@ -367,6 +368,13 @@ async function _apply({ target, source, statusId, ongoing, label, abilityName, s
 
 /** Apply on a client that owns the target (or the GM), with a chat note. */
 export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "" }) {
+  // A PC keeps Vigilance on the Stalwart tracker ("gain vigilance +1"): add a
+  // charge there; the token status follows the tracker (tracker-statuses.mjs).
+  if (target?.type === "icon" && statusId === "vigilance") {
+    const next = await gainPcVigilance(target, 1);
+    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> gains <strong>Vigilance +1</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+    return;
+  }
   const already = hasStatus(target, statusId);
   if (already) {
     // Already there: an ongoing (+) version upgrades a normal one, otherwise nothing changes.

@@ -18,6 +18,7 @@ import {
 } from "../combat/statuses.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { marksOn, removeMark, getHatred } from "../combat/marks.mjs";
+import { MIRRORED_FOR_PC, pcTrackerValues, gainPcVigilance } from "../combat/tracker-statuses.mjs";
 
 const PANEL_ID = "icon-token-status-hud";
 
@@ -42,6 +43,19 @@ function _statusesFor(actor) {
   for (const def of ICON_STATUSES) {
     if (!actor.statuses.has(def.id)) continue;
     let count = 0;
+    // A PC's Vigilance / Power Die come from the combat tab trackers
+    // (tracker-statuses.mjs): the numbers are the sheet's, Power Die is read-only.
+    if (actor.type === "icon" && MIRRORED_FOR_PC.has(def.id)) {
+      const { vigilance, dice } = pcTrackerValues(actor);
+      if (def.id === "vigilance") {
+        out.push({ id: def.id, name: def.name, img: def.img, count: vigilance, adjustable: true, tracker: true });
+      } else {
+        const names = dice.map(d => `${d.label || "Power die"} d${d.faces ?? 6}: ${d.ticks}`).join(", ");
+        out.push({ id: def.id, name: dice.length === 1 ? names : `Power Dice ×${dice.length}`, img: def.img, count: 0,
+                   adjustable: false, tracker: true, title: `${names} — change them on the character sheet (Combat tab)` });
+      }
+      continue;
+    }
     if (STACKABLE_STATUSES.has(def.id))   count = getStatusCharges(actor, def.id);
     else if (def.id === "elevation")      count = actor.getFlag("icon-system", "elevation") ?? 0;
     // "Hatred of X" carries its target in the effect name (marks.mjs)
@@ -117,6 +131,16 @@ async function _onPanelClick(ev) {
     if (act === "remove") await removeMark(statusId.slice(5)).catch(err => console.error("ICON 1.5 | mark removal failed:", err));
     return;
   }
+  // A PC's Vigilance row drives the Stalwart tracker; the token status follows it.
+  if (actor.type === "icon" && statusId === "vigilance") {
+    const cur = pcTrackerValues(actor).vigilance;
+    try {
+      if (act === "remove")   await actor.update({ "system.combat.classResources.vigilance.value": 0 });
+      else if (act === "inc") await gainPcVigilance(actor, 1);
+      else if (act === "dec") await actor.update({ "system.combat.classResources.vigilance.value": Math.max(0, cur - 1) });
+    } catch (err) { console.error("ICON 1.5 | Token status HUD vigilance failed:", err); }
+    return;
+  }
   const stackable = STACKABLE_STATUSES.has(statusId);
   const elevation = statusId === "elevation";
 
@@ -163,7 +187,7 @@ export function renderTokenStatusHud() {
             ${s.adjustable ? `
               <button type="button" data-act="dec" title="Decrease">−</button>
               <button type="button" data-act="inc" title="Increase">+</button>` : ""}
-            <button type="button" data-act="remove" title="Remove ${escapeHTML(s.name)}">×</button>
+            ${s.tracker && !s.adjustable ? "" : `<button type="button" data-act="remove" title="Remove ${escapeHTML(s.name)}">×</button>`}
           </span>` : "";
         const count = s.adjustable ? `<span class="icon-token-status-hud__count">${s.count}</span>` : "";
         return `

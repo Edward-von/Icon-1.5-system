@@ -25,6 +25,7 @@ import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambit
 import { buildBondKitsNote, expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
+import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES,
          setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
@@ -681,9 +682,10 @@ export class IconSheet extends BaseActorSheet {
     });
     context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
     context.conditions = {
-      negative: markActive(groups.negative),
-      positive: markActive(groups.positive),
-      special:  markActive(groups.special),
+      // Statuses the sheet trackers / marks replace are left out (tracker-statuses.mjs)
+      negative: markActive(visibleStatuses(actor, groups.negative)),
+      positive: markActive(visibleStatuses(actor, groups.positive)),
+      special:  markActive(visibleStatuses(actor, groups.special)),
     };
     // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();

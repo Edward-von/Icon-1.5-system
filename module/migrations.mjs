@@ -19,6 +19,7 @@
  */
 
 import { fillJobTraitPowerDice } from "./data/item/power-die.mjs";
+import { syncTrackerStatuses } from "./combat/tracker-statuses.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "./helpers/advancement.mjs";
 
@@ -27,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 18;
+export const CURRENT_SCHEMA_VERSION = 19;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -724,6 +725,46 @@ const MIGRATIONS = {
       console.log(`ICON 1.5 | Migration 18: "${actor.name}" — power die added to ${docs.filter(d => d.system.powerDie).map(d => d.name).join(", ")}`);
     }
     if (n) console.log(`ICON 1.5 | Migration 18: ${n} job trait(s) given their power die`);
+  },
+
+  /* 19 — a PC's Vigilance and power dice live on the sheet trackers only.
+   * The Vigilance / Power Die / Bonus Damage / Marked statuses are hidden
+   * from PC pickers (tracker-statuses.mjs). Charges a PC still holds as a
+   * status move into the tracker (the larger Vigilance count wins, a Power
+   * Die status becomes an unlabelled d6), Bonus Damage and Marked are
+   * cleared, then the token statuses are rebuilt from the trackers. */
+  19: async () => {
+    const OLD = ["vigilance", "power-die", "bonus-damage", "marked"];
+    let n = 0;
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const charges = actor.getFlag("icon-system", "statusCharges") ?? {};
+      const cr      = actor.system.combat?.classResources ?? {};
+      const update  = {};
+      const notes   = [];
+      const vig = Number(charges.vigilance ?? 0);
+      if (vig > Number(cr.vigilance?.value ?? 0)) {
+        update["system.combat.classResources.vigilance.value"] = Math.min(Number(cr.vigilance?.max ?? 6) || 6, vig);
+        notes.push(`Vigilance ${vig} → tracker`);
+      }
+      const pd = Number(charges["power-die"] ?? 0);
+      if (pd > 0) {
+        const dice = foundry.utils.deepClone(cr.powerDice ?? []);
+        dice.push({ id: foundry.utils.randomID(8), label: "", faces: 6, ticks: Math.min(6, pd) });
+        update["system.combat.classResources.powerDice"] = dice;
+        notes.push(`Power Die ${pd} → tracker`);
+      }
+      for (const id of OLD) if (charges[id] !== undefined) update[`flags.icon-system.statusCharges.-=${id}`] = null;
+      const stale = actor.effects
+        .filter(e => OLD.some(id => e.statuses?.has(id) || e.getFlag("core", "statusId") === id) && !e.getFlag("icon-system", "tracker"))
+        .map(e => e.id);
+      if (stale.length) notes.push(`${stale.length} old status effect(s) removed`);
+      if (stale.length) await actor.deleteEmbeddedDocuments("ActiveEffect", stale);
+      if (Object.keys(update).length) await actor.update(update);
+      await syncTrackerStatuses(actor);
+      if (notes.length) { n++; console.log(`ICON 1.5 | Migration 19: "${actor.name}" — ${notes.join(", ")}`); }
+    }
+    if (n) console.log(`ICON 1.5 | Migration 19: ${n} character(s) moved to the sheet trackers`);
   },
 };
 

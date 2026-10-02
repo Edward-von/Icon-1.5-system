@@ -16,6 +16,7 @@ import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { npcActionStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
+import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
 import { enrichHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
@@ -180,9 +181,10 @@ export class FoeSheet extends BaseActorSheet {
     });
     context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
     context.conditions = {
-      negative: markActive(groups.negative),
-      positive: markActive(groups.positive),
-      special:  markActive(groups.special),
+      // Statuses the sheet trackers / marks replace are left out (tracker-statuses.mjs)
+      negative: markActive(visibleStatuses(actor, groups.negative)),
+      positive: markActive(visibleStatuses(actor, groups.positive)),
+      special:  markActive(visibleStatuses(actor, groups.special)),
     };
     // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();

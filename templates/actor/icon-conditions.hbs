@@ -12,8 +12,9 @@
       Click a condition to apply or remove it. <strong>Right-click</strong> a debuff
       to apply its <strong>+</strong> (ongoing) version — it can't be saved against
       and stays until the source is removed (right-click again to clear). Stackable
-      conditions (Blessed, Power Die, Vigilance, Bonus Damage, Elevation) use <strong>left-click</strong>
-      to add a charge and <strong>right-click</strong> to remove one. The
+      conditions (Blessed, Elevation{{#unless (icon-eq actor.type "icon")}}, Power Die, Vigilance, Bonus Damage{{/unless}}) use <strong>left-click</strong>
+      to add a charge and <strong>right-click</strong> to remove one.{{#if (icon-eq actor.type "icon")}} Vigilance and
+      power dice are kept on the Combat tab, bonus damage in the damage dialog, marks on the ability that made them.{{/if}} The
       <span class="icon-badge icon-badge--primary" style="font-size:.75em">auto</span>
       badge marks conditions that pre-fill boons/curses on attack rolls.
     </p>
