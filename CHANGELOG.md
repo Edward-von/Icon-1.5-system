@@ -1,5 +1,44 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 2 ottobre 2026 — Power die per tutte le classi, con nome; Godly Smite ha il suo dado (versione 1.13.0)
+
+### Bug e richieste di Maar
+
+- **Power die solo sul Wright**: Maar voleva tracciare i power die sulla scheda come vigilance, blessing, aether →
+  il blocco "Power Dice" della tab Combat era scritto dentro la sezione del Wright, quindi le altre classi non lo
+  vedevano e dovevano usare lo status "Power Die" sul token (un numero solo) → ora il blocco c'è per ogni classe,
+  sotto le risorse di classe.
+- **Power die con il nome**: un Knave può avere molti dadi insieme e non si capiva quale fosse quale → ogni dado ha
+  un nome e una dimensione (d4–d12): "+ Die" li chiede insieme al valore di partenza, un clic sul nome li cambia, il
+  dado non sale oltre la sua dimensione e il 🎲 tira il dado giusto. I dadi Wright di prima diventano "Power die d6".
+- **Godly Smite senza dado**: il tratto del Sealer nel compendio ha il suo d6 (p.191), ma quando un PG prende il job i
+  tratti vengono ricopiati dal job template, che conserva solo nome, testo e capitolo → il dado si perdeva per
+  strada. Ora viene preso dal tratto del compendio alla creazione del PG, al drop del job e al cambio di job
+  primario; la migrazione 18 lo aggiunge ai Sealer già esistenti.
+
+## 1 ottobre 2026 — Quick Guide: aree divise per famiglia, origin/attack space, Line con range (versione 1.12.1)
+
+### Novità (richieste di Maar)
+
+- **Burst: origin space e attack space**: le didascalie dei Blast dicevano che il centro è l'attack space, quelle dei
+  Burst non lo dicevano, e per Burst (target) è proprio la cosa da sapere → il manuale (p.97) dà la stessa regola ai
+  due: "The origin space and attack space is the central space". Ora tutte e tre le didascalie Burst lo dicono, i
+  Blast dicono "origin and attack space", Line e Arc dicono che l'attack space è un personaggio qualunque nell'area.
+  La nota in fondo spiega cosa vuol dire (chi è nell'attack space subisce il tiro per colpire e la parte d'attacco,
+  gli altri l'effetto d'area).
+- **Esempio di Line con range**: c'era solo "Line 5" senza range, che parte accanto a chi la usa → nuova clip
+  **Line 4, range 3**, registrata in Foundry come le altre: la linea parte da una casella qualsiasi nel range, che
+  diventa l'origin space (p.97).
+- **Titoletti per famiglia**: le 12 clip erano una griglia unica → ora sono divise sotto piccoli titoli Blast,
+  Burst, Line, Arc, Aura.
+- **Origin / attack space in evidenza** (richiesta di Edoardo, 2 ottobre): scritto solo nelle didascalie piccole si
+  perdeva → sotto ogni titoletto c'è una riga a parte, con bordo oro, che dice quale casella è l'origin e l'attack
+  space di quella famiglia (p.97); per Burst: "the central space — the space or character you pick for Burst
+  (target), you for Burst (self)".
+- **Movimento tutto in una volta**: la scheda Turn non diceva che lo standard move non si spezza → nuova riga nei
+  Limits: se ti fermi per usare un'abilità il movimento finisce e le caselle non usate sono perse (p.88, "Movement
+  can't be broken up").
+
 ## 1 ottobre 2026 — Mark che si impilano, level up, tour del GM, aree che si tolgono da sole (versione 1.12.0)
 
 ### Decisioni di Edoardo

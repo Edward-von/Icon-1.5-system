@@ -18,6 +18,7 @@
  * current schema. World-side compendia created by the GM are swept too.
  */
 
+import { fillJobTraitPowerDice } from "./data/item/power-die.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "./helpers/advancement.mjs";
 
@@ -26,7 +27,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 17;
+export const CURRENT_SCHEMA_VERSION = 18;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -699,6 +700,30 @@ const MIGRATIONS = {
       if (changed) await actor.update({ "system.clocks": clocks });
     }
     if (n) console.log(`ICON 1.5 | Migration 17: ${n} clock(s) given a stable id`);
+  },
+
+  /* 18 — job traits get the power die their pack copy has.
+   * Traits embedded from a job template lost it (the template's trait rows
+   * only hold name, description and chapter), so the Sealer's Godly Smite had
+   * no mantra die on the sheet. New characters get it on creation now
+   * (fillJobTraitPowerDice); this fills it in on the existing ones. */
+  18: async () => {
+    let n = 0;
+    for (const actor of game.actors) {
+      if (actor.type !== "icon") continue;
+      const docs = actor.items
+        .filter(i => i.type === "trait" && i.system?.source === "job" && !(i.system?.powerDie?.faces > 0))
+        .map(i => ({ _id: i.id, type: "trait", name: i.name, system: { source: "job", jobName: i.system.jobName } }));
+      if (!docs.length) continue;
+      await fillJobTraitPowerDice(docs);
+      const updates = docs.filter(d => d.system.powerDie)
+        .map(d => ({ _id: d._id, "system.powerDie": d.system.powerDie }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+      console.log(`ICON 1.5 | Migration 18: "${actor.name}" — power die added to ${docs.filter(d => d.system.powerDie).map(d => d.name).join(", ")}`);
+    }
+    if (n) console.log(`ICON 1.5 | Migration 18: ${n} job trait(s) given their power die`);
   },
 };
 

@@ -315,6 +315,48 @@ Emerso lavorando (da fare in blocchi futuri):
 - [x] (CHIUSO da Edoardo il 1 ottobre 2026: p.302 dice che la Great Culture la applica il GM; nessun Unique la ha nel pack, si aggiunge trascinando il template "Yeokin" da Foe Templates) **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Bug di Maar — power die (ricevuti il 2 ottobre 2026) — FATTO il 2 ottobre 2026 (versione 1.13.0)
+
+Testo di Maar: "Ability to add power die onto the combat sheet for ease-of-use" — poi: "this is on the sheet for
+Wrights, but not other classes. Moving this to a bug." Più Godly Smite del Sealer senza dado, e le etichette.
+
+- [x] **Tracker dei power die per tutte le classi** (S/M): il blocco "Power Dice" della tab Combat stava dentro la
+      sezione del Wright → ora è un blocco a sé, sotto le risorse di classe, per ogni classe.
+- [x] **Etichette e dimensione** (S): ogni dado ha un nome (l'abilità che lo dà) e una dimensione d4–d12; "+ Die"
+      chiede nome, dado e partenza; clic sul nome per rinominare; i tick non superano la dimensione, il 🎲 tira 1dN.
+      Pensato per il Knave con molti dadi insieme (oggi usava lo status "Power Die", un numero solo senza nome).
+- [x] **Godly Smite senza power die** (S, bug): il tratto nel pack `jobs` ha il d6 (Sessione 4), ma i tratti del PG
+      vengono ricreati dalla lista del job-template, che tiene solo nome/descrizione/capitolo → il dado si perdeva.
+      Ora viene copiato dal tratto del pack alla creazione (wizard, drop del job, cambio job primario) e la
+      migrazione 18 lo aggiunge ai Sealer esistenti.
+
+Emerso (da fare in un blocco futuro):
+- [ ] **Godly Smite automatico** (S): p.191 "You start combat with a mantra power die, a d6 that starts at 1, and
+      ticks up by 1 at the start of every round, to a maximum of 6" → oggi si mette fuori e si sposta a mano;
+      si potrebbe accendere a 1 all'inizio del combat e salire da solo a ogni round.
+- [ ] **Status "Power Die" sul token** (S): resta come prima (contatore unico). Chiedere a Maar se toglierlo per i PG
+      ora che c'è il tracker sulla scheda, o lasciarlo per i foe.
+
+## Richieste di Maar — scheda Areas della guida, secondo giro (ricevute il 1 ottobre 2026 sera) — FATTA il 1 ottobre 2026 (versione 1.12.1)
+
+Commento di Maar alle clip delle aree ("oh yes this is very good"), con tre richieste. File: `module/apps/area-diagrams.mjs`
+(elenco `AREAS` + didascalie), clip in `assets/guide/areas/*.webm`, CSS `.icon-area-*` in `css/icon.css`.
+
+- [x] **Burst: origin space e attack space** (S): le didascalie dei Blast dicono "The centre is the attack space", quelle
+      dei Burst no. Manuale p.97: "Burst X: … The origin space and attack space is the central space". Conta soprattutto
+      per Burst (target). Aggiungere la frase alle tre didascalie Burst (e scrivere "origin and attack space" anche nei Blast,
+      p.97: "The origin space and the attack space (if there is one) is the central space").
+- [x] **Esempio di Line con range** (S/M): oggi c'è solo "Line 5" senza range (parte accanto a chi la usa). Registrare una
+      clip nuova, es. "Line 4, range 3", con lo stesso metodo delle altre (piazzamento 📐 in Foundry, ffmpeg) e la
+      didascalia p.97: con un range l'origin space è la prima casella della linea.
+- [x] **Titoletti per gruppo** (S): dividere le card in gruppi con un piccolo titolo — Blast, Burst, Line, Arc, Aura —
+      invece della griglia unica.
+- [x] (Edoardo, 2 ottobre 2026) **Origin/attack space più evidente**: riga `.icon-area-key` sotto ogni titoletto di
+      famiglia, non solo nelle didascalie.
+- [x] (arrivata il 2 ottobre 2026 con le altre tre) **Movimento tutto in una volta** (S): scheda Turn, "base movement
+      must all be taken at once, any movement not used will be wasted" → riga nei Limits, p.88 "Movement can't be
+      broken up: You can stop at any point during a movement to use an ability, but if you do, the movement ends".
+
 ## Richieste di Maar — guida rapida (ricevute il 1 ottobre 2026) — FATTA il 1 ottobre 2026 (versione 1.11.0)
 
 Testo originale: "Expansion / Further attention being brought to the quick-guide". "Quick-guide" è la **Rules Reference**

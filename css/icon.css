@@ -1148,7 +1148,7 @@
   border-radius: var(--ic-radius-sm);
 }
 
-/* --- Power Dice (Wright) --- */
+/* --- Power Dice (every class; label names the ability) --- */
 .icon-power-dice {
   display: flex;
   flex-wrap: wrap;
@@ -1178,6 +1178,16 @@
   border: 1px solid rgba(80,160,96,.4);
   border-radius: var(--ic-radius-sm);
 }
+.icon-power-die__label {
+  max-width: 11em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: bold;
+}
+.icon-power-die__label small { font-weight: normal; opacity: .75; }
+.icon-power-die__label--edit { cursor: pointer; }
+.icon-power-die__label--edit:hover { text-decoration: underline; }
 .icon-power-die .icon-btn--sm {
   width: 22px;
   height: 22px;
@@ -5870,4 +5880,17 @@ ol.chat-log .chat-message,
 .icon-area-clip { display: block; width: 100%; aspect-ratio: 480 / 452; background: var(--ic-bg-deep); border-radius: var(--ic-radius-sm); }
 .icon-area-legend { margin: 0 0 8px; font-size: .85em; color: var(--ic-text-dim); }
 .icon-area-legend__range { color: #7fa6d9; font-weight: 600; }
+.icon-area-group {
+  margin: 12px 0 6px; padding: 0 0 2px;
+  font-size: .82em; text-transform: uppercase; letter-spacing: .08em;
+  color: var(--ic-gold); border-bottom: 1px solid var(--ic-border-subtle);
+}
+.icon-area-legend + .icon-area-group { margin-top: 4px; }
+/* One line per family naming its origin / attack space, above the clips. */
+.icon-area-key {
+  margin: 0 0 6px; padding: 4px 8px;
+  font-size: .88em; color: var(--ic-text-normal);
+  background: var(--ic-bg-dark); border-left: 3px solid var(--ic-gold); border-radius: var(--ic-radius-sm);
+}
+.icon-area-key strong { color: var(--ic-gold-bright); }
 .icon-area-note { margin: 8px 0 0; font-size: .85em; color: var(--ic-text-dim); }

@@ -1643,6 +1643,39 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Promemoria Great Culture**: foe con fazione Folk e nessuna cultura → riquadro "Folk foe without a Great
       Culture" sotto i template; applicata una cultura sparisce; foe di altre fazioni non lo mostrano.
 
+## Quick Guide, aree per famiglia (1 ottobre 2026, versione 1.12.1)
+
+- [ ] **Titoletti**: Quick Guide → Areas: le clip sono sotto cinque titoletti Blast / Burst / Line / Arc / Aura,
+      nell'ordine; la legenda in alto e la nota in fondo ci sono ancora.
+- [ ] **Didascalie**: le tre Burst dicono che lo spazio centrale è origin e attack space; i tre Blast dicono "origin
+      and attack space"; Line e Arc dicono che l'attack space è un personaggio qualunque nell'area.
+- [ ] **Riga origin/attack space**: sotto ogni titoletto (Blast, Burst, Line, Arc, Aura) c'è una riga con bordo oro
+      prima delle clip; Burst dice "Origin and attack space: the central space — …"; si legge anche in tema chiaro.
+- [ ] **Line 4, range 3**: nuova clip sotto Line, parte a qualche casella dal PG dentro il range blu e gira in loop
+      come le altre. Con "riduci animazioni": ferma con i comandi del player.
+- [ ] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
+      taken all at once…" con il rimando a p.88.
+
+## Power die per tutte le classi, Godly Smite (2 ottobre 2026, versione 1.13.0)
+
+- [ ] **Tracker per ogni classe**: tab Combat di un PG Stalwart, uno Vagabond, uno Mendicant e uno Wright → sotto le
+      risorse di classe c'è il blocco "Power Dice" con "+ Die"; il Wright ha ancora Aether sopra.
+- [ ] **Aggiungere**: "+ Die" → dialog con nome, dado (d4–d12), partenza → Save: compare "Nome d8" con i tick giusti.
+      Senza nome mostra "Power die". Annulla/chiudi il dialog: non aggiunge niente.
+- [ ] **Tick e limite**: + fino alla dimensione del dado, poi avviso "already at its maximum"; − fino a 0 → il dado
+      sparisce. ✕ lo scarta subito.
+- [ ] **Rinominare**: clic sul nome → dialog senza "Starting at"; cambiare nome e passare da d8 a d4 con 6 tick →
+      tick scendono a 4.
+- [ ] **Tiro**: 🎲 di un d8 tira 1d8 in chat con nome e tick nella flavor.
+- [ ] **Più dadi** (caso Knave): tre dadi con nomi diversi stanno in fila e vanno a capo senza uscire dalla scheda.
+- [ ] **Fine combat**: "End encounter" svuota i power dice di tutti i PG.
+- [ ] **Wright, widget nel tratto di classe**: i dadi mostrano il nome; il 🎲 del singolo dado tira la sua dimensione.
+- [ ] **Dadi Wright vecchi**: un Wright che aveva già dadi prima dell'aggiornamento li vede come "Power die d6".
+- [ ] **Godly Smite, PG nuovo**: wizard di creazione con job Sealer → il tratto Godly Smite ha il widget "🎲 Power die
+      d6" con "Set out at 1". Uguale trascinando il job template Sealer su una scheda e con "set primary job".
+- [ ] **Godly Smite, PG esistente**: un Sealer creato prima dell'aggiornamento → al caricamento del mondo (GM) la
+      migrazione 18 aggiunge il dado (console: "Migration 18: … power die added to Godly Smite").
+
 ## Ancora da verificare con Maar (round 4, 30 agosto)
 
 - [x] Dropdown `<details>` delle schede PG restano aperti al cambio turno.

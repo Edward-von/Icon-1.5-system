@@ -204,6 +204,8 @@ function turnSchemaHTML() {
       <li>Each ability only <strong>once</strong> per turn (no duplicates).</li>
       <li>Some abilities cost <strong>both</strong> actions; some cost <strong>none</strong>.</li>
       <li><strong>Free actions</strong> don't spend an action but can't be repeated.</li>
+      <li>Your standard move is taken <strong>all at once</strong>: stop to use an ability and the move ends, and any
+        spaces you didn't use are <strong>lost</strong> (p.88, Movement can't be broken up).</li>
     </ul>
   </section>
   <div class="icon-guide-arrow">↓</div>

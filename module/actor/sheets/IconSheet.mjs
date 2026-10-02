@@ -10,7 +10,7 @@ import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs"
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks } from "../../helpers/ability-blocks.mjs";
-import { powerDieView } from "../../data/item/power-die.mjs";
+import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
@@ -127,6 +127,7 @@ export class IconSheet extends BaseActorSheet {
       rollPowerDie:     IconSheet.#onRollPowerDie,
       tickPowerDie:     IconSheet.#onTickPowerDie,
       removePowerDie:   IconSheet.#onRemovePowerDie,
+      editPowerDie:     IconSheet.#onEditPowerDie,
       // Power die tracked on an ability / trait item
       itemPowerDieTick: IconSheet.#onItemPowerDieTick,
       itemPowerDieSet:  IconSheet.#onItemPowerDieSet,
@@ -498,6 +499,11 @@ export class IconSheet extends BaseActorSheet {
     // Vigilance pips, Power Dice, Blessings and Combo token are usable right
     // next to the class feature that explains them (Maar's request, Aug 2026).
     const cr = system.combat?.classResources ?? {};
+    // Power dice tracker (combat tab, every class): ticks never above the die.
+    context.powerDice = (cr.powerDice ?? []).map(d => {
+      const faces = Number(d.faces) || 6;
+      return { id: d.id, label: d.label ?? "", faces, ticks: Math.min(faces, d.ticks ?? 1) };
+    });
     const quickFor = (t) => {
       // Fool's "Stack Dice" job trait: pips for the die(s) currently held.
       if (t.system?.source === "job" && /stack/i.test(t.name ?? "") && /fool/i.test(t.system?.jobName ?? "")) {
@@ -513,7 +519,7 @@ export class IconSheet extends BaseActorSheet {
       switch (t.system?.class) {
         case "stalwart":  return { type: "vigilance", value: cr.vigilance?.value ?? 0, max: cr.vigilance?.max ?? 6,
                                    pips: Array.from({ length: 6 }, (_, i) => ({ i: i + 1, active: i + 1 <= (cr.vigilance?.value ?? 0) })) };
-        case "wright":    return { type: "wright", aether: cr.aether?.value ?? 0, dice: cr.powerDice ?? [] };
+        case "wright":    return { type: "wright", aether: cr.aether?.value ?? 0, dice: context.powerDice };
         case "mendicant": return { type: "blessings", value: cr.blessingTokens?.value ?? 0 };
         case "vagabond":  return { type: "combo", value: cr.comboToken?.value ?? 0 };
         default: return null;
@@ -1994,6 +2000,7 @@ export class IconSheet extends BaseActorSheet {
 
     if (toCreate.length) {
       _log(`setPrimaryJob — embedding ${toCreate.length} new-primary items (traits+LB+gambits)`);
+      await fillJobTraitPowerDice(toCreate);
       await actor.createEmbeddedDocuments("Item", toCreate);
     }
 
@@ -2683,34 +2690,88 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * Wright — roll a power die (1d6). When the button carries a die id the
-   * chat flavor names that die and its current ticks.
+   * Power die dialog: label, die size and (when adding) starting ticks.
+   * Resolves to { label, faces, ticks } or null when cancelled.
    */
+  static async #powerDieDialog({ title, label = "", faces = 6, ticks = 1, withTicks = true }) {
+    const sizes = [4, 6, 8, 10, 12].map(f => `<option value="${f}" ${f === faces ? "selected" : ""}>d${f}</option>`).join("");
+    const content = `
+      <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
+        <label>Label (the ability that gave it):
+          <input type="text" name="label" value="${escapeHTML(label)}" placeholder="e.g. Godly Smite" autofocus>
+        </label>
+        <label>Die: <select name="faces">${sizes}</select></label>
+        ${withTicks ? `<label>Starting at: <input type="number" name="ticks" value="${ticks}" min="1" max="12" style="width:60px"></label>` : ""}
+      </div>`;
+    try {
+      return await foundry.applications.api.DialogV2.prompt({
+        window: { title },
+        content,
+        ok: {
+          label: "Save",
+          callback: (_e, button, dialog) => {
+            const root  = button?.form ?? dialog?.element ?? dialog;
+            const f     = Number(root.querySelector('select[name="faces"]')?.value) || 6;
+            const t     = Number(root.querySelector('input[name="ticks"]')?.value) || ticks;
+            return {
+              label: String(root.querySelector('input[name="label"]')?.value ?? "").trim(),
+              faces: f,
+              ticks: Math.max(1, Math.min(f, t)),
+            };
+          },
+        },
+        rejectClose: false,
+      });
+    } catch { return null; }
+  }
+
+  /** Roll a power die (1dN, d6 when the button names no die) to chat. */
   static async #onRollPowerDie(event, target) {
     const actor = this.document;
     const id    = target.dataset.id;
     const dice  = actor.system.combat.classResources.powerDice ?? [];
     const die   = id ? dice.find(d => d.id === id) : null;
-    const roll  = await new Roll("1d6").evaluate();
+    const faces = Number(die?.faces) || 6;
+    const roll  = await new Roll(`1d${faces}`).evaluate();
+    const name  = escapeHTML(die?.label || "Power Die");
     const flavor = die
-      ? `Power Die (${die.ticks} ${die.ticks === 1 ? "tick" : "ticks"}) — rolled 1d6`
+      ? `${name} (${die.ticks} ${die.ticks === 1 ? "tick" : "ticks"}) — rolled 1d${faces}`
       : "Power Die — rolled 1d6";
-    _log(`rollPowerDie — actor: "${actor.name}" | die: ${id ?? "-"} | result: ${roll.total}`);
+    _log(`rollPowerDie — actor: "${actor.name}" | die: ${id ?? "-"} d${faces} | result: ${roll.total}`);
     await roll.toMessage({ speaker: ChatMessage.getSpeaker({ actor }), flavor });
   }
 
-  /** Wright — add a new power die with ticks = 1. */
+  /** Set out a new power die: label, size and starting ticks from a dialog. */
   static async #onAddPowerDie(event, target) {
+    const picked = await IconSheet.#powerDieDialog({ title: "Set out a power die" });
+    if (!picked) return;
     const dice = foundry.utils.deepClone(this.document.system.combat.classResources.powerDice ?? []);
     const id   = foundry.utils.randomID(8);
-    dice.push({ id, ticks: 1 });
-    _log(`addPowerDie — actor: "${this.document.name}" | id: ${id} | total: ${dice.length}`);
+    dice.push({ id, ...picked });
+    _log(`addPowerDie — actor: "${this.document.name}" | id: ${id} | "${picked.label}" d${picked.faces} at ${picked.ticks} | total: ${dice.length}`);
+    await this.document.update({ "system.combat.classResources.powerDice": dice });
+  }
+
+  /** Rename a power die or change its size (ticks are kept, capped at the new size). */
+  static async #onEditPowerDie(event, target) {
+    const id   = target.dataset.id;
+    const dice = foundry.utils.deepClone(this.document.system.combat.classResources.powerDice ?? []);
+    const die  = dice.find(d => d.id === id);
+    if (!die) { _log(`editPowerDie — BLOCKED: no die with id "${id}"`); return; }
+    const picked = await IconSheet.#powerDieDialog({
+      title: "Edit power die", label: die.label ?? "", faces: Number(die.faces) || 6, withTicks: false,
+    });
+    if (!picked) return;
+    die.label = picked.label;
+    die.faces = picked.faces;
+    die.ticks = Math.min(die.faces, die.ticks);
+    _log(`editPowerDie — id: ${id} | "${die.label}" d${die.faces} at ${die.ticks}`);
     await this.document.update({ "system.combat.classResources.powerDice": dice });
   }
 
   /**
-   * Wright — adjust a power die's ticks. If ticks drop to 0 or below, the
-   * die is consumed (removed from the array).
+   * Adjust a power die's ticks, never above its size. If ticks drop to 0
+   * the die is discarded (removed from the array).
    */
   static async #onTickPowerDie(event, target) {
     const id    = target.dataset.id;
@@ -2718,18 +2779,24 @@ export class IconSheet extends BaseActorSheet {
     const dice  = foundry.utils.deepClone(this.document.system.combat.classResources.powerDice ?? []);
     const idx   = dice.findIndex(d => d.id === id);
     if (idx < 0) { _log(`tickPowerDie — BLOCKED: no die with id "${id}"`); return; }
-    const nextTicks = dice[idx].ticks + delta;
+    const faces = Number(dice[idx].faces) || 6;
+    const prev  = dice[idx].ticks;
+    const nextTicks = Math.min(faces, prev + delta);
+    if (nextTicks === prev) {
+      if (delta > 0) ui.notifications.info(`${dice[idx].label || "Power die"} is already at its maximum (${faces}).`);
+      return;
+    }
     if (nextTicks <= 0) {
       dice.splice(idx, 1);
-      _log(`tickPowerDie — consumed | id: ${id} | remaining: ${dice.length}`);
+      _log(`tickPowerDie — discarded | id: ${id} | remaining: ${dice.length}`);
     } else {
       dice[idx].ticks = nextTicks;
-      _log(`tickPowerDie — id: ${id} | ${dice[idx].ticks - delta} → ${nextTicks}`);
+      _log(`tickPowerDie — id: ${id} | ${prev} → ${nextTicks}`);
     }
     await this.document.update({ "system.combat.classResources.powerDice": dice });
   }
 
-  /** Wright — remove a power die by id. */
+  /** Discard a power die by id. */
   static async #onRemovePowerDie(event, target) {
     const id   = target.dataset.id;
     const dice = foundry.utils.deepClone(this.document.system.combat.classResources.powerDice ?? []);
@@ -2990,6 +3057,7 @@ export class IconSheet extends BaseActorSheet {
       }
       if (toCreate.length) {
         _log(`dropJobTemplate — embedding ${toCreate.length} items (primary, includes class traits)`);
+        await fillJobTraitPowerDice(toCreate);
         await actor.createEmbeddedDocuments("Item", toCreate);
       }
     }

@@ -67,7 +67,7 @@
     </div>
 
     {{!-- Class Resources — displayed inline with HP/Vigor for all classes.
-         Stalwart=Vigilance, Vagabond=Combo, Mendicant=Blessings, Wright=Aether+Power Dice. --}}
+         Stalwart=Vigilance, Vagabond=Combo, Mendicant=Blessings, Wright=Aether; Power Dice for everyone. --}}
     {{#if primaryJobClass}}
       <div class="icon-resource-section icon-resource-section--inline icon-resource-section--{{primaryJobClass}}">
 
@@ -112,7 +112,7 @@
           </div>
         {{/if}}
 
-        {{!-- Wright — Aether + Power Dice --}}
+        {{!-- Wright — Aether --}}
         {{#if (icon-eq primaryJobClass "wright")}}
           <div class="icon-resource-block icon-resource-block--wright icon-resource-block--inline">
             <h4>Aether <small>(+1 at start of your turn; max 6; lost at end of combat)</small></h4>
@@ -123,34 +123,42 @@
               <button type="button" class="icon-btn icon-btn--sm" data-action="adjustAether" data-delta="1"
                       {{#unless isEditable}}disabled{{/unless}}>+</button>
             </div>
-            <div class="icon-resource-block__header">
-              <h4>Power Dice</h4>
-              {{#if isEditable}}
-                <button type="button" class="icon-btn icon-btn--sm" data-action="addPowerDie">+ Die</button>
-              {{/if}}
-            </div>
-            <div class="icon-power-dice">
-              {{#each system.combat.classResources.powerDice as |die|}}
-                <div class="icon-power-die" data-die-id="{{die.id}}">
-                  <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
-                          data-id="{{die.id}}" data-delta="-1"
-                          {{#unless ../isEditable}}disabled{{/unless}}>−</button>
-                  <span class="icon-power-die__value">{{die.ticks}}</span>
-                  <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
-                          data-id="{{die.id}}" data-delta="1"
-                          {{#unless ../isEditable}}disabled{{/unless}}>+</button>
-                  {{#if ../isEditable}}
-                    <button type="button" class="icon-btn icon-btn--remove icon-btn--sm" data-action="removePowerDie"
-                            data-id="{{die.id}}" title="Remove die">✕</button>
-                  {{/if}}
-                </div>
-              {{/each}}
-              {{#unless system.combat.classResources.powerDice.length}}
-                <p class="icon-empty">No active power dice.</p>
-              {{/unless}}
-            </div>
           </div>
         {{/if}}
+
+        {{!-- Power dice — every class. A die set out by an ability, ticked up
+             or down, discarded at 0 (glossary). Labels tell several apart. --}}
+        <div class="icon-resource-block icon-resource-block--power-dice icon-resource-block--inline">
+          <div class="icon-resource-block__header">
+            <h4>Power Dice <small>(lost at end of combat)</small></h4>
+            {{#if isEditable}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="addPowerDie" title="Set out a new power die">+ Die</button>
+            {{/if}}
+          </div>
+          <div class="icon-power-dice">
+            {{#each powerDice as |die|}}
+              <div class="icon-power-die" data-die-id="{{die.id}}">
+                <span class="icon-power-die__label {{#if ../isEditable}}icon-power-die__label--edit{{/if}}"
+                      {{#if ../isEditable}}data-action="editPowerDie" data-id="{{die.id}}" title="Rename / change die"{{/if}}>{{#if die.label}}{{die.label}}{{else}}Power die{{/if}} <small>d{{die.faces}}</small></span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
+                        data-id="{{die.id}}" data-delta="-1" title="Tick down (discarded at 0)"
+                        {{#unless ../isEditable}}disabled{{/unless}}>−</button>
+                <span class="icon-power-die__value">{{die.ticks}}</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
+                        data-id="{{die.id}}" data-delta="1" title="Tick up (max {{die.faces}})"
+                        {{#unless ../isEditable}}disabled{{/unless}}>+</button>
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie"
+                        data-id="{{die.id}}" title="Roll 1d{{die.faces}}">🎲</button>
+                {{#if ../isEditable}}
+                  <button type="button" class="icon-btn icon-btn--remove icon-btn--sm" data-action="removePowerDie"
+                          data-id="{{die.id}}" title="Discard die">✕</button>
+                {{/if}}
+              </div>
+            {{else}}
+              <p class="icon-empty">No power dice set out.</p>
+            {{/each}}
+          </div>
+        </div>
 
       </div>
     {{/if}}
@@ -435,10 +443,11 @@
                 <span class="icon-trait__quick-label">Power Dice</span>
                 {{#each trait.quick.dice as |die|}}
                   <span class="icon-power-die icon-power-die--inline" data-die-id="{{die.id}}">
+                    {{#if die.label}}<small class="icon-power-die__label">{{die.label}}</small>{{/if}}
                     <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="-1" {{#unless ../../isEditable}}disabled{{/unless}}>−</button>
                     <span class="icon-power-die__value">{{die.ticks}}</span>
                     <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="1" {{#unless ../../isEditable}}disabled{{/unless}}>+</button>
-                    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" data-id="{{die.id}}" title="Roll this power die (1d6)">🎲</button>
+                    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" data-id="{{die.id}}" title="Roll this power die (1d{{die.faces}})">🎲</button>
                   </span>
                 {{/each}}
                 {{#if ../isEditable}}

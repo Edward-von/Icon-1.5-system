@@ -12,6 +12,7 @@
  * On submit, writes everything to the actor in a single transaction.
  */
 import { buildClassTraitDocs } from "../helpers/classes.mjs";
+import { fillJobTraitPowerDice } from "../data/item/power-die.mjs";
 import { buildBondKitsNote } from "../helpers/advancement.mjs";
 import { formatTag } from "../helpers/rule-tooltips.mjs";
 import { parseAbilitySections, escapeHTML } from "../helpers/enrich.mjs";
@@ -571,6 +572,7 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
 
     if (toEmbed.length) {
       _log(`embedding ${toEmbed.length} items (bond power + ${jobSys.traits?.length ?? 0} traits + ${jobSys.limitBreak?.name ? 1 : 0} LB + ${abilityPicks.length} abilities)`);
+      await fillJobTraitPowerDice(toEmbed);
       await actor.createEmbeddedDocuments("Item", toEmbed);
     }
 

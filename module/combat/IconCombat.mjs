@@ -568,7 +568,7 @@ export class IconCombat extends Combat {
      *   • Vigilance   (Stalwart)   → 0
      *   • Combo Token (Vagabond)   → 0
      *   • Blessing Tokens (Mendicant) → 0
-     *   • Power Dice  (Wright)     → []
+     *   • Power Dice  (any class)  → []
      *   • Aether      (Wright)     → 0  ("All Aether disperses at the end of combat", p.204)
      * Stacked Dice (Fool) are also lost at end of combat.
      */

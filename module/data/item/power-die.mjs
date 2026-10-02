@@ -76,3 +76,28 @@ export function powerDieView(system) {
   const value = Math.min(faces, Math.max(0, Number(pd?.value ?? 0)));
   return { faces, start, value, active: value > 0, atMax: value >= faces, source };
 }
+
+/**
+ * Job templates carry their traits as plain {name, description, chapter}
+ * rows, so a trait embedded from one loses the power die its standalone
+ * copy in the `jobs` pack has (Sealer's Godly Smite mantra die). Look each
+ * job trait up in that pack by name + job and copy the die across.
+ * Mutates and returns `docs` (item creation data).
+ * @param {object[]} docs
+ */
+export async function fillJobTraitPowerDice(docs) {
+  const pack = game.packs.get("icon-system.jobs");
+  if (!pack) return docs;
+  const index = await pack.getIndex({ fields: ["system.jobName", "system.powerDie"] });
+  for (const doc of docs) {
+    if (doc?.type !== "trait" || doc.system?.source !== "job") continue;
+    if (Number(doc.system?.powerDie?.faces ?? 0) > 0) continue;
+    const match = index.find(e => e.type === "trait" && e.name === doc.name
+      && (e.system?.jobName ?? "") === (doc.system?.jobName ?? "")
+      && Number(e.system?.powerDie?.faces ?? 0) > 0);
+    if (!match) continue;
+    const pd = match.system.powerDie;
+    doc.system.powerDie = { faces: pd.faces, start: pd.start ?? 1, value: 0 };
+  }
+  return docs;
+}

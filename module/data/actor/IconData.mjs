@@ -174,9 +174,13 @@ export class IconData extends foundry.abstract.TypeDataModel {
             value: new NumberField({ required: true, initial: 0, min: 0, max: 2, integer: true }),
             max:   new NumberField({ required: true, initial: 1, min: 1, max: 2, integer: true }),
           }),
-          // Wright — array of power dice: { id, ticks }
+          // Power dice set out by abilities, any class: { id, label, faces, ticks }.
+          // `label` names the ability that granted it (several at once on a
+          // Knave); `faces` caps the ticks. Started as the Wright's tracker.
           powerDice: new ArrayField(new SchemaField({
             id:    new StringField({ required: true, initial: "" }),
+            label: new StringField({ required: true, initial: "" }),
+            faces: new NumberField({ required: true, initial: 6, min: 2, integer: true }),
             ticks: new NumberField({ required: true, initial: 1, min: 1, integer: true }),
           }), { initial: [] }),
         }),
