@@ -1645,56 +1645,68 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 ## Quick Guide, aree per famiglia (1 ottobre 2026, versione 1.12.1)
 
-- [ ] **Titoletti**: Quick Guide → Areas: le clip sono sotto cinque titoletti Blast / Burst / Line / Arc / Aura,
+- [x] **Titoletti**: Quick Guide → Areas: le clip sono sotto cinque titoletti Blast / Burst / Line / Arc / Aura,
       nell'ordine; la legenda in alto e la nota in fondo ci sono ancora.
-- [ ] **Didascalie**: le tre Burst dicono che lo spazio centrale è origin e attack space; i tre Blast dicono "origin
+- [x] **Didascalie**: le tre Burst dicono che lo spazio centrale è origin e attack space; i tre Blast dicono "origin
       and attack space"; Line e Arc dicono che l'attack space è un personaggio qualunque nell'area.
-- [ ] **Riga origin/attack space**: sotto ogni titoletto (Blast, Burst, Line, Arc, Aura) c'è una riga con bordo oro
-      prima delle clip; Burst dice "Origin and attack space: the central space — …"; si legge anche in tema chiaro.
-- [ ] **Line 4, range 3**: nuova clip sotto Line, parte a qualche casella dal PG dentro il range blu e gira in loop
-      come le altre. Con "riduci animazioni": ferma con i comandi del player.
-- [ ] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
+- [x] **Riga origin/attack space**: sotto ogni titoletto (Blast, Burst, Line, Arc, Aura) c'è una riga con bordo oro
+      prima delle clip; Burst dice "Origin and attack space: the central space — …"; si legge anche in tema chiaro. — *2 ottobre: tema chiaro non provato.*
+- [x] **Line 4, range 3**: nuova clip sotto Line, parte a qualche casella dal PG dentro il range blu e gira in loop
+      come le altre. Con "riduci animazioni": ferma con i comandi del player. — *2 ottobre: "riduci animazioni" non provato.*
+- [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
+
+## Esito playtest del 2 ottobre 2026 (Foundry locale, mondo "test", attori di prova poi cancellati)
+
+Sezioni 1.12.1, 1.13.0 e 1.14.0: 26 controlli passati, 2 bug trovati e corretti subito (versione 1.14.1, voci qui sotto).
+Non provati: il lato giocatore (serve un secondo client), il tema chiaro della guida, "riduci animazioni".
+
+## Correzioni del playtest (2 ottobre 2026, versione 1.14.1)
+
+- [x] **Gain vigilance dalle card**: Gates of Hell → bottoni "Vigilance +1" e "Vigilance +2" (Heroic) oltre a Counter; +1 porta
+      il tracker da 0 a 1, +2 da 3 a 5, chat "gains Vigilance +N (now N)". Lettore del testo: 32/32 test, su 9.890 testi
+      dei compendi cambiano solo 15 (tutti Stalwart, compare il bottone Vigilance).
+- [x] **Nome lungo di un power die**: il nome viene tagliato ma "d12" resta visibile; nome intero nel tooltip.
 
 ## Status doppioni nascosti sui PG, token legato ai tracker (2 ottobre 2026, versione 1.14.0)
 
-- [ ] **HUD del token, PG**: tasto destro sul token di un PG → tavolozza degli status: niente Vigilance, Power Die, Bonus
+- [x] **HUD del token, PG**: tasto destro sul token di un PG → tavolozza degli status: niente Vigilance, Power Die, Bonus
       Damage, Marked; Blessed c'è.
-- [ ] **HUD del token, foe/legend**: Vigilance, Power Die, Bonus Damage ci sono; Marked no.
-- [ ] **Tab Conditions**: PG senza i quattro status e con la frase d'aiuto che rimanda alla tab Combat; foe e legend
+- [x] **HUD del token, foe/legend**: Vigilance, Power Die, Bonus Damage ci sono; Marked no.
+- [x] **Tab Conditions**: PG senza i quattro status e con la frase d'aiuto che rimanda alla tab Combat; foe e legend
       con Vigilance / Power Die / Bonus Damage, senza Marked.
-- [ ] **Vigilance sul token**: Stalwart, alza la Vigilance in scheda da 0 a 2 → sul token compare l'icona Vigilance;
+- [x] **Vigilance sul token**: Stalwart, alza la Vigilance in scheda da 0 a 2 → sul token compare l'icona Vigilance;
       il pannello degli status (token selezionato) dice 2; + e − del pannello cambiano il tracker in scheda; a 0
       l'icona sparisce dal token.
-- [ ] **Power die sul token**: "+ Die" su un PG qualsiasi → icona Power Die sul token; nel pannello "Power Dice ×N" con
+- [x] **Power die sul token**: "+ Die" su un PG qualsiasi → icona Power Die sul token; nel pannello "Power Dice ×N" con
       i nomi nel tooltip, senza +/− né ×; scartato l'ultimo dado l'icona sparisce.
-- [ ] **Fine combat**: "End encounter" svuota i tracker → le icone Vigilance / Power Die spariscono dai token dei PG.
-- [ ] **Gain vigilance**: card di un'abilità con "gain vigilance" → bottone Gain sul PG → in chat "gains Vigilance +1
-      (now N)", tracker +1 (max 6), nessuno status separato. Da giocatore su un alleato: passa dal GM e funziona uguale.
-- [ ] **Bonus Damage su un foe**: messo dalla tab Conditions del foe, il tiro del danno lo aggiunge e lo consuma come prima.
-- [ ] **Migrazione 19**: un PG che prima dell'aggiornamento aveva Vigilance 3 come status e un Power Die 2 → dopo il
+- [x] **Fine combat**: "End encounter" svuota i tracker → le icone Vigilance / Power Die spariscono dai token dei PG.
+- [x] **Gain vigilance**: card di un'abilità con "gain vigilance" → bottone Gain sul PG → in chat "gains Vigilance +1
+      (now N)", tracker +1 (max 6), nessuno status separato. Da giocatore su un alleato: passa dal GM e funziona uguale. — *2 ottobre: giocatore→GM non provato (serve un secondo client); il bottone mancava per "Gain +1 vigilance" → corretto, vedi 1.14.1.*
+- [x] **Bonus Damage su un foe**: messo dalla tab Conditions del foe, il tiro del danno lo aggiunge e lo consuma come prima.
+- [x] **Migrazione 19**: un PG che prima dell'aggiornamento aveva Vigilance 3 come status e un Power Die 2 → dopo il
       caricamento (GM) tracker Vigilance 3 e un "Power die d6" a 2; Bonus Damage e Marked tolti; console "Migration 19".
-- [ ] **Marked vecchio su un foe**: un foe che aveva Marked come status lo vede ancora nella tab Conditions (per
+- [x] **Marked vecchio su un foe**: un foe che aveva Marked come status lo vede ancora nella tab Conditions (per
       toglierlo); tolto, non ricompare.
 
 ## Power die per tutte le classi, Godly Smite (2 ottobre 2026, versione 1.13.0)
 
-- [ ] **Tracker per ogni classe**: tab Combat di un PG Stalwart, uno Vagabond, uno Mendicant e uno Wright → sotto le
+- [x] **Tracker per ogni classe**: tab Combat di un PG Stalwart, uno Vagabond, uno Mendicant e uno Wright → sotto le
       risorse di classe c'è il blocco "Power Dice" con "+ Die"; il Wright ha ancora Aether sopra.
-- [ ] **Aggiungere**: "+ Die" → dialog con nome, dado (d4–d12), partenza → Save: compare "Nome d8" con i tick giusti.
+- [x] **Aggiungere**: "+ Die" → dialog con nome, dado (d4–d12), partenza → Save: compare "Nome d8" con i tick giusti.
       Senza nome mostra "Power die". Annulla/chiudi il dialog: non aggiunge niente.
-- [ ] **Tick e limite**: + fino alla dimensione del dado, poi avviso "already at its maximum"; − fino a 0 → il dado
+- [x] **Tick e limite**: + fino alla dimensione del dado, poi avviso "already at its maximum"; − fino a 0 → il dado
       sparisce. ✕ lo scarta subito.
-- [ ] **Rinominare**: clic sul nome → dialog senza "Starting at"; cambiare nome e passare da d8 a d4 con 6 tick →
+- [x] **Rinominare**: clic sul nome → dialog senza "Starting at"; cambiare nome e passare da d8 a d4 con 6 tick →
       tick scendono a 4.
-- [ ] **Tiro**: 🎲 di un d8 tira 1d8 in chat con nome e tick nella flavor.
-- [ ] **Più dadi** (caso Knave): tre dadi con nomi diversi stanno in fila e vanno a capo senza uscire dalla scheda.
-- [ ] **Fine combat**: "End encounter" svuota i power dice di tutti i PG.
-- [ ] **Wright, widget nel tratto di classe**: i dadi mostrano il nome; il 🎲 del singolo dado tira la sua dimensione.
-- [ ] **Dadi Wright vecchi**: un Wright che aveva già dadi prima dell'aggiornamento li vede come "Power die d6".
-- [ ] **Godly Smite, PG nuovo**: wizard di creazione con job Sealer → il tratto Godly Smite ha il widget "🎲 Power die
+- [x] **Tiro**: 🎲 di un d8 tira 1d8 in chat con nome e tick nella flavor.
+- [x] **Più dadi** (caso Knave): tre dadi con nomi diversi stanno in fila e vanno a capo senza uscire dalla scheda. — *2 ottobre: con un nome lungo spariva anche "d12" → corretto, vedi 1.14.1.*
+- [x] **Fine combat**: "End encounter" svuota i power dice di tutti i PG.
+- [x] **Wright, widget nel tratto di classe**: i dadi mostrano il nome; il 🎲 del singolo dado tira la sua dimensione.
+- [x] **Dadi Wright vecchi**: un Wright che aveva già dadi prima dell'aggiornamento li vede come "Power die d6".
+- [x] **Godly Smite, PG nuovo**: wizard di creazione con job Sealer → il tratto Godly Smite ha il widget "🎲 Power die
       d6" con "Set out at 1". Uguale trascinando il job template Sealer su una scheda e con "set primary job".
-- [ ] **Godly Smite, PG esistente**: un Sealer creato prima dell'aggiornamento → al caricamento del mondo (GM) la
+- [x] **Godly Smite, PG esistente**: un Sealer creato prima dell'aggiornamento → al caricamento del mondo (GM) la
       migrazione 18 aggiunge il dado (console: "Migration 18: … power die added to Godly Smite").
 
 ## Ancora da verificare con Maar (round 4, 30 agosto)

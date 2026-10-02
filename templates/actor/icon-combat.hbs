@@ -139,7 +139,8 @@
             {{#each powerDice as |die|}}
               <div class="icon-power-die" data-die-id="{{die.id}}">
                 <span class="icon-power-die__label {{#if ../isEditable}}icon-power-die__label--edit{{/if}}"
-                      {{#if ../isEditable}}data-action="editPowerDie" data-id="{{die.id}}" title="Rename / change die"{{/if}}>{{#if die.label}}{{die.label}}{{else}}Power die{{/if}} <small>d{{die.faces}}</small></span>
+                      title="{{#if die.label}}{{die.label}}{{else}}Power die{{/if}} d{{die.faces}}{{#if ../isEditable}} — click to rename / change die{{/if}}"
+                      {{#if ../isEditable}}data-action="editPowerDie" data-id="{{die.id}}"{{/if}}><span class="icon-power-die__name">{{#if die.label}}{{die.label}}{{else}}Power die{{/if}}</span> <small>d{{die.faces}}</small></span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie"
                         data-id="{{die.id}}" data-delta="-1" title="Tick down (discarded at 0)"
                         {{#unless ../isEditable}}disabled{{/unless}}>−</button>

@@ -1179,11 +1179,17 @@
   border-radius: var(--ic-radius-sm);
 }
 .icon-power-die__label {
-  max-width: 11em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3px;
   white-space: nowrap;
   font-weight: bold;
+}
+/* A long name is cut, the die size next to it always shows. */
+.icon-power-die__name {
+  max-width: 10em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .icon-power-die__label small { font-weight: normal; opacity: .75; }
 .icon-power-die__label--edit { cursor: pointer; }

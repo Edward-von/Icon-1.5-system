@@ -86,7 +86,7 @@ const GRANT_ADJ_AFTER_RE = /^\s+(?:damage|attacks?|effects?|movement|ability|abi
 /** Verbs that grant a status to the subject before them. */
 const GRANT_VERB_RE = /\b(?:gains?|gained|gaining|have|has|get|gets|regains?|become|becomes|are|is|with|grants?(?:\s+(?:you|them|it|yourself))?)\s*(?:\+\d\s*)?$/i;
 /** Imperative start of a clause ("Gain stealth", "Become intangible…") = the user. */
-const IMPERATIVE_SELF_RE = /^\s*(?:then\s+|and\s+|you\s+(?:may|can|must)\s+|may\s+|can\s+)?(?:gain|become|regain|have)\s*$/i;
+const IMPERATIVE_SELF_RE = /^\s*(?:then\s+|and\s+|you\s+(?:may|can|must)\s+|may\s+|can\s+)?(?:gain|become|regain|have)\s*(?:\+\d\s*)?$/i;
 /** "Choose a foe in range 3 and become immobile" — the object of the imperative is not the subject of "become". */
 const CHOOSE_AND_SELF_RE = /\b(?:choose|pick|select|target|mark)\s+(?:a|an|one|two|the|up to \d+|any)?\s*(?:foes?|targets?|characters?|allies|ally|creatures?)\b[^,;]*\b(?:and|then)\s+(?:become|gain|are|have)\s*$/i;
 /** "until the end of your next turn" after a status mention. */
@@ -377,7 +377,9 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         if (!def) continue;
         const start = m.index, end = start + m[0].length;
         const after = sentence.slice(end);
-        if (GRANT_ADJ_AFTER_RE.test(after) || /^\s*:/.test(after) || /^\s*\+/.test(after)) continue;
+        // "Vigilance +1" is a number of charges (Vigilance X, p.94), not the "+" of an ongoing status.
+        const vigAmount = def.id === "vigilance" ? Number(/^\s*\+(\d)/.exec(after)?.[1] ?? /\+(\d)\s*$/.exec(sentence.slice(0, start))?.[1] ?? 0) : 0;
+        if (GRANT_ADJ_AFTER_RE.test(after) || /^\s*:/.test(after) || (/^\s*\+/.test(after) && !vigAmount)) continue;
         const seg = segOf(start);
         const before = sentence.slice(seg.start, start);
         const beforeLower = before.toLowerCase();
@@ -394,14 +396,14 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           if (allyAt >= 0 && allyAt > otherAt) target = selfAt >= 0 && /\byou\s+and\b/i.test(before) ? "both" : "ally";
           else if (selfAt >= 0 && selfAt > otherAt) target = "self";
           else if (otherAt < 0 && IMPERATIVE_SELF_RE.test(before)) target = "self";
-          else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*$/i.test(before)) target = "self";
+          else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*(?:\+\d\s*)?$/i.test(before)) target = "self";
           if (!target) continue;
         }
         const until = (UNTIL_RE.exec(after)?.[1] ?? "").trim();
         const targets = target === "both" ? ["self", "ally"] : [target];
         for (const t of targets) {
           if (blockEntries.some(e => e.kind === "gain" && e.id === def.id && e.target === t)) continue;
-          blockEntries.push({ id: def.id, label: def.label, ongoing: false, when: "always", section, key: outcomeKey(section),
+          blockEntries.push({ id: def.id, label: vigAmount ? `${def.label} +${vigAmount}` : def.label, ongoing: false, when: "always", section, key: outcomeKey(section),
             sentence, saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "gain", target: t, until, _sentenceIndex: si, end, _targetsAll: target });
         }
       }

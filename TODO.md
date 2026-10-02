@@ -315,6 +315,13 @@ Emerso lavorando (da fare in blocchi futuri):
 - [x] (CHIUSO da Edoardo il 1 ottobre 2026: p.302 dice che la Great Culture la applica il GM; nessun Unique la ha nel pack, si aggiunge trascinando il template "Yeokin" da Foe Templates) **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
+
+- [x] **Gain vigilance**: il lettore del testo non riconosceva "Gain +1 vigilance" / "vigilance +1" (S, fatto).
+- [x] **Nome lungo di un power die** nascondeva la dimensione (S, fatto).
+- [ ] Da provare con un secondo client: Gain vigilance da giocatore su un alleato, controlli lato giocatore dei
+      power die; tema chiaro della guida e "riduci animazioni" (S, playtest).
+
 ## Richiesta di Maar — status doppioni dei tracker (ricevuta il 2 ottobre 2026) — FATTA il 2 ottobre 2026 (versione 1.14.0)
 
 Testo di Maar: "Old status methods of tracking (Vigilance, Power Die, Bonus Damage, Marked, etc) seem redundant with

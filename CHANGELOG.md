@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 2 ottobre 2026 — Correzioni dal playtest locale (versione 1.14.1)
+
+- **Gain vigilance mancante**: le card degli Stalwart non avevano il bottone per la vigilance ("Gain +1 vigilance",
+  "gain vigilance +1 at the end of your turn") → il lettore del testo scartava "vigilance +1" scambiando il "+" per
+  quello degli status continui, e non riconosceva "Gain +1 …" come rivolto a sé → ora legge entrambe le forme e il
+  numero: "Vigilance +1" / "Vigilance +2" alzano il tracker di quel valore. Cambia solo per 15 testi dei compendi, tutti
+  di Stalwart.
+- **Nome lungo di un power die**: tagliato con i puntini, si portava via anche la dimensione del dado → ora si taglia
+  solo il nome, "d12" resta visibile e il nome intero è nel tooltip.
+
 ## 2 ottobre 2026 — Status doppioni nascosti sui PG, il token segue i tracker della scheda (versione 1.14.0)
 
 ### Richiesta di Maar
