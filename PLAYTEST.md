@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Guida rapida, tab Narrative (9 ottobre 2026, versione 1.16.0)
+
+- [ ] **Tab presente**: aprire la guida → sei tab, "Narrative" (icona piuma) tra Turn e Areas; la barra delle tab sta
+      su una riga alla larghezza di default (720px) e poggia sulla linea dorata (fix della 1.15.0).
+- [ ] **Contenuto**: sette riquadri con la pagina accanto al titolo; la scala 1-3 / 4-5 / 6 / 6,6 ha quattro colori
+      sobri (rosso, ambra, verde, oro); le due tabelle (Risk, More dice) hanno le colonne allineate e il testo va a
+      capo nelle celle senza uscire dalla finestra. Restringere la finestra: niente barra di scorrimento orizzontale.
+- [ ] **Ricerca**: "aid" → compaiono la riga Aid della tabella e il riquadro "Aid or set up?" (più le righe del
+      glossario che lo citano); "second wind", "exhausted", "desperate", "fortune" trovano la loro riga. Svuotare la
+      ricerca → si torna alla tab di prima.
+- [ ] **Ultima tab ricordata**: chiudere la guida sulla tab Narrative e riaprirla → si riapre su Narrative.
+- [ ] **Testi**: confrontare a campione con il manuale (pp.17, 19, 29-30, 34): niente regole inventate.
+
 ## Feedback di Maar, Sessione A: tab, riquadri, planner, clock, reliquie (9 ottobre 2026, versione 1.15.0)
 
 - [ ] **Tab della scheda PG**: la linea dorata sotto Narrative/Combat/… corre lungo il fondo delle tab (non le

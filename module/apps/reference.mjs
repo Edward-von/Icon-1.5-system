@@ -1,6 +1,7 @@
 /**
  * reference.mjs — In-system rules reference (the "Quick Guide"): a
- * turn-structure schema, screen recordings of the area patterns
+ * turn-structure schema, narrative play at a glance (rolls, risk, effect,
+ * effort, strain), screen recordings of the area patterns
  * (area-diagrams.mjs), a searchable glossary of ICON 1.5 combat/narrative
  * keywords (Comeback, Exceed, statuses, triggered effects, resources, …) and
  * an FAQ of table edge cases.
@@ -218,6 +219,141 @@ function turnSchemaHTML() {
 }
 
 /**
+ * Narrative play at a glance — the things tables mix up most (Maar, 9 Oct 2026:
+ * aid vs set up, second winds, "exhausted", the risks of a roll). Every row is
+ * an `.icon-ref-term`, so the pane takes part in the guide's search.
+ * Page numbers are the PDF's "N of 501".
+ */
+const NARRATIVE_RISKS = [
+  // [risk, when, consequence on 1-5, strain]
+  ["Controlled", "Good position, plenty of time, relative safety.", "Minor: you make it, but drop something on the way.", "1"],
+  ["Risky", "The default for every roll.", "Middling: you end up clinging to the edge.", "2"],
+  ["Desperate", "A bad spot, or a leap for a faint hope.", "Major: you fall into the chasm.", "4 (rarely critical)"],
+];
+
+const NARRATIVE_EFFECTS = [
+  ["No effect", "The action can't do it at all (charm a mindless monster, leap a 50-foot wall)."],
+  ["Weak", "Less than you hoped: the gem comes half loose, roll again."],
+  ["Normal", "The default: what you expect to happen."],
+  ["Powerful", "More than expected: one roll finds the way out of the whole maze."],
+  ["Superpowered", "Beyond mortal limits: smash a tower, sneak through an army. Only from a power that grants it, or a 6,6 on a powerful roll."],
+];
+
+const NARRATIVE_HELP = [
+  // [name, cost, who rolls, what you get, catch]
+  ["Push", "1 effort", "You", "+1 boon on your own roll.", "—"],
+  ["Aid", "1 effort (the helper)", "Only the ally", "+1 boon on the ally's roll.", "The helper shares the consequences (strain, bad spots). Only one aid per roll."],
+  ["Set up", "No effort", "The helper first, then the ally", "If the set-up roll succeeds: +1 boon or increased effect on the ally's action.", "The set-up roll has reduced or no effect of its own and normal consequences."],
+  ["Tempt Fate", "No effort", "You", "+1 die, as if you had pushed.", "Suggest a bad outcome; if the GM agrees, it comes true whatever you roll."],
+  ["Team action", "2 effort (the leader)", "Only the leader", "One roll decides the outcome for the whole group.", "Everyone shares the result."],
+];
+
+/** Build the Narrative pane. */
+function narrativeHTML() {
+  const row = (term, html) => `<div class="icon-ref-term" data-term="${term.toLowerCase()}">${html}</div>`;
+  const page = p => `<span class="icon-guide-page">${p}</span>`;
+
+  const ladder = [
+    ["1–3", "fail", "Failure", "You don't get what you wanted and suffer the risk."],
+    ["4–5", "cost", "Success at a cost", "You get it, but with a consequence, a setback or reduced effect."],
+    ["6", "clean", "Success", "You get it, with no complications."],
+    ["6, 6", "crit", "Critical", "Success with increased effect. Never with 0 dice."],
+  ].map(([n, k, t, d]) => `<div class="icon-guide-ladder__step icon-guide-ladder__step--${k}">
+      <span class="icon-guide-ladder__n">${n}</span><strong>${t}</strong><span>${d}</span></div>`).join("");
+
+  const risks = NARRATIVE_RISKS.map(([r, when, cons, strain]) => row(`${r} risk`, `
+      <span class="icon-guide-grid__key">${r}</span><span>${when}</span><span>${cons}</span><span class="icon-guide-grid__num">${strain}</span>`)).join("");
+
+  const effects = NARRATIVE_EFFECTS.map(([e, d]) => row(`${e} effect`, `<strong>${e}</strong> <span>— ${d}</span>`)).join("");
+
+  const help = NARRATIVE_HELP.map(([n, cost, who, gain, a]) => row(n, `
+      <span class="icon-guide-grid__key">${n}</span><span>${cost}</span><span>${who}</span><span>${gain}</span><span>${a}</span>`)).join("");
+
+  return `
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">The action roll ${page("pp.16-17")}</h3>
+    ${row("action roll dice pool", `<p class="icon-guide-text">Say what you want to achieve and pick the action that fits
+      (Sneak, Traverse, Sense, Study, Charm, Command, Tinker, Excel, Smash, Endure). The GM sets the <strong>risk</strong>
+      and the <strong>effect</strong> <em>before</em> you roll. Roll <strong>1d6 per dot</strong> and keep the
+      <strong>highest</strong>. With 0 dots, roll 2d6 and keep the <strong>lowest</strong>.</p>`)}
+    <div class="icon-guide-ladder">${ladder}</div>
+    ${row("bonus dice boon curse max", `<p class="icon-guide-note">Boons (+1d6) and curses (−1d6) cancel 1 to 1, and a
+      roll never gets more than <strong>+2 or −2</strong> dice: 6 dice at most (p.17, p.20).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Risk: what a bad roll costs ${page("pp.18, 29-30")}</h3>
+    <p class="icon-guide-text">Anything but a 6 brings a consequence. The risk decides how hard it hits.</p>
+    <div class="icon-guide-grid icon-guide-grid--risk">
+      <span class="icon-guide-grid__head">Risk</span><span class="icon-guide-grid__head">When</span>
+      <span class="icon-guide-grid__head">Consequence</span><span class="icon-guide-grid__head">Strain</span>
+      ${risks}
+    </div>
+    ${row("consequences gm clock", `<p class="icon-guide-note">Other consequences the GM can pick: a worse position, a new
+      clock, ticks on a clock (1-2 on a 4-5, 2-3 on a failure), a hard choice, an obstacle, lost time, reduced effect
+      (p.29).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Effect: what a success achieves ${page("pp.18-19, 35")}</h3>
+    ${effects}
+    ${row("increased effect", `<p class="icon-guide-note">Increased effect stops at Powerful, however many times you get
+      it, and can't lift "no effect" (p.35).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">More dice: push, aid, set up ${page("pp.19-20, 34-35")}</h3>
+    <div class="icon-guide-grid icon-guide-grid--help">
+      <span class="icon-guide-grid__head"></span><span class="icon-guide-grid__head">Costs</span>
+      <span class="icon-guide-grid__head">Who rolls</span><span class="icon-guide-grid__head">You get</span>
+      <span class="icon-guide-grid__head">The catch</span>
+      ${help}
+    </div>
+    ${row("aid vs set up difference", `<p class="icon-guide-callout"><strong>Aid or set up?</strong> To
+      <strong>aid</strong> you spend effort and don't roll, but whatever goes wrong for your ally happens to you too. To
+      <strong>set up</strong> you spend nothing but make your own roll first, with its own risks, and it only helps if
+      it succeeds. You can't do both for the same action: a set-up counts as aiding, and aid doesn't stack with a
+      set-up (pp.19, 34).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Effort, exhausted, second wind ${page("p.34")}</h3>
+    ${row("effort", `<p class="icon-guide-text"><strong>Effort</strong> is a set of boxes from your Bond. Tick one to push,
+      to aid, toward a team action, or to act normally for one action while broken.</p>`)}
+    ${row("exhausted", `<p class="icon-guide-text"><strong>Exhausted</strong> = every effort box is ticked. You can't spend
+      effort until you get it back. Some Bonds gain a bonus while exhausted.</p>`)}
+    ${row("regain effort camp interlude", `<p class="icon-guide-text">All effort comes back when you <strong>camp</strong> or
+      finish an <strong>interlude</strong>.</p>`)}
+    ${row("second wind", `<p class="icon-guide-text"><strong>Second wind</strong>: once per session, get all your effort back
+      outside camps and interludes when you meet your Bond's trigger, written under your Bond on the sheet's
+      Narrative tab. You can save it for a better moment.</p>`)}
+    ${row("exhausted burden", `<p class="icon-guide-note">Not to be confused with an "exhausted" <em>burden</em> (tiredness,
+      ennui): that is long-term harm from a break, see below (p.30).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Strain, break, burden ${page("pp.30-31")}</h3>
+    ${row("strain", `<p class="icon-guide-text"><strong>Strain</strong> is how heroes get hurt outside combat: 1, 2 or 4 by
+      risk. All strain heals when you camp or finish an interlude.</p>`)}
+    ${row("break broken critical strain", `<p class="icon-guide-text"><strong>Break</strong>: when a strain box would be
+      ticked with all boxes already full, or on critical strain. Clear all strain and take a burden; you can't act on your
+      own for the rest of the scene unless you or someone nearby spends 1 effort per action.</p>`)}
+    ${row("burden", `<p class="icon-guide-text"><strong>Burden</strong>: name it (a broken arm, fear, sickness) and tick two
+      actions above 0d at −1d. Healed only during an interlude, a few segments at a time. Invoke it to get into trouble
+      during a roll: 1 XP at the end of that session.</p>`)}
+    ${row("three burdens", `<p class="icon-guide-note">With 3 burdens a break adds no new one, but you stay broken until the
+      expedition ends and must sit out the next one (p.31).</p>`)}
+  </section>
+
+  <section class="icon-section icon-ref-section">
+    <h3 class="icon-section__title">Fortune rolls ${page("p.20")}</h3>
+    ${row("fortune roll recall", `<p class="icon-guide-text">For things that aren't dangerous but have an unclear outcome
+      (scouting from afar, research, recalling lore, a drinking contest), roll the action with <strong>nothing at stake</strong>:
+      1-3 poor, 4-5 average, 6 good, 6,6 excellent. The result changes the risk and effect of later rolls.</p>`)}
+  </section>`;
+}
+
+/**
  * Edge cases that come up at the table, as [question, answer]. Collected by
  * the playtest group (October 2026) and checked against the rulebook; page
  * numbers are the PDF's "N of 501".
@@ -279,6 +415,7 @@ function glossaryHTML() {
 /** The guide's tabs, in order; `searchable` panes take part in the search. */
 const PANES = [
   { id: "turn",     icon: "fa-solid fa-clock-rotate-left", label: "Turn",     html: () => turnSchemaHTML() },
+  { id: "narrative", icon: "fa-solid fa-feather",           label: "Narrative", html: () => narrativeHTML(), searchable: true },
   { id: "areas",    icon: "fa-solid fa-vector-square",     label: "Areas",    html: () => `<section class="icon-section">${areaDiagramsHTML()}</section>` },
   { id: "glossary", icon: "fa-solid fa-book",              label: "Glossary", html: () => glossaryHTML(), searchable: true },
   { id: "faq",      icon: "fa-solid fa-circle-question",   label: "FAQ",      html: () => faqHTML(),      searchable: true },
@@ -304,6 +441,7 @@ export class QuickGuide extends HandlebarsApplicationMixin(ApplicationV2) {
     header:   { template: "systems/icon-system/templates/apps/quick-guide/header.hbs" },
     tabs:     { template: "templates/generic/tab-navigation.hbs" },
     turn:     { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
+    narrative: { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
     areas:    { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
     glossary: { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
     faq:      { template: "systems/icon-system/templates/apps/quick-guide/pane.hbs" },
@@ -387,7 +525,7 @@ export function onShowReferenceControl(event) {
 }
 
 /**
- * Show the quick guide (tabs: turn schema, areas, glossary, FAQ), on `tab` or
+ * Show the quick guide (tabs: turn schema, narrative, areas, glossary, FAQ), on `tab` or
  * the last tab used. Safe to call any time; never throws.
  * @returns {Promise<QuickGuide|void>}
  */
@@ -441,7 +579,7 @@ export async function promptQuickGuide({ stampOnly = false } = {}) {
   const open = await foundry.applications.api.DialogV2.confirm({
     window:  { title: `ICON 1.5 — version ${version}`, icon: "fa-solid fa-book-open" },
     content: `<p>The ICON 1.5 system has been updated to <strong>${version}</strong>.</p>
-      <p>Do you want to open the <strong>Quick Guide</strong>? It covers how a turn works, every area pattern, the
+      <p>Do you want to open the <strong>Quick Guide</strong>? It covers how a turn works, narrative rolls and effort, every area pattern, the
       glossary and an FAQ of edge cases. You can open it any time from the Quick Guide button on your character
       sheet or the <i class="fa-solid fa-book"></i> book in the token controls.</p>`,
     yes: { label: "Open the Quick Guide", icon: "fa-solid fa-book-open", default: true },

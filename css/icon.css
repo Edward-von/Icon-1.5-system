@@ -5927,6 +5927,44 @@ ol.chat-log .chat-message,
 .icon-guide-faq__a { margin-top: 2px; color: var(--ic-text-normal); }
 .icon-guide-empty { margin: 0; padding: 4px 12px 10px; font-style: italic; color: var(--ic-text-dim); }
 
+/* Narrative pane (reference.mjs narrativeHTML) */
+.icon-guide-page { margin-left: 6px; font-size: .78em; font-weight: 400; letter-spacing: .04em; text-transform: none; color: var(--ic-text-dim); }
+.icon-guide-pane .icon-ref-term > .icon-guide-text { margin: 0 0 6px; }
+/* Result ladder: one step per band of the highest die, low to high. */
+.icon-guide-ladder { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 8px 0; }
+.icon-guide-ladder__step {
+  --step: var(--ic-border-vis);
+  display: flex; flex-direction: column; gap: 2px; padding: 6px 8px;
+  background: color-mix(in srgb, var(--step) 14%, var(--ic-bg-panel));
+  border: 1px solid var(--ic-border-faint); border-top: 3px solid var(--step); border-radius: var(--ic-radius-sm);
+  font-size: .88em; line-height: 1.35; color: var(--ic-text-normal);
+}
+.icon-guide-ladder__step strong { color: var(--ic-text-bright); }
+.icon-guide-ladder__n { font-family: var(--ic-display); font-size: 1.5em; line-height: 1.1; color: var(--ic-text-bright); }
+.icon-guide-ladder__step--fail  { --step: var(--ic-red); }
+.icon-guide-ladder__step--cost  { --step: #b07a2a; }
+.icon-guide-ladder__step--clean { --step: var(--ic-green-bright); }
+.icon-guide-ladder__step--crit  { --step: var(--ic-gold-bright); }
+/* Tables: each .icon-ref-term row is display: contents, so its cells sit in the
+   grid and the search can still hide the row as a whole. */
+.icon-guide-grid { display: grid; gap: 0; margin: 6px 0 8px; font-size: .88em; line-height: 1.35; }
+.icon-guide-grid--risk { grid-template-columns: 88px minmax(0, 1fr) minmax(0, 1.3fr) 64px; }
+.icon-guide-grid--help { grid-template-columns: 82px minmax(0, .8fr) minmax(0, .8fr) minmax(0, 1.2fr) minmax(0, 1.4fr); }
+.icon-guide-grid > .icon-ref-term { display: contents; }
+.icon-guide-grid > span, .icon-guide-grid > .icon-ref-term > span {
+  padding: 5px 8px 5px 0; border-top: 1px solid var(--ic-border-faint); color: var(--ic-text-normal);
+}
+.icon-guide-grid > .icon-guide-grid__head {
+  border-top: none; padding-top: 0; font-size: .82em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ic-gold);
+}
+.icon-guide-grid .icon-guide-grid__key { font-weight: 700; color: var(--ic-text-bright); }
+.icon-guide-grid .icon-guide-grid__num { font-family: var(--ic-display); font-size: 1.1em; color: var(--ic-text-bright); }
+.icon-guide-callout {
+  margin: 4px 0 2px; padding: 8px 10px; color: var(--ic-text-normal);
+  background: var(--ic-bg-deep); border-left: 3px solid var(--ic-gold); border-radius: var(--ic-radius-sm);
+}
+.icon-guide-callout strong { color: var(--ic-text-bright); }
+
 /* Search: every searchable pane with a hit is shown at once. */
 .icon-quick-guide [hidden] { display: none !important; }
 .icon.sheet.icon-quick-guide.is-searching .icon-tab[data-tab] { display: none; }

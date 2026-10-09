@@ -333,8 +333,8 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] **Ranghi delle reliquie sbloccati / bloccati** (S): nella tab Relics, evidenziare i ranghi sbloccati e
       sbiadire quelli ancora bloccati.
 
-### Sessione B — Tab "Narrative" nella guida rapida (M/L)
-- [ ] Nuova tab della Quick Guide per il gioco narrativo, sui dubbi segnalati da Maar: differenza tra Aid e Set up,
+### Sessione B — Tab "Narrative" nella guida rapida (M/L) — FATTA il 9 ottobre 2026 (versione 1.16.0)
+- [x] Nuova tab della Quick Guide per il gioco narrativo, sui dubbi segnalati da Maar: differenza tra Aid e Set up,
       come funzionano i second wind, cosa vuol dire "exhausted", i diversi rischi dei tiri. Testi presi dal manuale
       (con pagina), stile delle altre tab (diagrammi dove servono).
 

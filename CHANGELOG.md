@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 ottobre 2026 — Guida rapida: tab "Narrative" (versione 1.16.0)
+
+### Richiesta di Maar
+
+- **Il gioco narrativo confondeva i tavoli** (Aid o Set up, second wind, "exhausted", i rischi dei tiri) → nuova tab
+  **Narrative** nella guida rapida, tra Turn e Areas, con la pagina del manuale per ogni parte: il tiro e la scala dei
+  risultati (1-3, 4-5, 6, 6-6), il rischio (Controlled / Risky / Desperate con conseguenze e strain 1 / 2 / 4),
+  l'effetto (da nessuno a superpowered), una tabella che mette a confronto Push, Aid, Set up, Tempt Fate e Team action
+  con un riquadro "Aid or set up?", Effort / Exhausted / Second wind (con la differenza dal burden "exhausted"),
+  Strain / Break / Burden e i tiri di fortuna. La ricerca della guida trova anche queste righe (es. "aid",
+  "second wind").
+
 ## 9 ottobre 2026 — Feedback di Maar: tab, riquadri, planner, clock colorati, ranghi delle reliquie (versione 1.15.0)
 
 ### Bug (bassa priorità)
