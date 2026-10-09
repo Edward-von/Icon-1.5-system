@@ -315,6 +315,41 @@ Emerso lavorando (da fare in blocchi futuri):
 - [x] (CHIUSO da Edoardo il 1 ottobre 2026: p.302 dice che la Great Culture la applica il GM; nessun Unique la ha nel pack, si aggiunge trascinando il template "Yeokin" da Foe Templates) **Villager senza tratti** (S, dati): il Villager nel pack non ha nessun tratto di fazione/cultura; nel
       libro è un mob degli Yeokin (p.322) e la Great Culture "Camaraderie (Villager)" esiste solo in Foe Abilities.
 
+## Feedback di Maar — documento "Icon VTT Bugs" (ricevuto il 9 ottobre 2026)
+
+Nessun bug alto/medio. Molti commenti positivi dai tavoli di Maar (encounter planner, save automatici, keyword al
+passaggio del mouse, clock board, guide visive). La richiesta 1 (skin/temi alla COMP/CON per fazione) è **scartata per
+scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
+
+### Sessione A — Bug bassi e ritocchi (S+S+S+S+M+S) — FATTA il 9 ottobre 2026 (versione 1.15.0)
+- [x] **Tab della scheda PG "affondate"** (S, bug): la barra Narrative/Combat/Conditions/Relics/Notes sta più in basso
+      e rientrata rispetto al resto della scheda (foto di Maar). La barra aveva un'altezza fissata da fuori (non da Foundry 13.351): ora segue le tab.
+- [x] **Box ridimensionabili solo in verticale** (S, bug): sulle schede clock e foe i riquadri si allargano solo in
+      altezza (`resize: vertical` in `css/icon.css`). Erano le textarea `.icon-editor` senza larghezza: ora a tutta larghezza.
+- [x] **Bottoni dell'Encounter planner piccoli** (S): ingrandire i bottoni troppo piccoli di `EncounterDesigner`.
+- [x] **Scheda clock più ariosa** (S): "looks a little compressed"; più spazio tra i clock e tra le righe.
+- [x] **Colore dei clock** (M): 3-4 colori già pronti (es. positivo / negativo / neutro / altro) più un color picker
+      per un colore libero, per ogni clock. (Il picker c'era già: aggiunti i 4 colori pronti.)
+- [x] **Ranghi delle reliquie sbloccati / bloccati** (S): nella tab Relics, evidenziare i ranghi sbloccati e
+      sbiadire quelli ancora bloccati.
+
+### Sessione B — Tab "Narrative" nella guida rapida (M/L)
+- [ ] Nuova tab della Quick Guide per il gioco narrativo, sui dubbi segnalati da Maar: differenza tra Aid e Set up,
+      come funzionano i second wind, cosa vuol dire "exhausted", i diversi rischi dei tiri. Testi presi dal manuale
+      (con pagina), stile delle altre tab (diagrammi dove servono).
+
+### Sessione C — Trofei (L, dati + scheda)
+- [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
+      ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti
+      gli usi.
+- [ ] **Trofei sulla scheda PG** senza automazione: usi rimasti come tracker, "1/battle", "dura un'expedition", e
+      trofei personalizzati creati a mano.
+
+### Sessione D — Gear kit migliori (L)
+- [ ] Oggi il kit è solo un campo di testo (`system.narrative.gearKit`) che il drop di un item `gear-kit` riempie col
+      nome. Richiesta: drag & drop vero (il kit resta sulla scheda con i suoi oggetti), scelta del kit quando si sceglie
+      il bond, conteggio degli usi. Da chiarire con Maar quali usi intende tracciare.
+
 ## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
 
 - [x] **Gain vigilance**: il lettore del testo non riconosceva "Gain +1 vigilance" / "vigilance +1" (S, fatto).

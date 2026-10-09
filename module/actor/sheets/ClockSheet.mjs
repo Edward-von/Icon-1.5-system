@@ -14,7 +14,7 @@
 import { enrichHTML } from "../../helpers/enrich.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
-import { CLOCK_SIZES } from "../../data/actor/ClockData.mjs";
+import { CLOCK_SIZES, CLOCK_COLOR_PRESETS } from "../../data/actor/ClockData.mjs";
 
 const _log = (...args) => console.debug("[ICON | ClockSheet]", ...args);
 
@@ -31,6 +31,7 @@ export class ClockSheet extends BaseActorSheet {
       setClockValue:  ClockSheet.#onSetClockValue,
       adjustClock:    ClockSheet.#onAdjustClock,
       toggleSecret:   ClockSheet.#onToggleSecret,
+      setClockColor:  ClockSheet.#onSetClockColor,
       postClock:      ClockSheet.#onPostClock,
     },
     form: { submitOnChange: true },
@@ -65,6 +66,7 @@ export class ClockSheet extends BaseActorSheet {
       // or picking any other field would silently rewrite it to the first
       // option. The schema allows 1-24; CLOCK_SIZES is only the book's list.
       sizes:    CLOCK_SIZES.includes(c.max) ? CLOCK_SIZES : [...CLOCK_SIZES, c.max].sort((a, b) => a - b),
+      presets:  CLOCK_COLOR_PRESETS.map(p => ({ ...p, on: p.color === String(c.color ?? "").toLowerCase() })),
     })).filter(c => !c.hidden);
 
     _log(`_prepareContext — "${actor.name}" | ${context.clocks.length} clock(s) shown`);
@@ -165,6 +167,18 @@ export class ClockSheet extends BaseActorSheet {
     const clocks = this.#clocks();
     if (!clocks[i]) return;
     clocks[i].secret = !clocks[i].secret;
+    await this.#writeClocks(clocks);
+  }
+
+  /** A preset swatch: same field as the colour picker, one click. */
+  static async #onSetClockColor(event, target) {
+    event.preventDefault();
+    const i = Number(target.dataset.index);
+    const color = String(target.dataset.color ?? "");
+    const clocks = this.#clocks();
+    if (!clocks[i] || !/^#[0-9a-f]{6}$/i.test(color)) return;
+    clocks[i].color = color;
+    _log(`setClockColor — "${clocks[i].name}" → ${color}`);
     await this.#writeClocks(clocks);
   }
 

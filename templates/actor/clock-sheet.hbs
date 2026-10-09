@@ -27,13 +27,6 @@
         <div class="icon-clock-card__head">
           <input type="text" name="system.clocks.{{c.i}}.name" value="{{c.name}}"
                  placeholder="Clock name" {{#unless ../isEditable}}disabled{{/unless}}>
-          <select name="system.clocks.{{c.i}}.max" class="icon-clock-size" {{#unless ../isEditable}}disabled{{/unless}}>
-            {{#each c.sizes as |sz|}}
-              <option value="{{sz}}" {{#icon-eq c.max sz}}selected{{/icon-eq}}>{{sz}}</option>
-            {{/each}}
-          </select>
-          <input type="color" name="system.clocks.{{c.i}}.color" value="{{c.color}}"
-                 title="Colour of this clock" {{#unless ../isEditable}}disabled{{/unless}}>
           <span class="icon-clock-card__count">{{c.value}}/{{c.max}}</span>
           {{#if ../isGM}}
             <span class="icon-clock-card__drag" draggable="true" data-clock-drag-index="{{c.i}}"
@@ -70,6 +63,30 @@
           {{/if}}
           {{#if c.full}}<span class="icon-badge icon-badge--primary">FULL</span>{{/if}}
         </div>
+
+        {{!-- Size and colour on their own line: the head row was too crowded to read. --}}
+        {{#if ../isEditable}}
+          <div class="icon-clock-card__style">
+            <label class="icon-clock-card__field">
+              <span>Size</span>
+              <select name="system.clocks.{{c.i}}.max" class="icon-clock-size">
+                {{#each c.sizes as |sz|}}
+                  <option value="{{sz}}" {{#icon-eq c.max sz}}selected{{/icon-eq}}>{{sz}}</option>
+                {{/each}}
+              </select>
+            </label>
+            <div class="icon-clock-card__field">
+              <span>Colour</span>
+              {{#each c.presets as |p|}}
+                <button type="button" class="icon-clock-swatch {{#if p.on}}icon-clock-swatch--on{{/if}}"
+                        style="--swatch:{{p.color}}" data-action="setClockColor" data-index="{{c.i}}"
+                        data-color="{{p.color}}" title="{{p.label}}">{{p.label}}</button>
+              {{/each}}
+              <input type="color" name="system.clocks.{{c.i}}.color" value="{{c.color}}"
+                     title="Any other colour">
+            </div>
+          </div>
+        {{/if}}
 
         <input type="text" class="icon-clock-card__note" name="system.clocks.{{c.i}}.note" value="{{c.note}}"
                placeholder="What happens when it fills…" {{#unless ../isEditable}}disabled{{/unless}}>

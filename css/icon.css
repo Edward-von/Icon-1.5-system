@@ -136,6 +136,15 @@
   font-family: inherit;
   font-size: 0.87em;
 }
+/* Core gives every textarea `resize: vertical` and no width, so an editor box
+   with no rule of its own sat at the browser's ~20-column default and could
+   only be stretched downwards (clock notes, foe actions/traits: Maar, 9 Oct).
+   Fill the row instead; the height stays user-adjustable. */
+.icon.sheet textarea.icon-editor {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
 .icon.sheet input:focus,
 .icon.sheet select:focus,
 .icon.sheet textarea:focus {
@@ -808,19 +817,38 @@
 .icon-clock-card .icon-clock-seg:not([data-action]):hover { border-color: var(--ic-border-vis); background: var(--ic-bg-field); }
 .icon-clock-seg--filled:not([data-action]):hover,
 .icon-clock-card .icon-clock-seg--filled:not([data-action]):hover { background: var(--clock-color, var(--ic-gold-dim)); border-color: var(--clock-color, var(--ic-gold)); }
-.icon-clock-board { display: flex; flex-direction: column; gap: 8px; padding: 8px; }
+/* Roomier than the rest of the sheets (Maar, 9 Oct: the board "looks a little compressed"):
+   more air between cards and between the lines of a card. */
+.icon-clock-board { display: flex; flex-direction: column; gap: 14px; padding: 14px 14px 10px; }
 .icon-clock-card {
-  padding: 8px; border-radius: var(--ic-radius);
+  padding: 12px 14px; border-radius: var(--ic-radius);
   background: var(--ic-bg-panel);
   border: 1px solid var(--ic-border-subtle);
   border-left: 4px solid var(--clock-color);
 }
 .icon-clock-card--full { background: color-mix(in srgb, var(--clock-color) 12%, var(--ic-bg-panel)); }
-.icon-clock-card__head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
-.icon-clock-card__head input[type="text"] { flex: 1 1 auto; min-width: 0; }
-.icon-clock-card__head input[type="color"] { width: 26px; height: 24px; padding: 0; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: none; cursor: pointer; }
-.icon-clock-card__count { font-family: var(--ic-display); color: var(--ic-text-bright); white-space: nowrap; }
-.icon-clock-card__note { width: 100%; margin-top: 6px; font-size: .84em; }
+.icon-clock-card__head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.icon-clock-card__head input[type="text"] { flex: 1 1 auto; min-width: 0; font-family: var(--ic-display); font-size: 1.08em; }
+.icon-clock-card__count { font-family: var(--ic-display); font-size: 1.1em; color: var(--ic-text-bright); white-space: nowrap; }
+.icon-clock-card__note { width: 100%; margin-top: 10px; font-size: .84em; }
+.clock-sheet .icon-clock-row { gap: 4px; }
+.clock-sheet .icon-clock-seg { width: 24px; height: 24px; margin-right: 2px; }
+/* Size + colour line */
+.icon-clock-card__style { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 10px; }
+.icon-clock-card__field { display: flex; align-items: center; gap: 6px; }
+.icon-clock-card__field > span { font-size: .7em; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ic-text-dim); }
+.icon-clock-card__style input[type="color"] { width: 28px; height: 24px; padding: 0; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: none; cursor: pointer; }
+.icon-clock-swatch {
+  flex: 0 0 auto; height: 24px; padding: 0 8px 0 20px; position: relative; cursor: pointer;
+  font: inherit; font-size: .74em; color: var(--ic-text-dim); line-height: 22px;
+  background: var(--ic-bg-field); border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm);
+}
+.icon-clock-swatch::before {
+  content: ""; position: absolute; left: 6px; top: 50%; width: 10px; height: 10px; margin-top: -5px;
+  background: var(--swatch); border-radius: 2px;
+}
+.icon-clock-swatch:hover { color: var(--ic-text-bright); border-color: var(--swatch); }
+.icon-clock-swatch--on { color: var(--ic-text-bright); border-color: var(--swatch); background: color-mix(in srgb, var(--swatch) 18%, var(--ic-bg-field)); }
 .icon-clock-row { display: flex; align-items: center; flex-wrap: wrap; gap: 2px; }
 .icon-btn--secret-on { background: var(--ic-bg-deep); border-color: var(--ic-gold); color: var(--ic-gold); }
 /* The clock posted to chat. */
@@ -2486,6 +2514,29 @@ details[open] > .icon-basic-actions__summary::before {
   border-left-color: var(--ic-gold);
   background: rgba(200,150,28,0.05);
 }
+/* Unlocked vs locked ranks (Maar, 9 Oct: hard to tell which ranks are unlocked).
+   The template has always set --locked; it had no style until now. Unlocked rows
+   get a solid gold edge and a tint, locked ones dim their text (not the
+   Upgrade / Infuse controls, which are what you act on) behind a dashed edge. */
+.icon-relic-card--item .icon-relic-card__rank-row:not(.icon-relic-card__rank-row--locked) {
+  border-left: 3px solid var(--ic-gold-bright);
+  background: rgba(200,150,28,0.1);
+}
+.icon-relic-card--item .icon-relic-card__rank-row:not(.icon-relic-card__rank-row--locked) .icon-rank-label::after {
+  content: "✓ Unlocked";
+  margin-left: 8px; font-size: .78em; font-weight: 600; letter-spacing: .04em; color: var(--ic-gold);
+}
+.icon-relic-card__rank-row--locked {
+  border-left: 2px dashed var(--ic-border-vis);
+  background: transparent;
+}
+.icon-relic-card__rank-row--locked .icon-rank-label { color: var(--ic-text-dim); }
+.icon-relic-card__rank-row--locked .icon-rank-label::after {
+  content: "🔒 Locked";
+  margin-left: 8px; font-size: .78em; font-weight: 600; letter-spacing: .04em; color: var(--ic-text-dim);
+}
+.icon-relic-card__rank-row--locked > .icon-editor-wrap,
+.icon-relic-card__rank-row--locked > p { opacity: .45; }
 /* Partial dust infusion controls (progress + "+1 Dust" button). */
 .icon-relic-infuse {
   display: inline-flex;
@@ -4937,8 +4988,17 @@ ol.chat-log .chat-message,
   align-items: flex-end;
   justify-content: flex-start;   /* core: space-evenly */
   gap: 5px;
-  padding: 12px 8px 0;
+  /* Left edge in line with the tab content below (.icon-tab pads 12px). */
+  padding: 12px 12px 0;
   line-height: normal;           /* core: 2.5 */
+  /* Always as tall as the boxes it holds. Maar's build (9 Oct) gave the strip a
+     fixed height from outside our CSS (not core 13.351: likely v14 or a module),
+     so the boxes hung ~5px below its gold line and read as sunk into the sheet. */
+  height: auto;
+  min-height: max-content;
+  max-height: none;
+  flex: 0 0 auto;
+  overflow: visible;
   border-top: none;
   border-bottom: 1px solid var(--ic-gold-dim);
 }
@@ -5601,6 +5661,14 @@ ol.chat-log .chat-message,
 .icon-encounter__meta em { font-style: normal; color: var(--ic-text-ghost); }
 .icon-encounter__cost { flex: 0 0 26px; text-align: center; font-family: var(--ic-display); font-size: 1.15em; color: var(--ic-gold-bright); }
 .icon-encounter__row .icon-btn--sm, .icon-encounter__pick .icon-btn--sm { flex: 0 0 auto; min-width: 24px; }
+/* Bigger hit areas across the planner (Maar, 9 Oct: "some of the buttons are slightly
+   small"). The shared .icon-btn--sm (.74em, 1px padding) is sized for dense sheets; here
+   the +/−/✕ steppers and row buttons are clicked constantly while building a fight. */
+.icon.encounter-designer .icon-btn--sm {
+  min-height: 26px; min-width: 28px; padding: 3px 9px; font-size: .86em; line-height: 1.1;
+}
+.icon.encounter-designer .icon-btn:not(.icon-btn--sm) { min-height: 32px; padding: 5px 14px; font-size: .92em; }
+.icon.encounter-designer .icon-encounter__elite { padding: 4px 10px; font-size: .76em; min-height: 26px; }
 
 /* Picks */
 /* The pick row carries many controls (qty, Elite, reserve, cost, ✕): let them wrap

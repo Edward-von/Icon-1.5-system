@@ -16,6 +16,19 @@ const { SchemaField, StringField, NumberField, BooleanField, ArrayField, HTMLFie
 /** Clock sizes the book uses (p.140: "The longer the clock…"). */
 export const CLOCK_SIZES = [4, 6, 8, 10, 12];
 
+/**
+ * One-click colours for the board, so a table can tell kinds of clock apart at a
+ * glance (Maar: "positive/negative clocks/other clocks"). The colour picker next
+ * to them still takes any colour. Muted on purpose: they fill segments, the map
+ * wheel and the chat card.
+ */
+export const CLOCK_COLOR_PRESETS = [
+  { key: "progress", label: "Progress", color: "#4f9a52" },
+  { key: "danger",   label: "Danger",   color: "#b8402e" },
+  { key: "neutral",  label: "Neutral",  color: "#c8961c" },
+  { key: "mystery",  label: "Mystery",  color: "#6a5cb0" },
+];
+
 export class ClockData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {

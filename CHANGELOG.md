@@ -1,5 +1,30 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 9 ottobre 2026 — Feedback di Maar: tab, riquadri, planner, clock colorati, ranghi delle reliquie (versione 1.15.0)
+
+### Bug (bassa priorità)
+
+- **Tab della scheda PG "affondate"**: nella foto di Maar le tab scendevano sotto la linea dorata della barra, che
+  passava a metà della tab attiva → la barra aveva un'altezza fissata da fuori dal nostro CSS (non da Foundry 13.351:
+  probabilmente Foundry 14 o un modulo), più bassa delle tab → ora la barra prende sempre l'altezza delle tab che
+  contiene; in più la prima tab è allineata al bordo sinistro del contenuto.
+- **Riquadri allargabili solo in verticale** (scheda clock, scheda foe): i campi di testo lunghi non avevano una
+  larghezza nostra e restavano alla misura di default del browser (circa 20 caratteri), mentre Foundry permette solo
+  di allungarli verso il basso → ora sono larghi quanto la scheda; l'altezza si regola ancora trascinando l'angolo.
+
+### Richieste
+
+- **Bottoni dell'Encounter planner più grandi**: i bottoni piccoli (−/+, ✕, Elite, Load/Save…) sono più alti e larghi,
+  con un testo più leggibile; più grandi anche Chat / Actors / Deploy.
+- **Scheda clock più ariosa**: più spazio tra i clock e dentro ognuno; dimensione e colore sono scesi su una riga
+  loro, perché la prima riga era troppo affollata.
+- **Colore dei clock**: il selettore di colore c'era già, ma era un quadratino accanto al nome → ora ci sono quattro
+  colori pronti con un clic (Progress verde, Danger rosso, Neutral oro, Mystery viola) più il selettore per un colore
+  qualsiasi. Il colore arriva anche al clock sulla mappa e alla card in chat.
+- **Ranghi delle reliquie sbloccati / bloccati**: le righe dei ranghi bloccati avevano già un segno nel codice, ma
+  nessuno stile, quindi sembravano tutte uguali → ora i ranghi sbloccati hanno bordo dorato, sfondo e "✓ Unlocked",
+  quelli bloccati sono sbiaditi con "🔒 Locked" (i bottoni Upgrade / +1 Dust restano ben visibili).
+
 ## 2 ottobre 2026 — Correzioni dal playtest locale (versione 1.14.1)
 
 - **Gain vigilance mancante**: le card degli Stalwart non avevano il bottone per la vigilance ("Gain +1 vigilance",

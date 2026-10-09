@@ -1656,6 +1656,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Feedback di Maar, Sessione A: tab, riquadri, planner, clock, reliquie (9 ottobre 2026, versione 1.15.0)
+
+- [ ] **Tab della scheda PG**: la linea dorata sotto Narrative/Combat/… corre lungo il fondo delle tab (non le
+      taglia più a metà: guardare dentro la tab attiva, non deve vedersi una seconda riga dorata), e la prima tab
+      parte allineata al bordo sinistro del contenuto sotto. Provare anche sulle schede Foe e Legend.
+      Se possibile chiedere a Maar una foto con la sua build (il difetto da noi in 13.351 non si vedeva).
+- [ ] **Riquadri di testo a tutta larghezza**: scheda clock, campo Notes → largo quanto la scheda, si allunga
+      ancora in verticale trascinando l'angolo. Scheda foe in modalità modifica: tratti, azioni (Description / Hit /
+      Miss / Area), interrupt, round action → tutti a tutta larghezza. Dare un'occhiata anche a summon, legend e una
+      scheda item: niente riquadri che escono a destra.
+- [ ] **Bottoni dell'Encounter planner**: −/+ della party e delle quantità, ✕, Elite, On scene / All, Random fill,
+      Load/Save/New, Chat/Actors/Deploy più grandi; la finestra alla misura di default non va a capo in modo strano.
+- [ ] **Scheda clock più ariosa**: più spazio tra i clock e tra le righe; il pannello di un clock ha 4 righe: nome +
+      conteggio + bottoni, segmenti, "Size" + "Colour", nota.
+- [ ] **Colori pronti**: Progress / Danger / Neutral / Mystery → un clic cambia il colore di segmenti e bordo; il
+      campione scelto si vede acceso. Il quadratino del selettore accanto dà ancora un colore libero, e dopo un colore
+      libero nessun campione resta acceso. Il colore arriva anche al clock sulla mappa (⤓ Map) e alla card 💬.
+- [ ] **Clock da giocatore**: con un utente senza diritti di modifica la riga Size/Colour non compare; con diritti
+      di modifica compare e funziona. Un clock segreto (🙈) resta invisibile al giocatore e non sparisce quando lui
+      cambia qualcosa sulla board.
+- [ ] **Ranghi delle reliquie**: tab Relics di un PG con una reliquia al rango I → riga Rank I con bordo dorato, sfondo
+      e "✓ Unlocked"; Rank II, III, Aspect sbiaditi con bordo tratteggiato e "🔒 Locked", ma i bottoni Upgrade e
+      "+1 Dust" restano ben leggibili. Fare un Upgrade → la riga passa a sbloccata.
+
 ## Esito playtest del 2 ottobre 2026 (Foundry locale, mondo "test", attori di prova poi cancellati)
 
 Sezioni 1.12.1, 1.13.0 e 1.14.0: 26 controlli passati, 2 bug trovati e corretti subito (versione 1.14.1, voci qui sotto).
