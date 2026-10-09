@@ -1660,8 +1660,8 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 - [ ] **Tab della scheda PG**: la linea dorata sotto Narrative/Combat/… corre lungo il fondo delle tab (non le
       taglia più a metà: guardare dentro la tab attiva, non deve vedersi una seconda riga dorata), e la prima tab
-      parte allineata al bordo sinistro del contenuto sotto. Provare anche sulle schede Foe e Legend.
-      Se possibile chiedere a Maar una foto con la sua build (il difetto da noi in 13.351 non si vedeva).
+      parte allineata al bordo sinistro del contenuto sotto; tra una tab e l'altra un piccolo spazio regolare.
+      Provare anche sulle schede Foe e Legend, e su Foundry 13 e 14.
 - [ ] **Riquadri di testo a tutta larghezza**: scheda clock, campo Notes → largo quanto la scheda, si allunga
       ancora in verticale trascinando l'angolo. Scheda foe in modalità modifica: tratti, azioni (Description / Hit /
       Miss / Area), interrupt, round action → tutti a tutta larghezza. Dare un'occhiata anche a summon, legend e una

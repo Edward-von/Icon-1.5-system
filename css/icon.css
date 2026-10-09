@@ -536,6 +536,12 @@
 /* Must beat the AppV2 part reset above (`.icon.sheet [data-application-part]:not(header)`,
    specificity 0,3,1) — without this every tab section of the sheet is shown stacked. */
 .icon.sheet .icon-tab[data-tab]:not(.active) { display: none; }
+/* Same reset, other victim: the tab strip is a part too (core tab-navigation.hbs),
+   so it was display:block and `.icon.sheet .tabs { display: flex }` never applied.
+   As a block, the <a> tabs were inline boxes whose vertical padding doesn't grow
+   the line, so they hung ~6px below the strip's gold line ("sunk in", Maar 9 Oct)
+   and `gap` did nothing. */
+.icon.sheet nav.tabs[data-application-part] { display: flex; }
 
 /* ============================================================
    8. Sections
@@ -4991,14 +4997,6 @@ ol.chat-log .chat-message,
   /* Left edge in line with the tab content below (.icon-tab pads 12px). */
   padding: 12px 12px 0;
   line-height: normal;           /* core: 2.5 */
-  /* Always as tall as the boxes it holds. Maar's build (9 Oct) gave the strip a
-     fixed height from outside our CSS (not core 13.351: likely v14 or a module),
-     so the boxes hung ~5px below its gold line and read as sunk into the sheet. */
-  height: auto;
-  min-height: max-content;
-  max-height: none;
-  flex: 0 0 auto;
-  overflow: visible;
   border-top: none;
   border-bottom: 1px solid var(--ic-gold-dim);
 }

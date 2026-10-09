@@ -5,9 +5,11 @@
 ### Bug (bassa priorità)
 
 - **Tab della scheda PG "affondate"**: nella foto di Maar le tab scendevano sotto la linea dorata della barra, che
-  passava a metà della tab attiva → la barra aveva un'altezza fissata da fuori dal nostro CSS (non da Foundry 13.351:
-  probabilmente Foundry 14 o un modulo), più bassa delle tab → ora la barra prende sempre l'altezza delle tab che
-  contiene; in più la prima tab è allineata al bordo sinistro del contenuto.
+  passava a metà della tab attiva (succedeva a tutti, su Foundry 13 e 14) → la regola che azzera il layout dei pezzi
+  della scheda valeva anche per la barra delle tab e ne toglieva l'impaginazione: le tab diventavano testo in riga, e
+  il loro spazio interno sbordava sotto la linea. Lo stesso errore che il 9 settembre impilava il contenuto delle tab
+  → la barra ha di nuovo la sua impaginazione, le tab poggiano sulla linea con il piccolo spazio tra l'una e l'altra
+  che era previsto, e la prima tab è allineata al bordo sinistro del contenuto.
 - **Riquadri allargabili solo in verticale** (scheda clock, scheda foe): i campi di testo lunghi non avevano una
   larghezza nostra e restavano alla misura di default del browser (circa 20 caratteri), mentre Foundry permette solo
   di allungarli verso il basso → ora sono larghi quanto la scheda; l'altezza si regola ancora trascinando l'angolo.

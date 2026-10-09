@@ -323,7 +323,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Sessione A — Bug bassi e ritocchi (S+S+S+S+M+S) — FATTA il 9 ottobre 2026 (versione 1.15.0)
 - [x] **Tab della scheda PG "affondate"** (S, bug): la barra Narrative/Combat/Conditions/Relics/Notes sta più in basso
-      e rientrata rispetto al resto della scheda (foto di Maar). La barra aveva un'altezza fissata da fuori (non da Foundry 13.351): ora segue le tab.
+      e rientrata rispetto al resto della scheda (foto di Maar). Il reset CSS dei part AppV2 rendeva la barra `display: block` (tab inline che sbordavano): ora è flex.
 - [x] **Box ridimensionabili solo in verticale** (S, bug): sulle schede clock e foe i riquadri si allargano solo in
       altezza (`resize: vertical` in `css/icon.css`). Erano le textarea `.icon-editor` senza larghezza: ora a tutta larghezza.
 - [x] **Bottoni dell'Encounter planner piccoli** (S): ingrandire i bottoni troppo piccoli di `EncounterDesigner`.
