@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Domain e abilità che creano terreno (12 ottobre 2026, versione 1.17.5)
+
+- [ ] **Helix Heel**: PG con la reliquia Domain → pannello di Helix Heel → nessun promemoria "place your Domain".
+      Lo stesso per Lance.
+- [ ] **Terraforming / Geyser**: il promemoria di Domain c'è ancora.
+- [ ] **Pyre / Death Blossom**: ("create a pit under…") il promemoria di Domain ora compare.
+- [ ] **Midas / Comet**: il promemoria c'è (statua oggetto, arma che diventa oggetto).
+
 ## Riquadri allargabili (12 ottobre 2026, versione 1.17.4)
 
 - [ ] **Clock**: scheda di un clock → il riquadro delle note è largo quanto la scheda; trascinando l'angolo in basso a

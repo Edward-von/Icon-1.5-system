@@ -401,6 +401,11 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — riquadri solo verticali — FATTO il 12 ottobre 2026 (versione 1.17.4)
 - [x] I riquadri di testo delle schede si allargano anche di lato (prima resize solo verticale).
 
+### Bug di Maar del 12 ottobre 2026 — Domain su Helix Heel — FATTO il 12 ottobre 2026 (versione 1.17.5)
+- [x] Domain scattava su qualunque testo con "object": ora solo se l'abilità crea terreno o un oggetto.
+- [ ] **Emerso lavorando** (S, da controllare col manuale): Chaos Tarot e Sleight of Hand fanno scattare Domain per
+      una frase sul wild card del Seer ("such as creating terrain effects"); succedeva anche prima.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

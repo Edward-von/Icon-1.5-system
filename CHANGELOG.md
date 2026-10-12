@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Domain solo per le abilità che creano terreno o oggetti (versione 1.17.5)
+
+### Bug di Maar
+
+- **Helix Heel mostrava il promemoria di Domain**: la reliquia scatta "When you create a terrain effect or object"
+  (p.250), ma il controllo bastava che il testo dicesse "object" o "terrain effect" da qualche parte. Helix Heel
+  *usa* gli oggetti che ci sono già ("If an object is in the end space…"), non ne crea → ora serve che l'abilità ne
+  crei uno: un tag terrain effect, un blocco "Object:" / "Terrain effect:", oppure un verbo di creazione (create,
+  place, summon, raise, replace with, becomes…) seguito da object / terrain / pit / boulder / wall. Escono Helix Heel,
+  Lance e Quaking Palm (usano oggetti senza crearne). Entrano 13 abilità che creano pit o terreno e prima erano
+  ignorate: Massive Overhead, Valkyrie, Cryo, Chastise, Gigaton Whip, Pandaemonium, Pyre, Bio, Death Blossom, Rime,
+  Blackstar, Deepwrath e Takedown.
+
 ## 12 ottobre 2026 — Riquadri di testo allargabili anche di lato (versione 1.17.4)
 
 ### Bug di Maar
