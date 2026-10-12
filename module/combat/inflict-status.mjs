@@ -64,6 +64,13 @@ async function _onInflictClick(btn) {
     catch (err) { console.warn("[ICON | InflictStatus] bad damage data on the button", err); }
   }
 
+  // One save, two outcomes (ability-statuses.mjs pairSaveOutcomes).
+  let pair = null;
+  if (d.pair) {
+    try { pair = JSON.parse(d.pair); }
+    catch (err) { console.warn("[ICON | InflictStatus] bad save-pair data on the button", err); }
+  }
+
   const spec = {
     kind:        d.kind || "inflict",          // "inflict" | "gain" | "save-damage"
     statusId:    d.statusId,
@@ -78,6 +85,7 @@ async function _onInflictClick(btn) {
     autoFailIf:  d.autoFail || "",
     sourceTokenId: d.sourceToken || "",
     saveDamage,
+    pair,
     source,
   };
 
@@ -92,7 +100,7 @@ async function _onInflictClick(btn) {
   const r = results[0];
   if (!d.targetUuid || !r) { btn.disabled = false; return; }
   btn.textContent = spec.kind === "save-damage" ? (r.success ? "✓ saved" : "✓ failed — damage rolled")
-                  : r.relayed ? "→ GM" : r.applied ? `✓ ${spec.label}${spec.ongoing ? "+" : ""}` : "✓ saved";
+                  : r.relayed ? "→ GM" : r.applied ? `✓ ${r.appliedLabel ?? `${spec.label}${spec.ongoing ? "+" : ""}`}` : "✓ saved";
   btn.classList.add(r.applied ? "icon-chat-btn--done" : "icon-chat-btn--resisted");
   btn.disabled = true;
 }
@@ -145,7 +153,7 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
  * Save (if the text asks for one) and apply.
  * @returns {Promise<{applied: boolean, success: boolean|null, relayed: boolean}|null>} null = cancelled
  */
-export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "", kind = "inflict", saveDamage = null, targetTokenId = "" }) {
+export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "", kind = "inflict", saveDamage = null, targetTokenId = "", pair = null }) {
   if (!target) return null;
   if (!statusId && kind !== "save-damage") return null;
   const fullLabel = `${label}${ongoing ? "+" : ""}`;
@@ -189,9 +197,11 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
       subtitle: `${abilityName ? `${abilityName} — ` : ""}${source?.name ?? "?"} → ${target.name}`,
       successText: kind === "save-damage"
         ? (saveDamage?.success?.deals ? `Saved — reduced damage (${saveDamage?.label ?? ""}).` : `Saved — no damage.`)
+        : pair ? `Saved — ${_pairLabel(pair.success)} instead.`
         : when === "success" ? `Saved — ${fullLabel} applies on a successful save.` : `Saved! ${fullLabel} avoided.`,
       failureText: kind === "save-damage"
         ? `Failed — full damage (${saveDamage?.label ?? ""}).`
+        : pair ? `Failed — ${_pairLabel(pair.fail)} applied.`
         : when === "success" ? `Failed — the failed-save outcome applies instead (see the ability text).` : `Failed — ${fullLabel} applied.`,
     });
     success = r.success; total = r.total; rolled = true;
@@ -214,6 +224,18 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
     return { applied: !success, success, relayed: false };
   }
 
+  // One save, two outcomes: the result picks which statuses land.
+  if (pair) {
+    const list = (success ? pair.success : pair.fail) ?? [];
+    let res = null;
+    for (const st of list) {
+      const r = await _apply({ target, source, statusId: st.id, ongoing: !!st.ongoing, label: `${st.label}${st.ongoing ? "+" : ""}`, abilityName, sourceTokenId, note });
+      if (r) res = res ? { ...res, relayed: res.relayed || r.relayed } : r;
+    }
+    await damageAfter();
+    return res ? { ...res, success, appliedLabel: _pairLabel(list) } : null;
+  }
+
   const applied = when === "success" ? success : !success;
   if (!applied) {
     if (!rolled) await _chat(target, `<strong>${escapeHTML(target.name)}</strong> ${success ? "saves against" : "fails the save, but"} <strong>${escapeHTML(fullLabel)}</strong> ${success ? "" : "only applies on a successful save"} <small>— ${escapeHTML(abilityName || "effect")}${source ? ` (${escapeHTML(source.name)})` : ""}, ${escapeHTML(note)}</small>`);
@@ -223,6 +245,11 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
   const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note });
   await damageAfter();
   return res ? { ...res, success } : null;
+}
+
+/** "Blind+ + Weakened" — the statuses of one side of a save pair. */
+function _pairLabel(list) {
+  return (list ?? []).map(st => `${st.label}${st.ongoing ? "+" : ""}`).join(" + ");
 }
 
 /* -------------------------------------------------- */

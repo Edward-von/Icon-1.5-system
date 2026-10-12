@@ -613,6 +613,42 @@ function _blockOn(key, outcome) {
 }
 
 /**
+ * One save, two outcomes: when a block has statuses for a FAILED save and
+ * statuses for a SUCCESSFUL one ("must save or become blinded+ … On a
+ * successful save, they are only blinded"), they become a single entry with
+ * `pair: { fail, success }` — one roll, and the outcome picks which statuses
+ * land. Left apart when the successful save offers a choice ("either slashed
+ * or weakened"): those stay as separate buttons to pick from.
+ * @param {Array<StatusEntry>} entries  inflict entries
+ * @returns {Array<StatusEntry>}
+ */
+export function pairSaveOutcomes(entries) {
+  const out = [];
+  const done = new Set();
+  for (const e of entries) {
+    if (done.has(e)) continue;
+    const peers = entries.filter(x => x.section === e.section && !x.kind && x.id);
+    const fail = peers.filter(x => x.when === "fail");
+    const success = peers.filter(x => x.when === "success");
+    const choice = success.some(x => /\beither\b/i.test(x.sentence));
+    if (e.kind || !e.id || e.when === "always" || !fail.length || !success.length || choice) { out.push(e); continue; }
+    peers.filter(x => x.when !== "always").forEach(x => done.add(x));
+    const brief = (list) => list.map(x => ({ id: x.id, label: x.label, ongoing: !!x.ongoing }));
+    const tag = (list) => list.map(x => `${x.label}${x.ongoing ? "+" : ""}`).join(" + ");
+    const first = fail[0];
+    out.push({
+      ...first,
+      label: `${tag(fail)} / ${tag(success)}`,
+      ongoing: false,
+      saveDamage: fail.find(x => x.saveDamage)?.saveDamage ?? success.find(x => x.saveDamage)?.saveDamage,
+      sentence: [...new Set([...fail, ...success].map(x => x.sentence))].join(" "),
+      pair: { fail: brief(fail), success: brief(success), failLabel: tag(fail), successLabel: tag(success) },
+    });
+  }
+  return out;
+}
+
+/**
  * Render the "Inflict" block: one row per target (or one "current targets"
  * row when nothing was targeted), a button per status grouped by block.
  *
@@ -627,7 +663,7 @@ function _blockOn(key, outcome) {
  */
 export function statusBlockHtml(entries, { source, abilityName = "", outcome = null, targets = null, evaded = null } = {}) {
   if (!entries?.length || !source) return "";
-  const inflict = entries.filter(e => !e.kind || e.kind === "save-damage");
+  const inflict = pairSaveOutcomes(entries.filter(e => !e.kind || e.kind === "save-damage"));
   const gains   = entries.filter(e => e.kind === "gain");
   const notes   = entries.filter(e => e.kind === "note");
   const sourceTokenId = source.getActiveTokens?.()?.[0]?.id ?? "";
@@ -659,18 +695,21 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
         const isDmg = e.kind === "save-damage";
         const title = isDmg
           ? `Save (10+) — damage on a failed save: ${dmg.label}`
+          : e.pair
+            ? `One save (10+): failed → ${e.pair.failLabel}; successful → ${e.pair.successLabel}`
           : save
             ? (e.when === "success" ? `${e.label}${e.ongoing ? "+" : ""} — applies on a SUCCESSFUL save (10+)` : `${e.label}${e.ongoing ? "+" : ""} — target saves first: 10+ avoids it`)
             : `${e.label}${e.ongoing ? "+" : ""} — apply (no save)`;
         const mods = [e.saveCurses ? `+${e.saveCurses} curse` : "", e.saveBoons ? `+${e.saveBoons} boon` : "", e.autoFailIf ? `${e.autoFailIf} → auto-fail` : "", dmg && !isDmg ? `then damage: ${dmg.label}` : ""].filter(Boolean).join(", ");
+        const pairAttr = e.pair ? ` data-pair="${esc(JSON.stringify({ fail: e.pair.fail, success: e.pair.success }))}"` : "";
         const dmgAttrs = dmg ? ` data-dmg-fail="${esc(JSON.stringify(dmg.fail))}" data-dmg-success="${esc(JSON.stringify(dmg.success))}" data-dmg-label="${esc(dmg.label)}"` : "";
-        const label = isDmg ? `🎲 💥 ${dmg.label}` : `${save ? "🎲 " : ""}${e.label}${e.ongoing ? "+" : ""}${dmg ? " 💥" : ""}`;
+        const label = isDmg ? `🎲 💥 ${dmg.label}` : `${save ? "🎲 " : ""}${esc(e.label)}${e.ongoing ? "+" : ""}${dmg ? " 💥" : ""}`;
         return `<button type="button" class="icon-chat-btn icon-chat-btn--status${save ? " icon-chat-btn--status-save" : ""}${e.when === "success" ? " icon-chat-btn--status-on-success" : ""}${e.ongoing ? " icon-chat-btn--status-ongoing" : ""}${isDmg ? " icon-chat-btn--status-damage" : ""}"
           data-action="inflictStatus" data-kind="${isDmg ? "save-damage" : "inflict"}" data-status-id="${esc(e.id)}" data-label="${esc(e.label)}" data-ongoing="${e.ongoing ? "true" : "false"}"
           data-when="${esc(e.when)}" data-section="${esc(e.section)}" data-save-boons="${e.saveBoons}" data-save-curses="${e.saveCurses}"
           data-auto-fail="${esc(e.autoFailIf)}" data-sentence="${esc(e.sentence)}" data-ability="${esc(abilityName)}"
           data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
-          data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"${dmgAttrs}
+          data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"${dmgAttrs}${pairAttr}
           title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}&#10;${esc(e.sentence)}">${label}</button>`;
       }).join("");
       return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${btns}</span>`;

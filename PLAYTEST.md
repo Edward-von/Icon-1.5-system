@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Un solo tiro per i due esiti del save (12 ottobre 2026, versione 1.17.10)
+
+- [ ] **Terrorize**: un Ghul usa Terrorize su un PG bersagliato → nella card c'è un solo bottone "🎲 Blind+ / Blind".
+- [ ] **Fallito**: clic → tiro fallito → il PG ha Blind+ (con il +, niente save a fine turno); il bottone dice
+      "✓ Blind+".
+- [ ] **Riuscito**: su un altro PG → tiro riuscito → il PG ha Blind normale; il bottone dice "✓ Blind".
+- [ ] **Danno con il save**: Hurl Self (Great Boulder Hob) → un bottone "Stunned / Slashed 💥": un tiro, poi lo
+      status giusto e il danno.
+- [ ] **Scelta**: Finish Off (Nilfling) → i bottoni restano separati come prima.
+
 ## Vigilance nelle regole dello Stalwart (12 ottobre 2026, versione 1.17.9)
 
 - [ ] **Stalwart**: scheda di un PG Stalwart → tab combattimento → aprire "Stalwart — Relevant Rules & Heroics" →

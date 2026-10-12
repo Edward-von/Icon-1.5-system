@@ -421,6 +421,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [ ] **Emerso lavorando** (S): anche le altre classi hanno una pagina "Most relevant rules" (Vagabond p.146,
       Mendicant, Wright); confrontarle con le liste della scheda (il Vagabond ne ha zero).
 
+### Bug di Maar del 12 ottobre 2026 — Terrorize con due tiri salvezza — FATTO il 12 ottobre 2026 (versione 1.17.10)
+- [x] Status del save fallito e del save riuscito nello stesso blocco → un solo bottone, un solo tiro.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

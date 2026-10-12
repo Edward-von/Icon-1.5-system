@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Un solo tiro salvezza quando fallire e riuscire danno status diversi (versione 1.17.10)
+
+### Bug di Maar
+
+- **Terrorize chiedeva due tiri salvezza (Blind+ e Blind) e superare il primo non dava Blind**: il testo ("must save
+  or become blinded+ … On a successful save, they are only blinded") veniva letto come due status separati, ognuno
+  con il suo bottone e il suo tiro. Il bottone Blind+ con il tiro riuscito non applicava niente, e Blind chiedeva un
+  secondo tiro → ora i due esiti dello stesso tiro diventano un solo bottone ("🎲 Blind+ / Blind"): un tiro, e il
+  risultato decide cosa applicare (fallito → Blind+, riuscito → Blind). Vale per tutte le abilità scritte così:
+  Terrorize (Ghul, Wailer, Twinsoul, Stutterghast, Arc Ghul), Sticky Solution, Izuna Drop, Berserkgang, Enthrall e
+  Hurl Self. Restano separate le abilità in cui il tiro riuscito lascia una scelta (Finish Off: "either slashed or
+  weakened").
+
 ## 12 ottobre 2026 — Vigilance nelle regole dello Stalwart (versione 1.17.9)
 
 ### Bug di Maar
