@@ -413,6 +413,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] I tasti premuti nei campi delle finestre staccate non arrivano più alle scorciatoie di Foundry (1–0 = macro).
 - [ ] **Da segnalare agli autori di PopOut!** (fuori dal nostro codice): il bug è loro, valeva per qualunque sistema.
 
+### Domanda di Maar del 12 ottobre 2026 — slow turn e NPC che aprono il round — FATTO il 12 ottobre 2026 (versione 1.17.8)
+- [x] È la regola di p.87 (apre il lato opposto a chi ha chiuso); aggiunta la spiegazione all'indicatore del tracker.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

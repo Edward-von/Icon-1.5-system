@@ -1175,10 +1175,17 @@ function _renderIconTracker(app, html, data, combat) {
           : "";
       const factionClass = faction === "pc" ? "icon-turn-indicator--pc" :
                            faction === "npc" ? "icon-turn-indicator--npc" : "";
+      // Why this side opens the round: it's the side opposite to the one that
+      // ended the last round (p.87), so PC slow turns hand the opening to the
+      // NPCs. Advisory only: any pip can still be clicked.
+      const roundOpen = !acting && !combat.getFlag(FLAG_NS, FLAG_LAST);
+      const factionTip = roundOpen && combat.round > 1
+        ? "The round opens with the side opposite to the one that ended the last round (p.87): if the last round ended with a PC turn (slow turns included), an NPC goes first. Advisory only, any pip can still be clicked."
+        : "Sides alternate PC / NPC (p.87); when one side has no activations left, the other keeps going. Advisory only, any pip can still be clicked.";
 
       banner.innerHTML = `
         <div class="icon-combat-banner__round">Round <strong>${combat.round}</strong></div>
-        <div class="icon-turn-indicator ${factionClass}">${factionLabel}</div>
+        <div class="icon-turn-indicator ${factionClass}" title="${factionTip}">${factionLabel}</div>
         <div class="icon-party-resolve" title="Shared by the whole party (p.99). Spend it from a PC sheet with the Limit Break button, or adjust it here.">
           <span class="icon-party-resolve__label">Party Resolve</span>
           <span class="icon-party-resolve__controls">

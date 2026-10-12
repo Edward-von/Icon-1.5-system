@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Spiegato perché dopo le slow turn apre un NPC (versione 1.17.8)
+
+### Domanda di Maar
+
+- **Dopo un round chiuso da slow turn il tracker indica che tocca agli NPC**: è la regola, non un bug. Il round
+  successivo apre il lato opposto a quello che ha chiuso il round prima (p.87: "if the round ends with a player
+  character turn, it will start with an npc turn"). Le slow turn sono quasi sempre dei PG e vengono per ultime,
+  quindi il round dopo apre quasi sempre un NPC. L'indicazione resta un consiglio: qualunque pallino si può
+  cliccare → aggiunta una spiegazione al passaggio del mouse sull'indicatore "PC/NPC PICKS NEXT" del tracker, con
+  la pagina.
+
 ## 12 ottobre 2026 — Si scrive di nuovo nei campi delle finestre staccate con PopOut! (versione 1.17.7)
 
 ### Bug di Maar

@@ -1656,6 +1656,12 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Chi apre il round dopo le slow turn (12 ottobre 2026, versione 1.17.8)
+
+- [ ] **Round 2 dopo una slow turn**: chiudere il round 1 con la slow turn di un PG → Next Round → il tracker dice
+      "NPC PICKS NEXT"; il mouse sopra l'indicatore spiega la regola (p.87).
+- [ ] **Solo consiglio**: nello stesso momento cliccare il pallino di un PG → il PG agisce normalmente.
+
 ## Campi nelle finestre staccate con PopOut! (12 ottobre 2026, versione 1.17.7)
 
 - [ ] **Serve il modulo PopOut!**, con almeno una macro nella barra in basso (slot 1).
