@@ -2148,14 +2148,59 @@ export class IconSheet extends BaseActorSheet {
     const total   = resolve.personal + resolve.party;
     _log(`useLimitBreak — actor: "${this.document.name}" | lb: "${lb.name}" | cost: ${cost} | resolve: ${total} (personal: ${resolve.personal}, party: ${resolve.party})`);
     if (total < cost) { _log(`useLimitBreak — BLOCKED: not enough resolve`); return ui.notifications.warn(`Need ${cost} Resolve (have ${total}).`); }
-    const partySpend    = Math.min(resolve.party, cost);
+    // p.99: "you can use any combination of party or personal resolve, but
+    // party resolve is shared … used with the consent of your team members".
+    // The player picks the split whenever there is one to pick; it starts on
+    // personal first, since the party pool belongs to everyone.
+    const minParty = Math.max(0, cost - resolve.personal);
+    const maxParty = Math.min(resolve.party, cost);
+    let partySpend = minParty;
+    if (maxParty > minParty) {
+      const content = `
+        <div class="icon-lb-resolve" style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
+          <p style="margin:0"><strong>${escapeHTML(lb.name)}</strong> costs <strong>${cost}</strong> Resolve.
+            You have <strong>${resolve.personal}</strong> personal and the party has <strong>${resolve.party}</strong>.</p>
+          <label>From party resolve:
+            <input type="number" name="party" value="${minParty}" min="${minParty}" max="${maxParty}" style="width:60px">
+          </label>
+          <p style="margin:0" data-split>From personal resolve: <strong>${cost - minParty}</strong></p>
+          <p style="margin:0; opacity:.75"><small>Party resolve is shared: spend it with your team's consent (p.99).</small></p>
+        </div>`;
+      const id = Hooks.on("renderDialogV2", (app, html) => {
+        const input = html.querySelector?.('.icon-lb-resolve input[name="party"]');
+        if (!input) return;
+        Hooks.off("renderDialogV2", id);
+        const out = html.querySelector(".icon-lb-resolve [data-split] strong");
+        input.addEventListener("input", () => {
+          const p = Math.max(minParty, Math.min(maxParty, Number(input.value) || 0));
+          out.textContent = String(cost - p);
+        });
+      });
+      let picked;
+      try {
+        picked = await foundry.applications.api.DialogV2.prompt({
+          window: { title: `Limit Break — ${lb.name}` },
+          content,
+          ok: {
+            label: "Use Limit Break",
+            callback: (_e, button) => Math.max(minParty, Math.min(maxParty, Number(button.form.elements.party?.value) || 0)),
+          },
+          rejectClose: false,
+        });
+      } catch { picked = null; }
+      finally { Hooks.off("renderDialogV2", id); }
+      if (picked == null) return;
+      partySpend = picked;
+    }
     const personalSpend = cost - partySpend;
+    _log(`useLimitBreak — spend: party ${partySpend}, personal ${personalSpend}`);
     await this.document.update({
       "system.combat.resolve.party":    resolve.party    - partySpend,
       "system.combat.resolve.personal": resolve.personal - personalSpend,
     });
     const speaker = ChatMessage.getSpeaker({ actor: this.document });
-    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(lb.name)}</em>!<br>${lb.system.effect ?? ""}` });
+    const spent = [personalSpend ? `${personalSpend} personal` : "", partySpend ? `${partySpend} party` : ""].filter(Boolean).join(" + ");
+    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(lb.name)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}` });
   }
 
   static async #onAddJob(event, target) {

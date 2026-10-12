@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Limit break: si sceglie quale Resolve spendere (versione 1.16.11)
+
+### Bug di Maar
+
+- **Il limit break prendeva sempre prima la Party Resolve**, e la personale solo quando quella era finita, senza
+  chiedere → il manuale (p.99) dice che si può usare "any combination of party or personal resolve", e che la party è
+  di tutto il gruppo e va usata col consenso degli altri. Ora, quando c'è una scelta da fare, "Use" apre un piccolo
+  dialog: quanta Resolve prendere dalla party (il resto viene dalla personale), con il conto aggiornato mentre si
+  cambia il numero. Parte usando prima la personale. Se c'è un solo modo di pagare (per esempio la party è a 0), il
+  dialog non compare. In chat il messaggio del limit break dice come è stato pagato ("Resolve: 1 personal + 1 party").
+
 ## 12 ottobre 2026 — Il danno delle combo che aggiungono soltanto (versione 1.16.10)
 
 ### Bug di Maar

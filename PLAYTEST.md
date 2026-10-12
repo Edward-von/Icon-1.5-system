@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Limit break, scelta della Resolve (12 ottobre 2026, versione 1.16.11)
+
+- [ ] **Scelta**: PG con limit break da 2, Resolve personale 2 e Party Resolve 3 → Use → dialog "From party resolve: 0",
+      "From personal resolve: 2"; portare la party a 1 → la personale diventa 1. Use → personale 1, party 2; in chat
+      "(Resolve: 1 personal + 1 party)".
+- [ ] **Limiti del campo**: il numero non scende sotto il minimo necessario (personale 1, costo 2 → party almeno 1) e non
+      supera la party disponibile.
+- [ ] **Nessuna scelta**: Party Resolve 0 → Use paga dalla personale senza dialog; personale 0 → paga dalla party
+      senza dialog.
+- [ ] **Annulla**: chiudere il dialog → nessuna Resolve spesa, niente in chat.
+- [ ] **Party sincronizzata**: dopo aver speso dalla party, il contatore della Party Resolve nel tracker e sulle schede
+      degli altri PG scende uguale.
+- [ ] **Resolve insufficiente**: totale minore del costo → avviso "Need N Resolve" come prima.
+
 ## Danno delle combo (12 ottobre 2026, versione 1.16.10)
 
 - [ ] **Death Blossom**: un foe bersagliato → 💥 Damage senza combo → dialog con Hit 2[D]+fray, Miss fray, Area fray.
