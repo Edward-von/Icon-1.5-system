@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Campi nelle finestre staccate con PopOut! (12 ottobre 2026, versione 1.17.7)
+
+- [ ] **Serve il modulo PopOut!**, con almeno una macro nella barra in basso (slot 1).
+- [ ] **Numeri**: staccare la scheda di un PG → nel campo Current Vigor scrivere 12 → il numero viene scritto e
+      salvato, la macro dello slot 1 non parte.
+- [ ] **Frecce**: nello stesso campo freccia su/giù → il numero cambia, la mappa non scorre.
+- [ ] **Testo**: in un riquadro di testo scrivere una parola con W, A, S, D → le lettere vengono scritte.
+- [ ] **Finestra principale**: tutto come prima; fuori dai campi le scorciatoie (1–0, frecce) funzionano anche
+      nella finestra staccata.
+
 ## Controlli delle risorse sui tratti (12 ottobre 2026, versione 1.17.6)
 
 - [ ] **Vagabond**: Skirmisher, Finesse, Dodge, Prowl → nessun bottone combo token. L'interruttore COMBO sopra le

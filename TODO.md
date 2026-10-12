@@ -409,6 +409,10 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — combo token sui tratti del Vagabond — FATTO il 12 ottobre 2026 (versione 1.17.6)
 - [x] Il controllo della risorsa di classe compare solo sul tratto che la usa; nessuno sui tratti del Vagabond.
 
+### Bug di Maar del 12 ottobre 2026 — numeri non modificabili nelle finestre PopOut! — FATTO il 12 ottobre 2026 (versione 1.17.7)
+- [x] I tasti premuti nei campi delle finestre staccate non arrivano più alle scorciatoie di Foundry (1–0 = macro).
+- [ ] **Da segnalare agli autori di PopOut!** (fuori dal nostro codice): il bug è loro, valeva per qualunque sistema.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

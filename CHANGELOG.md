@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Si scrive di nuovo nei campi delle finestre staccate con PopOut! (versione 1.17.7)
+
+### Bug di Maar
+
+- **Nelle finestre staccate con PopOut! non si riuscivano a cambiare i numeri**: PopOut! gira ogni tasto premuto
+  nella finestra staccata alle scorciatoie di Foundry. Foundry però controlla se stai scrivendo guardando solo la
+  finestra principale: non vede il campo attivo nella finestra staccata e fa partire le scorciatoie. I tasti 1–0
+  lanciano le macro della barra e il numero non viene scritto; anche le frecce e le lettere delle scorciatoie
+  (W A S D…) vengono mangiate → nelle finestre staccate i tasti premuti dentro un campo di testo o numerico restano
+  alla finestra e non arrivano più alle scorciatoie, come succede nella finestra principale. Esc passa ancora.
+  Vale per tutte le finestre del nuovo tipo (schede, dialoghi), anche quelle di Foundry.
+
 ## 12 ottobre 2026 — Controlli delle risorse solo sul tratto giusto (versione 1.17.6)
 
 ### Bug di Maar

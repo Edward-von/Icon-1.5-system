@@ -891,6 +891,31 @@ Hooks.on("renderActorDirectory", (app, html /*, data */) => {
   actions.appendChild(btn);
 });
 
+/* ================================================== */
+/*  Typing in popped-out windows (PopOut! module)     */
+/* ================================================== */
+
+/**
+ * PopOut! forwards every keydown/keyup of a popped-out window to Foundry's
+ * keybindings. Foundry decides "the user is typing" from the MAIN window's
+ * focused element, so while typing in a popped-out field the keys still fire
+ * their bindings and get swallowed: 1–0 run hotbar macros, so numbers can't
+ * be typed. Keys pressed inside an editable field of a popped-out window stop
+ * at the application, as they would in the main window.
+ */
+Hooks.on("renderApplicationV2", (app, element) => {
+  if (!(element instanceof HTMLElement) || element.dataset.iconKeyGuard) return;
+  element.dataset.iconKeyGuard = "1";
+  const guard = ev => {
+    if (ev.target?.ownerDocument === document) return;          // not popped out
+    const t = ev.target;
+    const editable = ["INPUT", "SELECT", "TEXTAREA"].includes(t?.tagName) || t?.isContentEditable;
+    if (editable && ev.key !== "Escape") ev.stopPropagation();
+  };
+  element.addEventListener("keydown", guard);
+  element.addEventListener("keyup", guard);
+});
+
 /**
  * "Reveal reserves" on the encounter chat card: un-hide the reserve tokens and
  * add them to the scene's combat (GM only).
