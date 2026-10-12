@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Pannello e combo (12 ottobre 2026, versione 1.16.8)
+
+- [ ] **Death Blossom**: PG con Death Blossom, COMBO OFF → bottone "📐 Burst 1"; clic → si piazza subito un Burst 1
+      (nessuna scelta). COMBO ON → il pannello si ridisegna: bottone "📐 Arc 4", il tag Arc 4 evidenziato; clic → scelta
+      tra Arc 4 e Arc 8 (Combo).
+- [ ] **Dopo Show in Chat**: COMBO ON → Show in Chat su Death Blossom (il token si spende) → il pannello resta su "Arc 4"
+      fino all'attacco.
+- [ ] **Holy / Hades**: COMBO ON → i tag True Strike e Medium Blast evidenziati, bottone "📐 Medium Blast".
+- [ ] **Altre abilità senza combo**: niente cambia accendendo o spegnendo COMBO.
+
 ## Card delle versioni combo (12 ottobre 2026, versione 1.16.7)
 
 - [ ] **Show in Chat di Devil Hand**: PG con God Hand e combo token → Show in Chat → titolo "Devil Hand" con "God Hand

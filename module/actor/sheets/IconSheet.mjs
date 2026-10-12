@@ -311,8 +311,11 @@ export class IconSheet extends BaseActorSheet {
       const desc = parseAbilitySections(s.description);
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       // While the combo token is held, a combo ability shows the combo's own
-      // tags (Hades: True Strike + Medium Blast) — flagged as upgraded.
-      const comboArmed = context.comboActive && !!s.isCombo && !!String(s.comboEffect ?? "").trim();
+      // tags (Hades: True Strike + Medium Blast) — flagged as upgraded — and
+      // its own area on the 📐 button (Death Blossom → Flying Sleeves: Arc 4).
+      // Same test as the attack / Show in Chat buttons; context.comboActive is
+      // only set further down, so reading it here was always false.
+      const comboArmed = this._comboArmed(a);
       const tags = resolveAbilityTags(s, { comboMode: comboArmed });
       return {
         id:          a.id,
@@ -1586,7 +1589,10 @@ export class IconSheet extends BaseActorSheet {
         // The armed Infuse version can change the shape ("CRYOTIC — Change
         // area to Line 8", "BIOTIC — increase blast size to medium blast").
         ...(ab.infusions ?? []).filter(i => i.armed).map(i => [i.label, i.text]),
-        ab.hasCombo   ? ["Combo",     s.comboEffect]  : null,
+        // The combo's shapes only while the combo version is in play (its tags
+        // are then already ab.tags): Flying Sleeves offers Arc 4 / Arc 8, the
+        // base Death Blossom just its Burst 1.
+        ab.hasCombo && ab.comboArmed ? ["Combo", s.comboEffect] : null,
         s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
         ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
         ab.hasTalent2 ? ["Talent II", s.talent2]      : null,

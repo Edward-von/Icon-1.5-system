@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Il pannello dell'abilità segue la combo (versione 1.16.8)
+
+### Bug di Maar
+
+- **Il bottone 📐 non cambiava nome accendendo la combo** (Death Blossom → Flying Sleeves restava "Burst 1" invece di
+  "Arc 4"): il pannello delle abilità controllava se la combo era attiva prima che la scheda avesse letto il combo
+  token, quindi per il pannello la combo era sempre spenta → ora usa lo stesso controllo dei bottoni di attacco e Show
+  in Chat (token tenuto, o appena speso su quell'abilità). Con la combo accesa il bottone dice "Arc 4" e i tag della
+  combo sono evidenziati come "upgraded", come era previsto e non succedeva mai.
+- **Il dialog per scegliere l'area offriva le forme della combo anche a combo spenta** (Death Blossom base proponeva
+  Arc 4 e Arc 8) → le forme della combo compaiono solo quando la combo è attiva.
+
 ## 12 ottobre 2026 — Card delle versioni combo: nome e blocchi giusti (versione 1.16.7)
 
 ### Bug di Maar (con le foto di God Hand / Devil Hand)

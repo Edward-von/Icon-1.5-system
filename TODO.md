@@ -370,6 +370,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Show in Chat della combo con il nome base e "⚡ ⚡"; card dell'attacco con tutto il testo combo nel blocco Hit
       ed Exceed della versione base.
 
+### Bug di Maar del 12 ottobre 2026 — bottone dell'area con la combo — FATTO il 12 ottobre 2026 (versione 1.16.8)
+- [x] Death Blossom / Flying Sleeves: il bottone 📐 non cambiava nome con la combo accesa.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
