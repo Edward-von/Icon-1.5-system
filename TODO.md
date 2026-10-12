@@ -360,6 +360,14 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Con GM + GM assistente i save automatici di fine turno (e l'annuncio di fase delle legend) uscivano una volta
       per GM.
 
+### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
+- [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
+      succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
+      finestra nuova tutti gli script tranne poche librerie), non tocca hook né socket e non ri-renderizza le
+      finestre. Il nostro fine turno gira solo sul GM attivo. Da chiedere a Maar: quale finestra era staccata, chi
+      (GM o giocatore), se c'era un secondo GM o lo stesso GM collegato due volte (stesso sintomo del bug delle 1.16.5,
+      che Maar non ha ancora: ha la 1.14.1). Poi riprodurre in locale installando PopOut!.
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti
