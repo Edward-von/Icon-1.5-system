@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Più stance insieme (versione 1.17.0)
+
+### Richiesta di Maar
+
+- **Si poteva tenere una sola stance**: la regola generale è una alla volta (p.103), ma il tratto Martial Master del
+  Knave ("You can take two stances at once", p.141) e l'Aspect della reliquia Byrax ("You can hold +1 more stance than
+  normal", p.249) alzano il limite, fino a 3 → il numero massimo di stance ora si calcola da solo: 1, +1 se il PG ha
+  Martial Master, +1 se ha Byrax all'Aspect. Accanto alla stance c'è un campo **Extra** per qualunque altro effetto
+  che alzi il limite, senza tetto. Il bottone 🧘 di un'abilità aggiunge la stance alle altre finché c'è posto; a limite
+  raggiunto sostituisce la più vecchia e lo dice. Ripremuto, toglie solo quella stance. Con più di una stance
+  possibile la scheda mostra "Stances 2/3"; il segnalino sul token diventa "Stance: Rampage, Iron Wall".
+- I personaggi che avevano già una stance la tengono: il campo è lo stesso (più nomi sono separati da " | "), non
+  serve nessuna migrazione.
+
 ## 12 ottobre 2026 — Limit break: si sceglie quale Resolve spendere (versione 1.16.11)
 
 ### Bug di Maar

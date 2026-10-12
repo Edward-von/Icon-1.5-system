@@ -383,6 +383,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — limit break e Resolve — FATTO il 12 ottobre 2026 (versione 1.16.11)
 - [x] Il limit break spendeva sempre prima la Party Resolve senza chiedere (p.99: qualunque combinazione).
 
+### Richiesta di Maar del 12 ottobre 2026 — più stance insieme — FATTA il 12 ottobre 2026 (versione 1.17.0)
+- [x] Massimo automatico (1 + Martial Master + Byrax Aspect) e campo Extra senza tetto.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

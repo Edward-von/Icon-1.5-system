@@ -334,7 +334,7 @@ export class IconSheet extends BaseActorSheet {
         comboMark:   _comboMark(s),
         // Stance abilities: 🧘 button, lit while this is the stance in play
         canStance:   tags.some(t => tagKey(t) === "stance"),
-        stanceOn:    IconActor.stanceOf(actor) === a.name,
+        stanceOn:    IconActor.stancesOf(actor).includes(a.name),
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
@@ -636,6 +636,12 @@ export class IconSheet extends BaseActorSheet {
     // Combo token — active when a vagabond (or any class with combo abilities)
     // has earned their combo token. Drives the combo display on ability previews.
     context.comboActive = (system.combat?.classResources?.comboToken?.value ?? 0) === 1;
+
+    // Stances: how many at once, and why (Martial Master, Byrax Aspect, extra).
+    const stanceMax = IconActor.stanceMax(this.document);
+    context.stanceMax     = stanceMax.max;
+    context.stanceSources = stanceMax.sources.join(", ");
+    context.stanceCount   = IconActor.stancesOf(this.document).length;
 
     // Primary job class — drives the conditional class-resources panel
     // in the Combat tab (Vigilance / Combo Token / Blessings / Aether).
@@ -1226,7 +1232,7 @@ export class IconSheet extends BaseActorSheet {
       canMark:     markFromTags(tags).can || !!_comboMark(s),
       comboMark:   _comboMark(s),
       canStance:   tags.some(t => tagKey(t) === "stance"),
-      stanceOn:    IconActor.stanceOf(this.document) === item.name,
+      stanceOn:    IconActor.stancesOf(this.document).includes(item.name),
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf(desc.sections, this.document, item.id),
       marks:       _abilityMarks(this.document.id, item.id, _comboMark(s)),
@@ -1511,21 +1517,29 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * 🧘 Take (or drop) the stance this ability grants. ICON allows one stance at
-   * a time (p.104): taking a new one replaces the old, and pressing the button
-   * again drops it. Writing `system.combat.stance` is enough — IconActor keeps
-   * the marker effect on the token in step.
+   * 🧘 Take (or drop) the stance this ability grants. One stance at a time
+   * (p.103), more with Martial Master / Byrax / the extra stances on the sheet
+   * (IconActor.stanceMax): a new stance joins the others until the maximum,
+   * then replaces the oldest; pressing the button again drops it. Writing
+   * `system.combat.stance` is enough — IconActor keeps the token marker in step.
    */
   static async #onAbilityStance(event, target) {
     event.stopPropagation();
     const item = this.document.items.get(target.dataset.itemId);
     if (!item) return;
-    const current = IconActor.stanceOf(this.document);
-    const next    = current === item.name ? "" : item.name;
-    _log(`abilityStance — "${item.name}" | "${current}" → "${next}"`);
-    await this.document.update({ "system.combat.stance": next });
-    if (next && current && current !== item.name) {
-      ui.notifications.info(`${this.document.name}: "${current}" dropped for "${next}" (one stance at a time, p.104).`);
+    const list = IconActor.stancesOf(this.document);
+    const { max } = IconActor.stanceMax(this.document);
+    let next, dropped = [];
+    if (list.includes(item.name)) next = list.filter(n => n !== item.name);
+    else {
+      next = [...list, item.name];
+      while (next.length > max) dropped.push(next.shift());
+    }
+    _log(`abilityStance — "${item.name}" | [${list.join(", ")}] → [${next.join(", ")}] (max ${max})`);
+    await this.document.update({ "system.combat.stance": IconActor.joinStances(next) });
+    if (dropped.length) {
+      const limit = max === 1 ? "one stance at a time, p.103" : `${max} stances at most`;
+      ui.notifications.info(`${this.document.name}: "${dropped.join(", ")}" dropped for "${item.name}" (${limit}).`);
     }
   }
 

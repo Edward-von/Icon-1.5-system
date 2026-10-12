@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Più stance insieme (12 ottobre 2026, versione 1.17.0)
+
+- [ ] **Una sola stance**: PG senza Martial Master né Byrax → 🧘 su una stance, poi su un'altra → la prima viene tolta,
+      avviso "(one stance at a time, p.103)". Etichetta "Stance" con "active".
+- [ ] **Knave**: PG con il tratto Martial Master → etichetta "Stances", 🧘 su due stance → entrambe attive, "2/2"; la
+      terza sostituisce la più vecchia con avviso "(2 stances at most)". Il token mostra "Stance: A, B".
+- [ ] **Byrax**: reliquia Byrax al rango Aspect (e Martial Master) → massimo 3; al rango III → massimo 2.
+- [ ] **Extra**: campo Extra a 2 su un PG senza tratti → massimo 3; il tooltip sull'etichetta dice "1 + +2 extra".
+- [ ] **Togliere**: 🧘 su una stance attiva → si toglie solo quella; Clear le toglie tutte e toglie il segnalino.
+- [ ] **Vecchio PG**: un personaggio che aveva già una stance la vede ancora attiva dopo l'aggiornamento.
+- [ ] **Dialog d'attacco**: bersagliare un PG con due stance → nella card del bersaglio "🧘 A, B".
+
 ## Limit break, scelta della Resolve (12 ottobre 2026, versione 1.16.11)
 
 - [ ] **Scelta**: PG con limit break da 2, Resolve personale 2 e Party Resolve 3 → Use → dialog "From party resolve: 0",

@@ -132,10 +132,14 @@ export class IconData extends foundry.abstract.TypeDataModel {
           party:    new NumberField({ required: true, initial: 0, min: 0, integer: true }),
         }),
 
-        // Currently active stance (ICON: one stance at a time). Free text — the
-        // name of the stance the character is in; empty = none. A token marker
-        // effect is synced to this in IconActor._onUpdate.
+        // Active stance(s). Free text — the names of the stances the character
+        // is in, separated by " | " when there are several (Martial Master,
+        // Byrax Aspect); empty = none. A token marker effect is synced to this
+        // in IconActor._onUpdate. One name, as before, is a list of one.
         stance: new StringField({ required: true, initial: "" }),
+        // Stances the character can hold on top of the automatic maximum
+        // (1, +1 Martial Master, +1 Byrax Aspect — IconActor.stanceMax).
+        stanceBonus: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
 
         equippedAbilities:  new ArrayField(new StringField({ initial: "" }), { initial: [] }),
         equippedLimitBreak: new StringField({ required: true, initial: "" }),

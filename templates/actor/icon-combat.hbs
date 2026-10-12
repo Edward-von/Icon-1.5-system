@@ -165,16 +165,23 @@
     {{/if}}
   </div>
 
-  {{!-- Stance — ICON allows one active stance at a time. The name is synced to
-       a marker effect on the token (IconActor._syncStanceMarker). --}}
+  {{!-- Stance — one at a time (p.103), more with Martial Master / Byrax Aspect /
+       the extra field (IconActor.stanceMax). Several names are separated by
+       " | ". The names are synced to a marker effect on the token
+       (IconActor._syncStanceMarker). --}}
   <div class="icon-section icon-stance-section">
     <div class="icon-stance-row">
-      <label class="icon-resource__title">Stance
-        {{#if system.combat.stance}}<span class="icon-badge icon-badge--primary">active</span>{{/if}}
+      <label class="icon-resource__title" title="Stances you can hold at once: {{stanceMax}}{{#if stanceSources}} (1 + {{stanceSources}}){{/if}}">{{#if (icon-gt stanceMax 1)}}Stances{{else}}Stance{{/if}}
+        {{#if system.combat.stance}}<span class="icon-badge icon-badge--primary">{{#if (icon-gt stanceMax 1)}}{{stanceCount}}/{{stanceMax}}{{else}}active{{/if}}</span>{{/if}}
       </label>
       <input type="text" class="icon-stance-input" name="system.combat.stance"
-             value="{{system.combat.stance}}" placeholder="No stance active"
+             value="{{system.combat.stance}}" placeholder="{{#if (icon-gt stanceMax 1)}}No stance active — names separated by |{{else}}No stance active{{/if}}"
              {{#unless isEditable}}disabled{{/unless}}>
+      <label class="icon-stance-bonus" title="Stances you can hold beyond the automatic maximum ({{stanceMax}}{{#if stanceSources}}: 1 + {{stanceSources}}{{/if}}). For any other effect that raises it.">
+        <span>Extra</span>
+        <input type="number" name="system.combat.stanceBonus" value="{{system.combat.stanceBonus}}" min="0" step="1"
+               {{#unless isEditable}}disabled{{/unless}}>
+      </label>
       {{#if isEditable}}
         <button type="button" class="icon-btn icon-btn--sm" data-action="clearStance"
                 {{#unless system.combat.stance}}disabled{{/unless}}

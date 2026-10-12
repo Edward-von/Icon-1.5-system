@@ -103,15 +103,43 @@ export class IconActor extends Actor {
   }
 
   /**
-   * The stance a character is currently in, "" when none. Reads the field a
-   * PC keeps it in; foes and legends have no stance field, so they answer "".
-   * One place to ask, so the ability panel, the roll dialogs and the token HUD
-   * all show the same thing.
+   * The stance(s) a character is currently in, "" when none ("Rampage,
+   * Iron Wall" for two). Reads the field a PC keeps it in; foes and legends
+   * have no stance field, so they answer "". One place to ask, so the ability
+   * panel, the roll dialogs and the token HUD all show the same thing.
    * @param {Actor} actor
    * @returns {string}
    */
   static stanceOf(actor) {
-    return String(actor?.system?.combat?.stance ?? "").trim();
+    return IconActor.stancesOf(actor).join(", ");
+  }
+
+  /** The stances a character is in, as a list (the field separates them with " | "). */
+  static stancesOf(actor) {
+    return String(actor?.system?.combat?.stance ?? "").split("|").map(s => s.trim()).filter(Boolean);
+  }
+
+  /** Write a list of stances back in the field's format. */
+  static joinStances(list) {
+    return [...new Set((list ?? []).map(s => String(s).trim()).filter(Boolean))].join(" | ");
+  }
+
+  /**
+   * How many stances the character can hold at once: one (p.103), +1 with the
+   * Knave's Martial Master trait ("You can take two stances at once", p.141),
+   * +1 with the Byrax relic at Aspect ("You can hold +1 more stance than
+   * normal", p.249), + the extra stances typed on the sheet for anything else.
+   * @param {Actor} actor
+   * @returns {{max:number, sources:string[]}}
+   */
+  static stanceMax(actor) {
+    const sources = [];
+    const items = actor?.items ?? [];
+    if (items.some(i => i.type === "trait" && /^martial master$/i.test(String(i.name).trim()))) sources.push("Martial Master");
+    if (items.some(i => i.type === "relic" && /^byrax$/i.test(String(i.name).trim()) && Number(i.system?.currentRank ?? 1) >= 4)) sources.push("Byrax Aspect");
+    const extra = Math.max(0, Number(actor?.system?.combat?.stanceBonus) || 0);
+    if (extra) sources.push(`+${extra} extra`);
+    return { max: 1 + sources.length - (extra ? 1 : 0) + extra, sources };
   }
 
   /**
@@ -122,7 +150,8 @@ export class IconActor extends Actor {
    */
   async _syncStanceMarker(stanceName) {
     const existing = this.effects.find(e => e.getFlag("icon-system", "isStanceMarker"));
-    const name = (stanceName ?? "").trim();
+    // Several stances share one marker: "Stance: Rampage, Iron Wall".
+    const name = String(stanceName ?? "").split("|").map(s => s.trim()).filter(Boolean).join(", ");
     const desiredName = name ? `Stance: ${name}` : null;
     // Idempotent: only write when the marker actually needs to change, so a
     // form re-submit on an unrelated field can't churn the effect.

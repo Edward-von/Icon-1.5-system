@@ -2781,6 +2781,9 @@ details[open] > .icon-basic-actions__summary::before {
 /* Aura colour picker, next to the stance row. */
 .icon-aura-color { display: inline-flex; align-items: center; gap: 4px; margin-left: auto; font-size: .74em; color: var(--ic-text-dim); }
 .icon-aura-color input[type="color"] { width: 26px; height: 22px; padding: 0; border: 1px solid var(--ic-border-subtle); border-radius: var(--ic-radius-sm); background: none; cursor: pointer; }
+/* Extra stances beyond the automatic maximum (Martial Master, Byrax Aspect). */
+.icon-stance-bonus { display: inline-flex; align-items: center; gap: 4px; font-size: .74em; color: var(--ic-text-dim); }
+.icon-stance-bonus input[type="number"] { width: 38px; height: 22px; text-align: center; }
 /* Summon chips on the ability panel: drag one onto the map to place it. */
 .icon-summon-chip {
   display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px 2px 3px;

@@ -145,7 +145,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
               ${showDefense && t.defense != null ? `<span title="Defense">DEF <b>${t.defense}</b></span>` : ""}
               <span title="Armor (subtracted when the damage is applied)">ARM <b>${t.armor ?? 0}</b></span>
               ${t.hp != null ? `<span title="Hit points">HP <b>${t.hp}</b>${t.hpMax != null ? `/${t.hpMax}` : ""}</span>` : ""}
-              ${t.stance ? `<span class="icon-roll-target__stance" title="Stance the target is in (p.104: one at a time)">🧘 ${esc(t.stance)}</span>` : ""}
+              ${t.stance ? `<span class="icon-roll-target__stance" title="Stance(s) the target is in">🧘 ${esc(t.stance)}</span>` : ""}
             </span>
             ${t.defChips ? `<span class="icon-roll-target__defs">${t.defChips}</span>` : ""}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-roll-target__drop"
