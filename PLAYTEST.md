@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Card delle versioni combo (12 ottobre 2026, versione 1.16.7)
+
+- [ ] **Show in Chat di Devil Hand**: PG con God Hand e combo token → Show in Chat → titolo "Devil Hand" con "God Hand
+      combo" sotto, prima riga "⚡ Combo — Devil Hand: +1 boon." con un solo fulmine.
+- [ ] **Attacco di Devil Hand**: con il combo token → attacco → titolo "Devil Hand (God Hand combo)"; sopra Hit ci
+      sono tre riquadri viola (Combo — Devil Hand: +1 boon, Effect: Teleport 1, Effect: Character explodes…); Hit dice
+      solo "[D]+fray", Miss "fray damage"; con 15+ Exceed dice "Repeat the effect" (non più "gain 3 vigor").
+- [ ] **Colori**: i riquadri viola restano viola anche su una card Hit (bordo verde sugli altri) e Miss (bordo rosso).
+- [ ] **Danno**: la card del danno della combo si chiama "Devil Hand (God Hand combo)".
+- [ ] **Combo che aggiunge soltanto**: Low Blow con The Hook → attacco: un riquadro viola "Combo — The Hook: Gains
+      range 2 and effect: Shove…", poi Hit / Miss di Low Blow come prima; titolo "The Hook (Low Blow combo)".
+- [ ] **Senza combo**: God Hand senza token → card dell'attacco come prima, nessun riquadro viola.
+
 ## Status dal verbo e versioni combo (12 ottobre 2026, versione 1.16.6)
 
 - [ ] **God Hand base**: PG Mendicant con God Hand, senza combo token → attacco → nella card c'è il bottone Inflict

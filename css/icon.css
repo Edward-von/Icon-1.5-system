@@ -4766,6 +4766,15 @@ ol.chat-log .chat-message,
   background: rgba(80, 48, 160, .12);
 }
 .icon-ability-block--combo strong { color: #d0b0ff; }
+/* The combo version's own lines on the attack card ("+1 boon", its Effect blocks):
+   same purple as above, kept over the hit / miss border colours. */
+.icon-chat-card .icon-chat-card__effect-block.icon-chat-card__effect-block--combo {
+  border-color: #8060c0;
+  background: rgba(80, 48, 160, .12);
+}
+.icon-chat-card__effect-block--combo .icon-chat-card__effect-label { color: #d0b0ff; }
+/* "God Hand combo" beside the combo version's name on the Show in Chat card. */
+.icon-chat-card__combo-of { display: block; font-size: .7em; font-weight: normal; opacity: .75; }
 
 /* ============================================================
    Clock +/- buttons (burden / ambition)

@@ -1,7 +1,7 @@
 {{!-- templates/chat/ability-card.hbs — Show in Chat for an ability --}}
 <div class="icon-chat-card icon-chat-card--ability {{#if comboMode}}icon-chat-card--combo{{/if}} icon-class--{{ab.class}}">
   <div class="icon-chat-card__header">
-    <strong class="icon-chat-card__action">{{ab.name}}</strong>
+    <strong class="icon-chat-card__action">{{ab.name}}{{#if ab.comboOf}} <small class="icon-chat-card__combo-of">{{ab.comboOf}} combo</small>{{/if}}</strong>
     {{#if ab.jobName}}<span class="icon-badge icon-class--{{ab.class}}">{{ab.jobName}}</span>{{/if}}
     <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
     <span class="icon-badge">{{ab.cost}}</span>

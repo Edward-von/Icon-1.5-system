@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Card delle versioni combo: nome e blocchi giusti (versione 1.16.7)
+
+### Bug di Maar (con le foto di God Hand / Devil Hand)
+
+- **La card "Show in Chat" della combo teneva il nome base**: si chiamava "God Hand" anche quando mostrava Devil Hand,
+  e la prima riga diceva "⚡ ⚡ Combo — DEVIL HAND" (il fulmine doppio, il nome in maiuscolo) → ora il titolo è
+  **Devil Hand**, con "God Hand combo" sotto; la riga della combo è "⚡ Combo — Devil Hand".
+- **La card dell'attacco della combo era sbagliata**: tutto il testo di Devil Hand finiva in un unico blocco Hit, e
+  Exceed restava quello di God Hand ("gain 3 vigor") → la card è costruita come lo Show in Chat: Hit, Miss, Exceed e
+  Crit prendono il testo della combo dove la combo li riscrive (Exceed di Devil Hand: "Repeat the effect"), e le righe
+  proprie della combo ("+1 boon", i due Effect) stanno sopra, ciascuna nel suo riquadro viola. Il titolo è "Devil Hand
+  (God Hand combo)", come quello della card del danno. Le combo senza un nome proprio restano "Nome (Combo)".
+
 ## 12 ottobre 2026 — Bottoni degli status: versioni combo e status scritti come verbo (versione 1.16.6)
 
 ### Bug di Maar

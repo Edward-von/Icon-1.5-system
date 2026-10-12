@@ -203,7 +203,7 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
-  hitEffect, missEffect, exceedEffect, critEffect,
+  hitEffect, missEffect, exceedEffect, critEffect, effects = [],
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
   statusEntries = [],
@@ -269,6 +269,8 @@ export async function combatRoll({
     missEffect:    missEffect  ?? "",
     exceedEffect:  exceedEffect ?? "",
     critEffect:    critEffect   ?? "",
+    // Extra blocks shown above Hit / Miss (a combo version's own lines).
+    effects:       effects ?? [],
     // Relic integration (p.245): attack invokes check the RAW d20; notes are
     // the relic reminders that apply to this attack. No attack roll happened
     // when every target evaded, so the invokes are not shown.

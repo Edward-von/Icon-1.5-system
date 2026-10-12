@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, comboDisplayName, comboTitle } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts } from "../../canvas/area-templates.mjs";
@@ -1300,7 +1300,11 @@ export class IconSheet extends BaseActorSheet {
     // an ability whose combo only ADDS something (Low Blow / The Hook) still
     // prints in full, with the combo wording marked.
     const cardAb = comboMode
-      ? { ...ab, blocks: await buildAbilityBlocks(item?.system ?? {}, {
+      ? { ...ab,
+          // "Devil Hand", with "God Hand combo" beside it (the base name when the combo has none).
+          name:    comboDisplayName(item?.system?.comboEffect) || ab.name,
+          comboOf: comboDisplayName(item?.system?.comboEffect) ? ab.name : "",
+          blocks: await buildAbilityBlocks(item?.system ?? {}, {
             sections: parseAbilitySections(item?.system?.description).sections,
             enrich:   enrichHTML,
             comboText: item?.system?.comboEffect ?? "",
@@ -1678,18 +1682,39 @@ export class IconSheet extends BaseActorSheet {
       : null;
     const areaLine = placement ? areaSummaryHtml(placement, { attackTargetId: mods.attackTargetId }) : "";
 
+    // Combo version: the card is built from the ability with the combo merged
+    // in, like Show in Chat — Hit / Miss / Exceed / Crit take the combo's
+    // wording where it rewrites them (Devil Hand's Exceed is "Repeat the
+    // effect", not God Hand's vigor), and the combo's own lines ("+1 boon",
+    // its Effect blocks) are listed above them instead of being poured, whole,
+    // into the Hit box.
+    let card = { hit: ab.hitEffect, miss: ab.missEffect, exceed: ab.exceedEffect, crit: ab.critEffect, effects: [] };
+    if (comboArmed) {
+      const sys = this.document.items.get(itemId)?.system ?? {};
+      const blocks = await buildAbilityBlocks(sys, {
+        sections: parseAbilitySections(sys.description).sections, enrich: enrichHTML, comboText: sys.comboEffect ?? "" });
+      const keysOf = (b) => String(b.key ?? "").split("+");
+      const field = (k) => blocks.find(b => keysOf(b).includes(k))?.text ?? "";
+      card = {
+        hit: field("hit"), miss: field("miss"), exceed: field("exceed"), crit: field("crit"),
+        effects: blocks.filter(b => b.combo && !keysOf(b).some(k => ["hit", "miss", "exceed", "crit"].includes(k)))
+                       .map(b => ({ label: b.label, text: b.text })),
+      };
+    }
+
     await combatRoll({
-      abilityName:  comboArmed ? `${ab.name} (Combo)` : ab.name,
+      abilityName:  comboArmed ? comboTitle(ab.name, this.document.items.get(itemId)?.system?.comboEffect) : ab.name,
       costLabel:    ab.cost,
       // `ab.tags` is an array of {raw, label, tooltip} — combatRoll expects plain strings
       tags:         ab.tags.map(t => t.label ?? t.raw ?? ""),
       boons:        mods.boons,
       curses:       mods.curses,
       defense:      mods.defense,
-      hitEffect:    comboArmed ? ab.comboEffect : ab.hitEffect,
-      missEffect:   ab.missEffect,
-      exceedEffect: ab.exceedEffect,
-      critEffect:   ab.critEffect,
+      hitEffect:    card.hit,
+      missEffect:   card.miss,
+      exceedEffect: card.exceed,
+      critEffect:   card.crit,
+      effects:      card.effects,
       areaHtml:     areaLine,
       relicInvokes,
       relicNotes,
@@ -1740,7 +1765,7 @@ export class IconSheet extends BaseActorSheet {
       outcome:     mods.outcome,
       damagedie:   combat.damagedie,
       fray:        combat.fray,
-      abilityName: useCombo ? `${ab.name} (Combo)` : ab.name,
+      abilityName: useCombo ? comboTitle(ab.name, this.document.items.get(itemId)?.system?.comboEffect) : ab.name,
       bonusDice:   mods.bonusDice,
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,

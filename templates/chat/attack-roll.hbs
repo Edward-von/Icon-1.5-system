@@ -50,6 +50,12 @@
   {{#if relicInvokeHtml}}{{{relicInvokeHtml}}}{{/if}}
 
   {{!-- Ability effects (shown inline for quick reference) --}}
+  {{#each effects as |e|}}
+    <div class="icon-chat-card__effect-block icon-chat-card__effect-block--combo">
+      <span class="icon-chat-card__effect-label">⚡ {{e.label}}</span>
+      <span class="icon-chat-card__effect-text">{{{e.text}}}</span>
+    </div>
+  {{/each}}
   {{#if hitEffect}}
     <div class="icon-chat-card__effect-block {{#unless isHit}}icon-chat-card__effect-block--dim{{/unless}}">
       <span class="icon-chat-card__effect-label">Hit</span>

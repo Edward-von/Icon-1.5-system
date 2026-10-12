@@ -144,6 +144,26 @@ export function parseComboText(comboText) {
   return { name, lead, blocks };
 }
 
+/**
+ * The combo version's name as a title: the book prints it in capitals
+ * ("DEVIL HAND" → "Devil Hand"); "" when the combo text names none.
+ */
+export function comboDisplayName(comboText) {
+  const name = parseComboText(comboText).name;
+  return name && name === name.toUpperCase()
+    ? name.toLowerCase().replace(/(^|[\s'-])\p{L}/gu, c => c.toUpperCase())
+    : name;
+}
+
+/**
+ * Card title of the combo version: "Devil Hand (God Hand combo)", or
+ * "Low Blow (Combo)" when the combo text has no name of its own.
+ */
+export function comboTitle(baseName, comboText) {
+  const name = comboDisplayName(comboText);
+  return name ? `${name} (${baseName} combo)` : `${baseName} (Combo)`;
+}
+
 /** "on hit" → "Hit", "area effect" → "Area", anything else title-cased as written. */
 function _canonComboLabel(raw) {
   const key = COMBO_FIELD_LABELS.find(([re]) => re.test(raw.trim()))?.[1];
@@ -213,7 +233,9 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
       else out.push({ key: cb.key || "section", label: cb.label, text: cb.text, fromText: !cb.key, combo: true, comboDone: true });
     }
     if (combo.lead) {
-      out.unshift({ key: "combo", label: `⚡ Combo${combo.name ? ` — ${combo.name}` : ""}`, text: combo.lead, fromText: true, combo: true });
+      // The card adds the ⚡ in front of every combo block, so the label doesn't carry one.
+      const name = comboDisplayName(comboText);
+      out.unshift({ key: "combo", label: `Combo${name ? ` — ${name}` : ""}`, text: combo.lead, fromText: true, combo: true });
     }
   }
 
