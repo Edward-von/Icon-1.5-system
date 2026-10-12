@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Riquadri di testo allargabili anche di lato (versione 1.17.4)
+
+### Bug di Maar
+
+- **I riquadri delle schede clock e foe si allungavano solo verso il basso**: Foundry e le nostre regole più vecchie
+  li bloccavano in verticale. Nella 1.15.0 erano già diventati larghi quanto la scheda (prima erano di circa 20
+  caratteri), ma restavano trascinabili solo in giù → ora tutti i riquadri di testo delle nostre schede (clock, foe,
+  legend, item) si trascinano dall'angolo in entrambe le direzioni. Partono larghi quanto la loro riga e non escono
+  dalla scheda: per averli ancora più larghi si allarga la finestra.
+
 ## 12 ottobre 2026 — Gli Infuse delle Mastery (versione 1.17.3)
 
 ### Bug di Maar

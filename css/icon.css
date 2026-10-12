@@ -145,6 +145,15 @@
   min-width: 0;
   box-sizing: border-box;
 }
+/* Every text box on our sheets can be dragged both ways (Maar, 12 Oct: clock
+   and foe boxes only grew downwards — core and our older rules said
+   `resize: vertical`). It starts as wide as its row and can't outgrow the
+   sheet: to make it wider than that, widen the window. Higher specificity
+   than the per-sheet `resize: vertical` rules below, so they all follow. */
+.icon.sheet textarea {
+  resize: both;
+  max-width: 100%;
+}
 .icon.sheet input:focus,
 .icon.sheet select:focus,
 .icon.sheet textarea:focus {
