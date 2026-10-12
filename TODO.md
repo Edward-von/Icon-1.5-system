@@ -377,6 +377,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Senza token proponeva le aree della combo (token speso con Show in Chat e mai "dimenticato"); la combo perdeva
       il range 2.
 
+### Bug di Maar del 12 ottobre 2026 — "Death Blossom does not deal damage" — FATTO il 12 ottobre 2026 (versione 1.16.10)
+- [x] Il danno delle combo che cambiano solo una parte dell'abilità era letto come "nessun danno"; Fortuna tirava 0 dadi.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

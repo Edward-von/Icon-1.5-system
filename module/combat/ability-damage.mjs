@@ -55,7 +55,8 @@ export function parseAbilityDamage(itemSystem) {
   let hitText = s.hitEffect || "";
   if (!hitText && s.description) {
     const desc = s.description;
-    const m = desc.match(/(?:on\s+hit|autohit)\s*[:]?\s*([^.]+)/i);
+    // "Auto hit" is printed with and without the space (Fortuna: "Auto hit: [D]+fray").
+    const m = desc.match(/(?:on\s+hit|auto[-\s]?hit)\s*[:]?\s*([^.]+)/i);
     if (m) hitText = m[1];
   }
   let hit = parseChunk(hitText);
@@ -103,18 +104,42 @@ export function parseAbilityDamage(itemSystem) {
 
 /**
  * Parse the COMBO version of an ability. `comboEffect` is a single free-text
- * blob that replaces the base ability's text when the combo token is spent,
- * so it is parsed as a description-only ability: the "On hit:" / "Miss:" /
- * "Area Effect:" fallbacks in parseAbilityDamage pick the chunks out of it.
+ * blob; the "On hit:" / "Miss:" / "Area Effect:" fallbacks in
+ * parseAbilityDamage pick its chunks out of it. A chunk the combo doesn't
+ * rewrite keeps the base ability's damage, the same merge the cards use
+ * (ability-blocks.mjs): Flying Sleeves only changes Death Blossom's area, so
+ * it still hits for 2[D]+fray — parsed alone it "dealt no damage" and the
+ * Damage button refused to roll.
  * Returns null when the ability has no usable combo version.
  */
 export function parseComboAbilityDamage(itemSystem) {
   const s = itemSystem ?? {};
   if (!s.isCombo || !s.comboEffect || !String(s.comboEffect).trim()) return null;
-  return parseAbilityDamage({
+  const text  = String(s.comboEffect).replace(/<[^>]+>/g, " ");
+  const combo = parseAbilityDamage({ isAttack: !!s.isAttack, description: text });
+  const base  = parseAbilityDamage(s);
+  const rewrites = {
+    hit:  /\b(?:on\s+hit|auto[-\s]?hit|hit)\s*:/i.test(text),
+    miss: /\bmiss\s*:/i.test(text),
+    area: /\barea\s*effect\s*:/i.test(text),
+  };
+  // A combo that restates its trigger is the whole ability written out again
+  // (Justice → Judgement: "Interrupt 1. Gamble. Trigger: … Effect: …", no
+  // Area Effect line): nothing is inherited from the base version.
+  if (/\btrigger\s*:/i.test(text)) return combo;
+  // No labelled chunk at all but damage-shaped prose: parseAbilityDamage put it in `hit`.
+  const anyLabel = rewrites.hit || rewrites.miss || rewrites.area;
+  const deals = (c) => c.mult > 0 || c.flat > 0 || c.fray;
+  if (!anyLabel && deals(combo.hit)) rewrites.hit = true;
+  const hit  = rewrites.hit  ? combo.hit  : base.hit;
+  const miss = rewrites.miss ? combo.miss : base.miss;
+  const area = rewrites.area ? combo.area : base.area;
+  return {
     isAttack:    !!s.isAttack,
-    description: s.comboEffect,
-  });
+    isAutoHit:   combo.isAutoHit || (!rewrites.hit && base.isAutoHit),
+    dealsDamage: deals(hit) || deals(area) || miss.fray,
+    hit, miss, area,
+  };
 }
 
 /**

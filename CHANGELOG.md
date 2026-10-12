@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Il danno delle combo che aggiungono soltanto (versione 1.16.10)
+
+### Bug di Maar
+
+- **"Death Blossom does not deal damage"**: il calcolo del danno leggeva la combo come se sostituisse tutta
+  l'abilità; Flying Sleeves cambia solo l'area e non ha una riga di danno, quindi per il programma la combo "non faceva
+  danno" e il bottone Damage si rifiutava → la combo sostituisce solo le parti che riscrive (Hit, Miss, Area), il resto
+  è quello dell'abilità base, come già sulle card. Valeva anche per Low Blow, Umbra, Revenge, Bleak Mercy e Chastise.
+  Una combo che riscrive anche il Trigger è l'abilità scritta da capo e non eredita niente (Justice → Judgement, che
+  nel manuale non fa danno). Senza combo token, su Maar il messaggio veniva dal token "ricordato" corretto nella 1.16.9.
+- **Fortuna (Astra) tirava 0 dadi**: "Auto hit: [D]+fray" col trattino mancante e lo spazio non veniva letto (il
+  programma cercava solo "autohit" attaccato) → ora tira [D]+fray. Sulle abilità base non cambia nessun danno (6066
+  abilità e azioni controllate).
+
 ## 12 ottobre 2026 — Death Blossom: l'area giusta e il suo range (versione 1.16.9)
 
 ### Bug di Maar (con la foto di Death Blossom)

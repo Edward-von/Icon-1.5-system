@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Danno delle combo (12 ottobre 2026, versione 1.16.10)
+
+- [ ] **Death Blossom**: un foe bersagliato → 💥 Damage senza combo → dialog con Hit 2[D]+fray, Miss fray, Area fray.
+      COMBO ON → 💥 Damage → stesso dialog (prima: "does not deal damage").
+- [ ] **Low Blow / Umbra / Revenge** con COMBO ON → il danno si tira con i dadi della versione base.
+- [ ] **Astra / Fortuna** con COMBO ON → il danno è [D]+fray (prima 0 dadi), Area fray.
+- [ ] **Justice / Judgement** con COMBO ON → il bottone Damage dice che non fa danno (nel manuale Judgement non fa danno).
+- [ ] **Devil Hand**: il danno resta [D]+fray.
+
 ## Death Blossom, area e range (12 ottobre 2026, versione 1.16.9)
 
 - [ ] **Range della combo**: COMBO ON → Death Blossom → 📐 "Arc 4" → l'arco si piazza fino a 2 caselle dal personaggio
