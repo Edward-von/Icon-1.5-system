@@ -431,6 +431,9 @@ export class FoeSheet extends BaseActorSheet {
       divine:      mods.divine,
       trueStrike:  mods.trueStrike,
       unerring:    mods.unerring,
+      targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
     });
   }
 

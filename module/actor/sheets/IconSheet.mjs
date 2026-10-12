@@ -1716,6 +1716,8 @@ export class IconSheet extends BaseActorSheet {
       trueStrike:  mods.trueStrike,
       unerring:    mods.unerring,
       targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
     });
 
     _log(`abilityDamageRoll — "${ab.name}" | outcome: ${mods.outcome} | combo: ${useCombo}`);
@@ -1811,6 +1813,8 @@ export class IconSheet extends BaseActorSheet {
       trueStrike:  mods.trueStrike,
       unerring:    mods.unerring,
       targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
     });
   }
 

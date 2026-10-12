@@ -10,16 +10,24 @@
  * Shared by PCs, foes and legends. Return shapes are unchanged from the old
  * prompts so the roll code (combatRoll / postAbilityDamageCard) is untouched:
  *   promptAttackMods → { boons, curses, defense }            | null
- *   promptDamageMods → { outcome, targetName, bonusDice, vulnerable,
- *                        resistance, weakened, hatred, useCombo } | null
+ *   promptDamageMods → { outcome, targetName, targetIds, attackTargetId,
+ *                        bonusDice, vulnerable, resistance, weakened, hatred,
+ *                        useCombo } | null
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
 import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
+import { areaFromTags } from "../canvas/area-templates.mjs";
 
 const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
+
+// The attack target picked in the last attack dialog, per attacker and
+// ability, so the damage dialog that follows starts on the same token instead
+// of treating every token in the area as the one that was attacked (p.117).
+const _lastAttackTarget = new Map();
+const _attackKey = (actor, ab) => `${actor?.uuid ?? ""}|${String(ab?.name ?? "").replace(/ \(Combo\)$/, "")}`;
 
 /* -------------------------------------------------- */
 /*  Shared pieces                                      */
@@ -107,7 +115,7 @@ function _hero({ actor, kicker, title, cost, tags, dieLabel, dieSub }) {
  * the picked one gives the Defense to beat and is the only one that rolls
  * Evasion, the others are labelled "area".
  */
-function _targetCard(targets, { showDefense = true, pickAttackTarget = false, areaLabel = "" } = {}) {
+function _targetCard(targets, { showDefense = true, pickAttackTarget = false, areaLabel = "", pickedId = "", pickHint = "" } = {}) {
   if (!targets.length) {
     return `
       <section class="icon-roll-card icon-roll-card--targets icon-roll-card--empty">
@@ -117,7 +125,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
   }
   const pick = pickAttackTarget && targets.length > 1;
   const hint = pick
-    ? `<small>${areaLabel ? `${esc(areaLabel)} — ` : ""}pick the attack target, the others only take the area effect</small>`
+    ? `<small>${areaLabel ? `${esc(areaLabel)} — ` : ""}${esc(pickHint || "pick the attack target, the others only take the area effect")}</small>`
     : (targets.length > 1 && showDefense ? `<small>lowest DEF is used</small>` : "");
   return `
     <section class="icon-roll-card icon-roll-card--targets" data-pick="${pick ? "1" : ""}">
@@ -128,7 +136,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
               data-defense="${t.defense ?? ""}"
               data-evasion="${t.defense_?.evasion ? (t.defense_.sureEvasion ? "sure" : String(t.defense_.evasionThreshold ?? 4)) : ""}">
             ${pick ? `<label class="icon-roll-target__pick" title="Attack target — the one you roll the d20 against">
-                        <input type="radio" name="attackTarget" value="${esc(t.id)}"${i === 0 ? " checked" : ""}>
+                        <input type="radio" name="attackTarget" value="${esc(t.id)}"${(targets.some(x => x.id === pickedId) ? t.id === pickedId : i === 0) ? " checked" : ""}>
                       </label>` : ""}
             <img src="${esc(t.img)}" alt="">
             <span class="icon-roll-target__name">${esc(t.name)}</span>
@@ -346,6 +354,9 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
           const rows = Array.from(f.querySelectorAll(".icon-roll-target"));
           const attackTargetId = f.querySelector('input[name="attackTarget"]:checked')?.value
                               ?? rows[0]?.dataset.tokenId ?? "";
+          // Remembered only when there was a choice to make (an area on the table).
+          if (f.querySelector('input[name="attackTarget"]')) _lastAttackTarget.set(_attackKey(actor, ab), attackTargetId);
+          else _lastAttackTarget.delete(_attackKey(actor, ab));
           return {
             boons:   Math.max(0, Number(f.elements.boons?.value)  || 0),
             curses:  Math.max(0, Number(f.elements.curses?.value) || 0),
@@ -413,6 +424,20 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     { value: "area", label: "Area", formula: chunkFormula(p.area), show: !!(p.area?.mult > 0 || p.area?.flat > 0 || p.area?.fray) },
   ].filter(o => o.show);
 
+  // Area attack (p.117): only the token in the attack space takes the hit /
+  // miss damage, the rest of the area takes the area effect. Several targets
+  // on an ability with an area → the dialog asks which one was attacked,
+  // starting on the token picked in the attack dialog.
+  const remembered = _lastAttackTarget.get(_attackKey(actor, ab)) ?? "";
+  const areaTag = areaFromTags(ab.tags ?? []);
+  const hasArea = (!!areaTag && areaTag.kind !== "aura") || !!(p.area?.mult > 0 || p.area?.flat > 0 || p.area?.fray)
+               || targets.some(t => t.id === remembered);
+  const pickTarget = hasArea && targets.length > 1;
+  const areaDealsDamage = (c) => !!(c?.area?.mult > 0 || c?.area?.flat > 0 || c?.area?.fray);
+  const pickHint = areaDealsDamage(p)
+    ? "Hit / Crit / Miss go to the attack target, the others get a separate Area roll"
+    : "Hit / Crit / Miss go to the attack target only (the area deals no damage)";
+
   const pc = ab.parsedCombo;
   const comboFormula = pc?.dealsDamage ? (chunkFormula(pc.hit) || chunkFormula(pc.area) || "see card") : null;
 
@@ -420,7 +445,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     <div class="icon-roll-dialog icon-roll-dialog--damage">
       ${_hero({ actor, kicker: `Damage roll${ab.isAutoHit ? " · auto-hit" : ""}`, title: ab.name ?? "Damage", cost: ab.cost, tags: ab.tags, dieLabel: `[D] ${die}`, dieSub: `fray ${fray}` })}
       <div class="icon-roll-body">
-        ${_targetCard(targets, { showDefense: false })}
+        ${_targetCard(targets, { showDefense: false, pickAttackTarget: pickTarget, areaLabel: areaTag?.label ?? "", pickedId: remembered, pickHint })}
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Outcome</h4>
           <div class="icon-roll-seg">
@@ -495,6 +520,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     };
     f.querySelectorAll('input').forEach(el => el.addEventListener("input", update));
     f.querySelectorAll('input').forEach(el => el.addEventListener("change", update));
+    // ✕ drops a target from this roll (and untargets it on the map); the
+    // radios move the attack target. Neither changes the formula.
+    _wireTargetCard(root, () => {});
     update();
   });
 
@@ -507,9 +535,15 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         label: "💥 Roll Damage",
         callback: (_e, button) => {
           const f = button.form;
+          // Only the rows still listed get an Apply button on the card.
+          const rows = Array.from(f.querySelectorAll(".icon-roll-target"));
+          const targetIds = rows.map(r => r.dataset.tokenId);
+          const attackTargetId = f.querySelector('input[name="attackTarget"]:checked')?.value ?? "";
           return {
             outcome:    f.querySelector('input[name="outcome"]:checked')?.value ?? "hit",
-            targetName: targets.map(t => t.name).join(", "),
+            targetName: rows.map(r => r.dataset.name).join(", "),
+            targetIds,
+            attackTargetId,
             bonusDice:  Math.max(0, Number(f.elements.bonusDice?.value) || 0),
             vulnerable: !!f.elements.vulnerable?.checked,
             resistance: !!f.elements.resistance?.checked,

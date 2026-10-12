@@ -864,6 +864,19 @@ export class IconMeasuredTemplate extends foundry.canvas.placeables.MeasuredTemp
  */
 export function registerAreaTemplates() {
   CONFIG.MeasuredTemplate.objectClass = IconMeasuredTemplate;
+  // Removing an area (🗑 on the card, Delete on the map, end of turn) also
+  // drops the targets it gave its author: otherwise the next damage roll still
+  // listed every token that had been in it. Targets are per user, so each
+  // client clears its own, and only for the areas that user placed.
+  Hooks.on("deleteMeasuredTemplate", (doc) => {
+    const cells = doc.flags?.[FLAG_NS]?.cells;
+    if (!cells?.length || doc.author?.id !== game.user.id) return;
+    if (!canvas?.ready || doc.parent !== canvas.scene) return;
+    const inArea = new Set(tokensInCells(cells).map(t => t.id));
+    for (const t of Array.from(game.user.targets)) {
+      if (inArea.has(t.id)) t.setTarget(false, { releaseOthers: false });
+    }
+  });
   Hooks.on("preUpdateToken", (tokenDoc, changed, options) => {
     // Remember where the token was so updateToken can compute the cell delta.
     if ("x" in changed || "y" in changed) options.iconPrevPos = { x: tokenDoc.x, y: tokenDoc.y };

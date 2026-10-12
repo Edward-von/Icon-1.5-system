@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Danno degli attacchi ad area (versione 1.16.1)
+
+### Bug di Maar
+
+- **Il danno di un attacco ad area andava a tutti come se fossero stati attaccati** (Pyre, Enochian): il dialog
+  dell'attacco lasciava scegliere un solo bersaglio d'attacco, ma il dialog del danno non lo sapeva e metteva tutti i
+  bersagli sulla stessa card di Hit → il dialog del danno ora ricorda il bersaglio scelto nell'attacco (si può
+  cambiare) e, come dice il manuale a p.117, Hit / Crit / Miss vanno solo al bersaglio d'attacco, mentre gli altri
+  ricevono una card "Area damage" a parte (solo se l'area fa danno).
+- **Il ✕ nel dialog del danno non faceva niente**: i bottoni c'erano, ma non erano collegati a nessuna azione → ora
+  tolgono il bersaglio dal tiro e dalla mappa, e la card del danno usa solo i bersagli rimasti nella lista.
+- **Tolta l'area, i bersagli restavano**: il template selezionava i token dentro di sé, ma rimuoverlo non li
+  deselezionava → quando un'area viene tolta (bottone 🗑, Delete sulla mappa, inizio del turno successivo), chi l'ha
+  piazzata smette di bersagliare i token che c'erano dentro.
+
 ## 9 ottobre 2026 — Guida rapida: tab "Narrative" (versione 1.16.0)
 
 ### Richiesta di Maar

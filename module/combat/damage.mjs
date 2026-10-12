@@ -498,14 +498,40 @@ export async function recoverAction(actor) {
  * @param {string} [opts.targetName=""]
  * @param {Array}  [opts.targetsOverride]  Rows for the Apply buttons instead of the user's targets
  *                                         ([{tokenId, actorUuid}] — save-linked damage, inflict-status.mjs)
+ * @param {Array<string>} [opts.targetIds] Token ids still listed in the damage dialog (✕ removes them);
+ *                                         null = the user's current targets
+ * @param {string} [opts.attackTargetId]   Area attack: the token in the attack space (p.117)
  * @returns {Promise<{net:number}>}
  */
-export async function postAbilityDamageCard(actor, {
-  parsed, outcome = "hit", damagedie = "d6", fray = 0, abilityName = "Attack",
-  bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
-  hatred = false, targetName = "", targetsOverride = null,
-  flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
-} = {}) {
+export async function postAbilityDamageCard(actor, opts = {}) {
+  let {
+    parsed, outcome = "hit", damagedie = "d6", fray = 0, abilityName = "Attack",
+    bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
+    hatred = false, targetName = "", targetsOverride = null, targetIds = null, attackTargetId = "",
+    flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
+  } = opts;
+
+  // Area attack (p.117): "for a character in the attack space, make an attack
+  // […] and apply the attack part of your ability instead of the area effect".
+  // A Hit / Crit / Miss card goes to the attack target alone; everyone else in
+  // the area gets their own Area roll when the area deals damage.
+  if (!targetsOverride && attackTargetId && targetIds?.length > 1 && targetIds.includes(attackTargetId)
+      && ["hit", "crit", "miss"].includes(outcome)) {
+    const others = targetIds.filter(id => id !== attackTargetId);
+    const nameOf = (id) => canvas?.tokens?.get(id)?.name ?? "";
+    const result = await postAbilityDamageCard(actor, {
+      ...opts, targetIds: [attackTargetId], attackTargetId: "", targetName: nameOf(attackTargetId),
+    });
+    const area = parsed?.area;
+    if (area && (area.mult > 0 || area.flat > 0 || area.fray)) {
+      // The bonus dice belong to the attack; the Area roll is the area effect alone.
+      await postAbilityDamageCard(actor, {
+        ...opts, outcome: "area", bonusDice: 0, targetIds: others, attackTargetId: "",
+        targetName: others.map(nameOf).filter(Boolean).join(", "),
+      });
+    }
+    return result;
+  }
   // Damage types (p.104). Divine: "cannot be reduced, mitigated, or negated in
   // any way except immunity (ignores armor, weak, resistance, defiance, and
   // bypasses vigor)". Pierce: "cannot be reduced by armor or weakened". Armor
@@ -609,7 +635,9 @@ export async function postAbilityDamageCard(actor, {
   // PC path first, then the foe/legend path, so foe targets show real numbers.
   const targetRows = targetsOverride
     ? targetsOverride.map(o => ({ id: o.tokenId, actor: o.actor ?? fromUuidSync(o.actorUuid), document: canvas?.tokens?.get(o.tokenId)?.document }))
-    : Array.from(game.user?.targets ?? []);
+    : targetIds
+      ? targetIds.map(id => canvas?.tokens?.get(id)).filter(Boolean)
+      : Array.from(game.user?.targets ?? []);
   const targets = targetRows.map(t => ({
     tokenId:   t.id,
     actorUuid: t.actor?.uuid ?? null,

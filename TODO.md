@@ -338,6 +338,10 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
       come funzionano i second wind, cosa vuol dire "exhausted", i diversi rischi dei tiri. Testi presi dal manuale
       (con pagina), stile delle altre tab (diagrammi dove servono).
 
+### Bug di Maar del 12 ottobre 2026 — danno degli attacchi ad area — FATTO il 12 ottobre 2026 (versione 1.16.1)
+- [x] Il danno dopo un attacco ad area (Pyre, Enochian) trattava tutti i bersagli come bersaglio d'attacco; il ✕ del
+      dialog del danno non toglieva i bersagli; i bersagli restavano anche dopo aver tolto l'area.
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti

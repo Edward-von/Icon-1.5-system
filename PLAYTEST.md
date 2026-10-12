@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Danno degli attacchi ad area (12 ottobre 2026, versione 1.16.1)
+
+Preparazione: un PG Pyromancer o Enochian con un'abilità ad area che fa danno anche come Area effect, e tre foe
+sulla scena dentro l'area.
+
+- [ ] **Bersaglio d'attacco nel dialog del danno**: attacco ad area → nel dialog dell'attacco scegliere il secondo foe
+      → tirare. Poi 💥 danno: il dialog elenca i tre foe con i pallini, e quello scelto prima è già selezionato.
+- [ ] **Hit diviso**: esito Hit → in chat due card: "… — Hit" con il solo bersaglio d'attacco, e "… — Area damage"
+      con gli altri due (senza i dadi bonus). Con Miss: Miss al bersaglio d'attacco, Area agli altri.
+- [ ] **Area senza danno**: un'abilità ad area il cui Area effect non fa danno → con Hit esce una sola card, col solo
+      bersaglio d'attacco; il suggerimento sopra la lista lo dice.
+- [ ] **Esito Area scelto a mano**: card unica "Area damage" con tutti i foe rimasti nella lista.
+- [ ] **✕ nel dialog del danno**: ✕ su un foe → sparisce dalla lista e non è più bersagliato sulla mappa; la card che
+      esce non ha il bottone Apply per lui. Togliendo il bersaglio d'attacco, il pallino passa al primo rimasto.
+- [ ] **Attacco singolo**: un'abilità senza area con un solo bersaglio → dialog del danno come prima (niente pallini),
+      card con quel bersaglio.
+- [ ] **Togliere l'area**: 🗑 area sulla card dell'attacco (o Delete sul template) → i foe che erano dentro non sono più
+      bersagliati; il dialog del danno dopo dice "No token targeted". I bersagli fuori dall'area restano.
+- [ ] **Foe e Legend**: le stesse prove con un'azione ad area di un foe e di una legend.
+
 ## Guida rapida, tab Narrative (9 ottobre 2026, versione 1.16.0)
 
 - [ ] **Tab presente**: aprire la guida → sei tab, "Narrative" (icona piuma) tra Turn e Areas; la barra delle tab sta
