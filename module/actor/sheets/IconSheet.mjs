@@ -36,6 +36,32 @@ import { promptNarrativeRoll, promptAttackMods,
 
 const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
 
+/**
+ * The combo version's own "Mark:" block, or null. Rot's combo, Regenerate,
+ * marks an ally instead of a foe and "can be placed even if Rot is already
+ * active", so it is a mark of its own (key `<item id>:combo`), with its own
+ * 🎯 button, rather than a replacement of the base mark.
+ * @returns {{name:string, text:string, stackText:string}|null}
+ */
+function _comboMark(s) {
+  if (!s?.isCombo) return null;
+  const raw  = String(s.comboEffect ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const head = raw.match(/^([A-Z][A-Z' -]*[A-Z])\s*[—–-]\s*/);   // "REGENERATE — Mark: …"
+  const mark = parseAbilitySections(head ? raw.slice(head[0].length) : raw).sections.find(sec => /\bMark$/i.test(sec.label));
+  if (!mark) return null;
+  const name = head ? head[1].toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "Combo";
+  return { name, text: mark.text, stackText: raw };
+}
+
+/** Marks an ability has on the scene: the base mark, then the combo's own (labelled with its name). */
+function _abilityMarks(actorId, itemId, comboMark) {
+  const row = (m, version = "") => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks, version });
+  return [
+    ...marksBy(actorId, itemId).map(m => row(m)),
+    ...(comboMark ? marksBy(actorId, `${itemId}:combo`).map(m => row(m, comboMark.name)) : []),
+  ];
+}
+
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
@@ -301,7 +327,8 @@ export class IconSheet extends BaseActorSheet {
         // text when the header has no area (Tsunami, p.233) → 📐 button
         areaLabel:   abilityArea(tags, s.description)?.label ?? "",
         // Mark abilities: 🎯 button + the marks this ability currently has on the scene
-        canMark:     markFromTags(tags).can,
+        canMark:     markFromTags(tags).can || !!_comboMark(s),
+        comboMark:   _comboMark(s),
         // Stance abilities: 🧘 button, lit while this is the stance in play
         canStance:   tags.some(t => tagKey(t) === "stance"),
         stanceOn:    IconActor.stanceOf(actor) === a.name,
@@ -309,7 +336,7 @@ export class IconSheet extends BaseActorSheet {
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions:   infusionsOf(desc.sections, actor, a.id),
-        marks:       marksBy(actor.id, a.id).map(m => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks })),
+        marks:       _abilityMarks(actor.id, a.id, _comboMark(s)),
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -1193,12 +1220,13 @@ export class IconSheet extends BaseActorSheet {
       tags,
       areaLabel:   abilityArea(tags, s.description)?.label ?? "",
       comboArmed:  combo,
-      canMark:     markFromTags(tags).can,
+      canMark:     markFromTags(tags).can || !!_comboMark(s),
+      comboMark:   _comboMark(s),
       canStance:   tags.some(t => tagKey(t) === "stance"),
       stanceOn:    IconActor.stanceOf(this.document) === item.name,
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf(desc.sections, this.document, item.id),
-      marks:       marksBy(this.document.id, item.id).map(m => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks })),
+      marks:       _abilityMarks(this.document.id, item.id, _comboMark(s)),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -1497,6 +1525,7 @@ export class IconSheet extends BaseActorSheet {
   /**
    * 🎯 Mark the targeted token with this ability (marks.mjs). Exactly one
    * token must be targeted; the mark's text is the ability's "Mark:" block.
+   * `data-combo` = the combo version's own mark (Rot → Regenerate).
    */
   static async #onAbilityMark(event, target) {
     event.stopPropagation();
@@ -1504,6 +1533,13 @@ export class IconSheet extends BaseActorSheet {
     if (!item) return;
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    const comboMark = target.dataset.combo === "1" ? _comboMark(item.system) : null;
+    if (comboMark) {
+      _log(`abilityMark — "${item.name}" combo "${comboMark.name}" on ${targets[0].name}`);
+      await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `${item.id}:combo`,
+        abilityName: `${item.name} (${comboMark.name})`, text: comboMark.text, stackText: comboMark.stackText });
+      return;
+    }
     const sections = parseAbilitySections(item.system.description).sections;
     const text = sections.find(sec => /\bMark$/i.test(sec.label))?.text
       ?? sections.map(sec => `${sec.label}: ${sec.text}`).join(" ");

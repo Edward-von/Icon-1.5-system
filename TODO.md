@@ -350,6 +350,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
       (Spite, la stance "gain hatred+ of the closest foe") non hanno un bottone: `inflict-status.mjs` considera la
       Hatred solo come inflitta dall'attaccante. Si mette a mano dalla tab Conditions.
 
+### Bug di Maar del 12 ottobre 2026 — mark della combo di Rot — FATTO il 12 ottobre 2026 (versione 1.16.3)
+- [x] Rot / Regenerate: il bottone del mark piazzava sempre il mark base, mai quello della combo.
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti

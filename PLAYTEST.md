@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Rot / Regenerate (12 ottobre 2026, versione 1.16.3)
+
+- [ ] **Due bottoni**: PG con Rot (Harvester) → pannello dell'abilità: "🎯 Mark target" e "🎯 Mark target (Regenerate)".
+      Le altre abilità con mark hanno solo il primo.
+- [ ] **Mark base**: bersagliare un foe → "🎯 Mark target" → in chat il testo di Rot (cannot be cured, +1 curse on saves);
+      sul pannello compare il chip col nome del foe.
+- [ ] **Mark della combo**: bersagliare un alleato → "🎯 Mark target (Regenerate)" → in chat "Rot (Regenerate)" col testo
+      di Regenerate (regeneration, defiance); chip "Alleato (Regenerate)". Il mark di Rot sul foe resta.
+- [ ] **Spostare**: Regenerate su un secondo alleato → il primo perde il suo mark Regenerate, il foe tiene Rot.
+- [ ] **✕ sul chip** toglie solo quel mark.
+
 ## Hatred+ ongoing (12 ottobre 2026, versione 1.16.2)
 
 - [ ] **Hatred+ resta**: un'abilità che infligge "hatred+" → Inflict sul foe → in chat "gains Hatred+ of …

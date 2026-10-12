@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Rot / Regenerate: il mark della combo (versione 1.16.3)
+
+### Bug di Maar
+
+- **Rot piazzava sempre il mark base, mai quello di Regenerate**: il bottone 🎯 leggeva solo il blocco "Mark:" della
+  descrizione, e il testo della combo non veniva mai guardato → sul pannello di Rot c'è un secondo bottone,
+  **🎯 Mark target (Regenerate)**, che piazza il mark della combo col suo testo (regeneration, defiance sotto il 25%).
+  Il manuale dice che "può essere piazzato anche se Rot è già attivo", quindi è un mark a parte: non sposta né
+  sostituisce quello di Rot. Sul pannello i due mark si distinguono, perché quello della combo ha "(Regenerate)"
+  accanto al nome.
+
 ## 12 ottobre 2026 — Hatred+ resta oltre il turno (versione 1.16.2)
 
 ### Bug di Maar
