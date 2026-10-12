@@ -438,6 +438,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
       gli usi.
 - [ ] **Trofei sulla scheda PG** senza automazione: usi rimasti come tracker, "1/battle", "dura un'expedition", e
       trofei personalizzati creati a mano.
+- Maar l'ha richiesta di nuovo il 12 ottobre 2026: "Trophies would be a great compendium, along with having custom
+  trophy implementation options. Doesn't need to be automated. Use tracker, 1/battle, expedition long marker, etc."
+  Conferma il perimetro sopra: niente automazione, solo compendio + tracker sulla scheda.
 
 ### Sessione D — Gear kit migliori (L)
 - [ ] Oggi il kit è solo un campo di testo (`system.narrative.gearKit`) che il drop di un item `gear-kit` riempie col
