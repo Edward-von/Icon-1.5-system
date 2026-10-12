@@ -795,8 +795,10 @@ export function registerCombatHooks() {
    *   4. Nudge the GM when every activation has been spent.
    */
   Hooks.on("updateCombat", async (combat, changes, options, userId) => {
-    // Only process on the GM client to avoid duplicate execution
-    if (!game.user.isGM) return;
+    // Only the designated active GM processes it: with an assistant GM (or a
+    // second GM) connected, a plain isGM check ran the end-of-turn saves,
+    // effects and reminders once per GM.
+    if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
     if (!(combat instanceof IconCombat)) return;
 
     try {
@@ -960,7 +962,8 @@ export function registerCombatHooks() {
   });
 
   Hooks.on("updateActor", async (actor, changes, options /*, userId */) => {
-    if (!game.user.isGM) return;
+    // Active GM only, or every connected GM announces the new phase.
+    if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
     if (actor.type !== "legend") return;
     const oldPhase = options._iconLegendOldPhase;
     if (oldPhase == null) return;

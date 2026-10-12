@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Con due GM i tiri automatici non escono più doppi (versione 1.16.5)
+
+### Bug di Maar
+
+- **Con un GM assistente collegato, ogni save automatico usciva due volte** (per PG e NPC): tutto quello che succede a
+  fine turno (save, fine della Hatred, effetti di fine turno, promemoria delle reliquie) partiva da un controllo che
+  chiedeva solo "sono un GM?", quindi lo eseguiva ogni GM collegato → ora lo esegue solo il GM "attivo" scelto da
+  Foundry, come già facevano il relay dei giocatori e gli altri automatismi. Stessa correzione per l'annuncio del
+  cambio di fase delle legend. L'inizio del combat non cambia: lo esegue solo chi preme Start, e così funziona anche
+  quando lo preme il GM assistente.
+
 ## 12 ottobre 2026 — Vigilance: si tiene il dado più alto (versione 1.16.4)
 
 ### Bug di Maar

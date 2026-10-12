@@ -356,6 +356,10 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — Vigilance sommava i dadi — FATTO il 12 ottobre 2026 (versione 1.16.4)
 - [x] Lo Spend di Vigilance sommava i d6 invece di tenere il più alto (p.105, p.117).
 
+### Bug di Maar del 12 ottobre 2026 — save doppi con due GM — FATTO il 12 ottobre 2026 (versione 1.16.5)
+- [x] Con GM + GM assistente i save automatici di fine turno (e l'annuncio di fase delle legend) uscivano una volta
+      per GM.
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti

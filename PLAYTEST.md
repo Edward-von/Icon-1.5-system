@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Due GM collegati (12 ottobre 2026, versione 1.16.5)
+
+Preparazione: due utenti con ruolo Gamemaster (o GM + Assistant GM) collegati allo stesso mondo, in due schede.
+
+- [ ] **Save di fine turno una volta sola**: un foe e un PG con uno status salvabile (es. Weakened) → fine del loro
+      turno → in chat UN solo save per status (prima ne uscivano due). Con la Hatred normale: un solo "ends".
+- [ ] **Fase delle legend**: una legend che passa alla fase successiva → un solo annuncio in chat.
+- [ ] **Start dal GM assistente**: il GM assistente preme Start Combat → la Party Resolve parte da 0 e i promemoria
+      "Start of combat" delle reliquie escono una volta.
+- [ ] **Un solo GM**: con un GM solo, i save di fine turno escono come prima.
+
 ## Vigilance, dado più alto (12 ottobre 2026, versione 1.16.4)
 
 - [ ] **Spend con 3 cariche**: PG Stalwart con Vigilance 3 → Spend → il dialog dice "keep the highest die — the dice
