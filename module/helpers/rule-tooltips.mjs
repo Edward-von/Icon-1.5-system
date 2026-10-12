@@ -89,8 +89,8 @@ const RULES = {
   /* ==================== POSITIVE STATUSES ==================== */
   "unstoppable": "Unstoppable: immune to all statuses while moving; foes can't move you; ignores Engagement and Rampart.",
   "rampart":     "Rampart: foes can't Dash, Fly, or Teleport into or out of any space adjacent to this character. Like a super-engagement.",
-  "vigilance":   (n) => n ? `Vigilance ${n}: ${n} charges (d6 each). Spend any number of charges for: reduce ally damage in range 2, OR damage foes breaking adjacency. Stacks up to 6, lasts until combat ends.`
-                           : "Vigilance X: X charges (d6 each). Spend for: reduce ally damage in range 2, OR damage foes breaking adjacency. Stacks up to 6, lasts until combat ends.",
+  "vigilance":   (n) => n ? `Vigilance ${n}: ${n} charges (d6 each). Spend any number of charges on one trigger, roll 1d6 per charge and keep the highest (the dice don't add up), to: reduce an ally's damage in range 2 as if with armor, OR damage a foe breaking adjacency. Charges stack up to 6 and last until combat ends.`
+                           : "Vigilance X: X charges (d6 each). Spend any number on one trigger, roll 1d6 per charge and keep the highest (the dice don't add up), to: reduce an ally's damage in range 2 as if with armor, OR damage a foe breaking adjacency. Charges stack up to 6 and last until combat ends.",
   "sturdy":      "Sturdy: when moved or removed/placed by a foe, can only be moved maximum 1 space per turn.",
   "counter":     "Counter: deal 2 damage back each time you take damage.",
   "defiance":    "Defiance: HP can't be reduced below 1. When triggered, become immune to all damage for the rest of the current turn.",

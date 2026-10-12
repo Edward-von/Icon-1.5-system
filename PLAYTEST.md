@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Vigilance, dado più alto (12 ottobre 2026, versione 1.16.4)
+
+- [ ] **Spend con 3 cariche**: PG Stalwart con Vigilance 3 → Spend → il dialog dice "keep the highest die — the dice
+      don't add up" e ha i due usi. Roll con 3 cariche → in chat 3d6 con un solo dado tenuto (gli altri barrati), il
+      totale è il dado più alto, flavor "3 charges, highest die: reduce the ally's damage by N (as if with armor)".
+      Tracker a 0.
+- [ ] **Uso "punish"**: scegliere "A foe breaks adjacency" → flavor "the foe breaking adjacency takes N damage".
+- [ ] **Una carica**: Spend con 1 carica → 1d6 normale, senza "highest die".
+- [ ] **Tooltip**: passare il mouse su "vigilance" nel testo di un'abilità → dice "keep the highest (the dice don't add
+      up)" e "range 2".
+
 ## Rot / Regenerate (12 ottobre 2026, versione 1.16.3)
 
 - [ ] **Due bottoni**: PG con Rot (Harvester) → pannello dell'abilità: "🎯 Mark target" e "🎯 Mark target (Regenerate)".

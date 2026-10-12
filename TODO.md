@@ -353,6 +353,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — mark della combo di Rot — FATTO il 12 ottobre 2026 (versione 1.16.3)
 - [x] Rot / Regenerate: il bottone del mark piazzava sempre il mark base, mai quello della combo.
 
+### Bug di Maar del 12 ottobre 2026 — Vigilance sommava i dadi — FATTO il 12 ottobre 2026 (versione 1.16.4)
+- [x] Lo Spend di Vigilance sommava i d6 invece di tenere il più alto (p.105, p.117).
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti

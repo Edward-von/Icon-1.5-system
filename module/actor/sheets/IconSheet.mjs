@@ -2159,11 +2159,11 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * Stalwart — spend Vigilance charges. Prompts for how many charges to spend,
-   * rolls 1d6 per charge, posts the total to chat as a damage reduction, and
-   * deducts the spent charges from the tracker. (Manual: spend any number of
-   * charges to reduce damage to an ally in range 2, or damage foes breaking
-   * adjacency — each charge is a d6.)
+   * Stalwart — spend Vigilance charges. Prompts for how many charges and for
+   * which of the two uses, rolls 1d6 per charge and keeps the HIGHEST (p.105,
+   * p.117: "rolling 1d6 per charge spent and picking the highest result" —
+   * more charges raise the odds of a 6, they don't add up), posts it to chat
+   * and deducts the spent charges from the tracker.
    */
   static async #onSpendVigilance(event, target) {
     event?.stopPropagation?.();
@@ -2177,10 +2177,14 @@ export class IconSheet extends BaseActorSheet {
     const content = `
       <div style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
         <p style="margin:0">You have <strong>${cur}</strong> Vigilance ${cur === 1 ? "charge" : "charges"}.
-          Each spent charge rolls 1d6; the total reduces damage.</p>
+          Each spent charge rolls 1d6 and you keep the <strong>highest</strong> die — the dice don't add up.</p>
         <label>Charges to spend:
           <input type="number" name="charges" value="${cur}" min="1" max="${cur}" style="width:60px">
         </label>
+        <label><input type="radio" name="use" value="reduce" checked>
+          An ally in range 2 is damaged by a foe's ability: reduce the damage, as if with armor</label>
+        <label><input type="radio" name="use" value="punish">
+          A foe breaks adjacency with you: deal that much damage to them</label>
       </div>`;
 
     let spend;
@@ -2193,18 +2197,25 @@ export class IconSheet extends BaseActorSheet {
           callback: (_e, button, dialog) => {
             const root = button?.form ?? dialog?.element ?? dialog;
             const n = Number(root.querySelector('input[name="charges"]')?.value) || 1;
-            return Math.max(1, Math.min(cur, n));
+            const use = root.querySelector('input[name="use"]:checked')?.value ?? "reduce";
+            return { n: Math.max(1, Math.min(cur, n)), use };
           },
         },
         rejectClose: false,
       });
     } catch { return; }
     if (!spend) return;
+    const { use } = spend;
+    spend = spend.n;
 
-    const roll = await new Roll(`${spend}d6`).evaluate();
+    // kh = keep the highest die (p.105).
+    const roll = await new Roll(spend > 1 ? `${spend}d6kh` : "1d6").evaluate();
+    const charges = `${spend} ${spend === 1 ? "charge" : "charges"}${spend > 1 ? ", highest die" : ""}`;
     await roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
-      flavor:  `Vigilance — spent ${spend} ${spend === 1 ? "charge" : "charges"}: reduce damage by ${roll.total}`,
+      flavor:  use === "punish"
+        ? `Vigilance — ${charges}: the foe breaking adjacency takes ${roll.total} damage`
+        : `Vigilance — ${charges}: reduce the ally's damage by ${roll.total} (as if with armor)`,
     });
 
     const next = Math.max(0, cur - spend);

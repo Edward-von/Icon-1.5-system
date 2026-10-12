@@ -173,7 +173,7 @@
   "ICON.StatusDesc.TrueStrike":    "Ignores Dodge, Blind, Evasion, and Stealth.",
   "ICON.StatusDesc.Unerring":      "Ignores Cover and Aetherwall.",
   "ICON.StatusDesc.Unstoppable":   "Immune to statuses. Foes cannot move you. Ignores engagement and Rampart.",
-  "ICON.StatusDesc.Vigilance":     "X charges. Spend 1 to reduce adjacent ally's damage, or deal damage to a foe that breaks adjacency.",
+  "ICON.StatusDesc.Vigilance":     "X charges (d6 each). Spend any number, roll 1d6 per charge and keep the highest: reduce the damage to an ally in range 2 as if with armor, or deal it to a foe that breaks adjacency.",
   "ICON.StatusDesc.Vigor":         "Temporary HP equal to VIT. Absorbs damage before HP. Lost at end of combat.",
   "ICON.StatusDesc.Bloodied":      "At or below 50% max HP.",
   "ICON.StatusDesc.Immobile":      "Cannot move or be moved by any means.",

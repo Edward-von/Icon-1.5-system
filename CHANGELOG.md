@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Vigilance: si tiene il dado più alto (versione 1.16.4)
+
+### Bug di Maar
+
+- **Spendere Vigilance sommava i dadi**: il bottone Spend tirava 1d6 per carica e scriveva in chat il totale ("the total
+  reduces damage"), come se le cariche si sommassero → il manuale (p.105 e p.117) dice "rolling 1d6 per charge spent
+  and picking the highest result": si tira un d6 per carica e si tiene **il più alto**. Più cariche aumentano la
+  probabilità di fare 6, ma i dadi non si sommano. Il dialog ora lo dice, fa scegliere tra i due usi (ridurre il danno
+  di un alleato entro range 2 "as if with armor", o fare danno a un foe che rompe l'adiacenza) e la chat riporta il
+  dado più alto con l'uso scelto. Il tooltip della parola "Vigilance" e la descrizione dello status dicono la stessa
+  cosa; la descrizione dello status parlava di "adjacent ally", ma il manuale dice range 2.
+
 ## 12 ottobre 2026 — Rot / Regenerate: il mark della combo (versione 1.16.3)
 
 ### Bug di Maar
