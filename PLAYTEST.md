@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Infuse delle Mastery (12 ottobre 2026, versione 1.17.3)
+
+- [ ] **Lance con Mastery**: Wright con Lance e "Mastery unlocked" spuntato → sul pannello "✨ Infuse 3" (Volvaga) e
+      "✨ Infuse 6 — GREAT SPIRIT LANCE". Con 6 Aether → clic → Aether −6, in chat il testo di Great Spirit Lance; il
+      bottone dice "— armed". Riclic → Aether restituito.
+- [ ] **Senza Mastery**: togliere la spunta → il bottone di Great Spirit Lance sparisce, Volvaga resta.
+- [ ] **Aether insufficiente**: con 4 Aether → avviso "needs 6 Aether".
+- [ ] **Infuse X**: Cryo con Mastery → "✨ Infuse X — MAGNACRYO" chiede quanto Aether spendere.
+- [ ] **Area**: Great Spirit Lance armata → 📐 offre anche "Line 10".
+
 ## Tracker con più turni (12 ottobre 2026, versione 1.17.2)
 
 - [ ] **GM**: un foe con 2 attivazioni → ▶ → la riga è attiva con "■" arancione e UN pip sbiadito; clic sul pip sbiadito →

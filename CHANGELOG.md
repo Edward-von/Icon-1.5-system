@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Gli Infuse delle Mastery (versione 1.17.3)
+
+### Bug di Maar
+
+- **Lance non offriva Great Spirit Lance**: la seconda versione infusa di Lance è la sua Mastery ("GREAT SPIRIT LANCE:
+  Infuse 6 — 2 actions, Attack, Line 10, Width 3…"), ma i bottoni ✨ Infuse leggevano solo i blocchi "Infuse N:" della
+  descrizione → con la Mastery sbloccata, sul pannello compare un secondo bottone, **✨ Infuse 6 — GREAT SPIRIT
+  LANCE**, che funziona come gli altri (spende l'Aether, posta il testo in chat, offre le sue aree sul 📐). Lo stesso
+  vale per le altre sei Mastery scritte così: MAGNACRYO (Cryo), MAGNAGEO (Geo), MAGNAPYRE (Pyre), MAGNABIO (Bio),
+  MAGNARIME (Rime) e TIDAL SMASH (Heave-Ho). Il danno della versione infusa si legge ancora dal testo, come per gli
+  altri Infuse.
+
 ## 12 ottobre 2026 — Tracker: chi ha più turni chiude il turno con un bottone solo (versione 1.17.2)
 
 ### Bug di Maar

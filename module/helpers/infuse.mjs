@@ -19,7 +19,7 @@ const NS = "icon-system";
 
 /** "Infuse 3" → 3, "Infuse X" → null (the player picks how much). */
 export function infuseCost(label) {
-  const m = /^infuse\s+(\d+|x)$/i.exec(String(label ?? "").trim());
+  const m = /^infuse\s+(\d+|x)(?:\s*\(mastery\))?$/i.exec(String(label ?? "").trim());
   if (!m) return undefined;
   return /^x$/i.test(m[1]) ? null : Number(m[1]);
 }
@@ -31,6 +31,25 @@ export function infuseCost(label) {
 export function infuseName(text) {
   const m = /^\s*([A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,})(?:\s*\([^)]*\))?\s*[—-]/.exec(String(text ?? ""));
   return m ? m[1].trim() : "";
+}
+
+/**
+ * The infused version a Mastery adds, as one more Infuse block — or [] when
+ * the mastery isn't unlocked or isn't one. Seven Wright masteries are a
+ * bigger infusion of their ability: "GREAT SPIRIT LANCE: Infuse 6 — 2
+ * actions, Attack, Line 10, Width 3…" (Lance), MAGNACRYO / MAGNAGEO /
+ * MAGNAPYRE / MAGNABIO / MAGNARIME, TIDAL SMASH. They only lived in the
+ * mastery text, so the panel never offered them. The label says "(Mastery)"
+ * so it can't clash with the ability's own Infuse block of the same cost.
+ * @param {object} system  the ability's system data
+ * @returns {Array<{label:string, text:string}>}
+ */
+export function masteryInfusion(system) {
+  if (!system?.masteryUnlocked) return [];
+  const text = String(system.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const m = /^([^:—]+?):\s*Infuse\s+(\d+|X)\s*[—–-]\s*(.+)$/i.exec(text);
+  if (!m) return [];
+  return [{ label: `Infuse ${m[2].toUpperCase()} (Mastery)`, text: `${m[1].trim().toUpperCase()} — ${m[3]}` }];
 }
 
 /** What the actor currently has infused, or null. */
@@ -58,6 +77,8 @@ export function infusionsOf(sections, actor, itemId) {
       name:    infuseName(sec.text),
       text:    sec.text,
       armed:   !!armed && armed.itemId === itemId && armed.label === sec.label,
+      mastery: /\(mastery\)/i.test(sec.label),       // the Mastery's bigger version (masteryInfusion)
+      costLabel: sec.label.replace(/\s*\(mastery\)\s*$/i, ""),   // "Infuse 6", for the button
       aether:  actor?.system?.combat?.classResources?.aether?.value ?? 0,
     });
   }

@@ -20,7 +20,7 @@ import { abilityStatusEntries, statusBlockHtml } from "../../combat/ability-stat
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
-import { infusionsOf, armInfusion, cancelInfusion, armedInfusion } from "../../helpers/infuse.mjs";
+import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { buildBondKitsNote, expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
@@ -338,7 +338,7 @@ export class IconSheet extends BaseActorSheet {
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
-        infusions:   infusionsOf(desc.sections, actor, a.id),
+        infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id),
         marks:       _abilityMarks(actor.id, a.id, _comboMark(s)),
         talentSelected,
         masteryUnlocked,
@@ -1234,7 +1234,7 @@ export class IconSheet extends BaseActorSheet {
       canStance:   tags.some(t => tagKey(t) === "stance"),
       stanceOn:    IconActor.stancesOf(this.document).includes(item.name),
       summons:     summonsForAbility(s, s.jobName),
-      infusions:   infusionsOf(desc.sections, this.document, item.id),
+      infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id),
       marks:       _abilityMarks(this.document.id, item.id, _comboMark(s)),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
@@ -2350,7 +2350,7 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
     const sections = parseAbilitySections(item.system?.description ?? "").sections;
-    const infusion = infusionsOf(sections, this.document, item.id).find(i => i.label === label);
+    const infusion = infusionsOf([...sections, ...masteryInfusion(item.system)], this.document, item.id).find(i => i.label === label);
     if (!infusion) return;
     // Only one infuse effect can be up at a time (rule-tooltips: "only one
     // infuse effect can trigger at a time"), so a different one is refunded.

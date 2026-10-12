@@ -627,7 +627,7 @@
             <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
                     data-action="abilityInfuse" data-item-id="{{ab.id}}" data-label="{{inf.label}}"
                     title="{{#if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}. Aether now: {{inf.aether}}">
-              ✨ {{inf.label}}{{#if inf.armed}} — armed{{/if}}
+              ✨ {{#if inf.mastery}}{{inf.costLabel}} — {{inf.name}}{{else}}{{inf.label}}{{/if}}{{#if inf.armed}} — armed{{/if}}
             </button>
           {{/each}}
           {{#each ab.summons as |sm|}}
