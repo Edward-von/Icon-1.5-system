@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Hatred+ ongoing (12 ottobre 2026, versione 1.16.2)
+
+- [ ] **Hatred+ resta**: un'abilità che infligge "hatred+" → Inflict sul foe → in chat "gains Hatred+ of …
+      (ongoing — it doesn't end with the turn)". Fine turno del foe: la Hatred è ancora lì, nessun messaggio "ends".
+- [ ] **Hatred normale finisce**: stessa prova con un'abilità che infligge "hatred" senza + → a fine turno del foe in
+      chat "Hatred of … ends (end of turn)" e lo status sparisce.
+- [ ] **Togliere a mano / fine incontro**: la Hatred+ si toglie dalla tab Conditions; con "End encounter" sparisce.
+
 ## Danno degli attacchi ad area (12 ottobre 2026, versione 1.16.1)
 
 Preparazione: un PG Pyromancer o Enochian con un'abilità ad area che fa danno anche come Area effect, e tre foe

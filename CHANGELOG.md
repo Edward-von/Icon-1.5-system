@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Hatred+ resta oltre il turno (versione 1.16.2)
+
+### Bug di Maar
+
+- **Hatred+ spariva sempre a fine turno**: la Hatred inflitta come ongoing veniva salvata come tale, ma il controllo di
+  fine turno la toglieva comunque, senza guardare il "+" → ora a fine turno finisce solo la Hatred normale (p.104).
+  Quella ongoing resta finché la sua fonte non viene meno (p.94): si toglie a mano dalla tab Conditions, o sparisce
+  a fine incontro. Anche il messaggio in chat lo dice ("Hatred+ of …", "doesn't end with the turn").
+
 ## 12 ottobre 2026 — Danno degli attacchi ad area (versione 1.16.1)
 
 ### Bug di Maar

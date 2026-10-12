@@ -342,6 +342,14 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Il danno dopo un attacco ad area (Pyre, Enochian) trattava tutti i bersagli come bersaglio d'attacco; il ✕ del
       dialog del danno non toglieva i bersagli; i bersagli restavano anche dopo aver tolto l'area.
 
+### Bug di Maar del 12 ottobre 2026 — Hatred+ finiva a fine turno — FATTO il 12 ottobre 2026 (versione 1.16.2)
+- [x] La Hatred+ (ongoing) veniva tolta a fine turno come quella normale.
+- [ ] **Emerso lavorando — Hatred+ con durata e Hatred+ su se stessi** (M): alcune abilità danno una Hatred+ che
+      scade a una data ora (Mock: "until the end of their next turn", Spite: "until the end of your next turn"):
+      oggi la Hatred+ resta finché non la si toglie a mano. Inoltre le abilità che fanno *guadagnare* Hatred+ al PG
+      (Spite, la stance "gain hatred+ of the closest foe") non hanno un bottone: `inflict-status.mjs` considera la
+      Hatred solo come inflitta dall'attaccante. Si mette a mano dalla tab Conditions.
+
 ### Sessione C — Trofei (L, dati + scheda)
 - [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti

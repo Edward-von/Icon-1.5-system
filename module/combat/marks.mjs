@@ -159,7 +159,8 @@ export async function applyHatred(actor, target, { ongoing = false, silent = fal
     },
   }]);
   _log(`${actor.name} gains Hatred of ${target.name}`);
-  if (!silent) await _chat(actor, `<strong>${escapeHTML(actor.name)}</strong> gains <strong>Hatred of ${escapeHTML(target.name)}</strong> — half damage against anyone else until the end of their turn.`);
+  const until = ongoing ? "until its source is lifted (ongoing — it doesn't end with the turn)" : "until the end of their turn";
+  if (!silent) await _chat(actor, `<strong>${escapeHTML(actor.name)}</strong> gains <strong>Hatred${ongoing ? "+" : ""} of ${escapeHTML(target.name)}</strong> — half damage against anyone else ${until}.`);
   return effect;
 }
 

@@ -9,7 +9,7 @@
 
 import { saveRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
-import { promptHatredTarget, applyHatred, endHatred } from "./marks.mjs";
+import { promptHatredTarget, applyHatred, endHatred, getHatred } from "./marks.mjs";
 import { askOwner, registerPromptResponder } from "./remote-prompt.mjs";
 
 /* ================================================== */
@@ -181,8 +181,11 @@ export async function rollEndOfTurnSaves(combatant) {
   const actor = combatant.actor;
   if (!actor) return;
 
-  // Hatred of X ends at the end of the hater's turn (p.104) — no save.
-  try { await endHatred(actor, "end of turn"); }
+  // Hatred of X ends at the end of the hater's turn (p.104) — no save. The
+  // ongoing "Hatred+" stays: ongoing effects can't be "removed, or ignored
+  // until whatever is causing them is lifted" (p.94); it goes by hand from the
+  // Conditions tab, or at the end of the encounter.
+  try { if (!getHatred(actor)?.effect?.getFlag("icon-system", "ongoing")) await endHatred(actor, "end of turn"); }
   catch (err) { console.warn("[ICON | statuses] could not end Hatred", err); }
 
   // Saves apply ONLY to negative statuses. Positive effects (isBoon — Defiance,
