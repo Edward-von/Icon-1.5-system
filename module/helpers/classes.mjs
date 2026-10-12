@@ -37,6 +37,35 @@ export const CLASS_INFO = {
           "Stalwarts can rush as part of their abilities. When you rush, you move X spaces and are " +
           "unstoppable and immune to all damage during that move.",
       },
+      // Vigilance, Rampart, Sturdy and True Strike: the Stalwart's "Most
+      // relevant rules" (p.117; the interrupt/adjacency notes are p.109).
+      {
+        name: "Vigilance X",
+        description:
+          "A special effect with X charges, each represented by a d6. Like a triggered effect, it can " +
+          "only be activated once per trigger. Vigilance charges stack up to 6, and last until the end " +
+          "of combat. A character can spend any number of charges of Vigilance for one of the " +
+          "following effects, rolling 1d6 per charge spent and picking the highest result: when an " +
+          "ally in range 2 is damaged by a foe's ability, reduce the damage by the amount rolled as if " +
+          "with armor; or when a foe breaks adjacency with you, deal that much damage to them. " +
+          "Vigilance is an effect, so it doesn't take an interrupt and bypasses evasion or dodge; it " +
+          "triggers whenever a foe breaks adjacency for any reason, even when moved by someone else.",
+      },
+      {
+        name: "Rampart",
+        description:
+          "Foes cannot enter or exit any space affected by a character's Rampart by dashing, flying, " +
+          "or teleporting.",
+      },
+      {
+        name: "Sturdy",
+        description:
+          "When moved or removed and placed by a foe, can only be moved max 1 space a turn.",
+      },
+      {
+        name: "True Strike",
+        description: "Ignores dodge, evasion, blind, and stealth.",
+      },
       {
         name: "Shove X",
         description:

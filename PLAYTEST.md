@@ -1656,6 +1656,12 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Vigilance nelle regole dello Stalwart (12 ottobre 2026, versione 1.17.9)
+
+- [ ] **Stalwart**: scheda di un PG Stalwart → tab combattimento → aprire "Stalwart — Relevant Rules & Heroics" →
+      ci sono Vigilance X, Rampart, Sturdy e True Strike, dopo Rush X.
+- [ ] **Multiclasse**: un PG con un job Stalwart e uno di un'altra classe vede le stesse voci, senza doppioni.
+
 ## Chi apre il round dopo le slow turn (12 ottobre 2026, versione 1.17.8)
 
 - [ ] **Round 2 dopo una slow turn**: chiudere il round 1 con la slow turn di un PG → Next Round → il tracker dice

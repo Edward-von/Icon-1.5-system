@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Vigilance nelle regole dello Stalwart (versione 1.17.9)
+
+### Bug di Maar
+
+- **Le regole dello Stalwart non spiegavano Vigilance**: il riquadro "Relevant Rules" della scheda elencava Rush,
+  Shove, Aura e altre parole chiave, ma non Vigilance, Rampart, Sturdy e True Strike, che il manuale mette tra le
+  regole più importanti dello Stalwart (p.117) → aggiunte. Vigilance ha il testo di p.117 (cariche d6 fino a 6,
+  si tira 1d6 per carica e si tiene il più alto: riduce il danno a un alleato in range 2 come armor, oppure
+  danneggia un foe che rompe l'adiacenza) con le precisazioni di p.109 (è un effetto, non serve un interrupt e
+  scatta anche se il foe viene spostato da altri).
+
 ## 12 ottobre 2026 — Spiegato perché dopo le slow turn apre un NPC (versione 1.17.8)
 
 ### Domanda di Maar
