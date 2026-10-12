@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Status dal verbo e versioni combo (12 ottobre 2026, versione 1.16.6)
+
+- [ ] **God Hand base**: PG Mendicant con God Hand, senza combo token → attacco → nella card c'è il bottone Inflict
+      **Sealed**; passando il mouse si legge la frase del manuale ("Seal your foe, then bless…").
+- [ ] **Devil Hand**: con il combo token → attacco con God Hand → la card NON offre Sealed (la combo riscrive l'Effect).
+- [ ] **Low Blow / The Hook**: con il combo token la card offre ancora Hatred e Slashed della versione base.
+- [ ] **Umbra / Penumbra**: con il combo token la card offre Blind; senza combo token come prima.
+- [ ] **Revenge / Indignation**: con il combo token niente Unstoppable, resta Counter.
+- [ ] **Foe**: Greatsword "Great Slice" → bottone Slashed; un foe con "Ambush" (Aetherachnid, Burrower…) → Dazed;
+      Mistral "Sweep of the Wind" → Dazed con il save.
+- [ ] **Nessun falso positivo**: Fairy Ring con il talento II → il testo "it doesn't seal them" non aggiunge un secondo
+      Sealed; Divine Aegis ("a holy seal") non offre Sealed.
+
 ## Due GM collegati (12 ottobre 2026, versione 1.16.5)
 
 Preparazione: due utenti con ruolo Gamemaster (o GM + Assistant GM) collegati allo stesso mondo, in due schede.

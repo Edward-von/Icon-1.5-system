@@ -360,6 +360,12 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Con GM + GM assistente i save automatici di fine turno (e l'annuncio di fase delle legend) uscivano una volta
       per GM.
 
+### Bug di Maar del 12 ottobre 2026 — status delle combo e "Seal your foe" — FATTO il 12 ottobre 2026 (versione 1.16.6)
+- [x] God Hand non offriva Sealed (verbo non riconosciuto); con la combo attiva sparivano gli status della base.
+- [ ] **Emerso lavorando — status sulla card del danno** (S/M, da chiedere a Maar): i bottoni Inflict stanno sulla
+      card dell'attacco (o dell'auto-hit), non su quella del danno. Maar dice "when damage card is posted": chiedere se
+      li vuole anche lì.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla

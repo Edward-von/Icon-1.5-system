@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Bottoni degli status: versioni combo e status scritti come verbo (versione 1.16.6)
+
+### Bug di Maar
+
+- **God Hand non dava mai il bottone per Sealed**: il riconoscimento degli status leggeva solo la forma "è sealed /
+  diventa sealed", non il verbo con il suo oggetto ("Seal your foe", "dazes its target", "Shatter attack target",
+  "dazes or blinds them") → ora riconosce anche il verbo, ma solo se segue davvero un bersaglio (foe, target,
+  character, them…). Non scatta con un nome ("a holy seal", "Intimidate's stun") né con una negazione ("it doesn't
+  seal them"). Sui pack compaiono 53 bottoni nuovi (God Hand, Fairy Ring, Cryo, Demon Claw, Helix Heel, Intimidate,
+  e tra i foe Ambush, Great Slice, Masamune/Muramasa, Shadow Scour, Snatch Memory, Swirling Elements…); nessun
+  bottone che c'era prima sparisce.
+- **Con la combo attiva sparivano gli status della versione base**: i bottoni della combo leggevano solo il testo
+  della combo, anche quando la combo aggiunge soltanto qualcosa ("The Hook: Gains range 2 and effect: Shove…") → ora la
+  versione combo è l'abilità con i blocchi che la combo riscrive, come già la mostra la scheda: i blocchi che la
+  combo non nomina restano. Low Blow con The Hook tiene Hatred e Slashed, Umbra con Penumbra tiene Blind; Revenge con
+  Indignation ("replaces the base effect") perde Unstoppable, come dice il testo.
+- **Devil Hand non dà Sealed, ed è giusto**: nel manuale la combo di God Hand riscrive entrambi i blocchi Effect, e
+  "Seal your foe" diventa l'esplosione in medium blast. Il Sealed c'è solo nella versione base.
+
 ## 12 ottobre 2026 — Con due GM i tiri automatici non escono più doppi (versione 1.16.5)
 
 ### Bug di Maar

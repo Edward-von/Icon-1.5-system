@@ -124,6 +124,43 @@ function _dmgLabel(c) {
   return parts.join("+") + (c.times > 1 ? ` ×${c.times}` : "");
 }
 
+/*
+ * Statuses written as a verb with an object: "Seal your foe" (God Hand),
+ * "dazes its target", "Shatter attack target", "dazes or blinds them". The
+ * mention patterns read the participle ("your foe is sealed"), so the verb is
+ * rewritten as one before matching — only when a real object follows (foe,
+ * target, character, them…) and the word isn't a noun ("a holy seal",
+ * "Intimidate's stun", "a flurry of slashes").
+ */
+const VERB_PARTICIPLE = {
+  seal: "sealed", stun: "stunned", daze: "dazed", weaken: "weakened",
+  slash: "slashed", shatter: "shattered", pacify: "pacified", blind: "blinded",
+};
+const VERB_WORD = "(?:seals?|stuns?|dazes?|weakens?|slash(?:es)?|shatters?|pacif(?:y|ies)|blinds?)";
+const VERB_OBJECT = "(?:them|it|him|her|(?:(?:your|the|its|their|that|this|all|any|each|every|both|two|three|four|up\\s+to\\s+(?:two|three|four|\\d+)|adjacent|bloodied|other|nearby|targeted|attack|main)\\s+){0,4}(?:foes?|targets?|characters?|attacker|enem(?:y|ies)|creatures?))\\b";
+// Not after an article / a noun-maker ("a holy seal") or a negation ("it doesn't seal them").
+const VERB_RE = new RegExp(
+  `(?<!\\b(?:a|an|the|this|that|holy|dire|umbral|astral|aether|of|additional|not|never)\\s)(?<!(?:'s|n't)\\s)` +
+  `\\b(${VERB_WORD}(?:\\s*,?\\s*(?:or|and)\\s+${VERB_WORD}|\\s*,\\s*${VERB_WORD})*)(?=\\s+(${VERB_OBJECT}))`,
+  "gi");
+const BARE_NOUN_RE = /^(?:foes?|targets?|characters?|attacker|enem(?:y|ies)|creatures?)\b/i;
+function _participle(word) {
+  const lower = word.toLowerCase();
+  const base = [lower, lower.replace(/s$/, ""), lower.replace(/es$/, ""), lower.replace(/ies$/, "y")]
+    .find(w => VERB_PARTICIPLE[w]);
+  const out = base ? VERB_PARTICIPLE[base] : word;
+  return word[0] === word[0].toUpperCase() ? out[0].toUpperCase() + out.slice(1) : out;
+}
+/**
+ * "Seal your foe" → "Sealed your foe", "Blinds foe" → "Blinded the foe" (a
+ * bare noun right after would read as "a blinded foe", an adjective). For
+ * matching only: the card keeps the book's words.
+ */
+export function verbsToParticiples(text) {
+  return String(text ?? "").replace(VERB_RE, (group, _g, object) =>
+    group.replace(new RegExp(VERB_WORD, "gi"), _participle) + (BARE_NOUN_RE.test(object) ? " the" : ""));
+}
+
 /** Nouns that make a preceding status word an adjective ("dazed foes"). */
 const ADJ_NOUN = "(?:foes?|characters?|character's|allies|ally|targets?|enemies|enemy|creatures?|summons?|objects?|units?|status(?:es)?|darkness|spaces?|areas?|terrain|tokens?)";
 const ADJ_AFTER_RE = new RegExp(`^(?:\\+?\\s*(?:,|/|\\bor\\b|\\band\\b|,\\s*(?:or|and))\\s*(?:${STATUS_ALT})\\+?)*\\s+${ADJ_NOUN}\\b`, "i");
@@ -271,7 +308,9 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
     const af = body.match(AUTO_FAIL_RE);
     const autoFailIf = af ? (af[1].toLowerCase() === "bloodied" ? "bloodied" : STATUS_BY_WORD(af[1])?.id ?? "") : "";
 
-    const sentences = _sentences(body);
+    // Matching runs on the verb-rewritten text; the button keeps the book's sentence.
+    const shown = _sentences(body);
+    const sentences = _sentences(verbsToParticiples(body));
     const blockEntries = [];   // entries of this block, in order (for the "avoid this effect" rule)
 
     sentences.forEach((sentence, si) => {
@@ -361,7 +400,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         const until = (UNTIL_RE.exec(after)?.[1] ?? "").trim();
         const entry = {
           id: def.id, label: def.label, ongoing, when, section, key: outcomeKey(section),
-          sentence, saveBoons, saveCurses, autoFailIf: (when === "always") ? "" : autoFailIf,
+          sentence: shown[si] ?? sentence, saveBoons, saveCurses, autoFailIf: (when === "always") ? "" : autoFailIf,
           skip, gainTarget, until, _sentenceIndex: si, end,
         };
         prev = entry;
@@ -404,7 +443,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         for (const t of targets) {
           if (blockEntries.some(e => e.kind === "gain" && e.id === def.id && e.target === t)) continue;
           blockEntries.push({ id: def.id, label: vigAmount ? `${def.label} +${vigAmount}` : def.label, ongoing: false, when: "always", section, key: outcomeKey(section),
-            sentence, saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "gain", target: t, until, _sentenceIndex: si, end, _targetsAll: target });
+            sentence: shown[si] ?? sentence, saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "gain", target: t, until, _sentenceIndex: si, end, _targetsAll: target });
         }
       }
 
@@ -419,7 +458,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           if (NOTE_SKIP_BEFORE_RE.test(sentence.slice(seg.start, m.index).toLowerCase()) && re !== NOTE_UNABLE_RE) continue;
           if (blockEntries.some(e => e.kind === "note" && e.label.toLowerCase() === text.toLowerCase())) continue;
           const t = text.charAt(0).toUpperCase() + text.slice(1);
-          blockEntries.push({ id: "", label: t, ongoing: false, when: "always", section, key: outcomeKey(section), sentence,
+          blockEntries.push({ id: "", label: t, ongoing: false, when: "always", section, key: outcomeKey(section), sentence: shown[si] ?? sentence,
             saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "note", _sentenceIndex: si, end: m.index + m[0].length });
         }
       }
@@ -456,7 +495,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           const saveDamage = { fail, success: success.deals ? success : null, label: `${_dmgLabel(fail)}${success.deals ? ` / ${_dmgLabel(success)} on a successful save` : ""}` };
           const gated = blockEntries.filter(e => e._sentenceIndex === si && !e.kind && e.when !== "always");
           if (gated.length) for (const e of gated) e.saveDamage = saveDamage;
-          else blockEntries.push({ id: "", label: `Damage: ${saveDamage.label}`, ongoing: false, when: "fail", section, key: outcomeKey(section), sentence,
+          else blockEntries.push({ id: "", label: `Damage: ${saveDamage.label}`, ongoing: false, when: "fail", section, key: outcomeKey(section), sentence: shown[si] ?? sentence,
             saveBoons, saveCurses, autoFailIf, skip: false, kind: "save-damage", saveDamage, _sentenceIndex: si, end: sentence.length });
         }
       }
@@ -483,22 +522,28 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   const opts = { sourceName };
   const out = [];
   const add = (text, label) => { if (text && String(text).trim()) out.push(...parseInflictedStatuses(text, { ...opts, label })); };
-  if (comboMode) {
-    add(s.comboEffect, "Combo");
-  } else {
-    add(s.hitEffect, "Hit");
-    add(s.missEffect, "Miss");
-    add(s.areaEffect, "Area");
-    add(s.description, "Effect");
-    add(s.chargeEffect, "Charge");
-    add(s.heroicEffect, "Heroic");
-    add(s.exceedEffect, "Exceed");
-    add(s.collideEffect, "Collide");
-    add(s.slayEffect, "Slay");
-    add(s.critEffect, "Crit");
-    add(s.finishingBlowEffect, "Finishing Blow");
-    add(s.comebackEffect, "Comeback");
-  }
+  // The combo version is the ability with the blocks its text rewrites
+  // (ability-blocks.mjs merges it the same way on the sheet): a block the combo
+  // doesn't mention keeps the base wording. "The Hook: Gains range 2 and
+  // effect: Shove…" only adds a line, so the base statuses still apply; Devil
+  // Hand writes its own Effect blocks, so God Hand's "Seal your foe" doesn't.
+  const combo = comboMode ? String(s.comboEffect ?? "").replace(/<[^>]+>/g, " ") : "";
+  const rewrites = (re) => comboMode && re.test(combo);
+  if (comboMode) add(s.comboEffect, "Combo");
+  if (!rewrites(/\b(?:On hit|Hit):/i))              add(s.hitEffect, "Hit");
+  if (!rewrites(/\bMiss(?: or area(?: effect)?)?:/i)) add(s.missEffect, "Miss");
+  if (!rewrites(/\bArea(?: effect)?:/i))           add(s.areaEffect, "Area");
+  // Block labels are capitalised; "and effect: Shove" is a sentence, not a block.
+  // "replaces the base effect with: …" (Indignation) rewrites it too.
+  if (!rewrites(/(?:^|[^A-Za-z])Effect:/) && !rewrites(/\breplaces? the (?:base )?effect\b/i)) add(s.description, "Effect");
+  if (!rewrites(/\bCharge:/i))                      add(s.chargeEffect, "Charge");
+  if (!rewrites(/\bHeroic:/i))                      add(s.heroicEffect, "Heroic");
+  if (!rewrites(/\bExceed:/i))                      add(s.exceedEffect, "Exceed");
+  if (!rewrites(/\bCollide:/i))                     add(s.collideEffect, "Collide");
+  if (!rewrites(/\bSlay:/i))                        add(s.slayEffect, "Slay");
+  if (!rewrites(/\bCrit(?:ical(?: hit)?)?:/i))      add(s.critEffect, "Crit");
+  if (!rewrites(/\bFinishing Blow:/i))              add(s.finishingBlowEffect, "Finishing Blow");
+  if (!rewrites(/\bComeback:/i))                    add(s.comebackEffect, "Comeback");
   const talent = Number(s.talentSelected ?? 0);
   if (talent >= 1) add(s.talent1, "Talent I");
   if (talent >= 2) add(s.talent2, "Talent II");
