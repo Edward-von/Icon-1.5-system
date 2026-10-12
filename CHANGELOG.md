@@ -1,5 +1,31 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Trofei: compendio e scheda (versione 1.18.0, Sessione C)
+
+### Richiesta di Maar
+
+- **Compendio Trophies**: i trofei non esistevano nel sistema → nuovo tipo di oggetto "Trophy" e nuovo compendio con
+  i 144 trofei del manuale, copiati dalle pagine del PDF (il testo estratto mescola le colonne delle tabelle):
+  - i 20 **General Dungeon Trophies** della tabella d20 (pp.243-244), con il numero del d20;
+  - le tabelle dei trofei delle 8 fazioni (Relict, Ruin Beast, Scavenger, Imperial, Demon, Lowlander, Jotunn, Hob);
+  - i trofei di ogni legend, con il nome della legend;
+  - i 2 trofei dell'avventura d'esempio "The Tower" (Helm of Mist, Dread Mace).
+
+  Una cartella per fazione. Ogni trofeo ha la pagina, il testo "Uses" com'è stampato e il contatore pronto (3 usi,
+  1 expedition, 3 combats; Scav Badge è "Unlimited"). Il manuale dice che un trofeo dà "un tratto o un'abilità"
+  (p.242) ma non dice quale per ciascuno: il campo resta vuoto, si può impostare a mano.
+- **Trofei sulla scheda del PG**: il tab "Relics" diventa "Relics & Trophies", con una sezione Trofei sotto le
+  reliquie. Niente automazione, come chiesto: si trascina un trofeo dal compendio, oppure "+ Custom trophy" ne crea
+  uno vuoto da compilare. Per ogni trofeo:
+  - gli usi rimasti come quadratini, con − / + e il bottone **Use**: toglie un uso e manda la card in chat; a 0 il
+    trofeo "si sbriciola" (p.242) e resta sbiadito finché non lo si toglie;
+  - per quelli che durano un combat o un'expedition, la spunta **"In effect this combat / expedition"** (Use la
+    accende da sola);
+  - per quelli "1/battle" (Circlet of Command), la spunta **"Used this combat"**, e Use non riparte finché non la si
+    toglie;
+  - il contatore "N/3" nel titolo: un PG tiene tre trofei alla volta (p.242). Il quarto si può aggiungere, con un
+    avviso.
+
 ## 12 ottobre 2026 — Un solo tiro salvezza quando fallire e riuscire danno status diversi (versione 1.17.10)
 
 ### Bug di Maar

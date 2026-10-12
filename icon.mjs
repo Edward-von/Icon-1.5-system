@@ -26,6 +26,7 @@ import { RelicData      } from "./module/data/item/RelicData.mjs";
 import { BondData       } from "./module/data/item/BondData.mjs";
 import { BondPowerData  } from "./module/data/item/BondPowerData.mjs";
 import { GearKitData    } from "./module/data/item/GearKitData.mjs";
+import { TrophyData     } from "./module/data/item/TrophyData.mjs";
 import { FoeAbilityData } from "./module/data/item/FoeAbilityData.mjs";
 import { JobTemplateData } from "./module/data/item/JobTemplateData.mjs";
 import { FoeTemplateData } from "./module/data/item/FoeTemplateData.mjs";
@@ -214,6 +215,7 @@ Hooks.once("init", () => {
     "bond":        BondData,
     "bond-power":  BondPowerData,
     "gear-kit":    GearKitData,
+    "trophy":      TrophyData,
     "foe-ability":  FoeAbilityData,
     "job-template": JobTemplateData,
     "foe-template": FoeTemplateData,

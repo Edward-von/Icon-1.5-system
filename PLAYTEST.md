@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Trofei (12 ottobre 2026, versione 1.18.0, Sessione C)
+
+- [ ] **Compendio**: c'è "Trophies" con 10 cartelle (General, Relict, Ruin Beast, Scavenger, Imperial, Demon,
+      Lowlander, Jotunn, Hob, The Tower). General ha 20 trofei; aprendone uno si vede la scheda del trofeo (Uses,
+      d20, pagina, testo).
+- [ ] **Tab**: la scheda del PG ha il tab "Relics & Trophies"; la barra dei tab non va a capo né esce dalla scheda.
+- [ ] **Trascinare**: Boots of Speed sulla scheda → compare sotto le reliquie con 6 quadratini pieni, "6/6 uses left".
+- [ ] **Use**: clic su Use → 5/6, card in chat con "uses Boots of Speed". − e + cambiano il numero.
+- [ ] **Si sbriciola**: Crystal Skull (1 uso) → Use → card "its last use: the trophy crumbles", la scheda mostra
+      "💔 Crumbled", il trofeo è sbiadito, niente Use.
+- [ ] **Durata**: Frost enchantment (3 combats) → Use → 2/3 e spunta "In effect this combat" accesa; si spegne a mano.
+- [ ] **1/battle**: Circlet of Command → badge "1/battle"; Use → "Used this combat" spuntata e Use disattivato;
+      togliendo la spunta Use torna attivo.
+- [ ] **Unlimited**: Scav Badge → "Unlimited uses", niente − / +; Use manda solo la card.
+- [ ] **Tre al massimo**: con 3 trofei, trascinarne un quarto → avviso "already holds three trophies", il trofeo
+      viene aggiunto e il contatore "4/3" diventa rosso.
+- [ ] **Custom**: "+ Custom trophy" → si apre la scheda di "New trophy"; cambiare nome, Lasts = Expeditions, 2 di 2,
+      testo → la scheda del PG si aggiorna.
+- [ ] **Giocatore**: da giocatore proprietario del PG, Use e le spunte funzionano.
+
 ## Un solo tiro per i due esiti del save (12 ottobre 2026, versione 1.17.10)
 
 - [ ] **Terrorize**: un Ghul usa Terrorize su un PG bersagliato → nella card c'è un solo bottone "🎲 Blind+ / Blind".

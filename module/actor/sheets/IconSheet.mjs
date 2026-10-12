@@ -66,6 +66,7 @@ function _abilityMarks(actorId, itemId, comboMark) {
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
 import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage } from "../../combat/ability-damage.mjs";
+import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
 export { _parseAbilityDamage };
 
 export class IconSheet extends BaseActorSheet {
@@ -119,6 +120,11 @@ export class IconSheet extends BaseActorSheet {
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
+      trophyShowInChat:   IconSheet.#onTrophyShowInChat,
+      trophyUse:          IconSheet.#onTrophyUse,
+      trophyAdjust:       IconSheet.#onTrophyAdjust,
+      trophyToggle:       IconSheet.#onTrophyToggle,
+      addCustomTrophy:    IconSheet.#onAddCustomTrophy,
       invokeGambit:       IconSheet.#onInvokeGambit,
       bondPowerShowInChat: IconSheet.#onBondPowerShowInChat,
       toggleBondPowerUse:  IconSheet.#onToggleBondPowerUse,
@@ -473,6 +479,38 @@ export class IconSheet extends BaseActorSheet {
       };
     }));
     context.dustPool = dustPool;
+
+    // Trophies (p.242): uses left, 1/battle marker, "in effect" marker for the
+    // ones that last a combat or an expedition. Three at once.
+    const rawTrophies = actor.items.filter(i => i.type === "trophy");
+    context.trophyItems = await Promise.all(rawTrophies.map(async t => {
+      const s = t.system ?? {};
+      const unit = TROPHY_UNITS[s.usesUnit] ?? TROPHY_UNITS.uses;
+      const max  = s.uses?.max ?? 1;
+      const left = Math.min(max, s.uses?.value ?? 0);
+      const unlimited = s.usesUnit === "unlimited";
+      return {
+        unlimited,
+        id:          t.id,
+        name:        t.name,
+        img:         t.img,
+        kindLabel:   s.kind === "trait" ? "Trait" : s.kind === "ability" ? "Ability" : "",
+        source:      s.sourceLabel ?? "",
+        usesText:    s.usesText ?? "",
+        left, max,
+        unitLeft:    unit.left,
+        lasting:     !!unit.active,
+        activeLabel: unit.active,
+        active:      !!s.active,
+        perCombat:   !!s.perCombat,
+        usedThisCombat: !!s.usedThisCombat,
+        broken:      !unlimited && left <= 0,
+        pips:        !unlimited && max <= 10 ? Array.from({ length: max }, (_, i) => ({ on: i < left })) : null,
+        description: await enrichHTML(s.description),
+      };
+    }));
+    context.trophyCount = rawTrophies.length;
+    context.trophyOver  = rawTrophies.length > 3;
 
     // Bond item — embedded bond (drag-and-drop slot in the Narrative tab).
     // At most one is expected; if more exist (legacy) we show the first.
@@ -1364,6 +1402,95 @@ export class IconSheet extends BaseActorSheet {
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content,
     });
+  }
+
+  /* -------------------------------------------------- */
+  /*  Trophies (p.242) — tracked, not automated           */
+  /* -------------------------------------------------- */
+
+  /** Chat card for a trophy; `event` is a line saying what just happened. */
+  async _postTrophyCard(item, event = "") {
+    const s = item.system ?? {};
+    const unit = TROPHY_UNITS[s.usesUnit] ?? TROPHY_UNITS.uses;
+    const tp = {
+      name:        item.name,
+      kindLabel:   s.kind === "trait" ? "Trait" : s.kind === "ability" ? "Ability" : "",
+      source:      s.sourceLabel ?? "",
+      description: await enrichHTML(s.description),
+      left:        s.usesUnit === "unlimited" ? "Unlimited" : (s.uses?.value ?? 0),
+      unitLeft:    unit.left || "uses",
+      broken:      !!s.broken,
+      perCombat:   !!s.perCombat,
+      event,
+    };
+    const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    const content = await renderTemplate("systems/icon-system/templates/chat/trophy-card.hbs", { tp });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.document }), content });
+  }
+
+  static async #onTrophyShowInChat(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (item) await this._postTrophyCard(item);
+  }
+
+  /**
+   * Use the trophy: one use (or one combat / expedition) goes, the card goes to
+   * chat. A combat- or expedition-long trophy is switched "in effect"; a
+   * 1/battle one is marked spent for this combat. At 0 it crumbles (p.242).
+   */
+  static async #onTrophyUse(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const s = item.system;
+    if (s.usesUnit === "unlimited") {
+      await this._postTrophyCard(item, `${this.document.name} uses ${item.name}.`);
+      return;
+    }
+    const left = s.uses?.value ?? 0;
+    if (left <= 0) { ui.notifications.warn(`${item.name} has crumbled: no uses left.`); return; }
+    if (s.perCombat && s.usedThisCombat) { ui.notifications.warn(`${item.name} can only be used once per combat.`); return; }
+    const unit = TROPHY_UNITS[s.usesUnit] ?? TROPHY_UNITS.uses;
+    const next = left - 1;
+    const update = { "system.uses.value": next };
+    if (s.perCombat) update["system.usedThisCombat"] = true;
+    if (unit.active) update["system.active"] = true;
+    _log(`trophyUse — "${item.name}" ${left} → ${next}`);
+    await item.update(update);
+    const what = unit.active ? `${unit.active.toLowerCase()}` : "used";
+    await this._postTrophyCard(item, next <= 0
+      ? `${this.document.name} uses ${item.name} (${what}) — its last use: the trophy crumbles.`
+      : `${this.document.name} uses ${item.name} (${what}).`);
+  }
+
+  /** −/+ on the uses left (data-delta), between 0 and the maximum. */
+  static async #onTrophyAdjust(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const max  = item.system.uses?.max ?? 1;
+    const next = Math.max(0, Math.min(max, (item.system.uses?.value ?? 0) + (Number(target.dataset.delta) || 0)));
+    await item.update({ "system.uses.value": next });
+  }
+
+  /** Flip a trophy marker: data-field = "active" | "usedThisCombat". */
+  static async #onTrophyToggle(event, target) {
+    event.stopPropagation();
+    const item  = this.document.items.get(target.dataset.itemId);
+    const field = target.dataset.field;
+    if (!item || !["active", "usedThisCombat"].includes(field)) return;
+    await item.update({ [`system.${field}`]: !item.system[field] });
+  }
+
+  /** A blank trophy on this character, opened for editing (custom trophies). */
+  static async #onAddCustomTrophy(event) {
+    event.stopPropagation();
+    const [item] = await this.document.createEmbeddedDocuments("Item", [{
+      name: "New trophy", type: "trophy", img: "icons/svg/chest.svg",
+      system: { usesText: "1", usesUnit: "uses", uses: { value: 1, max: 1 } },
+    }]);
+    item?.sheet?.render(true);
   }
 
   /** Post a relic card to chat (only the unlocked ranks are shown). */
@@ -3101,7 +3228,11 @@ export class IconSheet extends BaseActorSheet {
       case "bond-power":
       case "trait":
       case "relic":
-        if (!(await this.#checkChapterGate(item))) return;
+      case "trophy":
+        if (item.type === "trophy" && this.document.items.filter(i => i.type === "trophy").length >= 3) {
+          ui.notifications.warn(`${this.document.name} already holds three trophies: a character can hold on to three at once (p.242).`);
+        }
+        if (item.type !== "trophy" && !(await this.#checkChapterGate(item))) return;
         _log(`drop — embedding "${item.name}" (${item.type})`);
         await this.document.createEmbeddedDocuments("Item", [item.toObject()]);
         break;

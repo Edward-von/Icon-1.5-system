@@ -108,7 +108,7 @@
   "ICON.TabNarrative":  "Narrative",
   "ICON.TabCombat":     "Combat",
   "ICON.TabConditions": "Conditions",
-  "ICON.TabRelics":     "Relics",
+  "ICON.TabRelics":     "Relics & Trophies",
   "ICON.TabNotes":      "Notes",
 
   "ICON.StatusSlashed":       "Slashed",
@@ -246,6 +246,7 @@
   "TYPES.Item.bond":           "Bond",
   "TYPES.Item.bond-power":     "Bond Power",
   "TYPES.Item.gear-kit":       "Gear Kit",
+  "TYPES.Item.trophy":         "Trophy",
   "TYPES.Item.foe-ability":    "Foe Ability",
   "TYPES.Item.job-template":   "Job Template",
   "TYPES.Item.foe-template":   "Foe Template"

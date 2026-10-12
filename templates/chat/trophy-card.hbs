@@ -1,0 +1,13 @@
+{{!-- templates/chat/trophy-card.hbs — Show in Chat / Use for a trophy --}}
+<div class="icon-chat-card icon-chat-card--trophy">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{tp.name}}</strong>
+    <span class="icon-badge">Trophy{{#if tp.kindLabel}} · {{tp.kindLabel}}{{/if}}</span>
+  </div>
+  <p class="icon-chat-card__subtitle">{{tp.source}}</p>
+  {{#if tp.event}}<p class="icon-chat-trophy__event">{{tp.event}}</p>{{/if}}
+  {{#if tp.description}}
+    <div class="icon-chat-card__desc">{{{tp.description}}}</div>
+  {{/if}}
+  <p class="icon-chat-trophy__uses">{{#if tp.broken}}💔 Crumbled — no uses left{{else}}{{tp.left}} {{tp.unitLeft}}{{/if}}{{#if tp.perCombat}} · 1/battle{{/if}}</p>
+</div>

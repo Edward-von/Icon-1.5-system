@@ -3,6 +3,7 @@
  * Renders type-specific fields via conditional HBS blocks.
  */
 import { enrichHTML, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
+import { TROPHY_UNITS } from "../data/item/TrophyData.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -74,7 +75,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     context.itemType   = item.type;
     context.config     = CONFIG.ICON;
     context.isEditable = this.isEditable;
-    context.canShowInChat = ["foe-ability", "trait"].includes(item.type);
+    context.canShowInChat = ["foe-ability", "trait", "trophy"].includes(item.type);
 
     context.classChoices = {
       stalwart:  "Stalwart",
@@ -130,6 +131,11 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       case "trait":
       case "gear-kit":
         context.enriched = { description: await _enrich(system.description) };
+        break;
+      case "trophy":
+        context.enriched = { description: await _enrich(system.description) };
+        context.trophyUnits = Object.entries(TROPHY_UNITS).map(([key, u]) => ({ key, label: u.label, selected: key === system.usesUnit }));
+        context.trophySource = system.sourceLabel;
         break;
       case "bond":
         context.enriched = {

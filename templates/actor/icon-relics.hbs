@@ -157,4 +157,72 @@
       {{/unless}}
     {{/unless}}
   </div>
+
+  {{!-- Trophies (p.242): tracked by hand, nothing automated --}}
+  <div class="icon-section icon-trophies">
+    <h3 class="icon-section__title">
+      Trophies <small class="{{#if trophyOver}}icon-trophies__over{{/if}}" title="A character can hold on to three trophies at once (p.242)">{{trophyCount}}/3</small>
+      {{#if isEditable}}
+        <button type="button" class="icon-btn icon-btn--sm" data-action="addCustomTrophy"
+                title="Create a custom trophy on this character and open it">+ Custom trophy</button>
+      {{/if}}
+    </h3>
+    {{#each trophyItems as |tp|}}
+      <div class="icon-trophy-card {{#if tp.broken}}icon-trophy-card--broken{{/if}} {{#if tp.active}}icon-trophy-card--active{{/if}}" data-item-id="{{tp.id}}">
+        <div class="icon-trophy-card__header">
+          <strong title="Double-click to open">{{tp.name}}</strong>
+          {{#if tp.kindLabel}}<span class="icon-badge">{{tp.kindLabel}}</span>{{/if}}
+          {{#if tp.perCombat}}<span class="icon-badge" title="Can only be used once per combat">1/battle</span>{{/if}}
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat" data-action="trophyShowInChat" data-item-id="{{tp.id}}" title="Post trophy to chat">💬</button>
+          {{#if ../isEditable}}
+            <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                    data-action="removeItem" data-item-id="{{tp.id}}" title="Remove trophy">×</button>
+          {{/if}}
+        </div>
+        <p class="icon-trophy-card__source">{{tp.source}}{{#if tp.usesText}} · <span title="Uses, as printed in the book">Uses: {{tp.usesText}}</span>{{/if}}</p>
+        <div class="icon-trophy-card__track">
+          {{#if tp.unlimited}}
+            <span class="icon-trophy-card__left">Unlimited uses</span>
+          {{else if tp.broken}}
+            <span class="icon-trophy-card__broken">💔 Crumbled — no uses left</span>
+          {{else}}
+            {{#if tp.pips}}
+              <span class="icon-trophy-pips" title="{{tp.left}} {{tp.unitLeft}}">{{#each tp.pips}}<span class="icon-trophy-pip {{#if on}}icon-trophy-pip--on{{/if}}"></span>{{/each}}</span>
+            {{/if}}
+            <span class="icon-trophy-card__left">{{tp.left}}/{{tp.max}} {{tp.unitLeft}}</span>
+          {{/if}}
+          {{#if ../isEditable}}
+            {{#unless tp.unlimited}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="trophyAdjust" data-item-id="{{tp.id}}" data-delta="-1" title="One less">−</button>
+            <button type="button" class="icon-btn icon-btn--sm" data-action="trophyAdjust" data-item-id="{{tp.id}}" data-delta="1" title="One more">+</button>
+            {{/unless}}
+            {{#unless tp.broken}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--primary" data-action="trophyUse" data-item-id="{{tp.id}}"
+                      title="Spend one {{#if tp.lasting}}(starts it for this {{#if (icon-eq tp.unitLeft "combats left")}}combat{{else}}expedition{{/if}}){{else}}use{{/if}} and post the trophy to chat"
+                      {{#if (icon-and tp.perCombat tp.usedThisCombat)}}disabled{{/if}}>Use</button>
+            {{/unless}}
+          {{/if}}
+        </div>
+        {{#if (icon-or tp.lasting tp.perCombat)}}
+          <div class="icon-trophy-card__markers">
+            {{#if tp.lasting}}
+              <label class="icon-trophy-marker {{#if tp.active}}icon-trophy-marker--on{{/if}}" title="Tick it while the trophy's effect is running; untick it when the combat or expedition is over">
+                <input type="checkbox" data-action="trophyToggle" data-item-id="{{tp.id}}" data-field="active" {{#if tp.active}}checked{{/if}} {{#unless ../isEditable}}disabled{{/unless}}>
+                {{tp.activeLabel}}
+              </label>
+            {{/if}}
+            {{#if tp.perCombat}}
+              <label class="icon-trophy-marker {{#if tp.usedThisCombat}}icon-trophy-marker--on{{/if}}" title="Ticked when used; untick it at the end of the combat">
+                <input type="checkbox" data-action="trophyToggle" data-item-id="{{tp.id}}" data-field="usedThisCombat" {{#if tp.usedThisCombat}}checked{{/if}} {{#unless ../isEditable}}disabled{{/unless}}>
+                Used this combat
+              </label>
+            {{/if}}
+          </div>
+        {{/if}}
+        <div class="icon-trophy-card__desc icon-editor-wrap">{{{tp.description}}}</div>
+      </div>
+    {{else}}
+      <p class="icon-empty">No trophies. Drop one from the Trophies compendium, or make a custom one.</p>
+    {{/each}}
+  </div>
 </section>

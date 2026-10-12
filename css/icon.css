@@ -2552,6 +2552,44 @@ details[open] > .icon-basic-actions__summary::before {
 }
 .icon-relic-card__rank-row--locked > .icon-editor-wrap,
 .icon-relic-card__rank-row--locked > p { opacity: .45; }
+/* Trophies (p.242) on the Relics tab: uses left as pips, markers for
+   "in effect this combat/expedition" and "used this combat" (1/battle). A
+   crumbled trophy (0 uses) is dimmed but stays on the sheet until removed. */
+.icon-trophies { margin-top: 14px; }
+.icon-trophies .icon-section__title { display: flex; align-items: center; gap: 8px; }
+.icon-trophies .icon-section__title small { font-size: .7em; color: var(--ic-text-dim); }
+.icon-trophies .icon-section__title .icon-trophies__over { color: var(--ic-danger, #b8402e); font-weight: 700; }
+.icon-trophies .icon-section__title .icon-btn { margin-left: auto; }
+.icon-trophy-card {
+  position: relative;
+  border: 1px solid var(--ic-border-vis);
+  border-left: 3px solid var(--ic-gold);
+  border-radius: var(--ic-radius);
+  padding: 9px 12px;
+  margin-bottom: 8px;
+  background: var(--ic-bg-panel);
+}
+.icon-trophy-card--active { border-left-color: var(--ic-gold-bright); background: rgba(200,150,28,0.08); }
+.icon-trophy-card--broken { border-left: 2px dashed var(--ic-border-vis); }
+.icon-trophy-card--broken .icon-trophy-card__desc,
+.icon-trophy-card--broken .icon-trophy-card__source { opacity: .45; }
+.icon-trophy-card__header { display: flex; align-items: center; gap: 7px; padding-right: 22px; }
+.icon-trophy-card__source { margin: 3px 0 6px; font-size: .8em; color: var(--ic-text-dim); }
+.icon-trophy-card__track { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.icon-trophy-card__left { font-size: .85em; color: var(--ic-text-bright); }
+.icon-trophy-card__broken { font-size: .85em; color: var(--ic-text-dim); font-weight: 600; }
+.icon-trophy-pips { display: inline-flex; gap: 3px; }
+.icon-trophy-pip {
+  width: 12px; height: 12px; border-radius: 2px;
+  border: 1px solid var(--ic-border-vis); background: transparent;
+}
+.icon-trophy-pip--on { background: var(--ic-gold); border-color: var(--ic-gold-bright); }
+.icon-trophy-card__markers { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: .85em; }
+.icon-trophy-marker { display: inline-flex; align-items: center; gap: 4px; color: var(--ic-text-dim); }
+.icon-trophy-marker--on { color: var(--ic-gold-bright); font-weight: 600; }
+.icon-trophy-card__desc { margin-top: 6px; font-size: .88em; }
+.icon-chat-trophy__event { margin: 4px 0; font-weight: 600; }
+.icon-chat-trophy__uses { margin: 4px 0 0; font-size: .85em; color: var(--ic-text-dim); }
 /* Partial dust infusion controls (progress + "+1 Dust" button). */
 .icon-relic-infuse {
   display: inline-flex;

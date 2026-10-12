@@ -432,15 +432,19 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
       (GM o giocatore), se c'era un secondo GM o lo stesso GM collegato due volte (stesso sintomo del bug delle 1.16.5,
       che Maar non ha ancora: ha la 1.14.1). Poi riprodurre in locale installando PopOut!.
 
-### Sessione C — Trofei (L, dati + scheda)
-- [ ] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
+### Sessione C — Trofei (L, dati + scheda) — FATTA il 12 ottobre 2026 (versione 1.18.0)
+- [x] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
       ~righe 20632, 22384+ del .txt). Regole p.243: massimo 3 trofei, danno un tratto o un'abilità, si rompono finiti
       gli usi.
-- [ ] **Trofei sulla scheda PG** senza automazione: usi rimasti come tracker, "1/battle", "dura un'expedition", e
+- [x] **Trofei sulla scheda PG** senza automazione: usi rimasti come tracker, "1/battle", "dura un'expedition", e
       trofei personalizzati creati a mano.
 - Maar l'ha richiesta di nuovo il 12 ottobre 2026: "Trophies would be a great compendium, along with having custom
   trophy implementation options. Doesn't need to be automated. Use tracker, 1/battle, expedition long marker, etc."
   Conferma il perimetro sopra: niente automazione, solo compendio + tracker sulla scheda.
+- Fatto: 144 trofei (script `icon-compendium-audit/trophies-pack/build-trophies-pack.mjs`, dati in
+  `trophies.json`), sezione nel tab "Relics & Trophies".
+- [ ] **Emerso lavorando** (S, da chiedere a Maar): "Used this combat" e "In effect this combat" si tolgono a mano;
+      se Maar vuole, si possono spegnere da sole alla fine del combat.
 
 ### Sessione D — Gear kit migliori (L)
 - [ ] Oggi il kit è solo un campo di testo (`system.narrative.gearKit`) che il drop di un item `gear-kit` riempie col

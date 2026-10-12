@@ -509,6 +509,53 @@
     </div>
   {{/icon-eq}}
 
+  {{!-- ===== TROPHY ===== --}}
+  {{#icon-eq itemType "trophy"}}
+    <div class="icon-item-section icon-item-section--meta">
+      <div class="icon-field-row">
+        <label>Grants</label>
+        <select name="system.kind" {{#unless isEditable}}disabled{{/unless}}>
+          <option value="" {{#icon-eq system.kind ""}}selected{{/icon-eq}}>—</option>
+          <option value="ability" {{#icon-eq system.kind "ability"}}selected{{/icon-eq}}>An ability</option>
+          <option value="trait" {{#icon-eq system.kind "trait"}}selected{{/icon-eq}}>A trait</option>
+        </select>
+        <label title="What the uses count: active uses, combats or expeditions (p.242)">Lasts</label>
+        <select name="system.usesUnit" {{#unless isEditable}}disabled{{/unless}}>
+          {{#each trophyUnits as |u|}}<option value="{{u.key}}" {{#if u.selected}}selected{{/if}}>{{u.label}}</option>{{/each}}
+        </select>
+        <label>Left</label>
+        <input type="number" name="system.uses.value" value="{{system.uses.value}}" min="0" {{#unless isEditable}}disabled{{/unless}}>
+        <label>of</label>
+        <input type="number" name="system.uses.max" value="{{system.uses.max}}" min="1" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+      <div class="icon-field-row">
+        <label title="The book's Uses column, as printed">Uses (book)</label>
+        <input type="text" name="system.usesText" value="{{system.usesText}}" {{#unless isEditable}}disabled{{/unless}}>
+        <label title="Can only be used once per combat">
+          <input type="checkbox" name="system.perCombat" {{#if system.perCombat}}checked{{/if}} {{#unless isEditable}}disabled{{/unless}}>
+          1/battle
+        </label>
+      </div>
+      <div class="icon-field-row">
+        <label>Faction</label>
+        <input type="text" name="system.faction" value="{{system.faction}}" placeholder="General, Relict, Ruin Beast…" {{#unless isEditable}}disabled{{/unless}}>
+        <label>Legend</label>
+        <input type="text" name="system.legend" value="{{system.legend}}" {{#unless isEditable}}disabled{{/unless}}>
+        <label>d20</label>
+        <input type="number" name="system.d20" value="{{system.d20}}" min="0" max="20" {{#unless isEditable}}disabled{{/unless}}>
+        <label>Page</label>
+        <input type="number" name="system.page" value="{{system.page}}" min="0" {{#unless isEditable}}disabled{{/unless}}>
+      </div>
+    </div>
+    <div class="icon-item-section">
+      <h4 class="icon-section__title">Effect <small>— {{trophySource}}</small></h4>
+      <div class="icon-editor-wrap">{{{enriched.description}}}</div>
+      {{#if isEditable}}<textarea name="system.description" class="icon-editor">{{system.description}}</textarea>{{/if}}
+      <p class="notes">Trophies grant a trait or an ability and last a number of combats, expeditions or active uses;
+        at 0 the trophy crumbles. A character holds three at once (p.242).</p>
+    </div>
+  {{/icon-eq}}
+
   {{!-- ===== FOE ABILITY ===== --}}
   {{#icon-eq itemType "foe-ability"}}
     <div class="icon-item-section icon-item-section--meta">
