@@ -544,9 +544,11 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   if (!rewrites(/\bCrit(?:ical(?: hit)?)?:/i))      add(s.critEffect, "Crit");
   if (!rewrites(/\bFinishing Blow:/i))              add(s.finishingBlowEffect, "Finishing Blow");
   if (!rewrites(/\bComeback:/i))                    add(s.comebackEffect, "Comeback");
+  // Talents are mutually exclusive (p.113: "pick either talent I or talent II"):
+  // Talent II no longer drags Talent I's statuses in.
   const talent = Number(s.talentSelected ?? 0);
-  if (talent >= 1) add(s.talent1, "Talent I");
-  if (talent >= 2) add(s.talent2, "Talent II");
+  if (talent === 1) add(s.talent1, "Talent I");
+  if (talent === 2) add(s.talent2, "Talent II");
   if (s.masteryUnlocked) add(s.mastery, "Mastery");
   return _dedupe(out);
 }

@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Draken Cross: Small o Medium Blast col Talent II (versione 1.17.1)
+
+### Bug di Maar
+
+- **Draken Cross col Talent II non lasciava scegliere la Medium Blast**: il Talent II dice "Charge: Increase range to
+  5, and all areas may be increased to medium blasts". Due difetti insieme: "medium blast**s**" al plurale non veniva
+  letto (le copie dell'abilità senza i tag del talento offrivano solo Small Blast), e quando i tag del talento c'erano
+  l'area diventava sempre Medium Blast range 5, anche fuori dalla Charge → ora 📐 offre tutte e due: "Base: Small
+  Blast, range 3" e "Talent II: Medium Blast, range 5". Quando il talento vale solo su una Charge (o un Heroic,
+  Exceed…), la versione base è la prima. In generale: se un talento, una mastery o una combo cambiano l'area, la
+  base resta tra le scelte; un testo che cambia anche il range ("Increase range to 5") dà quel range alle sue aree.
+- **Gli status del Talent I comparivano anche scegliendo il Talent II**: i talenti si escludono a vicenda (p.113,
+  "pick either talent I or talent II"), ma i bottoni Inflict leggevano il Talent I anche con il II scelto → ora solo
+  quello scelto.
+
 ## 12 ottobre 2026 — Più stance insieme (versione 1.17.0)
 
 ### Richiesta di Maar

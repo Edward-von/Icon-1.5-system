@@ -1594,8 +1594,22 @@ export class IconSheet extends BaseActorSheet {
     // Base area from the tags + the shapes the combo / charge / unlocked
     // upgrade texts describe ("Area becomes Arc 4", "Charge: Large Blast")
     const s = this.document.items.get(ab.id)?.system ?? {};
+    // A talent / mastery / combo whose tags change the area (Draken Cross
+    // Talent II: Medium Blast, range 5) still lets the base area be placed:
+    // the book's upgrade is often conditional ("Charge: … may be increased"),
+    // and then the base area is the default.
+    const baseArea = areaFromTags(s.tags ?? []);
+    const tagArea  = areaFromTags(ab.tags);
+    const changed  = !!(baseArea && tagArea && (baseArea.label !== tagArea.label || baseArea.range !== tagArea.range));
+    const upgraded = changed ? ab.tags.find(t => t.upgraded && areaFromTags([t])) ?? ab.tags.find(t => t.upgraded) : null;
+    const tagSource = changed ? (/^From ([^:]+):/.exec(upgraded?.tooltip ?? "")?.[1] ?? "Upgrade") : "";
+    const sourceText = { "Talent I": s.talent1, "Talent II": s.talent2, "Mastery": s.mastery, "Combo": s.comboEffect }[tagSource] ?? "";
+    const conditional = /^\s*(?:charge|heroic|exceed|collide|comeback|finishing blow)\s*:/i.test(String(sourceText).replace(/<[^>]+>/g, ""));
     const variants = areaVariants({
       tags: ab.tags,
+      tagSource,
+      alt: changed ? [{ source: "Base", area: baseArea }] : [],
+      altFirst: conditional,
       texts: [
         // Only when the header has no area: the shape is in the prose instead
         // ("The area is a medium blast terrain effect", p.233).

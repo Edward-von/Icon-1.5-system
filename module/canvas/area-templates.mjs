@@ -177,7 +177,8 @@ export function areasInText(text) {
   const plain = String(text ?? "").replace(/<[^>]+>/g, " ").toLowerCase();
   const out = [];
   const seen = new Set();
-  const re = /\b(?:(small|medium|large) blast|line (\d+)|arc (\d+)|burst (\d+)(?: \((self|target)\))?)\b/g;
+  // "blasts": Draken Cross Talent II, "all areas may be increased to medium blasts".
+  const re = /\b(?:(small|medium|large) blasts?|line (\d+)|arc (\d+)|burst (\d+)(?: \((self|target)\))?)\b/g;
   for (const m of plain.matchAll(re)) {
     let area;
     if (m[1]) area = { kind: "blast", size: m[1][0] };
@@ -211,23 +212,38 @@ export function abilityArea(tags, description = "") {
 /**
  * The areas an ability can be placed with: the one from its tags first, then
  * the alternatives its combo / charge / unlocked upgrade texts describe.
+ * `alt` adds whole areas before the texts' ones (the ability's base area when
+ * a talent's tags changed it), `altFirst` puts them before the tags' area (an
+ * upgrade that only applies on a Charge / Heroic is the exception, not the
+ * default). A text that also changes the range ("Increase range to 5, and
+ * all areas may be increased to medium blasts") gives its areas that range.
  * @param {object} opts
  * @param {Array}  opts.tags    ability tags (raw strings or {raw})
  * @param {Array<[string, string]>} [opts.texts]  [source label, rules text] pairs
+ * @param {Array<{source:string, area:object}>} [opts.alt]
+ * @param {string} [opts.tagSource]  where the tags' area comes from ("Talent II"), "" for the base
+ * @param {boolean} [opts.altFirst]
  * @returns {Array<{label:string, source:string, area:object}>}
  */
-export function areaVariants({ tags, texts = [] }) {
+export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFirst = false }) {
   const base = areaFromTags(tags);
   const range = base?.range ?? rangeFromTags(tags);
   const out = [];
   const seen = new Set();
-  if (base) { out.push({ label: base.label, source: "", area: base }); seen.add(base.label); }
+  // Same shape at another range is another variant (Small Blast r3 / Medium Blast r5).
+  const key = (a) => `${a.label}@${a.range ?? ""}`;
+  const push = (source, area) => {
+    if (seen.has(key(area))) return;
+    seen.add(key(area));
+    out.push({ label: area.label, source, area });
+  };
+  const alts = () => alt.forEach(a => a?.area && push(a.source ?? "", a.area));
+  if (altFirst) alts();
+  if (base) push(tagSource, base);
+  if (!altFirst) alts();
   for (const [source, text] of texts) {
-    for (const area of areasInText(text)) {
-      if (seen.has(area.label)) continue;
-      seen.add(area.label);
-      out.push({ label: area.label, source, area: { ...area, range } });
-    }
+    const r = /\brange\s+(?:to\s+|of\s+)?(\d+)/i.exec(String(text ?? ""));
+    for (const area of areasInText(text)) push(source, { ...area, range: r ? Number(r[1]) : range });
   }
   return out;
 }
@@ -240,9 +256,11 @@ export async function chooseAreaVariant(variants, abilityName = "") {
   if (!variants?.length) return null;
   if (variants.length === 1) return variants[0].area;
   try {
+    const ranges = new Set(variants.map(v => v.area?.range ?? 0));
+    const withRange = (v) => ranges.size > 1 && v.area?.range ? `${v.label}, range ${v.area.range}` : v.label;
     const buttons = variants.map((v, i) => ({
       action: String(i),
-      label: v.source ? `${v.source}: ${v.label}` : v.label,
+      label: v.source ? `${v.source}: ${withRange(v)}` : withRange(v),
       default: i === 0,
       callback: () => v.area,
     }));

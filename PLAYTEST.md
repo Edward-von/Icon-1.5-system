@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Draken Cross e aree dei talenti (12 ottobre 2026, versione 1.17.1)
+
+- [ ] **Talent II scelto**: Draken Cross con Talent II → 📐 → dialog con "Base: Small Blast, range 3" (primo) e
+      "Talent II: Medium Blast, range 5"; Medium Blast si piazza fino a 5 caselle, Small Blast fino a 3.
+- [ ] **Senza talento**: Draken Cross senza talenti → 📐 piazza subito la Small Blast, nessuna scelta.
+- [ ] **Talent I scelto**: nessuna Medium Blast proposta.
+- [ ] **Death Blossom**: COMBO ON → 📐 come prima (Arc 4 / Combo: Arc 8), COMBO OFF → Burst 1.
+- [ ] **Status dei talenti**: un'abilità con status diversi nei due talenti, Talent II scelto → la card dell'attacco
+      non offre gli status del Talent I.
+
 ## Più stance insieme (12 ottobre 2026, versione 1.17.0)
 
 - [ ] **Una sola stance**: PG senza Martial Master né Byrax → 🧘 su una stance, poi su un'altra → la prima viene tolta,

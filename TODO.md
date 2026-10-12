@@ -386,6 +386,12 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Richiesta di Maar del 12 ottobre 2026 — più stance insieme — FATTA il 12 ottobre 2026 (versione 1.17.0)
 - [x] Massimo automatico (1 + Martial Master + Byrax Aspect) e campo Extra senza tetto.
 
+### Bug di Maar del 12 ottobre 2026 — Draken Cross Talent II — FATTO il 12 ottobre 2026 (versione 1.17.1)
+- [x] Medium Blast del Talent II non selezionabile ("blasts" al plurale; tag del talento applicati sempre).
+- [ ] **Emerso lavorando — attacco senza area già piazzata** (S): se si preme l'attacco senza aver usato 📐 prima,
+      l'area che si piazza è quella dei tag (Medium Blast col Talent II), senza la scelta del 📐. Valutare se usare lo
+      stesso dialog anche lì.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
