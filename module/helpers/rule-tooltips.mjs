@@ -258,6 +258,15 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
     for (const t of layer.tags) if (!base.includes(t) && !origin.has(t)) origin.set(t, layer);
     current = layer.tags;
   }
+  // A layer that changes the area keeps the ability's range unless it gives
+  // its own: Flying Sleeves "Area becomes Arc 4" is still placed in range 2
+  // (p.97: an AoE with a listed range goes anywhere in that range). Without
+  // it the arc had to touch the user and the placement refused every spot.
+  const isRange = (t) => /^(?:range-\d+\+?|no-max-range)$/i.test(String(t).replace(/\s+/g, "-"));
+  const selfArea = (t) => /^(?:burst-\d+-self|aura(?:-\d+)?)$/i.test(String(t).replace(/\s+/g, "-"));
+  if (current !== base && !current.some(isRange) && !current.some(selfArea)) {
+    current = [...current, ...base.filter(isRange)];
+  }
 
   return current.map(formatTag).filter(Boolean).map(tag => {
     const layer = origin.get(tag.raw);

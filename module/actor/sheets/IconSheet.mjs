@@ -2303,7 +2303,13 @@ export class IconSheet extends BaseActorSheet {
     const current = this.document.system.combat.classResources.comboToken.value ?? 0;
     const next    = current ? 0 : 1;
     _log(`toggleComboToken — actor: "${this.document.name}" | ${current} → ${next}`);
-    await this.document.update({ "system.combat.classResources.comboToken.value": next });
+    // Setting the token by hand also forgets a token already spent on an
+    // ability with Show in Chat: otherwise that ability stayed in its combo
+    // version (tags, area) with COMBO off until a damage roll cleared it.
+    await this.document.update({
+      "system.combat.classResources.comboToken.value": next,
+      "flags.icon-system.-=comboSpentOnItem": null,
+    });
   }
 
   /** Fool — set Stacked Dice held (click the last active pip to drop one). */

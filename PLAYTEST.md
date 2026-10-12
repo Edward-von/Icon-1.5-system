@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Death Blossom, area e range (12 ottobre 2026, versione 1.16.9)
+
+- [ ] **Range della combo**: COMBO ON → Death Blossom → 📐 "Arc 4" → l'arco si piazza fino a 2 caselle dal personaggio
+      senza l'avviso "The first space of the arc must be in range"; i tag mostrano anche Range 2.
+- [ ] **Base**: COMBO OFF → 📐 "Burst 1" → si piazza un Burst 1 entro range 2, nessuna scelta di archi.
+- [ ] **Token speso e dimenticato**: COMBO ON → Show in Chat su Death Blossom (il token va a 0, il pannello resta su
+      "Arc 4") → senza tirare il danno, clic su COMBO due volte (ON e poi OFF) → il pannello torna su "Burst 1".
+- [ ] **Fine turno**: stessa cosa ma chiudendo il turno del personaggio → al turno dopo Death Blossom è di nuovo base.
+- [ ] **Flusso normale**: COMBO ON → Show in Chat → attacco → danno: attacco e danno usano ancora la versione combo.
+
 ## Pannello e combo (12 ottobre 2026, versione 1.16.8)
 
 - [ ] **Death Blossom**: PG con Death Blossom, COMBO OFF → bottone "📐 Burst 1"; clic → si piazza subito un Burst 1

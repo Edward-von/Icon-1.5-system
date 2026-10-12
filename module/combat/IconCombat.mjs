@@ -818,6 +818,10 @@ export function registerCombatHooks() {
           await applyEndOfTurnEffects(prev);
           // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
           await _postRelicTurnReminders(prev.actor, "end", "End of turn");
+          // A combo token spent on an ability with Show in Chat only covers
+          // that use (its attack and damage come as separate clicks): it
+          // doesn't carry into the next turn.
+          if (prev.actor.getFlag(FLAG_NS, "comboSpentOnItem")) await prev.actor.unsetFlag(FLAG_NS, "comboSpentOnItem");
         }
       }
 

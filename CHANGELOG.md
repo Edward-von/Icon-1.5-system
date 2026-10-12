@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Death Blossom: l'area giusta e il suo range (versione 1.16.9)
+
+### Bug di Maar (con la foto di Death Blossom)
+
+- **Senza combo token, 📐 di Death Blossom proponeva Arc 4 / Arc 8 invece di Burst 1**: Show in Chat con COMBO acceso
+  spende il token e si ricorda su quale abilità l'ha speso, perché l'attacco e il danno arrivano dopo con clic
+  separati. Quel ricordo si cancellava solo col tiro del danno o a fine combat: senza tirare il danno, l'abilità
+  restava nella versione combo anche col token a 0 → ora si cancella anche quando si accende o spegne COMBO a mano e
+  alla fine del turno del personaggio.
+- **La versione combo perdeva il range** ("The first space of the arc must be in range"): i tag di Flying Sleeves
+  (attack, arc-4, unerring) sostituivano quelli di Death Blossom e il "range 2" spariva, così l'arco doveva toccare il
+  personaggio → quando una combo, un talento o una mastery cambiano i tag senza dare un range proprio, resta quello
+  dell'abilità (p.97: un'area con un range si piazza ovunque entro quel range). Sistemato nel codice, quindi vale
+  anche per le copie dell'abilità già nei mondi. Nel pack era l'unico caso.
+
 ## 12 ottobre 2026 — Il pannello dell'abilità segue la combo (versione 1.16.8)
 
 ### Bug di Maar

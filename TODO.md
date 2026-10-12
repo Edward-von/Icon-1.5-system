@@ -373,6 +373,10 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 ### Bug di Maar del 12 ottobre 2026 — bottone dell'area con la combo — FATTO il 12 ottobre 2026 (versione 1.16.8)
 - [x] Death Blossom / Flying Sleeves: il bottone 📐 non cambiava nome con la combo accesa.
 
+### Bug di Maar del 12 ottobre 2026 — Death Blossom: area e range — FATTO il 12 ottobre 2026 (versione 1.16.9)
+- [x] Senza token proponeva le aree della combo (token speso con Show in Chat e mai "dimenticato"); la combo perdeva
+      il range 2.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
