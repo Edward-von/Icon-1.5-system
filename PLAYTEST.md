@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Tracker con più turni (12 ottobre 2026, versione 1.17.2)
+
+- [ ] **GM**: un foe con 2 attivazioni → ▶ → la riga è attiva con "■" arancione e UN pip sbiadito; clic sul pip sbiadito →
+      non succede niente (tooltip "Turn still to take — end this turn first"). ■ → turno chiuso, il pip torna normale.
+- [ ] **Giocatore**: PG con 2 attivazioni → "▶ Take turn" → durante il turno si vede "■ End turn" e un pip sbiadito non
+      cliccabile.
+- [ ] **Due turni di fila**: ■ e poi ▶ sulla stessa riga → secondo turno, i save di fine turno del primo escono in mezzo.
+- [ ] **Un turno solo**: un PG con 1 attivazione → durante il turno solo "■ End turn", come prima.
+
 ## Draken Cross e aree dei talenti (12 ottobre 2026, versione 1.17.1)
 
 - [ ] **Talent II scelto**: Draken Cross con Talent II → 📐 → dialog con "Base: Small Blast, range 3" (primo) e

@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Tracker: chi ha più turni chiude il turno con un bottone solo (versione 1.17.2)
+
+### Bug di Maar
+
+- **Con più turni, i nodi del tracker facevano cose diverse**: mentre un personaggio (o un Elite) era di turno, accanto
+  a "■ End turn" restavano i "▶" dei turni ancora da fare; premerne uno chiudeva il turno e apriva subito il
+  successivo, e i giocatori si confondevano → mentre il personaggio è di turno, i turni che gli restano si vedono
+  ancora ma sbiaditi e non si possono premere. Si esce dal turno solo con "■ End turn"; il turno dopo si prende
+  quando nessuno è attivo, come gli altri. Un Elite che vuole fare due turni di fila preme End turn e poi ▶ sulla
+  stessa riga: gli effetti di fine turno si risolvono in mezzo come prima.
+
 ## 12 ottobre 2026 — Draken Cross: Small o Medium Blast col Talent II (versione 1.17.1)
 
 ### Bug di Maar

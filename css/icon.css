@@ -3009,6 +3009,9 @@ details[open] > .icon-basic-actions__summary::before {
 .combatant.icon-faction-npc .icon-activation-btn:hover { color: #f09080; }
 .icon-activation-btn--stop,
 .combatant .icon-activation-btn--stop { color: var(--ic-orange-bright, #e0a020); }
+/* Activations left while the combatant is acting: shown, not clickable. */
+.combatant .icon-activation-btn--waiting,
+.combatant .icon-activation-btn--waiting:hover { opacity: .35; cursor: default; transform: none; }
 
 /* Faction tint on the row edge */
 .combat-tracker .combatant.icon-faction-pc  { border-left: 3px solid rgba(88,160,216,.55); }

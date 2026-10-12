@@ -42,13 +42,24 @@ export class IconCombatTracker extends CoreCombatTracker {
       // "■ End turn"): the bare chevron pips were not recognised as buttons
       // (Maar's table, 9 Sept 2026). The GM keeps the compact pips.
       const own = !game.user.isGM && !!combatant?.isOwner;
-      const buttons = Array.from({ length: pending }, (_, i) => ({
+      // While this combatant is acting, its other activations are only shown
+      // (dimmed, not clickable): a ▶ next to "■ End turn" used to end the turn
+      // AND start the next one in a single click, which confused the players.
+      // The stop button is the one way out of the current turn.
+      const buttons = Array.from({ length: pending }, (_, i) => isActive ? {
+        icon:     "fa-solid fa-circle-play",
+        cls:      "icon-activation-btn icon-activation-btn--waiting",
+        action:   "",
+        disabled: true,
+        tooltip:  "Turn still to take — end this turn first",
+        label:    "",
+      } : {
         icon:    "fa-solid fa-circle-play",
         cls:     "icon-activation-btn" + (own && i === 0 ? " icon-activation-btn--labelled" : ""),
         action:  "activateCombatantTurn",
         tooltip: own ? "Take your turn (spends one activation)" : "Activate",
         label:   own && i === 0 ? "▶ Take turn" : "",
-      }));
+      });
       if (isActive) buttons.push({
         icon:    "fa-solid fa-circle-stop",
         cls:     "icon-activation-btn icon-activation-btn--stop" + (own ? " icon-activation-btn--labelled" : ""),

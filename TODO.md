@@ -392,6 +392,9 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
       l'area che si piazza è quella dei tag (Medium Blast col Talent II), senza la scelta del 📐. Valutare se usare lo
       stesso dialog anche lì.
 
+### Bug di Maar del 12 ottobre 2026 — tracker con più turni — FATTO il 12 ottobre 2026 (versione 1.17.2)
+- [x] I ▶ dei turni rimanenti, premuti durante il turno, chiudevano il turno e aprivano il successivo.
+
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
 - [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
