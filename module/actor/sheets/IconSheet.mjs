@@ -22,7 +22,7 @@ import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
-import { buildBondKitsNote, expectedApTotal, expectedSkillRanksFromLevels,
+import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
 import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
@@ -67,6 +67,7 @@ function _abilityMarks(actorId, itemId, comboMark) {
 // world macros that import { _parseAbilityDamage } from this file working.
 import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage } from "../../combat/ability-damage.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
+import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
 
 export class IconSheet extends BaseActorSheet {
@@ -99,6 +100,12 @@ export class IconSheet extends BaseActorSheet {
       removeAmbition:IconSheet.#onRemoveAmbition,
       addLooseGear:    IconSheet.#onAddLooseGear,
       removeLooseGear: IconSheet.#onRemoveLooseGear,
+      gearKitCarry:     IconSheet.#onGearKitCarry,
+      gearItemUsed:     IconSheet.#onGearItemUsed,
+      gearNewExpedition: IconSheet.#onGearNewExpedition,
+      gearAddBondKits:  IconSheet.#onGearAddBondKits,
+      gearCustomKit:    IconSheet.#onGearCustomKit,
+      gearClearOldKit:  IconSheet.#onGearClearOldKit,
       setXp:         IconSheet.#onSetXp,
       adjustXp:      IconSheet.#onAdjustXp,
       setWounds:        IconSheet.#onSetWounds,
@@ -511,6 +518,35 @@ export class IconSheet extends BaseActorSheet {
     }));
     context.trophyCount = rawTrophies.length;
     context.trophyOver  = rawTrophies.length > 3;
+
+    // Gear (p.35): base kit always with you, bond kits carried one per
+    // expedition (two for the Highborn), used/lost items marked until the
+    // next expedition; loose gear taken along up to the bond's limit.
+    {
+      const bondName = bondNameOf(actor);
+      const rules    = bondGearRules(bondName);
+      const kits = actor.items.filter(i => i.type === "gear-kit").map(k => {
+        const used = new Set(k.system.used ?? []);
+        return {
+          id: k.id, name: k.name, always: !!k.system.always, carried: !!k.system.carried, custom: !!k.system.custom,
+          items: (k.system.items ?? []).filter(Boolean).map(name => ({ name, used: used.has(name) })),
+        };
+      }).sort((a, b) => (b.always - a.always) || (b.carried - a.carried) || a.name.localeCompare(b.name));
+      const loose = system.narrative?.looseGear ?? [];
+      const looseLimit = looseGearLimit(actor);
+      const looseCarried = loose.filter(g => g.carried).length;
+      context.gear = {
+        bondName, kits,
+        carryLimit:   rules.carry,
+        carriedCount: kits.filter(k => k.carried && !k.always).length,
+        canCustom:    rules.customItems > 0 && !!bondName,
+        customItems:  rules.customItems,
+        canAddBondKits: !!bondName,
+        oldKit:       system.narrative?.gearKit ?? "",
+        looseLimit, looseCarried,
+        looseOver:    looseCarried > looseLimit,
+      };
+    }
 
     // Bond item — embedded bond (drag-and-drop slot in the Narrative tab).
     // At most one is expected; if more exist (legacy) we show the first.
@@ -1101,13 +1137,110 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({ "system.narrative.ambitions": ambitions });
   }
 
-  /** Add an empty loose-gear slot (max 2). */
+  /** Add an empty loose-gear row. Any amount can be kept; how many are taken
+   *  on an expedition is the "carried" tick (p.36). */
   static async #onAddLooseGear(event, target) {
     const gear = foundry.utils.deepClone(this.document.system.narrative.looseGear ?? []);
-    if (gear.length >= 2) { _log(`addLooseGear — BLOCKED (max 2)`); return; }
-    gear.push("");
+    const carried = gear.filter(g => g.carried).length;
+    gear.push({ name: "", carried: carried < looseGearLimit(this.document) });
     _log(`addLooseGear — actor: "${this.document.name}" | count: ${gear.length}`);
     await this.document.update({ "system.narrative.looseGear": gear });
+  }
+
+  /* -------------------------------------------------- */
+  /*  Gear kits (p.35)                                   */
+  /* -------------------------------------------------- */
+
+  /**
+   * Carry (or put down) a bond kit for this expedition. One kit at a time
+   * (the others are put down), two for the Highborn.
+   */
+  static async #onGearKitCarry(event, target) {
+    event.stopPropagation();
+    const actor = this.document;
+    const kit = actor.items.get(target.dataset.itemId);
+    if (!kit || kit.system.always) return;
+    const limit = bondGearRules(bondNameOf(actor)).carry || 1;
+    if (kit.system.carried) { await kit.update({ "system.carried": false }); return; }
+    const others = actor.items.filter(i => i.type === "gear-kit" && !i.system.always && i.system.carried && i.id !== kit.id);
+    const updates = [{ _id: kit.id, "system.carried": true }];
+    if (limit === 1) others.forEach(o => updates.push({ _id: o.id, "system.carried": false }));
+    else if (others.length >= limit) {
+      ui.notifications.warn(`${actor.name} already carries ${limit} kits this expedition: put one down first.`);
+      return;
+    }
+    await actor.updateEmbeddedDocuments("Item", updates);
+  }
+
+  /** Mark a kit item used up or lost (or back), until the next expedition. */
+  static async #onGearItemUsed(event, target) {
+    event.stopPropagation();
+    const kit  = this.document.items.get(target.dataset.itemId);
+    const name = target.dataset.name;
+    if (!kit || !name) return;
+    const used = new Set(kit.system.used ?? []);
+    if (used.has(name)) used.delete(name); else used.add(name);
+    await kit.update({ "system.used": [...used] });
+  }
+
+  /** A new expedition: used and lost kit items come back (p.35). */
+  static async #onGearNewExpedition(event) {
+    event.stopPropagation();
+    const actor = this.document;
+    const kits = actor.items.filter(i => i.type === "gear-kit" && (i.system.used ?? []).length);
+    if (kits.length) await actor.updateEmbeddedDocuments("Item", kits.map(k => ({ _id: k.id, "system.used": [] })));
+    const carried = actor.items.filter(i => i.type === "gear-kit" && i.system.carried).map(i => i.name);
+    ui.notifications.info(`${actor.name}: gear restocked for a new expedition${carried.length ? ` — carrying ${carried.join(" + ")}` : " — pick the kit to carry"}.`);
+  }
+
+  /** Put the bond's kits (and the base kit) on the sheet. */
+  static async #onGearAddBondKits(event) {
+    event.stopPropagation();
+    const actor = this.document;
+    const bond  = bondNameOf(actor);
+    if (!bond) { ui.notifications.warn("Give the character a bond first."); return; }
+    const n = await addBondKits(actor, bond);
+    ui.notifications.info(n ? `${n} kit(s) of the ${bond} added.` : `The ${bond}'s kits are already on the sheet.`);
+  }
+
+  /**
+   * Custom kit (p.35): any three items from the bond's kits, five for the
+   * Highborn (p.66). Picked in a dialog, saved as a kit of its own.
+   */
+  static async #onGearCustomKit(event) {
+    event.stopPropagation();
+    const actor = this.document;
+    const rules = bondGearRules(bondNameOf(actor));
+    const n = rules.customItems;
+    const groups = await bondKitItems(actor);
+    if (!n || !groups.length) { ui.notifications.warn("No bond kits to pick items from."); return; }
+    const html = `<p class="notes">Pick any ${n} items from your bond's kits (p.35${n === 5 ? ", p.66" : ""}).</p>`
+      + groups.map(g => `<fieldset class="icon-custom-kit__group"><legend>${escapeHTML(g.kit)}</legend>`
+        + g.items.map(it => `<label class="icon-custom-kit__item"><input type="checkbox" name="pick" value="${escapeHTML(it)}"> ${escapeHTML(it)}</label>`).join("")
+        + `</fieldset>`).join("");
+    const picked = await foundry.applications.api.DialogV2.prompt({
+      window: { title: `Custom kit — ${n} items` },
+      content: `<div class="icon-custom-kit">${html}</div>`,
+      ok: {
+        label: "Make kit",
+        callback: (ev, button) => [...button.form.querySelectorAll('input[name="pick"]:checked')].map(i => i.value),
+      },
+      rejectClose: false,
+    });
+    if (!picked) return;
+    if (picked.length !== n) { ui.notifications.warn(`A custom kit has ${n} items: ${picked.length} picked.`); return; }
+    const old = actor.items.filter(i => i.type === "gear-kit" && i.system.custom).map(i => i.id);
+    if (old.length) await actor.deleteEmbeddedDocuments("Item", old);
+    await actor.createEmbeddedDocuments("Item", [{
+      name: "Custom Kit", type: "gear-kit", img: "icons/svg/item-bag.svg",
+      system: { bondName: bondNameOf(actor), kitName: "Custom Kit", items: [...new Set(picked)], custom: true, carried: false },
+    }]);
+  }
+
+  /** Clear the old free-text kit field once the kits are on the sheet. */
+  static async #onGearClearOldKit(event) {
+    event.stopPropagation();
+    await this.document.update({ "system.narrative.gearKit": "" });
   }
 
   /** Remove a loose-gear slot by index. */
@@ -3243,19 +3376,22 @@ export class IconSheet extends BaseActorSheet {
         await this.#onDropJobTemplate(item);
         break;
       case "gear-kit": {
-        // Equip the kit by name AND write its contents into the Notes tab —
-        // the kit's item list used to be readable only on the compendium item.
-        _log(`drop — gear-kit: setting gearKit to "${item.name}"`);
-        const kitItems = Array.isArray(item.system?.items) ? item.system.items.filter(Boolean) : [];
-        const updates  = { "system.narrative.gearKit": item.name };
-        const marker   = `${item.name} —`;
-        const notes    = this.document.system.biography?.notes ?? "";
-        if (kitItems.length && !notes.includes(marker)) {
-          updates["system.biography.notes"] =
-            `${notes ? `${notes}\n\n` : ""}${marker} ${kitItems.join(", ")}`;
+        // The kit goes on the sheet with its items (Gear section). An
+        // adventurer's kit is always carried; a bond kit is picked to carry
+        // when nothing else is.
+        const actor = this.document;
+        if (actor.items.some(i => i.type === "gear-kit" && i.name === item.name)) {
+          ui.notifications.info(`${actor.name} already has the ${item.name}.`);
+          break;
         }
-        await this.document.update(updates);
-        ui.notifications.info(`Kit "${item.name}" equipped${kitItems.length ? " (contents listed in Notes)" : ""}.`);
+        const data = item.toObject();
+        const isBase = !!item.system?.isAdventurersKit;
+        const carrying = actor.items.some(i => i.type === "gear-kit" && !i.system.always && i.system.carried);
+        data.system.always  = isBase;
+        data.system.carried = !isBase && !carrying;
+        data.system.used    = [];
+        _log(`drop — gear-kit: embedding "${item.name}" (always: ${isBase}, carried: ${data.system.carried})`);
+        await actor.createEmbeddedDocuments("Item", [data]);
         break;
       }
       default:
@@ -3465,7 +3601,8 @@ export class IconSheet extends BaseActorSheet {
         modal: true,
       });
       if (!ok) { _log(`dropBond — cancelled (replace declined)`); return; }
-      await actor.deleteEmbeddedDocuments("Item", [existing.id]);
+      const oldKits = actor.items.filter(i => i.type === "gear-kit" && !i.system.custom).map(i => i.id);
+      await actor.deleteEmbeddedDocuments("Item", [existing.id, ...oldKits]);
     }
 
     _log(`dropBond — bond: "${item.name}" | effortMax: ${s.effortMax} | ideals: ${JSON.stringify(s.ideals)}`);
@@ -3476,16 +3613,10 @@ export class IconSheet extends BaseActorSheet {
       "system.biography.ideals":     Array.isArray(s.ideals) ? s.ideals : [],
     };
 
-    // List the bond's baseline equipment kits in the Notes tab so players can
-    // pick one without digging through the Gear Kits compendium.
-    const kitsBlock = await buildBondKitsNote(item.name);
-    const notes     = actor.system.biography?.notes ?? "";
-    if (kitsBlock && !notes.includes(`Kits (${item.name})`)) {
-      updates["system.biography.notes"] = `${notes ? `${notes}\n\n` : ""}${kitsBlock}`;
-    }
-
     await actor.update(updates);
-    ui.notifications.info(`Bond "${item.name}" applied${kitsBlock ? " — its gear kits are listed in Notes" : ""}.`);
+    // The bond's kits (and the base kit) go on the sheet, Gear section.
+    const kits = await addBondKits(actor, item.name);
+    ui.notifications.info(`Bond "${item.name}" applied${kits ? ` — ${kits} gear kit(s) added: pick the one you carry in the Gear section` : ""}.`);
   }
 
   async #onDropAbilitySlot(event, slot) {

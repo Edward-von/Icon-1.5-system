@@ -149,6 +149,19 @@
       {{#unless bondPowers.length}}
         <p class="icon-wizard__warn">No bond powers found in the <code>icon-system.bond-powers</code> compendium.</p>
       {{/unless}}
+
+      <h4 class="icon-wizard__subtitle">Gear kit</h4>
+      <p class="icon-wizard__hint">The kit you carry on your first expedition, besides the adventurer's kit (p.35). All your bond's kits go on the sheet; you can switch before each expedition.</p>
+      <div class="icon-option-grid icon-option-grid--wide" data-role="kit-grid">
+        {{#each kits as |k|}}
+          <label class="icon-option" data-bond="{{k.bondName}}" hidden>
+            <input type="radio" name="kitName" value="{{k.name}}">
+            <span class="icon-option__title">{{k.name}}</span>
+            {{#if k.items}}<span class="icon-option__desc">{{k.items}}</span>{{/if}}
+          </label>
+        {{/each}}
+      </div>
+      <p class="icon-wizard__empty" data-role="kit-empty">Pick a bond first.</p>
     </section>
 
     {{!-- 6. Starting Job --}}

@@ -13,7 +13,7 @@
  */
 import { buildClassTraitDocs } from "../helpers/classes.mjs";
 import { fillJobTraitPowerDice } from "../data/item/power-die.mjs";
-import { buildBondKitsNote } from "../helpers/advancement.mjs";
+import { addBondKits, compendiumKits } from "../helpers/gear.mjs";
 import { formatTag } from "../helpers/rule-tooltips.mjs";
 import { parseAbilitySections, escapeHTML } from "../helpers/enrich.mjs";
 
@@ -71,6 +71,7 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
 
     await this._loadBonds();
     await this._loadBondPowers();
+    await this._loadKits();
     await this._loadJobTemplates();
     await this._loadStartingAbilities();
 
@@ -98,6 +99,7 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
       actions,
       bonds:            this._bonds,
       bondPowers:       this._powers,
+      kits:             this._kits,
       jobs:             this._jobs,
       abilities:        this._abilities,
       distributionSlots: Array.from({ length: DISTRIBUTION_DOTS }, (_, i) => i + 1),
@@ -137,6 +139,20 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
         description: _excerpt(i.system?.description, 160),
       }));
     _log(`loaded ${this._powers.length} bond powers`);
+  }
+
+  /** The bonds' own kits (not the base kits, which every character has). */
+  async _loadKits() {
+    const docs = await compendiumKits();
+    this._kits = docs
+      .filter(d => d.system?.bondName && !d.system?.isAdventurersKit && !/^outsider$/i.test(d.system.bondName))
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(d => ({
+        name:     d.name,
+        bondName: d.system.bondName.trim().toLowerCase(),
+        items:    _excerpt((d.system.items ?? []).filter(Boolean).join(", "), 160),
+      }));
+    _log(`loaded ${this._kits.length} bond kits`);
   }
 
   async _loadJobTemplates() {
@@ -205,6 +221,7 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
     /* ---------- Bond → primary actions + bond powers ---------- */
     const primaryCards = $$('[data-role="primary-grid"] .icon-option');
     const powerCards   = $$('[data-role="power-grid"] .icon-option');
+    const kitCards     = $$('[data-role="kit-grid"] .icon-option');
     const checkedBond  = () => $('input[name="bondUuid"]:checked');
 
     const syncFromBond = () => {
@@ -232,6 +249,21 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
         if (show) visiblePowers++;
       });
       $('[data-role="power-empty"]').hidden = visiblePowers > 0;
+
+      // Kits of the bond (p.35); the Outsider has only its own kit (p.76).
+      let visibleKits = 0;
+      kitCards.forEach(card => {
+        const show = !!bondName && card.dataset.bond === bondName;
+        card.hidden = !show;
+        if (!show) card.querySelector("input").checked = false;
+        if (show) visibleKits++;
+      });
+      const kitEmpty = $('[data-role="kit-empty"]');
+      if (kitEmpty) {
+        kitEmpty.hidden = visibleKits > 0;
+        kitEmpty.textContent = bondName === "outsider" ? "The Outsider only has the outsider's kit (p.76): it's always with you."
+                             : bondName ? "No kits for this bond in the Gear Kits compendium." : "Pick a bond first.";
+      }
 
       if (heroBond) { heroBond.textContent = sel?.dataset?.name ?? ""; heroBond.hidden = !sel; }
       syncDots();
@@ -502,14 +534,6 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
       if (val !== baseActions[key]) updates[`system.narrative.actions.${key}`] = val;
     }
 
-    // List the bond's baseline equipment kits in the Notes tab so a fresh
-    // character can pick one without digging through the Gear Kits compendium.
-    const kitsBlock = await buildBondKitsNote(bondItem.name);
-    const notes     = actor.system.biography?.notes ?? "";
-    if (kitsBlock && !notes.includes(`Kits (${bondItem.name})`)) {
-      updates["system.biography.notes"] = `${notes ? `${notes}\n\n` : ""}${kitsBlock}`;
-    }
-
     _log(`applying updates:`, updates);
     await actor.update(updates);
 
@@ -574,6 +598,13 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
       _log(`embedding ${toEmbed.length} items (bond power + ${jobSys.traits?.length ?? 0} traits + ${jobSys.limitBreak?.name ? 1 : 0} LB + ${abilityPicks.length} abilities)`);
       await fillJobTraitPowerDice(toEmbed);
       await actor.createEmbeddedDocuments("Item", toEmbed);
+    }
+
+    // Gear kits on the sheet (base kit + the bond's), the picked one carried.
+    await addBondKits(actor, bondItem.name);
+    if (data.kitName) {
+      const kit = actor.items.find(i => i.type === "gear-kit" && i.name === data.kitName);
+      if (kit) await kit.update({ "system.carried": true });
     }
 
     ui.notifications.info(`${actor.name} — character setup complete.`);

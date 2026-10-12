@@ -78,8 +78,15 @@ export class IconData extends foundry.abstract.TypeDataModel {
           halfwayBonusClaimed: new BooleanField({ required: true, initial: false }),
         }),
 
+        // Old free-text kit field. Kits are embedded gear-kit items now
+        // (helpers/gear.mjs); the sheet still shows a value left here.
         gearKit:   new StringField({ required: true, initial: "" }),
-        looseGear: new ArrayField(new StringField({ initial: "" }), { initial: [] }),
+        // Loose gear: keep any amount, take a few on an expedition (p.36).
+        // Was a list of names until 1.19.0 (migrateData converts it).
+        looseGear: new ArrayField(new SchemaField({
+          name:    new StringField({ required: true, initial: "" }),
+          carried: new BooleanField({ required: true, initial: false }),
+        }), { initial: [] }),
 
         // Dust — magical essence used to infuse relics (rank/aspect upgrades)
         // and to pay for refocus. Manual p. 245 / p. 113.
@@ -199,6 +206,16 @@ export class IconData extends foundry.abstract.TypeDataModel {
         dust: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
       }), { initial: [] }),
     };
+  }
+
+  /** Loose gear stored as plain names (before 1.19.0) → {name, carried}. The
+   *  old list held at most two, the ones taken along: they stay carried. */
+  static migrateData(source) {
+    const gear = source?.narrative?.looseGear;
+    if (Array.isArray(gear) && gear.some(g => typeof g === "string")) {
+      source.narrative.looseGear = gear.map(g => typeof g === "string" ? { name: g, carried: true } : g);
+    }
+    return super.migrateData(source);
   }
 
   /* -------------------------------------------------- */

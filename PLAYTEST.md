@@ -1656,6 +1656,28 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Gear kit (12 ottobre 2026, versione 1.19.0, Sessione D)
+
+- [ ] **Bond nuovo**: PG senza bond → trascinare Pathfinder → nella sezione Gear compaiono Adventurer's Kit
+      ("Always", con gli oggetti come bottoni) e Highland, Lowland, Extreme Kit (non portati, elenco in breve).
+- [ ] **Portare un kit**: spuntare Highland Kit → diventa "Carried" con gli oggetti come bottoni; spuntare Lowland Kit
+      → Highland si toglie da solo (uno alla volta).
+- [ ] **Usato / perso**: clic su "Pitons" → barrato; di nuovo → torna. "↻ New expedition" → tutti gli oggetti tornano.
+- [ ] **Custom kit**: "+ Custom kit (3 items)" → finestra con gli oggetti dei kit del bond; sceglierne 3 → kit "Custom
+      Kit". Sceglierne 2 → avviso, niente kit.
+- [ ] **Highborn**: nessun Adventurer's Kit; si possono portare 2 kit insieme (al terzo, avviso); custom da 5.
+- [ ] **Elder / Outsider**: Elder ha il Weathered Adventurer's Kit come "Always"; Outsider ha solo l'Outsider's Kit e
+      niente "+ Custom kit".
+- [ ] **Cambio bond**: trascinare un altro bond → conferma → i kit vecchi spariscono, arrivano i nuovi, il custom
+      resta.
+- [ ] **Wizard**: creazione di un PG → al passo 5, sotto i poteri, i kit del bond scelto; scegliere un kit → a fine
+      wizard la scheda ha i kit e quello scelto è "Carried". Con Outsider il passo dice che c'è solo l'outsider's kit.
+- [ ] **Trascinare un kit** dal compendio: si aggiunge (lo stesso kit due volte → messaggio, non si duplica).
+- [ ] **PG vecchio**: un PG con il campo kit scritto a mano → "Old kit note: …" con ✕; "+ <bond> kits" aggiunge i kit.
+- [ ] **Loose gear**: un PG che aveva 2 loose gear → li ha ancora, spuntati; "+ Gear" ne aggiunge un terzo non
+      spuntato; spuntandolo il contatore va a "taken 3/2" in rosso. Outsider con Resourceful → limite 5.
+- [ ] **Giocatore**: da giocatore proprietario, spunte e bottoni funzionano.
+
 ## Trofei (12 ottobre 2026, versione 1.18.0, Sessione C)
 
 - [ ] **Compendio**: c'è "Trophies" con 10 cartelle (General, Relict, Ruin Beast, Scavenger, Imperial, Demon,

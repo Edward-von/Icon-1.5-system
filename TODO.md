@@ -446,10 +446,18 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [ ] **Emerso lavorando** (S, da chiedere a Maar): "Used this combat" e "In effect this combat" si tolgono a mano;
       se Maar vuole, si possono spegnere da sole alla fine del combat.
 
-### Sessione D — Gear kit migliori (L)
-- [ ] Oggi il kit è solo un campo di testo (`system.narrative.gearKit`) che il drop di un item `gear-kit` riempie col
+### Sessione D — Gear kit migliori (L) — FATTA il 12 ottobre 2026 (versione 1.19.0)
+- [x] Oggi il kit è solo un campo di testo (`system.narrative.gearKit`) che il drop di un item `gear-kit` riempie col
       nome. Richiesta: drag & drop vero (il kit resta sulla scheda con i suoi oggetti), scelta del kit quando si sceglie
       il bond, conteggio degli usi. Da chiarire con Maar quali usi intende tracciare.
+- Fatto: kit come item sulla scheda (base sempre, uno del bond portato per expedition, due per l'Highborn), custom kit,
+  kit aggiunti con il bond e scelti nel wizard, loose gear senza limite con spunta "portato" e limite per bond.
+  Per "conteggio degli usi" ho fatto la cosa che il manuale prevede: oggetti segnati usati/persi fino alla prossima
+  expedition (p.35: "even if that gear is used up or lost").
+- [ ] **Da chiedere a Maar**: gli bastano i segni usato/perso, o voleva contare usi numerici per oggetto (il manuale
+      non ne ha: "Icon doesn't care about minutely tracking gear", p.35)?
+- [ ] **Emerso lavorando** (S): l'Outsider, a fine interlude, può prendere un oggetto dai kit degli altri PG del party
+      come loose gear (p.76); oggi si scrive a mano nella lista.
 
 ## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
 

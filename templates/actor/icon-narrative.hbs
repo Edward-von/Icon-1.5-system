@@ -267,26 +267,85 @@
         {{/each}}
       </div>
 
-      {{!-- Gear --}}
-      <div class="icon-section">
-        <h3 class="icon-section__title">Gear Kit</h3>
-        <input type="text" name="system.narrative.gearKit"
-               value="{{system.narrative.gearKit}}" placeholder="Equipped kit"
-               {{#unless isEditable}}disabled{{/unless}}>
+      {{!-- Gear (p.35): kits on the sheet, one bond kit carried per expedition --}}
+      <div class="icon-section icon-gear">
         <div class="icon-section__header">
-          <h4 class="icon-subtitle">Loose Gear <small>({{system.narrative.looseGear.length}}/2)</small></h4>
+          <h3 class="icon-section__title">Gear</h3>
           {{#if isEditable}}
-            {{#icon-lte system.narrative.looseGear.length 1}}
-              <button type="button" class="icon-btn icon-btn--add" data-action="addLooseGear">
-                <i class="fas fa-plus"></i> Gear
-              </button>
-            {{/icon-lte}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="gearNewExpedition"
+                    title="Start of an expedition: used and lost kit items come back (p.35). Pick the kit you carry below.">↻ New expedition</button>
+          {{/if}}
+        </div>
+        {{#if gear.oldKit}}
+          <p class="icon-gear__old" title="The kit used to be a text field; kits are now items on the sheet">
+            Old kit note: <strong>{{gear.oldKit}}</strong>
+            {{#if isEditable}}<button type="button" class="icon-btn icon-btn--sm" data-action="gearClearOldKit" title="Clear the old note">✕</button>{{/if}}
+          </p>
+        {{/if}}
+        {{#each gear.kits as |kit|}}
+          <div class="icon-gear-kit {{#if kit.always}}icon-gear-kit--always{{/if}} {{#if kit.carried}}icon-gear-kit--carried{{/if}}" data-item-id="{{kit.id}}">
+            <div class="icon-gear-kit__header">
+              {{#if kit.always}}
+                <span class="icon-gear-kit__mark" title="Always with you (p.35)">●</span>
+              {{else}}
+                <label class="icon-gear-kit__carry" title="{{#if (icon-eq ../gear.carryLimit 2)}}Carry this kit this expedition (two kits, p.66){{else}}Carry this kit this expedition (one kit, p.35){{/if}}">
+                  <input type="checkbox" data-action="gearKitCarry" data-item-id="{{kit.id}}" {{#if kit.carried}}checked{{/if}} {{#unless ../isEditable}}disabled{{/unless}}>
+                </label>
+              {{/if}}
+              <strong title="Double-click to open">{{kit.name}}</strong>
+              {{#if kit.always}}<span class="icon-badge">Always</span>{{/if}}
+              {{#if kit.custom}}<span class="icon-badge">Custom</span>{{/if}}
+              {{#if kit.carried}}<span class="icon-badge icon-badge--carried">Carried</span>{{/if}}
+              {{#if ../isEditable}}
+                <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
+                        data-action="removeItem" data-item-id="{{kit.id}}" title="Remove kit">×</button>
+              {{/if}}
+            </div>
+            {{#if (icon-or kit.always kit.carried)}}
+              <div class="icon-gear-kit__items">
+                {{#each kit.items as |it|}}
+                  <button type="button" class="icon-gear-item {{#if it.used}}icon-gear-item--used{{/if}}"
+                          data-action="gearItemUsed" data-item-id="{{kit.id}}" data-name="{{it.name}}"
+                          title="{{#if it.used}}Used up or lost — click to get it back{{else}}Click when it's used up or lost (back next expedition){{/if}}"
+                          {{#unless ../../isEditable}}disabled{{/unless}}>{{it.name}}</button>
+                {{/each}}
+              </div>
+            {{else}}
+              <p class="icon-gear-kit__summary">{{#each kit.items as |it|}}{{it.name}}{{#unless @last}} · {{/unless}}{{/each}}</p>
+            {{/if}}
+          </div>
+        {{else}}
+          <p class="icon-empty">No kits on the sheet. Drop a kit from the Gear Kits compendium{{#if gear.canAddBondKits}}, or add the {{gear.bondName}}'s kits{{/if}}.</p>
+        {{/each}}
+        {{#if isEditable}}
+          <div class="icon-gear__actions">
+            {{#if gear.canAddBondKits}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="gearAddBondKits"
+                      title="Put the {{gear.bondName}}'s kits and base kit on the sheet (the ones already here are skipped)">+ {{gear.bondName}} kits</button>
+            {{/if}}
+            {{#if gear.canCustom}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="gearCustomKit"
+                      title="Any {{gear.customItems}} items from your bond's kits, carried as a kit of their own (p.35)">+ Custom kit ({{gear.customItems}} items)</button>
+            {{/if}}
+          </div>
+        {{/if}}
+
+        <div class="icon-section__header">
+          <h4 class="icon-subtitle">Loose Gear <small class="{{#if gear.looseOver}}icon-gear__over{{/if}}" title="Keep any amount; take {{gear.looseLimit}} on an expedition (p.36)">taken {{gear.looseCarried}}/{{gear.looseLimit}}</small></h4>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--add" data-action="addLooseGear">
+              <i class="fas fa-plus"></i> Gear
+            </button>
           {{/if}}
         </div>
         {{#each system.narrative.looseGear as |item i|}}
           <div class="icon-loose-gear-row">
-            <input type="text" name="system.narrative.looseGear.{{i}}"
-                   value="{{item}}" placeholder="Gear item"
+            <label class="icon-gear-kit__carry" title="Take it on this expedition">
+              <input type="checkbox" name="system.narrative.looseGear.{{i}}.carried" {{#if item.carried}}checked{{/if}}
+                     {{#unless ../isEditable}}disabled{{/unless}}>
+            </label>
+            <input type="text" name="system.narrative.looseGear.{{i}}.name"
+                   value="{{item.name}}" placeholder="Gear item"
                    {{#unless ../isEditable}}disabled{{/unless}}>
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove"
@@ -298,7 +357,7 @@
           </div>
         {{/each}}
         {{#unless system.narrative.looseGear.length}}
-          <p class="icon-empty">No loose gear. Click <strong>+ Gear</strong> to add (max 2).</p>
+          <p class="icon-empty">No loose gear. Click <strong>+ Gear</strong> to add; tick what you take on the expedition.</p>
         {{/unless}}
       </div>
 

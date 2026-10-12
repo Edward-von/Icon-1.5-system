@@ -1,5 +1,29 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Gear kit sulla scheda (versione 1.19.0, Sessione D)
+
+### Richiesta di Maar
+
+- **Il kit era solo un campo di testo**: trascinare un kit scriveva il nome in un campo e l'elenco degli oggetti nelle
+  Notes → ora i kit sono **oggetti veri sulla scheda**, nella sezione Gear del tab narrativo, con i loro oggetti.
+  Regole dal manuale:
+  - il **kit base** è sempre con te (p.35): l'Adventurer's Kit, la versione Weathered dell'Elder (p.74), l'Outsider's
+    Kit per l'Outsider (p.76); l'Highborn non ne ha (p.66);
+  - dei kit del bond se ne **porta uno per expedition** (p.35), due per l'Highborn (p.66): si spunta quello che si
+    porta, gli altri restano sulla scheda con l'elenco in breve;
+  - gli oggetti del kit portato sono bottoni: un clic li segna **usati o persi** (barrati), e il bottone
+    **↻ New expedition** li fa tornare tutti, perché a ogni expedition ci si rifornisce (p.35);
+  - **+ Custom kit**: si scelgono 3 oggetti qualsiasi dai kit del bond (5 per l'Highborn) e diventano un kit a sé
+    (p.35, p.66).
+- **Kit scelti con il bond**: trascinando un bond sulla scheda arrivano da soli il kit base e tutti i kit del bond
+  (cambiando bond, quelli vecchi se ne vanno; il custom resta). Nel wizard di creazione, al passo del Bond Power, si
+  sceglie anche il kit da portare alla prima expedition. Per i personaggi già fatti c'è il bottone "+ <bond> kits".
+  Il vecchio campo di testo, se aveva un valore, resta visibile come nota finché non lo si toglie.
+- **Loose gear**: prima si fermava a 2 oggetti. Il manuale dice che se ne tengono quanti si vuole, ma se ne portano 2
+  per expedition (p.36), 4 l'Outsider (p.76), +1 con il potere Resourceful (p.77) → ora la lista non ha limite e
+  ogni oggetto ha la spunta "lo porto"; il titolo mostra "taken N/limite" (rosso se si supera). I loose gear già
+  scritti diventano oggetti "portati" da soli.
+
 ## 12 ottobre 2026 — Trofei: compendio e scheda (versione 1.18.0, Sessione C)
 
 ### Richiesta di Maar
