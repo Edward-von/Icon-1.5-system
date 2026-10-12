@@ -10,7 +10,7 @@
   è quello dell'abilità base, come già sulle card. Valeva anche per Low Blow, Umbra, Revenge, Bleak Mercy e Chastise.
   Una combo che riscrive anche il Trigger è l'abilità scritta da capo e non eredita niente (Justice → Judgement, che
   nel manuale non fa danno). Senza combo token, su Maar il messaggio veniva dal token "ricordato" corretto nella 1.16.9.
-- **Fortuna (Astra) tirava 0 dadi**: "Auto hit: [D]+fray" col trattino mancante e lo spazio non veniva letto (il
+- **Fortuna (Astra) tirava 0 dadi**: "Auto hit: [D]+fray", scritto staccato, non veniva letto (il
   programma cercava solo "autohit" attaccato) → ora tira [D]+fray. Sulle abilità base non cambia nessun danno (6066
   abilità e azioni controllate).
 
