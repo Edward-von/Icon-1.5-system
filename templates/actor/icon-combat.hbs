@@ -479,11 +479,6 @@
                   {{/each}}
                 </span>
               {{/if}}
-              {{#if (icon-eq trait.quick.type "combo")}}
-                <span class="icon-trait__quick-label">Combo Token</span>
-                <button type="button" class="icon-btn icon-btn--sm" data-action="toggleComboToken"
-                        {{#unless ../isEditable}}disabled{{/unless}}>{{#if trait.quick.value}}● armed{{else}}○ none{{/if}}</button>
-              {{/if}}
             </div>
           {{/if}}
           {{#if trait.powerDie}}

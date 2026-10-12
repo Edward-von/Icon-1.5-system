@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 12 ottobre 2026 — Controlli delle risorse solo sul tratto giusto (versione 1.17.6)
+
+### Bug di Maar
+
+- **Tutti i tratti di classe del Vagabond avevano il bottone del combo token**: il controllo rapido della risorsa di
+  classe veniva messo su ogni tratto di classe, non solo su quello che la usa (lo stesso succedeva alle altre classi:
+  Vigilance su Armor 2 e Rush, Blessing su Diaga e Succor, Aether su Slip e Aetherwall) → ora compare solo sul tratto
+  che nomina la risorsa: Fortify (Vigilance), Bless (Blessing), Chain Reaction (Aether e power dice). Il Vagabond non
+  ne ha più su nessun tratto: nessuno parla di combo, e l'interruttore COMBO resta sopra le abilità.
+
 ## 12 ottobre 2026 — Domain solo per le abilità che creano terreno o oggetti (versione 1.17.5)
 
 ### Bug di Maar

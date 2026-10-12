@@ -526,8 +526,8 @@ export class IconSheet extends BaseActorSheet {
         return a.name.localeCompare(b.name);
       });
     // Quick class-resource controls shown in the header of the CLASS trait
-    // (source "class": Heroics / Finishing Blow / Blessing / Aether), so the
-    // Vigilance pips, Power Dice, Blessings and Combo token are usable right
+    // (source "class": Fortify / Bless / Chain Reaction), so the Vigilance
+    // pips, Aether and Power Dice, and Blessings are usable right
     // next to the class feature that explains them (Maar's request, Aug 2026).
     const cr = system.combat?.classResources ?? {};
     // Power dice tracker (combat tab, every class): ticks never above the die.
@@ -547,12 +547,17 @@ export class IconSheet extends BaseActorSheet {
                  pips: Array.from({ length: max }, (_, i) => ({ i: i + 1, active: i + 1 <= (sd.value ?? 0) })) };
       }
       if (t.system?.source !== "class") return null;
+      // Only on the class trait that uses the resource (Fortify, Bless,
+      // Chain Reaction), not on every class trait. Vagabond gets none: no
+      // trait mentions combo, and the COMBO toggle sits above the abilities.
+      const desc = String(t.system?.description ?? "").replace(/<[^>]+>/g, " ");
+      const uses = { stalwart: /\bvigilance\b/i, mendicant: /\bblessing tokens?\b/i, wright: /\baether\b/i }[t.system?.class];
+      if (!uses?.test(desc)) return null;
       switch (t.system?.class) {
         case "stalwart":  return { type: "vigilance", value: cr.vigilance?.value ?? 0, max: cr.vigilance?.max ?? 6,
                                    pips: Array.from({ length: 6 }, (_, i) => ({ i: i + 1, active: i + 1 <= (cr.vigilance?.value ?? 0) })) };
         case "wright":    return { type: "wright", aether: cr.aether?.value ?? 0, dice: context.powerDice };
         case "mendicant": return { type: "blessings", value: cr.blessingTokens?.value ?? 0 };
-        case "vagabond":  return { type: "combo", value: cr.comboToken?.value ?? 0 };
         default: return null;
       }
     };

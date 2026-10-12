@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Controlli delle risorse sui tratti (12 ottobre 2026, versione 1.17.6)
+
+- [ ] **Vagabond**: Skirmisher, Finesse, Dodge, Prowl → nessun bottone combo token. L'interruttore COMBO sopra le
+      abilità funziona come prima.
+- [ ] **Stalwart**: pips di Vigilance solo su Fortify (non su Armor 2, Heroics, Rush).
+- [ ] **Mendicant**: contatore Blessing solo su Bless. **Wright**: Aether e power dice solo su Chain Reaction.
+
 ## Domain e abilità che creano terreno (12 ottobre 2026, versione 1.17.5)
 
 - [ ] **Helix Heel**: PG con la reliquia Domain → pannello di Helix Heel → nessun promemoria "place your Domain".
