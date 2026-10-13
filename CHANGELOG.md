@@ -1,5 +1,11 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 13 ottobre 2026 — Release 1.15.1
+
+Prima release pubblicata dopo la 1.14.1. Contiene tutto quello che è descritto qui sotto, dalla voce "Feedback di
+Maar, Sessione A" (9 ottobre) fino a "FAQ della guida divisa in Combat e Narrative": i numeri 1.15.0–1.20.2 delle
+voci sono quelli delle build interne, mai pubblicate. Su GitHub si passa direttamente dalla 1.14.1 alla 1.15.1.
+
 ## 13 ottobre 2026 — FAQ della guida divisa in Combat e Narrative, quattro domande nuove (versione 1.20.2)
 
 ### Richiesta di Maar (FAQ Changes/Editions)
