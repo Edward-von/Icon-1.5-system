@@ -108,7 +108,7 @@ export function getHatred(actor) {
  * targets first) plus a free-text fallback. Resolves { name, tokenId,
  * actorUuid } or null when cancelled.
  */
-export async function promptHatredTarget(actor, { closest = false } = {}) {
+export async function promptHatredTarget(actor, { closest = false, until = "" } = {}) {
   const tokens   = _sceneTokens({ excludeActorId: actor?.id });
   const targeted = new Set(Array.from(game.user?.targets ?? []).map(t => t.id));
   // "Hatred of the closest foe" (Spite, Dark Knight): the nearest hostile token comes first.
@@ -117,7 +117,7 @@ export async function promptHatredTarget(actor, { closest = false } = {}) {
   const preselect = near.length || targeted.size;
   const options  = sorted.map((t, i) => `<option value="${escapeHTML(t.id)}" ${i === 0 && preselect ? "selected" : ""}>${escapeHTML(t.name)}${near.includes(t) ? " (closest)" : ""}${targeted.has(t.id) ? " (targeted)" : ""}</option>`).join("");
   const content = `
-    <p style="margin:0 0 6px"><strong>${escapeHTML(actor?.name ?? "")}</strong> gains <strong>Hatred of…</strong> (p.104: half damage against anyone else, ends at the end of their turn).${near.length > 1 ? " Several foes are equally close: you choose." : ""}</p>
+    <p style="margin:0 0 6px"><strong>${escapeHTML(actor?.name ?? "")}</strong> gains <strong>Hatred of…</strong> (p.104: half damage against anyone else, ${until ? escapeHTML(until) : "ends at the end of their turn"}).${near.length > 1 ? " Several foes are equally close: you choose." : ""}</p>
     ${sorted.length ? `<label style="display:block;margin-bottom:6px">Character on the map:
       <select name="token" style="width:100%">${options}<option value="">— other (type below) —</option></select></label>` : ""}
     <label style="display:block">Name: <input type="text" name="name" placeholder="e.g. the demon" style="width:100%"></label>`;

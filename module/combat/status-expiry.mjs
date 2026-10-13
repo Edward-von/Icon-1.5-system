@@ -26,10 +26,14 @@ const NS = "icon-system";
 
 const UNTIL_PARSE_RE = /\buntil\s+(?:the\s+)?(start|end|beginning)\s+of\s+(?:(your|their|its|his|her|the\s+[a-z' -]+?)\s+)?(next\s+)?turn\b/i;
 
-/** Is it this actor's turn in the active combat right now? */
+/**
+ * Is it this actor's turn right now? Every started combat is checked, not
+ * only `game.combat`: that is the first active combat of the viewed scene,
+ * which can be an old, empty one while the fight runs in another.
+ */
 function _isTheirTurn(actor) {
-  const current = game.combat?.started ? game.combat.combatant?.actor : null;
-  return !!current && !!actor && current.uuid === actor.uuid;
+  if (!actor) return false;
+  return (game.combats ?? []).some(c => c.started && c.combatant?.actor?.uuid === actor.uuid);
 }
 
 /** Elite foes and legends get the "lasts two turns instead" extra (Mock, p.141). */

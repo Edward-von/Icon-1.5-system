@@ -385,7 +385,7 @@ async function _apply({ target, source, statusId, ongoing, label, abilityName, s
   // Hatred GAINED by the user (Spite, Dark Knight: "gain hatred+ of the closest
   // foe to you"): ask of whom, with the closest foe on the map pre-selected.
   if (statusId === "hatred" && gain) {
-    const hated = await promptHatredTarget(target, { closest: true });
+    const hated = await promptHatredTarget(target, { closest: true, until: expiry?.text ?? (ongoing ? "ongoing: it doesn't end with the turn" : "") });
     if (!hated) return null;
     await applyHatred(target, hated, { ongoing, expiry });
     return { applied: true, relayed: needsRelay };

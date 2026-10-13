@@ -29,10 +29,15 @@ export function comboPartOf(tags) {
   return 0;
 }
 
-/** "<combat>:<round>:<turn>" — the turn now, or "" outside combat. */
+/**
+ * The turn being played now, or "" outside combat. An elite or a legend takes
+ * several turns a round from the same place in the tracker, so the
+ * activations it has left tell its turns apart.
+ */
 function _turnKey() {
-  const c = game.combat;
-  return c?.started ? `${c.id}:${c.round}:${c.turn ?? "-"}` : "";
+  const c = (game.combats ?? []).find(x => x.started && x.combatant) ?? null;
+  if (!c) return "";
+  return `${c.id}:${c.round}:${c.combatant.id}:${c.combatant.activations?.value ?? "-"}`;
 }
 
 /**

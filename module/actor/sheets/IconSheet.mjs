@@ -2604,7 +2604,10 @@ export class IconSheet extends BaseActorSheet {
     });
     const speaker = ChatMessage.getSpeaker({ actor: this.document });
     const spent = [personalSpend ? `${personalSpend} personal` : "", partySpend ? `${partySpend} party` : ""].filter(Boolean).join(" + ");
-    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(lb.name)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}` });
+    // The statuses the limit break inflicts or grants get their buttons, like an
+    // ability card (Mock: slashed+, weakened+, hatred+ "until the end of their next turn").
+    const statusHtml = statusBlockHtml(parseInflictedStatuses(lb.system.effect ?? "", { sourceName: this.document.name, label: "Effect" }), { source: this.document, abilityName: lb.name });
+    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(lb.name)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}${statusHtml}` });
   }
 
   static async #onAddJob(event, target) {

@@ -49,7 +49,7 @@ export class TrophyData extends foundry.abstract.TypeDataModel {
       page:        new NumberField({ required: true, initial: 0, min: 0, integer: true }),
       // p.242: "All Trophies grant you either a trait or an ability". The
       // book doesn't say which for each one, so "" = not stated (pack default).
-      kind:        new StringField({ required: true, initial: "", choices: ["", "ability", "trait"] }),
+      kind:        new StringField({ required: true, blank: true, initial: "", choices: ["", "ability", "trait"] }),
       // The book's Uses column, verbatim, and what the tracker counts.
       usesText:    new StringField({ required: true, initial: "1" }),
       usesUnit:    new StringField({ required: true, initial: "uses", choices: Object.keys(TROPHY_UNITS) }),

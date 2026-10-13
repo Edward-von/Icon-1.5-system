@@ -487,6 +487,12 @@ Già fatti: kit migliori (Sessione D; il conteggio usi è E10), tab Narrative de
 - Status "Power Die" sul token: resta com'è (risposta: no). Encounter Designer "riusa gli attori": da spiegare
   meglio a Edoardo prima di decidere.
 
+### Dal playtest della 1.15.1 (13 ottobre 2026)
+- [ ] **Usi dei kit con clic rapidissimi** (S): due clic sullo stesso oggetto prima che la scheda si ridisegni
+      contano come uno; servirebbe un blocco per oggetto finché l'aggiornamento non è fatto.
+- [ ] **Da provare con un secondo client**: summon piazzati da un giocatore co-GM, Mock e Bless da giocatore, due GM
+      collegati, slow turn / "NPC picks next", danno diviso degli attacchi ad area, tour guidati.
+
 ## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
 
 - [x] **Gain vigilance**: il lettore del testo non riconosceva "Gain +1 vigilance" / "vigilance +1" (S, fatto).

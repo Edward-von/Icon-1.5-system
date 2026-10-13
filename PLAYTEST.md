@@ -1656,6 +1656,33 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Esito playtest della 1.15.1 (13 ottobre 2026, Foundry locale, mondo "test", attori di prova poi cancellati)
+
+Provato da un solo client GM, con PG e foe "TEST" creati per l'occasione e poi cancellati insieme ai messaggi, al
+combat, ai token e a un utente "TEST player" creato per la prova dell'Outsider. Il combat di Edoardo (vuoto) è stato
+riattivato. Correzioni nella 1.15.2 (vedi CHANGELOG).
+
+**Passati**: avviso di aggiornamento e proposta della guida al primo avvio; compendi (icone e tinte di fazione sui 362
+foe e sui token, cartelle Uniques, macro senza emoji); E1 Spite (durata e foe più vicino), Mock su elite (un turno in
+più), Dark Knight; E2 scelta dell'area all'attacco e annullo; E3 Domain (Sleight of Hand no, Chaos Tarot sì); E4
+regole di Mendicant / Vagabond / Wright senza doppioni; E5 Godly Smite 1→2→3→4 e 0 a fine combat; E6 Outsider; E7
+icone dei summon (foe e compendio Summons) e macro Copy Foe Summons; E8 template sulle legend (Titan Armament, ✕,
+drop vero, job rifiutato) e Unique Iron Soldat su un foe; E9 trofei a fine combat; E10 usi dei kit; F1 Bless; F2 combo
+del Bale Troll (ordine, stesso turno, fuori ordine, chip, reset a fine combat); F3 "Try it on the map"; F4 riga
+dell'area e "area removed"; F5 larghezza della Line; FAQ a sezioni e ricerca; emoji sostituite (finestre d'attacco e
+danno, card, tracker, scheda, guida, Encounter planner). Dalle build interne: trofei (dopo la correzione), Terrorize /
+Hurl Self / Finish Off, regole dello Stalwart, controlli delle risorse sui tratti, Domain su 8 abilità, riquadri
+allargabili, Infuse delle Mastery di Lance (Line 10), tracker con due attivazioni, stance multiple con Martial Master,
+danno di Death Blossom in combo, God Hand / Devil Hand, Vigilance con 3 cariche, Rot con due Mark, tab Narrative,
+tab della scheda, ranghi delle reliquie, scheda clock.
+
+**Non provati** (servono un secondo client o un modulo): summon piazzati da un giocatore co-GM, relay giocatore di
+Mock e Bless, due GM collegati (1.16.5), PopOut! (1.17.7), slow turn e "NPC picks next" (1.17.8), danno diviso degli
+attacchi ad area (1.16.1), tour guidati.
+
+**Notato, non corretto**: due clic sullo stesso oggetto di un kit nello stesso istante (prima che la scheda si
+ridisegni) contano come un uso solo.
+
 ## FAQ a sezioni (13 ottobre 2026, versione 1.20.2)
 
 - [ ] Quick Guide → FAQ: tre sezioni (Combat, Narrative, Character sheet); in Combat le domande nuove "Am I my own

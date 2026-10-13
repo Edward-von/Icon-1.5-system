@@ -573,6 +573,7 @@ export function onShowReferenceControl(event) {
 export async function showReferenceGuide({ tab } = {}) {
   try {
     const target = PANES.some(p => p.id === tab) ? tab : lastTab;
+    lastTab = target;   // a search cleared later goes back here, not to the tab of a previous opening
     const open = foundry.applications.instances.get("icon-quick-guide");
     if (open?.rendered) {
       open.changeTab(target, "primary", { force: true });

@@ -1,5 +1,25 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 13 ottobre 2026 — Correzioni del playtest della 1.15.1 (versione 1.15.2)
+
+### Playtest locale (Foundry locale, mondo "test", attori di prova poi cancellati)
+
+- **Trofei impossibili da mettere sulla scheda**: trascinare un trofeo dal compendio, o premere "+ Custom trophy", non
+  faceva niente (errore di validazione in console) → il campo "ability / trait" del trofeo è vuoto per tutti i trofei
+  del manuale e il campo non accettava il valore vuoto → ora lo accetta. Era così dalla 1.18.0 interna.
+- **Il limit break non aveva i bottoni degli status**: la card di Use Limit Break era solo testo, quindi Mock non
+  offriva Slashed+ / Weakened+ / Hatred+ né la loro durata → ora la card ha i blocchi Inflict / Gain come le abilità.
+- **"Until the end of your next turn" finiva un turno prima**: con un vecchio combat vuoto attivo nel mondo, la
+  Hatred+ di Spite presa nel proprio turno durava fino alla fine di quel turno → il sistema guardava solo il primo
+  combat attivo della scena per sapere di chi è il turno → ora guarda tutti i combat iniziati.
+- **Combo dei foe e turni degli elite**: il secondo turno di un elite nello stesso round veniva preso per lo stesso
+  turno del primo (nessun avviso per la parte fuori ordine, avviso sbagliato "different turns" fra due turni veri) →
+  ora conta anche le attivazioni rimaste.
+- **Finestra "Hatred of…"**: diceva sempre "ends at the end of their turn" anche per Spite e Dark Knight → ora mostra
+  la durata dell'abilità ("until the end of your next turn", "ongoing").
+- **Guida rapida**: aperta direttamente su una tab (es. FAQ), svuotare la ricerca riportava alla tab dell'apertura
+  precedente → torna a quella aperta.
+
 ## 13 ottobre 2026 — Release 1.15.1
 
 Prima release pubblicata dopo la 1.14.1. Contiene tutto quello che è descritto qui sotto, dalla voce "Feedback di
