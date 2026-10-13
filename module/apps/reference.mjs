@@ -9,7 +9,7 @@
  * Built like the actor sheets (same window classes, banded header, core tab
  * strip, `.icon-section` panels), so it shares their look and CSS.
  *
- * Opened from the Quick Guide button in the PC sheet header, the 📖 tool in
+ * Opened from the Quick Guide button in the PC sheet header, the Quick Guide tool in
  * the token controls, the header menu of every actor sheet (`showReference`
  * action) and the once-per-update prompt (`promptQuickGuide`).
  *
@@ -440,8 +440,8 @@ export class QuickGuide extends HandlebarsApplicationMixin(ApplicationV2) {
   };
 
   /**
-   * "📐 Try it on the map" under an area clip (Maar): the same placement as an
-   * ability's 📐, from the selected token (or the user's character), so a
+   * "Try it on the map" under an area clip (Maar): the same placement as an
+   * ability's area button, from the selected token (or the user's character), so a
    * player can see whether the area fits before using it. The guide steps
    * aside while placing; the try is an ordinary area, removed like any other.
    */
@@ -602,7 +602,7 @@ export async function promptQuickGuide({ stampOnly = false } = {}) {
     content: `<p>The ICON 1.5 system has been updated to <strong>${version}</strong>.</p>
       <p>Do you want to open the <strong>Quick Guide</strong>? It covers how a turn works, narrative rolls and effort, every area pattern, the
       glossary and an FAQ of edge cases. You can open it any time from the Quick Guide button on your character
-      sheet or the <i class="fa-solid fa-book"></i> book in the token controls.</p>`,
+      sheet or the <i class='fa-solid fa-book'></i> book in the token controls.</p>`,
     yes: { label: "Open the Quick Guide", icon: "fa-solid fa-book-open", default: true },
     no:  { label: "Not now", icon: "fa-solid fa-xmark" },
     rejectClose: false,

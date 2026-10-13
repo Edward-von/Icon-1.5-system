@@ -43,7 +43,7 @@
       "sidebarTab": "combat",
       "tooltipDirection": "LEFT",
       "title": "Slow turns",
-      "content": "A player can skip their turn and take a <strong>slow turn</strong> later in the round instead. <strong>⏸ Slow</strong> marks it, and the character moves after the normal turns."
+      "content": "A player can skip their turn and take a <strong>slow turn</strong> later in the round instead. <strong><i class='fa-solid fa-pause'></i> Slow</strong> marks it, and the character moves after the normal turns."
     },
     {
       "id": "statuses",

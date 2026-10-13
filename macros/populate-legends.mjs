@@ -52,7 +52,7 @@ try {
     const data = LEGEND_DATA[key];
     if (!data) {
       skipped++;
-      log.push(`⏭ Skipped (no data): ${key}`);
+      log.push(`Skipped (no data): ${key}`);
       continue;
     }
 

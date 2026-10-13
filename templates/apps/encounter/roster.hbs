@@ -4,7 +4,7 @@
     <span class="icon-wizard__num">2</span>
     <h3 class="icon-wizard__step-title">Roster</h3>
     <span class="icon-wizard__counter" data-role="roster-count">{{rosterCount}} shown</span>
-    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="randomFill" title="Fill the remaining points with random foes from the rows shown below (filter by faction first)">🎲 Random fill</button>
+    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="randomFill" title="Fill the remaining points with random foes from the rows shown below (filter by faction first)"><i class="fa-solid fa-dice-d20"></i> Random fill</button>
     <button type="button" class="icon-btn icon-btn--sm" data-action="clearFilters" title="Reset the filters">Clear</button>
     <button type="button" class="icon-btn icon-btn--sm" data-action="reloadRoster" title="Re-read the compendium and the world actors">↻</button>
   </div>
@@ -39,7 +39,7 @@
         <span class="icon-encounter__meta">{{faction}} · Ch{{chapter}}{{#if (icon-gt size 1)}} · Size {{size}}{{/if}}{{#if hpMax}} · {{hpMax}} HP{{/if}}{{#if phases}} · {{phases}} phases{{/if}}{{#if traitsText}} · <em>{{traitsText}}</em>{{/if}}</span>
       </span>
       <span class="icon-encounter__cost" title="Budget points">{{costLabel}}</span>
-      <button type="button" class="icon-btn icon-btn--sm" data-action="openSource" title="Open the sheet">👁</button>
+      <button type="button" class="icon-btn icon-btn--sm" data-action="openSource" title="Open the sheet"><i class="fa-solid fa-eye"></i></button>
       <button type="button" class="icon-btn icon-btn--sm icon-btn--add" data-action="addPick" title="Add to the encounter">+</button>
     </div>
     {{/each}}

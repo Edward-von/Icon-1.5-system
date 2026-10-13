@@ -161,7 +161,7 @@ if (pack) {
     if (wasLocked) await pack.configure({ locked: true });
   }
 } else {
-  log.push(`⚠ pack "${PACK_ID}" not found — compendium skipped`);
+  log.push(`Warning: pack "${PACK_ID}" not found — compendium skipped`);
 }
 
 const summary = `Updated ${totalActions} action(s) across ${totalLegends} legend(s).`;

@@ -86,7 +86,7 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
         window: { title: `Save — ${actor.name}` },
         content,
         ok: {
-          label: "🎲 Roll Save",
+          label: "Roll Save", icon: "fa-solid fa-dice-d20",
           callback: (_e, button, dialog) => {
             const root = button?.form ?? dialog?.element ?? dialog;
             const q = (n) => root.querySelector(`[name="${n}"]`);

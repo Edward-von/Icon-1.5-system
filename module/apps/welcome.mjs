@@ -3,7 +3,7 @@
  *
  * Shown once per user (client-scoped `welcomeShown` flag, registered in
  * icon.mjs) on first load, and re-openable any time from the Character
- * Management section of the PC sheet (the ❔ Guide button → `showHelp` action).
+ * Management section of the PC sheet (the Guide button → `showHelp` action).
  */
 
 import { startIconTour } from "./tours.mjs";
@@ -26,13 +26,13 @@ const WELCOME_HTML = `
   <p style="margin:0 0 6px">On the <strong>Combat</strong> tab, drag abilities into the equipped <strong>slots</strong>. The <i class="fas fa-lock"></i> lock toggles the talent/mastery editors on and off, to prevent accidental changes during play.</p>
 
   <h3 style="${H3}">4 · Your budget — <strong>Character Management</strong></h3>
-  <p style="margin:0 0 6px">On the <strong>Notes</strong> tab, the <strong>Character Management</strong> section shows how much <strong>AP</strong> (abilities &amp; talents), <strong>Masteries</strong> and <strong>Skill Ranks</strong> (narrative actions) you've spent vs. the total earned from levelling up. The <span style="color:#e08a2a;font-weight:bold">⚠ OVER</span> flag warns if you've overspent. <strong>↻ Refocus</strong> refunds everything so you can rebuild.</p>
+  <p style="margin:0 0 6px">On the <strong>Notes</strong> tab, the <strong>Character Management</strong> section shows how much <strong>AP</strong> (abilities &amp; talents), <strong>Masteries</strong> and <strong>Skill Ranks</strong> (narrative actions) you've spent vs. the total earned from levelling up. The <span style="color:#e08a2a;font-weight:bold"><i class='fa-solid fa-triangle-exclamation'></i> OVER</span> flag warns if you've overspent. <strong>↻ Refocus</strong> refunds everything so you can rebuild.</p>
 
   <h3 style="${H3}">5 · Primary job ★</h3>
   <p style="margin:0 0 6px">Your <strong>primary</strong> job (marked with ★) provides base stats, traits and the Limit Break. Drag a <em>Job Template</em> from the <strong>Jobs</strong> compendium; if you have several jobs you can switch the primary from the Combat tab — the other jobs' abilities stay available.</p>
 
   <p style="margin:14px 0 0;font-size:.85em;color:#a89878;border-top:1px solid #3a3528;padding-top:8px">
-    💡 You can reopen this guide any time from the <strong>❔ Guide</strong> button in the <em>Character Management</em> section (Notes tab).
+    <i class='fa-solid fa-lightbulb'></i> You can reopen this guide any time from the <strong><i class='fa-solid fa-circle-question'></i> Guide</strong> button in the <em>Character Management</em> section (Notes tab).
     For a guided walk through the interface, press <strong>Take the tour</strong> below, or open <strong>Settings → Tours</strong>; for the rules at a glance (turns, areas, glossary, FAQ), press <strong>Quick Guide</strong>.
   </p>
 </div>`;

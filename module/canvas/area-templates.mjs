@@ -793,9 +793,9 @@ export function areaSummaryHtml(placement, { attackTargetId = "" } = {}) {
     ? `attack: ${esc(attacked.name)}${others.length ? ` · area: ${others.map(t => esc(t.name)).join(", ")}` : ""}`
     : (inArea.length ? inArea.map(t => esc(t.name)).join(", ") : "no one");
   const btn = placement.template
-    ? ` <button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${esc(placement.template.id)}" data-scene-id="${esc(placement.template.parent?.id)}" title="Remove the template from the map">🗑 Remove area</button>`
+    ? ` <button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${esc(placement.template.id)}" data-scene-id="${esc(placement.template.parent?.id)}" title="Remove the template from the map"><i class='fa-solid fa-trash'></i> Remove area</button>`
     : "";
-  return `<div class="icon-chat-card__area"><span class="icon-chat-card__area-label">📐 ${esc(placement.area.label)}</span> <span class="icon-chat-card__area-targets">${names}</span>${btn}</div>`;
+  return `<div class="icon-chat-card__area"><span class="icon-chat-card__area-label"><i class='fa-solid fa-vector-square'></i> ${esc(placement.area.label)}</span> <span class="icon-chat-card__area-targets">${names}</span>${btn}</div>`;
 }
 
 /* -------------------------------------------------- */
@@ -901,7 +901,7 @@ export class IconMeasuredTemplate extends foundry.canvas.placeables.MeasuredTemp
  */
 export function registerAreaTemplates() {
   CONFIG.MeasuredTemplate.objectClass = IconMeasuredTemplate;
-  // Removing an area (🗑 on the card, Delete on the map, end of turn) also
+  // Removing an area (the remove button on the card, Delete on the map, end of turn) also
   // drops the targets it gave its author: otherwise the next damage roll still
   // listed every token that had been in it. Targets are per user, so each
   // client clears its own, and only for the areas that user placed.

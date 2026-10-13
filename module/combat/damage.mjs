@@ -359,7 +359,7 @@ async function _applyWound(actor) {
     await ChatMessage.create({
       speaker,
       content: `<div class="icon-chat-card icon-chat-card--wound">
-        ⚠ <strong>${escapeHTML(actor.name)}</strong> is <em>Defeated!</em>
+        <i class='fa-solid fa-triangle-exclamation'></i> <strong>${escapeHTML(actor.name)}</strong> is <em>Defeated!</em>
         (Wound ${wounds}/${maxWounds} — max HP reduced by ${vit}. Can be Rescued.)
       </div>`,
     });

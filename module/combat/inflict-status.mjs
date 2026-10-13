@@ -4,7 +4,7 @@
  *
  * Pressing a status button on a card:
  *   1. resolves the target (the row's actor, or the user's current targets
- *      for the "🎯 Current targets" row);
+ *      for the "Current targets" row);
  *   2. when the text asks for a save ("must save or be stunned"), opens a
  *      small dialog for the save (boons / curses pre-filled from the text,
  *      a Blessed charge, "Bloodied foes fail the save", or "already rolled")
@@ -330,7 +330,7 @@ async function _saveDialog({ target, source, label, when, sentence, abilityName,
         <label>Boons <input type="number" name="boons" value="${saveBoons}" min="0" max="9"></label>
         <label>Curses <input type="number" name="curses" value="${saveCurses}" min="0" max="9"></label>
       </div>
-      ${modNotes.length ? `<p class="icon-inflict-dialog__note">⚙ ${modNotes.map(escapeHTML).join(" · ")}</p>` : ""}
+      ${modNotes.length ? `<p class="icon-inflict-dialog__note">${modNotes.map(escapeHTML).join(" · ")}</p>` : ""}
       ${blessings > 0 ? `<label class="icon-inflict-dialog__check"><input type="checkbox" name="blessing"> Spend a Blessed charge for +1 boon (${blessings} left)</label>` : ""}
       <label class="icon-inflict-dialog__mode">Result
         <select name="mode">

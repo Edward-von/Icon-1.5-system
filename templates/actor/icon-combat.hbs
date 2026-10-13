@@ -87,7 +87,7 @@
                 <span class="icon-vigilance-pip {{#if (icon-lte i ../system.combat.classResources.vigilance.value)}}icon-vigilance-pip--active{{/if}}"
                       data-action="setVigilance"
                       data-value="{{i}}"
-                      title="Set vigilance to {{i}}">⚡</span>
+                      title="Set vigilance to {{i}}"><i class="fa-solid fa-bolt"></i></span>
               {{/each}}
             </div>
           </div>
@@ -149,7 +149,7 @@
                         data-id="{{die.id}}" data-delta="1" title="Tick up (max {{die.faces}})"
                         {{#unless ../isEditable}}disabled{{/unless}}>+</button>
                 <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie"
-                        data-id="{{die.id}}" title="Roll 1d{{die.faces}}">🎲</button>
+                        data-id="{{die.id}}" title="Roll 1d{{die.faces}}"><i class="fa-solid fa-dice-d20"></i></button>
                 {{#if ../isEditable}}
                   <button type="button" class="icon-btn icon-btn--remove icon-btn--sm" data-action="removePowerDie"
                           data-id="{{die.id}}" title="Discard die">✕</button>
@@ -317,10 +317,10 @@
     </div>
     {{#if canLevelUp}}
       <div class="icon-level-up-bar">
-        <span class="icon-level-up-available">⬆ LEVEL UP AVAILABLE</span>
+        <span class="icon-level-up-available"><i class="fa-solid fa-arrow-up"></i> LEVEL UP AVAILABLE</span>
         {{#if isEditable}}
           <button type="button" class="icon-btn icon-btn--primary icon-btn--pulse"
-                  data-action="levelUp">⬆ Level Up Now</button>
+                  data-action="levelUp"><i class="fa-solid fa-arrow-up"></i> Level Up Now</button>
         {{/if}}
       </div>
     {{/if}}
@@ -328,7 +328,7 @@
       <div class="icon-save-bar">
         <button type="button" class="icon-btn icon-btn--sm" data-action="rollSave"
                 title="Roll a save vs a status effect (1d20, 10+ = success). Mendicants can spend a blessing for +1 boon.">
-          🛡 Save Roll
+          <i class="fa-solid fa-shield-halved"></i> Save Roll
         </button>
       </div>
     {{/if}}
@@ -417,11 +417,11 @@
             {{/if}}
             <span class="icon-badge icon-badge--chapter">Ch {{trait.chapter}}</span>
             {{#if trait.isLocked}}
-              <span class="icon-badge icon-badge--locked">🔒 Locked</span>
+              <span class="icon-badge icon-badge--locked"><i class="fa-solid fa-lock"></i> Locked</span>
             {{/if}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                     data-action="traitShowInChat" data-item-id="{{trait.id}}"
-                    title="Post trait to chat">💬</button>
+                    title="Post trait to chat"><i class="fa-solid fa-comment"></i></button>
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                       data-action="removeItem" data-item-id="{{trait.id}}"
@@ -435,7 +435,7 @@
                 <span class="icon-vigilance-track icon-vigilance-track--inline">
                   {{#each trait.quick.pips as |p|}}
                     <span class="icon-vigilance-pip {{#if p.active}}icon-vigilance-pip--active{{/if}}"
-                          data-action="setVigilance" data-value="{{p.i}}" title="Set vigilance to {{p.i}}">⚡</span>
+                          data-action="setVigilance" data-value="{{p.i}}" title="Set vigilance to {{p.i}}"><i class="fa-solid fa-bolt"></i></span>
                   {{/each}}
                 </span>
                 {{#if ../isEditable}}
@@ -455,13 +455,13 @@
                     <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="-1" {{#unless ../../isEditable}}disabled{{/unless}}>−</button>
                     <span class="icon-power-die__value">{{die.ticks}}</span>
                     <button type="button" class="icon-btn icon-btn--sm" data-action="tickPowerDie" data-id="{{die.id}}" data-delta="1" {{#unless ../../isEditable}}disabled{{/unless}}>+</button>
-                    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" data-id="{{die.id}}" title="Roll this power die (1d{{die.faces}})">🎲</button>
+                    <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" data-id="{{die.id}}" title="Roll this power die (1d{{die.faces}})"><i class="fa-solid fa-dice-d20"></i></button>
                   </span>
                 {{/each}}
                 {{#if ../isEditable}}
                   <button type="button" class="icon-btn icon-btn--sm" data-action="addPowerDie" title="Add a power die">+ Die</button>
                 {{/if}}
-                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" title="Roll a power die (1d6)">🎲 Roll</button>
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="rollPowerDie" title="Roll a power die (1d6)"><i class="fa-solid fa-dice-d20"></i> Roll</button>
               {{/if}}
               {{#if (icon-eq trait.quick.type "blessings")}}
                 <span class="icon-trait__quick-label">Blessing Tokens</span>
@@ -469,7 +469,7 @@
                 <span class="icon-counter-value">{{trait.quick.value}}</span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}}>+</button>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="blessCharacter" {{#unless ../isEditable}}disabled{{/unless}}
-                        title="Bless: give a blessing token to a character (one more Blessed charge, +1 boon on a save)">🙏 Bless…</button>
+                        title="Bless: give a blessing token to a character (one more Blessed charge, +1 boon on a save)"><i class="fa-solid fa-hands-praying"></i> Bless…</button>
               {{/if}}
               {{#if (icon-eq trait.quick.type "stackedDice")}}
                 <span class="icon-trait__quick-label">Stacked Dice {{trait.quick.value}}/{{trait.quick.max}}</span>
@@ -477,7 +477,7 @@
                   {{#each trait.quick.pips as |p|}}
                     <span class="icon-vigilance-pip icon-stacked-die-pip {{#if p.active}}icon-vigilance-pip--active{{/if}}"
                           data-action="setStackedDice" data-value="{{p.i}}" data-max="{{../trait.quick.max}}"
-                          title="{{#if p.active}}Spend / drop stacked die{{else}}Gain a stacked die (gamble result becomes 6){{/if}}">🎲</span>
+                          title="{{#if p.active}}Spend / drop stacked die{{else}}Gain a stacked die (gamble result becomes 6){{/if}}"><i class="fa-solid fa-dice-d20"></i></span>
                   {{/each}}
                 </span>
               {{/if}}
@@ -485,14 +485,14 @@
           {{/if}}
           {{#if trait.powerDie}}
             <div class="icon-trait__quick icon-power-die-widget" title="Power die unique to this item. Set it out when the text says so, tick it up or down as the text tells you; at 0 it is discarded.">
-              <span class="icon-trait__quick-label">🎲 Power die d{{trait.powerDie.faces}}</span>
+              <span class="icon-trait__quick-label"><i class="fa-solid fa-dice-d20"></i> Power die d{{trait.powerDie.faces}}</span>
               {{#if trait.powerDie.active}}
                 <span class="icon-power-die icon-power-die--inline">
                   <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{trait.id}}" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick down">−</button>
                   <span class="icon-power-die__value">{{trait.powerDie.value}}</span>
                   <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{trait.id}}" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick up (max {{trait.powerDie.faces}})">+</button>
                 </span>
-                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{trait.id}}" title="Roll 1d{{trait.powerDie.faces}}">🎲</button>
+                <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{trait.id}}" title="Roll 1d{{trait.powerDie.faces}}"><i class="fa-solid fa-dice-d20"></i></button>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieSet" data-item-id="{{trait.id}}" data-value="0" {{#unless ../isEditable}}disabled{{/unless}} title="Discard the die">Discard</button>
               {{else}}
                 <button type="button" class="icon-btn icon-btn--sm icon-btn--primary" data-action="itemPowerDieSet" data-item-id="{{trait.id}}" data-value="{{trait.powerDie.start}}" {{#unless ../isEditable}}disabled{{/unless}}>Set out at {{trait.powerDie.start}}</button>
@@ -543,7 +543,7 @@
       {{#if isEditable}}
         <button type="button" class="icon-btn icon-btn--sm" data-action="toggleAbilitiesLock"
                 title="{{#if abilitiesLocked}}Click to unlock — talent/mastery edits and remove buttons are disabled{{else}}Click to lock — protect equipped abilities from accidental edits{{/if}}">
-          {{#if abilitiesLocked}}🔒 Locked{{else}}🔓 Unlocked{{/if}}
+          {{#if abilitiesLocked}}<i class="fa-solid fa-lock"></i> Locked{{else}}<i class="fa-solid fa-lock-open"></i> Unlocked{{/if}}
         </button>
       {{/if}}
     </div>
@@ -558,7 +558,7 @@
               <div class="icon-ability-slot__badges">
                 {{#if item.system.isCombo}}
                   <span class="icon-ability-slot__badge icon-ability-slot__badge--combo {{#if ../comboActive}}icon-ability-slot__badge--combo-active{{/if}}"
-                        title="Combo ability">⚡</span>
+                        title="Combo ability"><i class="fa-solid fa-bolt"></i></span>
                 {{/if}}
                 {{#icon-gt item.system.talentSelected 0}}
                   <span class="icon-ability-slot__badge icon-ability-slot__badge--talent"
@@ -618,13 +618,13 @@
           <button type="button" class="icon-btn icon-btn--sm"
                   data-action="abilityShowInChat" data-item-id="{{ab.id}}"
                   title="Post the ability to chat for everyone to see">
-            💬 Show in Chat
+            <i class="fa-solid fa-comment"></i> Show in Chat
           </button>
           {{#each ab.infusions as |inf|}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
                     data-action="abilityInfuse" data-item-id="{{ab.id}}" data-label="{{inf.label}}"
                     title="{{#if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}. Aether now: {{inf.aether}}">
-              ✨ {{#if inf.mastery}}{{inf.costLabel}} — {{inf.name}}{{else}}{{inf.label}}{{/if}}{{#if inf.armed}} — armed{{/if}}
+              <i class="fa-solid fa-wand-sparkles"></i> {{#if inf.mastery}}{{inf.costLabel}} — {{inf.name}}{{else}}{{inf.label}}{{/if}}{{#if inf.armed}} — armed{{/if}}
             </button>
           {{/each}}
           {{#each ab.summons as |sm|}}
@@ -638,24 +638,24 @@
             <button type="button" class="icon-btn icon-btn--sm icon-btn--stance {{#if ab.stanceOn}}icon-btn--stance-on{{/if}}"
                     data-action="abilityStance" data-item-id="{{ab.id}}"
                     title="{{#if ab.stanceOn}}You are in this stance — click to drop it{{else}}Take this stance (one at a time, p.104){{/if}}">
-              {{#if ab.stanceOn}}🧘 In stance — drop{{else}}🧘 Take stance{{/if}}
+              {{#if ab.stanceOn}}<i class="fa-solid fa-yin-yang"></i> In stance — drop{{else}}<i class="fa-solid fa-yin-yang"></i> Take stance{{/if}}
             </button>
           {{/if}}
           {{#if ab.canMark}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
                     data-action="abilityMark" data-item-id="{{ab.id}}"
                     title="Mark the targeted token with this ability (target exactly one token first: hover it and press T)">
-              🎯 Mark target
+              <i class="fa-solid fa-crosshairs"></i> Mark target
             </button>
             {{#if ab.comboMark}}
               <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
                       data-action="abilityMark" data-item-id="{{ab.id}}" data-combo="1"
                       title="Combo version: mark the targeted token with {{ab.comboMark.name}} — its own mark, it doesn't replace the base one">
-                🎯 Mark target ({{ab.comboMark.name}})
+                <i class="fa-solid fa-crosshairs"></i> Mark target ({{ab.comboMark.name}})
               </button>
             {{/if}}
             {{#each ab.marks as |m|}}
-              <span class="icon-mark-chip" title="Marked by {{ab.name}}{{#if m.version}} ({{m.version}}){{/if}}">🎯 {{m.targetName}}{{#if m.version}} <small>({{m.version}})</small>{{/if}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}
+              <span class="icon-mark-chip" title="Marked by {{ab.name}}{{#if m.version}} ({{m.version}}){{/if}}"><i class="fa-solid fa-crosshairs"></i> {{m.targetName}}{{#if m.version}} <small>({{m.version}})</small>{{/if}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}
                 <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button>
               </span>
             {{/each}}
@@ -664,21 +664,21 @@
             <button type="button" class="icon-btn icon-btn--sm icon-btn--area"
                     data-action="abilityPlaceArea" data-item-id="{{ab.id}}"
                     title="Place the {{ab.areaLabel}} on the map and target the tokens inside it (right-click / Esc cancels)">
-              📐 {{ab.areaLabel}}
+              <i class="fa-solid fa-vector-square"></i> {{ab.areaLabel}}
             </button>
           {{/if}}
           {{#if ab.isAttack}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--primary"
                     data-action="abilityAttackRoll" data-item-id="{{ab.id}}"
                     title="{{#if ab.isAutoHit}}Auto-hit — skips the d20 and goes to damage{{else}}Roll 1d20 + boons/curses vs defense{{/if}}">
-              {{#if ab.isAutoHit}}✦ Auto-Hit{{else}}⚔ Attack Roll{{/if}}
+              {{#if ab.isAutoHit}}✦ Auto-Hit{{else}}<i class="fa-solid fa-hand-fist"></i> Attack Roll{{/if}}
             </button>
           {{/if}}
           {{#if ab.dealsDamage}}
             <button type="button" class="icon-btn icon-btn--sm"
                     data-action="abilityDamageRoll" data-item-id="{{ab.id}}"
                     title="Roll damage using the ability's parsed formula">
-              💥 Damage Roll
+              <i class="fa-solid fa-burst"></i> Damage Roll
             </button>
           {{/if}}
         </div>
@@ -687,14 +687,14 @@
              starting value, tick up/down, discard at 0 (manual glossary "Power Die"). --}}
         {{#if ab.powerDie}}
           <div class="icon-trait__quick icon-power-die-widget" title="Power die unique to this item. Set it out when the text says so, tick it up or down as the text tells you; at 0 it is discarded.">
-            <span class="icon-trait__quick-label">🎲 Power die d{{ab.powerDie.faces}}</span>
+            <span class="icon-trait__quick-label"><i class="fa-solid fa-dice-d20"></i> Power die d{{ab.powerDie.faces}}</span>
             {{#if ab.powerDie.active}}
               <span class="icon-power-die icon-power-die--inline">
                 <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{ab.id}}" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick down">−</button>
                 <span class="icon-power-die__value">{{ab.powerDie.value}}</span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieTick" data-item-id="{{ab.id}}" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}} title="Tick up (max {{ab.powerDie.faces}})">+</button>
               </span>
-              <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{ab.id}}" title="Roll 1d{{ab.powerDie.faces}}">🎲</button>
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--roll" data-action="itemPowerDieRoll" data-item-id="{{ab.id}}" title="Roll 1d{{ab.powerDie.faces}}"><i class="fa-solid fa-dice-d20"></i></button>
               <button type="button" class="icon-btn icon-btn--sm" data-action="itemPowerDieSet" data-item-id="{{ab.id}}" data-value="0" {{#unless ../isEditable}}disabled{{/unless}} title="Discard the die">Discard</button>
             {{else}}
               <button type="button" class="icon-btn icon-btn--sm icon-btn--primary" data-action="itemPowerDieSet" data-item-id="{{ab.id}}" data-value="{{ab.powerDie.start}}" {{#unless ../isEditable}}disabled{{/unless}}>Set out at {{ab.powerDie.start}}</button>
@@ -731,7 +731,7 @@
               </label>
             {{/if}}
             {{#if ../abilitiesLocked}}
-              <p class="icon-empty"><em>Locked. Click 🔒 above to unlock.</em></p>
+              <p class="icon-empty"><em>Locked. Click <i class="fa-solid fa-lock"></i> above to unlock.</em></p>
             {{/if}}
           </div>
         {{/if}}
@@ -759,7 +759,7 @@
         {{!-- Combo block — shown when ability has combo content --}}
         {{#if ab.hasCombo}}
           <div class="icon-ability-preview__combo {{#if ../comboActive}}icon-ability-preview__combo--active{{/if}}">
-            <p class="icon-ability-preview__combo-label">⚡ COMBO:</p>
+            <p class="icon-ability-preview__combo-label"><i class="fa-solid fa-bolt"></i> COMBO:</p>
             <div class="icon-ability-preview__combo-text">{{{ab.comboEffect}}}</div>
           </div>
         {{/if}}

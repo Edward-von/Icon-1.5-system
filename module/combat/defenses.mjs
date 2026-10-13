@@ -275,7 +275,7 @@ export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, 
   if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
   if (p.stealth && !compact)    chips.push(_chip("stealth", "Stealth", "Stealth: cannot be targeted directly except from an adjacent space (p.146)."));
   if (p.intangible && !compact) chips.push(_chip("intangible", "Intangible", "Intangible: see the character's text — usually immune to damage."));
-  if (!compact) for (const n of p.traitNotes) chips.push(_chip("trait", `⚠ ${n.name}`, `${n.name}: ${n.text} — set the ${n.key} status by hand when it applies.`));
+  if (!compact) for (const n of p.traitNotes) chips.push(_chip("trait", `${n.name}`, `${n.name}: ${n.text} — set the ${n.key} status by hand when it applies.`));
   return chips.join("");
 }
 

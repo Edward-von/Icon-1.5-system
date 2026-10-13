@@ -39,7 +39,7 @@
       "sheetTab": "main",
       "tooltipDirection": "LEFT",
       "title": "Actions",
-      "content": "Target the characters first (hover a token and press T), then <strong>⚔ Attack</strong> rolls against each target's Defense and <strong>💥 Damage</strong> rolls the damage.\nWhere the action has them: <strong>🎯 Mark</strong> marks the one targeted token, <strong>📐</strong> places the action's area on the map and targets everyone inside, <strong>💬</strong> posts the text to chat."
+      "content": "Target the characters first (hover a token and press T), then <strong><i class='fa-solid fa-hand-fist'></i> Attack</strong> rolls against each target's Defense and <strong><i class='fa-solid fa-burst'></i> Damage</strong> rolls the damage.\nWhere the action has them: <strong><i class='fa-solid fa-crosshairs'></i> Mark</strong> marks the one targeted token, <strong><i class='fa-solid fa-vector-square'></i></strong> places the action's area on the map and targets everyone inside, <strong><i class='fa-solid fa-comment'></i></strong> posts the text to chat."
     },
     {
       "id": "foe-conditions",
@@ -76,7 +76,7 @@
       "openApp": "encounter-designer",
       "tooltipDirection": "LEFT",
       "title": "The roster",
-      "content": "The foes and legends to pick from: from the compendiums, from the world (the ones already imported) or both. Filter by faction, class or name and add the ones you want; <strong>🎲 Random fill</strong> fills what is left of the budget from the rows shown."
+      "content": "The foes and legends to pick from: from the compendiums, from the world (the ones already imported) or both. Filter by faction, class or name and add the ones you want; <strong><i class='fa-solid fa-dice-d20'></i> Random fill</strong> fills what is left of the budget from the rows shown."
     },
     {
       "id": "encounter-deploy",
@@ -85,7 +85,7 @@
       "openApp": "encounter-designer",
       "tooltipDirection": "UP",
       "title": "Save and deploy",
-      "content": "Save the encounter under a name to use it later. <strong>📥 Actors</strong> imports the foes into a folder; <strong>🗺 Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden."
+      "content": "Save the encounter under a name to use it later. <strong><i class='fa-solid fa-file-import'></i> Actors</strong> imports the foes into a folder; <strong><i class='fa-solid fa-map'></i> Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden."
     },
     {
       "id": "clock-board",
@@ -100,7 +100,7 @@
       "id": "end",
       "selector": "",
       "title": "That's all",
-      "content": "You can run this tour again from <strong>Settings → Tours</strong>. The <strong>Quick Guide</strong> (📖 in the token controls) has the rules at a glance."
+      "content": "You can run this tour again from <strong>Settings → Tours</strong>. The <strong>Quick Guide</strong> (<i class='fa-solid fa-book-open'></i> in the token controls) has the rules at a glance."
     }
   ]
 }

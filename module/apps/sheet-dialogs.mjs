@@ -106,9 +106,9 @@ export async function promptNarrativeRoll({ label, rating, effort }) {
       // Warn when boons/curses exceed the cap (push is separate and always works).
       const warnings = [];
       if (netRaw > cap) {
-        warnings.push(`⚠ Net would be +${netRaw}, capped at +${cap}. Extra boons wasted.`);
+        warnings.push(`<i class='fa-solid fa-triangle-exclamation'></i> Net would be +${netRaw}, capped at +${cap}. Extra boons wasted.`);
       } else if (netRaw < -cap) {
-        warnings.push(`⚠ Net would be ${netRaw}, capped at −${cap}. Extra curses wasted.`);
+        warnings.push(`<i class='fa-solid fa-triangle-exclamation'></i> Net would be ${netRaw}, capped at −${cap}. Extra curses wasted.`);
       }
       warnEl.innerHTML = warnings.map(w => `<div>${w}</div>`).join("");
     };
@@ -127,7 +127,7 @@ export async function promptNarrativeRoll({ label, rating, effort }) {
       modal: true,
       rejectClose: false,
       ok: {
-        label: "🎲 Roll",
+        label: "Roll", icon: "fa-solid fa-dice-d20",
         callback: (event, button) => {
           const form = button.form;
           return {

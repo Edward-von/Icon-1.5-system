@@ -23,7 +23,7 @@
     <input type="checkbox" name="addParty" {{#if addParty}}checked{{/if}}>
     <span>+ party</span>
   </label>
-  <button type="button" class="icon-btn" data-action="postChat" {{#unless hasPicks}}disabled{{/unless}} title="Whisper the budget breakdown to the GMs">💬 Chat</button>
-  <button type="button" class="icon-btn" data-action="createActors" {{#unless hasPicks}}disabled{{/unless}}{{#if busy}} disabled{{/if}} title="Import the foes into an “Encounter: …” actor folder (Elite / mob / Legend HP already applied)">📥 Actors</button>
-  <button type="button" class="icon-btn icon-btn--primary" data-action="deploy" {{#unless canDeploy}}disabled{{/unless}} title="{{#if sceneName}}Actors + tokens at the centre of “{{sceneName}}” + combat (reserves hidden){{else}}Open a scene first{{/if}}">🗺 Deploy{{#if busy}}…{{/if}}</button>
+  <button type="button" class="icon-btn" data-action="postChat" {{#unless hasPicks}}disabled{{/unless}} title="Whisper the budget breakdown to the GMs"><i class="fa-solid fa-comment"></i> Chat</button>
+  <button type="button" class="icon-btn" data-action="createActors" {{#unless hasPicks}}disabled{{/unless}}{{#if busy}} disabled{{/if}} title="Import the foes into an “Encounter: …” actor folder (Elite / mob / Legend HP already applied)"><i class="fa-solid fa-file-import"></i> Actors</button>
+  <button type="button" class="icon-btn icon-btn--primary" data-action="deploy" {{#unless canDeploy}}disabled{{/unless}} title="{{#if sceneName}}Actors + tokens at the centre of “{{sceneName}}” + combat (reserves hidden){{else}}Open a scene first{{/if}}"><i class="fa-solid fa-map"></i> Deploy{{#if busy}}…{{/if}}</button>
 </footer>

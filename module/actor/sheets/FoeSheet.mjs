@@ -189,7 +189,7 @@ export class FoeSheet extends BaseActorSheet {
       positive: markActive(visibleStatuses(actor, groups.positive)),
       special:  markActive(visibleStatuses(actor, groups.special)),
     };
-    // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
+    // "Roll Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();
 
     _log(`_prepareContext — done | class: ${system.foeClass} | elite: ${system.isElite} | traits: ${system.traits.length} | actions: ${system.actions.length} | interrupts: ${system.interrupts.length}`);
@@ -315,7 +315,7 @@ export class FoeSheet extends BaseActorSheet {
     return statusBlockHtml(npcActionStatusEntries(action, { sourceName: this.document.name }), { source: this.document, abilityName: name });
   }
 
-  /** 🎯 Mark the targeted token with this action (marks.mjs); exactly one target. */
+  /** Mark the targeted token with this action (marks.mjs); exactly one target. */
   static async #onMarkActionTarget(event, target) {
     event.stopPropagation();
     const action = this.document.system.actions[Number(target.dataset.actionIndex)];
@@ -334,7 +334,7 @@ export class FoeSheet extends BaseActorSheet {
     if (target.dataset.effectUuid) await removeMark(target.dataset.effectUuid);
   }
 
-  /** 📐 Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */
+  /** area Place an action's Blast / Line / Arc / Burst on the map and target the tokens inside. */
   static async #onPlaceActionArea(event, target) {
     event.stopPropagation();
     const idx    = Number(target.dataset.actionIndex);
@@ -669,7 +669,7 @@ export class FoeSheet extends BaseActorSheet {
     ui.notifications.info(`"${cleanName}" added.`);
   }
 
-  /** 💬 on a summon: post its rules to chat, the foe as speaker. */
+  /** chat on a summon: post its rules to chat, the foe as speaker. */
   static async #onNpcSummonShowInChat(event, target) {
     event.stopPropagation();
     const sm = this.document.system.summons?.[Number(target.dataset.summonIndex)];

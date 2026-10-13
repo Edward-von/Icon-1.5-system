@@ -146,7 +146,7 @@ export function parseComboAbilityDamage(itemSystem) {
  * Foe/legend actions have no `isAttack` field: an action is an attack if it carries an
  * attack tag (book header "attack" / "melee attack" / "ranged attack") or spells out an
  * "On hit:" line. Non-attack abilities (marks, terrain, Diaga, traits-as-actions…) must
- * NOT show the ⚔ Attack button on the sheet.
+ * NOT show the Attack button on the sheet.
  */
 export function isFoeActionAttack(action) {
   const a = action ?? {};

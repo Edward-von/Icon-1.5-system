@@ -115,7 +115,7 @@ export async function offerWildCards(templateDoc, cells, { abilityName = "" } = 
   _log(`${cards.length} card(s) triggered — area ${cells.length} → ${extended.length} spaces`);
   await ChatMessage.create({
     content: `<div class="icon-chat-card icon-chat-card--wildcard">
-        <strong>🃏 ${cards.length} wild card${cards.length > 1 ? "s" : ""}</strong> triggered${abilityName ? ` by <strong>${esc(abilityName)}</strong>` : ""}
+        <strong><i class='fa-solid fa-clone'></i> ${cards.length} wild card${cards.length > 1 ? "s" : ""}</strong> triggered${abilityName ? ` by <strong>${esc(abilityName)}</strong>` : ""}
         <br><small>${esc(names.join(", "))} — the area grows from ${cells.length} to ${extended.length} spaces and the card${cards.length > 1 ? "s are" : " is"} removed (p.200).</small>
       </div>`,
   });

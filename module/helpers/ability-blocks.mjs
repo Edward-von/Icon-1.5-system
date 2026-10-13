@@ -233,7 +233,7 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
       else out.push({ key: cb.key || "section", label: cb.label, text: cb.text, fromText: !cb.key, combo: true, comboDone: true });
     }
     if (combo.lead) {
-      // The card adds the ⚡ in front of every combo block, so the label doesn't carry one.
+      // The card adds the bolt icon in front of every combo block, so the label doesn't carry one.
       const name = comboDisplayName(comboText);
       out.unshift({ key: "combo", label: `Combo${name ? ` — ${name}` : ""}`, text: combo.lead, fromText: true, combo: true });
     }

@@ -55,7 +55,7 @@
         <strong>AP</strong> buys abilities &amp; talents,
         <strong>Masteries</strong> unlock ability masteries, and
         <strong>Skill Ranks</strong> raise narrative actions. The
-        <span class="icon-resource-counter__flag">⚠ OVER</span> flag warns if you've spent
+        <span class="icon-resource-counter__flag"><i class="fa-solid fa-triangle-exclamation"></i> OVER</span> flag warns if you've spent
         more than you have. <strong>Refocus</strong> refunds everything so you can rebuild.
       </p>
 
@@ -68,7 +68,7 @@
           <div class="icon-resource-counter {{#if apOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq apFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
             Spent <strong>{{apSpent}}</strong> / {{apTotal}}
             {{#if apOverspent}}
-              <span class="icon-resource-counter__flag">⚠ OVER</span>
+              <span class="icon-resource-counter__flag"><i class="fa-solid fa-triangle-exclamation"></i> OVER</span>
             {{else}}{{#icon-eq apFree 0}}
               <span class="icon-resource-counter__flag">✓ all spent</span>
             {{else}}
@@ -81,7 +81,7 @@
           {{#if apPhantomHalfway}}
             <button type="button" class="icon-btn icon-btn--tiny" data-action="fixPhantomAp"
                     title="The halfway ability point (7 XP) used to be granted at level 0 too. The book gives it from level 1 on (p.112), so this sheet carries one AP it never earned.">
-              ⚠ one AP too many — fix
+              <i class="fa-solid fa-triangle-exclamation"></i> one AP too many — fix
             </button>
           {{/if}}
         </div>
@@ -94,7 +94,7 @@
           <div class="icon-resource-counter {{#if masteryOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq masteryFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
             Spent <strong>{{masterySpent}}</strong> / {{masteryTotal}}
             {{#if masteryOverspent}}
-              <span class="icon-resource-counter__flag">⚠ OVER</span>
+              <span class="icon-resource-counter__flag"><i class="fa-solid fa-triangle-exclamation"></i> OVER</span>
             {{else}}{{#icon-eq masteryFree 0}}
               <span class="icon-resource-counter__flag">✓ all spent</span>
             {{else}}
@@ -111,7 +111,7 @@
           <div class="icon-resource-counter {{#if skillRanksOverspent}}icon-resource-counter--warn{{else}}{{#icon-eq skillRanksFree 0}}icon-resource-counter--full{{/icon-eq}}{{/if}}">
             Spent <strong>{{skillRanksSpent}}</strong> / {{skillRanksTotal}}
             {{#if skillRanksOverspent}}
-              <span class="icon-resource-counter__flag">⚠ OVER</span>
+              <span class="icon-resource-counter__flag"><i class="fa-solid fa-triangle-exclamation"></i> OVER</span>
             {{else}}{{#icon-eq skillRanksFree 0}}
               <span class="icon-resource-counter__flag">✓ all spent</span>
             {{else}}
@@ -124,7 +124,7 @@
           {{#if skillRanksBehind}}
             <button type="button" class="icon-btn icon-btn--tiny" data-action="fixSkillRanks"
                     title="The field only grows when a level is taken through the level-up wizard. This character's level grants more improvements than it holds — imported or hand-built sheets end up here.">
-              ⚠ behind the level — set to {{skillRanksEarned}}
+              <i class="fa-solid fa-triangle-exclamation"></i> behind the level — set to {{skillRanksEarned}}
             </button>
           {{/if}}
         </div>
@@ -133,11 +133,11 @@
       <div class="icon-management-actions">
         <button type="button" class="icon-btn" data-action="showHelp"
                 title="Reopen the 'How to build your character' guide">
-          ❔ Guide
+          <i class="fa-solid fa-circle-question"></i> Guide
         </button>
         <button type="button" class="icon-btn" data-action="showReference"
                 title="Open the quick guide: turn structure, areas, glossary and FAQ">
-          📖 Quick Guide
+          <i class="fa-solid fa-book-open"></i> Quick Guide
         </button>
         <button type="button" class="icon-btn icon-btn--refocus" data-action="refocus"
                 title="Refocus: refund AP, Mastery and Skill Ranks, re-pick abilities">

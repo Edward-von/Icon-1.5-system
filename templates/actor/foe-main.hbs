@@ -96,7 +96,7 @@
                  {{#unless ../isEditable}}disabled{{/unless}}>
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeTraitShowInChat" data-trait-index="{{trait.i}}"
-                  title="Post trait to chat">💬</button>
+                  title="Post trait to chat"><i class="fa-solid fa-comment"></i></button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove"
                     data-action="removeTrait" data-index="{{trait.i}}">✕</button>
@@ -137,27 +137,27 @@
           {{/if}}
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeActionShowInChat" data-action-index="{{action.i}}"
-                  title="Post this action to chat">💬</button>
+                  title="Post this action to chat"><i class="fa-solid fa-comment"></i></button>
           {{#if action.canMark}}
           <button type="button" class="icon-btn icon-btn--mark"
                   data-action="markActionTarget" data-action-index="{{action.i}}"
-                  title="Mark the targeted token with this action (target exactly one token first)">🎯 Mark</button>
-          {{#each action.marks as |m|}}<span class="icon-mark-chip">🎯 {{m.targetName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}} <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button></span>{{/each}}
+                  title="Mark the targeted token with this action (target exactly one token first)"><i class="fa-solid fa-crosshairs"></i> Mark</button>
+          {{#each action.marks as |m|}}<span class="icon-mark-chip"><i class="fa-solid fa-crosshairs"></i> {{m.targetName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}} <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button></span>{{/each}}
           {{/if}}
           {{#if action.areaLabel}}
           <button type="button" class="icon-btn icon-btn--area"
                   data-action="placeActionArea" data-action-index="{{action.i}}"
-                  title="Place the {{action.areaLabel}} on the map and target the tokens inside it">📐 {{action.areaLabel}}</button>
+                  title="Place the {{action.areaLabel}} on the map and target the tokens inside it"><i class="fa-solid fa-vector-square"></i> {{action.areaLabel}}</button>
           {{/if}}
           {{#if action.isAttack}}
           <button type="button" class="icon-btn icon-btn--roll"
                   data-action="rollAction" data-action-index="{{action.i}}"
-                  title="Roll attack">⚔ Attack</button>
+                  title="Roll attack"><i class="fa-solid fa-hand-fist"></i> Attack</button>
           {{/if}}
           {{#if action.dealsDamage}}
             <button type="button" class="icon-btn icon-btn--roll"
                     data-action="rollFoeDamage" data-action-index="{{action.i}}"
-                    title="Roll damage">💥 Damage</button>
+                    title="Roll damage"><i class="fa-solid fa-burst"></i> Damage</button>
           {{/if}}
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove"
@@ -222,7 +222,7 @@
           </span>
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeInterruptShowInChat" data-interrupt-index="{{interrupt.i}}"
-                  title="Post this interrupt to chat">💬</button>
+                  title="Post this interrupt to chat"><i class="fa-solid fa-comment"></i></button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove"
                     data-action="removeInterrupt" data-index="{{interrupt.i}}">✕</button>
@@ -262,7 +262,7 @@
                      {{#unless ../isEditable}}disabled{{/unless}}>
               <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                       data-action="foeRoundActionShowInChat" data-round-action-index="{{ra.i}}"
-                      title="Post this round action to chat">💬</button>
+                      title="Post this round action to chat"><i class="fa-solid fa-comment"></i></button>
               {{#if ../isEditable}}
                 <input type="number" name="system.roundActions.{{ra.i}}.roundNumber"
                        value="{{ra.roundNumber}}" min="1"

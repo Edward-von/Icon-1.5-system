@@ -7,7 +7,7 @@
  * they loop back to the start after the last part is used."
  *
  * The sheet remembers the last part used (flag `icon-system.foeCombo` =
- * { last, turn }) when its attack, damage or 💬 is pressed. The part that
+ * { last, turn }) when its attack, damage or chat is pressed. The part that
  * comes next is highlighted, the others are dimmed until their turn comes.
  * Nothing is blocked: a part used out of order only gets a warning, and the
  * GM can reset the sequence or click a part's Combo chip to make it the next
@@ -65,7 +65,7 @@ export function comboView(actor, action) {
 }
 
 /**
- * An action was used (attack, damage or 💬). Records it when it is a combo
+ * An action was used (attack, damage or chat). Records it when it is a combo
  * part; warns when it is out of order or a second part in the same turn.
  * The same part pressed again in the same turn (attack, then damage) is the
  * same use.

@@ -40,7 +40,7 @@ const _log = (...args) => console.debug("[ICON | IconSheet]", ...args);
  * The combo version's own "Mark:" block, or null. Rot's combo, Regenerate,
  * marks an ally instead of a foe and "can be placed even if Rot is already
  * active", so it is a mark of its own (key `<item id>:combo`), with its own
- * 🎯 button, rather than a replacement of the base mark.
+ * Mark button, rather than a replacement of the base mark.
  * @returns {{name:string, text:string, stackText:string}|null}
  */
 function _comboMark(s) {
@@ -290,7 +290,7 @@ export class IconSheet extends BaseActorSheet {
     // action improvements handed out by level ups (LevelUpDialog), but the
     // dots on the sheet also include the six every character starts with:
     // the bond's +2 in one action and the 4 to distribute (p.241). Without
-    // those six in the total, a brand-new character reads "Spent 6 / 0 ⚠ OVER"
+    // those six in the total, a brand-new character reads "Spent 6 / 0 OVER"
     // for ever, which is what it did until now.
     // `system.combat.skillRanksTotal` is an accumulator: only LevelUpDialog
     // ever adds to it. A character who did not earn every level through that
@@ -329,7 +329,7 @@ export class IconSheet extends BaseActorSheet {
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       // While the combo token is held, a combo ability shows the combo's own
       // tags (Hades: True Strike + Medium Blast) — flagged as upgraded — and
-      // its own area on the 📐 button (Death Blossom → Flying Sleeves: Arc 4).
+      // its own area on the area button (Death Blossom → Flying Sleeves: Arc 4).
       // Same test as the attack / Show in Chat buttons; context.comboActive is
       // only set further down, so reading it here was always false.
       const comboArmed = this._comboArmed(a);
@@ -344,12 +344,12 @@ export class IconSheet extends BaseActorSheet {
         tags,
         comboArmed,
         // "Medium Blast" / "Line 4" / … from the tags, or from the ability's own
-        // text when the header has no area (Tsunami, p.233) → 📐 button
+        // text when the header has no area (Tsunami, p.233) → area button
         areaLabel:   abilityArea(tags, s.description)?.label ?? "",
-        // Mark abilities: 🎯 button + the marks this ability currently has on the scene
+        // Mark abilities: Mark button + the marks this ability currently has on the scene
         canMark:     markFromTags(tags).can || !!_comboMark(s),
         comboMark:   _comboMark(s),
-        // Stance abilities: 🧘 button, lit while this is the stance in play
+        // Stance abilities: stance button, lit while this is the stance in play
         canStance:   tags.some(t => tagKey(t) === "stance"),
         stanceOn:    IconActor.stancesOf(actor).includes(a.name),
         // Summons this ability names: draggable straight onto the map
@@ -810,7 +810,7 @@ export class IconSheet extends BaseActorSheet {
       positive: markActive(visibleStatuses(actor, groups.positive)),
       special:  markActive(visibleStatuses(actor, groups.special)),
     };
-    // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
+    // "Roll Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();
 
     _log(`_prepareContext — done | abilities: ${context.abilityItems.length} | relics: ${context.relicItems.length} | sort: ${this._actionSortMode} | primaryJobClass: "${context.primaryJobClass}"`);
@@ -1874,7 +1874,7 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * 🧘 Take (or drop) the stance this ability grants. One stance at a time
+   * Take (or drop) the stance this ability grants. One stance at a time
    * (p.103), more with Martial Master / Byrax / the extra stances on the sheet
    * (IconActor.stanceMax): a new stance joins the others until the maximum,
    * then replaces the oldest; pressing the button again drops it. Writing
@@ -1901,7 +1901,7 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * 🎯 Mark the targeted token with this ability (marks.mjs). Exactly one
+   * Mark the targeted token with this ability (marks.mjs). Exactly one
    * token must be targeted; the mark's text is the ability's "Mark:" block.
    * `data-combo` = the combo version's own mark (Rot → Regenerate).
    */
@@ -1933,7 +1933,7 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * 📐 Place the ability's Blast / Line / Arc / Burst on the map and target
+   * Place the ability's Blast / Line / Arc / Burst on the map and target
    * the tokens inside it (area-templates.mjs). Replaces this actor's previous
    * template for the same ability.
    */
@@ -1945,7 +1945,7 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * The areas this ability can be placed with (📐 and the attack roll share
+   * The areas this ability can be placed with (the area button and the attack roll share
    * the list, so both offer the same choice).
    */
   _areaVariantsFor(ab) {
@@ -2024,7 +2024,7 @@ export class IconSheet extends BaseActorSheet {
     // Cancelling the placement (Escape / right click) no longer kills the roll:
     // the attack is rolled without an area, so the d20 can be thrown before —
     // or without — putting the arc down. Cancel the dialog to call it off.
-    // No area on the map yet for this ability: the same choice as 📐 (base
+    // No area on the map yet for this ability: the same choice as the area button (base
     // area, talent / combo / charge shapes) instead of always the tags' one.
     let areaChoice;
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {
@@ -2710,7 +2710,7 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
-   * ✨ Infuse: spend the Aether and arm this version of the ability (p.117 —
+   * Infuse: spend the Aether and arm this version of the ability (p.117 —
    * "triggers when Aether is spent on an ability"). Pressing the armed one
    * again gives the Aether back, for when the plan changes before the roll.
    */
@@ -2805,7 +2805,7 @@ export class IconSheet extends BaseActorSheet {
       seen.add(actor.uuid);
       choices.push({ uuid: actor.uuid, label, tag });
     };
-    for (const t of game.user?.targets ?? []) add(t.actor, t.name, "🎯");
+    for (const t of game.user?.targets ?? []) add(t.actor, t.name, "(targeted)");
     for (const t of canvas?.tokens?.placeables ?? []) if (t.actor && t.document.disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) add(t.actor, t.name, "");
     for (const a of game.actors ?? []) if (a.type === "icon" && a.hasPlayerOwner) add(a, a.name, "");
     if (!choices.length) { ui.notifications.warn("No character to bless: target a token or add a player character."); return; }
@@ -2851,7 +2851,7 @@ export class IconSheet extends BaseActorSheet {
    */
   async _setAbilityTalent(itemId, value) {
     if (this._abilitiesLocked) {
-      ui.notifications.warn("Equipped abilities are locked. Click the 🔒 to unlock.");
+      ui.notifications.warn("Equipped abilities are locked. Click the lock to unlock.");
       await this.render();
       return;
     }
@@ -2894,7 +2894,7 @@ export class IconSheet extends BaseActorSheet {
    */
   async _setAbilityMastery(itemId, unlocked) {
     if (this._abilitiesLocked) {
-      ui.notifications.warn("Equipped abilities are locked. Click the 🔒 to unlock.");
+      ui.notifications.warn("Equipped abilities are locked. Click the lock to unlock.");
       await this.render();
       return;
     }

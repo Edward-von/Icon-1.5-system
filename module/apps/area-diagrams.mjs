@@ -11,7 +11,7 @@
 
 const CLIPS = "systems/icon-system/assets/guide/areas";
 
-/** The tags each clip shows, for its "📐 Try it on the map" button (the ranges are the clips' own). */
+/** The tags each clip shows, for its "Try it on the map" button (the ranges are the clips' own). */
 const TRY_TAGS = {
   "small-blast": "small-blast,range-3", "medium-blast": "medium-blast,range-3", "large-blast": "large-blast,range-3",
   "burst-1-target": "burst-1-target,range-3", "burst-1-self": "burst-1-self", "burst-2-self": "burst-2-self",
@@ -58,7 +58,7 @@ export function areaDiagramsHTML() {
                aria-label="${label}: the area being placed on the map"></video>
         <p class="icon-area-card__text">${caption}</p>
         ${TRY_TAGS[file] ? `<button type="button" class="icon-btn icon-btn--sm icon-area-card__try" data-action="tryArea" data-tags="${TRY_TAGS[file]}"
-                title="Place a ${label} from your selected token to see what it covers">📐 Try it on the map</button>` : ""}
+                title="Place a ${label} from your selected token to see what it covers"><i class='fa-solid fa-vector-square'></i> Try it on the map</button>` : ""}
       </figure>`).join("");
     return `
     <h3 class="icon-area-group">${heading}</h3>
@@ -66,7 +66,7 @@ export function areaDiagramsHTML() {
     <div class="icon-area-cards">${cards}</div>`;
   }).join("");
   return `
-  <p class="icon-area-legend">Recorded in Foundry with the 📐 placement: <span class="icon-area-legend__range">blue</span> is the
+  <p class="icon-area-legend">Recorded in Foundry with the area placement: <span class="icon-area-legend__range">blue</span> is the
     ability's range, the coloured squares are the area, red corners mark the characters it targets.</p>
   ${groups}
   <p class="icon-area-note">An area with a listed range can go anywhere as long as one of its spaces is in range; without

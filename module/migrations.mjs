@@ -657,7 +657,7 @@ const MIGRATIONS = {
    * taken *inside this system* rather than the character's level. A sheet that
    * arrived any other way — imported from another world, built by hand before
    * the wizard existed, or a level typed straight into the field — is stuck at
-   * whatever it was when it arrived, usually zero, and reads "⚠ OVER" for ever
+   * whatever it was when it arrived, usually zero, and reads "OVER" for ever
    * no matter how few dots the player actually spends.
    *
    * The advancement table (p.241) says how many improvements a level is worth,

@@ -38,12 +38,12 @@
       <div class="icon-grant-grid">
         {{#if combat.ap}}<div class="icon-grant"><span class="icon-grant__value">+{{combat.ap}}</span> Ability Point{{#icon-gt combat.ap 1}}s{{/icon-gt}}</div>{{/if}}
         {{#if combat.masteryPoint}}<div class="icon-grant"><span class="icon-grant__value">+{{combat.masteryPoint}}</span> Mastery Point</div>{{/if}}
-        {{#if combat.limitBreak}}<div class="icon-grant"><span class="icon-grant__icon">🔓</span> Limit Break unlocked</div>{{/if}}
-        {{#if combat.relic}}<div class="icon-grant"><span class="icon-grant__icon">✨</span> Relic #{{combat.relicNumber}}</div>{{/if}}
-        {{#if narrative.bondPowers}}<div class="icon-grant"><span class="icon-grant__icon">🌟</span> {{narrative.bondPowers}} Bond Power</div>{{/if}}
+        {{#if combat.limitBreak}}<div class="icon-grant"><span class="icon-grant__icon"><i class="fa-solid fa-lock-open"></i></span> Limit Break unlocked</div>{{/if}}
+        {{#if combat.relic}}<div class="icon-grant"><span class="icon-grant__icon"><i class="fa-solid fa-wand-sparkles"></i></span> Relic #{{combat.relicNumber}}</div>{{/if}}
+        {{#if narrative.bondPowers}}<div class="icon-grant"><span class="icon-grant__icon"><i class="fa-solid fa-star"></i></span> {{narrative.bondPowers}} Bond Power</div>{{/if}}
         {{#if narrative.actionImprovements}}<div class="icon-grant"><span class="icon-grant__value">+{{narrative.actionImprovements}}</span> Action improvement{{#icon-gt narrative.actionImprovements 1}}s{{/icon-gt}}</div>{{/if}}
-        {{#if combat.jobChoice}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> New job <em>or</em> +1 Mastery</div>{{/if}}
-        {{#if narrative.bondPowerOrActions}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon">⚖</span> Bond Power <em>or</em> +1 to 2 actions</div>{{/if}}
+        {{#if combat.jobChoice}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon"><i class="fa-solid fa-scale-balanced"></i></span> New job <em>or</em> +1 Mastery</div>{{/if}}
+        {{#if narrative.bondPowerOrActions}}<div class="icon-grant icon-grant--fork"><span class="icon-grant__icon"><i class="fa-solid fa-scale-balanced"></i></span> Bond Power <em>or</em> +1 to 2 actions</div>{{/if}}
         {{#if carryAp}}<div class="icon-grant icon-grant--carry"><span class="icon-grant__value">+{{carryAp}}</span> AP still unspent</div>{{/if}}
       </div>
 
@@ -61,7 +61,7 @@
     {{#if hasCombatFork}}
       <section class="icon-wizard__step icon-wizard__step--done">
         <div class="icon-wizard__step-head">
-          <span class="icon-wizard__num">⚔</span>
+          <span class="icon-wizard__num"><i class="fa-solid fa-hand-fist"></i></span>
           <h3 class="icon-wizard__step-title">Combat path</h3>
         </div>
         <div class="icon-option-grid icon-option-grid--wide">
@@ -98,7 +98,7 @@
     {{#if hasNarrativeFork}}
       <section class="icon-wizard__step icon-wizard__step--done">
         <div class="icon-wizard__step-head">
-          <span class="icon-wizard__num">📖</span>
+          <span class="icon-wizard__num"><i class="fa-solid fa-book-open"></i></span>
           <h3 class="icon-wizard__step-title">Narrative path</h3>
         </div>
         <div class="icon-option-grid icon-option-grid--wide">

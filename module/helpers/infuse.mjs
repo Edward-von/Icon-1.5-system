@@ -113,7 +113,7 @@ export async function armInfusion(actor, item, infusion) {
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--infuse">
-        <strong>✨ ${foundry.utils.escapeHTML(actor.name)}</strong> infuses
+        <strong><i class='fa-solid fa-wand-sparkles'></i> ${foundry.utils.escapeHTML(actor.name)}</strong> infuses
         <strong>${foundry.utils.escapeHTML(item.name)}</strong>${infusion.name ? ` — <em>${foundry.utils.escapeHTML(infusion.name)}</em>` : ""}
         <br><small>${foundry.utils.escapeHTML(infusion.label)}: ${cost} Aether spent (${pool - cost} left)</small>
         ${infusion.text ? `<div class="icon-chat-card__desc">${foundry.utils.escapeHTML(infusion.text)}</div>` : ""}

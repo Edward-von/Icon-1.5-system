@@ -125,7 +125,7 @@
       "sheetTab": "notes",
       "tooltipDirection": "UP",
       "title": "Character Management",
-      "content": "AP, masteries and skill ranks spent against what your levels have earned, with a warning if you overspend. <strong>↻ Refocus</strong> refunds everything so you can rebuild; <strong>❔ Guide</strong> reopens the character building guide."
+      "content": "AP, masteries and skill ranks spent against what your levels have earned, with a warning if you overspend. <strong>↻ Refocus</strong> refunds everything so you can rebuild; <strong><i class='fa-solid fa-circle-question'></i> Guide</strong> reopens the character building guide."
     }
   ]
 }

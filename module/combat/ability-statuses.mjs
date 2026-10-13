@@ -490,7 +490,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
 
       // Damage tied to the save of this sentence ("must save or take 2[D]+fray,
       // or [D]+fray on a successful save"): rolled from the same button as the
-      // status (one save), or from its own "🎲 damage" button when there is none.
+      // status (one save), or from its own "Roll damage" button when there is none.
       if (hasSave) {
         const rest = sentence.slice(savePos);
         const restLower = rest.toLowerCase();
@@ -729,7 +729,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
         const mods = [e.saveCurses ? `+${e.saveCurses} curse` : "", e.saveBoons ? `+${e.saveBoons} boon` : "", e.autoFailIf ? `${e.autoFailIf} → auto-fail` : "", dmg && !isDmg ? `then damage: ${dmg.label}` : ""].filter(Boolean).join(", ");
         const pairAttr = e.pair ? ` data-pair="${esc(JSON.stringify({ fail: e.pair.fail, success: e.pair.success }))}"` : "";
         const dmgAttrs = dmg ? ` data-dmg-fail="${esc(JSON.stringify(dmg.fail))}" data-dmg-success="${esc(JSON.stringify(dmg.success))}" data-dmg-label="${esc(dmg.label)}"` : "";
-        const label = isDmg ? `🎲 💥 ${dmg.label}` : `${save ? "🎲 " : ""}${esc(e.label)}${e.ongoing ? "+" : ""}${dmg ? " 💥" : ""}`;
+        const label = isDmg ? `<i class="fa-solid fa-dice-d20"></i> <i class='fa-solid fa-burst'></i> ${dmg.label}` : `${save ? '<i class="fa-solid fa-dice-d20"></i> ' : ""}${esc(e.label)}${e.ongoing ? "+" : ""}${dmg ? " <i class='fa-solid fa-burst'></i>" : ""}`;
         return `<button type="button" class="icon-chat-btn icon-chat-btn--status${save ? " icon-chat-btn--status-save" : ""}${e.when === "success" ? " icon-chat-btn--status-on-success" : ""}${e.ongoing ? " icon-chat-btn--status-ongoing" : ""}${isDmg ? " icon-chat-btn--status-damage" : ""}"
           data-action="inflictStatus" data-kind="${isDmg ? "save-damage" : "inflict"}" data-status-id="${esc(e.id)}" data-label="${esc(e.label)}" data-ongoing="${e.ongoing ? "true" : "false"}"
           data-when="${esc(e.when)}" data-section="${esc(e.section)}" data-save-boons="${e.saveBoons}" data-save-curses="${e.saveCurses}"
@@ -737,7 +737,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
           data-until="${esc(e.until ?? "")}" data-elite-extra="${Number(e.eliteExtra) || 0}"
           data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
           data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"${dmgAttrs}${pairAttr}
-          title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}${e.until ? ` — ends ${esc(e.until)}` : ""}&#10;${esc(e.sentence)}">${label}${e.until ? " <small>⏳</small>" : ""}</button>`;
+          title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}${e.until ? ` — ends ${esc(e.until)}` : ""}&#10;${esc(e.sentence)}">${label}${e.until ? " <small><i class='fa-solid fa-hourglass-half'></i></small>" : ""}</button>`;
       }).join("");
       return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${btns}</span>`;
     }).join("");
@@ -749,13 +749,13 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
           <span class="icon-chat-statuses__buttons">${buttons(t)}</span>
         </div>`).join("")
       : `<div class="icon-chat-statuses__row icon-chat-statuses__row--live">
-          <strong class="icon-chat-statuses__name" title="No token was targeted when this card was posted: the buttons apply to whoever is targeted when you click">🎯 Current targets</strong>
+          <strong class="icon-chat-statuses__name" title="No token was targeted when this card was posted: the buttons apply to whoever is targeted when you click"><i class='fa-solid fa-crosshairs'></i> Current targets</strong>
           <span class="icon-chat-statuses__buttons">${buttons(null)}</span>
         </div>`;
     const hasDmg = inflict.some(e => e.saveDamage);
     parts.push(`<div class="icon-chat-statuses" data-ability="${esc(abilityName)}">
-      <div class="icon-chat-statuses__header"><span>Inflict</span><span class="icon-chat-statuses__note">click to apply · 🎲 = save first (10+)${hasDmg ? " · 💥 = damage rolled after the save" : ""}</span></div>
-      ${sealed ? `<div class="icon-chat-statuses__sealed">⛔ <strong>${esc(source.name)}</strong> is <strong>Sealed</strong>: a sealed character cannot inflict statuses (p.104).${hasDmg ? " The 💥 damage rows still work." : ""}</div>` : ""}
+      <div class="icon-chat-statuses__header"><span>Inflict</span><span class="icon-chat-statuses__note">click to apply · <i class="fa-solid fa-dice-d20"></i> = save first (10+)${hasDmg ? " · <i class='fa-solid fa-burst'></i> = damage rolled after the save" : ""}</span></div>
+      ${sealed ? `<div class="icon-chat-statuses__sealed"><i class='fa-solid fa-ban'></i> <strong>${esc(source.name)}</strong> is <strong>Sealed</strong>: a sealed character cannot inflict statuses (p.104).${hasDmg ? " The <i class='fa-solid fa-burst'></i> damage rows still work." : ""}</div>` : ""}
       ${rowsHtml}
     </div>`);
   }
@@ -777,12 +777,12 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
           data-until="${esc(e.until ?? "")}" data-elite-extra="${Number(e.eliteExtra) || 0}"
           data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
           data-target-uuid="${self ? esc(source.uuid) : ""}" data-target-token="${self ? esc(sourceTokenId) : ""}"
-          title="${esc(title)}&#10;${esc(e.sentence)}">${self ? "" : "👥 "}${esc(e.label)}${e.ongoing ? "+" : ""}${until}</button>`;
+          title="${esc(title)}&#10;${esc(e.sentence)}">${self ? "" : "<i class='fa-solid fa-users'></i> "}${esc(e.label)}${e.ongoing ? "+" : ""}${until}</button>`;
       }).join("");
       return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${items}</span>`;
     }).join("");
     parts.push(`<div class="icon-chat-statuses icon-chat-statuses--gain" data-ability="${esc(abilityName)}">
-      <div class="icon-chat-statuses__header"><span>Gain</span><span class="icon-chat-statuses__note">on ${esc(source.name)} · 👥 = on the targeted allies</span></div>
+      <div class="icon-chat-statuses__header"><span>Gain</span><span class="icon-chat-statuses__note">on ${esc(source.name)} · <i class='fa-solid fa-users'></i> = on the targeted allies</span></div>
       <div class="icon-chat-statuses__row"><span class="icon-chat-statuses__buttons">${btns}</span></div>
     </div>`);
   }

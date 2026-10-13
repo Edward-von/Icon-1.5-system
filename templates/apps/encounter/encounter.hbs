@@ -40,7 +40,7 @@
     {{/each}}
   </div>
   {{else}}
-    <p class="icon-wizard__empty">Add foes from the roster (＋ or double-click) or roll 🎲 Random fill.</p>
+    <p class="icon-wizard__empty">Add foes from the roster (＋ or double-click) or roll <i class="fa-solid fa-dice-d20"></i> Random fill.</p>
   {{/if}}
 
   {{#if totals.over}}<p class="icon-wizard__warn">Over budget by {{totals.overBy}} point{{#unless (icon-eq totals.overBy 1)}}s{{/unless}}. Fine for a deliberately hard fight; otherwise move something to the reserve or drop it.</p>{{/if}}

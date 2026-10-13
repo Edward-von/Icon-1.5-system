@@ -119,7 +119,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
   if (!targets.length) {
     return `
       <section class="icon-roll-card icon-roll-card--targets icon-roll-card--empty">
-        <h4 class="icon-roll-card__title">🎯 Target</h4>
+        <h4 class="icon-roll-card__title"><i class='fa-solid fa-crosshairs'></i> Target</h4>
         <p class="icon-roll-card__hint">No token targeted — hover a token and press <kbd>T</kbd> (Shift+T for several), or fill the numbers by hand below.</p>
       </section>`;
   }
@@ -129,7 +129,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
     : (targets.length > 1 && showDefense ? `<small>lowest DEF is used</small>` : "");
   return `
     <section class="icon-roll-card icon-roll-card--targets" data-pick="${pick ? "1" : ""}">
-      <h4 class="icon-roll-card__title">🎯 Target${targets.length > 1 ? "s" : ""} ${hint}</h4>
+      <h4 class="icon-roll-card__title"><i class='fa-solid fa-crosshairs'></i> Target${targets.length > 1 ? "s" : ""} ${hint}</h4>
       <ul class="icon-roll-targets">
         ${targets.map((t, i) => `
           <li class="icon-roll-target" data-token-id="${esc(t.id)}" data-name="${esc(t.name)}"
@@ -145,7 +145,7 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
               ${showDefense && t.defense != null ? `<span title="Defense">DEF <b>${t.defense}</b></span>` : ""}
               <span title="Armor (subtracted when the damage is applied)">ARM <b>${t.armor ?? 0}</b></span>
               ${t.hp != null ? `<span title="Hit points">HP <b>${t.hp}</b>${t.hpMax != null ? `/${t.hpMax}` : ""}</span>` : ""}
-              ${t.stance ? `<span class="icon-roll-target__stance" title="Stance(s) the target is in">🧘 ${esc(t.stance)}</span>` : ""}
+              ${t.stance ? `<span class="icon-roll-target__stance" title="Stance(s) the target is in"><i class='fa-solid fa-yin-yang'></i> ${esc(t.stance)}</span>` : ""}
             </span>
             ${t.defChips ? `<span class="icon-roll-target__defs">${t.defChips}</span>` : ""}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-roll-target__drop"
@@ -264,7 +264,7 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
     : `Evasion: ${list.map(t => t.defense_.sureEvasion
         ? `${t.name} evades automatically (Rigoletto Aspect, this turn)`
         : `${t.name} rolls 1d6 (${t.defense_.evasionThreshold}+ = miss)`).join(", ")} before the attack`);
-  const evasionChip = `<span class="icon-roll-auto__chip" data-role="evasion" title="Applied automatically from the ability, the statuses and the elevation"${evaders.length ? "" : " hidden"}>⚙ ${esc(evasionNote(evaders))}</span>`;
+  const evasionChip = `<span class="icon-roll-auto__chip" data-role="evasion" title="Applied automatically from the ability, the statuses and the elevation"${evaders.length ? "" : " hidden"}>${esc(evasionNote(evaders))}</span>`;
 
   const content = `
     <div class="icon-roll-dialog icon-roll-dialog--attack">
@@ -273,7 +273,7 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
         ${_targetCard(targets, { pickAttackTarget: pick, areaLabel: area?.label ?? "" })}
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
-          <div class="icon-roll-auto"${notes.length || evaders.length ? "" : " hidden"}>${notes.map(n => `<span class="icon-roll-auto__chip" title="Applied automatically from the ability, the statuses and the elevation">⚙ ${esc(n)}</span>`).join("")}${evasionChip}</div>
+          <div class="icon-roll-auto"${notes.length || evaders.length ? "" : " hidden"}>${notes.map(n => `<span class="icon-roll-auto__chip" title="Applied automatically from the ability, the statuses and the elevation">${esc(n)}</span>`).join("")}${evasionChip}</div>
           <p class="icon-roll-card__hint" data-role="no-mods"${notes.length || evaders.length ? " hidden" : ""}>No automatic modifiers (ability tags, statuses, height).</p>
           <div class="icon-roll-steppers">
             ${_stepper({ name: "boons",  label: "Boons",  hint: "+1d6 each, keep the highest, added to the d20", value: boons })}
@@ -326,7 +326,7 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
         const list = evading.map(r => targets.find(t => t.id === r.dataset.tokenId)).filter(Boolean);
         const text = evasionNote(list);
         evasionChipEl.hidden = !text;
-        evasionChipEl.textContent = text ? `⚙ ${text}` : "";
+        evasionChipEl.textContent = text ? `${text}` : "";
         // The chips box may have started empty (no statuses, no evader).
         const box = evasionChipEl.parentElement;
         const anyChip = !!text || !!box?.querySelector(".icon-roll-auto__chip:not([hidden]):not([data-role='evasion'])");
@@ -345,7 +345,7 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
       window: { title: `Attack — ${ab.name ?? "Attack"}` },
       content,
       ok: {
-        label: "⚔ Roll Attack",
+        label: "Roll Attack", icon: "fa-solid fa-hand-fist",
         callback: (_e, button) => {
           const f = button.form;
           const defenseVal = f.elements.defense?.value;
@@ -457,7 +457,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           </div>
           ${comboFormula ? `
             <label class="icon-roll-chip icon-roll-chip--combo" title="Roll the combo version's damage instead of the base ability's.">
-              <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}><span>⚡ Combo version <small>${esc(comboFormula)}</small></span>
+              <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}><span><i class='fa-solid fa-bolt'></i> Combo version <small>${esc(comboFormula)}</small></span>
             </label>` : ""}
         </section>
         <section class="icon-roll-card">
@@ -477,10 +477,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
           ${hatred.active || autoHalf.length || dodgers.length || fbNote ? `<div class="icon-roll-auto">
-            ${fbNote ? `<span class="icon-roll-auto__chip" title="Finishing Blow (Vagabond): triggers when the attack targets a Bloodied foe — at or under 50% HP (p.104).">⚙ ${esc(fbNote)}</span>` : ""}
-            ${hatred.active ? `<span class="icon-roll-auto__chip">⚠ ${esc(hatred.note)}</span>` : ""}
-            ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">⚙ ½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}
-            ${dodgers.length ? `<span class="icon-roll-auto__chip" data-dodge-note title="Dodge: immune to damage from missed attacks, successful saves and area effects (p.144)">⚙ Dodge: ${esc(dodgers.join(", "))} — no damage from Miss / Area</span>` : ""}
+            ${fbNote ? `<span class="icon-roll-auto__chip" title="Finishing Blow (Vagabond): triggers when the attack targets a Bloodied foe — at or under 50% HP (p.104).">${esc(fbNote)}</span>` : ""}
+            ${hatred.active ? `<span class="icon-roll-auto__chip"><i class='fa-solid fa-triangle-exclamation'></i> ${esc(hatred.note)}</span>` : ""}
+            ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}
+            ${dodgers.length ? `<span class="icon-roll-auto__chip" data-dodge-note title="Dodge: immune to damage from missed attacks, successful saves and area effects (p.144)">Dodge: ${esc(dodgers.join(", "))} — no damage from Miss / Area</span>` : ""}
           </div>` : ""}
           <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note">Armor, Cover and Resistance are applied when the target presses Apply.</span></div>
         </section>
@@ -532,7 +532,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       window: { title: `Damage — ${ab.name ?? "Damage"}` },
       content,
       ok: {
-        label: "💥 Roll Damage",
+        label: "Roll Damage", icon: "fa-solid fa-burst",
         callback: (_e, button) => {
           const f = button.form;
           // Only the rows still listed get an Apply button on the card.

@@ -850,7 +850,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
 });
 
 /**
- * "🗑 Remove area" button on attack cards: removes the Blast / Line / Arc /
+ * "Remove area" button on attack cards: removes the Blast / Line / Arc /
  * Burst template the roll was made with (author or GM only — others just get
  * a disabled button). Once the area is gone — from this button, Delete on the
  * map or the end of the turn — the button goes away and the line says so
@@ -960,7 +960,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
  * Rules reference in the scene controls (everyone, not just the GM).
  *
  * The reference used to be reachable only from the "..." menu of a character
- * sheet, where players never look. A 📖 button in the token toolbar puts it
+ * sheet, where players never look. A Quick Guide button in the token toolbar puts it
  * one click away for everyone, on any scene.
  */
 Hooks.on("getSceneControlButtons", (controls) => {

@@ -42,7 +42,7 @@
           {{/if}}
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="relicShowInChat" data-item-id="{{relic.id}}"
-                  title="Post relic to chat">💬</button>
+                  title="Post relic to chat"><i class="fa-solid fa-comment"></i></button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                     data-action="removeItem" data-item-id="{{relic.id}}"
@@ -53,7 +53,7 @@
           <div class="icon-relic-card__invoke {{#if relic.invokeLocked}}icon-relic-card__invoke--locked{{/if}}"
                {{#if relic.invokeLocked}}title="Unlocks with Rank {{relic.invokeRankLabel}} of this relic"{{/if}}>
             <em>{{relic.invokeCondition}}</em>
-            {{#if relic.invokeLocked}}<span class="icon-badge">🔒 Rank {{relic.invokeRankLabel}}</span>{{/if}}
+            {{#if relic.invokeLocked}}<span class="icon-badge"><i class="fa-solid fa-lock"></i> Rank {{relic.invokeRankLabel}}</span>{{/if}}
           </div>
         {{/if}}
         {{#if relic.invokeEffect}}
@@ -173,7 +173,7 @@
           <strong title="Double-click to open">{{tp.name}}</strong>
           {{#if tp.kindLabel}}<span class="icon-badge">{{tp.kindLabel}}</span>{{/if}}
           {{#if tp.perCombat}}<span class="icon-badge" title="Can only be used once per combat">1/battle</span>{{/if}}
-          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat" data-action="trophyShowInChat" data-item-id="{{tp.id}}" title="Post trophy to chat">💬</button>
+          <button type="button" class="icon-btn icon-btn--sm icon-btn--chat" data-action="trophyShowInChat" data-item-id="{{tp.id}}" title="Post trophy to chat"><i class="fa-solid fa-comment"></i></button>
           {{#if ../isEditable}}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                     data-action="removeItem" data-item-id="{{tp.id}}" title="Remove trophy">×</button>
@@ -184,7 +184,7 @@
           {{#if tp.unlimited}}
             <span class="icon-trophy-card__left">Unlimited uses</span>
           {{else if tp.broken}}
-            <span class="icon-trophy-card__broken">💔 Crumbled — no uses left</span>
+            <span class="icon-trophy-card__broken"><i class="fa-solid fa-heart-crack"></i> Crumbled — no uses left</span>
           {{else}}
             {{#if tp.pips}}
               <span class="icon-trophy-pips" title="{{tp.left}} {{tp.unitLeft}}">{{#each tp.pips}}<span class="icon-trophy-pip {{#if on}}icon-trophy-pip--on{{/if}}"></span>{{/each}}</span>

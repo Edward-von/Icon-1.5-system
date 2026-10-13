@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 13 ottobre 2026 — Niente più emoji nell'interfaccia (versione 1.20.1)
+
+### Richiesta di Edoardo
+
+- **Emoji nel sistema**: bottoni, card in chat, schede, guida e tour usavano emoji (🎯 🎲 💬 📐 💥 🔒 ⚡ ⚔ …), che
+  si vedono diverse su ogni computer e non stanno con lo stile del sistema → sostituite dalle icone di Font Awesome
+  che Foundry usa già ovunque (mirino per il Mark, dado per i tiri, fumetto per la chat, quadrato per le aree,
+  lucchetto, fulmine per le combo…). Dove il testo non può contenere un'icona (etichette dei bottoni delle finestre,
+  avvisi, voci dei menu a tendina) l'emoji è solo tolta; i bottoni Roll / Roll Attack / Roll Damage / Roll Save delle
+  finestre hanno l'icona di Foundry accanto. Ripulito anche il compendio delle macro. Restano i simboli tipografici
+  (frecce, ✕, ✓, ★, ●), che non sono emoji.
+
 ## 13 ottobre 2026 — Voci rimaste e resto del documento di Maar (versione 1.20.0, Sessioni E e F)
 
 ### Voci emerse lavorando (Sessione E)

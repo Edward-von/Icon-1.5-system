@@ -5,18 +5,18 @@
     {{#if ab.jobName}}<span class="icon-badge icon-class--{{ab.class}}">{{ab.jobName}}</span>{{/if}}
     <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
     <span class="icon-badge">{{ab.cost}}</span>
-    {{#if comboMode}}<span class="icon-badge icon-badge--combo">⚡ COMBO</span>{{/if}}
+    {{#if comboMode}}<span class="icon-badge icon-badge--combo"><i class="fa-solid fa-bolt"></i> COMBO</span>{{/if}}
     {{#icon-gt ab.talentSelected 0}}
       <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
     {{/icon-gt}}
     {{#if ab.masteryUnlocked}}<span class="icon-badge icon-badge--primary">★ Mastered</span>{{/if}}
-    {{#if ab.powerDie.active}}<span class="icon-badge" title="Power die (current ticks)">🎲 d{{ab.powerDie.faces}}: {{ab.powerDie.value}}</span>{{/if}}
+    {{#if ab.powerDie.active}}<span class="icon-badge" title="Power die (current ticks)"><i class="fa-solid fa-dice-d20"></i> d{{ab.powerDie.faces}}: {{ab.powerDie.value}}</span>{{/if}}
   </div>
 
   {{#if comboMode}}
     {{!-- Combo version: tags still apply (they describe the ability, not the
          normal-vs-combo text). The blocks below are the ability's own, with
-         the combo text merged in (⚡ marks what the combo changes or adds) —
+         the combo text merged in (combo marks what the combo changes or adds) —
          a combo that only adds to the ability, like Low Blow / The Hook, used
          to print its addition alone and lose the rest. --}}
     {{#if ab.tags.length}}
@@ -31,7 +31,7 @@
       <div class="icon-chat-card__desc">{{{ab.description}}}</div>
     {{/if}}
     {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
-    {{#each ab.blocks as |b|}}<p class="{{#if b.combo}}icon-ability-block--combo{{else if b.fromText}}icon-ability-section{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{#if b.combo}}⚡ {{/if}}{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
+    {{#each ab.blocks as |b|}}<p class="{{#if b.combo}}icon-ability-block--combo{{else if b.fromText}}icon-ability-section{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{#if b.combo}}<i class="fa-solid fa-bolt"></i> {{/if}}{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
     {{!-- Talents / mastery are permanent upgrades of the ability — they still
          apply (and must be readable) when the combo version is used. --}}
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}

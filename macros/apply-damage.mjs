@@ -35,7 +35,7 @@
           Pierce — ignore target Armor
         </label>
         <p style="margin:0;font-size:.82em;color:#7fb2ff">
-          🎯 ${tokens.length} target(s): ${tokens.map(t => t.actor?.name ?? t.name ?? "?").join(", ")}
+          <i class='fa-solid fa-crosshairs'></i> ${tokens.length} target(s): ${tokens.map(t => t.actor?.name ?? t.name ?? "?").join(", ")}
         </p>
         <p style="margin:0;font-size:.78em;color:#8a8a8a">
           The Apply buttons on the card subtract each target's Armor (unless Pierce), then Vigor absorbs before HP.

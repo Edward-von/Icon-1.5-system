@@ -647,7 +647,7 @@ export class IconCombat extends Combat {
    * Set the shared Party Resolve to `value` (manual p.99: one pool shared by
    * the whole party). Single source of truth: the flag on the Combat document
    * is written first, then every PC combatant's `system.combat.resolve.party`
-   * is aligned to the same number, so the tracker banner, the "⚡p+P" badges
+   * is aligned to the same number, so the tracker banner, the "p+P" badges
    * and the PC sheets always agree. Actor updates carry the
    * `iconPartyResolveSync` option so the updateActor hook below does not
    * re-enter. Players relay the request to the active GM.
@@ -1022,7 +1022,7 @@ export function registerCombatHooks() {
         content: `
           <div class="icon-chat-card icon-chat-card--phase" style="border-color:#c04060">
             <div class="icon-chat-card__header">
-              <strong class="icon-chat-card__action">⚡ ${escapeHTML(actor.name)} — ${escapeHTML(phase.label ?? `Phase ${newPhase + 1}`)}</strong>
+              <strong class="icon-chat-card__action"><i class='fa-solid fa-bolt'></i> ${escapeHTML(actor.name)} — ${escapeHTML(phase.label ?? `Phase ${newPhase + 1}`)}</strong>
               <span class="icon-chat-card__pool">HP ${actor.system.hp.value}/${actor.system.hp.max}</span>
             </div>
             ${phase.description ? `<p style="margin:4px 0;font-size:.9em;color:#c0b898">${escapeHTML(phase.description)}</p>` : ""}
@@ -1119,7 +1119,7 @@ async function _nudgeReserves(combat) {
         <div class="icon-macro-header"><i class="fas fa-chess-knight"></i><h3>Reserves due — end of round ${ended}</h3></div>
         <div class="icon-macro-body">
           <p class="icon-macro-sub">${due.length} hidden token${due.length > 1 ? "s" : ""} (${names}) enter at the edge of the map now and act from this round (p.292).</p>
-          <button type="button" class="icon-btn icon-btn--add icon-encounter-card__reveal" data-action="revealReserves" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(due.map(t => t.id).join(","))}">👁 Reveal reserves &amp; add to combat</button>
+          <button type="button" class="icon-btn icon-btn--add icon-encounter-card__reveal" data-action="revealReserves" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(due.map(t => t.id).join(","))}"><i class='fa-solid fa-eye'></i> Reveal reserves &amp; add to combat</button>
         </div>
       </div>`,
     });
@@ -1165,7 +1165,7 @@ function _renderIconTracker(app, html, data, combat) {
         : "Declare a Slow Turn — sorts after normal turns for this round (triggers Charge effects)";
       slowBtn.classList.add("icon-slow-btn");
       if (isSlow) slowBtn.classList.add("icon-slow-btn--active");
-      slowBtn.textContent = isSlow ? "⏩ Slow" : "⏸ Slow";
+      slowBtn.innerHTML = isSlow ? `<i class='fa-solid fa-forward'></i> Slow` : `<i class='fa-solid fa-pause'></i> Slow`;
       slowBtn.addEventListener("click", ev => {
         ev.stopPropagation();
         IconCombat.toggleSlowTurn(id);
@@ -1180,7 +1180,7 @@ function _renderIconTracker(app, html, data, combat) {
         const resWrap = document.createElement("span");
         resWrap.classList.add("icon-resolve-display");
         resWrap.title = `Personal: ${personal}  |  Party: ${party}`;
-        resWrap.innerHTML = `<span class="icon-resolve-display__value">⚡${personal}+${party}</span>`;
+        resWrap.innerHTML = `<span class="icon-resolve-display__value"><i class='fa-solid fa-bolt'></i>${personal}+${party}</span>`;
 
         const plusBtn = document.createElement("button");
         plusBtn.type = "button";
@@ -1229,7 +1229,7 @@ function _renderIconTracker(app, html, data, combat) {
           <span class="icon-party-resolve__label">Party Resolve</span>
           <span class="icon-party-resolve__controls">
             <button type="button" class="icon-party-resolve__btn" data-delta="-1" title="Party Resolve −1">−</button>
-            <span class="icon-party-resolve__value">⚡${combat.partyResolve}</span>
+            <span class="icon-party-resolve__value"><i class='fa-solid fa-bolt'></i>${combat.partyResolve}</span>
             <button type="button" class="icon-party-resolve__btn" data-delta="1" title="Party Resolve +1">+</button>
           </span>
         </div>
@@ -1260,7 +1260,7 @@ function _renderIconTracker(app, html, data, combat) {
         const raBox = document.createElement("div");
         raBox.classList.add("icon-legend-round-actions");
         raBox.innerHTML = `
-          <div class="icon-legend-round-actions__title">⚠ Legend Round Actions</div>
+          <div class="icon-legend-round-actions__title"><i class='fa-solid fa-triangle-exclamation'></i> Legend Round Actions</div>
           <ul>${triggered.map(t => `<li>${t}</li>`).join("")}</ul>
         `;
         header.appendChild(raBox);

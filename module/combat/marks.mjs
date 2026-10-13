@@ -62,7 +62,7 @@ function _sceneActors() {
 
 /**
  * Is this a marking ability, and does it mark several characters at once?
- * `mark` and `multimark` both put the 🎯 button on an ability / foe action;
+ * `mark` and `multimark` both put the Mark button on an ability / foe action;
  * `multimark` additionally lets the ability hold more than one mark (p.95).
  * Accepts raw strings or the {raw,label} chips resolveAbilityTags returns.
  */
@@ -115,7 +115,7 @@ export async function promptHatredTarget(actor, { closest = false } = {}) {
   const near     = closest ? _closestFoes(actor, tokens) : [];
   const sorted   = [...tokens].sort((a, b) => (near.includes(b) - near.includes(a)) || (targeted.has(b.id) - targeted.has(a.id)) || a.name.localeCompare(b.name));
   const preselect = near.length || targeted.size;
-  const options  = sorted.map((t, i) => `<option value="${escapeHTML(t.id)}" ${i === 0 && preselect ? "selected" : ""}>${escapeHTML(t.name)}${near.includes(t) ? " (closest)" : ""}${targeted.has(t.id) ? " 🎯" : ""}</option>`).join("");
+  const options  = sorted.map((t, i) => `<option value="${escapeHTML(t.id)}" ${i === 0 && preselect ? "selected" : ""}>${escapeHTML(t.name)}${near.includes(t) ? " (closest)" : ""}${targeted.has(t.id) ? " (targeted)" : ""}</option>`).join("");
   const content = `
     <p style="margin:0 0 6px"><strong>${escapeHTML(actor?.name ?? "")}</strong> gains <strong>Hatred of…</strong> (p.104: half damage against anyone else, ends at the end of their turn).${near.length > 1 ? " Several foes are equally close: you choose." : ""}</p>
     ${sorted.length ? `<label style="display:block;margin-bottom:6px">Character on the map:
@@ -286,7 +286,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
       const stacks = same.stacks + 1;
       await eff.update({ name: _markName(abilityName, source.name, stacks), [`flags.${NS}.mark.stacks`]: stacks });
       _log(`${source.name} stacks ${abilityName} on ${target.name}: ${stacks}`);
-      await _chat(source, `<strong>🎯 ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> again — <strong>${escapeHTML(abilityName)}</strong> now has <strong>${stacks} stacks</strong>.`);
+      await _chat(source, `<strong><i class='fa-solid fa-crosshairs'></i> ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> again — <strong>${escapeHTML(abilityName)}</strong> now has <strong>${stacks} stacks</strong>.`);
       _refreshSheet(source);
       return eff;
     }
@@ -315,7 +315,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
     } } },
   }]);
   _log(`${source.name} marks ${target.name} with ${abilityName}`);
-  await _chat(source, `<strong>🎯 ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
+  await _chat(source, `<strong><i class='fa-solid fa-crosshairs'></i> ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
   _refreshSheet(source);   // the chip on the marker's panel lives on another actor's sheet
   return effect;
 }
@@ -395,7 +395,7 @@ export async function handleMarkSocket(data) {
  */
 export function registerMarkHooks() {
   // A mark created/removed by another client (GM relay) must refresh the
-  // marker's open sheet here too — the "🎯 target ✕" chips live on it.
+  // marker's open sheet here too — the "target ✕" chips live on it.
   for (const hook of ["createActiveEffect", "deleteActiveEffect"]) {
     Hooks.on(hook, async (effect) => {
       const mark = effect?.getFlag?.(NS, "mark");

@@ -28,7 +28,7 @@
 
     {{#if isEditable}}
       <p class="summon-sheet__drop-hint">
-        💡 Drop an <strong>Actor</strong> here to set the summoner, or drop an
+        <i class="fa-solid fa-lightbulb"></i> Drop an <strong>Actor</strong> here to set the summoner, or drop an
         <strong>Ability</strong> item to auto-fill the Source Ability and
         Summon Action text.
       </p>
@@ -77,11 +77,11 @@
         {{#if hasAction}}
           <button type="button" class="icon-btn icon-btn--roll"
                   data-action="rollSummonAttack"
-                  title="Roll attack">⚔ Attack</button>
+                  title="Roll attack"><i class="fa-solid fa-hand-fist"></i> Attack</button>
           {{#if dealsDamage}}
             <button type="button" class="icon-btn icon-btn--roll"
                     data-action="rollSummonDamage"
-                    title="Roll damage">💥 Damage</button>
+                    title="Roll damage"><i class="fa-solid fa-burst"></i> Damage</button>
           {{/if}}
         {{/if}}
       </div>
@@ -106,12 +106,12 @@
           {{#each saveableStatuses as |st|}}
             <button type="button" class="icon-btn icon-btn--sm icon-save-btn"
                     data-action="rollSave" data-effect-uuid="{{st.uuid}}"
-                    title="Roll a save against {{st.name}} — on a 10+ it is removed">🎲 {{st.name}}</button>
+                    title="Roll a save against {{st.name}} — on a 10+ it is removed"><i class="fa-solid fa-dice-d20"></i> {{st.name}}</button>
           {{else}}
             <span class="notes" style="font-size:.85em;color:#c0b898">No status to save against right now.</span>
           {{/each}}
           <button type="button" class="icon-btn icon-btn--sm" data-action="rollSave"
-                  title="Roll a save against something else (type the status in the dialog)">🛡 Save vs…</button>
+                  title="Roll a save against something else (type the status in the dialog)"><i class="fa-solid fa-shield-halved"></i> Save vs…</button>
         </div>
       </div>
     {{/if}}

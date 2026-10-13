@@ -27,7 +27,7 @@
               <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                       data-action="bondShowInChat" data-item-id="{{bondItem.id}}"
                       title="Post bond (special ability, second wind, ideals, description) to chat"
-                      onclick="event.preventDefault()">💬</button>
+                      onclick="event.preventDefault()"><i class="fa-solid fa-comment"></i></button>
               {{#if isEditable}}
                 <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
                         data-action="removeItem" data-item-id="{{bondItem.id}}"
@@ -107,7 +107,7 @@
                   <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                           data-action="bondPowerShowInChat" data-item-id="{{bp.id}}"
                           title="Post bond power to chat"
-                          onclick="event.preventDefault()">💬</button>
+                          onclick="event.preventDefault()"><i class="fa-solid fa-comment"></i></button>
                   {{#if ../isEditable}}
                     <button type="button" class="icon-btn icon-btn--remove icon-btn--inline"
                             data-action="removeItem" data-item-id="{{bp.id}}"
