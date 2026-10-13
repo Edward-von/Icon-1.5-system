@@ -1656,6 +1656,108 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Sessioni E + F (13 ottobre 2026, versione 1.20.0) — voci rimaste e resto del documento di Maar
+
+Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-templates, macros).
+
+**E1 — Hatred+ con durata, Hatred guadagnata**
+- [ ] **Mock** (limit break del Knave): PG nel suo turno, bersaglio un foe normale → card con Slashed+ / Weakened+ /
+      Hatred+ con ⏳; il tooltip dice "ends until the end of their next turn". Applicarli → in chat "…until the end of
+      their next turn". Finire il turno del PG: restano. Turno del foe, poi fine turno del foe → spariscono con una riga
+      in chat, senza tiro salvezza.
+- [ ] **Mock su elite / legend**: stessa prova su un foe Elite → resta un turno in più ("lasts two turns instead").
+- [ ] **Spite** (tratto del Knave): 💬 del tratto → la card ha un blocco "Gain" con Hatred+ ⏳. Clic → finestra
+      "Hatred of…" con il foe più vicino già scelto e "(closest)"; con due foe alla stessa distanza, la frase "you choose".
+      Applicata nel turno del PG: a fine di questo turno resta, a fine del turno dopo sparisce.
+- [ ] **Dark Knight** (stance): la card ha "Gain Hatred+" (senza ⏳: resta finché non si toglie, è una stance).
+- [ ] **Gain con durata** (controllo di regressione): un'abilità con "gain evasion until the start of your next
+      turn" → applicata, sparisce all'inizio del turno successivo del PG.
+- [ ] **Hatred normale**: Taunt ("gains hatred of you") → finisce a fine turno del foe come prima.
+- [ ] **Relay**: da giocatore, Mock su un foe che non possiede → il GM la applica, con la durata.
+
+**E2 — Attacco ad area senza 📐**
+- [ ] Draken Cross con Talent II (più aree possibili): senza aver usato 📐, premere ⚔ → si apre la stessa finestra
+      "which area?" del 📐; chiuderla annulla l'attacco. Un'abilità con una sola area → nessuna finestra, come prima.
+- [ ] Area già piazzata col 📐 → ⚔ la riusa senza chiedere.
+
+**E3 — Domain**
+- [ ] Reliquia Domain equipaggiata: Sleight of Hand non mostra più il promemoria Domain; Chaos Tarot sì (risultato 3:
+      "Create two spaces of difficult terrain").
+
+**E4 — Most relevant rules**
+- [ ] Scheda di un Vagabond, un Mendicant, un Wright: la lista "Relevant Rules" non è più vuota (Blinded, Dazed,
+      Evasion, Stealth, Dash, Teleport, Summon / Sealed, Pacified, Cure, Aura X, Combo, Mark / Shattered, Vulnerable,
+      Pierce, Teleport, Flying, terreni, Objects). Un PG multiclasse non ha doppioni (Teleport, Mark, Aura X).
+
+**E5 — Godly Smite**
+- [ ] PG Sealer con Godly Smite in un combat: Begin Combat → il dado mantra parte da 1. Next Round → 2, con una riga
+      in chat; non supera 6. End Encounter → torna a 0.
+
+**E6 — Outsider**
+- [ ] PG Outsider, nel party un PG Mighty e uno Seeker: sezione Loose Gear → "+ From the party's kits" → finestra con
+      gli oggetti dei kit Mighty e Seeker raggruppati; sceglierne uno → nuova riga di loose gear, non spuntata.
+      Un oggetto già nella lista è grigio. Senza altri bond nel party → messaggio.
+- [ ] Il bottone non c'è per gli altri bond.
+
+**E7 — Summon**
+- [ ] Trascinare un summon dei foe (es. Soul Spark dell'Abomination) → l'attore e il token hanno un'icona (sole), non
+      l'omino grigio. Un oggetto (Bonfire) → fuoco. Trascinare un summon dal compendio Summons (Beast) → zampa.
+- [ ] Macro "ICON: Copy Foe Summons" (compendio ICON Macros): un foe importato prima della 1.8.0 senza summon →
+      la macro lo elenca, conferma → il foe ha la sezione Summons. Rilanciata → "already has its summons".
+- [ ] Giocatore proprietario di un foe (co-GM): trascina il chip di un summon sulla mappa → "sent to the GM", il GM
+      lo piazza nel punto giusto. Un giocatore che non possiede il foe → avviso, niente.
+
+**E8 — Template**
+- [ ] Legend Jotunn (es. Thannir): trascinare "Titan Armament" da Foe Templates → chip "Special" sotto le statistiche,
+      HP ×1.5 e un turno in più; ✕ lo toglie e rimette tutto. Un template job su una legend → avviso, niente cambia.
+- [ ] Compendio Foe Templates: ogni fazione ha la cartella "Uniques" (e "Uniques / Elites"), per esempio Imperial /
+      Uniques / Iron Soldat. Trascinato su un foe Heavy → diventa l'Iron Soldat (classe, statistiche, azioni).
+
+**E9 — Trofei a fine combat**
+- [ ] Trofeo 1/battle con "Used this combat" spuntato e uno "In effect this combat" → End Encounter → si spengono
+      tutti e due. Uno "In effect this expedition" resta acceso.
+
+**E10 — Usi dei gear kit**
+- [ ] Outsider's Kit: "5 fire stones (hot!)" mostra 5/5; clic → 4/5 con un "−" accanto; 5 clic → barrato; clic sul
+      barrato → torna 5/5. "−" ridà un uso.
+- [ ] Shift+clic su "Rations" → "How many uses?" → 3 → mostra 3/3 e conta come sopra.
+- [ ] "↻ New expedition" → tutti gli usi tornano pieni; la quantità messa a mano (3) resta.
+- [ ] Oggetti senza numero: clic → barrato come prima.
+
+**E11 — Icone dei foe**
+- [ ] Compendio Foes: ogni foe ha l'icona della sua fazione (Folk villaggio, Relict rovine, Ruin Beast zampa,
+      Scavenger sacca, Imperial bandiera, Demon terrore, Lowlander veleno, Jotunn montagna, Hob quercia, Basic Jobs
+      combattimento, Elite Foes freccia). Il token sulla mappa ha il colore della fazione (toni spenti).
+- [ ] I job template in Foe Templates hanno la stessa icona.
+
+**F1 — Bless del Mendicant**
+- [ ] PG Mendicant, tratto Bless: accanto ai contatori c'è "🙏 Bless…" → finestra con i bersagli (🎯 per primi), i
+      token amici e i PG → "Give a blessing" → il PG scelto ha una carica Blessed in più, riga in chat.
+- [ ] Da giocatore, Bless su un PG di un altro giocatore → passa dal GM.
+- [ ] La carica si spende come prima nel tiro salvezza (+1 boon).
+
+**F2 — Combo dei foe**
+- [ ] Bale Troll: Storm of Claws ha il chip "Combo 1/2 — next", Boulder Fist è sbiadita. Attacco con Storm of Claws
+      → ora Boulder Fist è "next" e Storm of Claws è sbiadita. Damage della stessa azione nello stesso turno non
+      cambia niente. Boulder Fist → si torna a Combo 1.
+- [ ] Fuori ordine (Boulder Fist quando tocca a Storm of Claws) → avviso, registrato lo stesso. Due parti nello
+      stesso turno → avviso "different turns".
+- [ ] Clic su un chip "Combo N" → quella parte diventa la prossima (correzione errori). End Encounter → si riparte da 1.
+- [ ] Stessa cosa su una legend con combo, e su Atrophic Grave (4 parti).
+
+**F3 — Aree della guida sulla mappa**
+- [ ] Quick Guide → Areas: sotto ogni clip "📐 Try it on the map". Con un token selezionato → la guida si riduce, si
+      piazza l'area come col 📐 (Small Blast con il raggio 3), poi la guida torna. Senza token selezionato → avviso.
+
+**F4 — Rimozione dell'area**
+- [ ] Card d'attacco con area: la riga 📐 è più grande, bottone "🗑 Remove area". Clic → l'area sparisce e il bottone
+      diventa "area removed". Togliere l'area col tasto Canc sulla mappa (o a inizio turno) → anche la card si aggiorna,
+      anche in una chat staccata.
+
+**F5 — Larghezza della Line**
+- [ ] Piazzando una Line: + e − cambiano la larghezza (1–5), l'anteprima si allarga, l'etichetta dice "(width N)".
+      Piazzata → il template e la card dicono la larghezza scelta. Su blast / arc i tasti non fanno niente.
+
 ## Gear kit (12 ottobre 2026, versione 1.19.0, Sessione D)
 
 - [ ] **Bond nuovo**: PG senza bond → trascinare Pathfinder → nella sezione Gear compaiono Adventurer's Kit

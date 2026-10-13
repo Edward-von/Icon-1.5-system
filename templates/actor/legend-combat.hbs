@@ -36,6 +36,24 @@
             <input class="icon-stat__value" type="number" name="system.resolvePool"
                    value="{{system.resolvePool}}" {{#unless isEditable}}disabled{{/unless}}></div>
         </div>
+        {{!-- Foe templates (module/actor/foe-templates.mjs): faction / special ones dropped from Foe Templates --}}
+        <div class="icon-foe-templates">
+          <span class="icon-foe-templates__label">Templates</span>
+          {{#each appliedTemplates as |t|}}
+            <span class="icon-foe-template-chip" data-kind="{{t.kind}}">
+              <span class="icon-foe-template-chip__kind">{{t.kindLabel}}</span>
+              <a class="icon-foe-template-chip__name" data-action="openTemplate" data-uuid="{{t.uuid}}"
+                 title="Open the template">{{t.name}}</a>
+              {{#if ../isEditable}}
+                <button type="button" class="icon-foe-template-chip__remove" data-action="removeTemplate" data-index="{{t.i}}"
+                        title="Take {{t.name}} off: remove what it added and put back what it changed">✕</button>
+              {{/if}}
+            </span>
+          {{else}}
+            <span class="icon-foe-templates__empty">None — drag a faction or special template here from the
+              <em>Foe Templates</em> compendium (e.g. Titan Armament on a Jotunn legend).</span>
+          {{/each}}
+        </div>
       </div>
 
       {{!-- Phases --}}
@@ -130,11 +148,16 @@
           {{/if}}
         </div>
         {{#each enrichedActions as |action|}}
-          <div class="icon-legend-action {{#unless action.isActive}}icon-legend-action--locked{{/unless}}">
+          <div class="icon-legend-action {{#unless action.isActive}}icon-legend-action--locked{{/unless}} {{#if action.combo.isWaiting}}icon-foe-action--combo-wait{{/if}}">
             <div class="icon-ability-header">
               <span class="icon-ability-name">{{action.name}}</span>
               <span class="icon-ability-cost-badge">{{action.cost}}</span>
               <span class="icon-ability-phase-badge">{{action.phaseLabel}}</span>
+              {{#if action.combo.part}}
+                <button type="button" class="icon-combo-chip {{#if action.combo.isNext}}icon-combo-chip--next{{/if}}"
+                        data-action="setComboNext" data-part="{{action.combo.part}}" title="{{action.combo.tip}}"
+                        {{#unless ../isEditable}}disabled{{/unless}}>{{action.combo.label}}</button>
+              {{/if}}
               <button type="button" class="icon-btn-roll icon-btn--chat"
                       data-action="foeActionShowInChat" data-action-index="{{action.i}}"
                       title="Post this action to chat">💬</button>

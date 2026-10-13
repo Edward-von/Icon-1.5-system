@@ -2871,10 +2871,13 @@ details[open] > .icon-basic-actions__summary::before {
 /* Area line on attack cards: "📐 Medium Blast  Goblin, Warrior  [🗑 area]" */
 .icon-chat-card__area {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
-  margin: 2px 0 4px; padding: 3px 6px;
+  margin: 2px 0 4px; padding: 4px 6px;
   border-left: 3px solid #e07a2f; background: rgba(224, 122, 47, 0.08);
-  font-size: 0.85em;
+  font-size: 1em;
 }
+.icon-chat-card__area .icon-chat-card__area-remove { font-size: .95em; padding: 2px 8px; }
+.icon-chat-card__area--removed { opacity: .6; border-left-color: var(--ic-border-vis); background: transparent; }
+.icon-chat-card__area-gone { font-size: .85em; font-style: italic; color: var(--ic-text-dim); }
 .icon-chat-card__area-label { font-weight: 600; color: #e8a060; white-space: nowrap; }
 .icon-chat-card__area-targets { flex: 1 1 auto; }
 .icon-chat-card__area-remove { flex: 0 0 auto; }
@@ -4884,6 +4887,17 @@ ol.chat-log .chat-message,
 }
 .icon-gear-item:hover:not(:disabled) { border-color: var(--ic-gold); }
 .icon-gear-item--used { text-decoration: line-through; color: var(--ic-text-dim); opacity: .6; }
+/* Counted items ("5 fire stones 3/5") and the "−" that gives a use back. */
+.icon-gear-item__wrap { display: inline-flex; align-items: stretch; }
+.icon-gear-item__count { margin-left: 4px; font-variant-numeric: tabular-nums; color: var(--ic-gold); font-weight: 600; }
+.icon-gear-item__back {
+  flex: 0 0 auto; width: auto; height: auto; line-height: 1.3; margin-left: -1px;
+  padding: 2px 6px; font-size: .8em;
+  border: 1px solid var(--ic-border-vis); border-radius: 0 3px 3px 0;
+  background: transparent; color: var(--ic-text-dim); cursor: pointer;
+}
+.icon-gear-item__wrap:has(.icon-gear-item__back) .icon-gear-item { border-radius: 3px 0 0 3px; }
+.icon-gear-item__back:hover { border-color: var(--ic-gold); color: var(--ic-text-normal); }
 .icon-badge--carried { border-color: var(--ic-gold-bright); color: var(--ic-gold-bright); }
 
 /* Custom kit dialog: items grouped by kit. */
@@ -6091,6 +6105,7 @@ ol.chat-log .chat-message,
 }
 .icon-area-card__title { color: var(--ic-gold-bright); font-weight: bold; font-size: .95em; margin-bottom: 4px; }
 .icon-area-card__text { margin: 5px 0 0; font-size: .8em; line-height: 1.35; color: var(--ic-text-normal); text-align: left; }
+.icon-area-card__try { display: block; width: auto; margin: 6px auto 0; }
 .icon-area-clip { display: block; width: 100%; aspect-ratio: 480 / 452; background: var(--ic-bg-deep); border-radius: var(--ic-radius-sm); }
 .icon-area-legend { margin: 0 0 8px; font-size: .85em; color: var(--ic-text-dim); }
 .icon-area-legend__range { color: #7fa6d9; font-weight: 600; }
@@ -6108,3 +6123,16 @@ ol.chat-log .chat-message,
 }
 .icon-area-key strong { color: var(--ic-gold-bright); }
 .icon-area-note { margin: 8px 0 0; font-size: .85em; color: var(--ic-text-dim); }
+
+/* Foe / legend combo sequence (foe-combo.mjs, p.290): the next part is marked,
+   the parts that aren't up yet are dimmed but still usable. */
+.icon-combo-chip {
+  flex: 0 0 auto; width: auto; height: auto; line-height: 1.3;
+  padding: 1px 7px; font-size: .75em; white-space: nowrap;
+  border: 1px solid var(--ic-border-vis); border-radius: 3px;
+  background: transparent; color: var(--ic-text-dim); cursor: pointer;
+}
+.icon-combo-chip--next { border-color: var(--ic-gold); color: var(--ic-gold); font-weight: 600; }
+.icon-combo-chip:hover:not(:disabled) { border-color: var(--ic-gold); color: var(--ic-text-normal); }
+.icon-foe-action--combo-wait { opacity: .55; }
+.icon-foe-action--combo-wait:hover { opacity: .85; }

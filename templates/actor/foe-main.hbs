@@ -119,7 +119,7 @@
       {{/if}}
     </div>
     {{#each enrichedActions as |action|}}
-      <div class="icon-foe-action">
+      <div class="icon-foe-action {{#if action.combo.isWaiting}}icon-foe-action--combo-wait{{/if}}">
         <div class="icon-foe-action__header">
           <input type="text" name="system.actions.{{action.i}}.name"
                  value="{{action.name}}" placeholder="Action name"
@@ -130,6 +130,11 @@
             <option value="2actions" {{#icon-eq action.cost "2actions"}}selected{{/icon-eq}}>2 Actions</option>
             <option value="free"     {{#icon-eq action.cost "free"}}selected{{/icon-eq}}>Free</option>
           </select>
+          {{#if action.combo.part}}
+            <button type="button" class="icon-combo-chip {{#if action.combo.isNext}}icon-combo-chip--next{{/if}}"
+                    data-action="setComboNext" data-part="{{action.combo.part}}" title="{{action.combo.tip}}"
+                    {{#unless ../isEditable}}disabled{{/unless}}>{{action.combo.label}}</button>
+          {{/if}}
           <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                   data-action="foeActionShowInChat" data-action-index="{{action.i}}"
                   title="Post this action to chat">💬</button>

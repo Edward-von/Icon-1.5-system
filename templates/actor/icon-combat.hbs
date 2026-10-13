@@ -468,6 +468,8 @@
                 <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="-1" {{#unless ../isEditable}}disabled{{/unless}}>−</button>
                 <span class="icon-counter-value">{{trait.quick.value}}</span>
                 <button type="button" class="icon-btn icon-btn--sm" data-action="adjustBlessings" data-delta="1" {{#unless ../isEditable}}disabled{{/unless}}>+</button>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="blessCharacter" {{#unless ../isEditable}}disabled{{/unless}}
+                        title="Bless: give a blessing token to a character (one more Blessed charge, +1 boon on a save)">🙏 Bless…</button>
               {{/if}}
               {{#if (icon-eq trait.quick.type "stackedDice")}}
                 <span class="icon-trait__quick-label">Stacked Dice {{trait.quick.value}}/{{trait.quick.max}}</span>

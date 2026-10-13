@@ -3,7 +3,7 @@
  * Legends have multiple actions, enhanced interrupts, phases, and round actions.
  */
 import { combatStatsSchema, prepareCombatStats } from "./common.mjs";
-import { summonSchema } from "./FoeData.mjs";
+import { summonSchema, appliedTemplatesField } from "./FoeData.mjs";
 
 const {
   SchemaField, StringField, NumberField, BooleanField,
@@ -113,6 +113,9 @@ export class LegendData extends foundry.abstract.TypeDataModel {
       roundActions: new ArrayField(roundActionSchema(), { initial: [] }),
       // Summons / objects this legend puts on the map (see FoeData summonSchema).
       summons:      new ArrayField(summonSchema(),      { initial: [] }),
+      // Faction / special templates dropped on the legend (Jotunn: Titanblood,
+      // Titan Armament…), same bookkeeping as on foes (foe-templates.mjs).
+      templates:    appliedTemplatesField(),
 
       resolvePool: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
 

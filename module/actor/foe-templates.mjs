@@ -38,7 +38,8 @@ const KIND_LABEL = { faction: "faction", culture: "Great Culture", job: "job", s
 /** Mutable copy of everything a template can touch. */
 function workingCopy(actor) {
   const s = actor.system;
-  const work = { hp: { value: s.hp.value, max: s.hp.max }, mob: { ...s.mob }, templates: deepClone(s.templates ?? []) };
+  const work = { hp: { value: s.hp.value, max: s.hp.max }, mob: { ...s.mob }, templates: deepClone(s.templates ?? []),
+                 isLegend: actor.type === "legend" };
   for (const k of SCALARS) work[k] = s[k];
   for (const t of BLOCK_TYPES) work[t] = deepClone(s[t] ?? []);
   // Extra turns a round live in a flag (IconCombat.turnsFor), not in system.
@@ -49,7 +50,10 @@ function workingCopy(actor) {
 /** The update that writes a working copy back. */
 function toUpdate(work) {
   const u = {};
-  for (const k of [...SCALARS, ...BLOCK_TYPES, "hp", "mob", "templates"]) u[`system.${k}`] = work[k];
+  // A legend has no class, Elite flag or mob block: only the fields it has.
+  const keys = work.isLegend ? [...SCALARS.filter(k => !["foeClass", "isElite"].includes(k)), ...BLOCK_TYPES, "hp", "templates"]
+                             : [...SCALARS, ...BLOCK_TYPES, "hp", "mob", "templates"];
+  for (const k of keys) u[`system.${k}`] = work[k];
   u["flags.icon-system.extraTurns"] = work.extraTurns;
   return u;
 }
@@ -94,7 +98,7 @@ function apply(work, item) {
   };
 
   // Job: class first — the old class's baseline traits / Diaga go (p.298).
-  if (t.foeClass && t.foeClass !== work.foeClass) {
+  if (t.foeClass && !work.isLegend && t.foeClass !== work.foeClass) {
     const old = CLASS_BASELINE[work.foeClass] ?? { traits: [], actions: [] };
     for (const [type, names] of [["traits", old.traits], ["actions", old.actions]]) {
       const keep = [];
@@ -116,13 +120,13 @@ function apply(work, item) {
   const st = t.stats ?? {};
   for (const k of ["vit", "defense", "speed", "fray", "armor", "size", "chapter"]) if (st[k] != null) set(k, st[k]);
   if (st.damagedie) set("damagedie", st.damagedie);
-  if (st.isElite != null) set("isElite", !!st.isElite);
+  if (st.isElite != null && !work.isLegend) set("isElite", !!st.isElite);
   if (st.hp != null) set("hp.max", st.hp);
 
   if (t.faction) set("faction", t.faction);
 
   // Legacy of the Titans (p.448): "Elite … Double HP if upgrading from a normal foe."
-  if (t.makeElite && !work.isElite && work.foeClass !== "mob") {
+  if (t.makeElite && !work.isLegend && !work.isElite && work.foeClass !== "mob") {
     set("isElite", true);
     set("hp.max", work.hp.max * 2);
   }
@@ -150,6 +154,11 @@ function apply(work, item) {
  * when a template already sits in the same slot.
  */
 export async function applyFoeTemplate(actor, item) {
+  // A job rewrites class and statline: a legend has no foe class to change.
+  if (actor.type === "legend" && item.system.kind === "job") {
+    ui.notifications.warn(`${item.name} is a job template: jobs are for foes. A legend takes faction and special templates.`);
+    return false;
+  }
   const slot = templateSlot(item);
   const work = workingCopy(actor);
   const existing = work.templates.findIndex(e => e.slot === slot);

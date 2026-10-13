@@ -12,11 +12,11 @@ import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks, comboDisplayName, comboTitle } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
-         areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts } from "../../canvas/area-templates.mjs";
+         areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
-import { abilityStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
+import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses } from "../../combat/ability-statuses.mjs";
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
@@ -66,8 +66,9 @@ function _abilityMarks(actorId, itemId, comboMark) {
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
 import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage } from "../../combat/ability-damage.mjs";
+import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
-import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems } from "../../helpers/gear.mjs";
+import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
 
 export class IconSheet extends BaseActorSheet {
@@ -99,9 +100,12 @@ export class IconSheet extends BaseActorSheet {
       addAmbition:   IconSheet.#onAddAmbition,
       removeAmbition:IconSheet.#onRemoveAmbition,
       addLooseGear:    IconSheet.#onAddLooseGear,
+      outsiderGear:    IconSheet.#onOutsiderGear,
       removeLooseGear: IconSheet.#onRemoveLooseGear,
       gearKitCarry:     IconSheet.#onGearKitCarry,
       gearItemUsed:     IconSheet.#onGearItemUsed,
+      gearItemGiveBack: IconSheet.#onGearItemGiveBack,
+      blessCharacter:   IconSheet.#onBlessCharacter,
       gearNewExpedition: IconSheet.#onGearNewExpedition,
       gearAddBondKits:  IconSheet.#onGearAddBondKits,
       gearCustomKit:    IconSheet.#onGearCustomKit,
@@ -526,10 +530,12 @@ export class IconSheet extends BaseActorSheet {
       const bondName = bondNameOf(actor);
       const rules    = bondGearRules(bondName);
       const kits = actor.items.filter(i => i.type === "gear-kit").map(k => {
-        const used = new Set(k.system.used ?? []);
         return {
           id: k.id, name: k.name, always: !!k.system.always, carried: !!k.system.carried, custom: !!k.system.custom,
-          items: (k.system.items ?? []).filter(Boolean).map(name => ({ name, used: used.has(name) })),
+          items: (k.system.items ?? []).filter(Boolean).map(name => {
+            const { spent, max } = itemCount(k.system, name);
+            return { name, used: spent >= max, spent, max, counted: max > 1, left: max - spent };
+          }),
         };
       }).sort((a, b) => (b.always - a.always) || (b.carried - a.carried) || a.name.localeCompare(b.name));
       const loose = system.narrative?.looseGear ?? [];
@@ -545,6 +551,8 @@ export class IconSheet extends BaseActorSheet {
         oldKit:       system.narrative?.gearKit ?? "",
         looseLimit, looseCarried,
         looseOver:    looseCarried > looseLimit,
+        // The Outsider takes gear from the party's other bonds at the end of an interlude (p.76).
+        isOutsider:   bondName.trim().toLowerCase() === "outsider",
       };
     }
 
@@ -1147,6 +1155,36 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({ "system.narrative.looseGear": gear });
   }
 
+  /**
+   * The Outsider, end of an interlude (p.76): pick one piece of gear from the
+   * kits of the bonds the rest of the party uses; it joins the loose gear list.
+   */
+  static async #onOutsiderGear(event, target) {
+    const groups = await partyBondGear(this.document);
+    if (!groups.length) {
+      ui.notifications.info("No other bond in the party: the Outsider takes gear from the kits of the bonds the other player characters use (p.76).");
+      return;
+    }
+    const have = new Set((this.document.system.narrative.looseGear ?? []).map(g => String(g.name ?? "").trim().toLowerCase()));
+    const options = groups.map(g => `<optgroup label="${escapeHTML(`${g.bond} — ${g.kit}`)}">${
+      g.items.map(it => `<option value="${escapeHTML(it)}"${have.has(it.trim().toLowerCase()) ? " disabled" : ""}>${escapeHTML(it)}</option>`).join("")}</optgroup>`).join("");
+    let picked = null;
+    try {
+      picked = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `End of interlude — ${this.document.name}` },
+        content: `<p>The Outsider can take <strong>one</strong> piece of gear from the kits of any bond used by another character in the party and add it to their loose gear (p.76).</p>
+          <label style="display:block">Gear <select name="gear" style="width:100%">${options}</select></label>`,
+        ok: { label: "Add to loose gear", callback: (_e, button) => button.form?.elements?.gear?.value ?? "" },
+        rejectClose: false,
+      });
+    } catch { picked = null; }
+    if (!picked) return;
+    const gear = foundry.utils.deepClone(this.document.system.narrative.looseGear ?? []);
+    gear.push({ name: picked, carried: false });
+    _log(`outsiderGear — "${this.document.name}" takes "${picked}"`);
+    await this.document.update({ "system.narrative.looseGear": gear });
+  }
+
   /* -------------------------------------------------- */
   /*  Gear kits (p.35)                                   */
   /* -------------------------------------------------- */
@@ -1172,23 +1210,72 @@ export class IconSheet extends BaseActorSheet {
     await actor.updateEmbeddedDocuments("Item", updates);
   }
 
-  /** Mark a kit item used up or lost (or back), until the next expedition. */
+  /**
+   * Use one of a kit item (click): "5 fire stones" counts down 5 uses, other
+   * items one; when none are left it is marked used up or lost until the next
+   * expedition, and a click on it then gets it back. Shift+click sets how
+   * many uses the item has (any item, e.g. rations).
+   */
   static async #onGearItemUsed(event, target) {
     event.stopPropagation();
     const kit  = this.document.items.get(target.dataset.itemId);
     const name = target.dataset.name;
     if (!kit || !name) return;
+    const counts = foundry.utils.deepClone(kit.system.counts ?? []);
+    let row = counts.find(c => c.name === name);
+    if (!row) { row = { name, spent: 0, max: 0 }; counts.push(row); }
     const used = new Set(kit.system.used ?? []);
-    if (used.has(name)) used.delete(name); else used.add(name);
-    await kit.update({ "system.used": [...used] });
+
+    if (event.shiftKey) {
+      const { max } = itemCount(kit.system, name);
+      let n = null;
+      try {
+        n = await foundry.applications.api.DialogV2.prompt({
+          window: { title: `Uses — ${name}` },
+          content: `<label style="display:block">How many uses does <strong>${escapeHTML(name)}</strong> have?
+            <input type="number" name="n" value="${max}" min="1" max="99" style="width:100%" autofocus></label>`,
+          ok: { label: "Set", callback: (_e, button) => Number(button.form?.elements?.n?.value) || 0 },
+          rejectClose: false,
+        });
+      } catch { n = null; }
+      if (!n || n < 1) return;
+      row.max = Math.min(99, n);
+      row.spent = Math.min(row.spent, row.max);
+      if (row.spent >= row.max) used.add(name); else used.delete(name);
+      await kit.update({ "system.counts": counts, "system.used": [...used] });
+      return;
+    }
+
+    const { spent, max } = itemCount(kit.system, name);
+    if (spent >= max) { row.spent = 0; used.delete(name); }           // all gone: a click gets it back
+    else { row.spent = spent + 1; if (row.spent >= max) used.add(name); }
+    await kit.update({ "system.counts": counts, "system.used": [...used] });
+  }
+
+  /** Give back one use of a counted kit item (the "−" next to it). */
+  static async #onGearItemGiveBack(event, target) {
+    event.stopPropagation();
+    const kit  = this.document.items.get(target.dataset.itemId);
+    const name = target.dataset.name;
+    if (!kit || !name) return;
+    const { spent } = itemCount(kit.system, name);
+    if (spent <= 0) return;
+    const counts = foundry.utils.deepClone(kit.system.counts ?? []);
+    let row = counts.find(c => c.name === name);
+    if (!row) { row = { name, spent: 0, max: 0 }; counts.push(row); }
+    row.spent = spent - 1;
+    await kit.update({ "system.counts": counts, "system.used": (kit.system.used ?? []).filter(n => n !== name) });
   }
 
   /** A new expedition: used and lost kit items come back (p.35). */
   static async #onGearNewExpedition(event) {
     event.stopPropagation();
     const actor = this.document;
-    const kits = actor.items.filter(i => i.type === "gear-kit" && (i.system.used ?? []).length);
-    if (kits.length) await actor.updateEmbeddedDocuments("Item", kits.map(k => ({ _id: k.id, "system.used": [] })));
+    // Spent uses go back to 0; quantities set by hand stay.
+    const kits = actor.items.filter(i => i.type === "gear-kit" && ((i.system.used ?? []).length || (i.system.counts ?? []).some(c => c.spent > 0)));
+    if (kits.length) await actor.updateEmbeddedDocuments("Item", kits.map(k => ({
+      _id: k.id, "system.used": [], "system.counts": (k.system.counts ?? []).map(c => ({ ...c, spent: 0 })),
+    })));
     const carried = actor.items.filter(i => i.type === "gear-kit" && i.system.carried).map(i => i.name);
     ui.notifications.info(`${actor.name}: gear restocked for a new expedition${carried.length ? ` — carrying ${carried.join(" + ")}` : " — pick the kit to carry"}.`);
   }
@@ -1528,6 +1615,11 @@ export class IconSheet extends BaseActorSheet {
       chapter:     item.system?.chapter ?? 1,
       description: await enrichHTML(item.system?.description),
     };
+    // Only the statuses the character GAINS (Spite: "gain Hatred+ of the closest
+    // foe until the end of your next turn"): a PC trait's other status words are
+    // conditions and reminders, not something the card should inflict.
+    const gains = parseInflictedStatuses(item.system?.description ?? "", { sourceName: this.document.name, label: "" }).filter(e => e.kind === "gain");
+    tr.statusHtml = statusBlockHtml(gains, { source: this.document, abilityName: item.name });
 
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/icon-system/templates/chat/trait-card.hbs", { tr });
@@ -1852,10 +1944,11 @@ export class IconSheet extends BaseActorSheet {
     return areaLasts(ab.tags, text);
   }
 
-  static async #onAbilityPlaceArea(event, target) {
-    event.stopPropagation();
-    const ab = await this._getAbilityDetail(target.dataset.itemId);
-    if (!ab) return;
+  /**
+   * The areas this ability can be placed with (📐 and the attack roll share
+   * the list, so both offer the same choice).
+   */
+  _areaVariantsFor(ab) {
     // Base area from the tags + the shapes the combo / charge / unlocked
     // upgrade texts describe ("Area becomes Arc 4", "Charge: Large Blast")
     const s = this.document.items.get(ab.id)?.system ?? {};
@@ -1892,6 +1985,14 @@ export class IconSheet extends BaseActorSheet {
         ab.hasMastery ? ["Mastery",   s.mastery]      : null,
       ].filter(Boolean),
     });
+    return variants;
+  }
+
+  static async #onAbilityPlaceArea(event, target) {
+    event.stopPropagation();
+    const ab = await this._getAbilityDetail(target.dataset.itemId);
+    if (!ab) return;
+    const variants = this._areaVariantsFor(ab);
     if (!variants.length) { ui.notifications.warn(`"${ab.name}" has no Blast / Line / Arc / Burst / Aura tag.`); return; }
     const area = await chooseAreaVariant(variants, ab.name);
     if (!area) return;
@@ -1923,7 +2024,17 @@ export class IconSheet extends BaseActorSheet {
     // Cancelling the placement (Escape / right click) no longer kills the roll:
     // the attack is rolled without an area, so the d20 can be thrown before —
     // or without — putting the arc down. Cancel the dialog to call it off.
-    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab) });
+    // No area on the map yet for this ability: the same choice as 📐 (base
+    // area, talent / combo / charge shapes) instead of always the tags' one.
+    let areaChoice;
+    if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {
+      const variants = this._areaVariantsFor(ab).filter(v => v.area?.kind !== "aura");
+      if (variants.length > 1) {
+        areaChoice = await chooseAreaVariant(variants, ab.name);
+        if (!areaChoice) return;   // closing the "which area?" dialog calls the attack off
+      }
+    }
+    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
     const areaHtml = placement ? areaSummaryHtml(placement) : "";
 
@@ -2675,6 +2786,45 @@ export class IconSheet extends BaseActorSheet {
     const next    = Math.max(0, current + delta);
     _log(`adjustBlessings — actor: "${this.document.name}" | ${current} → ${next}`);
     await this.document.update({ "system.combat.classResources.blessingTokens.value": next });
+  }
+
+  /**
+   * Mendicant — Bless (1 action): "Grant a blessing token to a character in
+   * range 4" (p.172). Pick the character (the targeted ones first, then the
+   * characters on the map, then the player characters); they get one more
+   * Blessed charge. Nothing is spent from this sheet: where blessings come
+   * from is left to the table (Maar).
+   */
+  static async #onBlessCharacter(event, target) {
+    event.stopPropagation();
+    const me = this.document;
+    const seen = new Set();
+    const choices = [];
+    const add = (actor, label, tag) => {
+      if (!actor || seen.has(actor.uuid)) return;
+      seen.add(actor.uuid);
+      choices.push({ uuid: actor.uuid, label, tag });
+    };
+    for (const t of game.user?.targets ?? []) add(t.actor, t.name, "🎯");
+    for (const t of canvas?.tokens?.placeables ?? []) if (t.actor && t.document.disposition === CONST.TOKEN_DISPOSITIONS.FRIENDLY) add(t.actor, t.name, "");
+    for (const a of game.actors ?? []) if (a.type === "icon" && a.hasPlayerOwner) add(a, a.name, "");
+    if (!choices.length) { ui.notifications.warn("No character to bless: target a token or add a player character."); return; }
+    const options = choices.map((c, i) => `<option value="${escapeHTML(c.uuid)}"${i === 0 ? " selected" : ""}>${escapeHTML(c.label)}${c.uuid === me.uuid ? " (yourself)" : ""}${c.tag ? ` ${c.tag}` : ""}</option>`).join("");
+    let uuid = null;
+    try {
+      uuid = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `Bless — ${me.name}` },
+        content: `<p><strong>Bless</strong> (1 action): grant a blessing token to a character in range 4 (p.172). They can spend it for +1 boon on a save.</p>
+          <label style="display:block">Character <select name="who" style="width:100%">${options}</select></label>`,
+        ok: { label: "Give a blessing", icon: "fa-solid fa-hands-praying", callback: (_e, button) => button.form?.elements?.who?.value ?? "" },
+        rejectClose: false,
+      });
+    } catch { uuid = null; }
+    if (!uuid) return;
+    const who = await fromUuid(uuid);
+    if (!who) return;
+    _log(`blessCharacter — "${me.name}" blesses "${who.name}"`);
+    await grantStatus({ target: who, source: me, statusId: "blessed", label: "Blessing", abilityName: "Bless" });
   }
 
   /** Mendicant — clear blessing tokens to 0. */

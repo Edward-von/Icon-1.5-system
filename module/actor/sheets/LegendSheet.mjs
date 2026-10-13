@@ -19,6 +19,8 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { comboView, noteComboUse, setComboNext } from "../../combat/foe-combo.mjs";
+import { applyFoeTemplate, removeFoeTemplate } from "../foe-templates.mjs";
 
 const _log = (...args) => console.debug("[ICON | LegendSheet]", ...args);
 
@@ -34,6 +36,8 @@ export class LegendSheet extends BaseActorSheet {
       showReference:     onShowReferenceControl,
       rollAction:        LegendSheet.#onRollAction,
       npcSummonShowInChat: LegendSheet.#onNpcSummonShowInChat,
+      removeTemplate:    LegendSheet.#onRemoveTemplate,
+      openTemplate:      LegendSheet.#onOpenTemplate,
       placeActionArea:   LegendSheet.#onPlaceActionArea,
       markActionTarget:  LegendSheet.#onMarkActionTarget,
       removeMark:        LegendSheet.#onRemoveMark,
@@ -46,6 +50,7 @@ export class LegendSheet extends BaseActorSheet {
       addInterrupt:      LegendSheet.#onAddInterrupt,
       removeInterrupt:   LegendSheet.#onRemoveInterrupt,
       foeInterruptShowInChat: LegendSheet.#onFoeInterruptShowInChat,
+      setComboNext:     LegendSheet.#onSetComboNext,
       foeActionShowInChat:    LegendSheet.#onFoeActionShowInChat,
       foeRoundActionShowInChat: LegendSheet.#onFoeRoundActionShowInChat,
       addRoundAction:    LegendSheet.#onAddRoundAction,
@@ -169,6 +174,7 @@ export class LegendSheet extends BaseActorSheet {
       // "hit"/"hit-miss" forces the button on.
       const dealsDamage = mode === "hit" || mode === "hit-miss" ? true : parsed.dealsDamage;
       return {
+        combo: comboView(actor, a),   // foe-combo.mjs: next part / waiting
         i,
         name:        a.name ?? "",
         cost:        a.cost ?? "1action",
@@ -270,6 +276,10 @@ export class LegendSheet extends BaseActorSheet {
     // "🎲 Save" buttons at the top of the Conditions tab (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();
 
+    // Foe templates on this legend (faction / special), in the order applied.
+    const KIND = { faction: "Faction", culture: "Great Culture", job: "Job", special: "Special" };
+    context.appliedTemplates = (system.templates ?? []).map((t, i) => ({ i, name: t.name, uuid: t.uuid, kindLabel: KIND[t.kind] ?? t.kind, kind: t.kind }));
+
     _log(`_prepareContext — done | phases: ${system.phases.length} | currentPhase: ${system.currentPhase} | actions: ${system.actions.length}`);
     return context;
   }
@@ -346,6 +356,7 @@ export class LegendSheet extends BaseActorSheet {
       ? currentTargets().filter(t => t.tokenId === mods.attackTargetId)
       : null;
 
+    await noteComboUse(actor, action);
     await combatRoll({
       abilityName: action.name,
       // tags of the action: "true strike" / "unerring" make the Evasion check skip (p.117)
@@ -430,6 +441,7 @@ export class LegendSheet extends BaseActorSheet {
     const mods = await LegendSheet.#promptLegendDamageMods(action, parsed, actor);
     if (!mods) return;
 
+    await noteComboUse(actor, action);
     await postAbilityDamageCard(actor, {
       parsed,
       outcome:     mods.outcome,
@@ -531,6 +543,7 @@ export class LegendSheet extends BaseActorSheet {
     const action = actor.system.actions[idx];
     if (!action) return;
     _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
+    await noteComboUse(actor, action);
     await postNpcActionCard(actor, action, { statusHtml: this.#statusHtmlFor(action, action.name) });
   }
 
@@ -631,6 +644,30 @@ export class LegendSheet extends BaseActorSheet {
   /*  Drag-drop                                          */
   /* -------------------------------------------------- */
 
+  /** ✕ on an applied template: undo what it did (module/actor/foe-templates.mjs). */
+  static async #onRemoveTemplate(event, target) {
+    event.stopPropagation();
+    const idx = Number(target.dataset.index);
+    _log(`removeTemplate — actor: "${this.document.name}" | idx: ${idx}`);
+    await removeFoeTemplate(this.document, idx);
+  }
+
+  /** Click on an applied template's name: open the template item, if it still exists. */
+  static async #onOpenTemplate(event, target) {
+    const item = target.dataset.uuid ? await fromUuid(target.dataset.uuid) : null;
+    _log(`openTemplate — uuid: "${target.dataset.uuid}" | found: ${!!item}`);
+    if (item) item.sheet.render(true);
+    else ui.notifications.warn("That template is no longer in its compendium.");
+  }
+
+  /** Click on a Combo chip: make that part the next one of the sequence (foe-combo.mjs). */
+  static async #onSetComboNext(event, target) {
+    event.stopPropagation();
+    const part = Number(target.dataset.part) || 1;
+    _log(`setComboNext — actor: "${this.document.name}" | next: Combo ${part}`);
+    await setComboNext(this.document, part);
+  }
+
   async _onDropSheet(event) {
     if (this._dropInProgress) {
       _log(`drop — IGNORED (another drop is already in progress)`);
@@ -647,6 +684,11 @@ export class LegendSheet extends BaseActorSheet {
       if (!item) { _log(`drop — ERROR: could not resolve item`); return; }
 
       _log(`drop — item: "${item.name}" | type: "${item.type}"`);
+      if (item.type === "foe-template") {
+        if (!this.isEditable) return;
+        await applyFoeTemplate(this.document, item);
+        return;
+      }
       if (item.type !== "foe-ability") {
         _log(`drop — WARN: expected foe-ability, got "${item.type}"`);
         return ui.notifications.warn(`Cannot drop item type "${item.type}" on a Legend.`);

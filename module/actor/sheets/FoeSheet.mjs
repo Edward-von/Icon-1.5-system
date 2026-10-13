@@ -26,6 +26,7 @@ import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { comboView, noteComboUse, setComboNext } from "../../combat/foe-combo.mjs";
 import { applyFoeTemplate, removeFoeTemplate } from "../foe-templates.mjs";
 
 const _log = (...args) => console.debug("[ICON | FoeSheet]", ...args);
@@ -45,6 +46,7 @@ export class FoeSheet extends BaseActorSheet {
       markActionTarget: FoeSheet.#onMarkActionTarget,
       removeMark:       FoeSheet.#onRemoveMark,
       rollFoeDamage:    FoeSheet.#onRollFoeDamage,
+      setComboNext:     FoeSheet.#onSetComboNext,
       foeActionShowInChat: FoeSheet.#onFoeActionShowInChat,
       foeTraitShowInChat:  FoeSheet.#onFoeTraitShowInChat,
       applyBaseStats:   FoeSheet.#onApplyBaseStats,
@@ -110,6 +112,7 @@ export class FoeSheet extends BaseActorSheet {
     context.enrichedActions = await Promise.all(system.actions.map(async (a, i) => {
       const parsed = _parseAbilityDamage(a);
       return {
+        combo: comboView(actor, a),   // foe-combo.mjs: next part / waiting
         ...a, i,
         enrichedHit:  await enrich(a.hitEffect),
         enrichedMiss: await enrich(a.missEffect),
@@ -291,6 +294,7 @@ export class FoeSheet extends BaseActorSheet {
       ? currentTargets().filter(t => t.tokenId === mods.attackTargetId)
       : null;
 
+    await noteComboUse(actor, action);
     await combatRoll({
       abilityName: action.name,
       // tags of the action: "true strike" / "unerring" make the Evasion check skip (p.117)
@@ -378,6 +382,7 @@ export class FoeSheet extends BaseActorSheet {
     const action = actor.system.actions[idx];
     if (!action) return;
     _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
+    await noteComboUse(actor, action);
     await postNpcActionCard(actor, action, { statusHtml: this.#statusHtmlFor(action, action.name) });
   }
 
@@ -415,6 +420,7 @@ export class FoeSheet extends BaseActorSheet {
     const mods = await FoeSheet.#promptFoeDamageMods(action, parsed, actor);
     if (!mods) return;
 
+    await noteComboUse(actor, action);
     await postAbilityDamageCard(actor, {
       parsed,
       outcome:     mods.outcome,
@@ -579,6 +585,14 @@ export class FoeSheet extends BaseActorSheet {
   /* -------------------------------------------------- */
   /*  Drag-drop                                          */
   /* -------------------------------------------------- */
+
+  /** Click on a Combo chip: make that part the next one of the sequence (foe-combo.mjs). */
+  static async #onSetComboNext(event, target) {
+    event.stopPropagation();
+    const part = Number(target.dataset.part) || 1;
+    _log(`setComboNext — actor: "${this.document.name}" | next: Combo ${part}`);
+    await setComboNext(this.document, part);
+  }
 
   async _onDropSheet(event) {
     if (this._dropInProgress) {

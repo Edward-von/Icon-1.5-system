@@ -15,7 +15,8 @@
  *      GM over the system socket, the same way marks do (marks.mjs).
  */
 import { applyStatus, hasStatus, getStatusCharges, adjustStatusCharges, toggleOngoing } from "./statuses.mjs";
-import { applyHatred } from "./marks.mjs";
+import { applyHatred, promptHatredTarget } from "./marks.mjs";
+import { expiryFromUntil } from "./status-expiry.mjs";
 import { gainPcVigilance } from "./tracker-statuses.mjs";
 import { saveRoll } from "../dice/rolls.mjs";
 import { postAbilityDamageCard } from "./damage.mjs";
@@ -84,6 +85,8 @@ async function _onInflictClick(btn) {
     saveCurses:  Number(d.saveCurses) || 0,
     autoFailIf:  d.autoFail || "",
     sourceTokenId: d.sourceToken || "",
+    until:       d.until || "",
+    eliteExtra:  Number(d.eliteExtra) || 0,
     saveDamage,
     pair,
     source,
@@ -153,7 +156,7 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
  * Save (if the text asks for one) and apply.
  * @returns {Promise<{applied: boolean, success: boolean|null, relayed: boolean}|null>} null = cancelled
  */
-export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "", kind = "inflict", saveDamage = null, targetTokenId = "", pair = null }) {
+export async function inflictStatus({ target, source, statusId, label, ongoing = false, when = "always", sentence = "", abilityName = "", saveBoons = 0, saveCurses = 0, autoFailIf = "", sourceTokenId = "", kind = "inflict", saveDamage = null, targetTokenId = "", pair = null, until = "", eliteExtra = 0 }) {
   if (!target) return null;
   if (!statusId && kind !== "save-damage") return null;
   const fullLabel = `${label}${ongoing ? "+" : ""}`;
@@ -171,12 +174,12 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
 
   // "Gain": the user (or the targeted allies) gets the status, no save.
   if (kind === "gain") {
-    const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "", gain: true });
+    const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "", gain: true, until, eliteExtra });
     return res ? { ...res, success: null } : null;
   }
 
   if (when === "always" && kind !== "save-damage") {
-    const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "" });
+    const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note: "", until, eliteExtra });
     return res ? { ...res, success: null } : null;
   }
 
@@ -229,7 +232,7 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
     const list = (success ? pair.success : pair.fail) ?? [];
     let res = null;
     for (const st of list) {
-      const r = await _apply({ target, source, statusId: st.id, ongoing: !!st.ongoing, label: `${st.label}${st.ongoing ? "+" : ""}`, abilityName, sourceTokenId, note });
+      const r = await _apply({ target, source, statusId: st.id, ongoing: !!st.ongoing, label: `${st.label}${st.ongoing ? "+" : ""}`, abilityName, sourceTokenId, note, until, eliteExtra });
       if (r) res = res ? { ...res, relayed: res.relayed || r.relayed } : r;
     }
     await damageAfter();
@@ -242,7 +245,7 @@ export async function inflictStatus({ target, source, statusId, label, ongoing =
     await damageAfter();
     return { applied: false, success, relayed: false };
   }
-  const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note });
+  const res = await _apply({ target, source, statusId, ongoing, label: fullLabel, abilityName, sourceTokenId, note, until, eliteExtra });
   await damageAfter();
   return res ? { ...res, success } : null;
 }
@@ -367,34 +370,50 @@ async function _saveDialog({ target, source, label, when, sentence, abilityName,
 /*  Apply (direct or relayed)                          */
 /* -------------------------------------------------- */
 
-async function _apply({ target, source, statusId, ongoing, label, abilityName, sourceTokenId, note, gain = false }) {
+async function _apply({ target, source, statusId, ongoing, label, abilityName, sourceTokenId, note, gain = false, until = "", eliteExtra = 0 }) {
   const needsRelay = !(target.isOwner || game.user.isGM);
+  // "until the end of their next turn" → a countdown on the effect (status-expiry.mjs).
+  const expiry = until ? expiryFromUntil(until, { target, source, eliteExtra }) : null;
 
   // Hatred is always "of someone" — the attacker (marks.mjs relays it itself).
-  // A "Gain" of Hatred on the user is not a thing the text does.
   if (statusId === "hatred" && !gain) {
     if (!source) { ui.notifications.warn("Hatred needs a source character."); return null; }
     if (needsRelay && !game.users.activeGM) { ui.notifications.warn("No GM is connected — can't apply that right now."); return null; }
-    await applyHatred(target, { name: source.name, tokenId: sourceTokenId || null, actorUuid: source.uuid }, { ongoing });
+    await applyHatred(target, { name: source.name, tokenId: sourceTokenId || null, actorUuid: source.uuid }, { ongoing, expiry });
+    return { applied: true, relayed: needsRelay };
+  }
+  // Hatred GAINED by the user (Spite, Dark Knight: "gain hatred+ of the closest
+  // foe to you"): ask of whom, with the closest foe on the map pre-selected.
+  if (statusId === "hatred" && gain) {
+    const hated = await promptHatredTarget(target, { closest: true });
+    if (!hated) return null;
+    await applyHatred(target, hated, { ongoing, expiry });
     return { applied: true, relayed: needsRelay };
   }
 
   if (!needsRelay) {
-    await applyStatusDirect({ target, statusId, ongoing, label, abilityName, sourceName: source?.name ?? "", note });
+    await applyStatusDirect({ target, statusId, ongoing, label, abilityName, sourceName: source?.name ?? "", note, expiry });
     return { applied: true, relayed: false };
   }
   if (!game.users.activeGM) { ui.notifications.warn("No GM is connected — can't apply that right now."); return null; }
   game.socket.emit(SOCKET, {
     type: "inflictStatus",
     targetUuid: target.uuid, statusId, ongoing, label, abilityName,
-    sourceName: source?.name ?? "", note,
+    sourceName: source?.name ?? "", note, expiry,
   });
   ui.notifications.info(`${label} sent to the GM to apply to "${target.name}".`);
   return { applied: true, relayed: true };
 }
 
 /** Apply on a client that owns the target (or the GM), with a chat note. */
-export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "" }) {
+export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "", expiry = null }) {
+  // A blessing is a token: each one given is one more Blessed charge (p.172),
+  // spent for +1 boon on a save.
+  if (statusId === "blessed") {
+    const next = await adjustStatusCharges(target, "blessed", 1);
+    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> gains a <strong>blessing</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
+    return;
+  }
   // A PC keeps Vigilance on the Stalwart tracker ("gain vigilance +1"): add a
   // charge there; the token status follows the tracker (tracker-statuses.mjs).
   if (target?.type === "icon" && statusId === "vigilance") {
@@ -409,11 +428,21 @@ export async function applyStatusDirect({ target, statusId, ongoing = false, lab
     const effect = target.effects.find(e => e.statuses?.has(statusId) || e.getFlag("core", "statusId") === statusId);
     const wasOngoing = effect?.getFlag("icon-system", "ongoing") ?? false;
     if (ongoing && effect && !wasOngoing) await toggleOngoing(effect);
+    if (expiry && effect) await effect.setFlag("icon-system", "expiry", expiry);
     await _chat(target, `<strong>${escapeHTML(target.name)}</strong> ${ongoing && !wasOngoing ? `is now <strong>${escapeHTML(label)}</strong> (upgraded to ongoing)` : `is already <strong>${escapeHTML(label || statusId)}</strong>`} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
     return;
   }
-  await applyStatus(target, statusId, ongoing);
-  await _chat(target, `<strong>${escapeHTML(target.name)}</strong> is now <strong>${escapeHTML(label || statusId)}</strong> <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+  await applyStatus(target, statusId, ongoing, expiry ? { flags: { expiry } } : {});
+  await _chat(target, `<strong>${escapeHTML(target.name)}</strong> is now <strong>${escapeHTML(label || statusId)}</strong>${expiry ? ` ${escapeHTML(expiry.text)}` : ""} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+}
+
+/**
+ * Give a positive status to a character from a sheet button (the Mendicant's
+ * Bless): applied here when this client owns the target, otherwise relayed to
+ * the active GM like the Gain buttons of the cards.
+ */
+export function grantStatus({ target, source = null, statusId, label = "", abilityName = "" }) {
+  return _apply({ target, source, statusId, ongoing: false, label: label || statusId, abilityName, sourceTokenId: "", note: "", gain: true });
 }
 
 /** GM side of the relay (called from the IconCombat socket handler). */
@@ -424,6 +453,7 @@ export async function handleInflictSocket(data) {
   await applyStatusDirect({
     target, statusId: data.statusId, ongoing: !!data.ongoing, label: data.label ?? "",
     abilityName: data.abilityName ?? "", sourceName: data.sourceName ?? "", note: data.note ?? "",
+    expiry: data.expiry ?? null,
   });
 }
 

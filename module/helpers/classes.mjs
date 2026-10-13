@@ -139,7 +139,44 @@ export const CLASS_INFO = {
   vagabond: {
     label: "Vagabond",
     basicAttackRange: 4,
-    relevantRules: [],
+    relevantRules: [
+      // The Vagabond's "Most relevant rules" (p.146). Dodge is a class trait card already.
+      {
+        name: "Blinded",
+        description:
+          "Max range of all abilities is 2. Very strong against ranged attackers and much weaker against melee attackers.",
+      },
+      {
+        name: "Dazed",
+        description:
+          "+1 curse on attacks. Makes attacks harder to hit, and effects such as exceed or crit even harder to activate.",
+      },
+      {
+        name: "Evasion",
+        description:
+          "Roll a d6 when targeted by an attack. On a 4+, the attack automatically misses. Check before the attack roll. It does nothing against effect damage or abilities. With dodge, missed attacks deal no damage at all.",
+      },
+      {
+        name: "Stealth",
+        description:
+          "Cannot be directly targeted except from an adjacent space. Breaks on using any ability other than dash or standard move.",
+      },
+      {
+        name: "Dash",
+        description:
+          "Special movement that ignores engagement.",
+      },
+      {
+        name: "Teleport",
+        description:
+          "Instantly move to a free space within range X. You don't have to be able to see a space to teleport there.",
+      },
+      {
+        name: "Summon",
+        description:
+          "A character controlled by its Summoner. Summons are intangible and do not count as foes or allies for the purposes of abilities. Summons do not take turns: they have a summon action that they use on their summoner's turn, or a summon effect that is always active, and otherwise don't take actions or move on their own. Summons are removed from the battlefield when their summoner is defeated.",
+      },
+    ],
     specialMechanic: {
       name: "Finishing Blow",
       description:
@@ -174,7 +211,39 @@ export const CLASS_INFO = {
   mendicant: {
     label: "Mendicant",
     basicAttackRange: 5,
-    relevantRules: [],
+    relevantRules: [
+      // The Mendicant's "Most relevant rules" (p.173).
+      {
+        name: "Sealed",
+        description:
+          "Character cannot inflict statuses while sealed.",
+      },
+      {
+        name: "Pacified",
+        description:
+          "Character deals half damage. Breaks on taking damage from a foe's ability.",
+      },
+      {
+        name: "Cure",
+        description:
+          "A character that's cured gains vigor 4, or a vigor surge if bloodied. Then, that character may save against all statuses, ending them on a success.",
+      },
+      {
+        name: "Aura X",
+        description:
+          "This ability is a continuous, ongoing effect that affects all characters within range X of a character, including that character. Characters are only affected by an aura while inside. The effects from auras can't be purged as long as foes remain inside.",
+      },
+      {
+        name: "Combo",
+        description:
+          "Actions with Combo have two versions, a base version and a combo version. When you use the base ability, gain a combo token. Any time you use a combo ability and have a token, you use the combo version instead, discarding the token. You can only have one combo token at once, and discard all tokens at the end of combat. Combo versions count as the same ability, so they can't be used in the same turn, but combos carry over between turns.",
+      },
+      {
+        name: "Mark",
+        description:
+          "Place your mark on a specific character. You can only place one mark at a time on each enemy or ally and each ability can only place one mark. If you place a new mark on a character with a mark from you, you can choose which to keep or which to discard.",
+      },
+    ],
     specialMechanic: {
       name: "Blessing",
       description:
@@ -208,7 +277,59 @@ export const CLASS_INFO = {
   wright: {
     label: "Wright",
     basicAttackRange: 6,
-    relevantRules: [],
+    relevantRules: [
+      // The Wright's "Most relevant rules" (p.205).
+      {
+        name: "Shattered",
+        description:
+          "Character cannot gain or benefit from Vigor.",
+      },
+      {
+        name: "Vulnerable",
+        description:
+          "All damage taken increased by 1. Adds up fast against multiple instances of low damage, and also increases all allies' damage.",
+      },
+      {
+        name: "Pierce",
+        description:
+          "Ignores armor, weak, and vigor.",
+      },
+      {
+        name: "Teleport",
+        description:
+          "Instantly move to a free space within range X.",
+      },
+      {
+        name: "Flying",
+        description:
+          "A flying character ignores all terrain types other than impassable terrain, and ignores engagement and obstruction.",
+      },
+      {
+        name: "Difficult terrain",
+        description:
+          "Costs +1 space of movement to exit.",
+      },
+      {
+        name: "Dangerous terrain",
+        description:
+          "Take 2 piercing damage when entering or exiting a space of dangerous terrain, but can only take this damage once per turn.",
+      },
+      {
+        name: "Impassable terrain",
+        description:
+          "Blocks movement of all kinds except phasing, and blocks line of sight. Could be something like a pillar, cliff, or a solid rock wall that goes to the ceiling.",
+      },
+      {
+        name: "Pit",
+        description:
+          "Counts as -1 height than its base space.",
+      },
+      {
+        name: "Objects",
+        description:
+          "Categorized by height, 1-3. Blocks movement. Provides cover if you're the same height. Blocks line of sight if you're smaller. Characters can move up and stand on top of objects. Costs +1 movement per difference in height to move on.",
+      },
+    ],
     specialMechanic: {
       name: "Aether",
       description:

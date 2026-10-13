@@ -53,7 +53,15 @@ export const INFLICTABLE = [
 ];
 const STATUS_ALT = INFLICTABLE.map(s => s.re).join("|");
 // Trailing "(?![a-z])" instead of "\b": "blinded+" must keep its "+".
-const MENTION_RE = new RegExp(`\\b(${STATUS_ALT})(\\+)?(?: of (?:you|them|it|(?:the |this )?[a-z]+))?(?![a-z])`, "gi");
+// "hatred+ of the closest foe" (Spite, Dark Knight): the whole object is part of the mention,
+// otherwise "foe" after it reads as "hatred foes" (an adjective).
+const MENTION_RE = new RegExp(`\\b(${STATUS_ALT})(\\+)?(?: of (?:you|them|it|the (?:closest|closet|nearest) (?:foe|enemy|character)|(?:the |this )?[a-z]+))?(?![a-z])`, "gi");
+/** "Hatred of the closest foe": gained by the subject of the clause, never inflicted. */
+const CLOSEST_RE = /\bof the (?:closest|closet|nearest)\b/i;
+/** "These effects continue until the end of their next turn." (Mock) — the duration of the sentence before. */
+const CONTINUE_RE = /^(?:these|those|the|this|all)\s+(?:effects?|statuses|status|conditions?)\s+(?:continues?|lasts?|persists?|remains?)\s+(until\s+(?:the\s+)?(?:start|end|beginning)\s+of\s+[^.,;]+)/i;
+/** "On elite and legend foes, this ability lasts two turns instead" (Mock) — one more turn on those targets. */
+const ELITE_EXTRA_RE = /\belite\s+(?:and|or)\s+legend\s+foes?\b[^.]*\blasts?\s+two\s+turns\b/i;
 const STATUS_BY_WORD = (w) => INFLICTABLE.find(s => new RegExp(`^(?:${s.re})$`, "i").test(w));
 
 /** Positive statuses the text grants ("you gain evasion", "allies gain sturdy") → "Gain" buttons. */
@@ -90,7 +98,7 @@ const IMPERATIVE_SELF_RE = /^\s*(?:then\s+|and\s+|you\s+(?:may|can|must)\s+|may\
 /** "Choose a foe in range 3 and become immobile" — the object of the imperative is not the subject of "become". */
 const CHOOSE_AND_SELF_RE = /\b(?:choose|pick|select|target|mark)\s+(?:a|an|one|two|the|up to \d+|any)?\s*(?:foes?|targets?|characters?|allies|ally|creatures?)\b[^,;]*\b(?:and|then)\s+(?:become|gain|are|have)\s*$/i;
 /** "until the end of your next turn" after a status mention. */
-const UNTIL_RE = /^\+?\s*(?:[a-z ,]*?)?\b(until\s+(?:the\s+)?(?:start|end|beginning)\s+of\s+[^.,;]+|for\s+the\s+rest\s+of\s+(?:the\s+)?combat|this\s+turn(?:\s+only)?)/i;
+const UNTIL_RE = /^\+?\s*(?:[a-z ,]*?)?\b(until\s+(?:the\s+)?(?:start|end|beginning)\s+of\s+[^.,;]*?\b(?:turns?|rounds?|combat|encounter)\b|for\s+the\s+rest\s+of\s+(?:the\s+)?combat|this\s+turn(?:\s+only)?)/i;
 
 /* Non-status effects worth a reminder chip on the card (kind "note"). */
 const NOTE_SHOVE_RE  = /\b((?:shove[sd]?|push(?:ed|es)?|pull(?:ed|s)?)\s+(?:(?:the|that|all|each|every|any|your|a|an|adjacent|target|targets|it|them|foes?|characters?|allies|ally|yourself|you|other|others|in\s+the\s+area)\s+)*(\d+)(?:\s+spaces?)?(?:\s+(?:towards?|away\s+from|in\s+any\s+direction|closer|directly\s+away)[^.,;]*)?)/gi;
@@ -295,6 +303,8 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
   const selfRe = _selfRe(sourceName);
   const out = [];
 
+  const eliteExtra = ELITE_EXTRA_RE.test(plainText(text)) ? 1 : 0;
+
   for (const block of blocks) {
     const section = block.label || label;
     const body = block.text;
@@ -315,7 +325,11 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
 
     sentences.forEach((sentence, si) => {
       const lower = sentence.toLowerCase();
-      if (SKIP_SENTENCE_RE.test(lower)) return;
+      // A stance describing itself never inflicts; the one thing kept is the
+      // Hatred it makes you gain (Dark Knight: "While in this stance: You gain
+      // hatred+ of the closest foe to you at the start of your turn…").
+      const stanceOnly = SKIP_SENTENCE_RE.test(lower);
+      if (stanceOnly && !/\bhatred\+?\s+of the (?:closest|closet|nearest)\b/.test(lower)) return;
       const saveM = lower.match(SAVE_TRIGGER_RE);
       const savePos = saveM ? saveM.index : -1;
       const hasSave = savePos >= 0;
@@ -336,11 +350,19 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
       }
       const segOf = (i) => segments.find(s => i >= s.start && i < s.end) ?? segments[segments.length - 1];
 
+      // "These effects continue until the end of their next turn." gives the
+      // previous sentence's statuses the duration they didn't write themselves.
+      const cont = CONTINUE_RE.exec(sentence);
+      if (cont) {
+        for (const e of blockEntries) if (e._sentenceIndex === si - 1 && (!e.kind || e.kind === "gain") && !e.until) e.until = cont[1].trim();
+      }
+
       let prev = null;   // previous mention in this sentence (for chains)
       MENTION_RE.lastIndex = 0;
       for (const m of sentence.matchAll(MENTION_RE)) {
         const def = STATUS_BY_WORD(m[1]);
         if (!def) continue;
+        if (stanceOnly && !(def.id === "hatred" && CLOSEST_RE.test(m[0]))) continue;
         const start = m.index, end = start + m[0].length;
         const after = sentence.slice(end);
         const ongoing = !!m[2];
@@ -355,7 +377,8 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           // Adjective ("dazed foes", "weakened or slashed characters") / glossary ("Dazed: …").
           if (ADJ_AFTER_RE.test(after) || /^\s*:/.test(after)) skip = true;
           const seg = segOf(start);
-          const before = sentence.slice(seg.start, start);
+          // "While in this stance: You gain…" — the stance lead-in is not a condition on the gain.
+          const before = sentence.slice(seg.start, start).replace(stanceOnly ? /^.*\bthis\s+stance\s*:\s*/i : /$^/, "");
           const beforeLower = before.toLowerCase();
           // Conditions / descriptions rather than inflictions.
           if (!skip && SKIP_BEFORE_RE.test(beforeLower)) skip = true;
@@ -374,6 +397,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
             if (allyAt >= 0 && allyAt > otherAt && allyAt > selfAt) { skip = true; gainTarget = grantVerb ? "ally" : ""; }
             const prefixOther = _lastIndex(OTHER_SUBJECT_RE, sentence.slice(0, start).replace(selfRe, x => " ".repeat(x.length)));
             if (!skip && CHOOSE_AND_SELF_RE.test(before)) { skip = true; gainTarget = "self"; }
+            else if (!skip && def.id === "hatred" && CLOSEST_RE.test(m[0]) && IMPERATIVE_SELF_RE.test(before)) { skip = true; gainTarget = "self"; }
             else if (!skip && !hasSave && prefixOther < 0 && IMPERATIVE_SELF_RE.test(before)) { skip = true; gainTarget = "self"; }
           }
           // Save gating.
@@ -410,6 +434,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
 
       // Positive statuses granted to the user or to allies ("gain evasion until
       // the start of your next turn", "allies in range 2 gain sturdy").
+      if (stanceOnly) return;
       GRANT_RE.lastIndex = 0;
       for (const m of sentence.matchAll(GRANT_RE)) {
         const def = GRANT_BY_WORD(m[1]);
@@ -506,6 +531,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
       const kind = e.kind ?? "";
       if (blockEntries.some(o => o !== e && (o.kind ?? "") === kind && o.id === e.id && o.label === e.label && o.when === e.when && o.ongoing === e.ongoing && (o.target ?? "") === (e.target ?? "") && blockEntries.indexOf(o) < blockEntries.indexOf(e))) continue;
       const { skip, _sentenceIndex, end, gainTarget, _targetsAll, ...clean } = e;
+      if (clean.until && eliteExtra) clean.eliteExtra = eliteExtra;
       out.push(clean);
     }
   }
@@ -708,9 +734,10 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
           data-action="inflictStatus" data-kind="${isDmg ? "save-damage" : "inflict"}" data-status-id="${esc(e.id)}" data-label="${esc(e.label)}" data-ongoing="${e.ongoing ? "true" : "false"}"
           data-when="${esc(e.when)}" data-section="${esc(e.section)}" data-save-boons="${e.saveBoons}" data-save-curses="${e.saveCurses}"
           data-auto-fail="${esc(e.autoFailIf)}" data-sentence="${esc(e.sentence)}" data-ability="${esc(abilityName)}"
+          data-until="${esc(e.until ?? "")}" data-elite-extra="${Number(e.eliteExtra) || 0}"
           data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
           data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"${dmgAttrs}${pairAttr}
-          title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}&#10;${esc(e.sentence)}">${label}</button>`;
+          title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}${e.until ? ` — ends ${esc(e.until)}` : ""}&#10;${esc(e.sentence)}">${label}${e.until ? " <small>⏳</small>" : ""}</button>`;
       }).join("");
       return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${btns}</span>`;
     }).join("");
@@ -747,6 +774,7 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
         return `<button type="button" class="icon-chat-btn icon-chat-btn--status icon-chat-btn--gain${self ? "" : " icon-chat-btn--gain-ally"}${e.ongoing ? " icon-chat-btn--status-ongoing" : ""}"
           data-action="inflictStatus" data-kind="gain" data-status-id="${esc(e.id)}" data-label="${esc(e.label)}" data-ongoing="${e.ongoing ? "true" : "false"}"
           data-when="always" data-section="${esc(e.section)}" data-save-boons="0" data-save-curses="0" data-auto-fail="" data-sentence="${esc(e.sentence)}" data-ability="${esc(abilityName)}"
+          data-until="${esc(e.until ?? "")}" data-elite-extra="${Number(e.eliteExtra) || 0}"
           data-source-uuid="${esc(source.uuid)}" data-source-token="${esc(sourceTokenId)}"
           data-target-uuid="${self ? esc(source.uuid) : ""}" data-target-token="${self ? esc(sourceTokenId) : ""}"
           title="${esc(title)}&#10;${esc(e.sentence)}">${self ? "" : "👥 "}${esc(e.label)}${e.ongoing ? "+" : ""}${until}</button>`;

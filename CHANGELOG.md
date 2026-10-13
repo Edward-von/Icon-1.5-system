@@ -1,5 +1,64 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 13 ottobre 2026 — Voci rimaste e resto del documento di Maar (versione 1.20.0, Sessioni E e F)
+
+### Voci emerse lavorando (Sessione E)
+
+- **Hatred+ con una durata**: Mock dava Slashed+, Weakened+ e Hatred+ "until the end of their next turn", Spite la
+  Hatred+ "until the end of your next turn", ma restavano finché qualcuno non le toglieva a mano → la durata scritta
+  nella frase dopo ("These effects continue…") non arrivava ai bottoni, e nessuno contava i turni → ora i bottoni
+  portano la durata (⏳) e lo status, applicato, conta da solo i turni di chi lo subisce (o di chi usa l'abilità, se
+  il testo dice "your") e sparisce al momento giusto, con una riga in chat. Su elite e legend Mock dura un turno in più
+  (p.141). Vale per ogni status con "until the end / start of … turn", anche i Gain ("gain evasion until the start of
+  your next turn").
+- **Hatred+ guadagnata su se stessi**: Spite e la stance Dark Knight ("gain hatred+ of the closest foe") non avevano
+  un bottone → il parser leggeva "foe" come aggettivo e scartava la frase, e le frasi delle stance erano saltate in
+  blocco → ora c'è il bottone Gain; la finestra "Hatred of…" mette per primo il foe più vicino. Il tratto Spite, da
+  💬, mostra i suoi Gain (solo quelli: gli altri status dei tratti dei PG sono condizioni).
+- **Attacco ad area senza 📐**: premendo ⚔ senza aver piazzato l'area, si piazzava sempre quella dei tag → ora si apre
+  la stessa scelta del 📐 (base, talento, combo, charge).
+- **Domain su Sleight of Hand**: il promemoria scattava per la regola delle wild card ("…such as creating terrain
+  effects", che è un esempio di cosa NON fanno) → frase esclusa. Chaos Tarot lo tiene: col 3 crea terreno difficile
+  (p.250: "when you create a terrain effect").
+- **Most relevant rules di Vagabond, Mendicant, Wright**: le liste erano vuote → copiate dalle pagine del manuale
+  (p.146, p.173, p.205), senza ripetere i tratti di classe che hanno già la loro card.
+- **Godly Smite**: il dado mantra si metteva e si spostava a mano → ora parte da 1 a inizio combat e sale di 1 a ogni
+  round fino a 6 (p.191).
+- **Outsider**: a fine interlude può prendere un oggetto dai kit degli altri bond del party (p.76) → bottone
+  "+ From the party's kits" nel Loose Gear.
+- **Summon**: tutti con l'omino grigio → ogni summon e oggetto ha un'icona di Foundry adatta (fuoco, zampa, ingranaggio…),
+  anche quelli trascinati dal compendio Summons. Nuova macro "ICON: Copy Foe Summons" per i foe importati prima della
+  1.8.0. Un giocatore che possiede il foe (co-GM) può trascinarne i summon: li piazza il GM.
+- **Template**: la scheda Legend non accettava i template → ora accetta quelli di fazione e speciali (Titan Armament sui
+  Jotunn), con i chip e la ✕ come sui foe; i job no. Nel compendio Foe Templates ci sono anche i 115 Unique, in
+  "<Fazione> / Uniques" e "Uniques / Elites".
+
+### Risposte di Edoardo alle domande per Maar
+
+- **Trofei**: "Used this combat" e "In effect this combat" si spengono da soli a End Encounter ("this expedition" resta).
+- **Gear kit, usi contati**: ogni oggetto del kit ha i suoi usi: "5 fire stones" ne ha 5, "Three free meals" 3, gli
+  altri 1; Shift+clic dà una quantità a mano a qualunque oggetto. Clic = un uso, "−" lo ridà, a zero l'oggetto è
+  barrato; New expedition li ricarica tutti.
+- **Icone dei foe**: un'icona per fazione su tutti i 362 foe del compendio (e sui job template), con il token colorato
+  della fazione in toni spenti. I foe già importati nei mondi non cambiano: si reimportano.
+
+### Documento di Maar (Sessione F)
+
+- **Bless del Mendicant**: niente modo di dare la blessing a un altro PG → bottone "🙏 Bless…" sul tratto: si sceglie
+  il personaggio e riceve una carica Blessed (via GM se è di un altro giocatore). Nessuna automazione su da dove
+  vengono le blessing, come chiesto.
+- **Combo dei foe "1 poi 2"**: niente teneva il conto della sequenza → la parte che tocca è marcata "next", le altre
+  sbiadite; usarne una (attacco, danno o 💬) fa avanzare la sequenza, che ricomincia dopo l'ultima parte (p.290).
+  Fuori ordine o due parti nello stesso turno: solo un avviso. Clic sul chip "Combo N" per correggere; si azzera a
+  fine combat.
+- **Aree della guida sulla mappa**: nella tab Areas, ogni clip ha "📐 Try it on the map", che piazza quell'area dal
+  token selezionato.
+- **Rimozione dell'area**: la riga dell'area sulla card era piccola e il bottone restava dopo aver tolto l'area → testo
+  più grande, bottone "🗑 Remove area", e quando l'area sparisce (bottone, Canc, inizio turno) la card dice "area
+  removed".
+- **Larghezza della Line**: le abilità Enochian che allargano la linea non avevano modo di farlo → durante il
+  piazzamento di una Line, + e − cambiano la larghezza (1–5).
+
 ## 12 ottobre 2026 — Gear kit sulla scheda (versione 1.19.0, Sessione D)
 
 ### Richiesta di Maar

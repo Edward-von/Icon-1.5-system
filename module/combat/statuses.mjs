@@ -185,7 +185,12 @@ export async function rollEndOfTurnSaves(combatant) {
   // ongoing "Hatred+" stays: ongoing effects can't be "removed, or ignored
   // until whatever is causing them is lifted" (p.94); it goes by hand from the
   // Conditions tab, or at the end of the encounter.
-  try { if (!getHatred(actor)?.effect?.getFlag("icon-system", "ongoing")) await endHatred(actor, "end of turn"); }
+  // A Hatred with its own duration ("until the end of their next turn") is
+  // counted down by status-expiry.mjs instead.
+  try {
+    const h = getHatred(actor)?.effect;
+    if (h && !h.getFlag("icon-system", "ongoing") && !h.getFlag("icon-system", "expiry")) await endHatred(actor, "end of turn");
+  }
   catch (err) { console.warn("[ICON | statuses] could not end Hatred", err); }
 
   // Saves apply ONLY to negative statuses. Positive effects (isBoon — Defiance,

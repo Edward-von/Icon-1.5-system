@@ -102,6 +102,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 /* -------------------------------------------------- */
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
 import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
+import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
@@ -240,6 +241,7 @@ Hooks.once("init", () => {
 
   // ---- Foe / legend summons dragged from the sheet onto the canvas ----
   registerFoeSummonHooks();
+  registerSummonImageHook();
 
   // ---- Campaign clocks dragged from the clock board onto the canvas ----
   registerClockTokenHooks();
@@ -848,10 +850,18 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
 });
 
 /**
- * "🗑 area" button on attack cards: removes the Blast / Line / Arc / Burst
- * template the roll was made with (author or GM only — others just get a
- * disabled button).
+ * "🗑 Remove area" button on attack cards: removes the Blast / Line / Arc /
+ * Burst template the roll was made with (author or GM only — others just get
+ * a disabled button). Once the area is gone — from this button, Delete on the
+ * map or the end of the turn — the button goes away and the line says so
+ * (Maar: it stayed there, small, after the area was removed).
  */
+function _markAreaRemoved(btn) {
+  const row = btn.closest(".icon-chat-card__area");
+  row?.classList.add("icon-chat-card__area--removed");
+  btn.replaceWith(Object.assign(document.createElement("span"), { className: "icon-chat-card__area-gone", textContent: "area removed" }));
+}
+
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   const buttons = html.querySelectorAll('[data-action="removeAreaTemplate"]');
   if (!buttons.length) return;
@@ -860,14 +870,19 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     btn.dataset.iconBound = "true";
     const scene = game.scenes?.get(btn.dataset.sceneId);
     const doc   = scene?.templates?.get(btn.dataset.templateId);
-    if (!doc) { btn.disabled = true; btn.title = "Template already removed"; btn.style.opacity = "0.5"; return; }
+    if (!doc) { _markAreaRemoved(btn); return; }
     if (!(doc.isOwner || game.user.isGM)) { btn.disabled = true; btn.title = "Only the placer or the GM can remove it"; btn.style.opacity = "0.5"; return; }
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault(); ev.stopPropagation();
       try { await doc.delete(); } catch (err) { console.warn("ICON 1.5 | area template removal failed", err); return; }
-      btn.disabled = true; btn.textContent = "✓ removed"; btn.style.opacity = "0.5";
     });
   });
+});
+
+// The area is gone (any way): every card that offered to remove it, in the
+// chat log and in popped-out chat windows, drops its button.
+Hooks.on("deleteMeasuredTemplate", (doc) => {
+  for (const btn of document.querySelectorAll(`[data-action="removeAreaTemplate"][data-template-id="${doc.id}"]`)) _markAreaRemoved(btn);
 });
 
 /* ================================================== */

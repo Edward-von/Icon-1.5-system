@@ -8,7 +8,7 @@
  * the next expedition ("we can reasonably assume you can restock", p.35).
  */
 const {
-  StringField, BooleanField, ArrayField, HTMLField,
+  StringField, BooleanField, ArrayField, HTMLField, SchemaField, NumberField,
 } = foundry.data.fields;
 
 export class GearKitData extends foundry.abstract.TypeDataModel {
@@ -28,6 +28,15 @@ export class GearKitData extends foundry.abstract.TypeDataModel {
       custom:            new BooleanField({ required: true, initial: false }),
       // Items used up or lost this expedition (by name).
       used:              new ArrayField(new StringField({ initial: "" }), { initial: [] }),
+      // Uses counted per item (Edoardo, 13 Oct 2026): "5 fire stones" has 5
+      // uses; any item can be given a quantity by hand. `spent` resets on a
+      // new expedition, `max` (when set by hand) stays. Items not listed here
+      // count 1 use, or the number their name starts with (gear.mjs).
+      counts:            new ArrayField(new SchemaField({
+        name:  new StringField({ required: true, initial: "" }),
+        spent: new NumberField({ required: true, initial: 0, min: 0, integer: true }),
+        max:   new NumberField({ required: true, initial: 0, min: 0, integer: true }),   // 0 = from the name
+      }), { initial: [] }),
     };
   }
 }

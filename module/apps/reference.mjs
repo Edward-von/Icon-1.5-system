@@ -18,6 +18,7 @@
  */
 
 import { areaDiagramsHTML, startAreaClips } from "./area-diagrams.mjs";
+import { areaFromTags, placeAreaTemplate } from "../canvas/area-templates.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 const _log = (...a) => console.debug("[ICON | QuickGuide]", ...a);
@@ -435,7 +436,27 @@ export class QuickGuide extends HandlebarsApplicationMixin(ApplicationV2) {
     classes: ["icon", "sheet", "icon-quick-guide"],
     position: { width: 720, height: 720 },
     window: { title: "ICON 1.5 — Quick Guide", icon: "fa-solid fa-book-open", resizable: true },
+    actions: { tryArea: QuickGuide.#onTryArea },
   };
+
+  /**
+   * "📐 Try it on the map" under an area clip (Maar): the same placement as an
+   * ability's 📐, from the selected token (or the user's character), so a
+   * player can see whether the area fits before using it. The guide steps
+   * aside while placing; the try is an ordinary area, removed like any other.
+   */
+  static async #onTryArea(event, target) {
+    const tags = String(target.dataset.tags ?? "").split(",").filter(Boolean);
+    const area = areaFromTags(tags);
+    if (!area) return;
+    const token = canvas?.tokens?.controlled?.[0] ?? game.user?.character?.getActiveTokens?.()?.[0] ?? null;
+    const actor = token?.actor ?? null;
+    if (!actor) { ui.notifications.warn("Select your token on the map first: the area is placed from it."); return; }
+    _log(`tryArea — ${area.label} from "${actor.name}"`);
+    await this.minimize();
+    try { await placeAreaTemplate({ actor, area, abilityName: `Try: ${area.label}`, abilityKey: "guide-try" }); }
+    finally { this.maximize(); }
+  }
 
   static PARTS = {
     header:   { template: "systems/icon-system/templates/apps/quick-guide/header.hbs" },

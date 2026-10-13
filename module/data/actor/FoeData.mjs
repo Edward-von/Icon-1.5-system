@@ -156,6 +156,22 @@ export function summonSchema() {
 
 /* ---------- main model ---------- */
 
+/**
+ * Foe templates applied from the "Foe Templates" compendium
+ * (module/actor/foe-templates.mjs), shared by foes and legends.
+ */
+export function appliedTemplatesField() {
+  return new ArrayField(new SchemaField({
+    slot:    new StringField({ required: true, initial: "" }),
+    kind:    new StringField({ required: true, initial: "" }),
+    name:    new StringField({ required: true, initial: "" }),
+    uuid:    new StringField({ required: true, initial: "" }),
+    added:   new foundry.data.fields.ObjectField(),   // { traits: [names], actions: [...], interrupts: [...], roundActions: [...] }
+    removed: new foundry.data.fields.ObjectField(),   // { traits: [blocks], actions: [blocks] } — old class baseline
+    prev:    new foundry.data.fields.ObjectField(),   // system fields as they were before
+  }), { initial: [] });
+}
+
 export class FoeData extends foundry.abstract.TypeDataModel {
 
   static defineSchema() {
@@ -217,15 +233,7 @@ export class FoeData extends foundry.abstract.TypeDataModel {
       // makes two templates exclusive ("faction", "culture", "job", or
       // "special:<name>" for the ones that stack, like Imperial Officer).
       // Never rendered as form inputs, so the whole-array submit trap doesn't reach it.
-      templates: new ArrayField(new SchemaField({
-        slot:    new StringField({ required: true, initial: "" }),
-        kind:    new StringField({ required: true, initial: "" }),
-        name:    new StringField({ required: true, initial: "" }),
-        uuid:    new StringField({ required: true, initial: "" }),
-        added:   new foundry.data.fields.ObjectField(),   // { traits: [names], actions: [...], interrupts: [...], roundActions: [...] }
-        removed: new foundry.data.fields.ObjectField(),   // { traits: [blocks], actions: [blocks] } — old class baseline
-        prev:    new foundry.data.fields.ObjectField(),   // system fields as they were before
-      }), { initial: [] }),
+      templates: appliedTemplatesField(),
 
       defeat:     new HTMLField({ required: true, initial: "" }),
       loot:        new HTMLField({ required: true, initial: "" }),

@@ -11,10 +11,14 @@
  *     summoner (the Summon sheet rolls with the summoner's [D] and fray);
  *   - places an unlinked token where it was dropped, so several copies
  *     (Soul Sparks, Blades of Agony, Automata) each have their own HP.
- * Creating actors is a GM job; a player dropping a chip gets a warning.
+ * Creating actors is a GM job: a player who owns the foe (a co-GM running
+ * the foes) sends the drop to the active GM over the system socket, and the
+ * GM places it. Other players get a warning.
  */
+import { summonImage } from "../helpers/summon-images.mjs";
 
 const _log = (...a) => console.debug("[ICON | FoeSummons]", ...a);
+const SOCKET = "system.icon-system";
 
 export const FOE_SUMMON_DRAG = "IconFoeSummon";
 const FOLDER_NAME = "Foe Summons";
@@ -33,7 +37,7 @@ async function summonFolder() {
 
 /** Summon actor data for summon `sm` of `owner`. */
 function summonActorData(owner, sm, key, folderId) {
-  const img = "icons/svg/mystery-man.svg";
+  const img = summonImage(sm.name, { descriptor: sm.descriptor, kind: sm.kind });
   // A foe still in its compendium has no world actor to point at; a token's synthetic actor shares its base id.
   const summoner = owner.pack ? "" : owner.id;
   return {
@@ -63,10 +67,22 @@ function summonActorData(owner, sm, key, folderId) {
 }
 
 /** Drop handler body: put summon `data.index` of actor `data.actorUuid` at (data.x, data.y). */
-export async function placeFoeSummon(data) {
-  if (!canvas?.scene) return;
-  if (!game.user.isGM) { ui.notifications.warn("Only the GM can place a foe's summons."); return; }
+export async function placeFoeSummon(data, { requester = null } = {}) {
+  const scene = data.sceneId ? game.scenes.get(data.sceneId) : canvas?.scene;
+  if (!scene) return;
   const owner = await fromUuid(data.actorUuid);
+  if (!game.user.isGM) {
+    // A player who runs this foe: the active GM creates the actor and token.
+    if (!owner?.isOwner) { ui.notifications.warn("Only the GM, or a player who owns this foe, can place its summons."); return; }
+    if (!game.users.activeGM) { ui.notifications.warn("No GM is connected — can't place the summon right now."); return; }
+    game.socket.emit(SOCKET, { type: "placeFoeSummon", userId: game.user.id, data: { ...data, sceneId: scene.id } });
+    ui.notifications.info("Summon sent to the GM to place.");
+    return;
+  }
+  if (requester && !owner?.testUserPermission?.(requester, "OWNER")) {
+    console.warn(`[ICON | FoeSummons] ${requester.name} doesn't own "${owner?.name}" — summon not placed`);
+    return;
+  }
   const sm = owner?.system?.summons?.[data.index];
   _log(`place — owner: "${owner?.name}" | summon[${data.index}]: "${sm?.name}" | at ${data.x},${data.y}`);
   if (!sm) { ui.notifications.warn("That summon is no longer on the foe's sheet."); return; }
@@ -81,13 +97,15 @@ export async function placeFoeSummon(data) {
   }
 
   // The drop point is the cursor: centre the token on it, then snap to the grid.
-  const grid = canvas.grid.size;
+  // The scene's own grid: a relayed drop may be on a scene the GM isn't viewing.
+  const sceneGrid = scene.grid;
+  const grid = sceneGrid.size;
   const size = sm.size || 1;
   const corner = { x: data.x - (size * grid) / 2 + grid / 2, y: data.y - (size * grid) / 2 + grid / 2 };
-  const p = canvas.grid.getTopLeftPoint(corner);
+  const p = sceneGrid.getTopLeftPoint(corner);
   const td = await actor.getTokenDocument({ x: p.x, y: p.y });
-  await canvas.scene.createEmbeddedDocuments("Token", [td.toObject()]);
-  ui.notifications.info(`${sm.name} placed (${owner.name}).`);
+  await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+  ui.notifications.info(`${sm.name} placed (${owner.name})${requester ? ` for ${requester.name}` : ""}.`);
 }
 
 /** Canvas drop hook: our chips carry `type: "IconFoeSummon"`; everything else goes on to core. */
@@ -96,5 +114,12 @@ export function registerFoeSummonHooks() {
     if (data?.type !== FOE_SUMMON_DRAG) return;
     placeFoeSummon(data).catch(err => { console.error("ICON 1.5 | placing a foe summon failed", err); ui.notifications.error(`Could not place the summon: ${err.message}`); });
     return false;
+  });
+
+  // The GM side of a player's drop (see placeFoeSummon). Only the active GM acts.
+  game.socket?.on(SOCKET, (msg) => {
+    if (msg?.type !== "placeFoeSummon" || !game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
+    const requester = game.users.get(msg.userId) ?? null;
+    placeFoeSummon(msg.data ?? {}, { requester }).catch(err => console.error("ICON 1.5 | placing a relayed foe summon failed", err));
   });
 }

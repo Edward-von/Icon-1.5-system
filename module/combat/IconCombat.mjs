@@ -25,7 +25,10 @@
  *   • Both reset under specific conditions (combat end / camp).
  */
 
+import { setOutCombatPowerDice, tickRoundPowerDice } from "../data/item/power-die.mjs";
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
+import { tickStatusExpiry } from "./status-expiry.mjs";
+import { clearCombo } from "./foe-combo.mjs";
 import { deleteAreaTemplates, clearExpiredAreaTemplates } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
@@ -420,6 +423,12 @@ export class IconCombat extends Combat {
     // on the Legend sheet before the fight, and the sheet rescales
     // hp.max from the canonical hp.baseline.
     await this.resetActivations();
+    // "You start combat with a mantra power die … that starts at 1" (Godly Smite, p.191).
+    for (const c of this.combatants) {
+      if (c.actor?.type !== "icon") continue;
+      try { await setOutCombatPowerDice(c.actor); }
+      catch (err) { console.warn("[ICON | IconCombat] could not set out the combat power dice", err); }
+    }
     this._playCombatSound("startEncounter");
     const updateData = { round: 1, turn: null };
     Hooks.callAll("combatStart", this, updateData);
@@ -490,6 +499,18 @@ export class IconCombat extends Combat {
       if (actor.getFlag(FLAG_NS, "interruptUses") != null) {
         await actor.unsetFlag(FLAG_NS, "interruptUses");
       }
+    }
+
+    /* --- Power dice that "tick up by 1 at the start of every round" (Godly Smite, p.191) --- */
+    for (const combatant of this.combatants) {
+      if (combatant.actor?.type !== "icon") continue;
+      try {
+        const ticked = await tickRoundPowerDice(combatant.actor);
+        if (ticked.length) await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor: combatant.actor }),
+          content: `<div class="icon-chat-card icon-chat-card--status-applied">${ticked.map(t => `<strong>${escapeHTML(t.name)}</strong> power die ticks up to <strong>${t.value}</strong>`).join("<br>")} <small>— start of round ${this.round + 1}</small></div>`,
+        });
+      } catch (err) { console.warn("[ICON | IconCombat] could not tick the round power dice", err); }
     }
 
     /* --- Refill activations for the new round --- */
@@ -590,12 +611,20 @@ export class IconCombat extends Combat {
           .filter(i => (i.system?.powerDie?.value ?? 0) > 0)
           .map(i => ({ _id: i.id, "system.powerDie.value": 0 }));
         if (dieResets.length) await combatant.actor.updateEmbeddedDocuments("Item", dieResets);
+        // Trophies: "Used this combat" (1/battle) and "In effect this combat"
+        // end with it; "In effect this expedition" stays (p.242).
+        const trophyResets = combatant.actor.items
+          .filter(i => i.type === "trophy" && (i.system.usedThisCombat || (i.system.active && i.system.usesUnit === "combats")))
+          .map(i => ({ _id: i.id, "system.usedThisCombat": false, ...(i.system.usesUnit === "combats" ? { "system.active": false } : {}) }));
+        if (trophyResets.length) await combatant.actor.updateEmbeddedDocuments("Item", trophyResets);
       }
     }
 
-    /* --- Hatred and marks don't outlive the encounter (p.103-104) --- */
+    /* --- Hatred and marks don't outlive the encounter (p.103-104); foe combo sequences start over --- */
     for (const combatant of this.combatants) {
       if (!combatant.actor) continue;
+      try { await clearCombo(combatant.actor); }
+      catch (err) { console.warn("[ICON | IconCombat] could not reset the combo sequence", err); }
       try { await clearCombatEffects(combatant.actor); }
       catch (err) { console.warn("[ICON | IconCombat] could not clear marks/hatred", err); }
     }
@@ -814,6 +843,10 @@ export function registerCombatHooks() {
         const prevId = options._iconPrevCombatantId ?? null;
         const prev   = prevId ? combat.combatants.get(prevId) : null;
         if (prev?.actor) {
+          // Statuses that last "until the end of <their> next turn" end first,
+          // so nobody saves against something that just ran out.
+          try { await tickStatusExpiry(combat, prev.actor, "end"); }
+          catch (err) { console.warn("[ICON | IconCombat] status expiry (end) failed", err); }
           await rollEndOfTurnSaves(prev);
           await applyEndOfTurnEffects(prev);
           // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
@@ -838,6 +871,12 @@ export function registerCombatHooks() {
       if (turnChanged && current?.actor) {
         /* Record which side acted last (advisory alternation). */
         await combat.setFlag(FLAG_NS, FLAG_LAST, IconCombat.isPC(current) ? "pc" : "npc");
+
+        /* Statuses that last "until the start of <their> next turn". Not on an undo. */
+        if (!options._iconSkipEndOfTurn) {
+          try { await tickStatusExpiry(combat, current.actor, "start"); }
+          catch (err) { console.warn("[ICON | IconCombat] status expiry (start) failed", err); }
+        }
 
         /* The areas this character placed on its last turn have done their
          * work: clear them (auras and terrain effects stay). Not on an undo. */

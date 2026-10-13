@@ -304,10 +304,14 @@
             {{#if (icon-or kit.always kit.carried)}}
               <div class="icon-gear-kit__items">
                 {{#each kit.items as |it|}}
-                  <button type="button" class="icon-gear-item {{#if it.used}}icon-gear-item--used{{/if}}"
-                          data-action="gearItemUsed" data-item-id="{{kit.id}}" data-name="{{it.name}}"
-                          title="{{#if it.used}}Used up or lost — click to get it back{{else}}Click when it's used up or lost (back next expedition){{/if}}"
-                          {{#unless ../../isEditable}}disabled{{/unless}}>{{it.name}}</button>
+                  <span class="icon-gear-item__wrap">
+                    <button type="button" class="icon-gear-item {{#if it.used}}icon-gear-item--used{{/if}}"
+                            data-action="gearItemUsed" data-item-id="{{kit.id}}" data-name="{{it.name}}"
+                            title="{{#if it.used}}Used up or lost — click to get it back{{else}}{{#if it.counted}}Click to use one ({{it.left}} of {{it.max}} left){{else}}Click when it's used up or lost{{/if}}{{/if}} · back next expedition · Shift+click: set how many uses it has"
+                            {{#unless ../../isEditable}}disabled{{/unless}}>{{it.name}}{{#if it.counted}} <span class="icon-gear-item__count">{{it.left}}/{{it.max}}</span>{{/if}}</button>
+                    {{#if it.counted}}{{#if it.spent}}{{#if ../../isEditable}}<button type="button" class="icon-gear-item__back" data-action="gearItemGiveBack"
+                            data-item-id="{{kit.id}}" data-name="{{it.name}}" title="Give back one use">−</button>{{/if}}{{/if}}{{/if}}
+                  </span>
                 {{/each}}
               </div>
             {{else}}
@@ -336,6 +340,10 @@
             <button type="button" class="icon-btn icon-btn--add" data-action="addLooseGear">
               <i class="fas fa-plus"></i> Gear
             </button>
+            {{#if gear.isOutsider}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="outsiderGear"
+                      title="End of an interlude: take one piece of gear from the kits of another bond in your party (p.76)">+ From the party's kits</button>
+            {{/if}}
           {{/if}}
         </div>
         {{#each system.narrative.looseGear as |item i|}}

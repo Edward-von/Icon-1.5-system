@@ -108,13 +108,16 @@ export function getHatred(actor) {
  * targets first) plus a free-text fallback. Resolves { name, tokenId,
  * actorUuid } or null when cancelled.
  */
-export async function promptHatredTarget(actor) {
+export async function promptHatredTarget(actor, { closest = false } = {}) {
   const tokens   = _sceneTokens({ excludeActorId: actor?.id });
   const targeted = new Set(Array.from(game.user?.targets ?? []).map(t => t.id));
-  const sorted   = [...tokens].sort((a, b) => (targeted.has(b.id) - targeted.has(a.id)) || a.name.localeCompare(b.name));
-  const options  = sorted.map((t, i) => `<option value="${escapeHTML(t.id)}" ${i === 0 && targeted.size ? "selected" : ""}>${escapeHTML(t.name)}${targeted.has(t.id) ? " 🎯" : ""}</option>`).join("");
+  // "Hatred of the closest foe" (Spite, Dark Knight): the nearest hostile token comes first.
+  const near     = closest ? _closestFoes(actor, tokens) : [];
+  const sorted   = [...tokens].sort((a, b) => (near.includes(b) - near.includes(a)) || (targeted.has(b.id) - targeted.has(a.id)) || a.name.localeCompare(b.name));
+  const preselect = near.length || targeted.size;
+  const options  = sorted.map((t, i) => `<option value="${escapeHTML(t.id)}" ${i === 0 && preselect ? "selected" : ""}>${escapeHTML(t.name)}${near.includes(t) ? " (closest)" : ""}${targeted.has(t.id) ? " 🎯" : ""}</option>`).join("");
   const content = `
-    <p style="margin:0 0 6px"><strong>${escapeHTML(actor?.name ?? "")}</strong> gains <strong>Hatred of…</strong> (p.104: half damage against anyone else, ends at the end of their turn).</p>
+    <p style="margin:0 0 6px"><strong>${escapeHTML(actor?.name ?? "")}</strong> gains <strong>Hatred of…</strong> (p.104: half damage against anyone else, ends at the end of their turn).${near.length > 1 ? " Several foes are equally close: you choose." : ""}</p>
     ${sorted.length ? `<label style="display:block;margin-bottom:6px">Character on the map:
       <select name="token" style="width:100%">${options}<option value="">— other (type below) —</option></select></label>` : ""}
     <label style="display:block">Name: <input type="text" name="name" placeholder="e.g. the demon" style="width:100%"></label>`;
@@ -140,12 +143,31 @@ export async function promptHatredTarget(actor) {
 }
 
 /**
- * Give `actor` Hatred of `target` ({ name, tokenId?, actorUuid? }). Replaces
- * an existing Hatred (you hate one character at a time).
+ * The hostile tokens nearest to `actor`'s token (ties all returned: "if
+ * multiple foes are equidistant, you can choose"). Hostile = the opposite
+ * disposition; with no token on the map, nothing.
  */
-export async function applyHatred(actor, target, { ongoing = false, silent = false } = {}) {
+function _closestFoes(actor, tokens) {
+  const own = actor?.getActiveTokens?.()?.[0];
+  if (!own || !canvas?.grid) return [];
+  const foes = tokens.filter(t => t.document.disposition !== own.document.disposition && t.document.disposition !== 0);
+  let best = Infinity, out = [];
+  for (const t of foes) {
+    const d = canvas.grid.measurePath([own.center, t.center]).distance;
+    if (d < best - 1e-6) { best = d; out = [t]; }
+    else if (Math.abs(d - best) < 1e-6) out.push(t);
+  }
+  return out;
+}
+
+/**
+ * Give `actor` Hatred of `target` ({ name, tokenId?, actorUuid? }). Replaces
+ * an existing Hatred (you hate one character at a time). `expiry` is the
+ * countdown of status-expiry.mjs ("until the end of their next turn").
+ */
+export async function applyHatred(actor, target, { ongoing = false, silent = false, expiry = null } = {}) {
   if (!actor || !target?.name) return null;
-  if (_needsRelay(actor)) { _relay({ method: "applyHatred", actorUuid: actor.uuid, target, ongoing }); return null; }
+  if (_needsRelay(actor)) { _relay({ method: "applyHatred", actorUuid: actor.uuid, target, ongoing, expiry }); return null; }
   const current = getHatred(actor);
   if (current) await current.effect.delete();
   const [effect] = await actor.createEmbeddedDocuments("ActiveEffect", [{
@@ -155,11 +177,12 @@ export async function applyHatred(actor, target, { ongoing = false, silent = fal
     flags: {
       core: { statusId: "hatred" },
       [NS]: { isStatus: true, canSave: false, ongoing, isBoon: false, isSpecial: false,
-              hatred: { name: target.name, tokenId: target.tokenId ?? null, actorUuid: target.actorUuid ?? null } },
+              hatred: { name: target.name, tokenId: target.tokenId ?? null, actorUuid: target.actorUuid ?? null },
+              ...(expiry ? { expiry } : {}) },
     },
   }]);
   _log(`${actor.name} gains Hatred of ${target.name}`);
-  const until = ongoing ? "until its source is lifted (ongoing — it doesn't end with the turn)" : "until the end of their turn";
+  const until = expiry ? expiry.text : ongoing ? "until its source is lifted (ongoing — it doesn't end with the turn)" : "until the end of their turn";
   if (!silent) await _chat(actor, `<strong>${escapeHTML(actor.name)}</strong> gains <strong>Hatred${ongoing ? "+" : ""} of ${escapeHTML(target.name)}</strong> — half damage against anyone else ${until}.`);
   return effect;
 }
@@ -346,7 +369,7 @@ export async function handleMarkSocket(data) {
   switch (data.method) {
     case "applyHatred": {
       const actor = await fromUuid(data.actorUuid ?? "");
-      if (actor) await applyHatred(actor, data.target, { ongoing: !!data.ongoing });
+      if (actor) await applyHatred(actor, data.target, { ongoing: !!data.ongoing, expiry: data.expiry ?? null });
       break;
     }
     case "endHatred": {

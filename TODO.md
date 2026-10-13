@@ -295,9 +295,9 @@ Emerso lavorando (da fare in blocchi futuri):
       - [x] **Titan Armament, turno in più** — FATTO il 30 settembre 2026 (1.8.2): il template dà +50% HP ma il tracker dà comunque 2 turni a un
             Elite; p.448 dice "take one extra turn a round". Servirebbe un campo "turni extra" letto da
             `IconCombat.turnsFor()`.
-      - [ ] **Template sulle Legend** (S): la scheda Legend non accetta il drop dei template (il libro non lo
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Template sulle Legend** (S): la scheda Legend non accetta il drop dei template (il libro non lo
             chiede, ma Maar potrebbe volerlo per i Jotunn legend).
-      - [ ] **Template dei Unique** (S, dati): oggi i job template coprono solo i job di fazione e le varianti; gli
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Template dei Unique** (S, dati): oggi i job template coprono solo i job di fazione e le varianti; gli
             Unique (Iron Soldat, Silent One…) restano solo come attori nel compendio Foes.
       - [x] **Foe Abilities "Faction: …"** — TOLTE il 30 settembre 2026 (1.8.2), 39 voci: le vecchie voci parafrasate "Faction: X — Y" in Foe Abilities
             ora sono doppioni meno precisi dei template; decidere se toglierle.
@@ -305,10 +305,10 @@ Emerso lavorando (da fare in blocchi futuri):
       dal libro, 85 agganci su 71 foe e legend, sezione "Summons & Objects" sulle schede con gettone da
       trascinare sulla mappa (crea l'attore Summon nella cartella "Foe Summons" e un token), anche nei job
       template. Resta, da valutare:
-      - [ ] **Foe già importati** (S): i foe già nei mondi non hanno i summon (non si aggiornano dai compendi). Si
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Foe già importati** (S): i foe già nei mondi non hanno i summon (non si aggiornano dai compendi). Si
             può reimportarli, oppure una macro "copia i summon dal compendio ai foe del mondo con lo stesso nome".
-      - [ ] **Immagini dei summon** (S): tutti usano `mystery-man.svg`, come i foe.
-      - [ ] **Summon dei giocatori** (S): solo il GM può piazzare i summon dei foe (crea attori); se Maar lascia i
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Immagini dei summon** (S): tutti usano `mystery-man.svg`, come i foe.
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Summon dei giocatori** (S): solo il GM può piazzare i summon dei foe (crea attori); se Maar lascia i
             foe a un giocatore co-GM servirebbe un relay via socket come per le altre azioni GM.
 - [x] **Token di dimensione sbagliata** — FATTO il 30 settembre 2026 (versione 1.8.1): 18 Jotunn token 2×2, Bouncer
       taglia 2 (p.367 "Prodigious size: Size 2"), Scrapper token 1×1. `validate-packs.mjs`: HIGH 0.
@@ -344,7 +344,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — Hatred+ finiva a fine turno — FATTO il 12 ottobre 2026 (versione 1.16.2)
 - [x] La Hatred+ (ongoing) veniva tolta a fine turno come quella normale.
-- [ ] **Emerso lavorando — Hatred+ con durata e Hatred+ su se stessi** (M): alcune abilità danno una Hatred+ che
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando — Hatred+ con durata e Hatred+ su se stessi** (M): alcune abilità danno una Hatred+ che
       scade a una data ora (Mock: "until the end of their next turn", Spite: "until the end of your next turn"):
       oggi la Hatred+ resta finché non la si toglie a mano. Inoltre le abilità che fanno *guadagnare* Hatred+ al PG
       (Spite, la stance "gain hatred+ of the closest foe") non hanno un bottone: `inflict-status.mjs` considera la
@@ -388,7 +388,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — Draken Cross Talent II — FATTO il 12 ottobre 2026 (versione 1.17.1)
 - [x] Medium Blast del Talent II non selezionabile ("blasts" al plurale; tag del talento applicati sempre).
-- [ ] **Emerso lavorando — attacco senza area già piazzata** (S): se si preme l'attacco senza aver usato 📐 prima,
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando — attacco senza area già piazzata** (S): se si preme l'attacco senza aver usato 📐 prima,
       l'area che si piazza è quella dei tag (Medium Blast col Talent II), senza la scelta del 📐. Valutare se usare lo
       stesso dialog anche lì.
 
@@ -403,7 +403,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — Domain su Helix Heel — FATTO il 12 ottobre 2026 (versione 1.17.5)
 - [x] Domain scattava su qualunque testo con "object": ora solo se l'abilità crea terreno o un oggetto.
-- [ ] **Emerso lavorando** (S, da controllare col manuale): Chaos Tarot e Sleight of Hand fanno scattare Domain per
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando** (S, da controllare col manuale): Chaos Tarot e Sleight of Hand fanno scattare Domain per
       una frase sul wild card del Seer ("such as creating terrain effects"); succedeva anche prima.
 
 ### Bug di Maar del 12 ottobre 2026 — combo token sui tratti del Vagabond — FATTO il 12 ottobre 2026 (versione 1.17.6)
@@ -418,7 +418,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — Vigilance assente dalle regole dello Stalwart — FATTO il 12 ottobre 2026 (versione 1.17.9)
 - [x] Aggiunte Vigilance, Rampart, Sturdy e True Strike alle Relevant Rules dello Stalwart (p.117).
-- [ ] **Emerso lavorando** (S): anche le altre classi hanno una pagina "Most relevant rules" (Vagabond p.146,
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando** (S): anche le altre classi hanno una pagina "Most relevant rules" (Vagabond p.146,
       Mendicant, Wright); confrontarle con le liste della scheda (il Vagabond ne ha zero).
 
 ### Bug di Maar del 12 ottobre 2026 — Terrorize con due tiri salvezza — FATTO il 12 ottobre 2026 (versione 1.17.10)
@@ -443,7 +443,7 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
   Conferma il perimetro sopra: niente automazione, solo compendio + tracker sulla scheda.
 - Fatto: 144 trofei (script `icon-compendium-audit/trophies-pack/build-trophies-pack.mjs`, dati in
   `trophies.json`), sezione nel tab "Relics & Trophies".
-- [ ] **Emerso lavorando** (S, da chiedere a Maar): "Used this combat" e "In effect this combat" si tolgono a mano;
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando** (S, da chiedere a Maar): "Used this combat" e "In effect this combat" si tolgono a mano;
       se Maar vuole, si possono spegnere da sole alla fine del combat.
 
 ### Sessione D — Gear kit migliori (L) — FATTA il 12 ottobre 2026 (versione 1.19.0)
@@ -454,10 +454,38 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
   kit aggiunti con il bond e scelti nel wizard, loose gear senza limite con spunta "portato" e limite per bond.
   Per "conteggio degli usi" ho fatto la cosa che il manuale prevede: oggetti segnati usati/persi fino alla prossima
   expedition (p.35: "even if that gear is used up or lost").
-- [ ] **Da chiedere a Maar**: gli bastano i segni usato/perso, o voleva contare usi numerici per oggetto (il manuale
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Da chiedere a Maar**: gli bastano i segni usato/perso, o voleva contare usi numerici per oggetto (il manuale
       non ne ha: "Icon doesn't care about minutely tracking gear", p.35)?
-- [ ] **Emerso lavorando** (S): l'Outsider, a fine interlude, può prendere un oggetto dai kit degli altri PG del party
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Emerso lavorando** (S): l'Outsider, a fine interlude, può prendere un oggetto dai kit degli altri PG del party
       come loose gear (p.76); oggi si scrive a mano nella lista.
+
+### Sessione E — Voci rimaste "emerse lavorando" (13 ottobre 2026, richiesta di Edoardo: farle tutte) — FATTA il 13 ottobre 2026 (versione 1.20.0)
+Raccoglie le voci aperte che non aspettano una risposta di Maar (le voci originali restano nelle loro sezioni e si
+spuntano lì).
+- [x] E1. Hatred+ con durata (Mock, Spite) e Hatred+ guadagnata su se stessi (Spite, Dark Knight) (M)
+- [x] E2. Attacco ad area senza 📐: stesso dialog di scelta dell'area (S)
+- [x] E3. Domain su Chaos Tarot / Sleight of Hand: controllare col manuale (S)
+- [x] E4. "Most relevant rules" di Vagabond, Mendicant, Wright (S)
+- [x] E5. Godly Smite automatico (S)
+- [x] E6. Outsider: oggetto dai kit degli altri PG a fine interlude (S)
+- [x] E7. Summon: immagini, macro per i foe già importati, piazzamento da giocatore co-GM (S+S+S)
+- [x] E8. Template: drop sulle Legend, template degli Unique (S+S)
+
+Risposte di Edoardo del 13 ottobre 2026 alle domande per Maar (decide lui):
+- [x] E9. Trofei: "Used this combat" e "In effect this combat" si spengono da soli a fine combat (S)
+- [x] E10. Gear kit: contare gli usi per oggetto, non solo usato/perso (S/M)
+- [x] E11. Token dei foe: un'icona per fazione, assegnata a tutti i foe di quella fazione (M, dati)
+### Sessione F — Resto del documento di Maar (ri-incollato da Edoardo il 13 ottobre 2026: "fai tutti questi") — FATTA il 13 ottobre 2026 (versione 1.20.0)
+Già fatti: kit migliori (Sessione D; il conteggio usi è E10), tab Narrative della guida (Sessione B).
+- [x] F1. Mendicant: bottone sul tratto delle blessing per dare un Blessed a un giocatore (niente automazione) (S)
+- [x] F2. Combo dei foe "1 poi 2": dopo aver usato la parte 1, la 2 si evidenzia / la 1 si scurisce finché non si
+      usa l'altra; reset a mano per gli errori (M)
+- [x] F3. Aree della FAQ piazzabili sulla mappa (dalla guida) per provare se un'area ci sta (S/M)
+- [x] F4. Prompt di rimozione dell'area: testo più grande, e sparisce da solo se l'area viene tolta (S)
+- [x] F5. Larghezza della Line scelta al momento del piazzamento (Enochian che allargano la linea) (S)
+
+- Status "Power Die" sul token: resta com'è (risposta: no). Encounter Designer "riusa gli attori": da spiegare
+  meglio a Edoardo prima di decidere.
 
 ## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
 
@@ -499,10 +527,10 @@ Wrights, but not other classes. Moving this to a bug." Più Godly Smite del Seal
       migrazione 18 lo aggiunge ai Sealer esistenti.
 
 Emerso (da fare in un blocco futuro):
-- [ ] **Godly Smite automatico** (S): p.191 "You start combat with a mantra power die, a d6 that starts at 1, and
+- [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) **Godly Smite automatico** (S): p.191 "You start combat with a mantra power die, a d6 that starts at 1, and
       ticks up by 1 at the start of every round, to a maximum of 6" → oggi si mette fuori e si sposta a mano;
       si potrebbe accendere a 1 all'inizio del combat e salire da solo a ogni round.
-- [ ] **Status "Power Die" sul token** (S): resta come prima (contatore unico). Chiedere a Maar se toglierlo per i PG
+- [x] (CHIUSO: Edoardo il 13 ottobre 2026 risponde di lasciarlo com'è) **Status "Power Die" sul token** (S): resta come prima (contatore unico). Chiedere a Maar se toglierlo per i PG
       ora che c'è il tracker sulla scheda, o lasciarlo per i foe.
 
 ## Richieste di Maar — scheda Areas della guida, secondo giro (ricevute il 1 ottobre 2026 sera) — FATTA il 1 ottobre 2026 (versione 1.12.1)
@@ -665,7 +693,7 @@ vanno pianificate come blocchi a sé. Le dimensioni sono stime (S/M/L/XL come in
             copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
       - [x] Nilfling (Jotunn, Ch1 skirmisher 28 HP) non è Elite nel pack `foes` mentre gli altri Jotunn lo sono:
             verificato il 9 settembre 2026 (Sessione 13) sul manuale p.449 ("Thinblood: doesn't have the elite trait"): il pack è giusto.
-      - [ ] Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
+      - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una
             passata sul pack (`img` + `prototypeToken.texture`). (M, dati)
 - [x] **Automazione effetti/save** offensiva (FATTA il 9 settembre 2026, Sessione 11): parser degli status
       inflitti dal testo (`module/combat/ability-statuses.mjs`), blocco "Inflict" con un bottone per status e

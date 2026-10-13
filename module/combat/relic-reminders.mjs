@@ -108,7 +108,9 @@ export const RELIC_REMINDERS = {
     { rank: 1, match: [
         { tags: ["terrain", "terrain-effect"] },
         { text: /(?:^|[.:]\s*)(?:object|terrain effect)\s*:/ },
-        { text: /\b(?:create[sd]?|creating|place[sd]?|placing|summon(?:s|ed|ing)?|raise[sd]?|conjure[sd]?|leave[sd]?|leaving|spawn(?:s|ed)?|replace[sd]?|becomes?|turn(?:s|ed)? into)\b[^.;]{0,60}?\b(?:objects?|terrain(?: effects?)?|pits?|boulders?|walls?|pillars?)\b/ },
+        // Not the Seer's wild-card rule "Wild cards do not extend … such as
+        // creating terrain effects" (Sleight of Hand): an example, not a creation.
+        { text: /(?<!\bsuch\s+as\s+)\b(?:create[sd]?|creating|place[sd]?|placing|summon(?:s|ed|ing)?|raise[sd]?|conjure[sd]?|leave[sd]?|leaving|spawn(?:s|ed)?|replace[sd]?|becomes?|turn(?:s|ed)? into)\b[^.;]{0,60}?\b(?:objects?|terrain(?: effects?)?|pits?|boulders?|walls?|pillars?)\b/ },
       ], text: "You may place your Domain (small blast) over one of the spaces this creates, or move it there." },
     { rank: 1, match: { attack: true },                      text: "+1 boon against foes inside your Domain." },
     { rank: 4, match: { attack: true, round: 4 },            text: ({ round }) => round ? `Round ${round}: your Domain is difficult and dangerous terrain for foes (Round 4+).` : "Round 4+: your Domain is difficult and dangerous terrain for foes." },

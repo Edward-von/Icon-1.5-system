@@ -101,3 +101,51 @@ export async function fillJobTraitPowerDice(docs) {
   }
   return docs;
 }
+
+/*
+ * Power dice the text sets out on its own: "You start combat with a mantra
+ * power die, a d6 that starts at 1, and ticks up by 1 at the start of every
+ * round, to a maximum of 6" (Sealer's Godly Smite, p.191). Read from the
+ * item's text, so any trait or ability written the same way follows.
+ */
+const STARTS_COMBAT_RE = /\bstart\s+combat\s+with\s+an?\s+[^.]*?\bpower\s+die\b/i;
+const TICKS_ROUND_RE   = /\bticks?\s+up\s+by\s+1\s+at\s+the\s+start\s+of\s+(?:every|each)\s+round\b/i;
+
+function _autoDieItems(actor, re) {
+  return (actor?.items ?? []).filter(i => Number(i.system?.powerDie?.faces ?? 0) > 0 && re.test(String(i.system?.description ?? "")));
+}
+
+/**
+ * Combat starts: set out every "you start combat with a … power die" at its
+ * starting value. Returns the names of the items it set.
+ * @param {Actor} actor
+ */
+export async function setOutCombatPowerDice(actor) {
+  const items = _autoDieItems(actor, STARTS_COMBAT_RE);
+  if (!items.length) return [];
+  await actor.updateEmbeddedDocuments("Item", items.map(i => {
+    const { faces, start } = effectivePowerDie(i.system);
+    return { _id: i.id, "system.powerDie.value": Math.min(faces, Math.max(1, start)) };
+  }));
+  return items.map(i => i.name);
+}
+
+/**
+ * A new round starts: tick up by 1 (to the die's maximum) every die whose
+ * text says so and that is set out. Returns [{ name, value }] of the ticked ones.
+ * @param {Actor} actor
+ */
+export async function tickRoundPowerDice(actor) {
+  const items = _autoDieItems(actor, TICKS_ROUND_RE).filter(i => Number(i.system.powerDie.value ?? 0) > 0);
+  const out = [];
+  const updates = [];
+  for (const i of items) {
+    const { faces } = effectivePowerDie(i.system);
+    const value = Math.min(faces, Number(i.system.powerDie.value) + 1);
+    if (value === Number(i.system.powerDie.value)) continue;
+    updates.push({ _id: i.id, "system.powerDie.value": value });
+    out.push({ name: i.name, value });
+  }
+  if (updates.length) await actor.updateEmbeddedDocuments("Item", updates);
+  return out;
+}

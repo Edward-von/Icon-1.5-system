@@ -11,6 +11,14 @@
 
 const CLIPS = "systems/icon-system/assets/guide/areas";
 
+/** The tags each clip shows, for its "📐 Try it on the map" button (the ranges are the clips' own). */
+const TRY_TAGS = {
+  "small-blast": "small-blast,range-3", "medium-blast": "medium-blast,range-3", "large-blast": "large-blast,range-3",
+  "burst-1-target": "burst-1-target,range-3", "burst-1-self": "burst-1-self", "burst-2-self": "burst-2-self",
+  "line-5": "line-5", "line-4-range-3": "line-4,range-3",
+  "arc-3": "arc-3", "arc-4": "arc-4", "arc-5": "arc-5", "aura-2": "aura-2",
+};
+
 const ARC = n => `${n} spaces painted one click at a time, in orthogonal steps; it can twist, but never overlaps itself or you. The origin space is you; in an attack, the attack space is any one character in the area.`;
 
 /** The patterns by family: heading, the family's origin / attack space in one
@@ -49,6 +57,8 @@ export function areaDiagramsHTML() {
         <video class="icon-area-clip" src="${CLIPS}/${file}.webm" loop muted playsinline preload="metadata"
                aria-label="${label}: the area being placed on the map"></video>
         <p class="icon-area-card__text">${caption}</p>
+        ${TRY_TAGS[file] ? `<button type="button" class="icon-btn icon-btn--sm icon-area-card__try" data-action="tryArea" data-tags="${TRY_TAGS[file]}"
+                title="Place a ${label} from your selected token to see what it covers">📐 Try it on the map</button>` : ""}
       </figure>`).join("");
     return `
     <h3 class="icon-area-group">${heading}</h3>

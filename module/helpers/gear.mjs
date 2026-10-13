@@ -18,6 +18,24 @@ const _log = (...a) => console.debug("[ICON | Gear]", ...a);
 
 const KIT_PACK = "icon-system.gear-kits";
 
+const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10, twelve: 12 };
+
+/** Uses an item's name gives it: "5 fire stones (hot!)" → 5, "Three free meals" → 3, else 1. */
+export function itemQuantity(name) {
+  const m = /^\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten|twelve)\b/i.exec(String(name ?? ""));
+  if (!m) return 1;
+  const n = NUMBER_WORDS[m[1].toLowerCase()] ?? Number(m[1]);
+  return Math.max(1, Math.min(99, n || 1));
+}
+
+/** { spent, max } of one item of a kit (system data). */
+export function itemCount(system, name) {
+  const row = (system?.counts ?? []).find(c => c.name === name);
+  const max = row?.max > 0 ? row.max : itemQuantity(name);
+  const used = (system?.used ?? []).includes(name);
+  return { spent: used ? max : Math.min(max, row?.spent ?? 0), max };
+}
+
 /** What a bond allows: base kit, kits carried, custom kit size, loose gear. */
 export function bondGearRules(bondName) {
   const b = String(bondName ?? "").trim().toLowerCase();
@@ -100,4 +118,32 @@ export async function bondKitItems(actor) {
     groups.set(k.name, (k.system?.items ?? []).filter(Boolean));
   }
   return [...groups].map(([kit, items]) => ({ kit, items }));
+}
+
+/**
+ * The Outsider (p.76): "at the end of an interlude [you] can take any other
+ * piece of gear from any other bond used by player character in your party
+ * and add it to your loose gear list". The party = the other player-owned
+ * PCs; their bonds' kits come from the Gear Kits compendium.
+ * @returns {Promise<Array<{bond: string, kit: string, items: string[]}>>}
+ */
+export async function partyBondGear(actor) {
+  const bonds = new Set();
+  for (const pc of game.actors ?? []) {
+    if (pc.type !== "icon" || pc.id === actor?.id || !pc.hasPlayerOwner) continue;
+    const b = bondNameOf(pc).trim();
+    if (b && b.toLowerCase() !== bondNameOf(actor).trim().toLowerCase()) bonds.add(b);
+  }
+  if (!bonds.size) return [];
+  const docs = await compendiumKits();
+  const out = [];
+  for (const bond of [...bonds].sort()) {
+    const key = bond.toLowerCase();
+    for (const d of docs) {
+      if (String(d.system?.bondName ?? "").trim().toLowerCase() !== key) continue;
+      const items = (d.system?.items ?? []).filter(Boolean);
+      if (items.length) out.push({ bond, kit: d.name, items });
+    }
+  }
+  return out;
 }

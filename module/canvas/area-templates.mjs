@@ -436,7 +436,7 @@ class AreaPlacement {
       const free = this.rangeKeys ? " Hold Alt to place it outside the usual range (an Infuse that extends the range, a GM ruling)." : "";
       const hint = this.area.kind === "arc"
         ? `Paint the ${this.area.label} one space at a time (${this.area.size} spaces, orthogonal steps). Enter or right-click finishes early, Esc cancels.${free}`
-        : `Click to place the ${this.area.label}. ${this.area.kind === "line" ? "Mouse wheel rotates it. " : ""}Right-click or Esc cancels.${free}`;
+        : `Click to place the ${this.area.label}. ${this.area.kind === "line" ? "Mouse wheel rotates it; + and − change its width (an Enochian ability that widens the line). " : ""}Right-click or Esc cancels.${free}`;
       ui.notifications.info(hint);
     });
   }
@@ -565,8 +565,26 @@ class AreaPlacement {
     this.#render();
   }
 
+  /**
+   * A Line's width, changed while placing (Maar: Enochian abilities that
+   * widen their line had no way to do it). 1 to 5; the label follows.
+   */
+  #setLineWidth(delta) {
+    const width = Math.clamp((this.area.width ?? 1) + delta, 1, 5);
+    if (width === (this.area.width ?? 1)) return;
+    this.area.width = width;
+    this.area.label = areaLabel(this.area);
+    ui.notifications.info(`${this.area.label}`, { console: false });
+    this.#render();
+  }
+
   #onKey(ev) {
     if (ev.key === "Alt") this.#setFreePlacement(true);
+    if (this.area.kind === "line" && ["+", "=", "-", "_"].includes(ev.key)) {
+      ev.preventDefault(); ev.stopImmediatePropagation();
+      this.#setLineWidth(ev.key === "+" || ev.key === "=" ? 1 : -1);
+      return;
+    }
     if (ev.key === "Escape") { ev.preventDefault(); ev.stopImmediatePropagation(); this.cancel(); }
     else if (ev.key === "Enter" && this.area.kind === "arc" && this.arcCells.length) {
       ev.preventDefault(); ev.stopImmediatePropagation(); this.#finishArc();
@@ -726,8 +744,9 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false }) {
-  const area = areaFromTags(tags);
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null }) {
+  // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
+  const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
   const existing = findAreaTemplates({ actorId: actor.id, abilityKey })[0];
   // Reusing a template already on the table: only target from it when the
@@ -774,7 +793,7 @@ export function areaSummaryHtml(placement, { attackTargetId = "" } = {}) {
     ? `attack: ${esc(attacked.name)}${others.length ? ` · area: ${others.map(t => esc(t.name)).join(", ")}` : ""}`
     : (inArea.length ? inArea.map(t => esc(t.name)).join(", ") : "no one");
   const btn = placement.template
-    ? ` <button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${esc(placement.template.id)}" data-scene-id="${esc(placement.template.parent?.id)}" title="Remove the template from the map">🗑 area</button>`
+    ? ` <button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${esc(placement.template.id)}" data-scene-id="${esc(placement.template.parent?.id)}" title="Remove the template from the map">🗑 Remove area</button>`
     : "";
   return `<div class="icon-chat-card__area"><span class="icon-chat-card__area-label">📐 ${esc(placement.area.label)}</span> <span class="icon-chat-card__area-targets">${names}</span>${btn}</div>`;
 }
