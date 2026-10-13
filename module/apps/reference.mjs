@@ -359,42 +359,62 @@ function narrativeHTML() {
  * the playtest group (October 2026) and checked against the rulebook; page
  * numbers are the PDF's "N of 501".
  */
-export const FAQ = [
-  ["When are interrupts reset?",
-   "At the start of each of your turns. Each interrupt can be used as many times as its tag says (Interrupt 1, Interrupt 2…) between your turns, and only one interrupt per turn, yours or anyone else's (p.91, Interrupts)."],
-  ["What are the engagement rules?",
-   "Leaving a space adjacent to a foe costs +1 space of movement. A dash ignores engagement, and so does flying (p.88, Movement penalties; Dash, rush, fly, and teleport). But a space affected by Rampart can't be entered or left by dashing, flying or teleporting (p.104, Rampart)."],
-  ["Can in-combat abilities be used out of combat?",
-   "Not by the book: narrative play and tactical combat have separate rules with next to no overlap (p.11, Two modes of play). Some house rules to ask your GM about: use each ability once per combat or per session for a bonus on a related roll (+1 boon, increased effect…), use it for flavour only, or open a combat with it as a \"first strike\" that doesn't spend actions on your turn."],
-  ["In what order do the effects of an ability resolve?",
-   "In the order they are listed, unless the ability says otherwise; some effects happen before the attack even though they are written after it, for ease of formatting (p.108, Order of operations)."],
-  ["Are summons allies?",
-   "No. Summons count as neither foes nor allies: they can only be targeted by abilities that can target any character, or that name summons specifically (p.92, Targeting)."],
-  ["Cover or Resistance together with Armor: which comes first?",
-   "First the attacker's additions and multiplications (bonus damage and the like), then the defender's Armor and other reductions, then the defender's multiplications and divisions, such as Resistance. Example: 5 damage against 2 Armor and Resistance → 5 − 2 = 3, halved to 1.5, rounded up to 2. Vigor takes damage before HP, and Armor and Resistance apply to it normally (p.106, Damage order). The Apply button on damage cards follows this order."],
-  ["I'm on a height 3 object and my target is next to me, down in a pit. Can a Range 2 ability hit them?",
-   "Yes, and so can a melee attack. ICON doesn't track vertical space: height and elevation don't count for range or adjacency, and even flying characters can be reached in melee (p.106, Height). Think of areas (auras, blasts…) as columns, not spheres."],
-  ["The sheet says I have 5 AP at level 2, but the book says 6!",
-   "The sheet is right. The +1 AP at 7 XP starts at level 1 (p.15, Character Advancement), so there is none between level 0 and level 1. The Total AP column of the advancement table (p.115) counts it anyway, which puts every total one AP too high."],
-  ["Why can't I save against Immobile?",
-   "Immobile is a special state, not a status, so it can't be saved against (p.94, Special States)."],
-  ["What does (+) mean?",
-   "On a status or effect it means ongoing: it can't be saved against, removed or ignored until whatever causes it is lifted (p.94, Ongoing (+)). Elsewhere a \"+\" may stand for a boon, written +1D: in combat roll a d6 per boon and add the highest to the d20; in narrative play add a d6 to the pool per boon (p.12, Boons and curses)."],
-  ["Is \"remove from the battlefield and place\" the same as teleporting?",
-   "No. A character who is picked up and placed doesn't count as moving, so it doesn't trigger effects, interrupts or abilities that trigger off movement, and it isn't stopped by Rampart or Vigilance (p.88, Removing and placing characters)."],
+/** The FAQ, by section (Maar, Oct 2026: Combat / Narrative). Each entry is [question, answer], answer in HTML. */
+export const FAQ_SECTIONS = [
+  { title: "Combat", items: [
+    ["When are interrupts reset?",
+     "At the start of each of your turns. Each interrupt can be used as many times as its tag says (Interrupt 1, Interrupt 2…) between your turns, and only one interrupt per turn, yours or anyone else's (p.91, Interrupts)."],
+    ["What are the engagement rules?",
+     "Leaving a space adjacent to a foe costs +1 space of movement. A dash ignores engagement, and so does flying (p.88, Movement penalties; Dash, rush, fly, and teleport). But a space affected by Rampart can't be entered or left by dashing, flying or teleporting (p.104, Rampart)."],
+    ["In what order do the effects of an ability resolve?",
+     "In the order they are listed, unless the ability says otherwise; some effects happen before the attack even though they are written after it, for ease of formatting (p.108, Order of operations)."],
+    ["Are summons allies?",
+     "No. Summons count as neither foes nor allies: they can only be targeted by abilities that can target any character, or that name summons specifically (p.92, Targeting)."],
+    ["Cover or Resistance together with Armor: which comes first?",
+     "First the attacker's additions and multiplications (bonus damage and the like), then the defender's Armor and other reductions, then the defender's multiplications and divisions, such as Resistance. Example: 5 damage against 2 Armor and Resistance → 5 − 2 = 3, halved to 1.5, rounded up to 2. Vigor takes damage before HP, and Armor and Resistance apply to it normally (p.106, Damage order). The Apply button on damage cards follows this order."],
+    ["I'm on a height 3 object and my target is next to me, down in a pit. Can a Range 2 ability hit them?",
+     "Yes, and so can a melee attack. ICON doesn't track vertical space: height and elevation don't count for range or adjacency, and even flying characters can be reached in melee (p.106, Height). Think of areas (auras, blasts…) as columns, not spheres."],
+    ["Why can't I save against Immobile?",
+     "Immobile is a special state, not a status, so it can't be saved against (p.94, Special States)."],
+    ["What does (+) mean?",
+     "On a status or effect it means ongoing: it can't be saved against, removed or ignored until whatever causes it is lifted (p.94, Ongoing (+)). Elsewhere a \"+\" may stand for a boon, written +1D: in combat roll a d6 per boon and add the highest to the d20; in narrative play add a d6 to the pool per boon (p.12, Boons and curses)."],
+    ["Is \"remove from the battlefield and place\" the same as teleporting?",
+     "No. A character who is picked up and placed doesn't count as moving, so it doesn't trigger effects, interrupts or abilities that trigger off movement, and it isn't stopped by Rampart or Vigilance (p.88, Removing and placing characters)."],
+    ["Am I my own ally?",
+     "No. An ally is an allied character other than you, and abilities can't target you unless they say so; \"characters\" means everyone, you included (p.92, Targeting)."],
+    ["If I gamble with more than one die, do I add them together?",
+     "No. A gamble is a d6 roll that triggers its effect on the listed number or higher (p.95, p.103). When an ability lets you roll extra dice for it, as Dire Parry does with vigilance charges (p.142), keep the highest result, the same way extra boons work (p.12)."],
+  ] },
+  { title: "Narrative", items: [
+    ["Can in-combat abilities be used out of combat?",
+     "Not by the book: narrative play and tactical combat have separate rules with next to no overlap (p.11, Two modes of play). Some house rules to ask your GM about: use each ability once per combat or per session for a bonus on a related roll (+1 boon, increased effect…), use it for flavour only, or open a combat with it as a \"first strike\" that doesn't spend actions on your turn."],
+    ["What is the difference between aid and set up?",
+     "<strong>Aid</strong>: tick 1 effort; the ally gets +1 boon on their action roll, and you share in any consequences of it (strain, bad situations). A roll can benefit from aid only once (p.34). <strong>Set up</strong>: you make your own action roll, with reduced or no effect by itself and its own normal consequences; if it succeeds, your ally gets +1 boon <em>or</em> increased effect on the action you set up (p.19, p.35). A set up counts as aiding, so one roll can't have both (p.19, p.34)."],
+    ["How does a second wind work?",
+     "Once per session, when you fulfil your bond's second wind trigger, you regain all your effort outside of camps and interludes. You don't have to take it when it happens: you can wait for a better moment (p.34). Each bond has its own trigger, and a few work differently: the Pathfinder regains 1 effort whenever they enter a new scene, any number of times a session (p.56)."],
+  ] },
+  { title: "Character sheet", items: [
+    ["The sheet says I have 5 AP at level 2, but the book says 6!",
+     "The sheet is right. The +1 AP at 7 XP starts at level 1 (p.15, Character Advancement), so there is none between level 0 and level 1. The Total AP column of the advancement table (p.115) counts it anyway, which puts every total one AP too high."],
+  ] },
 ];
+
+/** Every FAQ entry in one list. */
+export const FAQ = FAQ_SECTIONS.flatMap(sec => sec.items);
 
 /** FAQ entries — same filterable rows as the glossary. */
 function faqHTML() {
-  const rows = FAQ.map(([q, a]) => `
-    <div class="icon-ref-term icon-guide-faq" data-term="${q.toLowerCase().replace(/"/g, "")}">
-      <strong class="icon-guide-faq__q">${q}</strong>
-      <div class="icon-guide-faq__a">${a}</div>
-    </div>`).join("");
-  return `<section class="icon-section icon-ref-section">
-    <h3 class="icon-section__title">Edge cases from the table</h3>
-    ${rows}
-  </section>`;
+  return FAQ_SECTIONS.map(sec => {
+    const rows = sec.items.map(([q, a]) => `
+      <div class="icon-ref-term icon-guide-faq" data-term="${q.toLowerCase().replace(/"/g, "")}">
+        <strong class="icon-guide-faq__q">${q}</strong>
+        <div class="icon-guide-faq__a">${a}</div>
+      </div>`).join("");
+    return `<section class="icon-section icon-ref-section">
+      <h3 class="icon-section__title">${sec.title}</h3>
+      ${rows}
+    </section>`;
+  }).join("");
 }
 
 /** Build the glossary HTML (one panel per category; each term is a filterable row). */

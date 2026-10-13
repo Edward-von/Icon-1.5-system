@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 13 ottobre 2026 — FAQ della guida divisa in Combat e Narrative, quattro domande nuove (versione 1.20.2)
+
+### Richiesta di Maar (FAQ Changes/Editions)
+
+- **FAQ in un solo elenco**: le domande di combattimento e quelle narrative erano mescolate → la tab FAQ ora ha le
+  sezioni Combat, Narrative e Character sheet, e la ricerca le attraversa tutte.
+- **Domande nuove**, con le risposte di Maar ricontrollate sul manuale:
+  - "Am I my own ally?" — no: alleato = un personaggio alleato diverso da te; "characters" include te (p.92);
+  - "If I gamble with more than one die…" — no, si tiene il dado più alto. Il libro definisce il gamble come 1d6
+    (p.95, p.103) e non lo dice esplicitamente: la risposta lo appoggia a Dire Parry (p.142) e alla regola dei boon
+    (p.12);
+  - "Aid o set up?" — aid costa 1 effort, +1 boon, condividi le conseguenze; set up è un tiro tuo con effetto ridotto
+    che dà +1 boon o effetto aumentato; non si possono avere tutti e due (p.19, p.34, p.35). Corretto rispetto al testo
+    di Maar: il libro non dice che il set up "a volte" costa effort;
+  - "Come funziona il second wind?" — una volta a sessione, al trigger del bond, ricarichi tutto l'effort e puoi
+    aspettare (p.34); il Pathfinder fa eccezione: 1 effort a ogni scena nuova, quante volte vuole (p.56).
+
 ## 13 ottobre 2026 — Niente più emoji nell'interfaccia (versione 1.20.1)
 
 ### Richiesta di Edoardo

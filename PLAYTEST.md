@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## FAQ a sezioni (13 ottobre 2026, versione 1.20.2)
+
+- [ ] Quick Guide → FAQ: tre sezioni (Combat, Narrative, Character sheet); in Combat le domande nuove "Am I my own
+      ally?" e "If I gamble with more than one die…", in Narrative "aid and set up" e "second wind".
+- [ ] Ricerca "ally", "gamble", "second wind": trova le righe giuste; le sezioni senza risultati spariscono; svuotando
+      la ricerca torna la tab di prima.
+
 ## Niente emoji (13 ottobre 2026, versione 1.20.1)
 
 - [ ] Scheda PG (tab Combat, Conditions, Notes, Relics), scheda Foe, Legend, Summon, Clock: nessuna emoji; al loro posto
