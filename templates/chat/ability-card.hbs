@@ -4,7 +4,7 @@
     <strong class="icon-chat-card__action">{{ab.name}}{{#if ab.comboOf}} <small class="icon-chat-card__combo-of">{{ab.comboOf}} combo</small>{{/if}}</strong>
     {{#if ab.jobName}}<span class="icon-badge icon-class--{{ab.class}}">{{ab.jobName}}</span>{{/if}}
     <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
-    <span class="icon-badge">{{ab.cost}}</span>
+    <span class="icon-badge{{#if ab.costUpgraded}} icon-badge--primary{{/if}}"{{#if ab.costTooltip}} data-tooltip="{{ab.costTooltip}}"{{/if}}>{{ab.cost}}</span>
     {{#if comboMode}}<span class="icon-badge icon-badge--combo"><i class="fa-solid fa-bolt"></i> COMBO</span>{{/if}}
     {{#icon-gt ab.talentSelected 0}}
       <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>

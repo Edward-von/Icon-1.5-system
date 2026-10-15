@@ -601,7 +601,7 @@
           <strong>{{ab.name}}</strong>
           <span class="icon-badge icon-class--{{ab.class}}">{{ab.jobName}}</span>
           <span class="icon-badge icon-badge--chapter">Ch {{ab.chapter}}</span>
-          <span class="icon-badge">{{ab.cost}}</span>
+          <span class="icon-badge{{#if ab.costUpgraded}} icon-badge--primary{{/if}}"{{#if ab.costTooltip}} data-tooltip="{{ab.costTooltip}}"{{/if}}>{{ab.cost}}</span>
           {{#icon-gt ab.talentSelected 0}}
             <span class="icon-badge icon-badge--primary">Talent {{#icon-eq ab.talentSelected 1}}I{{else}}II{{/icon-eq}}</span>
           {{/icon-gt}}

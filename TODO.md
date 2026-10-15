@@ -62,10 +62,13 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.6: la finestra talento/mastery partiva solo per le abilità lasciate
       esattamente su un riquadro; ora parte dovunque l'abilità venga lasciata sulla scheda, e un drop fatto mentre la
       finestra precedente è aperta dà una notifica invece di sparire.)
-- [ ] **R5. Tag grigi senza tooltip** (S, bug)
+- [x] **R5. Tag grigi senza tooltip** (S, bug)
       Dropkick: "Sacrifice" grigio e senza tooltip. Comet: "Medium Blast" grigio. Catapult: "Interrupt 1" in cima
       alla card senza tooltip; con la mastery spuntata compare "Interrupt 3" ("Maybe an old implementation of the tag
       system?").
+      (FATTO il 15 ottobre 2026, versione 1.15.7: aggiunte le spiegazioni mancanti per Sacrifice, Small/Medium/Large
+      Blast e Terrain Effect con i nomi usati dai compendi; per le abilità interrupt il numero di usi, anche quello
+      cambiato da talento/mastery, sta sul badge del costo con il tooltip invece che in un tag doppio.)
 - [ ] **R6. Parole del testo di colore evidenziate come keyword** (S, bug)
       Battering Ram "flying", Six Hells Trigram "summon" (come se fosse il tipo di personaggio Summon), Revenge "armor".
 - [ ] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
@@ -161,6 +164,13 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
 - [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
       True Strike come se fosse uno status (c'era anche prima).
+- [ ] **Emerso lavorando su R5 — tag dei foe ancora grigi** (S/M): nel pack delle foe abilities restano senza
+      tooltip "per-round-N", "per-combat-N", "repeatable", "usable-when-bloodied", "round-3+(-only)", "area-effect",
+      "burst-N-target/self", più i tag da meccanica di fazione ("cauldron-action",
+      "might-of-the-wild", "blade-consume-N", "requires-N-tally", …). Servono le regole dal manuale per ognuno.
+- [ ] **Emerso lavorando su R5 — costo grezzo nei riquadri delle abilità** (S): i sei riquadri della tab Combat
+      mostrano il costo come è salvato ("1action", "interrupt-1") invece di "1 Action" / "Interrupt 1"
+      (`icon-combat.hbs`, `item.system.cost`), e non seguono la mastery di Catapult.
 
 ---
 

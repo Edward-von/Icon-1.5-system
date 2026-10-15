@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Tooltip su Sacrifice, sui Blast e sul costo degli interrupt (versione 1.15.7)
+
+### Round di debug del 15 ottobre, punto R5
+
+- **Tag grigi senza spiegazione**: Dropkick mostrava "Sacrifice" grigio e senza tooltip, Comet "Medium Blast" grigio
+  (lo stesso per Small/Large Blast e "Terrain Effect") → il grigio è il colore dei tag che il sistema non riconosce: le
+  spiegazioni dei Blast esistevano solo con i nomi corti ("blast-m"), mentre i compendi scrivono i nomi come nel libro
+  ("medium-blast"), e Sacrifice e Terrain Effect non avevano proprio una spiegazione → aggiunte le spiegazioni con i
+  nomi usati dai compendi: Sacrifice X (p.103: si paga all'inizio, non si riduce, non porta sotto 1 HP), Small /
+  Medium / Large Blast (p.98), Terrain Effect (p.95-96). Valgono anche per i tag dei foe con gli stessi nomi.
+- **Catapult: "Interrupt 1" senza tooltip e "Interrupt 3" in più con la mastery**: il costo in cima alla card e
+  all'anteprima era una scritta senza spiegazione; con la mastery spuntata ("Catapult becomes Interrupt 3", p.123) il
+  costo restava "Interrupt 1" e compariva a parte un tag "Interrupt 3" → la mastery salva il nuovo numero come tag, e
+  nessuno lo riportava sul costo → per le abilità interrupt il numero di usi va ora sul badge del costo (con il
+  tooltip della regola; se viene da talento/mastery il badge è evidenziato e il tooltip dice da dove arriva) e non
+  compare più come tag doppio. Vale anche per gli altri interrupt che avevano "Interrupt 1" ripetuto tra i tag.
+
 ## 15 ottobre 2026 — Talento e mastery chiesti per ogni abilità trascinata (versione 1.15.6)
 
 ### Round di debug del 15 ottobre, punto R4

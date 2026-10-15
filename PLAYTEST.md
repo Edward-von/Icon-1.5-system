@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R5 — tooltip su Sacrifice, sui Blast e sul costo degli interrupt (15 ottobre 2026, versione 1.15.7)
+
+Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiungere da compendio), tab Combat.
+
+- [ ] **Dropkick**: nell'anteprima dell'abilità il tag "Sacrifice" non è più grigio; passandoci sopra compare la regola
+      del Sacrifice (p.103). Show in Chat → stesso tag con tooltip nella card.
+- [ ] **Comet**: "Medium Blast" non è più grigio e ha il tooltip (3×3, 9 spazi); "Object" e "Range 3" come prima.
+- [ ] **Catapult senza mastery**: il badge del costo "Interrupt 1" in cima all'anteprima e alla card in chat ha il
+      tooltip della regola degli interrupt; nessun tag "Interrupt" tra i tag.
+- [ ] **Catapult con la mastery**: spuntare la mastery → il badge del costo diventa "Interrupt 3", evidenziato, con
+      tooltip "From Mastery: Catapult becomes Interrupt 3" + la regola; nessun tag "Interrupt 3" a parte. Stesso nella
+      card Show in Chat. Togliendo la mastery torna "Interrupt 1".
+- [ ] **Altro interrupt**: un'abilità interrupt qualsiasi di un altro job (es. una con "Interrupt 1" già tra i tag) →
+      il numero sta solo sul badge del costo, con il tooltip.
+- [ ] **Abilità normali**: un'abilità da 1 o 2 azioni → badge del costo come prima, senza tooltip; tag invariati.
+- [ ] **Foe**: un foe con un'azione "Small Blast" o "Medium Blast" o "Terrain Effect" → il tag ha il tooltip.
+
 ## R4 — talento e mastery chiesti per ogni abilità trascinata (15 ottobre 2026, versione 1.15.6)
 
 Setup: un PG con meno di sei abilità (capitolo alto, o da GM) e il compendio delle abilità aperto accanto alla scheda,

@@ -8,7 +8,7 @@ import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs"
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
-import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
+import { resolveAbilityTags, resolveAbilityCost } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
@@ -333,13 +333,16 @@ export class IconSheet extends BaseActorSheet {
       // Same test as the attack / Show in Chat buttons; context.comboActive is
       // only set further down, so reading it here was always false.
       const comboArmed = this._comboArmed(a);
-      const tags = resolveAbilityTags(s, { comboMode: comboArmed });
+      // Interrupt uses changed by a talent / mastery go on the cost badge (Catapult → Interrupt 3).
+      const { tags, ...cost } = resolveAbilityCost(s, resolveAbilityTags(s, { comboMode: comboArmed }));
       return {
         id:          a.id,
         name:        a.name,
         jobName:     s.jobName ?? "",
         class:       s.class ?? "",
-        cost:        abilityCostLabel(s.cost),
+        cost:        abilityCostLabel(cost.key),
+        costTooltip: cost.tooltip,
+        costUpgraded: cost.upgraded,
         chapter:     s.chapter ?? 1,
         tags,
         comboArmed,
@@ -1483,7 +1486,7 @@ export class IconSheet extends BaseActorSheet {
     // Strike and Medium Blast) and its own text says how the attack lands
     // (auto-hit instead of a roll), so the buttons and the area follow it.
     const combo  = comboMode ?? this._comboArmed(item);
-    const tags   = resolveAbilityTags(s, { comboMode: combo });
+    const { tags, ...cost } = resolveAbilityCost(s, resolveAbilityTags(s, { comboMode: combo }));
     const active = combo && parsedCombo ? parsedCombo : parsed;
     const desc = parseAbilitySections(s.description);
     const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
@@ -1492,7 +1495,9 @@ export class IconSheet extends BaseActorSheet {
       name:        item.name,
       jobName:     s.jobName ?? "",
       class:       s.class ?? "",
-      cost:        abilityCostLabel(s.cost),
+      cost:        abilityCostLabel(cost.key),
+      costTooltip: cost.tooltip,
+      costUpgraded: cost.upgraded,
       chapter:     s.chapter ?? 1,
       tags,
       areaLabel:   abilityArea(tags, s.description)?.label ?? "",

@@ -42,6 +42,11 @@ const RULES = {
   "blast-s":     "Small Blast: the centre space and the 4 next to it — 5 spaces (p.98).",
   "blast-m":     "Medium Blast: the 3×3 block around the centre — 9 spaces (p.98).",
   "blast-l":     "Large Blast: every space within 2 orthogonal steps of the centre — 13 spaces (p.98).",
+  // The packs spell the blasts out as the book prints them ("Medium Blast").
+  "small-blast": "Small Blast: the centre space and the 4 next to it — 5 spaces (p.98).",
+  "medium-blast":"Medium Blast: the 3×3 block around the centre — 9 spaces (p.98).",
+  "large-blast": "Large Blast: every space within 2 orthogonal steps of the centre — 13 spaces (p.98).",
+  "terrain-effect": "Terrain Effect: a passive effect placed on spaces of the battlefield; terrain effects can overlap and are not removed if you are defeated (p.95-96).",
   "aura":        (n) => n ? `Aura ${n}: continuous ongoing effect that affects all characters within ${n} spaces of the origin (usually the user). Only affects characters while inside.`
                            : "Aura: continuous ongoing effect that affects all characters within the specified range of an origin point. Only affects characters while inside.",
 
@@ -81,6 +86,7 @@ const RULES = {
   "rebound":     "Rebound: a rebounded ability bounces off a target character and is redirected from their space as the new origin, respecting cover and line-of-sight from there. Effects tied to the original user (sacrificing HP, moving) still apply. Does not stack.",
   "boon":        (n) => `Boon${n && Number(n) > 1 ? ` ${n}` : ""}: the attack rolls ${n || 1} extra d6 and adds the highest to the d20 (p.12). The dialog fills it in for you; boons and curses cancel 1 to 1.`,
   "curse":       (n) => `Curse${n && Number(n) > 1 ? ` ${n}` : ""}: the roll subtracts the highest of ${n || 1} d6 from the d20 (p.12). The dialog fills it in for you; boons and curses cancel 1 to 1.`,
+  "sacrifice":   (n) => `Sacrifice${n ? ` ${n}` : " X"}: reduce your HP by ${n || "X"} as a cost, paid at the start of the ability. It can't be reduced, ignored, transferred or resisted, can't bring your HP below 1, and can be paid even without enough HP left (p.103).`,
   "power-die":   "Power Die: a d6 tracker tied to a specific ability that ticks up or down based on conditions. Each power die is unique to its ability. Discarded when ticked to 0.",
   "stack-dice":  "Stack Dice (Fool): save a d6 result to influence a future gamble roll, including bomb summons.",
   "stance":      "Stance: an ongoing positive effect. You can only have one stance at a time; taking a new stance drops the old one (or drop as a free action at start of your turn). Refreshes regain its effects.",
@@ -282,4 +288,30 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
     const tooltip = tag.tooltip ? [from, tag.tooltip].join("\n\n") : from;
     return { ...tag, upgraded: true, tooltip };
   });
+}
+
+/**
+ * The cost an ability shows on its badge, with the rule on hover.
+ * An interrupt whose talent / mastery changes its uses per round carries the
+ * new count as an "interrupt-N" tag ("Catapult becomes Interrupt 3": masteryTags
+ * "interrupt-3"). That count belongs on the cost badge — printed as a second
+ * chip it sat next to an "Interrupt 1" badge that never changed — so for an
+ * interrupt ability the interrupt tag moves onto the cost and leaves the chips.
+ * @param {object} system  ability system data
+ * @param {Array<{raw:string,tooltip:string|null,upgraded:boolean}>} tags  from resolveAbilityTags
+ * @returns {{key:string, tooltip:string|null, upgraded:boolean, tags:Array}}
+ */
+export function resolveAbilityCost(system, tags = []) {
+  const base = String(system?.cost ?? "").trim();
+  const isInterrupt = (k) => /^interrupt-\d+$/i.test(String(k ?? ""));
+  if (!isInterrupt(base)) return { key: base, tooltip: null, upgraded: false, tags };
+  const tag = tags.find(t => isInterrupt(t.raw));
+  const key = tag ? tag.raw.toLowerCase() : base;
+  const upgraded = !!tag?.upgraded && key !== base;
+  return {
+    key,
+    tooltip: upgraded ? tag.tooltip : explainTag(key),
+    upgraded,
+    tags: tags.filter(t => !isInterrupt(t.raw)),
+  };
 }
