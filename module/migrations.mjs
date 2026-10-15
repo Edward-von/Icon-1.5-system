@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 22;
+export const CURRENT_SCHEMA_VERSION = 23;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -853,6 +853,47 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 22: ${n} copy/copies of Sleight of Hand / Chaos Tarot no longer repeat the wild card rules`);
+  },
+
+  /* 23 — Eclipse (Seer, p.203) and Raging Wolf's Comeback (Colossus, p.137)
+   * print a list under their rules line: Eclipse's two outcomes, Raging
+   * Wolf's three hp tiers. The pack stored them as one run-on paragraph; it
+   * now puts each item on its own "•" line, which the sheet and chat card
+   * show as one row each. Rewrite the copies that still carry the old text
+   * word for word. */
+  23: async () => {
+    const FIX = {
+      "Eclipse": {
+        field: "description",
+        old: "End your turn and create a Terrain Effect: Create a burning brand of star fire in range, dangerous terrain, then gain delay: Your next turn must be slow. At the start of that turn, check if there is a character standing in that space: If there is, that character takes 2 divine damage and is sealed. If there isn't, it explodes for a large blast area effect centered on that space, scattering star fire everywhere. All characters in the area take 2 divine damage, and create a space of dangerous terrain under every foe in the area. Then, end the effect.",
+        new: "End your turn and create a Terrain Effect: Create a burning brand of star fire in range, dangerous terrain, then gain delay: Your next turn must be slow. At the start of that turn, check if there is a character standing in that space:\n• If there is, that character takes 2 divine damage and is sealed.\n• If there isn't, it explodes for a large blast area effect centered on that space, scattering star fire everywhere. All characters in the area take 2 divine damage, and create a space of dangerous terrain under every foe in the area.\nThen, end the effect.",
+      },
+      "Raging Wolf": {
+        field: "comebackEffect",
+        old: "Gain additional effects depending on your current hp. Each effect stacks and takes place in order. Bloodied: You may rush 1, then deal fray damage to an adjacent foe. That foe is slashed. 25% or lower: You may fly 1, then shove all adjacent foes 1. 1 hp or lower: Repeat the above two effects.",
+        new: "Gain additional effects depending on your current hp. Each effect stacks and takes place in order.\n• Bloodied: You may rush 1, then deal fray damage to an adjacent foe. That foe is slashed.\n• 25% or lower: You may fly 1, then shove all adjacent foes 1.\n• 1 hp or lower: Repeat the above two effects.",
+      },
+    };
+    const fixOf = (item) => item.type === "ability" ? FIX[(item.name ?? "").trim()] : undefined;
+    const stale = (item) => {
+      const fix = fixOf(item);
+      return !!fix && String(item.system?.[fix.field] ?? "").replace(/\s+/g, " ").trim() === fix.old;
+    };
+    const change = (item) => { const fix = fixOf(item); return { [`system.${fix.field}`]: fix.new }; };
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, ...change(i) }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update(change(item));
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 23: ${n} copy/copies of Eclipse / Raging Wolf now show their list one item per row`);
   },
 };
 

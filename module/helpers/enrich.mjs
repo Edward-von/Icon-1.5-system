@@ -17,7 +17,7 @@ import { enrichRuleKeywords } from "./keywords.mjs";
  *   keywords.
  */
 export async function enrichHTML(html, { keywords = true } = {}) {
-  const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(formatRollTables(html), { async: true });
+  const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(formatRollTables(formatBulletLists(html)), { async: true });
   if (!keywords) return out;
   try { return enrichRuleKeywords(out); }
   catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
@@ -57,15 +57,61 @@ export function formatRollTables(text) {
   }
   if (marks.length < 3) return src;
 
-  const rows = marks.map((m, i) => {
-    let body = src.slice(m.body, marks[i + 1]?.at ?? src.length).trim();
-    // A short name before ":" or " - " ("A Tale of Fury: …", "Earth - …") is the result's title
-    const t = body.match(/^([^:.]{1,45}?)(:|\s[-–—]\s)\s*/);
-    if (t) body = `<b class="icon-roll-table__title">${t[1]}${t[2].trim() === ":" ? ":" : ` ${t[2].trim()}`}</b> ${body.slice(t[0].length)}`;
-    return `<span class="icon-roll-table__row"><span class="icon-roll-table__num">${i + 1}</span>`
-         + `<span class="icon-roll-table__text">${body}</span></span>`;
-  });
+  const rows = marks.map((m, i) => _tableRow(i + 1, src.slice(m.body, marks[i + 1]?.at ?? src.length).trim()));
   return `${src.slice(0, marks[0].at).trim()}<span class="icon-roll-table">${rows.join("")}</span>`;
+}
+
+/**
+ * One row of a roll table or bullet list. A short name before ":" or " - "
+ * ("A Tale of Fury: …", "Earth - …", "Bloodied: …") is the row's title.
+ */
+function _tableRow(marker, body) {
+  const t = body.match(/^([^:.]{1,45}?)(:|\s[-–—]\s)\s*/);
+  if (t) body = `<b class="icon-roll-table__title">${t[1]}${t[2].trim() === ":" ? ":" : ` ${t[2].trim()}`}</b> ${body.slice(t[0].length)}`;
+  return `<span class="icon-roll-table__row"><span class="icon-roll-table__num">${marker}</span>`
+       + `<span class="icon-roll-table__text">${body}</span></span>`;
+}
+
+/**
+ * Turn the bullet lines of a plain rules text ("…standing in that space:
+ * \n• If there is, …\n• If there isn't, …\nThen, end the effect.") into one
+ * row per bullet, as the book prints them (Eclipse p.203, Raging Wolf's
+ * Comeback p.137, Lycanthropy). Pack texts mark a list item with a line break
+ * followed by "•"; the line after the last bullet goes back to running text.
+ * Inline " • " bullets with no line break are left as they are.
+ * @param {string} text
+ * @returns {string}
+ */
+export function formatBulletLists(text) {
+  const src = String(text ?? "");
+  if (!/\n\s*•/.test(src) || /<[a-z][^>]*>/i.test(src)) return src;
+  const out = [];
+  let rows = [];
+  const flush = () => {
+    if (rows.length) out.push(`<span class="icon-roll-table">${rows.join("")}</span>`);
+    rows = [];
+  };
+  for (const raw of src.split("\n")) {
+    const line = raw.replace(/\s+/g, " ").trim();
+    if (!line) continue;
+    if (line.startsWith("•")) { rows.push(_tableRow("•", line.slice(1).trim())); continue; }
+    flush();
+    out.push(line);
+  }
+  flush();
+  return out.join(" ");
+}
+
+/**
+ * Plain text of an ability description: <p>/<br> wrappers and line breaks
+ * become spaces, except around a bullet line ("\n• …"), which keeps its own
+ * line for formatBulletLists().
+ */
+function _flattenText(description) {
+  const lines = String(description ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ")
+    .split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean);
+  return lines.reduce((acc, line, i) => !i ? line
+    : `${acc}${line.startsWith("•") || lines[i - 1].startsWith("•") ? "\n" : " "}${line}`, "");
 }
 
 /**
@@ -174,9 +220,9 @@ const _canonLabel = (raw) => raw.trim().replace(/\b[a-zA-Z]+/g, (w, i) =>
  * @returns {{ flavor: string, trigger: string, sections: Array<{label: string, text: string}> }}
  */
 export function parseAbilitySections(description) {
-  // Pack texts are plain; hand-edited ones may carry <p>/<br> wrappers — turn
-  // those into whitespace so a label never ends up inside a half-open tag.
-  const text = String(description ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim();
+  // <p>/<br> wrappers become whitespace so a label never ends up inside a
+  // half-open tag; bullet lines keep their line break (see _flattenText).
+  const text = _flattenText(description);
   if (!text) return { flavor: "", trigger: "", sections: [] };
 
   const hits = [];
@@ -224,7 +270,7 @@ export async function enrichAbilityDescription(description) {
   if (/<[a-z][^>]*>/i.test(raw)) return enrichHTML(raw);
   const { flavor } = parseAbilitySections(raw);
   if (!flavor) return enrichHTML(raw);
-  const text = raw.replace(/\s+/g, " ").trim();
+  const text = _flattenText(raw);
   const rest = text.slice(flavor.length).trim();
   const head = await enrichHTML(flavor, { keywords: false });
   return rest ? `${head} ${await enrichHTML(rest)}` : head;

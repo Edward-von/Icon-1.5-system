@@ -1656,6 +1656,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R12 — Eclipse e Raging Wolf con gli elenchi a righe (15 ottobre 2026, versione 1.15.14)
+
+Setup: un mondo con un PG Seer (Mendicant) con Eclipse e un PG Colossus (Stalwart) con Raging Wolf, aggiunte PRIMA
+dell'aggiornamento (per la migrazione 23) e altre due copie trascinate dal compendio Jobs DOPO; tab Combat.
+
+- [ ] **Migrazione**: al primo avvio dopo l'aggiornamento, in console (F12) compare "Migration 23: … Eclipse / Raging
+      Wolf …" e le copie vecchie hanno lo stesso aspetto di quelle nuove.
+- [ ] **Eclipse, anteprima sulla scheda**: nel blocco "End your turn and create a Terrain Effect" dopo "…standing in
+      that space:" ci sono due righe con il pallino in oro ("If there is, …" e "If there isn't, …"), poi "Then, end
+      the effect." a capo, come testo normale e non dentro l'ultima riga.
+- [ ] **Raging Wolf, anteprima sulla scheda**: ordine Special (no effect if not bloodied) → Comeback → Heroic →
+      Special (defeated); nel Comeback, dopo "…takes place in order.", tre righe con "Bloodied:", "25% or lower:",
+      "1 hp or lower:" in grassetto.
+- [ ] **Show in Chat**: le card delle due abilità mostrano gli stessi elenchi a righe, senza paragrafi vuoti.
+- [ ] **Scheda dell'abilità** (doppio clic): la descrizione di Eclipse e il campo Comeback di Raging Wolf sono a
+      righe; aprendo la modifica il testo ha una voce per riga, e salvando senza cambiare niente resta uguale.
+- [ ] **Già a capo prima**: il Limit Break Lycanthropy (Warden) e Split Heaven and Hell (Demon Slayer) ora mostrano le
+      loro voci "•" una per riga.
+- [ ] **Nessun cambiamento altrove**: un foe con "•" scritti in linea (es. Imperial Spy, Relict) e un'abilità senza
+      elenco restano come prima; i tooltip delle keyword (sealed, slashed, shove, dangerous terrain) funzionano
+      dentro le righe.
+- [ ] **Automazioni**: usando Raging Wolf e Eclipse gli status proposti (slashed, sealed) sono gli stessi di prima.
+
 ## R11 — Tabelle 1-6 una riga per risultato (15 ottobre 2026, versione 1.15.13)
 
 Setup: un mondo con un PG Chanter (Mendicant) con Monogatari e un PG Seer con Chaos Tarot (anche copie già sulle

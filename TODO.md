@@ -98,8 +98,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.13: una tabella numerata 1-6 nel testo ora esce una riga per
       risultato, numero in oro e nome in grassetto, come nel libro (p.179, p.201); solo resa, vale per tutte le
       tabelle, anche dei foe, e per le copie già sulle schede.)
-- [ ] **R12. Raging Wolf ed Eclipse formattati male** (S/M, dati)
+- [x] **R12. Raging Wolf ed Eclipse formattati male** (S/M, dati)
       Eclipse: "Formatted strangely. Please revisit." Raging Wolf: "formatted poorly and hard to read".
+      (FATTO il 15 ottobre 2026, versione 1.15.14: nel libro Eclipse ha i due esiti in elenco puntato (p.203) e il
+      Comeback di Raging Wolf le tre soglie di hp una per riga (p.137); nel compendio erano un paragrafo unico. Ora
+      ogni voce è su una riga "•" nel compendio e la resa le mostra una sotto l'altra; migrazione 23 per le copie già
+      sulle schede.)
 - [ ] **R13. The Tower: la mastery raddoppia il danno sbagliato** (S, regola)
       Il manuale dice doppio danno dai meteoriti di *Eclipse*, il sistema lo applica al meteorite della Tower.
       "Strange, but that's how it was written." Verificare la pagina.
@@ -188,6 +192,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
 - [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
       True Strike come se fosse uno status (c'era anche prima).
+- [ ] **Emerso lavorando su R12 — elenchi "•" in linea nei foe** (M, dati): circa 100 tratti/azioni di foe e legend
+      (Imperial Spy, Relict, Eternal Star del Warden, decreti del Majesty Demon, Creeping Cold delle Aesi…) scrivono
+      gli elenchi con " • " in linea, senza a capo, quindi restano un paragrafo unico. La resa a righe di R12 vale solo
+      per "\n•"; per usarla lì bisogna mettere l'a capo nei pack foes/legends, controllando a mano dove finisce l'ultima
+      voce (es. "3+: 1 damage. Phase 2: …" dell'Eternal Star).
 - [ ] **Emerso lavorando su R5 — tag dei foe ancora grigi** (S/M): nel pack delle foe abilities restano senza
       tooltip "per-round-N", "per-combat-N", "repeatable", "usable-when-bloodied", "round-3+(-only)", "area-effect",
       "burst-N-target/self", più i tag da meccanica di fazione ("cauldron-action",

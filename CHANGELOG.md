@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Eclipse e Raging Wolf con gli elenchi a righe (versione 1.15.14)
+
+### Round di debug del 15 ottobre, punto R12
+
+- **Eclipse e Raging Wolf difficili da leggere**: in Eclipse (Seer, Mendicant) i due esiti della stella ("If there
+  is, that character takes 2 divine damage…", "If there isn't, it explodes…") e la chiusura "Then, end the effect."
+  uscivano attaccati in un unico paragrafo; in Raging Wolf (Colossus, Stalwart) il Comeback metteva le tre soglie di
+  hp ("Bloodied:", "25% or lower:", "1 hp or lower:") in fila nella stessa frase, sulla scheda, nella card in chat e
+  nella scheda dell'abilità → il libro stampa i due esiti di Eclipse come elenco puntato con "Then, end the effect."
+  di nuovo a capo (p.203) e le tre soglie di Raging Wolf rientrate, una per riga (p.137); nel compendio dei job
+  l'elenco era andato perso e il testo era su una riga sola → nel compendio ogni voce ora sta su una riga che inizia
+  con "•" (come già in Lycanthropy e Split Heaven and Hell), e la resa mostra queste righe una sotto l'altra, con il
+  pallino in oro e il nome della soglia in grassetto ("Bloodied:"); il testo dopo l'elenco torna normale. La resa
+  vale anche per gli elenchi a capo già presenti (Lycanthropy, Split Heaven and Hell); i "•" scritti in linea nei
+  testi dei foe restano come sono. Migrazione 23: le copie di Eclipse e Raging Wolf già sulle schede e nella
+  sidebar che hanno ancora il testo vecchio parola per parola vengono aggiornate; quelle modificate a mano no.
+  L'ordine dei blocchi di Raging Wolf (Special, Comeback, Heroic, Special) era già quello del libro.
+
 ## 15 ottobre 2026 — Tabelle 1-6 una riga per risultato (versione 1.15.13)
 
 ### Round di debug del 15 ottobre, punto R11
