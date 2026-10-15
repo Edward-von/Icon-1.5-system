@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R15 — Il tiro del danno spunta Divine e Pierce dal testo (15 ottobre 2026, versione 1.15.17)
+
+Setup: un mondo con un PG Chanter (Mendicant) con Gentleness (va bene anche una copia aggiunta prima
+dell'aggiornamento); un foe con un'azione a danno piercing (es. Veridian Weapon — Gatling Cannons, o Demolisher —
+Battle Roar); tab Combat.
+
+- [ ] **Gentleness**: il bottone del danno di Gentleness apre il dialog con **Divine** già spuntato; l'anteprima dice
+      "1 → divine — nothing reduces it".
+- [ ] **Si può togliere**: togliendo la spunta a Divine e tirando, la card non tratta il danno come divine.
+- [ ] **Piercing**: il tiro del danno dell'azione piercing del foe apre con **Pierce** già spuntato.
+- [ ] **Per risultato**: su un'abilità dove solo l'area è divine/piercing (es. Gran Levincross o Helix Heel, se a
+      portata), passando da Hit ad Area la spunta segue il risultato scelto.
+- [ ] **Danno normale**: un attacco normale (es. [D]+fray) apre con Divine e Pierce vuoti come prima.
+- [ ] **Provoke**: il danno di Provoke propone ancora 2 e NON spunta Pierce (il piercing è quello subito, p.142).
+
 ## R14 — Provoke propone il danno giusto (15 ottobre 2026, versione 1.15.16)
 
 Setup: un mondo con un PG Knave (Stalwart) con Provoke (va bene anche una copia aggiunta prima dell'aggiornamento) e

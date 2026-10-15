@@ -39,7 +39,7 @@ export function parseAbilityDamage(itemSystem) {
   // Parse a single text blob for dice formula + fray + flat damage
   const parseChunk = (text) => {
     if (!text || typeof text !== "string") {
-      return { mult: 0, fray: false, flat: 0 };
+      return { mult: 0, fray: false, flat: 0, type: "" };
     }
     const lower = text.toLowerCase();
     // dice multiplier: "[D]", "2[D]", "3[d]"
@@ -52,7 +52,13 @@ export function parseAbilityDamage(itemSystem) {
     // p.142) is what they take, not what they deal: skip it.
     const flatMatch = lower.match(/(\d+)\s+(?:divine\s+|piercing\s+|true\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
     const flat = flatMatch ? Number(flatMatch[1]) : 0;
-    return { mult, fray: includesFray, flat };
+    // Damage type written next to the amount X
+    // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
+    // the damage dialog can start with Divine / Pierce ticked (p.104).
+    // Same "to you" exclusion as the flat amount.
+    const typeMatch = lower.match(/(?:\d+|\[d\]|fray)\s+(divine|piercing)\s+damage(?!\s+to\s+you(?:rself)?)/);
+    const type = typeMatch ? typeMatch[1] : "";
+    return { mult, fray: includesFray, flat, type };
   };
 
   // Primary hit: prefer `hitEffect`; fall back to description "On hit:" / "Autohit:" substring

@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Il tiro del danno spunta Divine e Pierce dal testo (versione 1.15.17)
+
+### Round di debug del 15 ottobre, punto R15
+
+- **Gentleness non selezionava Divine**: aprendo il tiro del danno di Gentleness (Chanter, Mendicant) la casella
+  Divine restava vuota, anche se il testo dice "take 1 divine damage" (p.179) → la lettura automatica del testo
+  prendeva solo la quantità di danno (1) e ignorava il tipo; nel dialog Divine e Pierce non si spuntavano mai da
+  soli per nessuna abilità → ora la lettura del danno ricorda anche il tipo scritto accanto alla quantità ("1 divine
+  damage", "[D]+fray divine damage", "2 piercing damage"; non il danno "to you" come in Provoke) e il dialog spunta
+  Divine o Pierce in base al risultato scelto (Hit / Miss / Area / versione combo); si può sempre togliere a mano.
+  Vale per PG, foe e legend. Solo codice: nessun cambio al compendio né alle schede.
+
 ## 15 ottobre 2026 — Provoke propone il danno giusto (versione 1.15.16)
 
 ### Round di debug del 15 ottobre, punto R14

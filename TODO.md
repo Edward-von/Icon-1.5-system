@@ -115,7 +115,10 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.16: la lettura del danno prendeva il primo "N damage" del testo, cioè
       "1 piercing damage to you" (danno subito, p.142); ora salta il danno seguito da "to you"/"to yourself" e propone
       2. Solo codice, vale anche per le copie già sulle schede.)
-- [ ] **R15. Gentleness: il tiro del danno non seleziona Divine** (S, bug)
+- [x] **R15. Gentleness: il tiro del danno non seleziona Divine** (S, bug)
+      (FATTO il 15 ottobre 2026, versione 1.15.17: la lettura del danno prendeva la quantità e non il tipo, e il
+      dialog non spuntava mai Divine/Pierce da solo; ora il tipo scritto accanto al danno ("1 divine damage", p.179;
+      "N piercing damage") spunta Divine o Pierce per il risultato scelto. Solo codice, vale per PG, foe e legend.)
 - [ ] **R16. God Hand: Talent 1 e 2 non danno i bonus a Devil Hand (combo) e a Fists of Heaven and Hell (mastery)
       nella card dell'attacco** (S/M, bug)
 - [ ] **R17. Polaris: il Talent 1 non permette di marcare un personaggio** (S/M, bug)

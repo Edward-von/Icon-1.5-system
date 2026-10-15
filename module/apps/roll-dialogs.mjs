@@ -518,11 +518,24 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       const dodgeNote = root.querySelector("[data-dodge-note]");
       if (dodgeNote) dodgeNote.hidden = !(outcome === "miss" || outcome === "area");
     };
+    // Divine / Pierce follow the damage type written in the text of the
+    // chosen outcome ("take 1 divine damage", Gentleness p.179): set when the
+    // dialog opens and when the outcome or the combo version changes. A
+    // manual tick stays until one of those changes.
+    const syncType = () => {
+      const outcome = f.querySelector('input[name="outcome"]:checked')?.value ?? "hit";
+      const src = (!!f.elements.useCombo?.checked && !!pc) ? pc : p;
+      const type = (outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
+      if (f.elements.divine) f.elements.divine.checked = type === "divine";
+      if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
+    };
+    f.querySelectorAll('input[name="outcome"], input[name="useCombo"]').forEach(el => el.addEventListener("change", syncType));
     f.querySelectorAll('input').forEach(el => el.addEventListener("input", update));
     f.querySelectorAll('input').forEach(el => el.addEventListener("change", update));
     // ✕ drops a target from this roll (and untargets it on the map); the
     // radios move the attack target. Neither changes the formula.
     _wireTargetCard(root, () => {});
+    syncType();
     update();
   });
 
