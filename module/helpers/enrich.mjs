@@ -17,10 +17,55 @@ import { enrichRuleKeywords } from "./keywords.mjs";
  *   keywords.
  */
 export async function enrichHTML(html, { keywords = true } = {}) {
-  const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(html ?? "", { async: true });
+  const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(formatRollTables(html), { async: true });
   if (!keywords) return out;
   try { return enrichRuleKeywords(out); }
   catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
+}
+
+/**
+ * Turn a numbered d6 table written inline in a plain rules text
+ * ("…gamble. 1. Card explodes… 2. All characters… 3. …") into one row per
+ * result, as the book prints it (Monogatari p.179, Chaos Tarot p.201, the
+ * foes' gamble actions). Pack texts store the table as one run-on line.
+ *
+ * Only plain texts are touched (hand-edited HTML keeps its own markup), and
+ * only when results 1, 2 and 3 are all found in order. The rows are spans
+ * (shown as block rows by CSS) because the text sits inside a <p>/<span> on
+ * the sheet and in chat, where a list element is not allowed.
+ * @param {string} text
+ * @returns {string}
+ */
+export function formatRollTables(text) {
+  const src = String(text ?? "");
+  if (!src || /<[a-z][^>]*>/i.test(src)) return src;
+  // Result k: "k. " after a space (or at the start), not immediately followed
+  // by another "k. " — "is shoved 2. 2. Lantern" (Shopkeep) is the end of
+  // result 1 followed by result 2. Result 1 must also start a sentence.
+  const find = (k, from) => {
+    const re = new RegExp(`(^|${k === 1 ? "[.:!?]" : ""}\\s+)${k}\\.\\s+(?!${k}\\.\\s)`, "g");
+    re.lastIndex = from;
+    const m = re.exec(src);
+    return m ? { at: m.index + m[1].length, body: m.index + m[0].length } : null;
+  };
+  const marks = [];
+  for (let k = 1, from = 0; ; k++) {
+    const m = find(k, from);
+    if (!m) break;
+    marks.push(m);
+    from = m.body;
+  }
+  if (marks.length < 3) return src;
+
+  const rows = marks.map((m, i) => {
+    let body = src.slice(m.body, marks[i + 1]?.at ?? src.length).trim();
+    // A short name before ":" or " - " ("A Tale of Fury: …", "Earth - …") is the result's title
+    const t = body.match(/^([^:.]{1,45}?)(:|\s[-–—]\s)\s*/);
+    if (t) body = `<b class="icon-roll-table__title">${t[1]}${t[2].trim() === ":" ? ":" : ` ${t[2].trim()}`}</b> ${body.slice(t[0].length)}`;
+    return `<span class="icon-roll-table__row"><span class="icon-roll-table__num">${i + 1}</span>`
+         + `<span class="icon-roll-table__text">${body}</span></span>`;
+  });
+  return `${src.slice(0, marks[0].at).trim()}<span class="icon-roll-table">${rows.join("")}</span>`;
 }
 
 /**

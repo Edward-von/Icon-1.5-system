@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R11 — Tabelle 1-6 una riga per risultato (15 ottobre 2026, versione 1.15.13)
+
+Setup: un mondo con un PG Chanter (Mendicant) con Monogatari e un PG Seer con Chaos Tarot (anche copie già sulle
+schede prima dell'aggiornamento); tab Combat. Un foe Troll (o Hag / Shopkeep / Diviner) sulla scena.
+
+- [ ] **Monogatari, anteprima sulla scheda**: nel blocco Effect, dopo "…once per song.", i sei racconti sono su sei
+      righe, numero 1-6 in oro a sinistra, "A Tale of Fury:" ecc. in grassetto; il Charge resta sotto, separato.
+- [ ] **Chaos Tarot, anteprima sulla scheda**: l'Area Effect mostra "Gamble, then apply the listed effect in the
+      area." e poi sei righe (Card explodes… / teleported 2 / difficult terrain / Bless / Seal / Choose two); la riga
+      2 finisce con "teleported 2." senza perdere il numero.
+- [ ] **Copie già sulle schede**: stesso aspetto anche per le abilità aggiunte prima dell'aggiornamento (nessuna
+      migrazione: è solo la resa).
+- [ ] **Show in Chat**: nelle card delle due abilità la tabella è a righe, senza paragrafi vuoti o testo spostato
+      fuori dal blocco.
+- [ ] **Scheda dell'abilità** (doppio clic su Monogatari): la descrizione mostra la tabella a righe.
+- [ ] **Foe**: l'azione Strange Brew del Troll (e Rummage dello Shopkeep: "1 · 10 foot pole:", "2 · Lantern:") è a
+      righe sulla scheda del foe e nella card in chat.
+- [ ] **Nessun falso positivo**: abilità con numeri nel testo ma senza tabella (es. "Gain aura 1. … shove 2") restano
+      testo normale.
+- [ ] **Tooltip delle keyword** (es. "Bless", "Seal", "teleported", "difficult terrain") ancora attivi dentro le righe.
+
 ## R10 — Sleight of Hand e Chaos Tarot senza il Wild Card ripetuto (15 ottobre 2026, versione 1.15.12)
 
 Setup: un mondo con un PG Seer (Mendicant) che aveva già Sleight of Hand e Chaos Tarot prima dell'aggiornamento, più

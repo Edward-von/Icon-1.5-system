@@ -2420,6 +2420,15 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-ability-section { padding-left: 8px; border-left: 2px solid rgba(200,150,28,.25); }
 .icon-ability-section strong { color: var(--ic-gold-bright); }
 
+/* Numbered d6 tables inside a rules text (enrich.mjs formatRollTables:
+   Monogatari, Chaos Tarot, foe gamble actions): one row per result. */
+.icon-roll-table { display: block; margin: 3px 0 1px; }
+.icon-roll-table__row { display: flex; align-items: baseline; gap: 6px; padding: 1px 0; }
+.icon-roll-table__row + .icon-roll-table__row { border-top: 1px dotted rgba(200,150,28,.22); }
+.icon-roll-table__num { flex: 0 0 1.2em; text-align: center; font-weight: 700; color: var(--ic-gold); }
+.icon-roll-table__text { flex: 1 1 auto; min-width: 0; }
+.icon-roll-table__title { font-weight: 700; }
+
 /* Relic reminders on ability cards (sheet panel + chat): a violet-tinted note
    so they read as "from a relic", not as part of the ability text. */
 .icon-ability-relic {

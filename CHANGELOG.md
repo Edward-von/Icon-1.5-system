@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Tabelle 1-6 una riga per risultato (versione 1.15.13)
+
+### Round di debug del 15 ottobre, punto R11
+
+- **Tabelle poco leggibili**: in Monogatari (Chanter, Mendicant) e nell'Area Effect di Chaos Tarot (Seer,
+  Mendicant) la tabella del gamble usciva come un unico blocco di testo ("…once per song. 1. A Tale of Fury: … 2. A
+  Tale of Travels: … 3. …"), sulla scheda, nella card in chat e nella scheda dell'abilità → il libro stampa i sei
+  risultati uno per riga (Monogatari p.179, Chaos Tarot p.201), mentre nel compendio il testo è su una riga sola e
+  il sistema lo mostrava così com'era → la resa ora riconosce una tabella numerata (risultati 1, 2, 3… in ordine,
+  almeno tre) nel testo semplice e la mostra una riga per risultato, con il numero in oro e il nome del risultato in
+  grassetto ("A Tale of Fury:", "Lantern:"). Vale per tutte le tabelle del genere, anche per le azioni dei foe
+  (Strange Brew dei Troll, Rummage di Collector e Shopkeep, Bend Fate del Diviner, Chaos beam del Pariah,
+  Aetherstorm del Quintessent, Fae Thief e Sober Up delle Aesi). Correzione solo nella resa (`formatRollTables` in
+  `module/helpers/enrich.mjs` + stile in `css/icon.css`): nessun dato cambiato, vale subito anche per le abilità
+  già sulle schede, senza migrazione. I testi scritti a mano in HTML restano come sono.
+
 ## 15 ottobre 2026 — Sleight of Hand e Chaos Tarot senza le regole del Wild Card ripetute (versione 1.15.12)
 
 ### Round di debug del 15 ottobre, punto R10
