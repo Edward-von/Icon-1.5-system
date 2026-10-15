@@ -39,6 +39,29 @@ export async function enrichHTML(html, { keywords = true } = {}) {
 export function formatRollTables(text) {
   const src = String(text ?? "");
   if (!src || /<[a-z][^>]*>/i.test(src)) return src;
+  const marks = _rollTableMarks(src);
+  if (!marks) return src;
+  const rows = marks.map((m, i) => _tableRow(i + 1, src.slice(m.body, marks[i + 1]?.at ?? src.length).trim()));
+  return `${src.slice(0, marks[0].at).trim()}<span class="icon-roll-table">${rows.join("")}</span>`;
+}
+
+/**
+ * The row of a numbered d6 table ("1. … 2. … 3. …", same reading as
+ * formatRollTables) for result `n`, as plain text — used by the gamble card to
+ * print the row the die landed on. HTML wrappers are stripped first.
+ * @param {string} text
+ * @param {number} n
+ * @returns {string}  "" when the text has no table or no row `n`
+ */
+export function rollTableRow(text, n) {
+  const src = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const marks = src ? _rollTableMarks(src) : null;
+  const m = marks?.[n - 1];
+  return m ? src.slice(m.body, marks[n]?.at ?? src.length).trim() : "";
+}
+
+/** Positions of the "1. ", "2. ", … markers of an inline d6 table, or null (fewer than 3). */
+function _rollTableMarks(src) {
   // Result k: "k. " after a space (or at the start), not immediately followed
   // by another "k. " — "is shoved 2. 2. Lantern" (Shopkeep) is the end of
   // result 1 followed by result 2. Result 1 must also start a sentence.
@@ -55,10 +78,7 @@ export function formatRollTables(text) {
     marks.push(m);
     from = m.body;
   }
-  if (marks.length < 3) return src;
-
-  const rows = marks.map((m, i) => _tableRow(i + 1, src.slice(m.body, marks[i + 1]?.at ?? src.length).trim()));
-  return `${src.slice(0, marks[0].at).trim()}<span class="icon-roll-table">${rows.join("")}</span>`;
+  return marks.length < 3 ? null : marks;
 }
 
 /**

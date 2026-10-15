@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Bottone Gamble sulle abilità (versione 1.15.29)
+
+### Round di debug del 15 ottobre, punto R25
+
+- **Gamble cliccabile**: Maar chiedeva un bottone per il gamble sulle abilità che lo hanno (es. Riposte), con dadi da
+  aggiungere o togliere al momento e spazio per i tratti del Fool che fissano il numero; Turz Ven ricordava che conta
+  solo il dado più alto (3d6kh1, non 3d6) → sulle abilità col tag "gamble" o con la parola nel testo in gioco
+  (descrizione, talento scelto, mastery sbloccata, combo) c'è un bottone **Gamble** nell'anteprima della scheda PG e
+  nella card di Show in Chat (lì lo usa solo chi possiede il personaggio). Apre una finestra con: **Dice** (1 di
+  default, +/−, fino a 10) per i dadi extra che dà l'abilità o un talento (Riposte Talent I: sacrifice 2 per 1 d6 in
+  più, p.142); **Vigilance charges spent** solo dove il testo spende la Vigilance sul gamble (Dire Parry, p.142: un d6
+  in più per carica), scalate dal tracker; **Result**: Roll (default), **Stacked Die** (solo se il Fool ne tiene uno:
+  risultato 6 e il dado viene speso, Stack Dice p.149) oppure **Set the number** (1-6, per Silver Rabbit III p.250,
+  Golden Mask p.340, Bend Fate p.199). Il tiro è 1d6 (gamble, p.148) o Nd6 tenendo il più alto, come la Vigilance
+  (p.105). La card in chat mostra i dadi (il più alto evidenziato), il risultato e, se l'abilità ha una tabella 1-6
+  (R11), la riga corrispondente. Solo codice.
+
 ## 15 ottobre 2026 — Più istanze dello stesso danno nel tiro del danno (versione 1.15.28)
 
 ### Round di debug del 15 ottobre, punto R24

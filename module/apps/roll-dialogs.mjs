@@ -643,3 +643,100 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     });
   } catch (err) { _log("damage dialog closed", err); return null; }
 }
+
+/* -------------------------------------------------- */
+/*  Gamble                                             */
+/* -------------------------------------------------- */
+
+/**
+ * Gamble dialog (p.148: "Roll 1d6, then trigger an effect on a certain result
+ * or higher"). Extra dice can be added or taken away on the spot — Riposte's
+ * Dire Parry rolls one more d6 per Vigilance charge spent, its Talent I one
+ * more for sacrifice 2 (p.142) — and only the HIGHEST die counts, as with
+ * Vigilance (p.105). The result can also be set instead of rolled: the Fool's
+ * Stacked Die makes it 6 (p.149); Silver Rabbit III, the Golden Mask and the
+ * Seer's Bend Fate let a number of your choice stand (pp.199, 250, 340).
+ *
+ * `vigilance`: charges the actor holds when the ability spends them on the
+ * gamble (0 = no field). `stacked`: Stacked Dice held (0 = no option).
+ * @returns {Promise<{dice:number, vigilance:number, mode:"roll"|"stacked"|"set", value:number}|null>}
+ */
+export async function promptGamble(ab, actor, { vigilance = 0, stacked = 0 } = {}) {
+  const content = `
+    <div class="icon-roll-dialog icon-roll-dialog--gamble">
+      ${_hero({ actor, kicker: "Gamble · only the highest die counts", title: ab.name ?? "Gamble", cost: ab.cost, tags: ab.tags, dieLabel: "d6", dieSub: "highest die" })}
+      <div class="icon-roll-body">
+        <section class="icon-roll-card">
+          <h4 class="icon-roll-card__title">Dice</h4>
+          <div class="icon-roll-steppers">
+            ${_stepper({ name: "dice", label: "Dice", hint: "1d6 by default; add the extra dice the ability, a talent or a relic gives you (sacrifice 2, …), or take some away", value: 1, min: 1, max: 10 })}
+            ${vigilance > 0 ? _stepper({ name: "vigilance", label: "Vigilance charges spent", hint: `+1d6 each, taken off your tracker (you hold ${vigilance})`, value: 0, min: 0, max: vigilance }) : ""}
+          </div>
+        </section>
+        <section class="icon-roll-card">
+          <h4 class="icon-roll-card__title">Result</h4>
+          <div class="icon-roll-seg">
+            <label class="icon-roll-seg__opt">
+              <input type="radio" name="mode" value="roll" checked>
+              <span class="icon-roll-seg__label">Roll<small>keep the highest</small></span>
+            </label>
+            ${stacked > 0 ? `
+            <label class="icon-roll-seg__opt" title="Stack Dice (Fool, p.149): the gamble result becomes 6, consuming the die">
+              <input type="radio" name="mode" value="stacked">
+              <span class="icon-roll-seg__label">Stacked Die<small>result 6 · spends 1 of ${stacked}</small></span>
+            </label>` : ""}
+            <label class="icon-roll-seg__opt" title="An effect that lets you pick the number: Silver Rabbit III (any number from 1 to 6), Golden Mask, Bend Fate (choose any result)">
+              <input type="radio" name="mode" value="set">
+              <span class="icon-roll-seg__label">Set the number<small>no roll</small></span>
+            </label>
+          </div>
+          <div class="icon-roll-steppers" data-role="set-value" style="display:none">
+            ${_stepper({ name: "setValue", label: "Number", hint: "the gamble result you choose", value: 6, min: 1, max: 6 })}
+          </div>
+          <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note"></span></div>
+        </section>
+      </div>
+    </div>`;
+
+  _onDialogRender(".icon-roll-dialog--gamble", root => {
+    const f = root.closest("form") ?? root;
+    const formula = root.querySelector(".icon-roll-preview__formula"), note = root.querySelector(".icon-roll-preview__note");
+    const setBox = root.querySelector('[data-role="set-value"]');
+    const update = () => {
+      const mode = f.querySelector('input[name="mode"]:checked')?.value ?? "roll";
+      const n = Math.max(1, Number(f.elements.dice?.value) || 1) + Math.max(0, Number(f.elements.vigilance?.value) || 0);
+      setBox.style.display = mode === "set" ? "" : "none";
+      if (mode === "stacked") { formula.textContent = "Result 6"; note.textContent = "No roll: the Stacked Die makes it 6."; }
+      else if (mode === "set") { formula.textContent = `Result ${Number(f.elements.setValue?.value) || 6}`; note.textContent = "No roll: the number you chose stands."; }
+      else {
+        formula.textContent = n > 1 ? `${n}d6, keep the highest` : "1d6";
+        note.textContent = n > 1 ? "The dice don't add up: only the highest one is the gamble result." : "";
+      }
+    };
+    f.addEventListener("input", update);
+    f.addEventListener("change", update);
+    update();
+  });
+
+  try {
+    return await foundry.applications.api.DialogV2.prompt({
+      ...DIALOG_OPTS,
+      window: { title: `Gamble — ${ab.name ?? "Gamble"}` },
+      content,
+      ok: {
+        label: "Gamble", icon: "fa-solid fa-dice",
+        callback: (_e, button) => {
+          const f = button.form;
+          const mode = f.querySelector('input[name="mode"]:checked')?.value ?? "roll";
+          return {
+            dice:      Math.min(10, Math.max(1, Math.floor(Number(f.elements.dice?.value) || 1))),
+            vigilance: Math.min(vigilance, Math.max(0, Math.floor(Number(f.elements.vigilance?.value) || 0))),
+            mode:      ["roll", "stacked", "set"].includes(mode) ? mode : "roll",
+            value:     Math.min(6, Math.max(1, Math.floor(Number(f.elements.setValue?.value) || 6))),
+          };
+        },
+      },
+      rejectClose: false,
+    });
+  } catch (err) { _log("gamble dialog closed", err); return null; }
+}

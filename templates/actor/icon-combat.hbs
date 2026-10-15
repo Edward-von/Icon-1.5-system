@@ -628,6 +628,13 @@
                   title="Post the ability to chat for everyone to see">
             <i class="fa-solid fa-comment"></i> Show in Chat
           </button>
+          {{#if ab.canGamble}}
+            <button type="button" class="icon-btn icon-btn--sm"
+                    data-action="abilityGamble" data-item-id="{{ab.id}}"
+                    title="Gamble (p.148): roll 1d6, or more dice keeping only the highest; a Stacked Die or a chosen number can replace the roll">
+              <i class="fa-solid fa-dice"></i> Gamble
+            </button>
+          {{/if}}
           {{#each ab.infusions as |inf|}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
                     data-action="abilityInfuse" data-item-id="{{ab.id}}" data-label="{{inf.label}}"

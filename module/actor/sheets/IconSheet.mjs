@@ -19,6 +19,7 @@ import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvoke
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
 import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses } from "../../combat/ability-statuses.mjs";
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
+import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion } from "../../helpers/infuse.mjs";
@@ -138,6 +139,7 @@ export class IconSheet extends BaseActorSheet {
       removeItem:        IconSheet.#onRemoveItem,
       setPrimaryJob:     IconSheet.#onSetPrimaryJob,
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
+      abilityGamble:      IconSheet.#onAbilityGamble,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
       abilityMark:        IconSheet.#onAbilityMark,
@@ -370,6 +372,8 @@ export class IconSheet extends BaseActorSheet {
         // Stance abilities: stance button, lit while this is the stance in play
         canStance:   tags.some(t => tagKey(t) === "stance"),
         stanceOn:    IconActor.stancesOf(actor).includes(a.name),
+        // Gamble button (p.148): "gamble" tag, or the word in a text in play
+        canGamble:   abilityGambles(s, tags),
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
@@ -1526,6 +1530,8 @@ export class IconSheet extends BaseActorSheet {
       comboMark:   _comboMark(s),
       canStance:   tags.some(t => tagKey(t) === "stance"),
       stanceOn:    IconActor.stancesOf(this.document).includes(item.name),
+      canGamble:   abilityGambles(s, tags),
+      actorUuid:   this.document.uuid,
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id),
       marks:       _abilityMarks(this.document.id, item.id, _comboMark(s)),
@@ -1631,6 +1637,12 @@ export class IconSheet extends BaseActorSheet {
       await this.document.update({ "system.combat.classResources.comboToken.value": 0 });
       await this.document.setFlag("icon-system", "comboSpentOnItem", itemId);
     }
+  }
+
+  /** Gamble button of an ability: dice dialog, Nd6 keep highest, card (combat/gamble.mjs). */
+  static async #onAbilityGamble(event, target) {
+    event.stopPropagation();
+    await rollGamble(this.document, this.document.items.get(target.dataset.itemId));
   }
 
   /** Post a trait card to chat. */

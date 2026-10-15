@@ -65,4 +65,12 @@
   {{/if}}
   {{!-- Inflicted statuses: a button per status and target (ability-statuses.mjs) --}}
   {{#if statusHtml}}{{{statusHtml}}}{{/if}}
+  {{!-- Gamble button (combat/gamble.mjs), bound in icon.mjs: owner only --}}
+  {{#if ab.canGamble}}
+    <div class="icon-chat-card__gamble">
+      <button type="button" class="icon-chat-btn" data-action="gambleAbility"
+              data-actor-uuid="{{ab.actorUuid}}" data-item-id="{{ab.id}}"
+              title="Gamble (p.148): roll 1d6, or more dice keeping only the highest"><i class="fa-solid fa-dice"></i> Gamble</button>
+    </div>
+  {{/if}}
 </div>

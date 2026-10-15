@@ -106,6 +106,7 @@ import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
+import { rollGamble } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 
 /* ================================================== */
@@ -882,6 +883,25 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
  */
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   bindInflictButtons(html);
+});
+
+/**
+ * "Gamble" button on an ability's Show in Chat card (combat/gamble.mjs, R25):
+ * opens the gamble dialog for the card's character. Only its owners can use
+ * it (the roll may spend Vigilance or a Stacked Die from their sheet).
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  html.querySelectorAll('[data-action="gambleAbility"]').forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    let actor = null;
+    try { actor = fromUuidSync(btn.dataset.actorUuid); } catch { actor = null; }
+    if (!actor?.isOwner) { btn.disabled = true; btn.title = "Only the owner of this character can gamble with it"; return; }
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      await rollGamble(actor, actor.items.get(btn.dataset.itemId));
+    });
+  });
 });
 
 /**

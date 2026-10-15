@@ -3598,6 +3598,11 @@ ol.chat-log .chat-message,
   cursor: not-allowed;
   transform: none;
 }
+/* Gamble button on the ability card (R25): gold, not the damage red */
+.icon-chat-card__gamble { margin-top: 6px; }
+.icon-chat-card__gamble .icon-chat-btn { background: rgba(200,150,28,.18); color: #e8c868; border-color: rgba(200,150,28,.55); }
+.icon-chat-card__gamble .icon-chat-btn:hover { background: rgba(200,150,28,.35); color: #fff; }
+.icon-chat-card__gamble .icon-chat-btn:disabled { opacity: .5; }
 .icon-chat-btn--apply-half {
   padding: 3px 7px;
   background: rgba(216,48,48,0.12);

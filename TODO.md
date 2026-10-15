@@ -195,10 +195,14 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.28: campo "Instances ×N" nella finestra del danno, precompilato da
       "twice" / "N times" nel testo dell'esito; tiro unico, Apply applica N istanze separate con armor e ½ su ciascuna,
       vulnerable/weakened già per istanza nella card (p.92, p.109); mob un hit per istanza. Solo codice.)
-- [ ] **R25. Gamble cliccabile** (M)
+- [x] **R25. Gamble cliccabile** (M)
       Bottone per il gamble sulle abilità che lo hanno (es. Riposte), con dadi da aggiungere o togliere al momento, e
       spazio per i tratti del Fool che fissano quei numeri. Commento di Turz Ven: "Remember that like armor/Vigilance,
       gamble only cares about the highest number rolled; so, 3d6kh1, not 3d6."
+      (FATTO il 15 ottobre 2026, versione 1.15.29: bottone Gamble nell'anteprima della scheda PG e nella card Show in
+      Chat; finestra con Dice +/−, cariche di Vigilance dove il testo le spende (Dire Parry), Stacked Die del Fool =
+      6 (p.149) o numero scelto 1-6; tiro Nd6 tenendo il più alto (p.105, p.148); card con dadi, risultato e riga
+      della tabella 1-6 se c'è. Solo codice.)
 - [ ] **R26. [D] che mostra i dadi veri nelle card delle abilità** (M)
       Sulla scheda di un PG "2d10" invece di "2[D]"; resta [D] prima della scelta o fuori dalla scheda. Il damage
       roller lo fa già.

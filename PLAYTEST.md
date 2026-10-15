@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R25 — Bottone Gamble sulle abilità (15 ottobre 2026, versione 1.15.29)
+
+Setup: un PG Knave (Stalwart) con Riposte equipaggiata e qualche carica di Vigilance; un PG Fool (Vagabond) con
+un'abilità gamble (es. Spinning Top) e un'abilità con tabella 1-6 se disponibile (es. Chaos Tarot, Monogatari); tab
+Combat, anteprima dell'abilità aperta.
+
+- [ ] **Bottone**: Riposte → nell'anteprima c'è il bottone **Gamble** accanto a Show in Chat; un'abilità senza gamble
+      (es. Provoke) non lo ha.
+- [ ] **Tiro base**: Gamble → la finestra mostra Dice = 1 e "1d6"; Gamble → card in chat con un dado e "gamble result".
+- [ ] **Dadi in più**: Dice a 3 con + → anteprima "3d6, keep the highest"; la card mostra 3 dadi, il più alto
+      evidenziato in verde, e il risultato è quel dado (non la somma).
+- [ ] **Vigilance (Dire Parry)**: con 2 cariche, campo "Vigilance charges spent" presente; metterlo a 2 → si tirano
+      Dice + 2 dadi, la card dice "(2 from Vigilance)" e "2 Vigilance charges spent", e il tracker scende di 2. Su
+      un'abilità che non parla di Vigilance il campo non c'è.
+- [ ] **Stacked Die (Fool)**: con 1 Stacked Die acceso sul tratto Stack Dice → opzione "Stacked Die" presente;
+      sceglierla → nessun tiro, risultato 6, il pip del tratto si spegne. Senza Stacked Die l'opzione non c'è.
+- [ ] **Set the number**: scegliere "Set the number" → appare il campo Number; impostarlo a 4 → card con risultato 4
+      e nessun dado tirato.
+- [ ] **Tabella 1-6**: su un'abilità con tabella numerata, Gamble → sotto il risultato la card mostra la riga di quel
+      numero.
+- [ ] **Card Show in Chat**: Show in Chat di Riposte → la card ha in fondo il bottone dorato Gamble, che apre la stessa
+      finestra. Da un altro utente che non possiede il PG il bottone è disattivato.
+- [ ] **Dice So Nice** (se attivo): il tiro mostra i dadi 3D; con Stacked Die o numero fissato non parte nessuna
+      animazione.
+
 ## R24 — Più istanze dello stesso danno nel tiro del danno (15 ottobre 2026, versione 1.15.28)
 
 Setup: un mondo con un PG qualunque e un foe Pepperbox (Skirmisher, p.302, reimportato dal compendio) sulla scena,
