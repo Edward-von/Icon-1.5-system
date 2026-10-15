@@ -275,6 +275,19 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   if (current !== base && !current.some(isRange) && !current.some(selfArea)) {
     current = [...current, ...base.filter(isRange)];
   }
+  // An upgrade that turns the ability into a mark says so in its text, and the
+  // ability gains the Mark button even though no tag list was written for it:
+  // Polaris Talent I "follow a character as a mark instead of a space" (p.202).
+  // Added after the layers so a mastery list does not drop the talent's mark.
+  const markUpgrade = [
+    selected === 1 && { source: "Talent I",  text: s.talent1 },
+    selected === 2 && { source: "Talent II", text: s.talent2 },
+    s.masteryUnlocked && { source: "Mastery", text: s.mastery },
+  ].find(u => u && /\b(?:as|making it) a mark\b/i.test(_plainText(u.text)));
+  if (markUpgrade && !current.some(t => /^(?:mark|multi-?mark)$/i.test(String(t).trim()))) {
+    current = [...current, "mark"];
+    if (!base.includes("mark")) origin.set("mark", markUpgrade);
+  }
   // A complete combo ability marks only if it writes its own "Mark:" block:
   // Sow's REAP is a melee attack with no mark, but its tags were copied from Sow.
   if (comboMode && comboReplacesBase(s.comboEffect) && !/\bMark:/.test(_plainText(s.comboEffect))) {

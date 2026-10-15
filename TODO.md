@@ -125,7 +125,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       per la combo. Ora il talento sbloccato vale per tutte le versioni (p.192): un suo Exceed / Hit / Miss / Crit va
       nel riquadro corrispondente, il resto (teleport a 2, Slay) ha un riquadro suo. Fists of Heaven and Hell non è
       ancora usabile (R28): vedi le voci emerse. Solo codice.)
-- [ ] **R17. Polaris: il Talent 1 non permette di marcare un personaggio** (S/M, bug)
+- [x] **R17. Polaris: il Talent 1 non permette di marcare un personaggio** (S/M, bug)
+      (FATTO il 15 ottobre 2026, versione 1.15.19: il bottone Mark segue il tag `mark` e il Talent I (p.202) non lo
+      dava. Ora un talento / una mastery sbloccati che rendono l'abilità un mark ("as a mark", "making it a mark")
+      aggiungono il tag Mark, anche con la mastery sbloccata; vale anche per la mastery Amico di Party Favor. Solo
+      codice, vale per le copie già sulle schede.)
 - [ ] **R18. Intimidate: la mastery non propone Unstoppable** (S, bug)
       Né il bottone per applicarlo a sé, né il testo di promemoria.
 - [ ] **R19. Aure mancanti o sbagliate** (M, bug)
@@ -228,6 +232,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       verificato): la card degli attacchi auto-hit (True Strike ecc.) non mostra né Exceed né il talento; la mastery
       sbloccata non entra in nessuna card dell'attacco (solo nello Show in Chat). Da controllare se ci sono mastery
       che aggiungono Hit / Exceed / Slay all'attacco e, se sì, trattarle come i talenti.
+- [ ] **Emerso lavorando su R17 — testo del mark per Polaris / Party Favor** (S): il bottone Mark di un'abilità senza
+      blocco "Mark:" mette nel mark tutto il testo dell'abilità (Terrain Effect + Gamble di Polaris); andrebbe usato
+      il testo del talento / della mastery che crea il mark. Da verificare nel playtest R17.
 
 ---
 

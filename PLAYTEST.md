@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R17 — Polaris può marcare un personaggio col Talent I (15 ottobre 2026, versione 1.15.19)
+
+Setup: un mondo con un PG Seer (Mendicant) con Polaris (va bene anche una copia aggiunta prima dell'aggiornamento);
+almeno un token di un altro personaggio sulla scena; tab Combat.
+
+- [ ] **Senza talento**: Polaris senza talento scelto → nessun bottone Mark, tag come prima (Range 5, Terrain
+      Effect, Gamble).
+- [ ] **Talent I**: scegliere il Talent I → compare la chip "Mark" evidenziata (tooltip "From Talent I: You can cause
+      one of your Polaris to follow a character…") e il bottone Mark.
+- [ ] **Marcare**: bersagliare un token (T) → bottone Mark → il personaggio riceve il mark di Polaris, che compare
+      tra i mark dell'abilità e nel tab Conditions; la ✕ lo toglie.
+- [ ] **Talent II**: passare al Talent II → la chip Mark e il bottone spariscono.
+- [ ] **Con la mastery**: Talent I + mastery Moon Silver Princess sbloccata → ci sono sia "Free Action" sia "Mark" e il
+      bottone Mark resta.
+- [ ] **Party Favor**: un PG Fool con Party Favor e la mastery Amico sbloccata → chip Mark e bottone Mark presenti;
+      senza mastery non ci sono.
+- [ ] **Altre abilità con mark**: un'abilità che marca già di suo (es. Sisyphus) ha il bottone Mark come prima.
+
 ## R16 — I talenti compaiono nella card dell'attacco (15 ottobre 2026, versione 1.15.18)
 
 Setup: un mondo con un PG Sealer (Mendicant) con God Hand equipaggiata (va bene anche una copia aggiunta prima

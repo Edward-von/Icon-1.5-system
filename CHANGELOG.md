@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Polaris può marcare un personaggio col Talent I (versione 1.15.19)
+
+### Round di debug del 15 ottobre, punto R17
+
+- **Polaris non dava il bottone Mark con il Talent I**: con il Talent I di Polaris (Seer, Mendicant) sbloccato,
+  "You can cause one of your Polaris to follow a character as a mark instead of a space" (p.202), la scheda non
+  mostrava il bottone Mark, quindi non si poteva marcare il personaggio da seguire → il bottone Mark compare solo
+  se l'abilità ha il tag `mark`; Polaris ha "range-5, terrain-effect, gamble" e il Talent I non aveva una lista di
+  tag sua, quindi il tag non arrivava mai → ora, quando il talento o la mastery sbloccati dicono che l'abilità
+  diventa un mark ("as a mark", "making it a mark"), l'abilità riceve il tag Mark (chip evidenziata con il testo del
+  talento nel tooltip) e il bottone Mark. Il tag resta anche con la mastery Moon Silver Princess sbloccata (che
+  cambia i tag in free action). La stessa regola vale per la mastery Amico di Party Favor (Fool), "making it a mark",
+  che aveva lo stesso difetto. Solo codice: nessun cambio al compendio né alle schede, vale anche per le copie già
+  sulle schede.
+
 ## 15 ottobre 2026 — I talenti compaiono nella card dell'attacco (versione 1.15.18)
 
 ### Round di debug del 15 ottobre, punto R16
