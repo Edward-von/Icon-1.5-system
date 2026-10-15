@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Mastery e talento in chat da soli (versione 1.15.35)
+
+### Round di debug del 15 ottobre, punto R31
+
+- **Postare solo la mastery o il talento**: Maar chiedeva un modo di mandare in chat la sola sotto-azione della
+  mastery di Symphony (Chanter, CRESCENDO, p.179: "you can create a mote in range 5 as a free action as part of
+  ending your turn") e il solo trigger della mastery di Spirit Shrine (Sealer, SPIRIT PATRONAGE, p.193: l'interrupt
+  "Grace of the Spirits — Trigger: An ally in the aura is damaged by an foe's ability"), senza il resto del testo →
+  nell'anteprima delle abilità sulla scheda PG, accanto all'etichetta "Mastery:" (solo se la mastery è sbloccata) e
+  accanto a quella del talento scelto, c'è un piccolo bottone con l'icona del fumetto che posta una card con solo
+  quel testo: titolo dell'abilità con sotto "Mastery: Crescendo" (il nome letto dalle maiuscole all'inizio del
+  testo) o "Talent I", badge job / capitolo / Mastery, testo con le keyword e i tooltip come nelle altre card, e i
+  bottoni Inflict / Gain se il testo nomina degli status. Vale per tutte le mastery e tutti i talenti; Show in Chat,
+  combo alternativa (R28) e Dervish (R29) non cambiano. Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — Track target: un segno che non è un mark (versione 1.15.34)
 
 ### Round di debug del 15 ottobre, punto R30

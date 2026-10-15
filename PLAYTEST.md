@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R31 — Mastery e talento in chat da soli (15 ottobre 2026, versione 1.15.35)
+
+Setup: un PG Chanter con Symphony, un PG Sealer con Spirit Shrine; un foe sulla mappa.
+
+- [ ] **Bottone solo se sbloccata**: anteprima di Symphony con la mastery NON sbloccata → nessuna riga Mastery, nessun
+      bottone; spuntare "Mastery unlocked" → accanto a "Mastery:" compare un piccolo bottone con il fumetto.
+- [ ] **Symphony**: clic sul bottone → in chat una card "Symphony" con sotto "Mastery: Crescendo", badge Chanter,
+      Ch e "★ Mastery", e solo il testo "CRESCENDO: If you create four or more motes… range 5 as a free action as
+      part of ending your turn…", senza Terrain Effect, Charge né talenti.
+- [ ] **Spirit Shrine**: mastery sbloccata, clic sul bottone → card "Spirit Shrine" / "Mastery: Spirit Patronage" con
+      l'interrupt Grace of the Spirits (Trigger ed Effect) leggibili; keyword con tooltip come nelle altre card.
+- [ ] **Talento**: scegliere Talent I su Symphony → bottone accanto a "Talent 1:" ma non accanto a "Talent 2:" (con
+      talento "none" nessun bottone sui talenti); clic → card "Symphony" / "Talent I" con solo il testo del talento.
+- [ ] **Status**: con un'abilità la cui mastery o talento nomina uno status (es. un talento che "blessed" / "sealed"),
+      la card ha i bottoni Inflict / Gain come le altre card.
+- [ ] **Niente regressioni**: Show in Chat di Symphony posta ancora la card completa; Dervish con la mastery stampa
+      ancora "Dervish + Dawn"; la combo alternativa di Felicity chiede ancora quale combo usare.
+
 ## R30 — Track target: un segno che non è un mark (15 ottobre 2026, versione 1.15.34)
 
 Setup: un PG Sealer con Grand Banishment e una qualsiasi abilità con Mark (es. Divine Aegis), un PG Seer con The

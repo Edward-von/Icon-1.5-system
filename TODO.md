@@ -232,8 +232,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       "that foe's / that character's (next) turn" (Grand Banishment p.193, The Tower p.203, anche Showdown,
       Assassinate, Great Giorgios, Pyroclast): segno "Tracked — …" con la grafica e la rimozione dei mark, ma non
       rimpiazza né viene rimpiazzato dai mark (p.95), non finisce alla sconfitta del PG, uno per abilità. Solo codice.)
-- [ ] **R31. Pubblicare in chat solo il trigger o la sotto-azione della mastery** (S/M)
+- [x] **R31. Pubblicare in chat solo il trigger o la sotto-azione della mastery** (S/M)
       Symphony, Spirit Shrine.
+      (FATTO il 15 ottobre 2026, versione 1.15.35: piccolo bottone chat accanto a "Mastery:" (se sbloccata) e al
+      talento scelto nell'anteprima della scheda PG; posta una card con solo quel testo, titolo "Symphony —
+      Mastery: Crescendo" (p.179) / "Spirit Shrine — Mastery: Spirit Patronage" (p.193), keyword e Inflict/Gain.
+      Generico per tutte le mastery e i talenti. Solo codice.)
 - [ ] **R32. Dimensione dell'aura con +/-** (S/M)
       Gentleness: l'aura della mastery cresce; stessi controlli della larghezza della Line.
 - [ ] **R33. Oggetti e segni piazzabili sulla mappa** (L/XL, da decidere)

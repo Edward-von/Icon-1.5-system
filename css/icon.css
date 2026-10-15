@@ -2899,6 +2899,7 @@ details[open] > .icon-basic-actions__summary::before {
 
 .icon-btn--sm     { padding: 1px 5px; font-size: 0.74em; }
 .icon-btn--inline { padding: 0 4px; font-size: 0.7em; }
+.icon-btn--part-chat { vertical-align: middle; line-height: 1.4; }
 
 /* ============================================================
    34. Tags

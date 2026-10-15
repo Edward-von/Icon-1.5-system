@@ -150,6 +150,7 @@ export class IconSheet extends BaseActorSheet {
       removeItem:        IconSheet.#onRemoveItem,
       setPrimaryJob:     IconSheet.#onSetPrimaryJob,
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
+      abilityPartToChat:  IconSheet.#onAbilityPartToChat,
       abilityGamble:      IconSheet.#onAbilityGamble,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
@@ -1719,6 +1720,47 @@ export class IconSheet extends BaseActorSheet {
       await this.document.update({ "system.combat.classResources.comboToken.value": 0 });
       await this.document.setFlag("icon-system", "comboSpentOnItem", itemId);
     }
+  }
+
+  /**
+   * Post one upgrade of an ability on its own (data-part = "mastery" | "talent1"
+   * | "talent2"): Symphony's CRESCENDO mote at the end of the turn (p.179),
+   * Spirit Shrine's Grace of the Spirits interrupt (p.193) — the trigger
+   * without the rest of the ability. Only an unlocked mastery / the selected
+   * talent; statuses in that text get their Inflict / Gain buttons.
+   */
+  static async #onAbilityPartToChat(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const s = item.system ?? {};
+    const part = target.dataset.part;
+    const parts = {
+      mastery: { text: s.mastery, label: "Mastery",    on: !!s.masteryUnlocked },
+      talent1: { text: s.talent1, label: "Talent I",   on: Number(s.talentSelected ?? 0) === 1 },
+      talent2: { text: s.talent2, label: "Talent II",  on: Number(s.talentSelected ?? 0) === 2 },
+    };
+    const p = parts[part];
+    if (!p?.on || !String(p.text ?? "").trim()) return;
+    // The book opens a mastery with its name in capitals ("CRESCENDO: If you…").
+    const plain = String(p.text).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+    const caps  = part === "mastery" ? /^([A-Z][A-Z'’ -]*[A-Z])\s*:/.exec(plain)?.[1] : null;
+    const title = caps ? caps.toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, c => c.toUpperCase()) : "";
+    _log(`abilityPartToChat — "${item.name}" | ${p.label}${title ? ` (${title})` : ""}`);
+    const pc = {
+      name:     item.name,
+      label:    p.label,
+      title,
+      jobName:  s.jobName ?? "",
+      class:    s.class ?? "",
+      chapter:  s.chapter ?? 1,
+      text:     await this._enrichAbility(p.text),
+      statusHtml: statusBlockHtml(parseInflictedStatuses(p.text, { sourceName: this.document.name, label: p.label }),
+                                  { source: this.document, abilityName: item.name }),
+    };
+    const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    const content = await renderTemplate("systems/icon-system/templates/chat/ability-part-card.hbs", { pc });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.document }), content });
   }
 
   /** Gamble button of an ability: dice dialog, Nd6 keep highest, card (combat/gamble.mjs). */

@@ -781,9 +781,11 @@
         {{#each ab.blocks as |b|}}
           <p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong> <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
         {{/each}}
-        {{#if ab.hasTalent1}}<p><strong>Talent 1:</strong> <span class="icon-ability-preview__effect">{{{ab.talent1}}}</span></p>{{/if}}
-        {{#if ab.hasTalent2}}<p><strong>Talent 2:</strong> <span class="icon-ability-preview__effect">{{{ab.talent2}}}</span></p>{{/if}}
-        {{#if ab.hasMastery}}<p><strong>Mastery:</strong> <span class="icon-ability-preview__effect">{{{ab.mastery}}}</span></p>{{/if}}
+        {{!-- Chat button beside the selected talent / unlocked mastery: posts that
+             text alone (Symphony's mote, Spirit Shrine's interrupt trigger). --}}
+        {{#if ab.hasTalent1}}<p><strong>Talent 1:</strong>{{#icon-eq ab.talentSelected 1}} <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityPartToChat" data-item-id="{{ab.id}}" data-part="talent1" title="Post only this talent to chat"><i class="fa-solid fa-comment"></i></button>{{/icon-eq}} <span class="icon-ability-preview__effect">{{{ab.talent1}}}</span></p>{{/if}}
+        {{#if ab.hasTalent2}}<p><strong>Talent 2:</strong>{{#icon-eq ab.talentSelected 2}} <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityPartToChat" data-item-id="{{ab.id}}" data-part="talent2" title="Post only this talent to chat"><i class="fa-solid fa-comment"></i></button>{{/icon-eq}} <span class="icon-ability-preview__effect">{{{ab.talent2}}}</span></p>{{/if}}
+        {{#if ab.hasMastery}}<p><strong>Mastery:</strong> <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityPartToChat" data-item-id="{{ab.id}}" data-part="mastery" title="Post only the mastery to chat"><i class="fa-solid fa-comment"></i></button> <span class="icon-ability-preview__effect">{{{ab.mastery}}}</span></p>{{/if}}
 
         {{!-- Relic integration: reminder lines from the character's relics (relic-reminders.mjs) --}}
         {{#each ab.relicReminders as |rr|}}
