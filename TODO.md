@@ -79,12 +79,16 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [x] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
       (FATTO il 15 ottobre 2026, versione 1.15.10: nel libro (p.136) l'abilità non ha testo di colore; nel compendio la
       riga ora comincia con "Effect:" e "Special" diventa "Special Effect"; migrazione 20 per le copie già sulle schede.)
-- [ ] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)
+- [x] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)
       Nella card (foto nel documento) "Trigger: A foe enters or exits the area." sta in cima come se fosse il trigger
       dell'abilità, e "Spirit Away —" resta appeso in fondo al Terrain Effect. Testo giusto secondo il documento:
       "Terrain effect: End your turn and create a ring of mushrooms, a burst 2 (self) terrain effect. The ring can be
       created overlapping any terrain and underneath characters. The ring lasts until this ability is used again.
       While the ring is active, gain the following interrupt:" e poi l'interrupt (Spirit Away). Controllare sul manuale.
+      (FATTO il 15 ottobre 2026, versione 1.15.11: nel compendio il trigger di Spirit Away non è più anche il trigger
+      dell'abilità (migrazione 21 per le copie già sulle schede); il nome di un interrupt concesso va nell'intestazione
+      del suo blocco, "Spirit Away — Interrupt 2" (sistemati anche Gran Reversa e Drifting Leaf). Testo lasciato
+      nell'ordine del manuale, p.187.)
 - [ ] **R10. Testo del Wild Card ripetuto per intero in Chaos Tarot e Sleight of Hand** (S, dati)
 - [ ] **R11. Tabelle poco leggibili** (S/M)
       Monogatari ("Some line breaks would be useful"), tabella del gamble di Chaos Tarot.

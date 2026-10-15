@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R9 — Fairy Ring: il trigger di Spirit Away al suo posto (15 ottobre 2026, versione 1.15.11)
+
+Setup: un mondo con un PG che aveva già Fairy Ring (Harvester, Mendicant) prima dell'aggiornamento, più un PG a cui
+la si aggiunge ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
+
+- [ ] **Migrazione**: in console compare "Migration 21: … copy/copies of Fairy Ring …" (solo se c'erano copie
+      vecchie); riaprendo il mondo non ricompare.
+- [ ] **Anteprima sulla scheda**: niente "Trigger:" in cima; dopo il testo di colore c'è il blocco "Terrain Effect"
+      che finisce con "The ring lasts until this ability is used again." (senza "Spirit Away —" in fondo), poi un
+      blocco intitolato "Spirit Away — Interrupt 2" con "Trigger: A foe enters or exits the area.", poi "Effect:
+      Teleport that foe 2 and seal them…", talenti e mastery.
+- [ ] **Tooltip**: passando sull'intestazione "Spirit Away — Interrupt 2" compare la spiegazione degli Interrupt
+      (usabile 2 volte per round).
+- [ ] **Copia nuova dal compendio**: stesso aspetto della copia migrata; nella scheda dell'abilità (doppio clic) il
+      campo "Interrupt Trigger" è vuoto.
+- [ ] **Show in Chat**: la card mostra gli stessi blocchi, senza "Trigger:" in cima.
+- [ ] **Stesso nome appeso, altre abilità**: Gran Reversa (Stance che finisce con "…gain the following interrupt:",
+      poi "Reverse Fate — Interrupt 1") e Drifting Leaf (Effect che finisce con "…until the start of your next
+      turn.", poi "LEAF ON THE WIND — Interrupt 2", e in fondo ancora "Infuse 3 or Slay: PHANTOM BLADE").
+- [ ] **Area di Fairy Ring**: il bottone dell'area piazza ancora il Burst 2 come prima.
+
 ## R8 — Massive Overhead: regole fuori dal testo di colore (15 ottobre 2026, versione 1.15.10)
 
 Setup: un mondo con un PG che aveva già Massive Overhead (Colossus, Stalwart) prima dell'aggiornamento, più un PG

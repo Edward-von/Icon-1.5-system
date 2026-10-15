@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Fairy Ring: il trigger di Spirit Away al suo posto (versione 1.15.11)
+
+### Round di debug del 15 ottobre, punto R9
+
+- **Fairy Ring: "Trigger" in cima e "Spirit Away —" appeso**: nell'anteprima di Fairy Ring (Harvester, Mendicant),
+  nella card in chat e nella scheda dell'abilità compariva in cima "Trigger: A foe enters or exits the area." come se
+  fosse il trigger dell'abilità, e il nome "Spirit Away —" restava in fondo al blocco Terrain Effect → due cause:
+  (1) nel compendio il trigger dell'interrupt concesso dall'anello era copiato anche nel campo "Interrupt Trigger"
+  dell'abilità, che però costa 1 azione e non è un interrupt (p.187); (2) il sistema riconosce il blocco a partire
+  dall'etichetta "Interrupt 2:", e il nome scritto prima ("Spirit Away —") finiva nel blocco precedente → nel
+  compendio dei job il campo è vuoto (il trigger resta, giusto, dentro l'interrupt), e il nome dell'interrupt ora va
+  nell'intestazione del suo blocco: "Spirit Away — Interrupt 2", con il tooltip della regola Interrupt. La stessa
+  correzione sistema Gran Reversa ("Reverse Fate — Interrupt 1") e Drifting Leaf ("LEAF ON THE WIND — Interrupt 2"),
+  che avevano lo stesso nome appeso. Le copie di Fairy Ring già sulle schede (e tra gli oggetti del mondo) vengono
+  corrette dalla migrazione 21, solo se hanno ancora quel trigger parola per parola. Il testo resta quello del manuale
+  (p.187: "While the ring is active, gain the following interrupt. The ring lasts until this ability is used
+  again."): il documento di Maar ha le due frasi in ordine inverso, ma il libro le scrive così.
+
 ## 15 ottobre 2026 — Massive Overhead: la prima riga di regole fuori dal testo di colore (versione 1.15.10)
 
 ### Round di debug del 15 ottobre, punto R8

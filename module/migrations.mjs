@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 20;
+export const CURRENT_SCHEMA_VERSION = 21;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -792,6 +792,32 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 20: ${n} copy/copies of Massive Overhead given the p.136 "Effect:" label`);
+  },
+
+  /* 21 — Fairy Ring (Harvester, p.187) is a 1-action terrain effect: the
+   * trigger "A foe enters or exits the area." belongs to the Spirit Away
+   * interrupt the ring grants, and is already in the description. The pack
+   * also stored it as the ability's own interrupt trigger, so the sheet and
+   * the chat card showed "Trigger:" at the top. Clear it on the copies that
+   * still carry exactly that text. */
+  21: async () => {
+    const OLD = "A foe enters or exits the area.";
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Fairy Ring"
+      && String(item.system?.interruptTrigger ?? "").trim() === OLD;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.interruptTrigger": "" }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.interruptTrigger": "" });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 21: ${n} copy/copies of Fairy Ring no longer show Spirit Away's trigger as their own`);
   },
 };
 

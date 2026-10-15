@@ -295,7 +295,8 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
  * @returns {string} tooltip text, or "" when the label is not a rule
  */
 export function blockLabelTooltip(label) {
-  const first = String(label ?? "").split(" or ")[0];
+  // "Spirit Away — Interrupt 2" → the interrupt rule, not the interrupt's name
+  const first = String(label ?? "").split(" or ")[0].replace(/^.*\s—\s(?=Interrupt\b)/, "");
   const key = first.toLowerCase().replace(/\(.*?\)/g, " ").trim().replace(/\s+/g, "-");
   if (!key) return "";
   return explainTag(key) ?? explainTag(key.replace(/-(?:\d+|x)$/, "")) ?? "";

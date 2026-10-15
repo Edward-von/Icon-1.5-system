@@ -144,10 +144,22 @@ export function parseAbilitySections(description) {
   }
 
   const flavor = (hits.length ? text.slice(0, hits[0].labelStart) : text).trim();
-  const sections = hits.map((h, i) => ({
+  const all = hits.map((h, i) => ({
     label: h.label,
     text:  text.slice(h.bodyStart, i + 1 < hits.length ? hits[i + 1].labelStart : undefined).trim(),
-  })).filter(s => s.text);
+  }));
+  // A granted interrupt is printed "Spirit Away — Interrupt 2: Trigger: …"
+  // (Fairy Ring p.187, Gran Reversa, Drifting Leaf): its name sits before the
+  // label, so it was left dangling at the end of the previous block. Move it
+  // onto the interrupt's own label ("Spirit Away — Interrupt 2").
+  for (let i = 1; i < all.length; i++) {
+    if (!/^Interrupt \d/.test(all[i].label)) continue;
+    const m = all[i - 1].text.match(/\s*\b([A-Z][A-Za-z' ]{0,40}?)\s*[—–]$/);
+    if (!m) continue;
+    all[i - 1].text = all[i - 1].text.slice(0, m.index).trim();
+    all[i].label = `${m[1]} — ${all[i].label}`;
+  }
+  const sections = all.filter(s => s.text);
 
   let trigger = "";
   if (sections[0]?.label === "Trigger") trigger = sections.shift().text;
