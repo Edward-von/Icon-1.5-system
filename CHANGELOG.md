@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Damage Utility sulla scheda PG (versione 1.15.31)
+
+### Round di debug del 15 ottobre, punto R27
+
+- **Damage Utility**: Maar chiedeva la macro del danno anche in fondo alla scheda dei giocatori, col nome "Damage
+  Utility", che funzionasse come la finestra del danno standard ma più modulare → in fondo al tab Combat della scheda
+  PG c'è un riquadro **Damage Utility** con un bottone che apre la stessa finestra del danno delle abilità in
+  modalità libera: niente abilità e niente scelta Hit/Crit/Miss/Area, solo i campi dell'esito "Other" (dadi del
+  [D] del personaggio, danno fisso, + fray, area effect) con in più un campo **Source** facoltativo che finisce nel
+  titolo della card ("Damage Utility — Counter damage"); sotto restano tutti i modificatori della finestra normale
+  (bonus dice, flat, Instances ×N, Vulnerable, Resistance/Cover, Weakened, Pierce, Divine, True Strike, Unerring,
+  Hatred) e la lista dei bersagli con la ✕. La card e i bottoni Apply sono quelli delle abilità (armatura, Vigor,
+  mob, Dodge sull'area, istanze separate). Riusa la finestra esistente invece di copiarla; le finestre delle abilità
+  non cambiano, salvo il suggerimento del campo Dice che ora dice anche quanto vale [D]. La macro "Apply Damage" del
+  compendio resta com'è. Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — [D] mostrato con il dado del personaggio (versione 1.15.30)
 
 ### Round di debug del 15 ottobre, punto R26

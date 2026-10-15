@@ -209,8 +209,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.30: sulla scheda di un PG con job, anteprima, Show in Chat e card
       dell'attacco (anche attacchi base) mostrano "[D]" come il dado del PG ("2[D]" → "2d10", p.84, p.91) con
       tooltip "2[D] = 2d10"; senza job, scheda item, compendio, foe/legend restano [D]. Solo resa.)
-- [ ] **R27. "Damage Utility" sulla scheda PG** (M)
+- [x] **R27. "Damage Utility" sulla scheda PG** (M)
       La macro del danno anche in fondo alla scheda, come la finestra del danno standard ma più modulare.
+      (FATTO il 15 ottobre 2026, versione 1.15.31: riquadro "Damage Utility" in fondo al tab Combat della scheda PG
+      che apre la finestra del danno in modalità libera (solo i campi di Other: dadi [D] del PG, fisso, fray, area,
+      più Source per la card) con tutti i modificatori, tipi e istanze; card e Apply quelli delle abilità. La macro
+      del pack resta com'è. Solo codice.)
 - [ ] **R28. Combo alternativa data dalla mastery** (M)
       Felicity (scelta tra Fleet e Fantasia con un menù allo Show in Chat), God Hand, Justice, Rot (marcare per
       Regrowth invece che per Regenerate).

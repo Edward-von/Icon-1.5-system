@@ -15,6 +15,8 @@
  *                        useCombo, other, instances } | null
  *   (`other`: { mult, flat, fray, area, label } for the "Other" outcome, else null;
  *    `instances`: how many separate times the rolled damage is dealt, p.92)
+ *   With `free: true` the damage dialog opens on the "Other" panel alone (the
+ *   PC sheet's Damage Utility): no ability, just dice / fixed / fray / area.
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
@@ -380,10 +382,12 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
 /**
  * Damage-roll dialog. `ab` needs { name, parsed, parsedCombo?, isAutoHit? };
  * `combat` needs { damagedie, fray }; `opts.actor` (the attacker) enables the
- * Hatred hint, `opts.comboDefault` pre-ticks the combo version.
+ * Hatred hint, `opts.comboDefault` pre-ticks the combo version, `opts.free`
+ * hides the outcome choice and keeps only the free "Other" panel, with a
+ * source label for the card (Damage Utility on the PC sheet).
  * @returns {Promise<object|null>}  see file header
  */
-export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null } = {}) {
+export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null, free = false } = {}) {
   const p   = ab.parsed ?? { hit: {}, miss: {}, area: {} };
   const die = combat?.damagedie ?? "d6";
   const fray = Number(combat?.fray ?? 0);
@@ -431,7 +435,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     // damage (Harvest Moon p.186, Dark Wind Devil Blade p.128) or anything
     // else the table needs: dice / fray / fixed amount typed in the panel below.
     { value: "other", label: "Other", formula: extras.length ? "mastery / talent / free" : "free amount", show: true },
-  ].filter(o => o.show);
+  ].filter(o => o.show && (!free || o.value === "other"));
 
   // Area attack (p.117): only the token in the attack space takes the hit /
   // miss damage, the rest of the area takes the area effect. Several targets
@@ -452,23 +456,26 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
 
   const content = `
     <div class="icon-roll-dialog icon-roll-dialog--damage">
-      ${_hero({ actor, kicker: `Damage roll${ab.isAutoHit ? " · auto-hit" : ""}`, title: ab.name ?? "Damage", cost: ab.cost, tags: ab.tags, dieLabel: `[D] ${die}`, dieSub: `fray ${fray}` })}
+      ${_hero({ actor, kicker: free ? "Free damage · no ability" : `Damage roll${ab.isAutoHit ? " · auto-hit" : ""}`, title: ab.name ?? "Damage", cost: ab.cost, tags: ab.tags, dieLabel: `[D] ${die}`, dieSub: `fray ${fray}` })}
       <div class="icon-roll-body">
         ${_targetCard(targets, { showDefense: false, pickAttackTarget: pickTarget, areaLabel: areaTag?.label ?? "", pickedId: remembered, pickHint })}
         <section class="icon-roll-card">
-          <h4 class="icon-roll-card__title">Outcome</h4>
-          <div class="icon-roll-seg">
+          <h4 class="icon-roll-card__title">${free ? "Damage" : "Outcome"}</h4>
+          ${free ? `<input type="radio" name="outcome" value="other" checked hidden>` : `<div class="icon-roll-seg">
             ${outcomes.map((o, i) => `
               <label class="icon-roll-seg__opt">
                 <input type="radio" name="outcome" value="${o.value}" ${i === 0 ? "checked" : ""}>
                 <span class="icon-roll-seg__label">${o.label}<small>${esc(o.formula)}</small></span>
               </label>`).join("")}
-          </div>
+          </div>`}
           ${comboFormula ? `
             <label class="icon-roll-chip icon-roll-chip--combo" title="Roll the combo version's damage instead of the base ability's.">
               <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}><span><i class='fa-solid fa-bolt'></i> Combo version <small>${esc(comboFormula)}</small></span>
             </label>` : ""}
           <div class="icon-roll-other" data-other-panel hidden>
+            ${free ? `<label class="icon-roll-other__label">Source <small>optional, shown on the card</small>
+              <input type="text" name="otherLabel" placeholder="Counter, hazard, mastery…" maxlength="60">
+            </label>` : ""}
             ${extras.length ? `<div class="icon-roll-chips">
               ${extras.map((x, i) => `
                 <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}">
@@ -476,7 +483,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
                 </label>`).join("")}
             </div>` : ""}
             <div class="icon-roll-steppers">
-              ${_stepper({ name: "otherDice", label: "Dice", hint: "[D] rolled for this damage", value: 0, max: 5 })}
+              ${_stepper({ name: "otherDice", label: "Dice", hint: `[D] rolled for this damage ([D] = ${die})`, value: 0, max: 5 })}
               ${_stepper({ name: "otherFlat", label: "Fixed damage", hint: "a fixed amount (\"2 divine damage\")", value: 0, max: 30 })}
             </div>
             <div class="icon-roll-chips">
@@ -619,7 +626,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
               flat:  Math.max(0, Number(f.elements.otherFlat?.value) || 0),
               fray:  !!f.elements.otherFray?.checked,
               area:  !!f.elements.otherArea?.checked,
-              label: picked ? picked.source : "",
+              label: picked ? picked.source : String(f.elements.otherLabel?.value ?? "").trim(),
             },
             targetName: rows.map(r => r.dataset.name).join(", "),
             targetIds,

@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R27 — Damage Utility sulla scheda PG (15 ottobre 2026, versione 1.15.31)
+
+Setup: un PG con job (dado d10, fray noto) e un foe sulla mappa con un po' di armatura; un secondo foe per l'area.
+
+- [ ] **Riquadro**: tab Combat della scheda PG, in fondo sotto Resolve → riquadro "Damage Utility" con descrizione
+      ("[D] = d10") e bottone. Una scheda aperta solo in lettura non mostra il bottone.
+- [ ] **Finestra**: bottone → finestra del danno con banda del PG, titolo "Damage Utility", nessuna riga
+      Hit/Crit/Miss/Area, subito i campi Source, Dice, Fixed damage, + Fray, Area effect; il campo Dice dice
+      "[D] = d10".
+- [ ] **Niente danno**: Roll Damage con tutto a zero → avviso "Damage Utility: no damage entered.", nessuna card.
+- [ ] **Dadi + fray**: target sul foe (T), Dice 2 + Fray → anteprima "2[d10] + fray N"; Roll Damage → card
+      "Damage Utility — Other damage" con 2d10 + fray; Apply toglie l'armatura del foe e scala gli HP.
+- [ ] **Source**: scrivere "Counter" in Source, Fixed damage 3 → card "Damage Utility — Counter damage", 3 danni.
+- [ ] **Tipi**: Fixed 2 + Divine → Apply ignora l'armatura e il Vigor; Pierce → ignora solo l'armatura.
+- [ ] **Istanze**: Fixed 3, Instances ×3 → anteprima "(3) × 3 instances"; Apply applica tre volte con l'armatura
+      ogni volta (su un mob, un colpo per istanza).
+- [ ] **Area**: due foe targettati, uno con Dodge, Area effect spuntato → il foe con Dodge non prende danno su Apply;
+      con True Strike spuntato sì.
+- [ ] **Modificatori**: Bonus dice, Vulnerable, Resistance, Weakened funzionano come nella finestra delle abilità.
+- [ ] **Senza target**: nessun token targettato → la finestra lo dice; la card viene comunque postata (come i tiri
+      delle abilità senza target).
+- [ ] **Nessuna regressione**: Damage Roll di un'abilità e degli attacchi base → finestra come prima (righe
+      Hit/Crit/Miss/Area/Other, niente campo Source); Other ancora con le righe di talento/mastery; finestra del
+      danno di un foe e di una legend invariata.
+
 ## R26 — [D] mostrato con il dado del personaggio (15 ottobre 2026, versione 1.15.30)
 
 Setup: un PG con job primario e dado d10 (es. Freelancer) e un'abilità che dice "[D]+fray" e una che dice "2[D]"

@@ -826,4 +826,17 @@
     </div>
   </div>
 
+  {{!-- Damage Utility — the damage dialog with no ability behind it (R27) --}}
+  {{#if isEditable}}
+    <div class="icon-section icon-damage-utility">
+      <h3 class="icon-section__title">Damage Utility</h3>
+      <div class="icon-damage-utility__row">
+        <p class="icon-damage-utility__desc">Damage that no ability rolls: counters, hazards, one-off effects. Dice ([D] = {{system.combat.damagedie}}), fixed amount, fray, type, instances, area — then Apply on the card.</p>
+        <button type="button" class="icon-btn icon-btn--use" data-action="damageUtility" title="Open the damage dialog with free fields">
+          <i class="fa-solid fa-burst"></i> Damage Utility
+        </button>
+      </div>
+    </div>
+  {{/if}}
+
 </section>

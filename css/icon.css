@@ -5698,6 +5698,14 @@ ol.chat-log .chat-message,
 /* "Other" outcome panel: free damage + the talent / mastery lines (R23) */
 .icon-roll-other { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--ic-border-subtle); }
 .icon-roll-other[hidden] { display: none; }
+/* Free mode (Damage Utility, R27): no outcome row above, so no divider */
+.icon-roll-card > input[name="outcome"][hidden] + .icon-roll-other { margin-top: 0; padding-top: 0; border-top: none; }
+.icon-roll-other__label { display: flex; flex-direction: column; gap: 3px; font-size: .85em; color: var(--ic-text-bright); }
+.icon-roll-other__label small { font-size: .8em; color: var(--ic-text-dim); }
+
+/* Damage Utility (PC sheet, Combat tab bottom, R27) */
+.icon-damage-utility__row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.icon-damage-utility__desc { flex: 1 1 220px; margin: 0; font-size: .85em; color: var(--ic-text-dim); }
 
 /* live preview */
 .icon-roll-preview { margin-top: 2px; padding: 6px 10px; background: rgba(200,150,28,.08); border: 1px solid rgba(200,150,28,.3); border-radius: var(--ic-radius-sm); display: flex; flex-direction: column; gap: 2px; }

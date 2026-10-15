@@ -196,6 +196,7 @@ export class IconSheet extends BaseActorSheet {
       // Basic actions (p.85)
       basicAttackRoll:  IconSheet.#onBasicAttackRoll,
       basicDamageRoll:  IconSheet.#onBasicDamageRoll,
+      damageUtility:    IconSheet.#onDamageUtility,
       basicRecover:     IconSheet.#onBasicRecover,
     },
     form: { submitOnChange: true },
@@ -2383,6 +2384,52 @@ export class IconSheet extends BaseActorSheet {
       relicInvokes: attackInvokes(this.document),
       relicNotes:   abilityRelicReminders(this.document, profile, { forAttackCard: true }),
       actor:       this.document,
+    });
+  }
+
+  /**
+   * Damage Utility (Combat tab bottom): the damage dialog with no ability
+   * behind it — only the free "Other" panel (dice of the character's [D],
+   * fixed amount, fray, area, source label) plus the usual modifiers, types
+   * and instances. The card and Apply are the ability ones.
+   */
+  static async #onDamageUtility(event, target) {
+    event.stopPropagation();
+    const combat = this.document.system.combat;
+    const none = { mult: 0, fray: false, flat: 0 };
+    const ab = {
+      name: "Damage Utility", tags: [], parsedCombo: null,
+      parsed: { hit: { ...none }, miss: { ...none }, area: { ...none }, extras: [] },
+    };
+    const mods = await promptDamageMods(ab, combat, { actor: this.document, free: true });
+    if (!mods) return;
+    const o = mods.other ?? {};
+    if (!(o.mult > 0 || o.flat > 0 || o.fray || mods.bonusDice > 0 || mods.flatBonus > 0)) {
+      ui.notifications.info("Damage Utility: no damage entered.");
+      return;
+    }
+    _log("damageUtility —", mods);
+    await postAbilityDamageCard(this.document, {
+      parsed:      ab.parsed,
+      outcome:     mods.outcome,
+      damagedie:   combat.damagedie,
+      fray:        combat.fray,
+      abilityName: ab.name,
+      bonusDice:   mods.bonusDice,
+      vulnerable:  mods.vulnerable,
+      resistance:  mods.resistance,
+      weakened:    mods.weakened,
+      hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
+      targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
+      other:       mods.other,
+      instances:   mods.instances,
     });
   }
 
