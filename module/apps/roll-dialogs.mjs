@@ -12,8 +12,9 @@
  *   promptAttackMods → { boons, curses, defense }            | null
  *   promptDamageMods → { outcome, targetName, targetIds, attackTargetId,
  *                        bonusDice, vulnerable, resistance, weakened, hatred,
- *                        useCombo, other } | null
- *   (`other`: { mult, flat, fray, area, label } for the "Other" outcome, else null)
+ *                        useCombo, other, instances } | null
+ *   (`other`: { mult, flat, fray, area, label } for the "Other" outcome, else null;
+ *    `instances`: how many separate times the rolled damage is dealt, p.92)
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
@@ -489,6 +490,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           <div class="icon-roll-steppers">
             ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus, max: 5 })}
             ${_stepper({ name: "flatBonus", label: "Flat damage", hint: "a fixed amount added after the dice (Harden, blessings, one-off effects)", value: 0, max: 30 })}
+            ${_stepper({ name: "instances", label: "Instances ×N", hint: "the same damage dealt N separate times (\"3 damage, three times\", p.92): armor, vulnerable and weakened count on each", value: Math.max(1, p.hit?.times ?? 1), min: 1, max: 10 })}
           </div>
           <div class="icon-roll-chips">
             <label class="icon-roll-chip"><input type="checkbox" name="vulnerable"><span>Vulnerable <small>+1</small></span></label>
@@ -547,6 +549,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       if (f.elements.divine?.checked)      tail.push("divine — nothing reduces it");
       else if (f.elements.pierce?.checked) tail.push("pierce — ignores armor");
       if (tail.length) txt += `  →  ${tail.join(", ")}`;
+      // Repeated damage (p.92): rolled once, dealt N times; the modifiers
+      // above count once per instance (vulnerable p.109, armor / weakened p.92).
+      const times = Math.max(1, Number(f.elements.instances?.value) || 1);
+      if (times > 1) txt = `(${txt}) × ${times} instances`;
       formula.textContent = txt;
       // The Dodge reminder only matters for the outcomes Dodge cancels (Miss / Area).
       const dodgeNote = root.querySelector("[data-dodge-note]");
@@ -564,6 +570,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
+      // Same for the number of instances written in the text ("three times").
+      const chunk = outcome === "other" ? picked
+                  : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
+      if (f.elements.instances) f.elements.instances.value = Math.max(1, chunk?.times ?? 1);
     };
     // A mastery / talent line under "Other" fills the panel with its amount,
     // type and area; the fields stay editable afterwards.
@@ -621,6 +631,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             hatred:     !!f.elements.hatred?.checked,
             useCombo:   !!f.elements.useCombo?.checked,
             flatBonus:  Math.max(0, Number(f.elements.flatBonus?.value) || 0),
+            instances:  Math.min(10, Math.max(1, Math.floor(Number(f.elements.instances?.value) || 1))),
             pierce:     !!f.elements.pierce?.checked,
             divine:     !!f.elements.divine?.checked,
             trueStrike: !!f.elements.trueStrike?.checked,

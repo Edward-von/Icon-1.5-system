@@ -771,6 +771,9 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
 
       const uuid   = btn.dataset.actorUuid;
       const amount = Number(btn.dataset.amount) || 0;
+      // Repeated damage ("3 damage, three times", p.92): the same amount is
+      // applied as separate instances, so armor (p.92) and the ½ come off each.
+      const instances = Math.min(10, Math.max(1, Math.floor(Number(btn.dataset.instances) || 1)));
       let   half   = btn.dataset.half === "true";
       const pierce = btn.dataset.pierce === "true";
       // Divine (p.104): can't be reduced, mitigated or negated in any way
@@ -816,24 +819,56 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       // on a PC reaching 0) live in applyDamageToActor — the same code path
       // used by applyDamagePipeline and the GM socket relay.
       let result;
+      const results = [];
       try {
-        result = await applyDamageToActor(actor, amount, {
-          applyArmor:  !pierce && !divine,
-          half,
-          halfReason,
-          chatConfirm: true,
-        });
+        for (let i = 0; i < instances; i++) {
+          result = await applyDamageToActor(actor, amount, {
+            applyArmor:  !pierce && !divine,
+            half,
+            halfReason,
+            chatConfirm: instances === 1,
+          });
+          if (!result?.ok) break;
+          results.push(result);
+          // A defeated PC (wound) or a foe / mob at 0 takes no further instances.
+          if (result.woundApplied || result.fallen || (!result.relayed && !result.isMob && result.hpAfter === 0)) break;
+        }
       } catch (err) {
         console.error("ICON 1.5 | Apply Damage failed:", err);
         ui.notifications.error(`Failed to apply damage to "${actor.name}".`);
         return;
       }
-      if (!result?.ok) return;
+      if (!results.length) return;
+      if (instances > 1) {
+        // One summary note for all the instances instead of one per instance.
+        result = { ...results[0], applied: results.reduce((a, r) => a + (r.applied ?? 0), 0) };
+        if (!result.relayed) {
+          const esc = foundry.utils.escapeHTML;
+          const each = results.map(r => r.isMob ? "1 hit" : String(r.applied)).join(" + ");
+          const last = results[results.length - 1];
+          const after = last.isMob ? `hits ${results[0].mob?.hitsBefore ?? "?"} → ${last.mob?.hitsAfter ?? "?"}`
+                                   : `HP ${results[0].hpBefore} → ${last.hpAfter}`;
+          const armorBlocked = results.reduce((a, r) => a + (r.armorBlocked ?? 0), 0);
+          const vigor = results.reduce((a, r) => a + (r.vigorAbsorbed ?? 0), 0);
+          const notes = [`${results.length} of ${instances} instances: ${each}`];
+          if (armorBlocked > 0) notes.push(`${armorBlocked} blocked by Armor`);
+          if (half) notes.push(halfReason && halfReason !== "manual ½" ? `each halved (${esc(halfReason)})` : "each halved");
+          if (vigor > 0) notes.push(`${vigor} absorbed by Vigor`);
+          if (results.length < instances) notes.push("stopped: the target is down");
+          await ChatMessage.create({
+            speaker: { alias: "Damage Applied" },
+            content: `<div class="icon-chat-card icon-chat-card--apply">
+                        <strong>${esc(actor.name)}</strong>: <strong>${last.isMob ? `${results.length} hit${results.length > 1 ? "s" : ""}` : result.applied}</strong> damage applied
+                        <br><small>${notes.join(", ")} — ${after}</small>
+                      </div>`,
+          });
+        }
+      }
 
       // Visual feedback on the button
       btn.disabled = true;
       btn.textContent = result.relayed ? "→ Sent to GM"
-                      : result.isMob   ? "✓ −1 hit"
+                      : result.isMob   ? `✓ −${results.length} hit${results.length > 1 ? "s" : ""}`
                       : `✓ Applied ${result.applied}${half && halfReason && halfReason !== "manual ½" ? ` (½ ${halfReason})` : ""}`;
       btn.style.opacity = "0.5";
     });

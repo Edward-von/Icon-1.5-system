@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Più istanze dello stesso danno nel tiro del danno (versione 1.15.28)
+
+### Round di debug del 15 ottobre, punto R24
+
+- **Danno ripetuto ("3 damage, three times")**: Maar chiedeva che il damage roller gestisse le abilità che
+  infliggono lo stesso danno più volte (es. Strongarm), fatte apposta per la sinergia con Vulnerable → la finestra
+  del danno (PG, foe, legend) ha un nuovo campo **Instances ×N** tra i modificatori, precompilato quando il testo
+  dell'esito scelto dice "twice" / "three times" / "N times" (Riddle del Pepperbox, p.302: "On hit: 3 damage, three
+  times"; anche le scelte rapide di Other) e modificabile a mano (Strongarm Talent II, Chastise). Regola del libro
+  (p.92): si tira una volta e si applica il totale N volte separate; armor (p.92, "each time that damage is applied"),
+  weakened (p.92, "each time a character deals damage") e vulnerable (p.109: "3+1 and 3+1 = 8 damage, not 3+3+1=7")
+  contano su ogni istanza. Quindi la card mostra il danno di una istanza (con +1 vulnerable / −2 weakened già dentro)
+  e "× N instances"; il bottone diventa "Apply X ×N" e applica N volte di fila, togliendo l'armor e l'eventuale ½
+  (Cover / Resistance) a ciascuna, con una sola nota riassuntiva in chat. Un mob perde un hit per istanza (p.291). Se
+  il bersaglio va a 0 (o un PG prende una ferita) le istanze rimanenti non si applicano. Se l'Area si tira insieme
+  all'attacco, ripete solo se è il suo testo a dirlo. Solo codice.
+
 ## 15 ottobre 2026 — Opzione "Other" nel tiro del danno per il danno delle mastery (versione 1.15.27)
 
 ### Round di debug del 15 ottobre, punto R23

@@ -1656,6 +1656,32 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R24 — Più istanze dello stesso danno nel tiro del danno (15 ottobre 2026, versione 1.15.28)
+
+Setup: un mondo con un PG qualunque e un foe Pepperbox (Skirmisher, p.302, reimportato dal compendio) sulla scena,
+più due token bersaglio: uno con Armor 2 (o un PG con armatura) e uno con lo status Vulnerable; un foe mob; tab Combat.
+
+- [ ] **Precompilato dal testo**: dalla scheda del Pepperbox, danno di Riddle → Outcome Hit → Instances ×N vale **3**;
+      passare a Miss → torna a **1**; di nuovo Hit → 3. L'anteprima dice "(3 + …) × 3 instances".
+- [ ] **Card**: Roll Damage con Hit → la card mostra il danno di una istanza, una riga finale "× 3 instances (each
+      applied separately)" e sotto il totale "3 damage, 3 times"; i bottoni dicono "Apply 3 ×3".
+- [ ] **Armor per istanza**: Apply sul bersaglio con Armor 2 → applica 1 + 1 + 1 = 3 (non 9 − 2 = 7); una sola nota
+      "Damage Applied" con "3 of 3 instances: 1 + 1 + 1, 6 blocked by Armor".
+- [ ] **Vulnerable per istanza**: stesso tiro con Vulnerable spuntato nella finestra → la card dice 4 per istanza;
+      Apply su un bersaglio senza armor → 12 (4 + 4 + 4), non 10.
+- [ ] **Weakened per istanza**: Weakened spuntato → ogni istanza perde 2 (3 → 1, totale 3 su bersaglio senza armor).
+- [ ] **½ per istanza**: bottone ½ (o un bersaglio in Cover) → ogni istanza dimezzata a parte, arrotondando per
+      eccesso (3 → 2, totale 6); la nota dice "each halved".
+- [ ] **Mob**: Apply ×3 su un mob → perde 3 hit, il bottone dice "✓ −3 hits".
+- [ ] **Bersaglio che cade**: un foe con pochi HP (es. 4) e Apply ×3 da 3 → si ferma alla seconda istanza; la nota
+      dice "2 of 3 instances … stopped: the target is down".
+- [ ] **A mano**: danno di un'abilità del PG senza "times" → Instances 1, card e Apply come prima; mettere 2 con il
+      − / + → card "× 2 instances", Apply due volte. Il campo non scende sotto 1 né sale sopra 10.
+- [ ] **Other**: esito Other, Fixed damage 1, Divine, Instances 3 (Chastise, p.179) → card "1 damage, 3 times",
+      Apply ignora l'armor e dà 3.
+- [ ] **Giocatore senza permessi**: un giocatore che applica ×3 a un foe → al GM arrivano 3 applicazioni (3 note in
+      chat dal lato del GM), il bottone dice "→ Sent to GM".
+
 ## R23 — Opzione "Other" nel tiro del danno per il danno delle mastery (15 ottobre 2026, versione 1.15.27)
 
 Setup: un mondo con un PG Harvester con Harvest e un PG Demon Slayer con Draken Cross (vanno bene copie aggiunte prima

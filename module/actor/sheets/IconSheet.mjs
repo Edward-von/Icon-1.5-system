@@ -2288,6 +2288,7 @@ export class IconSheet extends BaseActorSheet {
       targetIds:   mods.targetIds,
       attackTargetId: mods.attackTargetId,
       other:       mods.other,
+      instances:   mods.instances,
     });
 
     _log(`abilityDamageRoll — "${ab.name}" | outcome: ${mods.outcome} | combo: ${useCombo}`);
@@ -2386,6 +2387,7 @@ export class IconSheet extends BaseActorSheet {
       targetIds:   mods.targetIds,
       attackTargetId: mods.attackTargetId,
       other:       mods.other,
+      instances:   mods.instances,
     });
   }
 

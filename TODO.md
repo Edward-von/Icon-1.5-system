@@ -190,8 +190,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.27: nuovo esito "Other" nella finestra del danno (PG, foe, legend) con
       Dice / Fixed damage / + Fray / Area effect liberi e, come scelta rapida, le righe di danno del talento scelto e
       della mastery sbloccata (Harvest Moon p.186, Dark Wind Devil Blade p.128), con tipo divine/piercing. Solo codice.)
-- [ ] **R24. Più istanze dello stesso danno nel damage roller** (M)
+- [x] **R24. Più istanze dello stesso danno nel damage roller** (M)
       Abilità che infliggono lo stesso danno più volte (per la sinergia con Vulnerable), es. Strongarm.
+      (FATTO il 15 ottobre 2026, versione 1.15.28: campo "Instances ×N" nella finestra del danno, precompilato da
+      "twice" / "N times" nel testo dell'esito; tiro unico, Apply applica N istanze separate con armor e ½ su ciascuna,
+      vulnerable/weakened già per istanza nella card (p.92, p.109); mob un hit per istanza. Solo codice.)
 - [ ] **R25. Gamble cliccabile** (M)
       Bottone per il gamble sulle abilità che lo hanno (es. Riposte), con dadi da aggiungere o togliere al momento, e
       spazio per i tratti del Fool che fissano quei numeri. Commento di Turz Ven: "Remember that like armor/Vigilance,
@@ -232,6 +235,13 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 
 ### Emersi lavorando
 
+- [ ] **Emerso lavorando su R24 — "2 unerring damage" non letto come danno** (S): Showdown (p.157,
+      "they take 2 unerring damage from you twice") — il parser del danno riconosce solo "divine" / "piercing" tra il
+      numero e "damage", quindi l'importo non viene letto (né la ripetizione). Aggiungere "unerring" ai tipi in
+      `parseChunk` (ability-damage.mjs) e spuntare Unerring di conseguenza.
+- [ ] **Emerso lavorando su R24 — danno scritto negli Effect del testo base non proposto in Other** (S/M): Chastise
+      (p.179, "they take 1 divine damage three times") ha il danno in un Effect della base, non in hit/miss/area né in
+      talento/mastery: Other non lo propone come scelta rapida, va scritto a mano (Fixed 1, Divine, Instances 3).
 - [ ] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati): stesso difetto di Massive Overhead.
       Nel libro (p.219, "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.")
       la prima riga è un Effect, nel compendio è senza etichetta e diventa testo di colore. Pack + migrazione per nome.

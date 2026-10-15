@@ -504,6 +504,8 @@ export async function recoverAction(actor) {
  * @param {Array<string>} [opts.targetIds] Token ids still listed in the damage dialog (✕ removes them);
  *                                         null = the user's current targets
  * @param {string} [opts.attackTargetId]   Area attack: the token in the attack space (p.117)
+ * @param {number} [opts.instances=1]      Repeated damage ("3 damage, three times", p.92): rolled once,
+ *                                         dealt N separate times — Apply applies each one on its own
  * @returns {Promise<{net:number}>}
  */
 export async function postAbilityDamageCard(actor, opts = {}) {
@@ -512,8 +514,9 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
     hatred = false, targetName = "", targetsOverride = null, targetIds = null, attackTargetId = "",
     flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
-    other = null,
+    other = null, instances = 1,
   } = opts;
+  instances = Math.min(10, Math.max(1, Math.floor(Number(instances) || 1)));
 
   // Area attack (p.117): "for a character in the attack space, make an attack
   // […] and apply the attack part of your ability instead of the area effect".
@@ -529,8 +532,10 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     const area = parsed?.area;
     if (area && (area.mult > 0 || area.flat > 0 || area.fray)) {
       // The bonus dice belong to the attack; the Area roll is the area effect alone.
+      // The instances typed in the dialog belong to the attack too; the area
+      // repeats only if its own text says so.
       await postAbilityDamageCard(actor, {
-        ...opts, outcome: "area", bonusDice: 0, targetIds: others, attackTargetId: "",
+        ...opts, outcome: "area", bonusDice: 0, instances: area.times ?? 1, targetIds: others, attackTargetId: "",
         targetName: others.map(nameOf).filter(Boolean).join(", "),
       });
     }
@@ -638,6 +643,12 @@ export async function postAbilityDamageCard(actor, opts = {}) {
 
   const net = Math.max(0, running);
   if (steps.length > 0) steps[steps.length - 1].isFinal = true;
+  // Repeated damage (p.92: "roll [D] once, then apply the total damage three
+  // separate times"). `net` is ONE instance: vulnerable and weakened above
+  // already count once per instance (p.109: "3+1 and 3+1 = 8 damage, not
+  // 3+3+1=7"); armor and the ½ are taken off each instance on Apply (p.92).
+  if (instances > 1 && steps.length) steps[steps.length - 1].isFinal = false;
+  if (instances > 1) steps.push({ label: `× ${instances} instances (each applied separately)`, value: `${net} ×${instances}`, isFinal: true });
 
   // Collect the user's current targets for the Apply buttons. DEF/HP read the
   // PC path first, then the foe/legend path, so foe targets show real numbers.
@@ -663,6 +674,8 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     targetName:  targetName || "",
     targets,
     hasTargets:  targets.length > 0,
+    instances,
+    multi: instances > 1,
     outcome: cardOutcome,
     pierce: pierce || divine,   // both ignore the target's armor on Apply
     divine,
@@ -685,6 +698,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
       "icon-system": {
         damage: {
           amount:          net,
+          instances,
           sourceActorUuid: actor.uuid,
           sourceName:      actor.name,
           abilityName,

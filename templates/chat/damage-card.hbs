@@ -19,7 +19,7 @@
   </div>
 
   <div class="icon-chat-card__damage-total">
-    <strong>{{finalDamage}}</strong> damage
+    <strong>{{finalDamage}}</strong> damage{{#if multi}}, <strong>{{instances}} times</strong>{{/if}}
     {{#if vigorAbsorbed}}<span class="icon-chat-card__vigor-note">({{vigorAbsorbed}} absorbed by Vigor)</span>{{/if}}
   </div>
 
@@ -44,10 +44,11 @@
                   data-actor-uuid="{{t.actorUuid}}"
                   data-token-id="{{t.tokenId}}"
                   data-amount="{{../finalDamage}}"
+                  data-instances="{{../instances}}"
                   {{#if ../pierce}}data-pierce="true"{{/if}}
                   {{#if ../divine}}data-divine="true"{{/if}}
-                  title="Apply {{../finalDamage}} damage to {{t.name}}">
-            Apply {{../finalDamage}}
+                  title="Apply {{../finalDamage}} damage to {{t.name}}{{#if ../multi}}, {{../instances}} separate times (armor and ½ on each){{/if}}">
+            Apply {{../finalDamage}}{{#if ../multi}} ×{{../instances}}{{/if}}
           </button>
           <button type="button" class="icon-chat-btn icon-chat-btn--apply-half"
                   data-action="applyDamage"
@@ -55,6 +56,7 @@
                   data-token-id="{{t.tokenId}}"
                   data-amount="{{../finalDamage}}"
                   data-half="true"
+                  data-instances="{{../instances}}"
                   {{#if ../pierce}}data-pierce="true"{{/if}}
                   {{#if ../divine}}data-divine="true"{{/if}}
                   title="Apply half ({{../finalDamage}}/2)">

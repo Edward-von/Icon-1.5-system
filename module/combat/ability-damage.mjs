@@ -39,7 +39,7 @@ export function parseAbilityDamage(itemSystem) {
   // Parse a single text blob for dice formula + fray + flat damage
   const parseChunk = (text) => {
     if (!text || typeof text !== "string") {
-      return { mult: 0, fray: false, flat: 0, type: "" };
+      return { mult: 0, fray: false, flat: 0, type: "", times: 1 };
     }
     const lower = text.toLowerCase();
     // dice multiplier: "[D]", "2[D]", "3[d]"
@@ -56,9 +56,19 @@ export function parseAbilityDamage(itemSystem) {
     // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
     // the damage dialog can start with Divine / Pierce ticked (p.104).
     // Same "to you" exclusion as the flat amount.
-    const typeMatch = lower.match(/(?:\d+|\[d\]|fray)\s+(divine|piercing)\s+damage(?!\s+to\s+you(?:rself)?)/);
+    const typeMatch = lower.match(/(?:\d+|\[d\]|bfray)\s+(divine|piercing)\s+damage(?!\s+to\s+you(?:rself)?b)/);
     const type = typeMatch ? typeMatch[1] : "";
-    return { mult, fray: includesFray, flat, type };
+    // Repeated damage (p.92: "Some damage is listed as X, Y times […] roll
+    // [D] once, then apply the total damage three separate times"): "1 divine
+    // damage three times" (Chastise), "3 damage, three times", "deals [D]
+    // twice". Each instance takes armor, vulnerable and weakened on its own
+    // (p.92, p.109), so the damage card applies them one by one.
+    const timesMatch = lower.match(/(?:\bdamage|\[d\]|\bfray)\s*,?\s*(once|twice|thrice|(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+times)\b/);
+    const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+    const times = !timesMatch ? 1
+      : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
+      : (Number(timesMatch[2]) || WORDS[timesMatch[2]] || 1);
+    return { mult, fray: includesFray, flat, type, times };
   };
 
   // Primary hit: prefer `hitEffect`; fall back to description "On hit:" / "Autohit:" substring
@@ -152,10 +162,10 @@ export function parseAbilityDamage(itemSystem) {
     isAttack,
     isAutoHit,
     dealsDamage,
-    hit,    // { mult, fray, flat }
+    hit,    // { mult, fray, flat, type, times }
     miss,
     area,
-    extras, // [{ source, text, mult, fray, flat, type, area }] — "Other" outcome
+    extras, // [{ source, text, mult, fray, flat, type, times, area }] — "Other" outcome
   };
 }
 
