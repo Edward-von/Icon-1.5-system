@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R22 — Voce FAQ sulle difficoltà dei tiri narrativi (15 ottobre 2026, versione 1.15.26)
+
+Setup: un mondo qualsiasi; aprire la Quick Guide (bottone sulla scheda del PG) → tab FAQ.
+
+- [ ] **Voce presente**: nella sezione Narrative, dopo "What is the difference between 'aid' and 'set up?'", c'è
+      "What are the difficulties of a narrative roll? Trivial, risky (standard), heroic?" con la risposta su
+      controlled / risky / desperate (p.18), conseguenze e strain 1, 2, 4 (p.29), fortune roll (p.20) ed effetto
+      superpowered (pp.18-19).
+- [ ] **Ricerca**: nel campo di ricerca della guida scrivere "trivial", poi "heroic", poi "desperate" → la voce resta
+      visibile ogni volta.
+- [ ] **Aspetto**: i grassetti e gli a capo della risposta si vedono come nelle altre voci, senza tag HTML scritti in
+      chiaro.
+
 ## R21 — Con la mastery di Dropkick il tiro del danno propone l'Area (15 ottobre 2026, versione 1.15.25)
 
 Setup: un mondo con un PG Colossus (Stalwart) con Dropkick (va bene una copia aggiunta prima dell'aggiornamento), il

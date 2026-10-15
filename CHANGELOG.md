@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Voce FAQ sulle difficoltà dei tiri narrativi (versione 1.15.26)
+
+### Round di debug del 15 ottobre, punto R22
+
+- **FAQ narrativa: difficoltà dei tiri**: Maar chiedeva di aggiungere alla FAQ narrativa le "difficoltà" dei dadi
+  (Trivial, Risky/standard, Heroic) → nella Quick Guide, FAQ → Narrative, c'è una nuova voce "What are the difficulties
+  of a narrative roll? Trivial, risky (standard), heroic?". La risposta usa le parole del manuale: il libro la chiama
+  **risk** e ha tre livelli, controlled, risky (il default) e desperate (p.18), con conseguenze minori / medie /
+  maggiori e strain 1, 2 o 4 (p.29); "trivial" e "heroic" come livelli di rischio non esistono: si tira solo quando
+  l'esito è incerto (p.11), un compito senza conseguenze è un fortune roll (p.20), e un'azione eroica "beyond mortal
+  limits" è una questione di effetto (superpowered, pp.18-19). La tab Narrative della guida aveva già la tabella dei
+  rischi: non è cambiata. La ricerca della guida trova la voce con "trivial", "heroic", "desperate". Solo codice.
+
 ## 15 ottobre 2026 — Con la mastery di Dropkick il tiro del danno propone l'Area (versione 1.15.25)
 
 ### Round di debug del 15 ottobre, punto R21

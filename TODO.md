@@ -178,7 +178,10 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 
 ### Richieste
 
-- [ ] **R22. FAQ narrativa: difficoltà dei tiri (Trivial, Risky/standard, Heroic)** (S)
+- [x] **R22. FAQ narrativa: difficoltà dei tiri (Trivial, Risky/standard, Heroic)** (S)
+      (FATTO il 15 ottobre 2026, versione 1.15.26: voce nella FAQ Narrative con controlled/risky/desperate (p.18),
+      conseguenze e strain (p.29), niente "trivial"/"heroic" nel libro: fortune roll (p.20) ed effetto superpowered
+      (pp.18-19). Solo codice.)
 - [ ] **R23. Danno extra delle mastery** (M)
       Harvest: l'area della mastery si piazza, ma il danno della mastery non si tira facilmente (secondo bottone?).
       Draken Cross: i 2 danni divine della mastery non si tirano senza metterli nel danno dell'area.
