@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R2 — vigor oltre il massimo (15 ottobre 2026, versione 1.15.4)
+
+Setup: un PG qualunque (annotare la VIT, che è il massimo del vigor), un foe e una legend; un combat attivo.
+
+- [ ] **PG, valore a mano**: nella scheda, "Current Vigor" = VIT + 5 → il valore resta (non torna alla VIT), la scritta
+      dice "Vigor VIT+5 / VIT" e le 5 tacche in più sono viola.
+- [ ] **Danno sul vigor in più**: con quel vigor, applicare da una card un danno pari a VIT + 3 → tutto assorbito dal
+      vigor, gli HP non scendono, restano 2 di vigor.
+- [ ] **Recover non abbassa**: con vigor sopra il massimo, Recover (non bloodied) → il vigor resta com'era, non scende
+      alla VIT. Da bloodied (surge) idem. Con vigor 0, Recover dà ancora 4 e il surge porta alla VIT come prima.
+- [ ] **Regeneration**: bloodied, Regeneration attiva, vigor sopra il massimo → a fine turno il vigor non scende.
+- [ ] **Foe e legend**: nel campo Vigor della testata scrivere un valore sopra "/ max" → resta, e un danno lo consuma
+      prima degli HP.
+- [ ] **Fine combat**: chiudendo il combat il vigor del PG torna a 0 come prima.
+
 ## R1 — combo che ereditavano la versione base (15 ottobre 2026, versione 1.15.3)
 
 Setup: un PG Mendicant con le abilità combo citate sotto (Chanter, Harvester, Sealer, Seer); un PG Stalwart Knave con

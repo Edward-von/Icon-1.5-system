@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Il vigor può superare il massimo (versione 1.15.4)
+
+### Round di debug del 15 ottobre, punto R2
+
+- **Vigor oltre il massimo**: scrivendo sulla scheda (PG, foe, legend) un vigor più alto del massimo (VIT), il valore
+  tornava al massimo e i danni lo trattavano come tale → il sistema tagliava il vigor al massimo ogni volta che
+  ricalcolava la scheda, e il campo aveva il massimo come limite; ma la Mastery di Gran Reversa (Misericordia, p.202)
+  dice che il vigor che concede "can increase a character's total vigor over their maximum", senza un tetto (come
+  il Mead e il Holy Blood, che danno 15 e 20 vigor "over the maximum") → ora il valore scritto a mano resta e assorbe
+  i danni per intero; il limite normale vale solo quando il sistema dà vigor da solo (Recover, Regeneration), e
+  queste fonti non abbassano più un vigor già sopra il massimo. Sulla scheda del PG le tacche in più compaiono in
+  viola.
+
 ## 15 ottobre 2026 — Le combo non ereditano più la versione base (versione 1.15.3)
 
 ### Round di debug del 15 ottobre, punto R1

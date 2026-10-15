@@ -695,11 +695,14 @@ export class IconSheet extends BaseActorSheet {
         onScene: !!canvas?.scene?.tokens?.some(t => t.actorId === a.id),
       }));
 
-    // Vigor ticks (one per point up to vigor.max = VIT).
+    // Vigor ticks (one per point up to vigor.max = VIT). Vigor over the
+    // maximum (Gran Reversa's Mastery, p.202) adds extra "over" ticks.
     {
       const vmax = Math.max(1, system.combat?.vigor?.max ?? 1);
       const vval = system.combat?.vigor?.value ?? 0;
-      context.vigorTicks = Array.from({ length: vmax }, (_, i) => i < vval);
+      const len  = Math.max(vmax, vval);
+      context.vigorTickCount = len;
+      context.vigorTicks = Array.from({ length: len }, (_, i) => ({ on: i < vval, over: i >= vmax }));
     }
 
     // HP bar segments: 4 quarters of VIT each over the BASE max. Wounds

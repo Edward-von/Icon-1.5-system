@@ -49,12 +49,15 @@ export function combatStatsSchema({
 
 /**
  * Shared derived-data for any object carrying the combat-stat block plus hp:
- * cap hp.value to hp.max, tie vigor.max to VIT, cap vigor.value.
+ * cap hp.value to hp.max, tie vigor.max to VIT. vigor.value is NOT capped
+ * here: some effects let vigor go over the maximum (Gran Reversa's Mastery,
+ * p.202; Mead / Holy Blood consumables). The normal cap is applied when vigor
+ * is gained (addVigor in combat/damage.mjs), so a manual entry on the sheet
+ * can exceed it.
  * For PCs pass system.combat (AFTER deriving hp.max from wounds); for
  * foes/legends pass the system object itself.
  */
 export function prepareCombatStats(stats) {
   stats.hp.value    = Math.min(stats.hp.value, stats.hp.max);
   stats.vigor.max   = stats.vit;
-  stats.vigor.value = Math.min(stats.vigor.value, stats.vigor.max);
 }

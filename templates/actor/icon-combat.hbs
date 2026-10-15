@@ -54,14 +54,15 @@
       <div class="icon-vigor-labels">
         <span class="icon-vigor-label">Vigor {{system.combat.vigor.value}} / {{system.combat.vigor.max}}</span>
       </div>
-      <div class="icon-vigor-ticks" style="grid-template-columns: repeat({{system.combat.vigor.max}}, minmax(0, 1fr));">
-        {{#each vigorTicks as |t|}}<span class="icon-vigor-tick {{#if t}}icon-vigor-tick--on{{/if}}"></span>{{/each}}
+      <div class="icon-vigor-ticks" style="grid-template-columns: repeat({{vigorTickCount}}, minmax(0, 1fr));">
+        {{#each vigorTicks as |t|}}<span class="icon-vigor-tick {{#if t.on}}icon-vigor-tick--on{{/if}} {{#if t.over}}icon-vigor-tick--over{{/if}}"></span>{{/each}}
       </div>
       {{#if isEditable}}
         <div class="icon-vigor-controls">
           <label>Current Vigor</label>
           <input type="number" name="system.combat.vigor.value"
-                 value="{{system.combat.vigor.value}}" min="0" max="{{system.combat.vigor.max}}">
+                 value="{{system.combat.vigor.value}}" min="0"
+                 title="Normal maximum = VIT. Some effects (e.g. Gran Reversa's Mastery) let vigor go over it.">
         </div>
       {{/if}}
     </div>

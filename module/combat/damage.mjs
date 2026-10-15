@@ -414,6 +414,8 @@ export async function postCombatHeal(actor) {
 
 /**
  * Grant vigor to an actor (capped at VIT). Works for PCs, foes, and legends.
+ * Vigor already above the cap (Gran Reversa's Mastery, p.202, or a manual
+ * entry) is never lowered by a normal gain or a surge.
  * @param {Actor}   actor
  * @param {number}  amount   Vigor to add (ignored if surge = true)
  * @param {boolean} surge    true = vigor surge (fill to max immediately)
@@ -423,9 +425,8 @@ export async function addVigor(actor, amount = 0, surge = false) {
   const cont = p.container;
   if (!cont?.vigor) return;
   const max    = cont.vit;     // vigor.max = VIT
-  const newVal = surge
-    ? max
-    : Math.min((cont.vigor.value ?? 0) + amount, max);
+  const cur    = cont.vigor.value ?? 0;
+  const newVal = Math.max(cur, surge ? max : Math.min(cur + amount, max));
   await actor.update({ [p.vigor]: newVal });
 }
 

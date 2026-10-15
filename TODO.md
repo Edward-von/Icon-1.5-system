@@ -45,9 +45,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
         sostituisse.
       Probabilmente è una sola logica ("la combo sostituisce" contro "la combo aggiunge"). Va controllata sul manuale
       abilità per abilità. Se le cause sono diverse, dividere il punto.
-- [ ] **R2. Vigor oltre il massimo** (S/M, bug — priorità media)
+- [x] **R2. Vigor oltre il massimo** (S/M, bug — priorità media)
       "Players cannot increase vigor amount by above maximum (required by abilities like Gran Reversa's Mastery
       benefit)". Verificare sul manuale la mastery di Gran Reversa e quanto può superare il massimo.
+      (FATTO il 15 ottobre 2026, versione 1.15.4: la Mastery Misericordia, p.202, non mette un tetto; il vigor scritto
+      a mano sulla scheda non viene più riportato al massimo, Recover/Regeneration non lo abbassano, tacche in più
+      in viola sulla scheda del PG.)
 - [ ] **R3. Nessun avviso quando scade un'aura** (S/M, bug — priorità bassa)
       "No prompt on removing aura effects in chatbox or ability sheet for when an aura effect expires, requiring the
       player to go into" (la frase nel documento si interrompe lì; probabilmente: andare a toglierla a mano).

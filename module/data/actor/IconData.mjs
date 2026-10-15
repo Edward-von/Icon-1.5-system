@@ -238,7 +238,7 @@ export class IconData extends foundry.abstract.TypeDataModel {
     combat.hp.baseMax  = baseMax;
     combat.hp.bloodied = Math.ceil(baseMax / 2);
 
-    // Shared caps: hp.value to max, vigor.max = vit, vigor.value to max.
+    // Shared caps: hp.value to max, vigor.max = vit (vigor.value may exceed it).
     prepareCombatStats(combat);
 
     // Narrative: cap effort.value to max

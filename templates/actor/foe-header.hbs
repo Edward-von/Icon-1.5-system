@@ -93,9 +93,9 @@
                {{#unless isEditable}}disabled{{/unless}}>
       </div>
       {{!-- Vigor — set directly without needing the Vigor status (cap = VIT). --}}
-      <div class="foe-header__vigor" title="Vigor absorbs damage before HP (max = VIT). Lost at end of combat.">
+      <div class="foe-header__vigor" title="Vigor absorbs damage before HP (max = VIT; some effects let it go over). Lost at end of combat.">
         <span class="foe-header__vigor-label">Vigor</span>
-        <input type="number" name="system.vigor.value" value="{{system.vigor.value}}" min="0" max="{{system.vigor.max}}"
+        <input type="number" name="system.vigor.value" value="{{system.vigor.value}}" min="0"
                {{#unless isEditable}}disabled{{/unless}}>
         <span class="foe-header__vigor-max">/ {{system.vigor.max}}</span>
       </div>

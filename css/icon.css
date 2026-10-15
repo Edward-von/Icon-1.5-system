@@ -5203,6 +5203,7 @@ ol.chat-log .chat-message,
 .icon-vigor-ticks { display: grid; gap: 3px; height: 10px; flex: 1 1 120px; min-width: 100px; }
 .icon-vigor-tick { background: var(--ic-bg-light); border-radius: 2px; }
 .icon-vigor-tick--on { background: #7fc4ff; }
+.icon-vigor-tick--over.icon-vigor-tick--on { background: #c9a6ff; } /* vigor over the maximum */
 .icon-vigor-controls { margin: 0; }
 .icon-combat-top .icon-stats-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
 .icon-combat-top .icon-stat-block {
