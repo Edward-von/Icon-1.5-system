@@ -423,6 +423,13 @@
             <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
                     data-action="traitShowInChat" data-item-id="{{trait.id}}"
                     title="Post trait to chat"><i class="fa-solid fa-comment"></i></button>
+            {{#if trait.areaLabel}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--area"
+                      data-action="traitPlaceArea" data-item-id="{{trait.id}}"
+                      title="Place the {{trait.areaLabel}} around your token; it follows the token (clicking again replaces it)">
+                <i class="fa-solid fa-vector-square"></i> {{trait.areaLabel}}
+              </button>
+            {{/if}}
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                       data-action="removeItem" data-item-id="{{trait.id}}"

@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — I tratti che danno un'aura hanno il bottone area (versione 1.15.23)
+
+### Round di debug del 15 ottobre, punto R19c
+
+- **L'aura di Shieldmaster e di Pelagic Rage non si poteva mettere sulla mappa**: i due tratti dicono "You have
+  aura 1" (Shieldmaster, Bastion, p.121) e "You gain aura 2" (Pelagic Rage, Stormbender), ma sulla scheda del PG il
+  tratto aveva solo il bottone chat → il bottone area esisteva solo per le abilità (legato ai loro tag) e i tratti non
+  hanno tag → ora un tratto sbloccato il cui testo dà un'aura a chi lo possiede (stessa lettura del testo di R19)
+  mostra nell'intestazione un bottone "Aura N" con lo stesso stile di quello delle abilità: piazza l'aura attorno al
+  proprio token e la fa seguire il token. Ripremerlo sostituisce l'aura. La durata si legge dal testo come per le
+  abilità (R3): nessuno dei due tratti ne scrive una, quindi l'aura resta finché non la si toglie. Un tratto ancora
+  bloccato (capitolo non raggiunto) non ha il bottone. Solo codice: nessun cambio al compendio, vale anche per i
+  tratti già sulle schede.
+
 ## 15 ottobre 2026 — L'aura di Endless Battlement va sull'alleato (versione 1.15.22)
 
 ### Round di debug del 15 ottobre, punto R19b

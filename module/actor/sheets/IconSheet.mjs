@@ -8,7 +8,7 @@ import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs"
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
-import { resolveAbilityTags, resolveAbilityCost } from "../../helpers/rule-tooltips.mjs";
+import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
@@ -130,6 +130,7 @@ export class IconSheet extends BaseActorSheet {
       removeMark:         IconSheet.#onRemoveMark,
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
+      traitPlaceArea:     IconSheet.#onTraitPlaceArea,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
       trophyShowInChat:   IconSheet.#onTrophyShowInChat,
       trophyUse:          IconSheet.#onTrophyUse,
@@ -650,7 +651,11 @@ export class IconSheet extends BaseActorSheet {
     };
     context.traitItems = await Promise.all(rawTraits.map(async t => {
       const chapter = t.system?.chapter ?? 1;
+      // A trait that gives its owner an aura gets the same area button as the
+      // abilities (Shieldmaster "You have aura 1", p.121); not while locked.
+      const auraTag = chapter > currentChapter ? "" : traitAuraTag(t.system?.description);
       return {
+        areaLabel:           auraTag ? (areaFromTags([auraTag])?.label ?? "") : "",
         quick:               quickFor(t),
         powerDie:            powerDieView(t.system),
         id:                  t.id,
@@ -2028,6 +2033,22 @@ export class IconSheet extends BaseActorSheet {
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
     await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), text: this.#auraText(ab) });
+  }
+
+  /**
+   * Place the aura a trait gives its owner (p.102): Shieldmaster "You have
+   * aura 1" (p.121), Pelagic Rage "You gain aura 2". It follows the token and
+   * its duration, if the text gives one, is read as for the abilities' auras.
+   */
+  static async #onTraitPlaceArea(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const text = item.system?.description ?? "";
+    const area = areaFromTags([traitAuraTag(text)]);
+    if (!area) { ui.notifications.warn(`"${item.name}" gives no aura.`); return; }
+    _log(`traitPlaceArea — "${item.name}" | ${area.label}`);
+    await placeAreaTemplate({ actor: this.document, area, abilityName: item.name, abilityKey: item.id, lasting: true, text });
   }
 
   /**

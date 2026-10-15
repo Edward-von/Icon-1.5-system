@@ -158,10 +158,13 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       piazza attorno all'alleato bersagliato (T) e la fa seguire lui; senza un solo alleato bersagliato resta attorno a
       chi la usa con un avviso; oltre range 4 solo un avviso (niente con la mastery). Durata sempre sui turni del
       Bastion. Solo codice.)
-- [ ] **R19c. Tratti con un'aura: niente bottone per piazzarla** (S/M, bug)
+- [x] **R19c. Tratti con un'aura: niente bottone per piazzarla** (S/M, bug)
       Shieldmaster (Bastion, "You have aura 1", p.121) e Pelagic Rage ("You gain aura 2"): i tratti non hanno tag né
       bottone area sulla scheda (il bottone esiste solo per le abilità, `abilityPlaceArea` in IconSheet), quindi
       l'aura del tratto non si può mettere sulla mappa. Serve un bottone area per i tratti che danno un'aura a sé.
+      (FATTO il 15 ottobre 2026, versione 1.15.23: un tratto sbloccato il cui testo dà un'aura a sé ha nell'intestazione
+      un bottone "Aura N" (stesso stile delle abilità) che la piazza attorno al proprio token e la fa seguire; durata
+      letta dal testo come per le abilità. Solo codice.)
 - [ ] **R20. Sow: l'Arc 4 della mastery non è piazzabile come area** (S, bug)
 - [ ] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
 

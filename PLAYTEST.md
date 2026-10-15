@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R19c — I tratti che danno un'aura hanno il bottone area (15 ottobre 2026, versione 1.15.23)
+
+Setup: un mondo con un PG Bastion (Stalwart) con il tratto Shieldmaster e un PG Stormbender con Pelagic Rage
+(vanno bene i tratti già sulle schede), un token di ciascuno su una scena a griglia quadrata; tab Combat.
+
+- [ ] **Bottone su Shieldmaster**: sezione Traits → nell'intestazione di Shieldmaster, accanto al bottone chat, c'è
+      un bottone "Aura 1" con lo stesso stile del bottone area delle abilità.
+- [ ] **Piazzamento**: premerlo → l'aura 1 compare attorno al token del Bastion, la notifica dice "Aura 1 placed
+      around <nome>; it follows the token" (senza durata tra parentesi).
+- [ ] **Segue il token**: muovere il Bastion → l'aura si sposta con lui.
+- [ ] **Resta tra i turni**: con un combattimento avviato, passare il turno del Bastion e tornare al suo turno →
+      l'aura è ancora lì, nessuna card "… ends" in chat.
+- [ ] **Ripremere**: premere di nuovo il bottone → la vecchia aura sparisce, ne resta una sola.
+- [ ] **Pelagic Rage**: sulla scheda dello Stormbender il tratto ha il bottone "Aura 2" → piazza un'aura 2 attorno al
+      suo token (il "round 5" del testo lo decide il giocatore: il bottone c'è sempre).
+- [ ] **Tratto bloccato**: con un PG di capitolo più basso di quello del tratto (badge "Locked") → niente bottone.
+- [ ] **Altri tratti invariati**: i tratti senza aura (es. Sea Legs, Dash on the Rocks) non hanno il bottone; le aure
+      delle abilità (Rook, Endless Battlement sull'alleato) funzionano come prima.
+
 ## R19b — L'aura di Endless Battlement va sull'alleato (15 ottobre 2026, versione 1.15.22)
 
 Setup: un mondo con un PG Bastion (Stalwart) con Endless Battlement (va bene una copia aggiunta prima

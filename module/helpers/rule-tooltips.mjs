@@ -247,6 +247,16 @@ function _selfAuraSize(html) {
 }
 
 /**
+ * The aura a trait gives the character who has it, as an "aura-N" tag, or ""
+ * (p.102): Shieldmaster "You have aura 1" (p.121), Pelagic Rage "You gain
+ * aura 2". Same reading as the abilities' upgrades (_selfAuraSize).
+ */
+export function traitAuraTag(description) {
+  const size = _selfAuraSize(description);
+  return size ? `aura-${size}` : "";
+}
+
+/**
  * Resolve the tags an ability currently shows, applying the talent / mastery
  * tag overrides the character has unlocked (see AbilityData.talent1Tags etc)
  * and, with `comboMode`, the combo version's own tags (comboTags): the book's
