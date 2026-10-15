@@ -193,6 +193,8 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {string}   [opts.missEffect]    Enriched HTML
  * @param {string}   [opts.exceedEffect]  Enriched HTML (15+)
  * @param {string}   [opts.critEffect]    Enriched HTML
+ * @param {Array}    [opts.effects]       {label, text} blocks of a combo version, shown above Hit
+ * @param {Array}    [opts.talentEffects] {label, text} blocks of the unlocked talent, shown below Miss
  * @param {string}   [opts.costLabel]     "1 Action" etc.
  * @param {string[]} [opts.tags]
  * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
@@ -203,7 +205,7 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
-  hitEffect, missEffect, exceedEffect, critEffect, effects = [],
+  hitEffect, missEffect, exceedEffect, critEffect, effects = [], talentEffects = [],
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
   statusEntries = [],
@@ -271,6 +273,8 @@ export async function combatRoll({
     critEffect:    critEffect   ?? "",
     // Extra blocks shown above Hit / Miss (a combo version's own lines).
     effects:       effects ?? [],
+    // The unlocked talent's own lines ("Slay (Talent II): …"), below Miss.
+    talentEffects: talentEffects ?? [],
     // Relic integration (p.245): attack invokes check the RAW d20; notes are
     // the relic reminders that apply to this attack. No attack roll happened
     // when every target evaded, so the invokes are not shown.

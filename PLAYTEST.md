@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R16 — I talenti compaiono nella card dell'attacco (15 ottobre 2026, versione 1.15.18)
+
+Setup: un mondo con un PG Sealer (Mendicant) con God Hand equipaggiata (va bene anche una copia aggiunta prima
+dell'aggiornamento); almeno un foe come bersaglio; tab Combat. Per vedere l'Exceed serve un tiro di 15+ (aggiungere
+boon se serve).
+
+- [ ] **Base con Talent I**: God Hand con Talent I, senza combo token → attacco con 15+ → nel riquadro "Exceed (15+)"
+      c'è "You and allies in range 2 gain 3 vigor." e sotto "Talent I: Gain evasion until the end of your next turn."
+- [ ] **Sotto 15**: stesso attacco con un tiro sotto 15 → il riquadro Exceed (con la riga del talento) non compare.
+- [ ] **Devil Hand con Talent I**: con il combo token → attacco → titolo "Devil Hand (God Hand combo)"; l'Exceed (15+)
+      dice "Repeat the effect." e sotto "Talent I: Gain evasion…". I riquadri viola della combo sono come prima.
+- [ ] **Talent II**: passare a Talent II → attacco base e attacco con combo token → in entrambe le card ci sono un
+      riquadro "Talent II: Increase teleports to 2" e uno "Slay (Talent II): gain or lose a combo token."
+- [ ] **Senza talento**: con nessun talento scelto la card dell'attacco è come prima (nessuna riga "Talent").
+- [ ] **Altra abilità**: un'abilità d'attacco qualsiasi con un talento sbloccato (es. uno che dà +1 boon) → la card
+      dell'attacco mostra il riquadro "Talent I"/"Talent II" con il testo del talento.
+- [ ] **Show in Chat**: la card dello Show in Chat di God Hand / Devil Hand è come prima.
+
 ## R15 — Il tiro del danno spunta Divine e Pierce dal testo (15 ottobre 2026, versione 1.15.17)
 
 Setup: un mondo con un PG Chanter (Mendicant) con Gentleness (va bene anche una copia aggiunta prima

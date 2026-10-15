@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — I talenti compaiono nella card dell'attacco (versione 1.15.18)
+
+### Round di debug del 15 ottobre, punto R16
+
+- **I talenti di God Hand non arrivavano nella card dell'attacco**: con il Talent I o II di God Hand (Sealer,
+  Mendicant) sbloccato, tirando l'attacco di God Hand o della combo Devil Hand la card non mostrava né l'Exceed del
+  Talent I ("Gain evasion until the end of your next turn") né lo Slay e i teleport a 2 del Talent II, anche se il
+  libro dice "All versions of this ability gain…" (p.192) → la card dell'attacco era costruita solo con Hit, Miss,
+  Exceed e Crit dell'abilità (o della combo): i talenti finivano nella card dello Show in Chat ma mai in quella del
+  tiro, per nessuna abilità → ora il talento sbloccato entra nella card dell'attacco, sia della versione base sia
+  della combo: se aggiunge un Hit / Miss / Exceed / Crit la riga va in quel riquadro con l'etichetta "Talent I:"
+  (quindi l'Exceed del talento appare solo con 15+), il resto ("Increase teleports to 2", "Slay: …") ha un riquadro
+  suo ("Talent II", "Slay (Talent II)"). Il comportamento delle combo complete (R1) non cambia. La combo alternativa
+  della mastery, Fists of Heaven and Hell, non è ancora usabile dal sistema (punto R28): quando lo sarà, dovrà
+  ricevere i talenti allo stesso modo. Solo codice: nessun cambio al compendio né alle schede.
+
 ## 15 ottobre 2026 — Il tiro del danno spunta Divine e Pierce dal testo (versione 1.15.17)
 
 ### Round di debug del 15 ottobre, punto R15

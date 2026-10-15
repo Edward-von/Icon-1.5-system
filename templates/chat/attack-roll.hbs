@@ -68,6 +68,13 @@
       <span class="icon-chat-card__effect-text">{{{missEffect}}}</span>
     </div>
   {{/if}}
+  {{!-- Unlocked talent: its lines that are not a Hit / Miss / Exceed / Crit add-on --}}
+  {{#each talentEffects as |e|}}
+    <div class="icon-chat-card__effect-block">
+      <span class="icon-chat-card__effect-label">{{e.label}}</span>
+      <span class="icon-chat-card__effect-text">{{{e.text}}}</span>
+    </div>
+  {{/each}}
   {{#if exceedEffect}}
     {{#if isExceed}}
       <div class="icon-chat-card__effect-block icon-chat-card__effect-block--exceed">

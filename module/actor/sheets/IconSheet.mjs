@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates } from "../../canvas/area-templates.mjs";
@@ -2139,6 +2139,26 @@ export class IconSheet extends BaseActorSheet {
       };
     }
 
+    // The unlocked talent applies to every version of the ability (God Hand,
+    // p.192: "All versions of this ability gain Exceed: …"), so the base card
+    // and the combo card both carry it: a Hit / Miss / Exceed / Crit it grants
+    // joins that box (shown or dimmed with the outcome), anything else
+    // ("Increase teleports to 2", "Slay: …") gets a block of its own.
+    const talentEffects = [];
+    {
+      const sys = this.document.items.get(itemId)?.system ?? {};
+      const which = ab.hasTalent1 ? ["Talent I", sys.talent1] : ab.hasTalent2 ? ["Talent II", sys.talent2] : null;
+      for (const tb of which ? talentAttackBlocks(which[1]) : []) {
+        const text = await enrichHTML(tb.text);
+        if (["hit", "miss", "exceed", "crit"].includes(tb.key)) {
+          const line = `<strong>${which[0]}:</strong> ${text}`;
+          card[tb.key] = card[tb.key] ? `${card[tb.key]}<br>${line}` : line;
+        } else {
+          talentEffects.push({ label: tb.label ? `${tb.label} (${which[0]})` : which[0], text });
+        }
+      }
+    }
+
     await combatRoll({
       abilityName:  comboArmed ? comboTitle(ab.name, this.document.items.get(itemId)?.system?.comboEffect) : ab.name,
       costLabel:    ab.cost,
@@ -2152,6 +2172,7 @@ export class IconSheet extends BaseActorSheet {
       exceedEffect: card.exceed,
       critEffect:   card.crit,
       effects:      card.effects,
+      talentEffects,
       areaHtml:     areaLine,
       relicInvokes,
       relicNotes,

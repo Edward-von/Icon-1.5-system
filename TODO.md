@@ -119,8 +119,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.17: la lettura del danno prendeva la quantità e non il tipo, e il
       dialog non spuntava mai Divine/Pierce da solo; ora il tipo scritto accanto al danno ("1 divine damage", p.179;
       "N piercing damage") spunta Divine o Pierce per il risultato scelto. Solo codice, vale per PG, foe e legend.)
-- [ ] **R16. God Hand: Talent 1 e 2 non danno i bonus a Devil Hand (combo) e a Fists of Heaven and Hell (mastery)
+- [x] **R16. God Hand: Talent 1 e 2 non danno i bonus a Devil Hand (combo) e a Fists of Heaven and Hell (mastery)
       nella card dell'attacco** (S/M, bug)
+      (FATTO il 15 ottobre 2026, versione 1.15.18: la card dell'attacco non mostrava mai i talenti, né per la base né
+      per la combo. Ora il talento sbloccato vale per tutte le versioni (p.192): un suo Exceed / Hit / Miss / Crit va
+      nel riquadro corrispondente, il resto (teleport a 2, Slay) ha un riquadro suo. Fists of Heaven and Hell non è
+      ancora usabile (R28): vedi le voci emerse. Solo codice.)
 - [ ] **R17. Polaris: il Talent 1 non permette di marcare un personaggio** (S/M, bug)
 - [ ] **R18. Intimidate: la mastery non propone Unstoppable** (S, bug)
       Né il bottone per applicarlo a sé, né il testo di promemoria.
@@ -216,6 +220,14 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
       damage to itself") potrebbe proporre 10 come danno inflitto, come faceva Provoke con "to you"; da verificare
       sulla scheda del foe ed eventualmente saltare anche "to itself" in `ability-damage.mjs`.
+- [ ] **Emerso lavorando su R16 — Fists of Heaven and Hell con i talenti** (S, dipende da R28): la combo alternativa
+      della mastery di God Hand "gains all talent effects of this ability" (p.192), ma oggi non si può usare (R28).
+      Quando R28 la renderà usabile, la sua card dell'attacco deve ricevere il talento come la base e Devil Hand
+      (`talentAttackBlocks` in `ability-blocks.mjs`, usato in `IconSheet.mjs` prima di `combatRoll`).
+- [ ] **Emerso lavorando su R16 — talenti e mastery nella card auto-hit e mastery nella card dell'attacco** (S/M, non
+      verificato): la card degli attacchi auto-hit (True Strike ecc.) non mostra né Exceed né il talento; la mastery
+      sbloccata non entra in nessuna card dell'attacco (solo nello Show in Chat). Da controllare se ci sono mastery
+      che aggiungono Hit / Exceed / Slay all'attacco e, se sì, trattarle come i talenti.
 
 ---
 

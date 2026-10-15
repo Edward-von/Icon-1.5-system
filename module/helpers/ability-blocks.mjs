@@ -183,6 +183,57 @@ export function comboTitle(baseName, comboText) {
   return name ? `${name} (${baseName} combo)` : `${baseName} (Combo)`;
 }
 
+/* -------------------------------------------------- */
+/*  Talent text on the attack card                     */
+/* -------------------------------------------------- */
+
+/** Trigger labels a talent can grant ("all versions of this ability gain Exceed: …"). */
+const TALENT_LABELS = [
+  [/^exceed$/i,         "exceed"],
+  [/^slay$/i,           "slay"],
+  [/^crit(?:ical)?$/i,  "crit"],
+  [/^collide$/i,        "collide"],
+  [/^finishing blow$/i, "finish"],
+  [/^comeback$/i,       "comeback"],
+  [/^(?:on )?hit$/i,    "hit"],
+  [/^miss$/i,           "miss"],
+];
+const TALENT_LABEL_RE = /(?:\bgains?\s+|^|[.!?]\s+)(Exceed|Slay|Critical|Crit|Collide|Finishing Blow|Comeback|On hit|Hit|Miss)\s*:\s*/gi;
+/** ", and all versions of this ability" left before the next "gain X:" */
+const _trimTalentTail = (t) => String(t ?? "")
+  .replace(/,?\s*(?:and\s+)?(?:all\s+versions?\s+of\s+(?:this|the)\s+ability|this\s+ability|it)?\s*$/i, "")
+  .trim();
+
+/**
+ * Split the text of an unlocked talent into what the attack card shows.
+ * Talents apply to every version of the ability (God Hand, p.192: "All
+ * versions of this ability gain Exceed: …"), so the card of the base and of
+ * the combo version both carry them:
+ *   "All versions of this ability gain Exceed: Gain evasion …"
+ *     → [{ key: "exceed", text: "Gain evasion …" }]
+ *   "Increase teleports to 2, and all versions of this ability gain Slay: gain or lose a combo token."
+ *     → [{ key: "", text: "Increase teleports to 2" }, { key: "slay", text: "gain or lose a combo token." }]
+ * A talent with no trigger label comes back whole, as one block with key "".
+ *
+ * @param {string} talentText  raw talent text (may hold HTML)
+ * @returns {Array<{key:string,label:string,text:string}>} label is the block's own ("Exceed (15+)"), "" for the rest
+ */
+export function talentAttackBlocks(talentText) {
+  const text = String(talentText ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim();
+  if (!text) return [];
+  const hits = [...text.matchAll(TALENT_LABEL_RE)].map(m => ({ label: m[1], start: m.index + (/^[.!?]/.test(m[0]) ? 1 : 0), bodyStart: m.index + m[0].length }));
+  if (!hits.length) return [{ key: "", label: "", text }];
+  const out = [];
+  const rest = _trimTalentTail(text.slice(0, hits[0].start));
+  if (rest) out.push({ key: "", label: "", text: rest });
+  hits.forEach((h, i) => {
+    const body = _trimTalentTail(text.slice(h.bodyStart, i + 1 < hits.length ? hits[i + 1].start : undefined));
+    const key = TALENT_LABELS.find(([re]) => re.test(h.label))?.[1] ?? "";
+    if (body) out.push({ key, label: key ? ABILITY_BLOCK_FIELDS[key].label : h.label, text: body });
+  });
+  return out;
+}
+
 /** "on hit" → "Hit", "area effect" → "Area", anything else title-cased as written. */
 function _canonComboLabel(raw) {
   const key = COMBO_FIELD_LABELS.find(([re]) => re.test(raw.trim()))?.[1];
