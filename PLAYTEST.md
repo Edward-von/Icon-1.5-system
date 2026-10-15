@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R26 — [D] mostrato con il dado del personaggio (15 ottobre 2026, versione 1.15.30)
+
+Setup: un PG con job primario e dado d10 (es. Freelancer) e un'abilità che dice "[D]+fray" e una che dice "2[D]"
+(es. un attacco con On hit: 2[D]+fray); un PG nuovo senza job; un foe con un'azione che dice [D].
+
+- [ ] **Anteprima**: tab Combat, aprire l'anteprima dell'abilità → "On hit: 2d10+fray" invece di "2[D]+fray", e
+      "d10+fray" dove il testo dice "[D]+fray".
+- [ ] **Tooltip**: mouse su "2d10" → tooltip "2[D] = 2d10 (your damage die is d10). Your class damage die …".
+- [ ] **Talento / mastery / combo**: un [D] nel talento scelto, nella mastery sbloccata o nel testo combo è
+      convertito anche lì.
+- [ ] **Show in Chat**: la card in chat mostra "2d10" con lo stesso tooltip.
+- [ ] **Card dell'attacco**: Attack Roll dell'abilità → le righe Hit / Miss della card mostrano i dadi veri. Attacco
+      base leggero → "d10 + fray", pesante → "2d10 + fray".
+- [ ] **Cambio dado**: cambiare il dado del PG (es. a d6) → l'anteprima passa a "2d6"; le card già postate restano
+      come erano.
+- [ ] **Senza job**: PG senza job → l'anteprima continua a dire "2[D]".
+- [ ] **Fuori dalla scheda**: aprire la stessa abilità dalla scheda dell'item o dal compendio → resta "[D]"; azione
+      di un foe / legend (anteprima e Show in Chat) → resta "[D]".
+- [ ] **Damage roller**: la finestra del danno funziona come prima (dado mostrato, tiro corretto).
+
 ## R25 — Bottone Gamble sulle abilità (15 ottobre 2026, versione 1.15.29)
 
 Setup: un PG Knave (Stalwart) con Riposte equipaggiata e qualche carica di Vigilance; un PG Fool (Vagabond) con

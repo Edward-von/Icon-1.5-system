@@ -385,10 +385,10 @@ export class IconSheet extends BaseActorSheet {
         // Relic integration: reminder lines the character's relics add to this ability
         relicReminders: await this._relicRemindersFor(s, parsed),
         // Book-order rules blocks parsed out of the description (Stance, Mark, Effect…)
-        sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
+        sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await this._enrichAbility(sec.text) }))),
         // Every rules block (Hit/Miss/Area/Charge… + the parsed ones) in reading
         // order, merged where the book prints one line — see helpers/ability-blocks.mjs
-        blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: enrichHTML }),
+        blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still
         // gets a Damage button, and the talent / mastery damage that only the
@@ -396,22 +396,22 @@ export class IconSheet extends BaseActorSheet {
         isAttack:    parsed.isAttack,
         isAutoHit:   parsed.isAutoHit,
         dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage || !!parsed.extras?.length,
-        description:         await enrichHTML(desc.flavor, { keywords: false }),
-        trigger:             await enrichHTML(trigger),
-        hitEffect:           await enrichHTML(s.hitEffect),
-        missEffect:          await enrichHTML(s.missEffect),
-        areaEffect:          await enrichHTML(s.areaEffect),
-        chargeEffect:        await enrichHTML(s.chargeEffect),
-        heroicEffect:        await enrichHTML(s.heroicEffect),
-        exceedEffect:        await enrichHTML(s.exceedEffect),
-        collideEffect:       await enrichHTML(s.collideEffect),
-        slayEffect:          await enrichHTML(s.slayEffect),
-        critEffect:          await enrichHTML(s.critEffect),
-        finishingBlowEffect: await enrichHTML(s.finishingBlowEffect),
-        comebackEffect:      await enrichHTML(s.comebackEffect),
-        talent1:             await enrichHTML(s.talent1),
-        talent2:             await enrichHTML(s.talent2),
-        mastery:             await enrichHTML(s.mastery),
+        description:         await this._enrichAbility(desc.flavor, { keywords: false }),
+        trigger:             await this._enrichAbility(trigger),
+        hitEffect:           await this._enrichAbility(s.hitEffect),
+        missEffect:          await this._enrichAbility(s.missEffect),
+        areaEffect:          await this._enrichAbility(s.areaEffect),
+        chargeEffect:        await this._enrichAbility(s.chargeEffect),
+        heroicEffect:        await this._enrichAbility(s.heroicEffect),
+        exceedEffect:        await this._enrichAbility(s.exceedEffect),
+        collideEffect:       await this._enrichAbility(s.collideEffect),
+        slayEffect:          await this._enrichAbility(s.slayEffect),
+        critEffect:          await this._enrichAbility(s.critEffect),
+        finishingBlowEffect: await this._enrichAbility(s.finishingBlowEffect),
+        comebackEffect:      await this._enrichAbility(s.comebackEffect),
+        talent1:             await this._enrichAbility(s.talent1),
+        talent2:             await this._enrichAbility(s.talent2),
+        mastery:             await this._enrichAbility(s.mastery),
         // Boolean flags for template conditional rendering
         hasHit:     !!(s.hitEffect && s.hitEffect.trim()),
         hasMiss:    !!(s.missEffect && s.missEffect.trim()),
@@ -425,7 +425,7 @@ export class IconSheet extends BaseActorSheet {
         hasFinish:  !!(s.finishingBlowEffect && s.finishingBlowEffect.trim()),
         hasComeback:!!(s.comebackEffect && s.comebackEffect.trim()),
         isCombo:     !!(s.isCombo),
-        comboEffect: await enrichHTML(s.comboEffect),
+        comboEffect: await this._enrichAbility(s.comboEffect),
         hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
         // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
         comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
@@ -1477,6 +1477,20 @@ export class IconSheet extends BaseActorSheet {
    * _prepareContext as `abilityDetails`). Returns null if not found.
    */
   /**
+   * enrichHTML for the ability texts of this character (preview panel, Show in
+   * Chat card, attack card): "[D]" / "2[D]" are shown with the character's own
+   * damage die ("d10" / "2d10", p.84, p.91), with "[D] = d10" on hover. A character
+   * with no job yet keeps the [D] symbol (its die is only the schema default).
+   * Item sheets, compendium views and NPC sheets call enrichHTML directly and
+   * keep [D].
+   */
+  _enrichAbility(html, opts = {}) {
+    const combat = this.document.system?.combat ?? {};
+    const damageDie = (combat.jobs?.length && combat.damagedie) ? combat.damagedie : null;
+    return enrichHTML(html, { damageDie, ...opts });
+  }
+
+  /**
    * Relic reminder lines for one ability (relic-reminders.mjs), with the
    * rule keywords enriched like every other block on the card.
    */
@@ -1484,7 +1498,7 @@ export class IconSheet extends BaseActorSheet {
     const tags = resolveAbilityTags(s).map(t => t.raw);
     const profile = buildAbilityProfile(s, { tags, isAttack: parsed.isAttack, dealsDamage: parsed.dealsDamage });
     const list = abilityRelicReminders(this.document, profile, { forAttackCard });
-    return Promise.all(list.map(async r => ({ ...r, text: await enrichHTML(r.text) })));
+    return Promise.all(list.map(async r => ({ ...r, text: await this._enrichAbility(r.text) })));
   }
 
   /**
@@ -1540,30 +1554,30 @@ export class IconSheet extends BaseActorSheet {
       powerDie:    powerDieView(s),
       relicReminders: await this._relicRemindersFor(s, parsed),
       relicProfile:   buildAbilityProfile(s, { tags: tags.map(t => t.raw), isAttack: active.isAttack, dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage }),
-      sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await enrichHTML(sec.text) }))),
-      blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: enrichHTML }),
+      sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await this._enrichAbility(sec.text) }))),
+      blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }),
       hasSections: desc.sections.length > 0,
       isAttack:    active.isAttack,
       isAutoHit:   active.isAutoHit,
       dealsDamage: active.dealsDamage,
       parsed,
       parsedCombo,
-      description:         await enrichHTML(desc.flavor, { keywords: false }),
-      trigger:             await enrichHTML(trigger),
-      hitEffect:           await enrichHTML(s.hitEffect),
-      missEffect:          await enrichHTML(s.missEffect),
-      areaEffect:          await enrichHTML(s.areaEffect),
-      chargeEffect:        await enrichHTML(s.chargeEffect),
-      heroicEffect:        await enrichHTML(s.heroicEffect),
-      exceedEffect:        await enrichHTML(s.exceedEffect),
-      collideEffect:       await enrichHTML(s.collideEffect),
-      slayEffect:          await enrichHTML(s.slayEffect),
-      critEffect:          await enrichHTML(s.critEffect),
-      finishingBlowEffect: await enrichHTML(s.finishingBlowEffect),
-      comebackEffect:      await enrichHTML(s.comebackEffect),
-      talent1:             await enrichHTML(s.talent1),
-      talent2:             await enrichHTML(s.talent2),
-      mastery:             await enrichHTML(s.mastery),
+      description:         await this._enrichAbility(desc.flavor, { keywords: false }),
+      trigger:             await this._enrichAbility(trigger),
+      hitEffect:           await this._enrichAbility(s.hitEffect),
+      missEffect:          await this._enrichAbility(s.missEffect),
+      areaEffect:          await this._enrichAbility(s.areaEffect),
+      chargeEffect:        await this._enrichAbility(s.chargeEffect),
+      heroicEffect:        await this._enrichAbility(s.heroicEffect),
+      exceedEffect:        await this._enrichAbility(s.exceedEffect),
+      collideEffect:       await this._enrichAbility(s.collideEffect),
+      slayEffect:          await this._enrichAbility(s.slayEffect),
+      critEffect:          await this._enrichAbility(s.critEffect),
+      finishingBlowEffect: await this._enrichAbility(s.finishingBlowEffect),
+      comebackEffect:      await this._enrichAbility(s.comebackEffect),
+      talent1:             await this._enrichAbility(s.talent1),
+      talent2:             await this._enrichAbility(s.talent2),
+      mastery:             await this._enrichAbility(s.mastery),
       hasDesc:     !!desc.flavor,
       hasTrigger:  !!trigger,
       hasHit:      !!(s.hitEffect && s.hitEffect.trim()),
@@ -1578,7 +1592,7 @@ export class IconSheet extends BaseActorSheet {
       hasFinish:   !!(s.finishingBlowEffect && s.finishingBlowEffect.trim()),
       hasComeback: !!(s.comebackEffect && s.comebackEffect.trim()),
       isCombo:     !!(s.isCombo),
-      comboEffect: await enrichHTML(s.comboEffect),
+      comboEffect: await this._enrichAbility(s.comboEffect),
       hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
       // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
       comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
@@ -1616,7 +1630,7 @@ export class IconSheet extends BaseActorSheet {
           comboOf: comboDisplayName(item?.system?.comboEffect) ? ab.name : "",
           blocks: await buildAbilityBlocks(item?.system ?? {}, {
             sections: parseAbilitySections(item?.system?.description).sections,
-            enrich:   enrichHTML,
+            enrich:   t => this._enrichAbility(t),
             comboText: item?.system?.comboEffect ?? "",
           }) }
       : ab;
@@ -2191,7 +2205,7 @@ export class IconSheet extends BaseActorSheet {
     if (comboArmed) {
       const sys = this.document.items.get(itemId)?.system ?? {};
       const blocks = await buildAbilityBlocks(sys, {
-        sections: parseAbilitySections(sys.description).sections, enrich: enrichHTML, comboText: sys.comboEffect ?? "" });
+        sections: parseAbilitySections(sys.description).sections, enrich: t => this._enrichAbility(t), comboText: sys.comboEffect ?? "" });
       const keysOf = (b) => String(b.key ?? "").split("+");
       const field = (k) => blocks.find(b => keysOf(b).includes(k))?.text ?? "";
       card = {
@@ -2211,7 +2225,7 @@ export class IconSheet extends BaseActorSheet {
       const sys = this.document.items.get(itemId)?.system ?? {};
       const which = ab.hasTalent1 ? ["Talent I", sys.talent1] : ab.hasTalent2 ? ["Talent II", sys.talent2] : null;
       for (const tb of which ? talentAttackBlocks(which[1]) : []) {
-        const text = await enrichHTML(tb.text);
+        const text = await this._enrichAbility(tb.text);
         if (["hit", "miss", "exceed", "crit"].includes(tb.key)) {
           const line = `<strong>${which[0]}:</strong> ${text}`;
           card[tb.key] = card[tb.key] ? `${card[tb.key]}<br>${line}` : line;
@@ -2363,7 +2377,8 @@ export class IconSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
-      hitEffect:   ab.hitEffect,
+      // "[D] + fray" read with the character's die ("d10 + fray"), like ability cards
+      hitEffect:   await this._enrichAbility(ab.hitEffect),
       missEffect:  ab.missEffect,
       relicInvokes: attackInvokes(this.document),
       relicNotes:   abilityRelicReminders(this.document, profile, { forAttackCard: true }),

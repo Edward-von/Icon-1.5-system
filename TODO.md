@@ -203,9 +203,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       Chat; finestra con Dice +/−, cariche di Vigilance dove il testo le spende (Dire Parry), Stacked Die del Fool =
       6 (p.149) o numero scelto 1-6; tiro Nd6 tenendo il più alto (p.105, p.148); card con dadi, risultato e riga
       della tabella 1-6 se c'è. Solo codice.)
-- [ ] **R26. [D] che mostra i dadi veri nelle card delle abilità** (M)
+- [x] **R26. [D] che mostra i dadi veri nelle card delle abilità** (M)
       Sulla scheda di un PG "2d10" invece di "2[D]"; resta [D] prima della scelta o fuori dalla scheda. Il damage
       roller lo fa già.
+      (FATTO il 15 ottobre 2026, versione 1.15.30: sulla scheda di un PG con job, anteprima, Show in Chat e card
+      dell'attacco (anche attacchi base) mostrano "[D]" come il dado del PG ("2[D]" → "2d10", p.84, p.91) con
+      tooltip "2[D] = 2d10"; senza job, scheda item, compendio, foe/legend restano [D]. Solo resa.)
 - [ ] **R27. "Damage Utility" sulla scheda PG** (M)
       La macro del danno anche in fondo alla scheda, come la finestra del danno standard ma più modulare.
 - [ ] **R28. Combo alternativa data dalla mastery** (M)

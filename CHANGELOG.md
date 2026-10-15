@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — [D] mostrato con il dado del personaggio (versione 1.15.30)
+
+### Round di debug del 15 ottobre, punto R26
+
+- **[D] con i dadi veri**: Maar chiedeva che nelle card delle abilità "[D]" diventasse il dado di danno del personaggio
+  ("2d10" si capisce subito, "2[D]" no), restando [D] prima della scelta del job o fuori dalla scheda di un personaggio,
+  come fa già il damage roller → sulla scheda di un PG con almeno un job, i testi delle abilità (anteprima nel tab
+  Combat, card di Show in Chat, card dell'attacco, compresi talento, mastery, combo e promemoria delle reliquie, e la
+  riga Hit degli attacchi base) mostrano "[D]" come il dado del personaggio: "[D]+fray" → "d10+fray", "2[D]" → "2d10"
+  (p.84: "if you're a Freelancer, [D] is 1d10"; p.91: "2[D] or 3[D], roll that many dice"). Passandoci sopra il
+  mouse il tooltip dice "2[D] = 2d10 (your damage die is d10)" più la definizione del glossario. Un PG senza job, la
+  scheda dell'item, il compendio e le schede di foe e legend restano con [D]. Le card già in chat non cambiano. Solo
+  resa, nessun dato toccato.
+
 ## 15 ottobre 2026 — Bottone Gamble sulle abilità (versione 1.15.29)
 
 ### Round di debug del 15 ottobre, punto R25

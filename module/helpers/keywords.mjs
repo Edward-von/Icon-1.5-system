@@ -136,9 +136,14 @@ const SKIP_PARENTS = new Set(["A", "CODE", "PRE", "BUTTON", "INPUT", "TEXTAREA",
 /**
  * Wrap rule keywords in tooltip spans. Safe on plain text and on HTML.
  * @param {string} html
+ * @param {object} [options]
+ * @param {string|null} [options.damageDie=null]  the character's damage die
+ *   ("d10"): "[D]" / "2[D]" are then shown as "d10" / "2d10" (p.84: "if
+ *   you're a Freelancer, [D] is 1d10"), with "[D] = d10" in the tooltip.
+ *   Null keeps the [D] symbol (item sheets, compendium, NPCs).
  * @returns {string}
  */
-export function enrichRuleKeywords(html) {
+export function enrichRuleKeywords(html, { damageDie = null } = {}) {
   const src = String(html ?? "");
   if (!src.trim() || typeof document === "undefined") return src;
   if (!COMBINED.test(src)) return src;
@@ -166,11 +171,20 @@ export function enrichRuleKeywords(html) {
       const entry = _lookup(m[0]);
       const tip = entry ? def(entry.term) : "";
       if (!tip) continue;
-      if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+      let before = text.slice(last, m.index);
+      let label = m[0], tooltip = `${entry.term}: ${tip}`;
+      if (entry.term === "[D]" && damageDie) {
+        // "2[D]" → "2d10": the dice count written right before the symbol joins the die.
+        const mult = before.match(/(\d+)$/);
+        if (mult) before = before.slice(0, mult.index);
+        label = `${mult?.[1] ?? ""}${damageDie}`;
+        tooltip = `${mult?.[1] ?? ""}[D] = ${label} (your damage die is ${damageDie}). ${tip}`;
+      }
+      if (before) frag.appendChild(document.createTextNode(before));
       const span = document.createElement("span");
       span.className = `icon-kw${entry.cls ? ` icon-kw--${entry.cls}` : ""}`;
-      span.dataset.tooltip = `${entry.term}: ${tip}`;
-      span.textContent = m[0];
+      span.dataset.tooltip = tooltip;
+      span.textContent = label;
       frag.appendChild(span);
       last = m.index + m[0].length;
     }

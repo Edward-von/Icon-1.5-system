@@ -15,11 +15,14 @@ import { enrichRuleKeywords } from "./keywords.mjs";
  *   tooltips. Used for an ability's flavour line: it is narrative prose
  *   ("send your target flying"), not rules, so its words must not look like
  *   keywords.
+ * @param {string|null} [options.damageDie=null]  the character's damage die
+ *   ("d10"): "[D]" / "2[D]" are shown as "d10" / "2d10" (PC sheet and its
+ *   cards, see IconSheet._enrichAbility). Null keeps the [D] symbol.
  */
-export async function enrichHTML(html, { keywords = true } = {}) {
+export async function enrichHTML(html, { keywords = true, damageDie = null } = {}) {
   const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(formatRollTables(formatBulletLists(html)), { async: true });
   if (!keywords) return out;
-  try { return enrichRuleKeywords(out); }
+  try { return enrichRuleKeywords(out, { damageDie }); }
   catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
 }
 
