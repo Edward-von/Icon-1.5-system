@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R23 — Opzione "Other" nel tiro del danno per il danno delle mastery (15 ottobre 2026, versione 1.15.27)
+
+Setup: un mondo con un PG Harvester con Harvest e un PG Demon Slayer con Draken Cross (vanno bene copie aggiunte prima
+dell'aggiornamento), i loro token e due o tre token foe su una scena, uno con lo status Dodge; tab Combat.
+
+- [ ] **Other sempre presente**: bottone del danno di qualunque abilità (anche Light Attack) → nella riga Outcome c'è
+      **Other**; sceglierlo apre sotto un pannello con Dice, Fixed damage, + Fray, Area effect; tornare su Hit lo
+      chiude.
+- [ ] **Harvest**: sbloccare la mastery Harvest Moon → danno di Harvest → Other → c'è la scelta rapida "Mastery
+      2 flat piercing · area" (passandoci sopra si legge il testo della mastery); cliccarla → Fixed damage 2, Area
+      effect e Pierce spuntati; Roll Damage → card "Harvest — Mastery damage (area)" con 2 danni.
+- [ ] **Draken Cross**: sbloccare Dark Wind Devil Blade → Other → scelta rapida "Mastery 2 flat divine · area" → spunta
+      Divine; il tiro dà 2. Con Talent I scelto c'è anche "Talent I fray N · area" (fray damage again).
+- [ ] **Mastery bloccata**: togliere la mastery → in Other non c'è più la sua scelta rapida (restano i campi liberi).
+- [ ] **Campi liberi**: Other senza scelta rapida, Dice 1 + Fray → l'anteprima mostra "1[d…] + fray N" e il tiro
+      corrisponde; card "… — Other damage".
+- [ ] **Dodge**: Other con Area effect spuntato su un foe con Dodge → al momento di Apply è immune (chip "Dodge —
+      immune"); senza Area effect il danno passa.
+- [ ] **Hit / Area invariati**: su Harvest, Hit e Area tirano come prima (2[D]+fray e fray), con due foe bersagliati
+      la finestra chiede ancora il bersaglio dell'attacco.
+- [ ] **Foe / legend**: bottone danno di un'azione foe e di una legend → c'è Other con i soli campi liberi e il tiro
+      funziona.
+- [ ] **Danno solo da talento**: Rot con Talent II scelto ("take 2 piercing damage") → c'è il bottone Damage Roll e in
+      Other c'è la scelta rapida "Talent II 2 flat piercing".
+
 ## R22 — Voce FAQ sulle difficoltà dei tiri narrativi (15 ottobre 2026, versione 1.15.26)
 
 Setup: un mondo qualsiasi; aprire la Quick Guide (bottone sulla scheda del PG) → tab FAQ.

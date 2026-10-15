@@ -387,10 +387,11 @@ export class IconSheet extends BaseActorSheet {
         blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: enrichHTML }),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still
-        // gets a Damage button.
+        // gets a Damage button, and the talent / mastery damage that only the
+        // dialog's "Other" outcome rolls.
         isAttack:    parsed.isAttack,
         isAutoHit:   parsed.isAutoHit,
-        dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage,
+        dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage || !!parsed.extras?.length,
         description:         await enrichHTML(desc.flavor, { keywords: false }),
         trigger:             await enrichHTML(trigger),
         hitEffect:           await enrichHTML(s.hitEffect),
@@ -2248,7 +2249,7 @@ export class IconSheet extends BaseActorSheet {
     const combat = this.document.system.combat;
     _log(`abilityDamageRoll — "${ab.name}" | parsed:`, ab.parsed, "| parsedCombo:", ab.parsedCombo);
 
-    if (!ab.dealsDamage && !ab.parsedCombo?.dealsDamage) {
+    if (!ab.dealsDamage && !ab.parsedCombo?.dealsDamage && !ab.parsed?.extras?.length) {
       ui.notifications.warn(`"${ab.name}" does not deal damage.`);
       return;
     }
@@ -2286,6 +2287,7 @@ export class IconSheet extends BaseActorSheet {
       targetName:  mods.targetName,
       targetIds:   mods.targetIds,
       attackTargetId: mods.attackTargetId,
+      other:       mods.other,
     });
 
     _log(`abilityDamageRoll — "${ab.name}" | outcome: ${mods.outcome} | combo: ${useCombo}`);
@@ -2383,6 +2385,7 @@ export class IconSheet extends BaseActorSheet {
       targetName:  mods.targetName,
       targetIds:   mods.targetIds,
       attackTargetId: mods.attackTargetId,
+      other:       mods.other,
     });
   }
 

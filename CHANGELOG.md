@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Opzione "Other" nel tiro del danno per il danno delle mastery (versione 1.15.27)
+
+### Round di debug del 15 ottobre, punto R23
+
+- **Danno extra delle mastery e dei talenti**: Maar segnalava che con Harvest (Harvester) l'area della mastery si
+  piazza ma il suo danno non si tira facilmente, e che con Draken Cross (Demon Slayer) i 2 danni divine della mastery
+  si tirano solo mettendoli nel danno dell'area; Turz Ven proponeva un'opzione "Other" nel damage roller → la finestra
+  del danno ha un nuovo esito **Other**, accanto a Hit / Crit / Miss / Area, su tutte le schede (PG, foe, legend).
+  Scegliendolo si apre un pannello con: le righe di danno lette dal talento scelto e dalla mastery sbloccata come
+  scelta rapida (Harvest Moon, p.186: "2 piercing damage in a small blast area effect"; Dark Wind Devil Blade, p.128:
+  "take 2 divine damage"; Talent I di Draken Cross: "Deal fray damage again"), più i campi liberi Dice, Fixed damage,
+  + Fray e Area effect. La scelta rapida riempie i campi e spunta Divine / Pierce secondo il testo; tutto resta
+  modificabile. Bonus dice, Flat damage, Vulnerable, Resistance ecc. valgono come per gli altri esiti. La card in chat
+  si intitola "<abilità> — Mastery damage" (o "Talent I damage", "Other damage"); con Area effect spuntato Dodge rende
+  immuni al momento di Apply come per l'Area (p.144). Non vengono proposte le frasi che cambiano il danno invece di
+  aggiungerne ("instead of", "increases by", "becomes"), né quella già usata come danno dell'Area (R21). Le abilità
+  il cui unico danno sta nel talento o nella mastery (es. Rot con Talent II, Chastise) ora hanno il bottone Damage
+  Roll. Più istanze dello stesso danno ("twice") restano per R24. Solo codice.
+
 ## 15 ottobre 2026 — Voce FAQ sulle difficoltà dei tiri narrativi (versione 1.15.26)
 
 ### Round di debug del 15 ottobre, punto R22

@@ -182,11 +182,14 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.26: voce nella FAQ Narrative con controlled/risky/desperate (p.18),
       conseguenze e strain (p.29), niente "trivial"/"heroic" nel libro: fortune roll (p.20) ed effetto superpowered
       (pp.18-19). Solo codice.)
-- [ ] **R23. Danno extra delle mastery** (M)
+- [x] **R23. Danno extra delle mastery** (M)
       Harvest: l'area della mastery si piazza, ma il danno della mastery non si tira facilmente (secondo bottone?).
       Draken Cross: i 2 danni divine della mastery non si tirano senza metterli nel danno dell'area.
       Commento di Turz Ven: "I think most issues of this variety can be solved by simply adding a 'Other' option onto
       the damage roller."
+      (FATTO il 15 ottobre 2026, versione 1.15.27: nuovo esito "Other" nella finestra del danno (PG, foe, legend) con
+      Dice / Fixed damage / + Fray / Area effect liberi e, come scelta rapida, le righe di danno del talento scelto e
+      della mastery sbloccata (Harvest Moon p.186, Dark Wind Devil Blade p.128), con tipo divine/piercing. Solo codice.)
 - [ ] **R24. Più istanze dello stesso danno nel damage roller** (M)
       Abilità che infliggono lo stesso danno più volte (per la sinergia con Vulnerable), es. Strongarm.
 - [ ] **R25. Gamble cliccabile** (M)
@@ -281,6 +284,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R19 — foe con tag "aura" senza numero** (S): Aura of Slaughter dei sei demoni (Armor,
       Gaping, Horn, Starving, Nail, Battle) ha il tag "aura" senza dimensione; le schede foe non passano da
       `resolveAbilityTags`, quindi probabilmente chiedono ancora la dimensione (proposta 3). Non verificato.
+- [ ] **Emerso lavorando su R23 — finestra del danno dei summon senza "Other"** (S): la scheda summon usa ancora una
+      sua finestra semplice (`SummonSheet.#promptSummonDamageMods`, select Hit/Crit/Miss/Area) e non quella condivisa
+      di `roll-dialogs.mjs`, quindi non ha l'esito Other né Pierce/Divine/True Strike.
 
 ---
 

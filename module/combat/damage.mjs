@@ -488,7 +488,9 @@ export async function recoverAction(actor) {
  * @param {Actor}  actor                Attacking actor (speaker + damage flag).
  * @param {object} opts
  * @param {object} opts.parsed          { hit, miss, area } from _parseAbilityDamage.
- * @param {string} opts.outcome         "hit" | "crit" | "miss" | "area".
+ * @param {string} opts.outcome         "hit" | "crit" | "miss" | "area" | "other".
+ * @param {object} [opts.other]         "Other" outcome: { mult, flat, fray, area, label } typed in the
+ *                                      damage dialog (a mastery's own damage, p.128 / p.186).
  * @param {string} opts.damagedie       e.g. "d6" — resolved by caller per actor type.
  * @param {number} opts.fray            fray value resolved by caller.
  * @param {string} opts.abilityName
@@ -510,6 +512,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     bonusDice = 0, vulnerable = false, resistance = false, weakened = false,
     hatred = false, targetName = "", targetsOverride = null, targetIds = null, attackTargetId = "",
     flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
+    other = null,
   } = opts;
 
   // Area attack (p.117): "for a character in the attack space, make an attack
@@ -547,9 +550,13 @@ export async function postAbilityDamageCard(actor, opts = {}) {
   if (!trueStrike && hasStatus(actor, "true-strike")) trueStrike = true;
   // Select the parsed chunk for the chosen outcome. Save-linked damage
   // ("save-fail" / "save-success") is passed as the hit chunk by the caller.
-  const chunk = outcome === "miss" ? parsed.miss
+  const chunk = outcome === "other" ? { mult: 0, fray: false, flat: 0, ...(other ?? {}) }
+              : outcome === "miss" ? parsed.miss
               : outcome === "area" ? parsed.area
               : parsed.hit;
+  // What Apply reads: "Other" damage marked as an area effect counts as area
+  // damage for Dodge (p.144).
+  const cardOutcome = outcome === "other" && other?.area ? "area" : outcome;
 
   // ICON crit rule: +1[D] on top of the normal dice.
   let diceMult = chunk.mult;
@@ -656,7 +663,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     targetName:  targetName || "",
     targets,
     hasTargets:  targets.length > 0,
-    outcome,
+    outcome: cardOutcome,
     pierce: pierce || divine,   // both ignore the target's armor on Apply
     divine,
   });
@@ -666,6 +673,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
                : outcome === "area" ? `${abilityName} — Area damage`
                : outcome === "save-fail" ? `${abilityName} — Failed save`
                : outcome === "save-success" ? `${abilityName} — Successful save (reduced damage)`
+               : outcome === "other" ? `${abilityName} — ${other?.label ? `${other.label} damage` : "Other damage"}${other?.area ? " (area)" : ""}`
                : `${abilityName} — Hit`;
 
   await ChatMessage.create({
@@ -680,7 +688,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
           sourceActorUuid: actor.uuid,
           sourceName:      actor.name,
           abilityName,
-          outcome,
+          outcome: cardOutcome,
           // The attacker already ticked "Resistance / Cover ½" on the roll:
           // the Apply button must not halve a second time (defenses.mjs).
           halvedOnRoll: !!resistance,

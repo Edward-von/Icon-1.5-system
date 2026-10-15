@@ -105,16 +105,41 @@ export function parseAbilityDamage(itemSystem) {
   // the next. Not read: damage dealt "again" (a second instance, not the
   // area's own), and a text that writes out a whole other action with its own
   // labels (God Hand's alternate combo, the Magna infusions).
+  const talentNo = Number(s.talentSelected ?? 0);
+  const upgrades = [
+    { source: talentNo === 1 ? "Talent I" : "Talent II", text: { 1: s.talent1, 2: s.talent2 }[talentNo] },
+    { source: "Mastery", text: s.masteryUnlocked ? s.mastery : "" },
+  ].filter(u => u.text && typeof u.text === "string" && !/\b(?:combo|attack|hit)\s*:/i.test(u.text))
+   .map(u => ({ ...u, sentences: u.text.replace(/<[^>]+>/g, " ").split(/(?<=\.)\s+/) }));
+  let areaSentence = "";
   if (!anyDamage(area)) {
-    const talent = { 1: s.talent1, 2: s.talent2 }[Number(s.talentSelected ?? 0)];
-    for (const t of [talent, s.masteryUnlocked ? s.mastery : ""]) {
-      if (!t || typeof t !== "string" || /\b(?:combo|attack|hit)\s*:/i.test(t)) continue;
-      const sentences = t.replace(/<[^>]+>/g, " ").split(/(?<=\.)\s+/);
-      const i = sentences.findIndex(x => /\barea\s+effect\b/i.test(x));
+    for (const u of upgrades) {
+      const i = u.sentences.findIndex(x => /\barea\s+effect\b/i.test(x));
       if (i < 0) continue;
-      const chunk = [sentences[i], sentences[i + 1]]
-        .filter(x => x && /\bdamage\b/i.test(x) && !/\bagain\b/i.test(x)).map(parseChunk).find(anyDamage);
-      if (chunk) { area = chunk; break; }
+      const pick = [u.sentences[i], u.sentences[i + 1]]
+        .find(x => x && /\bdamage\b/i.test(x) && !/\bagain\b/i.test(x) && anyDamage(parseChunk(x)));
+      if (pick) { area = parseChunk(pick); areaSentence = pick; break; }
+    }
+  }
+
+  // Damage the upgrade in play deals besides the attack, offered by the
+  // damage dialog's "Other" outcome as a one-click roll: Harvest Moon
+  // ("dealing 2 piercing damage in a small blast area effect centered on each
+  // plant", p.186), Dark Wind Devil Blade ("all foes in any area you created
+  // with this ability are slashed and take 2 divine damage", p.128), a talent's
+  // "deal fray damage again". One entry per sentence with damage; the sentence
+  // already read as the Area damage above is left out, and so is a sentence
+  // that changes the ability's damage instead of adding some ("deals 4 damage
+  // instead of 2", "damage increases by 1", "becomes divine").
+  const extras = [];
+  for (const u of upgrades) {
+    for (const sentence of u.sentences) {
+      if (sentence === areaSentence || !/\bdamage\b/i.test(sentence)) continue;
+      if (/\b(?:instead\s+of|increases?\s+by|becomes)\b/i.test(sentence)) continue;
+      const chunk = parseChunk(sentence);
+      if (!anyDamage(chunk)) continue;
+      extras.push({ source: u.source, text: sentence.trim(), ...chunk,
+                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
     }
   }
 
@@ -130,6 +155,7 @@ export function parseAbilityDamage(itemSystem) {
     hit,    // { mult, fray, flat }
     miss,
     area,
+    extras, // [{ source, text, mult, fray, flat, type, area }] — "Other" outcome
   };
 }
 

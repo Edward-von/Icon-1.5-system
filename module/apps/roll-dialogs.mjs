@@ -12,7 +12,8 @@
  *   promptAttackMods → { boons, curses, defense }            | null
  *   promptDamageMods → { outcome, targetName, targetIds, attackTargetId,
  *                        bonusDice, vulnerable, resistance, weakened, hatred,
- *                        useCombo } | null
+ *                        useCombo, other } | null
+ *   (`other`: { mult, flat, fray, area, label } for the "Other" outcome, else null)
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
@@ -417,11 +418,18 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     if (c?.flat)     parts.push(`${c.flat} flat`);
     return parts.join(" + ");
   };
+  // Damage lines read from the selected talent / unlocked mastery (ability-damage.mjs).
+  const extras = Array.isArray(p.extras) ? p.extras : [];
+  const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   const outcomes = [
     { value: "hit",  label: "Hit",  formula: chunkFormula(p.hit) || "no damage", show: true },
     { value: "crit", label: "Crit", formula: p.hit?.mult > 0 ? `${p.hit.mult + 1}[${die}]${p.hit.fray ? ` + fray ${fray}` : ""}` : "", show: p.hit?.mult > 0 },
     { value: "miss", label: "Miss", formula: chunkFormula(p.miss), show: !!(p.miss?.fray || p.miss?.flat > 0 || p.miss?.mult > 0) },
     { value: "area", label: "Area", formula: chunkFormula(p.area), show: !!(p.area?.mult > 0 || p.area?.flat > 0 || p.area?.fray) },
+    // Damage the outcomes above don't cover — a mastery's or talent's own
+    // damage (Harvest Moon p.186, Dark Wind Devil Blade p.128) or anything
+    // else the table needs: dice / fray / fixed amount typed in the panel below.
+    { value: "other", label: "Other", formula: extras.length ? "mastery / talent / free" : "free amount", show: true },
   ].filter(o => o.show);
 
   // Area attack (p.117): only the token in the attack space takes the hit /
@@ -459,6 +467,22 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip icon-roll-chip--combo" title="Roll the combo version's damage instead of the base ability's.">
               <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}><span><i class='fa-solid fa-bolt'></i> Combo version <small>${esc(comboFormula)}</small></span>
             </label>` : ""}
+          <div class="icon-roll-other" data-other-panel hidden>
+            ${extras.length ? `<div class="icon-roll-chips">
+              ${extras.map((x, i) => `
+                <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}">
+                  <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.area ? " · area" : ""}</small></span>
+                </label>`).join("")}
+            </div>` : ""}
+            <div class="icon-roll-steppers">
+              ${_stepper({ name: "otherDice", label: "Dice", hint: "[D] rolled for this damage", value: 0, max: 5 })}
+              ${_stepper({ name: "otherFlat", label: "Fixed damage", hint: "a fixed amount (\"2 divine damage\")", value: 0, max: 30 })}
+            </div>
+            <div class="icon-roll-chips">
+              <label class="icon-roll-chip"><input type="checkbox" name="otherFray"><span>+ Fray <small>${fray}</small></span></label>
+              <label class="icon-roll-chip" title="Area effect damage: Dodge makes the target immune to it (p.144) unless True Strike is ticked."><input type="checkbox" name="otherArea"><span>Area effect <small>Dodge applies</small></span></label>
+            </div>
+          </div>
         </section>
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
@@ -490,11 +514,21 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   _onDialogRender(".icon-roll-dialog--damage", root => {
     const f = root.closest("form") ?? root;
     const formula = root.querySelector(".icon-roll-preview__formula");
+    const otherPanel = root.querySelector("[data-other-panel]");
+    // "Other": the chunk is whatever the panel says (dice / fixed / fray).
+    const otherChunk = () => ({
+      mult: Math.max(0, Number(f.elements.otherDice?.value) || 0),
+      flat: Math.max(0, Number(f.elements.otherFlat?.value) || 0),
+      fray: !!f.elements.otherFray?.checked,
+      area: !!f.elements.otherArea?.checked,
+    });
     const update = () => {
       const outcome = f.querySelector('input[name="outcome"]:checked')?.value ?? "hit";
       const useCombo = !!f.elements.useCombo?.checked && !!pc;
       const src = useCombo ? pc : p;
-      const chunk = outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
+      const chunk = outcome === "other" ? otherChunk()
+                  : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
+      if (otherPanel) otherPanel.hidden = outcome !== "other";
       let mult = chunk?.mult ?? 0; if (outcome === "crit") mult = Math.max(1, mult) + 1;
       const bonus = Number(f.elements.bonusDice?.value) || 0;
       const parts = [];
@@ -516,7 +550,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       formula.textContent = txt;
       // The Dodge reminder only matters for the outcomes Dodge cancels (Miss / Area).
       const dodgeNote = root.querySelector("[data-dodge-note]");
-      if (dodgeNote) dodgeNote.hidden = !(outcome === "miss" || outcome === "area");
+      if (dodgeNote) dodgeNote.hidden = !(outcome === "miss" || outcome === "area" || (outcome === "other" && chunk.area));
     };
     // Divine / Pierce follow the damage type written in the text of the
     // chosen outcome ("take 1 divine damage", Gentleness p.179): set when the
@@ -525,11 +559,24 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     const syncType = () => {
       const outcome = f.querySelector('input[name="outcome"]:checked')?.value ?? "hit";
       const src = (!!f.elements.useCombo?.checked && !!pc) ? pc : p;
-      const type = (outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
+      const picked = extras[Number(f.querySelector('input[name="otherPick"]:checked')?.value)];
+      const type = (outcome === "other" ? picked
+                  : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
     };
-    f.querySelectorAll('input[name="outcome"], input[name="useCombo"]').forEach(el => el.addEventListener("change", syncType));
+    // A mastery / talent line under "Other" fills the panel with its amount,
+    // type and area; the fields stay editable afterwards.
+    const fillOther = () => {
+      const x = extras[Number(f.querySelector('input[name="otherPick"]:checked')?.value)];
+      if (!x) return;
+      f.elements.otherDice.value = x.mult || 0;
+      f.elements.otherFlat.value = x.flat || 0;
+      f.elements.otherFray.checked = !!x.fray;
+      f.elements.otherArea.checked = !!x.area;
+    };
+    f.querySelectorAll('input[name="otherPick"]').forEach(el => el.addEventListener("change", fillOther));
+    f.querySelectorAll('input[name="outcome"], input[name="useCombo"], input[name="otherPick"]').forEach(el => el.addEventListener("change", syncType));
     f.querySelectorAll('input').forEach(el => el.addEventListener("input", update));
     f.querySelectorAll('input').forEach(el => el.addEventListener("change", update));
     // ✕ drops a target from this roll (and untargets it on the map); the
@@ -552,8 +599,18 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           const rows = Array.from(f.querySelectorAll(".icon-roll-target"));
           const targetIds = rows.map(r => r.dataset.tokenId);
           const attackTargetId = f.querySelector('input[name="attackTarget"]:checked')?.value ?? "";
+          const outcome = f.querySelector('input[name="outcome"]:checked')?.value ?? "hit";
+          const picked = extras[Number(f.querySelector('input[name="otherPick"]:checked')?.value)];
           return {
-            outcome:    f.querySelector('input[name="outcome"]:checked')?.value ?? "hit",
+            outcome,
+            // "Other" outcome: the damage typed in its panel, and a label for the card.
+            other: outcome !== "other" ? null : {
+              mult:  Math.max(0, Number(f.elements.otherDice?.value) || 0),
+              flat:  Math.max(0, Number(f.elements.otherFlat?.value) || 0),
+              fray:  !!f.elements.otherFray?.checked,
+              area:  !!f.elements.otherArea?.checked,
+              label: picked ? picked.source : "",
+            },
             targetName: rows.map(r => r.dataset.name).join(", "),
             targetIds,
             attackTargetId,

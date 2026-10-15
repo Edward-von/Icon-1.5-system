@@ -5690,6 +5690,10 @@ ol.chat-log .chat-message,
 .icon-roll-chip--type span { border-color: rgba(200,150,28,.55); }
 .icon-roll-chip--type input:checked + span { background: rgba(200,150,28,.2); color: var(--ic-gold-bright); }
 
+/* "Other" outcome panel: free damage + the talent / mastery lines (R23) */
+.icon-roll-other { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--ic-border-subtle); }
+.icon-roll-other[hidden] { display: none; }
+
 /* live preview */
 .icon-roll-preview { margin-top: 2px; padding: 6px 10px; background: rgba(200,150,28,.08); border: 1px solid rgba(200,150,28,.3); border-radius: var(--ic-radius-sm); display: flex; flex-direction: column; gap: 2px; }
 .icon-roll-preview__formula { font-family: var(--ic-display); font-size: 1.05em; color: var(--ic-gold-bright); }

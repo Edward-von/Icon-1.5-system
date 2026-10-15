@@ -440,6 +440,7 @@ export class FoeSheet extends BaseActorSheet {
       targetName:  mods.targetName,
       targetIds:   mods.targetIds,
       attackTargetId: mods.attackTargetId,
+      other:       mods.other,
     });
   }
 
