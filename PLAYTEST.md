@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R32 — Dimensione dell'aura con + e − (15 ottobre 2026, versione 1.15.36)
+
+Setup: un PG Chanter con Gentleness e la mastery sbloccata, un PG con un tratto ad aura (es. Shieldmaster); un foe
+vicino, scena a griglia quadrata.
+
+- [ ] **Avviso al piazzamento**: piazzare l'aura di Gentleness → l'avviso dice "… Mouse over it and press + or − to
+      change its size (1 to 3)."
+- [ ] **Allargare**: mouse sopra l'aura (anche con il livello Token attivo), premere + → l'aura passa a 2 caselle
+      attorno al token, l'etichetta sulla mappa diventa "Aura 2 · Gentleness", l'avviso mostra "Aura 2 (Gentleness) —
+      When you do, foes inside must save or be pacified."
+- [ ] **Limiti del testo**: premere ancora + → Aura 3; ancora + → avviso "Aura 3 is already at its maximum (3)" e
+      niente cambia; − fino ad Aura 1, poi − → "already at its minimum (1)".
+- [ ] **Segue il token**: con l'aura a 3, muovere il token → l'aura lo segue con la nuova dimensione.
+- [ ] **Senza limiti nel testo**: l'aura del tratto Shieldmaster va da 1 a 5 con + / −.
+- [ ] **Senza mastery**: Gentleness con la mastery NON sbloccata, ripiazzare l'aura → l'avviso non scrive "(1 to 3)"
+      e + / − vanno da 1 a 5.
+- [ ] **Non interferisce**: con il mouse fuori dall'aura, o sopra una scheda, o scrivendo in un campo di testo
+      (chat, scheda), + e − non cambiano nessuna aura; piazzando una Line, + e − cambiano ancora la sua larghezza.
+- [ ] **Permessi**: da giocatore, + / − sull'aura di un altro PG non fanno nulla; il GM può cambiare qualsiasi aura.
+
 ## R31 — Mastery e talento in chat da soli (15 ottobre 2026, versione 1.15.35)
 
 Setup: un PG Chanter con Symphony, un PG Sealer con Spirit Shrine; un foe sulla mappa.

@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Dimensione dell'aura con + e − (versione 1.15.36)
+
+### Round di debug del 15 ottobre, punto R32
+
+- **Cambiare la dimensione di un'aura già sulla mappa**: Maar chiedeva, per la mastery di Gentleness (Chanter,
+  GENTLE PRAYER, p.179: "When the aura refreshes, you may increase or decrease the aura size by +1, to a maximum of 3
+  or a minimum of 1. When you do, foes inside must save or be pacified"), gli stessi comandi + / − che allargano la
+  Line mentre la si piazza → con il mouse sopra un'aura già piazzata, + la allarga di 1 e − la restringe di 1: le
+  caselle si ridisegnano attorno al token che la porta (che continua a seguire), l'etichetta passa da "Aura 1" ad
+  "Aura 2". I limiti sono quelli scritti nel testo dell'abilità quando l'aura viene piazzata ("maximum of 3 / minimum
+  of 1": Gentleness con la mastery sbloccata va da 1 a 3), altrimenti da 1 a 5 come la larghezza della Line; al
+  limite un avviso lo dice. A ogni cambio un avviso mostra la nuova dimensione e, se il testo la scrive, la frase
+  che segue ("When you do, foes inside must save or be pacified"). Funziona su qualsiasi livello della mappa, solo
+  per chi ha piazzato l'aura o per il GM; non mentre si scrive in un campo, non con il mouse su una scheda, non
+  mentre si piazza un'altra area. Le aure piazzate prima di questa versione vanno da 1 a 5 (ripiazzarle per avere i
+  limiti del testo). Durata (R3), aure lette dal testo (R19), aure sugli alleati (R19b) e dei tratti (R19c) non
+  cambiano. Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — Mastery e talento in chat da soli (versione 1.15.35)
 
 ### Round di debug del 15 ottobre, punto R31

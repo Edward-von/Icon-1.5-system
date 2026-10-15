@@ -35,6 +35,11 @@
  * carries a countdown (`flags.icon-system.expiry`, same shape as the status
  * one in status-expiry.mjs); when it runs out, a chat card says so and offers
  * to remove it (tickAuraExpiry, called by IconCombat).
+ *
+ * Aura size: with the mouse over an aura already on the map, + and − grow or
+ * shrink it by 1 (the keys that widen a Line while placing it), within the
+ * bounds the text writes ("to a maximum of 3 or a minimum of 1", Gentleness'
+ * Gentle Prayer p.179), else 1 to 5 (resizeAura).
  */
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
 // Local escape: importing enrich.mjs here would close an import loop
@@ -405,6 +410,9 @@ async function promptAreaSize(area) {
 class AreaPlacement {
   static #active = null;
 
+  /** Is a placement running? (The aura + / − keys stay out of its way.) */
+  static get active() { return !!AreaPlacement.#active; }
+
   constructor({ area, sourceCells, rangeCells }) {
     this.area = area;
     this.sourceCells = sourceCells;
@@ -678,11 +686,13 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   const origin = canvas.grid.getCenterPoint(originCell);
   const color = areaColor(area, actor);
   const expiry = isAura ? await auraExpiry(text, actor) : null;
+  // The bounds the text puts on resizing the aura (+ / − over it, resizeAura)
+  const limits = isAura ? auraSizeLimits(text) : null;
   const data = {
     t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
     fillColor: color, borderColor: color, hidden: false,
     flags: { [FLAG_NS]: {
-      cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label },
+      cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label, ...(limits ?? {}) },
       actorId: actor.id, actorUuid: actor.uuid, tokenId: token.id, abilityKey, abilityName: abilityName ?? "",
       lasting: !!lasting || isAura,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
@@ -703,7 +713,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     // A persistent effect, not an attack: nothing to target.
     if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
     _log(`placed ${area.label} for "${abilityName}" — follows token ${holder.id}${expiry ? ` — ${expiry.text}` : ""}`);
-    ui.notifications.info(`${area.label} placed around ${holder.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}.`);
+    ui.notifications.info(`${area.label} placed around ${holder.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}. Mouse over it and press + or − to change its size${limits ? ` (${limits.min} to ${limits.max})` : ""}.`);
     return { template, cells, targets: [], area };
   }
 
@@ -742,6 +752,80 @@ function targetAnchorToken(token) {
     ? "This area is drawn from your target: target only that token, then place it again. Drawn from you for now."
     : "This area is drawn from your target: target that token, then place it again. Drawn from you for now.");
   return null;
+}
+
+/**
+ * The bounds an ability's text puts on changing its aura's size, or null when
+ * it writes none: "you may increase or decrease the aura size by +1, to a
+ * maximum of 3 or a minimum of 1. When you do, foes inside must save or be
+ * pacified" (Gentleness' Gentle Prayer, p.179) → { min: 1, max: 3, note }.
+ * `note` is the sentence after it when it starts "When you do", shown on
+ * each resize as a reminder of what the change sets off.
+ * @param {string} text  the ability's text (HTML allowed)
+ * @returns {{min:number, max:number, note:string}|null}
+ */
+export function auraSizeLimits(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const sentences = plain.split(/(?<=[.;])\s+/);
+  for (let k = 0; k < sentences.length; k++) {
+    const sentence = sentences[k];
+    if (!/\b(?:aura(?:'s)? size|size of (?:the|your|its) aura)\b/i.test(sentence)) continue;
+    const max = Number(sentence.match(/\bmaximum (?:of )?(\d+)/i)?.[1] ?? 0);
+    const min = Number(sentence.match(/\bminimum (?:of )?(\d+)/i)?.[1] ?? 0);
+    if (!max && !min) continue;
+    const next = sentences[k + 1]?.trim() ?? "";
+    return { min: min || 1, max: max || AURA_MAX_SIZE, note: /^when you do\b/i.test(next) ? next : "" };
+  }
+  return null;
+}
+
+/** Largest aura + / − reach when the text gives no maximum (as the Line's width). */
+const AURA_MAX_SIZE = 5;
+
+/**
+ * Grow or shrink an aura already on the map by `delta` (Maar: Gentleness'
+ * mastery changes the aura size each refresh, p.179). The cells are redrawn
+ * around the token holding it, the label follows; the bounds are the ones
+ * the text gave when it was placed (auraSizeLimits), else 1 to 5.
+ * @param {MeasuredTemplateDocument} doc  an aura template (followTokenId set)
+ * @param {number} delta  +1 or -1
+ * @returns {Promise<boolean>} whether the size changed
+ */
+export async function resizeAura(doc, delta) {
+  const f = doc?.flags?.[FLAG_NS];
+  if (!f?.followTokenId || f.area?.kind !== "aura") return false;
+  const holder = doc.parent?.tokens?.get(f.followTokenId);
+  if (!holder) { ui.notifications.warn("The token holding this aura is no longer on the scene."); return false; }
+  const min = Number(f.area.min) || 1, max = Number(f.area.max) || AURA_MAX_SIZE;
+  const now = Number(f.area.size) || 1;
+  const size = Math.clamp(now + delta, min, max);
+  if (size === now) {
+    ui.notifications.info(`${f.area.label ?? "Aura"} is already at its ${delta > 0 ? `maximum (${max})` : `minimum (${min})`}.`, { console: false });
+    return false;
+  }
+  const area = { ...f.area, size };
+  area.label = areaLabel(area);
+  const sourceCells = tokenCells(holder);
+  const cells = cellsInRange(sourceCells, size).concat(sourceCells);
+  await doc.update({ [`flags.${FLAG_NS}.area`]: area, [`flags.${FLAG_NS}.cells`]: cells });
+  _log(`${f.abilityName}: ${f.area.label} → ${area.label}`);
+  const name = f.abilityName ? ` (${f.abilityName})` : "";
+  ui.notifications.info(`${area.label}${name}${area.note ? ` — ${area.note}` : ""}`, { console: false });
+  return true;
+}
+
+/** The aura template under the mouse that this user may resize, or null. */
+function auraUnderMouse() {
+  if (!canvas?.ready || !canvas.scene || !canvas.mousePosition) return null;
+  const c = canvas.grid.getOffset(canvas.mousePosition);
+  const under = canvas.scene.templates.filter(t => {
+    const f = t.flags?.[FLAG_NS];
+    return f?.followTokenId && f.area?.kind === "aura" && (t.isOwner || game.user.isGM)
+      && (f.cells ?? []).some(k => k.i === c.i && k.j === c.j);
+  });
+  // Overlapping auras: the smallest one is the one the mouse points at most precisely.
+  under.sort((a, b) => a.flags[FLAG_NS].cells.length - b.flags[FLAG_NS].cells.length);
+  return under[0] ?? null;
 }
 
 /**
@@ -1065,6 +1149,22 @@ export function registerAreaTemplates() {
       if (inArea.has(t.id)) t.setTarget(false, { releaseOthers: false });
     }
   });
+  // + / − with the mouse over an aura on the map: change its size (resizeAura).
+  // Not while typing, nor while an area is being placed (the Line's own + / −),
+  // nor with the mouse over a sheet or the sidebar (canvas.mousePosition keeps
+  // the last spot on the board, so the board itself must be under the mouse).
+  let overBoard = false;
+  window.addEventListener("pointermove", (ev) => { overBoard = !!canvas?.app?.view && ev.target === canvas.app.view; }, { capture: true, passive: true });
+  window.addEventListener("keydown", (ev) => {
+    if (!["+", "=", "-", "_"].includes(ev.key) || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    if (!overBoard || AreaPlacement.active) return;
+    const el = document.activeElement;
+    if (el && (el.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(el.tagName))) return;
+    const doc = auraUnderMouse();
+    if (!doc) return;
+    ev.preventDefault(); ev.stopImmediatePropagation();
+    if (!ev.repeat) resizeAura(doc, ev.key === "+" || ev.key === "=" ? 1 : -1);
+  }, { capture: true });
   Hooks.on("preUpdateToken", (tokenDoc, changed, options) => {
     // Remember where the token was so updateToken can compute the cell delta.
     if ("x" in changed || "y" in changed) options.iconPrevPos = { x: tokenDoc.x, y: tokenDoc.y };

@@ -238,8 +238,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       talento scelto nell'anteprima della scheda PG; posta una card con solo quel testo, titolo "Symphony —
       Mastery: Crescendo" (p.179) / "Spirit Shrine — Mastery: Spirit Patronage" (p.193), keyword e Inflict/Gain.
       Generico per tutte le mastery e i talenti. Solo codice.)
-- [ ] **R32. Dimensione dell'aura con +/-** (S/M)
+- [x] **R32. Dimensione dell'aura con +/-** (S/M)
       Gentleness: l'aura della mastery cresce; stessi controlli della larghezza della Line.
+      (FATTO il 15 ottobre 2026, versione 1.15.36: mouse sopra un'aura già piazzata, + / − la allargano o restringono di
+      1 attorno al token che la porta; limiti letti dal testo al piazzamento ("maximum of 3 or a minimum of 1",
+      Gentle Prayer p.179), altrimenti 1-5 come la Line; l'avviso ripete "When you do, foes inside must save or be
+      pacified". Solo chi l'ha piazzata o il GM. Solo codice.)
 - [ ] **R33. Oggetti e segni piazzabili sulla mappa** (L/XL, da decidere)
       Symphony (motes, terrain effect), Fairy Ring (megamushroom della mastery), Comet ("thrown weapon"), Spirit
       Shrine (santuario con la sua aura), Gates of Hell (flash step della mastery), Eclipse (il singolo dangerous
