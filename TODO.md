@@ -136,13 +136,28 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       lettura del testo non riconosceva "also" davanti al verbo, quindi scartava lo status. Ora "also" è accettato:
       bottone "Gain Unstoppable" su di sé; stessa correzione per il Talent II di Circle the Oak (Gain Evasion). Solo
       codice, vale per le copie già sulle schede.)
-- [ ] **R19. Aure mancanti o sbagliate** (M, bug)
+- [x] **R19. Aure mancanti o sbagliate** (M, bug)
       - Endless Battlement: chiede la dimensione dell'aura (proposta 3) anche se è sempre 1, e la mette solo su chi
         la lancia, mentre va su un alleato.
       - Dervish Talent 1: non dà il tag aura e non si applica facilmente a sé.
       - Shieldmaster (tratto): niente aura su di sé.
       - Bleak Mercy combo e Dark Knight mastery: niente scelta dell'aura.
       Endless Battlement potrebbe essere un problema separato: se la causa è diversa, dividere.
+      (FATTO il 15 ottobre 2026, versione 1.15.21: le aure scritte solo nel testo non diventavano tag. Ora talento /
+      mastery / combo che danno un'aura a chi usa l'abilità aggiungono il tag Aura N e il bottone area (Dervish
+      Talent I e DAWN, Dark Knight mastery, Sweet Torment), e un tag "aura" senza numero prende la dimensione dal
+      testo (Endless Battlement Aura 1, niente più domanda; anche Rook, Strength of the Pack, Perseus, Nightmare).
+      Spostati: l'aura di Endless Battlement sull'alleato → R19b; l'aura del tratto Shieldmaster → R19c. Solo
+      codice, vale per le copie già sulle schede.)
+- [ ] **R19b. Endless Battlement: l'aura va sull'alleato scelto, non su chi usa la stance** (M, bug)
+      "That ally gains aura 1 until the start of your next turn. The aura deactivates if your ally is out of range"
+      (p.123). Il piazzamento delle aure (`placeAreaTemplate`, area-templates.mjs) mette sempre l'aura attorno al
+      token di chi usa l'abilità e la fa seguire quel token: manca il modo di scegliere un alleato (in range 4, o
+      senza limite con la mastery) e di legare l'aura al suo token. Causa diversa da R19 (dimensione già corretta).
+- [ ] **R19c. Tratti con un'aura: niente bottone per piazzarla** (S/M, bug)
+      Shieldmaster (Bastion, "You have aura 1", p.121) e Pelagic Rage ("You gain aura 2"): i tratti non hanno tag né
+      bottone area sulla scheda (il bottone esiste solo per le abilità, `abilityPlaceArea` in IconSheet), quindi
+      l'aura del tratto non si può mettere sulla mappa. Serve un bottone area per i tratti che danno un'aura a sé.
 - [ ] **R20. Sow: l'Arc 4 della mastery non è piazzabile come area** (S, bug)
 - [ ] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
 
@@ -239,6 +254,15 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R17 — testo del mark per Polaris / Party Favor** (S): il bottone Mark di un'abilità senza
       blocco "Mark:" mette nel mark tutto il testo dell'abilità (Terrain Effect + Gamble di Polaris); andrebbe usato
       il testo del talento / della mastery che crea il mark. Da verificare nel playtest R17.
+- [ ] **Emerso lavorando su R19 — Painkiller: l'aura di Sweet Torment dovrebbe durare per sempre** (S): con la mastery
+      di Bleak Mercy sbloccata ("Sweet Torment's aura lasts indefinitely", p.144) la durata dell'aura viene ancora
+      letta dal testo della combo ("until the end of your next turn") e l'aura scade. Da verificare in gioco.
+- [ ] **Emerso lavorando su R19 — aure alternative nel testo non proposte** (S): la mastery Phantom Bolts di Warding
+      Bolts ("hover around you as an Aura 2 instead") e l'Heroic di Rook ("increase aura to Aura 2") non compaiono
+      tra le scelte del bottone area (`areasInText` non legge "aura N"). Non verificato in gioco.
+- [ ] **Emerso lavorando su R19 — foe con tag "aura" senza numero** (S): Aura of Slaughter dei sei demoni (Armor,
+      Gaping, Horn, Starving, Nail, Battle) ha il tag "aura" senza dimensione; le schede foe non passano da
+      `resolveAbilityTags`, quindi probabilmente chiedono ancora la dimensione (proposta 3). Non verificato.
 
 ---
 

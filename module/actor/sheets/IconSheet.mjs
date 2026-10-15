@@ -1985,7 +1985,10 @@ export class IconSheet extends BaseActorSheet {
     // and then the base area is the default.
     const baseArea = areaFromTags(s.tags ?? []);
     const tagArea  = areaFromTags(ab.tags);
-    const changed  = !!(baseArea && tagArea && (baseArea.label !== tagArea.label || baseArea.range !== tagArea.range));
+    // A bare "aura" tag is the same aura once its size is read from the text
+    // (resolveAbilityTags): Endless Battlement offers Aura 1, not also "Base: Aura".
+    const sameAura = baseArea?.kind === "aura" && tagArea?.kind === "aura" && (!baseArea.size || baseArea.size === tagArea.size);
+    const changed  = !!(baseArea && tagArea && !sameAura && (baseArea.label !== tagArea.label || baseArea.range !== tagArea.range));
     const upgraded = changed ? ab.tags.find(t => t.upgraded && areaFromTags([t])) ?? ab.tags.find(t => t.upgraded) : null;
     const tagSource = changed ? (/^From ([^:]+):/.exec(upgraded?.tooltip ?? "")?.[1] ?? "Upgrade") : "";
     const sourceText = { "Talent I": s.talent1, "Talent II": s.talent2, "Mastery": s.mastery, "Combo": s.comboEffect }[tagSource] ?? "";

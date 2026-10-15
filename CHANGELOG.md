@@ -1,5 +1,27 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Le aure scritte nel testo danno il tag e l'area (versione 1.15.21)
+
+### Round di debug del 15 ottobre, punto R19
+
+- **Aure di talenti, mastery e combo senza tag né bottone area**: il Talent I di Dervish (Chanter, Mendicant: "A
+  swirling aura 1 of winds surrounds you…", p.178), la mastery Infectious Hatred di Dark Knight (Knave, Stalwart:
+  "While in Dark Knight, you have Aura 1", p.143) e la combo Sweet Torment di Bleak Mercy (Knave: "…until the end of
+  your next turn, gain aura 1", p.144) non davano il tag Aura né il bottone per piazzare l'aura → il bottone area e il
+  tag vengono dai tag dell'abilità, e queste tre aure sono scritte solo nel testo del talento / della mastery / della
+  combo, che non aveva una lista di tag sua → ora un talento scelto, una mastery sbloccata o la combo armata che danno
+  un'aura a chi usa l'abilità ("you have aura N", "gain aura N", "aura N … surrounds you") aggiungono il tag Aura N
+  (chip evidenziata con il testo nel tooltip) e quindi il bottone area, che la piazza attorno al token con la durata
+  letta dal testo (R3). Vale anche per la combo DAWN di Dervish. Un'aura data a un altro ("That ally gains aura 1")
+  non conta.
+- **Endless Battlement chiedeva la dimensione dell'aura (proposta 3)**: il tag era solo "aura", senza numero, e la
+  dimensione 1 è scritta nel testo ("That ally gains aura 1", p.123), quindi il piazzamento chiedeva quanti spazi
+  proponendo 3 → ora un tag "aura" senza numero prende la dimensione dal testo dell'abilità (Aura 1) e non chiede
+  niente; lo stesso per Rook (aura 1), Strength of the Pack (aura 2), Perseus (aura 1) e Nightmare (aura 2). Con la
+  mastery di Endless Battlement la scelta non offre più anche un secondo "Base: Aura" uguale. Che l'aura vada
+  sull'alleato e non su chi usa la stance è un difetto separato (R19b), come l'aura del tratto Shieldmaster (R19c).
+  Solo codice: nessun cambio al compendio né alle schede, vale anche per le copie già sulle schede.
+
 ## 15 ottobre 2026 — La mastery di Intimidate propone Unstoppable (versione 1.15.20)
 
 ### Round di debug del 15 ottobre, punto R18

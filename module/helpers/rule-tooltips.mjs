@@ -235,6 +235,18 @@ function _plainText(html) {
 }
 
 /**
+ * The size of the aura a text gives its user, or 0: "you have Aura 1",
+ * "Effect: Gain aura 1", "…, gain aura 1", "an aura 1 of winds surrounds you".
+ * An aura given to someone else ("That ally gains aura 1") does not count.
+ */
+function _selfAuraSize(html) {
+  const text = _plainText(html);
+  const m = /(?:\byou (?:have|gain)|(?:^|[.:;,—–]\s*)(?:then\s+)?gain)\s+(?:an?\s+)?aura\s+(\d+)\b/i.exec(text)
+         ?? /\baura\s+(\d+)\b[^.]*\bsurrounds you\b/i.exec(text);
+  return Number(m?.[1] ?? 0);
+}
+
+/**
  * Resolve the tags an ability currently shows, applying the talent / mastery
  * tag overrides the character has unlocked (see AbilityData.talent1Tags etc)
  * and, with `comboMode`, the combo version's own tags (comboTags): the book's
@@ -274,6 +286,31 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   const selfArea = (t) => /^(?:burst-\d+-self|aura(?:-\d+)?)$/i.test(String(t).replace(/\s+/g, "-"));
   if (current !== base && !current.some(isRange) && !current.some(selfArea)) {
     current = [...current, ...base.filter(isRange)];
+  }
+  // Auras written in the text rather than the tags (p.102, "Aura X").
+  // An upgrade that gives the user an aura gains the aura tag (and with it the
+  // area button) even though no tag list was written for it: Dervish Talent I
+  // "a swirling aura 1 of winds surrounds you" (p.178), Dark Knight's mastery
+  // "you have Aura 1" (p.143), Sweet Torment "gain aura 1" (p.144).
+  const isAura = (t) => /^aura(?:-\d+)?$/i.test(String(t).trim());
+  const auraUpgrade = [
+    selected === 1 && { source: "Talent I",  text: s.talent1 },
+    selected === 2 && { source: "Talent II", text: s.talent2 },
+    s.masteryUnlocked && { source: "Mastery", text: s.mastery },
+    comboMode && { source: "Combo", text: s.comboEffect },
+  ].map(u => u && { ...u, size: _selfAuraSize(u.text) }).find(u => u?.size);
+  if (auraUpgrade && !current.some(isAura)) {
+    const tag = `aura-${auraUpgrade.size}`;
+    current = [...current, tag];
+    if (!base.includes(tag)) origin.set(tag, auraUpgrade);
+  }
+  // A bare "aura" tag takes its size from the text, so the area is not asked
+  // for: Endless Battlement "That ally gains aura 1" (p.123), Rook, Nightmare.
+  const textSize = Number(/\baura\s+(\d+)\b/i.exec(_plainText(s.description))?.[1] ?? 0);
+  if (textSize && current.some(t => String(t).trim().toLowerCase() === "aura")) {
+    const tag = `aura-${textSize}`;
+    current = current.map(t => String(t).trim().toLowerCase() === "aura" ? tag : t);
+    if (origin.has("aura") && !base.includes(tag)) origin.set(tag, origin.get("aura"));
   }
   // An upgrade that turns the ability into a mark says so in its text, and the
   // ability gains the Mark button even though no tag list was written for it:

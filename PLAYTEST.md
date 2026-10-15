@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R19 — Le aure scritte nel testo danno il tag e l'area (15 ottobre 2026, versione 1.15.21)
+
+Setup: un mondo con un PG Chanter (Mendicant) con Dervish, un PG Knave (Stalwart) con Dark Knight e Bleak Mercy, un
+PG Bastion (Stalwart) con Endless Battlement (vanno bene copie aggiunte prima dell'aggiornamento); token sulla scena a
+griglia quadrata; tab Combat.
+
+- [ ] **Dervish senza talento**: nessun tag Aura e nessun bottone area (come prima).
+- [ ] **Dervish Talent I**: scegliere il Talent I → compare la chip "Aura 1" evidenziata (tooltip "From Talent I: …")
+      e il bottone area "Aura 1" → cliccarlo → aura 1 attorno al token di chi la usa, senza domande sulla dimensione,
+      con la durata "until the start of your next turn". Con il Talent II non c'è.
+- [ ] **Dervish DAWN**: armare la combo → chip "Aura 1" e bottone area; l'aura dura fino alla fine del turno dopo.
+- [ ] **Dark Knight**: mastery bloccata → niente aura; sbloccarla → chip "Aura 1" (From Mastery) e bottone area →
+      aura 1 attorno al token, senza scadenza.
+- [ ] **Bleak Mercy**: senza combo nessuna aura; armare Sweet Torment → chip "Aura 1" (From Combo) e bottone area →
+      aura 1 attorno al token; il tiro d'attacco non chiede di scegliere l'aura come area dell'attacco.
+- [ ] **Endless Battlement**: il tag mostra "Aura 1" → bottone area → aura 1 piazzata subito, senza chiedere la
+      dimensione (resta attorno a chi la usa: lo spostamento sull'alleato è R19b). Con la mastery sbloccata non
+      compare la scelta tra "Aura 1" e "Base: Aura".
+- [ ] **Altre aure col tag senza numero**: Rook → Aura 1, Strength of the Pack / Nightmare → Aura 2, senza domande.
+- [ ] **Aure già a posto**: Gentleness (Aura 1) e Gravebirth (Aura 2) come prima.
+
 ## R18 — La mastery di Intimidate propone Unstoppable (15 ottobre 2026, versione 1.15.20)
 
 Setup: un mondo con un PG Knave (Stalwart) con Intimidate (va bene anche una copia aggiunta prima dell'aggiornamento);
