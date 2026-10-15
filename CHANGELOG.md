@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Il testo di colore delle abilità senza tooltip delle keyword (versione 1.15.8)
+
+### Round di debug del 15 ottobre, punto R6
+
+- **Parole narrative scambiate per regole**: nella frase in corsivo all'inizio delle abilità alcune parole erano
+  evidenziate con il tooltip di una regola — Battering Ram "send your target *flying*" (Flying), Six Hells Trigram
+  "summon" (come il tipo di personaggio Summon), Revenge "your hands, feet, and *armor*" (Armor X) → il testo di colore
+  passava dallo stesso arricchimento dei blocchi di regole, che cerca le keyword in tutto il testo senza distinguere
+  la prosa dalle regole → il testo di colore ora viene mostrato senza tooltip delle keyword: nell'anteprima delle
+  abilità sulla scheda del PG, nella card "Show in Chat" e nella scheda dell'abilità (dove solo la parte dopo il
+  testo di colore, da "Effect:" in poi, ha i tooltip). I blocchi di regole (Effect, Talenti, Mastery, ecc.) non
+  cambiano.
+
 ## 15 ottobre 2026 — Tooltip su Sacrifice, sui Blast e sul costo degli interrupt (versione 1.15.7)
 
 ### Round di debug del 15 ottobre, punto R5

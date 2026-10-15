@@ -69,8 +69,10 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.7: aggiunte le spiegazioni mancanti per Sacrifice, Small/Medium/Large
       Blast e Terrain Effect con i nomi usati dai compendi; per le abilità interrupt il numero di usi, anche quello
       cambiato da talento/mastery, sta sul badge del costo con il tooltip invece che in un tag doppio.)
-- [ ] **R6. Parole del testo di colore evidenziate come keyword** (S, bug)
+- [x] **R6. Parole del testo di colore evidenziate come keyword** (S, bug)
       Battering Ram "flying", Six Hells Trigram "summon" (come se fosse il tipo di personaggio Summon), Revenge "armor".
+      (FATTO il 15 ottobre 2026, versione 1.15.8: il testo di colore non riceve più i tooltip delle keyword
+      nell'anteprima sulla scheda del PG, nella card in chat e nella scheda dell'abilità; i blocchi di regole sì.)
 - [ ] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
 - [ ] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
 - [ ] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)

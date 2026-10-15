@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R6 — testo di colore delle abilità senza tooltip delle keyword (15 ottobre 2026, versione 1.15.8)
+
+Setup: un PG con Battering Ram (Valiant, Stalwart), Six Hells Trigram e Revenge (da GM si possono aggiungere da
+compendio), tab Combat.
+
+- [ ] **Battering Ram**: nell'anteprima dell'abilità la frase in corsivo "…send your target flying." non ha più
+      "flying" evidenziato né tooltip; più sotto, nell'Effect, "shoved", "Collide", "slashed" hanno ancora il tooltip.
+- [ ] **Six Hells Trigram**: nella frase di colore "summon" non è evidenziato; nei blocchi di regole le keyword
+      (summon compreso, se c'è) hanno ancora il tooltip.
+- [ ] **Revenge**: "…hands, feet, and armor are ready to retaliate." senza tooltip su "armor".
+- [ ] **Show in Chat**: per le tre abilità la card in chat ha la frase di colore senza keyword evidenziate e i blocchi
+      di regole con i tooltip come prima.
+- [ ] **Scheda dell'abilità**: aprire Battering Ram dal compendio (o dalla scheda, icona di modifica) → nel riquadro
+      Description la frase iniziale è senza tooltip, la parte da "Effect:" in poi li ha.
+- [ ] **Abilità senza testo di colore** (che comincia subito con "Effect:"): tooltip come prima su tutto il testo.
+- [ ] **Abilità con descrizione scritta a mano in HTML** (con paragrafi/grassetti): la scheda dell'abilità la mostra
+      come prima, impaginazione intatta.
+
 ## R5 — tooltip su Sacrifice, sui Blast e sul costo degli interrupt (15 ottobre 2026, versione 1.15.7)
 
 Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiungere da compendio), tab Combat.

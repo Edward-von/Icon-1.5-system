@@ -8,8 +8,17 @@
  */
 import { enrichRuleKeywords } from "./keywords.mjs";
 
-export async function enrichHTML(html) {
+/**
+ * @param {string} html
+ * @param {object} [options]
+ * @param {boolean} [options.keywords=true]  false = skip the rule-keyword
+ *   tooltips. Used for an ability's flavour line: it is narrative prose
+ *   ("send your target flying"), not rules, so its words must not look like
+ *   keywords.
+ */
+export async function enrichHTML(html, { keywords = true } = {}) {
   const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(html ?? "", { async: true });
+  if (!keywords) return out;
   try { return enrichRuleKeywords(out); }
   catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
 }
@@ -143,6 +152,25 @@ export function parseAbilitySections(description) {
   let trigger = "";
   if (sections[0]?.label === "Trigger") trigger = sections.shift().text;
   return { flavor, trigger, sections };
+}
+
+/**
+ * Enrich a whole ability description (item sheet), leaving the leading
+ * flavour line without rule-keyword tooltips: only the rules blocks after it
+ * get them. Hand-edited HTML descriptions are enriched as before, so their
+ * markup is never rebuilt.
+ * @param {string} description
+ * @returns {Promise<string>}
+ */
+export async function enrichAbilityDescription(description) {
+  const raw = String(description ?? "");
+  if (/<[a-z][^>]*>/i.test(raw)) return enrichHTML(raw);
+  const { flavor } = parseAbilitySections(raw);
+  if (!flavor) return enrichHTML(raw);
+  const text = raw.replace(/\s+/g, " ").trim();
+  const rest = text.slice(flavor.length).trim();
+  const head = await enrichHTML(flavor, { keywords: false });
+  return rest ? `${head} ${await enrichHTML(rest)}` : head;
 }
 
 /** Human label for a foe/legend action cost key. */

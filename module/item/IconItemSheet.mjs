@@ -2,7 +2,7 @@
  * IconItemSheet — ApplicationV2 sheet for all ICON item types.
  * Renders type-specific fields via conditional HBS blocks.
  */
-import { enrichHTML, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
+import { enrichHTML, enrichAbilityDescription, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
 import { TROPHY_UNITS } from "../data/item/TrophyData.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
@@ -114,7 +114,8 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
           talent1:             await _enrich(system.talent1),
           talent2:             await _enrich(system.talent2),
           mastery:             await _enrich(system.mastery),
-          description:         await _enrich(system.description),
+          // flavour line stays plain prose (no rule-keyword tooltips)
+          description:         await enrichAbilityDescription(system.description),
         };
         // Interrupt abilities use a cost of "interrupt-1/2/3" — expose a flag so
         // the sheet can always show the Trigger field (even when still empty),
