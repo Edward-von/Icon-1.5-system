@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Con la mastery di Dropkick il tiro del danno propone l'Area (versione 1.15.25)
+
+### Round di debug del 15 ottobre, punto R21
+
+- **Dropkick: con la mastery sbloccata il damage roller non offriva l'Area**: la mastery Giant Kicker (Colossus,
+  p.136) dice "Dropkick gains true strike and a line 4 area effect that must include your target. The area deals fray
+  damage to all characters other than your target", ma nella finestra del danno c'erano solo Hit e Crit → il danno
+  dell'area veniva letto solo dal testo base dell'abilità (campo Area Effect o "Area Effect:" nella descrizione), mai
+  dal talento scelto o dalla mastery sbloccata; Dropkick di base non ha area, quindi niente opzione Area → ora, se il
+  testo base non ha danno d'area, si legge il talento scelto e la mastery sbloccata: la frase che nomina un "area
+  effect" (o quella dopo) dà il danno dell'Area, con il tipo (piercing/divine) come per gli altri danni. Non vengono
+  letti il danno "again" (una seconda istanza, è la richiesta R23/R24) né i testi che scrivono un'altra azione intera
+  (combo alternativa di God Hand, infusioni Magna). Stessa causa sistemata anche per: Sow con Spectral Scythe (2
+  piercing nell'arco), Pyroclast con Magmotic (2 piercing), Sidhe Talent II (2), Obsidian Flesh Talent II (2
+  piercing), Upheaval Talent I (2), Wicked Sheath Talent II (2 per carica: si tira 2, il resto a mano), Exorcism
+  Talent II (2 per carica, idem); Upheaval e Obsidian Flesh, che di base non fanno danno, con quel talento hanno il
+  bottone Damage. Hit, Crit e Miss restano quelli di prima. Solo codice: nessun cambio al
+  compendio, vale anche per le copie già sulle schede.
+
 ## 15 ottobre 2026 — L'Arc 4 della mastery di Sow si piazza dal bersaglio (versione 1.15.24)
 
 ### Round di debug del 15 ottobre, punto R20

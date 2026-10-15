@@ -170,7 +170,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       bersaglio; il bottone area ora legge anche talento scelto / mastery sbloccata / combo armata (c'è anche con REAP
       e sulle copie vecchie), l'arco parte accanto al token bersagliato e non lo copre, il tiro d'attacco non lo
       piazza più e tiene il bersaglio. Copre anche le altre aree scritte solo nel testo di talenti/mastery. Solo codice.)
-- [ ] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
+- [x] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
+      (FATTO il 15 ottobre 2026, versione 1.15.25: il danno dell'Area ora si legge anche dal talento scelto e dalla
+      mastery sbloccata quando il testo base non ne ha (Giant Kicker, p.136: "The area deals fray damage"); stessa
+      causa sistemata per Sow/Spectral Scythe, Pyroclast, Sidhe, Obsidian Flesh, Upheaval, Wicked Sheath, Exorcism.
+      Escluso il danno "again" (R23/R24). Solo codice.)
 
 ### Richieste
 

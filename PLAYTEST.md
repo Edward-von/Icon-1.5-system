@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R21 — Con la mastery di Dropkick il tiro del danno propone l'Area (15 ottobre 2026, versione 1.15.25)
+
+Setup: un mondo con un PG Colossus (Stalwart) con Dropkick (va bene una copia aggiunta prima dell'aggiornamento), il
+suo token e due o tre token foe su una scena; tab Combat.
+
+- [ ] **Mastery sbloccata**: sbloccare Giant Kicker su Dropkick → premere il bottone del danno di Dropkick → nella
+      finestra ci sono Hit, Crit e **Area**; Area mostra "fray N" e il tiro esce con la sola fray.
+- [ ] **Hit invariato**: nella stessa finestra Hit mostra ancora "1[d…] + fray N".
+- [ ] **Bersaglio dell'attacco**: con due o più foe bersagliati la finestra chiede quale è il bersaglio dell'attacco
+      ("the others get a separate Area roll").
+- [ ] **Mastery bloccata**: togliere la mastery → la finestra torna a Hit e Crit, niente Area.
+- [ ] **Altre abilità con la stessa causa**: Sow con Spectral Scythe sbloccata → Area "2 flat", e scegliendo Area si
+      spunta Pierce; Upheaval con Talent I scelto → il bottone Damage c'è e Area mostra "2 flat"; senza talento il
+      bottone Damage non c'è.
+- [ ] **Invariati**: Harvest e Draken Cross con la mastery sbloccata mostrano la stessa Area di prima (Fray); God Hand
+      con la mastery sbloccata non ha l'opzione Area.
+
 ## R20 — L'Arc 4 della mastery di Sow si piazza dal bersaglio (15 ottobre 2026, versione 1.15.24)
 
 Setup: un mondo con un PG Harvester (Mendicant) con Sow e la mastery Spectral Scythe sbloccata (va bene una copia

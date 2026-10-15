@@ -97,6 +97,27 @@ export function parseAbilityDamage(itemSystem) {
     if (anyDamage(descChunk)) hit = descChunk;
   }
 
+  // No area damage in the ability's own text: the upgrade in play (selected
+  // talent, unlocked mastery) may give it an area that deals damage. Dropkick's
+  // Giant Kicker (p.136): "gains … a line 4 area effect … The area deals fray
+  // damage to all characters other than your target" → the damage dialog
+  // offers Area. The damage sits in the sentence naming the area effect or
+  // the next. Not read: damage dealt "again" (a second instance, not the
+  // area's own), and a text that writes out a whole other action with its own
+  // labels (God Hand's alternate combo, the Magna infusions).
+  if (!anyDamage(area)) {
+    const talent = { 1: s.talent1, 2: s.talent2 }[Number(s.talentSelected ?? 0)];
+    for (const t of [talent, s.masteryUnlocked ? s.mastery : ""]) {
+      if (!t || typeof t !== "string" || /\b(?:combo|attack|hit)\s*:/i.test(t)) continue;
+      const sentences = t.replace(/<[^>]+>/g, " ").split(/(?<=\.)\s+/);
+      const i = sentences.findIndex(x => /\barea\s+effect\b/i.test(x));
+      if (i < 0) continue;
+      const chunk = [sentences[i], sentences[i + 1]]
+        .filter(x => x && /\bdamage\b/i.test(x) && !/\bagain\b/i.test(x)).map(parseChunk).find(anyDamage);
+      if (chunk) { area = chunk; break; }
+    }
+  }
+
   // Does this ability deal any damage at all?
   const dealsDamage = hit.mult > 0 || hit.flat > 0 || hit.fray ||
                        area.mult > 0 || area.flat > 0 || area.fray ||
