@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 21;
+export const CURRENT_SCHEMA_VERSION = 22;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -818,6 +818,41 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 21: ${n} copy/copies of Fairy Ring no longer show Spirit Away's trigger as their own`);
+  },
+
+  /* 22 — The book prints the Seer's wild card once, under "Summons" (p.200);
+   * Sleight of Hand and Chaos Tarot only say "summon a wild card" (p.201).
+   * The pack had the whole wild card block (range-2 rule, Summon Effect and
+   * its two bullets) pasted at the end of both descriptions. The Wild Card is
+   * its own actor in the summons pack, offered by the ability panel. Cut the
+   * copy on the copies that still carry the old text word for word. */
+  22: async () => {
+    const CARD = "Wild Card — Size 1, intangible. Summon Effect: The card emits a small blast area effect centered on it, which is normally inactive. When any space of an area ability from you or an ally would touch the area, it can be activated, causing the card to explode, and extending the area effect of that ability to encompass the card's area for the duration. Then, remove the card. Wild cards can be triggered by other wild cards. Wild cards do not extend the persistent effects of any area abilities, such as creating terrain effects in their space, but only the effects that last for the duration of the ability.";
+    const FIX = {
+      "Sleight of Hand": "A flash of bright color, and a card is stuck to your foe, bursting into arcane fire in a flash. Effect: Your foe is pacified. Effect: Summon a wild card in range 2 of your foe.",
+      "Chaos Tarot": "You flick a beautifully illustrated ethereal card onto the battlefield, laden with the threads of potential. Summon: Then, summon a wild card in the area.",
+    };
+    const OLD = {
+      "Sleight of Hand": `${FIX["Sleight of Hand"]} ${CARD}`,
+      "Chaos Tarot": `${FIX["Chaos Tarot"]} When a wild card is summoned, it can be summoned in range 2 if no other range is listed. ${CARD}`,
+    };
+    const nameOf = (item) => (item.name ?? "").trim();
+    const stale = (item) => item.type === "ability" && nameOf(item) in OLD
+      && String(item.system?.description ?? "").replace(/\s+/g, " ").trim() === OLD[nameOf(item)];
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.description": FIX[nameOf(i)] }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.description": FIX[nameOf(item)] });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 22: ${n} copy/copies of Sleight of Hand / Chaos Tarot no longer repeat the wild card rules`);
   },
 };
 

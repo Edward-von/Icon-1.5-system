@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Sleight of Hand e Chaos Tarot senza le regole del Wild Card ripetute (versione 1.15.12)
+
+### Round di debug del 15 ottobre, punto R10
+
+- **Wild Card ripetuto per intero**: nell'anteprima di Sleight of Hand e Chaos Tarot (Seer, Mendicant), nella card in
+  chat e nella scheda dell'abilità, dopo "summon a wild card" compariva tutto il blocco del Wild Card ("Wild Card —
+  Size 1, intangible. Summon Effect: The card emits a small blast…" con le due note sulle catene e sugli effetti
+  persistenti; in Chaos Tarot anche la regola del range 2) → il libro stampa il Wild Card una volta sola, nella
+  sezione Summons del Seer (p.200), e le abilità dicono solo "Summon a wild card in range 2 of your foe" /
+  "Summon: Then, summon a wild card in the area" (p.201); il compendio dei job aveva copiato quel blocco in fondo
+  alla descrizione di entrambe → nel compendio dei job la descrizione finisce con la riga del summon, come nel libro.
+  Le regole del Wild Card restano sull'attore Wild Card del compendio Summons, che il pannello dell'abilità già
+  propone. Le copie già sulle schede (e tra gli oggetti del mondo) vengono corrette dalla migrazione 22, solo se hanno
+  ancora il testo vecchio parola per parola.
+
 ## 15 ottobre 2026 — Fairy Ring: il trigger di Spirit Away al suo posto (versione 1.15.11)
 
 ### Round di debug del 15 ottobre, punto R9

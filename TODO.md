@@ -89,7 +89,10 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       dell'abilità (migrazione 21 per le copie già sulle schede); il nome di un interrupt concesso va nell'intestazione
       del suo blocco, "Spirit Away — Interrupt 2" (sistemati anche Gran Reversa e Drifting Leaf). Testo lasciato
       nell'ordine del manuale, p.187.)
-- [ ] **R10. Testo del Wild Card ripetuto per intero in Chaos Tarot e Sleight of Hand** (S, dati)
+- [x] **R10. Testo del Wild Card ripetuto per intero in Chaos Tarot e Sleight of Hand** (S, dati)
+      (FATTO il 15 ottobre 2026, versione 1.15.12: nel libro il Wild Card è stampato una volta, p.200; nel compendio
+      le due descrizioni ora finiscono con la riga del summon (p.201), le regole restano sull'attore Wild Card del
+      compendio Summons; migrazione 22 per le copie già sulle schede.)
 - [ ] **R11. Tabelle poco leggibili** (S/M)
       Monogatari ("Some line breaks would be useful"), tabella del gamble di Chaos Tarot.
 - [ ] **R12. Raging Wolf ed Eclipse formattati male** (S/M, dati)

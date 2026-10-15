@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R10 — Sleight of Hand e Chaos Tarot senza il Wild Card ripetuto (15 ottobre 2026, versione 1.15.12)
+
+Setup: un mondo con un PG Seer (Mendicant) che aveva già Sleight of Hand e Chaos Tarot prima dell'aggiornamento, più
+un PG a cui si aggiungono ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
+
+- [ ] **Migrazione**: in console compare "Migration 22: … copy/copies of Sleight of Hand / Chaos Tarot …" (solo se
+      c'erano copie vecchie); riaprendo il mondo non ricompare.
+- [ ] **Sleight of Hand, anteprima sulla scheda**: dopo il testo di colore ci sono Attack (auto-hit), "Effect: Your
+      foe is pacified.", Area Effect e "Effect: Summon a wild card in range 2 of your foe.", poi talenti e mastery
+      (King of Swords). Niente "Wild Card — Size 1, intangible" né "Summon Effect: The card emits…".
+- [ ] **Chaos Tarot, anteprima sulla scheda**: Area Effect con la tabella del gamble (1-6), poi "Summon: Then, summon
+      a wild card in the area." e basta; niente "When a wild card is summoned, it can be summoned in range 2…" né il
+      blocco del Wild Card. Talenti e mastery (Royalty Gold) invariati.
+- [ ] **Copia nuova dal compendio**: stesso aspetto delle copie migrate, anche nella scheda dell'abilità (doppio clic).
+- [ ] **Show in Chat**: le card delle due abilità mostrano gli stessi blocchi, senza il testo del Wild Card.
+- [ ] **Wild Card ancora raggiungibile**: nel pannello di entrambe le abilità c'è ancora il Wild Card da piazzare;
+      aprendo l'attore (compendio Summons) si leggono il Summon Effect e le due note (p.200).
+
 ## R9 — Fairy Ring: il trigger di Spirit Away al suo posto (15 ottobre 2026, versione 1.15.11)
 
 Setup: un mondo con un PG che aveva già Fairy Ring (Harvester, Mendicant) prima dell'aggiornamento, più un PG a cui
