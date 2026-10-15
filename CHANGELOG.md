@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Massive Overhead: la prima riga di regole fuori dal testo di colore (versione 1.15.10)
+
+### Round di debug del 15 ottobre, punto R8
+
+- **Massive Overhead: regole in corsivo**: nell'anteprima di Massive Overhead (Colossus, Stalwart), nella card in chat
+  e nella scheda dell'abilità "End your turn. Your next attack strikes with such force that it deals bonus damage and
+  creates a pit under its target after it resolves." compariva come frase di colore in corsivo, e solo "Special" come
+  blocco di regole → nel libro (p.136) l'abilità non ha testo di colore e comincia direttamente con le regole; nel
+  compendio quella riga era senza etichetta, e il sistema tratta come testo di colore tutto ciò che viene prima della
+  prima etichetta ("Effect:", "Special Effect:", …) → nel compendio dei job la riga ora comincia con "Effect:" e il
+  secondo blocco si chiama "Special Effect" come nel libro. Le copie già sulle schede dei PG (e tra gli oggetti del
+  mondo) vengono corrette da una migrazione all'apertura del mondo, solo se hanno ancora il testo vecchio parola per
+  parola: una copia modificata a mano resta com'è.
+
 ## 15 ottobre 2026 — Raging Wolf e altre abilità senza summon di un altro job (versione 1.15.9)
 
 ### Round di debug del 15 ottobre, punto R7

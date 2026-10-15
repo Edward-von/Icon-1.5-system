@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 19;
+export const CURRENT_SCHEMA_VERSION = 20;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -765,6 +765,33 @@ const MIGRATIONS = {
       if (notes.length) { n++; console.log(`ICON 1.5 | Migration 19: "${actor.name}" — ${notes.join(", ")}`); }
     }
     if (n) console.log(`ICON 1.5 | Migration 19: ${n} character(s) moved to the sheet trackers`);
+  },
+
+  /* 20 — Massive Overhead (Colossus, p.136) has no flavour text in the book:
+   * it opens with its rules. The pack stored that first line without a block
+   * label, so the sheet showed "End your turn. Your next attack…" as the
+   * italic flavour line. The pack now labels it "Effect:"; rewrite the copies
+   * on characters and in the sidebar too — only those still carrying the old
+   * text word for word, so a hand-edited copy is left alone. */
+  20: async () => {
+    const OLD = "End your turn. Your next attack strikes with such force that it deals bonus damage and creates a pit under its target after it resolves. Special: If your target was already in a pit before the triggering attack, it also activates all exceed effects.";
+    const NEW = "Effect: End your turn. Your next attack strikes with such force that it deals bonus damage and creates a pit under its target after it resolves. Special Effect: If your target was already in a pit before the triggering attack, it also activates all exceed effects.";
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Massive Overhead"
+      && String(item.system?.description ?? "").replace(/\s+/g, " ").trim() === OLD;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.description": NEW }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.description": NEW });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 20: ${n} copy/copies of Massive Overhead given the p.136 "Effect:" label`);
   },
 };
 

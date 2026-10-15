@@ -76,7 +76,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [x] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
       (FATTO il 15 ottobre 2026, versione 1.15.9: non era un dato del pack ma il collegamento per nome — "Beast Within"
       nella mastery; ora un'abilità offre solo i summon del proprio job. Corretti anche Blackstar → Bomb e Mist Strider → Shadow.)
-- [ ] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
+- [x] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
+      (FATTO il 15 ottobre 2026, versione 1.15.10: nel libro (p.136) l'abilità non ha testo di colore; nel compendio la
+      riga ora comincia con "Effect:" e "Special" diventa "Special Effect"; migrazione 20 per le copie già sulle schede.)
 - [ ] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)
       Nella card (foto nel documento) "Trigger: A foe enters or exits the area." sta in cima come se fosse il trigger
       dell'abilità, e "Spirit Away —" resta appeso in fondo al Terrain Effect. Testo giusto secondo il documento:
@@ -159,6 +161,14 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 
 ### Emersi lavorando
 
+- [ ] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati): stesso difetto di Massive Overhead.
+      Nel libro (p.219, "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.")
+      la prima riga è un Effect, nel compendio è senza etichetta e diventa testo di colore. Pack + migrazione per nome.
+- [ ] **Emerso lavorando su R8 — Boiling Blood: "Defy Death —" appeso al testo di colore** (S, dati): il testo di colore
+      finisce con "Defy Death —" (nome dell'interrupt, libro p.138). Da controllare come viene mostrato e sistemare.
+- [ ] **Emerso lavorando su R8 — Eye of the Storm: riga di regole senza etichetta** (S, dati): "This attack has no
+      attack space. Instead, the attack space is clear and exempt from this area." è una regola ma il libro la stampa
+      senza etichetta, quindi finisce nel testo di colore. Decidere come mostrarla (es. "Effect:").
 - [ ] **Emerso lavorando su R1 — Incubus / Succubus** (S): "Instead of the mark, gain Effect: …" non toglie il Mark
       della base (stesso problema di Sweet Torment, scritto in un altro modo). Va controllato sul manuale.
 - [ ] **Emerso lavorando su R1 — tag di Reap** (S, dati): i tag della combo di Sow ("attack, range-4, mark, pierce")

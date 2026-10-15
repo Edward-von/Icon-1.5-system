@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R8 — Massive Overhead: regole fuori dal testo di colore (15 ottobre 2026, versione 1.15.10)
+
+Setup: un mondo con un PG che aveva già Massive Overhead (Colossus, Stalwart) prima dell'aggiornamento, più un PG
+a cui la si aggiunge ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
+
+- [ ] **Migrazione**: in console compare "Migration 20: … copy/copies of Massive Overhead …" (solo se c'erano copie
+      vecchie); riaprendo il mondo non ricompare.
+- [ ] **Anteprima sulla scheda**: niente frase in corsivo; i blocchi di regole sono "Effect: End your turn. Your next
+      attack…" e "Special Effect: If your target was already in a pit…", poi Comeback/Heroic, talenti e mastery.
+- [ ] **Copia nuova dal compendio**: stesso aspetto della copia migrata.
+- [ ] **Show in Chat**: la card mostra gli stessi blocchi, senza testo di colore.
+- [ ] **Scheda dell'abilità** (doppio clic): il testo comincia con "Effect:" e le keyword (es. "pit", "exceed") hanno
+      il tooltip.
+- [ ] **Copia modificata a mano**: se prima di aggiornare si era cambiato il testo di Massive Overhead su un PG, resta
+      com'era.
+
 ## R7 — nessun summon di un altro job sulle abilità (15 ottobre 2026, versione 1.15.9)
 
 Setup: un PG con Raging Wolf (Colossus, Stalwart), Blackstar (Enochian) e Mist Strider (Warden), più un'abilità che
