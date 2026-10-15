@@ -1656,6 +1656,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R19b — L'aura di Endless Battlement va sull'alleato (15 ottobre 2026, versione 1.15.22)
+
+Setup: un mondo con un PG Bastion (Stalwart) con Endless Battlement (va bene una copia aggiunta prima
+dell'aggiornamento) e almeno due altri token alleati sulla scena a griglia quadrata; tab Combat; un combattimento
+avviato per la durata.
+
+- [ ] **Alleato bersagliato**: bersagliare (T) un alleato entro 4 spazi → bottone area "Aura 1" di Endless
+      Battlement → l'aura 1 compare attorno al token dell'alleato, non attorno al Bastion; la notifica dice
+      "Aura 1 placed around <alleato>".
+- [ ] **L'aura segue l'alleato**: muovere l'alleato → l'aura si sposta con lui; muovere il Bastion → l'aura resta
+      ferma sull'alleato.
+- [ ] **Durata**: la notifica e il conto alla rovescia sono "until the start of your next turn" del Bastion: all'inizio
+      del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area.
+- [ ] **Refresh**: bersagliare un altro alleato e ripremere il bottone area → la vecchia aura sparisce, la nuova è
+      attorno al nuovo alleato.
+- [ ] **Nessun bersaglio**: togliere tutti i target → bottone area → avviso "target that ally's token…" e aura attorno
+      al Bastion (come prima).
+- [ ] **Più bersagli**: due alleati bersagliati → avviso "target only that ally's token…" e aura attorno al Bastion.
+- [ ] **Fuori range**: bersagliare un alleato a più di 4 spazi → avviso "beyond range 4" ma l'aura si piazza sul
+      suo token. Con la mastery Perfect Battlement sbloccata l'avviso non compare.
+- [ ] **Altre aure invariate**: Rook, Dark Knight (mastery), Gentleness con un alleato bersagliato → l'aura resta
+      attorno a chi la usa, nessun avviso.
+
 ## R19 — Le aure scritte nel testo danno il tag e l'area (15 ottobre 2026, versione 1.15.21)
 
 Setup: un mondo con un PG Chanter (Mendicant) con Dervish, un PG Knave (Stalwart) con Dark Knight e Bleak Mercy, un

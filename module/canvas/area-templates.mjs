@@ -635,11 +635,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     area.label = areaLabel(area);
   }
 
-  const sourceCells = tokenCells(token.document);
   const isAura = area.kind === "aura";
+  // An aura the text gives to an ally ("choose an ally in range 4. That ally
+  // gains aura 1", Endless Battlement p.123) goes around that ally's token —
+  // the one the user targeted — and follows it instead of the user.
+  const holder = isAura ? auraHolderToken(text, token) : token;
+  const sourceCells = tokenCells(holder.document);
   let cells, originCell;
   if (isAura || (area.kind === "burst" && area.self)) {
-    // Around the user, no click needed. An aura keeps following the token.
+    // Around the user (or the ally holding it), no click needed. An aura keeps following the token.
     cells = cellsInRange(sourceCells, area.size).concat(sourceCells);
     originCell = sourceCells[0];
   } else {
@@ -663,7 +667,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       actorId: actor.id, actorUuid: actor.uuid, tokenId: token.id, abilityKey, abilityName: abilityName ?? "",
       lasting: !!lasting || isAura,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
-      followTokenId: isAura ? token.id : null,
+      followTokenId: isAura ? holder.id : null,
       // "until the end of your next turn": counted down by tickAuraExpiry
       expiry,
     } },
@@ -679,8 +683,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   if (isAura) {
     // A persistent effect, not an attack: nothing to target.
     if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
-    _log(`placed ${area.label} for "${abilityName}" — follows token ${token.id}${expiry ? ` — ${expiry.text}` : ""}`);
-    ui.notifications.info(`${area.label} placed around ${token.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}.`);
+    _log(`placed ${area.label} for "${abilityName}" — follows token ${holder.id}${expiry ? ` — ${expiry.text}` : ""}`);
+    ui.notifications.info(`${area.label} placed around ${holder.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}.`);
     return { template, cells, targets: [], area };
   }
 
@@ -703,6 +707,44 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   _log(`placed ${area.label} for "${abilityName}" — ${cells.length} cells, ${targets.length} target(s)`);
   ui.notifications.info(`${area.label} placed — ${targets.length ? targets.map(t => t.name).join(", ") : "no one"} in the area.`);
   return { template, cells, targets, area };
+}
+
+/**
+ * The token an aura goes around. Usually the user's own; when the text gives
+ * the aura to an ally ("That ally gains aura 1 until the start of your next
+ * turn", Endless Battlement p.123) it is the one token the user has targeted
+ * other than their own. With no such target (or several) the aura stays on the
+ * user, as before, with a warning saying how to move it. The ally's range
+ * ("choose an ally in range 4") is only checked to warn: the mastery lifts it
+ * ("no maximum range") and the aura is not refused for it.
+ * @param {string} text   the ability's text (HTML allowed)
+ * @param {Token}  token  the user's token
+ * @returns {Token}
+ */
+export function auraHolderToken(text, token) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  if (!/\b(?:that|the|an|your|target|chosen)\s+ally\s+(?:gains?|has)\s+(?:an?\s+)?aura\b/i.test(plain)) return token;
+  const allies = Array.from(game.user?.targets ?? []).filter(t => t.id !== token.id && t.actor);
+  if (allies.length !== 1) {
+    ui.notifications.warn(allies.length
+      ? "This aura goes on one ally: target only that ally's token, then place it again. Placed around you for now."
+      : "This aura goes on an ally: target that ally's token, then place it again. Placed around you for now.");
+    return token;
+  }
+  const ally = allies[0];
+  const m = /\bally\s+in\s+range\s+(\d+)/i.exec(plain);
+  if (m && !/no maximum range/i.test(plain)) {
+    const d = distanceToCellsSet(tokenCells(ally.document), tokenCells(token.document));
+    if (d > Number(m[1])) ui.notifications.warn(`${ally.name} is ${d} spaces away, beyond range ${m[1]}: the aura is not active while your ally is out of range.`);
+  }
+  return ally;
+}
+
+/** Smallest distance between two sets of cells (range counts diagonals, p.85). */
+function distanceToCellsSet(a, b) {
+  let best = Infinity;
+  for (const c of a) best = Math.min(best, distanceToCells(c, b));
+  return best;
 }
 
 /**

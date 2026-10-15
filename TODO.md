@@ -149,11 +149,15 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       testo (Endless Battlement Aura 1, niente più domanda; anche Rook, Strength of the Pack, Perseus, Nightmare).
       Spostati: l'aura di Endless Battlement sull'alleato → R19b; l'aura del tratto Shieldmaster → R19c. Solo
       codice, vale per le copie già sulle schede.)
-- [ ] **R19b. Endless Battlement: l'aura va sull'alleato scelto, non su chi usa la stance** (M, bug)
+- [x] **R19b. Endless Battlement: l'aura va sull'alleato scelto, non su chi usa la stance** (M, bug)
       "That ally gains aura 1 until the start of your next turn. The aura deactivates if your ally is out of range"
       (p.123). Il piazzamento delle aure (`placeAreaTemplate`, area-templates.mjs) mette sempre l'aura attorno al
       token di chi usa l'abilità e la fa seguire quel token: manca il modo di scegliere un alleato (in range 4, o
       senza limite con la mastery) e di legare l'aura al suo token. Causa diversa da R19 (dimensione già corretta).
+      (FATTO il 15 ottobre 2026, versione 1.15.22: se il testo dice che un alleato riceve l'aura, il bottone area la
+      piazza attorno all'alleato bersagliato (T) e la fa seguire lui; senza un solo alleato bersagliato resta attorno a
+      chi la usa con un avviso; oltre range 4 solo un avviso (niente con la mastery). Durata sempre sui turni del
+      Bastion. Solo codice.)
 - [ ] **R19c. Tratti con un'aura: niente bottone per piazzarla** (S/M, bug)
       Shieldmaster (Bastion, "You have aura 1", p.121) e Pelagic Rage ("You gain aura 2"): i tratti non hanno tag né
       bottone area sulla scheda (il bottone esiste solo per le abilità, `abilityPlaceArea` in IconSheet), quindi

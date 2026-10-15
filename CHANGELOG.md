@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — L'aura di Endless Battlement va sull'alleato (versione 1.15.22)
+
+### Round di debug del 15 ottobre, punto R19b
+
+- **Endless Battlement metteva l'aura su chi usa la stance**: il libro dice "choose an ally in range 4. That ally
+  gains aura 1 until the start of your next turn. The aura deactivates if your ally is out of range" (Bastion,
+  p.123), ma il bottone area piazzava l'aura attorno al token di chi la usa e la faceva seguire quel token → il
+  piazzamento delle aure (`placeAreaTemplate`) partiva sempre dal token di chi usa l'abilità e non aveva un modo per
+  scegliere un alleato → ora, se il testo dell'abilità dice che un alleato riceve l'aura ("That ally gains aura 1"),
+  l'aura va attorno al token dell'alleato bersagliato (target, tasto T) e segue lui quando si muove. La durata resta
+  contata sui turni di chi usa la stance (R3). Senza un alleato bersagliato, o con più bersagli, l'aura resta attorno
+  a chi la usa come prima, con un avviso che spiega di bersagliare l'alleato e ripiazzarla. Se l'alleato è oltre range
+  4 compare un avviso ma l'aura si piazza lo stesso (con la mastery Perfect Battlement il range non conta e l'avviso
+  non c'è). Le altre aure (Rook, Dervish, Gentleness…) restano attorno a chi le usa. Solo codice: nessun cambio al
+  compendio né alle schede.
+
 ## 15 ottobre 2026 — Le aure scritte nel testo danno il tag e l'area (versione 1.15.21)
 
 ### Round di debug del 15 ottobre, punto R19
