@@ -347,7 +347,7 @@ export class FoeSheet extends BaseActorSheet {
     const area = abilityArea(action.tags, text);
     if (!area) { ui.notifications.warn(`"${action.name}" has no Blast / Line / Arc / Burst tag, and its text names no area.`); return; }
     _log(`placeActionArea — "${action.name}" | ${area.label}`);
-    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}`, lasting: areaLasts(action.tags, text) });
+    await placeAreaTemplate({ actor, area, abilityName: action.name, abilityKey: `action:${action.name}`, lasting: areaLasts(action.tags, text), text });
   }
 
   /** Post a foe action to chat (name, cost, tags, description, hit/miss/area). */

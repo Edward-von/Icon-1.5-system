@@ -1656,6 +1656,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R3 — avviso in chat quando un'aura scade (15 ottobre 2026, versione 1.15.5)
+
+Setup: un PG Stalwart con Rook (aura 1 "until the end of your next turn", p.123) e, se possibile, un PG con Nightmare
+o High Prophecy ("until the start of your next turn"); un foe Trooper (Hold the Line!) e un PG con una stance ad aura
+(Gran Reversa, Strength of the Pack o Gentleness). Tutti con token sulla scena, un combat attivo.
+
+- [ ] **Rook, piazzata nel proprio turno**: nel turno del PG, bottone area di Rook → l'aura compare, la notifica dice
+      "(until the end of your next turn)". Fine di questo turno: nessun messaggio. Fine del turno successivo del PG →
+      in chat "<PG>'s Aura 1 (Rook) ends — until the end of your next turn" con il bottone **Remove area**.
+- [ ] **Remove area**: il bottone toglie l'aura dalla mappa e la riga diventa "area removed". Se l'aura era già stata
+      cancellata a mano, il bottone non c'è e la riga dice "area removed".
+- [ ] **L'aura non sparisce da sola**: ignorando il messaggio, l'aura resta sulla mappa, segue ancora il token e non
+      ripete il messaggio nei turni dopo.
+- [ ] **"Until the start of your next turn"** (Nightmare / High Prophecy): il messaggio arriva all'inizio del turno
+      successivo del PG, non alla fine di quello in cui è stata piazzata.
+- [ ] **Foe**: nel turno del Trooper, area di Hold the Line! dalla sua scheda → il messaggio arriva all'inizio del suo
+      turno successivo ("until the start of its next turn").
+- [ ] **Stance**: un'aura da stance (Gran Reversa / Strength of the Pack / Gentleness) non dà mai il messaggio e resta
+      come prima.
+- [ ] **Combo**: Bleak Mercy con COMBO ON (Sweet Torment, "until the end of your next turn, gain aura 1") → stesso
+      comportamento di Rook.
+- [ ] **Undo**: tornando indietro di un turno (previous turn) il conteggio non avanza e non arriva nessun messaggio.
+
 ## R2 — vigor oltre il massimo (15 ottobre 2026, versione 1.15.4)
 
 Setup: un PG qualunque (annotare la VIT, che è il massimo del vigor), un foe e una legend; un combat attivo.

@@ -30,9 +30,16 @@
  * (clearExpiredAreaTemplates, called by IconCombat), since the area has
  * already done its work. Two kinds stay until removed by hand or the end of
  * the encounter: auras, which follow their token, and terrain effects, which
- * last on the battlefield (p.96) — flagged `lasting` when placed.
+ * last on the battlefield (p.96) — flagged `lasting` when placed. An aura
+ * whose text gives it an end ("gain aura 1 until the end of your next turn")
+ * carries a countdown (`flags.icon-system.expiry`, same shape as the status
+ * one in status-expiry.mjs); when it runs out, a chat card says so and offers
+ * to remove it (tickAuraExpiry, called by IconCombat).
  */
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
+// Local escape: importing enrich.mjs here would close an import loop
+// (enrich → keywords → reference → this module).
+const escapeHTML = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 const FLAG_NS    = "icon-system";
 const HL_PREVIEW = "icon-area-preview";
@@ -612,8 +619,9 @@ class AreaPlacement {
  * @param {string} opts.abilityKey    identifies the ability (item id / action name) for replace & reuse
  * @param {boolean} [opts.replace=true]  delete this actor's previous template for the same ability
  * @param {boolean} [opts.lasting=false] a terrain effect: not cleared at the user's next turn (areaLasts)
+ * @param {string}  [opts.text=""]      the ability's text, read for an aura's duration (auraExpiry)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "" }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -646,6 +654,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // Origin = blast/burst centre, first space of a line/arc (control icon + ruler text sit there).
   const origin = canvas.grid.getCenterPoint(originCell);
   const color = areaColor(area, actor);
+  const expiry = isAura ? await auraExpiry(text, actor) : null;
   const data = {
     t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
     fillColor: color, borderColor: color, hidden: false,
@@ -655,6 +664,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       lasting: !!lasting || isAura,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
       followTokenId: isAura ? token.id : null,
+      // "until the end of your next turn": counted down by tickAuraExpiry
+      expiry,
     } },
   };
   let template = null;
@@ -668,8 +679,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   if (isAura) {
     // A persistent effect, not an attack: nothing to target.
     if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
-    _log(`placed ${area.label} for "${abilityName}" — follows token ${token.id}`);
-    ui.notifications.info(`${area.label} placed around ${token.name}; it follows the token.`);
+    _log(`placed ${area.label} for "${abilityName}" — follows token ${token.id}${expiry ? ` — ${expiry.text}` : ""}`);
+    ui.notifications.info(`${area.label} placed around ${token.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}.`);
     return { template, cells, targets: [], area };
   }
 
@@ -776,6 +787,69 @@ export async function clearExpiredAreaTemplates(combatant) {
   await scene.deleteEmbeddedDocuments("MeasuredTemplate", docs.map(d => d.id));
   _log(`start of ${combatant.name}'s turn: cleared ${docs.length} area template(s)`);
   return docs.length;
+}
+
+/**
+ * The end an ability's text gives its aura, as an expiry flag, or null (no
+ * end written: stance, "while marked", "for the rest of combat"…). Only a
+ * sentence that both grants a sized aura and says "until …" counts: "gains
+ * aura 2 until the start of its next turn", "Until the start of your next
+ * turn, you gain aura 2" — not "an ally in the aura … become sturdy until the
+ * start of your turn" (Shieldmaster: that is the status's end).
+ * @param {string} text  the ability's text (HTML allowed); the first matching sentence wins
+ * @param {Actor}  actor the aura's user (whose turns are counted)
+ * @returns {Promise<object|null>}
+ */
+export async function auraExpiry(text, actor) {
+  if (!actor || !text) return null;
+  // Lazy import, as for wild-cards.mjs: status-expiry.mjs reads enrich.mjs,
+  // whose imports lead back to this module.
+  const { expiryFromUntil } = await import("../combat/status-expiry.mjs");
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ");
+  for (const sentence of plain.split(/[.;\n]/)) {
+    if (!/\baura\s*\d/i.test(sentence)) continue;
+    const exp = expiryFromUntil(sentence.replace(/\s+/g, " "), { target: actor, source: actor });
+    if (exp) return exp;
+  }
+  return null;
+}
+
+/**
+ * A turn boundary passed for `clockActor` (`at` = "end" | "start"): count
+ * down the auras that wait on it, on every scene. One that runs out is not
+ * deleted on its own (the text may have been read wrong, or something made
+ * it last longer): its countdown is dropped and a chat card says it ended,
+ * with the Remove area button. Runs on the active GM only.
+ * @returns {Promise<number>} auras that ended
+ */
+export async function tickAuraExpiry(clockActor, at) {
+  if (!clockActor) return 0;
+  let ended = 0;
+  for (const scene of game.scenes ?? []) {
+    for (const t of scene.templates) {
+      const f = t.flags?.[FLAG_NS];
+      const exp = f?.expiry;
+      if (!f?.cells || !exp || exp.at !== at || exp.clockUuid !== clockActor.uuid) continue;
+      const left = (Number(exp.left) || 1) - 1;
+      if (left > 0) {
+        await t.setFlag(FLAG_NS, "expiry", { ...exp, left });
+        continue;
+      }
+      await t.unsetFlag(FLAG_NS, "expiry");
+      ended++;
+      const actor = fromUuidSync(f.actorUuid ?? "") ?? game.actors?.get(f.actorId) ?? clockActor;
+      const label = f.area?.label ?? "Aura";
+      _log(`${actor?.name}: ${label} (${f.abilityName}) ends — ${exp.text}`);
+      const btn = `<button type="button" class="icon-btn icon-btn--sm icon-btn--remove icon-chat-card__area-remove" data-action="removeAreaTemplate" data-template-id="${escapeHTML(t.id)}" data-scene-id="${escapeHTML(scene.id)}" title="Remove the aura from the map"><i class='fa-solid fa-trash'></i> Remove area</button>`;
+      try {
+        await ChatMessage.create({
+          speaker: ChatMessage.getSpeaker({ actor }),
+          content: `<div class="icon-chat-card icon-chat-card--status-applied"><div><strong>${escapeHTML(actor?.name ?? "")}</strong>'s <strong>${escapeHTML(label)}</strong>${f.abilityName ? ` (${escapeHTML(f.abilityName)})` : ""} ends <small>— ${escapeHTML(exp.text)}</small></div><div class="icon-chat-card__area"><span class="icon-chat-card__area-label"><i class='fa-solid fa-vector-square'></i> ${escapeHTML(label)}</span> ${btn}</div></div>`,
+        });
+      } catch (err) { console.warn("[ICON | AreaTemplates] aura end chat failed", err); }
+    }
+  }
+  return ended;
 }
 
 /**

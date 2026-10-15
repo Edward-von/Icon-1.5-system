@@ -1952,6 +1952,21 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * The texts an aura's duration is read from (area-templates.mjs auraExpiry),
+   * in the order they win: the armed combo replaces the base text, then the
+   * base effect, then the upgrades the character has (Dervish Talent I: "a
+   * swirling aura 1 … until the start of your next turn").
+   */
+  #auraText(ab) {
+    const s = this.document.items.get(ab.id)?.system ?? {};
+    return [
+      ab.hasCombo && ab.comboArmed ? s.comboEffect : "",
+      s.description, s.effect, s.areaEffect, s.hitEffect,
+      ab.hasTalent1 ? s.talent1 : "", ab.hasTalent2 ? s.talent2 : "", ab.hasMastery ? s.mastery : "",
+    ].filter(v => typeof v === "string" && v).join("\n");
+  }
+
+  /**
    * The areas this ability can be placed with (the area button and the attack roll share
    * the list, so both offer the same choice).
    */
@@ -2004,7 +2019,7 @@ export class IconSheet extends BaseActorSheet {
     const area = await chooseAreaVariant(variants, ab.name);
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
-    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab) });
+    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), text: this.#auraText(ab) });
   }
 
   /**

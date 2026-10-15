@@ -29,7 +29,7 @@ import { setOutCombatPowerDice, tickRoundPowerDice } from "../data/item/power-di
 import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
 import { tickStatusExpiry } from "./status-expiry.mjs";
 import { clearCombo } from "./foe-combo.mjs";
-import { deleteAreaTemplates, clearExpiredAreaTemplates } from "../canvas/area-templates.mjs";
+import { deleteAreaTemplates, clearExpiredAreaTemplates, tickAuraExpiry } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
@@ -847,6 +847,9 @@ export function registerCombatHooks() {
           // so nobody saves against something that just ran out.
           try { await tickStatusExpiry(combat, prev.actor, "end"); }
           catch (err) { console.warn("[ICON | IconCombat] status expiry (end) failed", err); }
+          // Auras "until the end of your next turn": a card offers to remove them.
+          try { await tickAuraExpiry(prev.actor, "end"); }
+          catch (err) { console.warn("[ICON | IconCombat] aura expiry (end) failed", err); }
           await rollEndOfTurnSaves(prev);
           await applyEndOfTurnEffects(prev);
           // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
@@ -876,6 +879,8 @@ export function registerCombatHooks() {
         if (!options._iconSkipEndOfTurn) {
           try { await tickStatusExpiry(combat, current.actor, "start"); }
           catch (err) { console.warn("[ICON | IconCombat] status expiry (start) failed", err); }
+          try { await tickAuraExpiry(current.actor, "start"); }
+          catch (err) { console.warn("[ICON | IconCombat] aura expiry (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

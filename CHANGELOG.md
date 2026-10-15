@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Avviso in chat quando un'aura scade (versione 1.15.5)
+
+### Round di debug del 15 ottobre, punto R3
+
+- **Aura scaduta senza avviso**: un'aura con una durata scritta (Rook "until the end of your next turn", Nightmare e
+  High Prophecy "until the start of your next turn", Dawn, Sweet Torment, Paradiso, e le azioni dei foe come Hold the
+  Line!, Fortress, Arkentech repulser shield) restava sulla mappa dopo la scadenza, senza nessun messaggio, e per
+  toglierla bisognava andare sul livello dei template e cancellarla a mano → le aure non venivano mai tolte a fine
+  turno (giusto, perché molte durano: stance, "while marked") e il sistema non leggeva la durata dal testo → ora,
+  quando l'aura viene piazzata, il sistema cerca nel testo dell'abilità la frase che dà l'aura e il suo "until …"
+  (stessa lettura degli status a tempo) e conta i turni; quando scade compare in chat "<nome>'s Aura N (abilità)
+  ends — until …" con il bottone **Remove area**. L'aura non sparisce da sola: se la durata è stata allungata (Bleak
+  Mercy Mastery, p.144: "lasts indefinitely") basta ignorare il messaggio. Le aure senza durata scritta (stance,
+  oggetti, "while marked") restano come prima.
+
 ## 15 ottobre 2026 — Il vigor può superare il massimo (versione 1.15.4)
 
 ### Round di debug del 15 ottobre, punto R2

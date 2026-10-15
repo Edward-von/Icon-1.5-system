@@ -51,9 +51,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.4: la Mastery Misericordia, p.202, non mette un tetto; il vigor scritto
       a mano sulla scheda non viene più riportato al massimo, Recover/Regeneration non lo abbassano, tacche in più
       in viola sulla scheda del PG.)
-- [ ] **R3. Nessun avviso quando scade un'aura** (S/M, bug — priorità bassa)
+- [x] **R3. Nessun avviso quando scade un'aura** (S/M, bug — priorità bassa)
       "No prompt on removing aura effects in chatbox or ability sheet for when an aura effect expires, requiring the
       player to go into" (la frase nel documento si interrompe lì; probabilmente: andare a toglierla a mano).
+      (FATTO il 15 ottobre 2026, versione 1.15.5: la durata dell'aura viene letta dal testo quando la si piazza
+      ("gain aura 1 until the end of your next turn") e contata sui turni; alla scadenza un messaggio in chat la
+      annuncia con il bottone Remove area. Le aure senza durata scritta restano come prima.)
 - [ ] **R4. Abilità trascinate dal compendio senza la scelta di talenti/mastery** (M, bug — priorità bassa)
       "Seems to only happen when adding many abilities quickly, so might be a menu issue."
 - [ ] **R5. Tag grigi senza tooltip** (S, bug)
