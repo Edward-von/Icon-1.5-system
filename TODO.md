@@ -57,8 +57,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.5: la durata dell'aura viene letta dal testo quando la si piazza
       ("gain aura 1 until the end of your next turn") e contata sui turni; alla scadenza un messaggio in chat la
       annuncia con il bottone Remove area. Le aure senza durata scritta restano come prima.)
-- [ ] **R4. Abilità trascinate dal compendio senza la scelta di talenti/mastery** (M, bug — priorità bassa)
+- [x] **R4. Abilità trascinate dal compendio senza la scelta di talenti/mastery** (M, bug — priorità bassa)
       "Seems to only happen when adding many abilities quickly, so might be a menu issue."
+      (FATTO il 15 ottobre 2026, versione 1.15.6: la finestra talento/mastery partiva solo per le abilità lasciate
+      esattamente su un riquadro; ora parte dovunque l'abilità venga lasciata sulla scheda, e un drop fatto mentre la
+      finestra precedente è aperta dà una notifica invece di sparire.)
 - [ ] **R5. Tag grigi senza tooltip** (S, bug)
       Dropkick: "Sacrifice" grigio e senza tooltip. Comet: "Medium Blast" grigio. Catapult: "Interrupt 1" in cima
       alla card senza tooltip; con la mastery spuntata compare "Interrupt 3" ("Maybe an old implementation of the tag

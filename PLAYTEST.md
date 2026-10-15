@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R4 — talento e mastery chiesti per ogni abilità trascinata (15 ottobre 2026, versione 1.15.6)
+
+Setup: un PG con meno di sei abilità (capitolo alto, o da GM) e il compendio delle abilità aperto accanto alla scheda,
+tab Combat.
+
+- [ ] **Drop su un riquadro**: trascinare un'abilità con talenti (es. Rook) su un riquadro "Drop ability here" → la
+      finestra "Equip: …" compare come prima; scegliendo Talent I e la mastery, il riquadro mostra TI e ★.
+- [ ] **Drop fuori dai riquadri**: trascinare un'altra abilità con talenti nello spazio tra i riquadri, sul titolo
+      della sezione o in un altro punto della scheda → compare la stessa finestra; dopo "Equip" l'abilità va nel primo
+      riquadro libero con i badge scelti.
+- [ ] **Annulla**: chiudere la finestra con la X → l'abilità NON viene aggiunta.
+- [ ] **Tante di fila**: aggiungere 4-5 abilità una dopo l'altra il più velocemente possibile, lasciandole dove
+      capita → ognuna chiede talento/mastery; nessuna arriva senza la finestra.
+- [ ] **Drop mentre la finestra è aperta**: con la finestra della precedente ancora aperta, lasciare un'altra abilità
+      fuori dai riquadri → notifica "The previous item is still being added…", la seconda non viene aggiunta; chiusa la
+      prima, rilasciandola funziona.
+- [ ] **Abilità senza talenti**: un'abilità senza talenti né mastery (se ce n'è una) o un tratto/reliquia → aggiunti
+      subito, nessuna finestra.
+
 ## R3 — avviso in chat quando un'aura scade (15 ottobre 2026, versione 1.15.5)
 
 Setup: un PG Stalwart con Rook (aura 1 "until the end of your next turn", p.123) e, se possibile, un PG con Nightmare

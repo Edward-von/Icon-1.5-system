@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Talento e mastery chiesti per ogni abilità trascinata (versione 1.15.6)
+
+### Round di debug del 15 ottobre, punto R4
+
+- **Abilità aggiunte senza scegliere talento/mastery**: trascinando molte abilità dal compendio sulla scheda del PG,
+  per alcune la finestra "Equip" (talento I/II, mastery) non compariva e l'abilità arrivava senza talento e senza
+  mastery → la finestra partiva solo se l'abilità veniva lasciata esattamente sopra uno dei sei riquadri delle
+  abilità; lasciata un po' più in là (nello spazio tra i riquadri, sul titolo, altrove nella scheda), cosa facile
+  quando se ne aggiungono tante di fila, passava dalla via generica che la aggiungeva in silenzio, e finiva lo stesso
+  nel primo riquadro libero (i riquadri mostrano le prime sei abilità, ovunque le si lasci) → ora la finestra compare
+  per ogni abilità, dovunque la si lasci sulla scheda; "chiudi" annulla l'aggiunta. Se si lascia un altro oggetto
+  mentre il precedente è ancora in corso (finestra aperta), una notifica dice di finire prima e riprovare, invece di
+  ignorarlo senza dire niente.
+
 ## 15 ottobre 2026 — Avviso in chat quando un'aura scade (versione 1.15.5)
 
 ### Round di debug del 15 ottobre, punto R3

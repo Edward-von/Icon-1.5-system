@@ -3471,8 +3471,11 @@ export class IconSheet extends BaseActorSheet {
     // lookup, DialogV2 confirm, actor update), silently ignore any additional
     // drop events. Belt-and-suspenders alongside the listener-binding guard
     // in BaseActorSheet.
+    // The player is told, since a drop made while the talent/mastery prompt
+    // of the previous one is still open would otherwise just vanish.
     if (this._dropInProgress) {
       _log(`drop — IGNORED (another drop is already in progress)`);
+      ui.notifications.info("The previous item is still being added: finish that first, then drop this one again.");
       return;
     }
     this._dropInProgress = true;
@@ -3541,8 +3544,22 @@ export class IconSheet extends BaseActorSheet {
           ui.notifications.warn(`${this.document.name} already holds three trophies: a character can hold on to three at once (p.242).`);
         }
         if (item.type !== "trophy" && !(await this.#checkChapterGate(item))) return;
-        _log(`drop — embedding "${item.name}" (${item.type})`);
-        await this.document.createEmbeddedDocuments("Item", [item.toObject()]);
+        {
+          const itemData = item.toObject();
+          // An ability dropped anywhere on the sheet (not only on a slot) asks
+          // for its talent / mastery too: slots show the first six abilities
+          // whatever the drop point, so a drop that missed a slot used to
+          // embed the ability silently with no talent and no mastery.
+          if (item.type === "ability") {
+            const config = await promptAbilityConfig(item);
+            if (config === null) { _log(`drop — "${item.name}" cancelled in the talent/mastery prompt`); return; }
+            itemData.system = itemData.system ?? {};
+            itemData.system.talentSelected  = config.talent;
+            itemData.system.masteryUnlocked = config.mastered;
+          }
+          _log(`drop — embedding "${item.name}" (${item.type})`);
+          await this.document.createEmbeddedDocuments("Item", [itemData]);
+        }
         break;
       case "bond":
         await this.#onDropBond(item);
