@@ -130,8 +130,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       dava. Ora un talento / una mastery sbloccati che rendono l'abilità un mark ("as a mark", "making it a mark")
       aggiungono il tag Mark, anche con la mastery sbloccata; vale anche per la mastery Amico di Party Favor. Solo
       codice, vale per le copie già sulle schede.)
-- [ ] **R18. Intimidate: la mastery non propone Unstoppable** (S, bug)
+- [x] **R18. Intimidate: la mastery non propone Unstoppable** (S, bug)
       Né il bottone per applicarlo a sé, né il testo di promemoria.
+      (FATTO il 15 ottobre 2026, versione 1.15.20: la frase della mastery (p.144) comincia con "also become" e la
+      lettura del testo non riconosceva "also" davanti al verbo, quindi scartava lo status. Ora "also" è accettato:
+      bottone "Gain Unstoppable" su di sé; stessa correzione per il Talent II di Circle the Oak (Gain Evasion). Solo
+      codice, vale per le copie già sulle schede.)
 - [ ] **R19. Aure mancanti o sbagliate** (M, bug)
       - Endless Battlement: chiede la dimensione dell'aura (proposta 3) anche se è sempre 1, e la mette solo su chi
         la lancia, mentre va su un alleato.

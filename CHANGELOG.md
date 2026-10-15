@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — La mastery di Intimidate propone Unstoppable (versione 1.15.20)
+
+### Round di debug del 15 ottobre, punto R18
+
+- **La mastery di Intimidate non proponeva Unstoppable**: con la mastery Iron Skull di Intimidate (Knave, Stalwart)
+  sbloccata, "After Intimidate's stun triggers, also become unstoppable until the end of your next turn" (p.144), la
+  card non mostrava né il bottone "Gain Unstoppable" per sé né la riga di promemoria → Unstoppable è già tra gli status
+  che si possono guadagnare e la mastery viene letta, ma la frase dopo la virgola comincia con "also become": la
+  lettura del testo riconosceva un ordine rivolto a chi usa l'abilità solo se iniziava con "gain / become…",
+  eventualmente preceduto da "then", "and" o "you may", e non con "also", quindi non sapeva a chi dare lo status e lo
+  scartava → ora "also" è accettato davanti al verbo (anche "then also", "you may also gain…"), e la mastery dà il
+  bottone "Gain Unstoppable" su di sé con la durata "until the end of your next turn". La stessa causa colpiva il
+  Talent II di Circle the Oak (Warden, Vagabond: "…also gain evasion until the end of your next turn", p.169), che ora
+  dà il bottone "Gain Evasion". Controllate tutte le abilità di jobs, bond powers e relic: nessun'altra cambia. Solo
+  codice: nessun cambio al compendio né alle schede, vale anche per le copie già sulle schede.
+
 ## 15 ottobre 2026 — Polaris può marcare un personaggio col Talent I (versione 1.15.19)
 
 ### Round di debug del 15 ottobre, punto R17

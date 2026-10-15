@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R18 — La mastery di Intimidate propone Unstoppable (15 ottobre 2026, versione 1.15.20)
+
+Setup: un mondo con un PG Knave (Stalwart) con Intimidate (va bene anche una copia aggiunta prima dell'aggiornamento);
+almeno un foe sulla scena; tab Combat.
+
+- [ ] **Senza mastery**: Intimidate con la mastery bloccata → usare / Show in Chat → nessun bottone "Gain Unstoppable"
+      (le note di rush / shove restano come prima).
+- [ ] **Con mastery**: sbloccare la mastery Iron Skull → usare l'abilità → nella card c'è il bottone "Gain Unstoppable"
+      (su di sé) con la durata "until the end of your next turn" e la frase della mastery nel tooltip / promemoria.
+- [ ] **Applicare**: cliccare il bottone → il PG riceve Unstoppable (icona sul token e nel tab Conditions).
+- [ ] **Circle the Oak**: un PG Warden (Vagabond) con Circle the Oak e il Talent II scelto → la card ha il bottone
+      "Gain Evasion" (su di sé, until the end of your next turn); con il Talent I non c'è.
+- [ ] **Altre abilità**: un'abilità che già dava un "Gain" (es. God Hand col Talent I, "Gain evasion…") lo dà come
+      prima.
+
 ## R17 — Polaris può marcare un personaggio col Talent I (15 ottobre 2026, versione 1.15.19)
 
 Setup: un mondo con un PG Seer (Mendicant) con Polaris (va bene anche una copia aggiunta prima dell'aggiornamento);

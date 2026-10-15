@@ -95,8 +95,12 @@ const GRANT_BY_WORD = (w) => GRANTABLE.find(s => new RegExp(`^(?:${s.re})$`, "i"
 const GRANT_ADJ_AFTER_RE = /^\s+(?:damage|attacks?|effects?|movement|ability|abilities|foes?|characters?|allies|ally|summons?|units?|creatures?|targets?)\b/i;
 /** Verbs that grant a status to the subject before them. */
 const GRANT_VERB_RE = /\b(?:gains?|gained|gaining|have|has|get|gets|regains?|become|becomes|are|is|with|grants?(?:\s+(?:you|them|it|yourself))?)\s*(?:\+\d\s*)?$/i;
-/** Imperative start of a clause ("Gain stealth", "Become intangible…") = the user. */
-const IMPERATIVE_SELF_RE = /^\s*(?:then\s+|and\s+|you\s+(?:may|can|must)\s+|may\s+|can\s+)?(?:gain|become|regain|have)\s*(?:\+\d\s*)?$/i;
+/**
+ * Imperative start of a clause ("Gain stealth", "Become intangible…") = the user.
+ * "also" may lead or follow the modal ("…, also become unstoppable", Intimidate's
+ * Iron Skull mastery; "then you may also gain…").
+ */
+const IMPERATIVE_SELF_RE = /^\s*(?:(?:then|and|also)\s+)*(?:(?:you\s+(?:may|can|must)|may|can)\s+(?:also\s+)?)?(?:gain|become|regain|have)\s*(?:\+\d\s*)?$/i;
 /** "Choose a foe in range 3 and become immobile" — the object of the imperative is not the subject of "become". */
 const CHOOSE_AND_SELF_RE = /\b(?:choose|pick|select|target|mark)\s+(?:a|an|one|two|the|up to \d+|any)?\s*(?:foes?|targets?|characters?|allies|ally|creatures?)\b[^,;]*\b(?:and|then)\s+(?:become|gain|are|have)\s*$/i;
 /** "until the end of your next turn" after a status mention. */
