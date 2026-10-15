@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Provoke propone il danno giusto (versione 1.15.16)
+
+### Round di debug del 15 ottobre, punto R14
+
+- **Provoke proponeva 1 danno invece di 2**: usando Provoke (Knave, Stalwart) il bottone del danno proponeva 1 danno
+  → il testo dice "each adjacent foe deals 1 piercing damage to you […] You then deal 2 damage, once, for each foe
+  that damaged you this way" (p.142): 1 è il danno che il PG subisce, 2 quello che infligge; la lettura automatica
+  del danno prendeva il primo "N damage" del testo, cioè quello subito → ora un danno seguito da "to you" / "to
+  yourself" viene saltato e la card propone 2. Solo codice: nessun cambio al compendio né alle schede, vale anche
+  per le copie già sulle schede.
+
 ## 15 ottobre 2026 — Superbolide della Tower fedele al libro (versione 1.15.15)
 
 ### Round di debug del 15 ottobre, punto R13

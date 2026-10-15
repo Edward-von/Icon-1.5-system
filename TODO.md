@@ -110,8 +110,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.15: il libro (p.203) dice davvero "double damage from Eclipse's
       meteor effect"; il compendio aveva tolto "Eclipse's". Testo riportato alla lettera nel compendio Jobs;
       migrazione 24 per le copie già sulle schede. Il raddoppio non è automatizzato.)
-- [ ] **R14. Provoke: la card del danno propone 1 invece di 2** (S, bug)
+- [x] **R14. Provoke: la card del danno propone 1 invece di 2** (S, bug)
       Va bene per il danno subito, ma il danno base rimandato indietro è 2.
+      (FATTO il 15 ottobre 2026, versione 1.15.16: la lettura del danno prendeva il primo "N damage" del testo, cioè
+      "1 piercing damage to you" (danno subito, p.142); ora salta il danno seguito da "to you"/"to yourself" e propone
+      2. Solo codice, vale anche per le copie già sulle schede.)
 - [ ] **R15. Gentleness: il tiro del danno non seleziona Divine** (S, bug)
 - [ ] **R16. God Hand: Talent 1 e 2 non danno i bonus a Devil Hand (combo) e a Fists of Heaven and Hell (mastery)
       nella card dell'attacco** (S/M, bug)

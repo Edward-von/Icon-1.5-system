@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R14 — Provoke propone il danno giusto (15 ottobre 2026, versione 1.15.16)
+
+Setup: un mondo con un PG Knave (Stalwart) con Provoke (va bene anche una copia aggiunta prima dell'aggiornamento) e
+almeno un foe adiacente; tab Combat.
+
+- [ ] **Danno proposto**: usando Provoke, il tiro/la card del danno propone 2 danni (non 1) da infliggere ai foe
+      adiacenti.
+- [ ] **Testo invariato**: sulla scheda e nella card in chat il testo di Provoke dice ancora "each adjacent foe deals 1
+      piercing damage to you" e "You then deal 2 damage" (p.142).
+- [ ] **Nient'altro cambiato**: un'altra abilità con danno fisso (es. Talent II di Provoke o un'abilità con "deal 2
+      damage to them") propone lo stesso danno di prima.
+
 ## R13 — Superbolide della Tower fedele al libro (15 ottobre 2026, versione 1.15.15)
 
 Setup: un mondo con un PG Seer (Mendicant) con The Tower aggiunta PRIMA dell'aggiornamento (per la migrazione 24) e

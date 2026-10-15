@@ -47,8 +47,10 @@ export function parseAbilityDamage(itemSystem) {
     const mult = diceMatch ? (diceMatch[1] ? Number(diceMatch[1]) : 1) : 0;
     // fray flat bonus
     const includesFray = /\bfray\b/.test(lower);
-    // explicit flat damage: "3 damage", "2 piercing damage"
-    const flatMatch = lower.match(/(\d+)\s+(?:divine\s+|piercing\s+|true\s+)?damage/);
+    // explicit flat damage: "3 damage", "2 piercing damage". Damage dealt to
+    // the user ("each adjacent foe deals 1 piercing damage to you", Provoke
+    // p.142) is what they take, not what they deal: skip it.
+    const flatMatch = lower.match(/(\d+)\s+(?:divine\s+|piercing\s+|true\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
     const flat = flatMatch ? Number(flatMatch[1]) : 0;
     return { mult, fray: includesFray, flat };
   };
