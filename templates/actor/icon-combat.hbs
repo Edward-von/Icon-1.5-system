@@ -669,6 +669,13 @@
                 <i class="fa-solid fa-crosshairs"></i> Mark target ({{ab.comboMark.name}})
               </button>
             {{/if}}
+            {{#if ab.altComboMark}}
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
+                      data-action="abilityMark" data-item-id="{{ab.id}}" data-combo="alt"
+                      title="Mastery's alternate combo: mark the targeted token with {{ab.altComboMark.name}} — its own mark, it doesn't replace the others">
+                <i class="fa-solid fa-crosshairs"></i> Mark target ({{ab.altComboMark.name}})
+              </button>
+            {{/if}}
             {{#each ab.marks as |m|}}
               <span class="icon-mark-chip" title="Marked by {{ab.name}}{{#if m.version}} ({{m.version}}){{/if}}"><i class="fa-solid fa-crosshairs"></i> {{m.targetName}}{{#if m.version}} <small>({{m.version}})</small>{{/if}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}
                 <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕</button>

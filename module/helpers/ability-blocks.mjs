@@ -184,6 +184,56 @@ export function comboTitle(baseName, comboText) {
 }
 
 /* -------------------------------------------------- */
+/*  Alternate combo from the mastery                   */
+/* -------------------------------------------------- */
+
+/**
+ * The alternate combo version an unlocked mastery adds, read from the mastery
+ * text: "Gain an alternate combo ability. You can choose this ability or Fleet
+ * when you spend a token. Combo: FANTASIA (2 actions) — Effect: …" (Felicity,
+ * p.177), "Gain an alternate combo action: REGROWTH — Mark: …" (Rot, p.186),
+ * FISTS OF HEAVEN AND HELL (God Hand, p.192), GRAN JUDICATA (Justice, p.194).
+ * The text comes back in the comboEffect format ("FANTASIA — 2 actions.
+ * Effect: …"), so every reader of comboEffect handles it as a complete combo.
+ * Its tags are the combo's own ones the alternate also has (the base tags,
+ * or a tag its text names: "+1 boon"); Judgement's gamble is not Gran Judicata's.
+ * @returns {{text:string, tags:string, name:string}|null}
+ */
+export function alternateCombo(system) {
+  const s = system ?? {};
+  if (!s.isCombo || !s.masteryUnlocked) return null;
+  const plain = String(s.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const at = plain.search(/\balternate combo (?:ability|action)\b/i);
+  if (at < 0) return null;
+  const m = plain.slice(at).match(/(?:Combo:\s*)?\b([A-Z][A-Z' ]*[A-Z])\s*(?:\(([^)]*)\))?\s*[—–]\s*(.+)$/);
+  if (!m) return null;
+  const text = `${m[1].trim()} — ${m[2] ? `${m[2].trim()}. ` : ""}${m[3].trim()}`;
+  const lower = text.toLowerCase();
+  const base = new Set((s.tags ?? []).map(t => String(t ?? "").trim().toLowerCase()));
+  const tags = String(s.comboTags ?? "").split(",").map(t => t.trim()).filter(Boolean)
+    .filter(t => base.has(t.toLowerCase()) || lower.includes(t.toLowerCase().replace(/-/g, " ")))
+    .join(", ");
+  return { text, tags, name: comboDisplayName(text) };
+}
+
+/**
+ * The ability data with the chosen combo version in comboEffect / comboTags:
+ * the system itself for the normal combo, a view of it with the mastery's
+ * alternate combo when `useAlternate` (and the mastery gives one). Every
+ * reader of comboEffect (card, attack, damage, statuses, tags) then follows
+ * the choice without knowing about it.
+ */
+export function withActiveCombo(system, useAlternate) {
+  const alt = useAlternate ? alternateCombo(system) : null;
+  if (!alt) return system;
+  // defineProperties, not assignment: it shadows the data model's fields even if they are read-only.
+  return Object.create(system, {
+    comboEffect: { value: alt.text, enumerable: true },
+    comboTags:   { value: alt.tags, enumerable: true },
+  });
+}
+
+/* -------------------------------------------------- */
 /*  Talent text on the attack card                     */
 /* -------------------------------------------------- */
 

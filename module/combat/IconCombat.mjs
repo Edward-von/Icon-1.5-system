@@ -604,6 +604,7 @@ export class IconCombat extends Combat {
           "system.combat.classResources.aether.value":         0,
           "system.combat.classResources.stackedDice.value":    0,
           "flags.icon-system.-=comboSpentOnItem":              null,
+          "flags.icon-system.-=comboChoice":                   null,
         });
         // Power dice tracked on ability / trait items end with the combat too
         // (stances and marks that grant them don't outlive the encounter).
@@ -857,7 +858,10 @@ export function registerCombatHooks() {
           // A combo token spent on an ability with Show in Chat only covers
           // that use (its attack and damage come as separate clicks): it
           // doesn't carry into the next turn.
-          if (prev.actor.getFlag(FLAG_NS, "comboSpentOnItem")) await prev.actor.unsetFlag(FLAG_NS, "comboSpentOnItem");
+          // The combo picked for that use (a mastery's alternate combo, IconSheet._pickCombo) goes with it.
+          if (prev.actor.getFlag(FLAG_NS, "comboSpentOnItem") || prev.actor.getFlag(FLAG_NS, "comboChoice")) {
+            await prev.actor.update({ [`flags.${FLAG_NS}.-=comboSpentOnItem`]: null, [`flags.${FLAG_NS}.-=comboChoice`]: null });
+          }
         }
       }
 

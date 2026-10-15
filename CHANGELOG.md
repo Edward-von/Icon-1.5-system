@@ -1,5 +1,28 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Combo alternativa data dalla mastery (versione 1.15.32)
+
+### Round di debug del 15 ottobre, punto R28
+
+- **Combo alternativa della mastery**: Maar chiedeva di poter usare la combo alternativa che quattro mastery
+  aggiungono ("Gain an alternate combo ability. You can choose this ability or Fleet when you spend a token", p.177):
+  Felicity → Fantasia (p.177), Rot → Regrowth (p.186), God Hand → Fists of Heaven and Hell (p.192), Justice → Gran
+  Judicata (p.194); per Felicity con un menù allo Show in Chat → con la mastery sbloccata e il token combo armato, il
+  primo clic su **Show in Chat**, **Attack** o **Damage** dell'abilità apre una finestra con due bottoni (la combo
+  normale, es. "Fleet", e quella della mastery, es. "Fantasia"). La scelta vale per quell'uso: card in chat, card
+  dell'attacco, danno, Inflict degli status, tag e area usano il testo della combo scelta al posto di quello normale,
+  e il titolo diventa "Fantasia (Felicity combo)". La scelta si azzera quando il token si accende/spegne a mano, a
+  fine turno e a fine combattimento, e dopo il tiro di danno del token speso. Il testo della combo alternativa è già
+  nel campo mastery del compendio ("Combo: FANTASIA (2 actions) — …"): viene letto da lì, nessun dato toccato e
+  nessuna migrazione.
+- **Rot, mark per Regrowth**: Maar non poteva marcare un personaggio con Regrowth invece che con Regenerate → con la
+  mastery sbloccata la scheda ha un terzo bottone **Mark target (Regrowth)**, accanto a quelli di Rot e di
+  Regenerate; è un mark a parte (non sostituisce gli altri) con il testo di Regrowth, e compare nelle chip dei mark
+  con "(Regrowth)".
+- **Fists of Heaven and Hell con i talenti** (voce emersa da R16): la combo alternativa di God Hand "gains all talent
+  effects of this ability" (p.192); la card dell'attacco aggiunge già il talento sbloccato a ogni versione
+  dell'abilità, quindi anche a Fists of Heaven and Hell, senza altro codice.
+
 ## 15 ottobre 2026 — Damage Utility sulla scheda PG (versione 1.15.31)
 
 ### Round di debug del 15 ottobre, punto R27

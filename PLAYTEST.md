@@ -1656,6 +1656,38 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R28 — Combo alternativa data dalla mastery (15 ottobre 2026, versione 1.15.32)
+
+Setup: un PG Chanter con Felicity, un Harvester con Rot, un Sealer con God Hand (Talent I o II scelto) e Justice; un
+foe e un alleato sulla mappa. Token combo acceso col bottone COMBO.
+
+- [ ] **Senza mastery niente cambia**: Felicity con la mastery non sbloccata, token acceso → Show in Chat posta Fleet
+      come prima, nessuna finestra.
+- [ ] **Felicity, scelta allo Show in Chat**: sbloccare la mastery, token acceso → Show in Chat apre la finestra
+      "Felicity — choose the combo" con i bottoni "Fleet" e "Fantasia". Fantasia → card "Fantasia (Felicity combo)"
+      con "2 actions." in testa e gli Effect/Special di Fantasia; il token si spegne.
+- [ ] **Fleet resta disponibile**: riaccendere il token → Show in Chat chiede di nuovo; Fleet → card "Fleet
+      (Felicity combo)" come prima.
+- [ ] **Chiudere la finestra annulla**: token acceso, Show in Chat, chiudere la finestra con la X → nessuna card,
+      il token resta acceso.
+- [ ] **God Hand, attacco**: token acceso, mastery sbloccata, target sul foe → Attack chiede Devil Hand / Fists of
+      Heaven And Hell; Fists → card d'attacco "Fists Of Heaven And Hell (God Hand combo)" con +1 boon, Teleport,
+      Seal + bless, esplosione da 1 divine, Exceed "Repeat all effects", e il talento scelto (Exceed: evasion o Slay)
+      come per Devil Hand. Il tiro di danno subito dopo non chiede di nuovo e usa [D]+fray.
+- [ ] **Scelta ricordata**: dopo il punto sopra (token ancora acceso), Show in Chat di God Hand non chiede di nuovo e
+      posta Fists; la scheda, con il token acceso, mostra il testo di Fists nella riga Combo.
+- [ ] **Justice**: mastery sbloccata, token acceso → Show in Chat chiede Judgement / Gran Judicata; Gran Judicata →
+      card con Interrupt 1, Trigger e l'Effect da 4 divine; nessun bottone Gamble (è di Judgement).
+- [ ] **Rot, bottone Regrowth**: mastery sbloccata → nel pannello di Rot tre bottoni Mark: "Mark target", "Mark
+      target (Regenerate)", "Mark target (Regrowth)". Targettare un alleato → Regrowth mette un mark con il testo di
+      Regrowth; la chip mostra "(Regrowth)"; i mark di Rot e Regenerate restano dove sono.
+- [ ] **Rot, Show in Chat**: token acceso → scelta Regenerate / Regrowth; Regrowth → card "Regrowth (Rot combo)" con
+      il Mark di Regrowth.
+- [ ] **Reset**: scelta fatta, poi spegnere e riaccendere il token col bottone → al prossimo uso la finestra torna;
+      lo stesso a fine turno (passare il turno) e a fine combattimento.
+- [ ] **Altre combo intatte**: un'abilità combo senza combo alternativa (es. Holy → Hades) con il token acceso non
+      apre nessuna finestra.
+
 ## R27 — Damage Utility sulla scheda PG (15 ottobre 2026, versione 1.15.31)
 
 Setup: un PG con job (dado d10, fray noto) e un foe sulla mappa con un po' di armatura; un secondo foe per l'area.

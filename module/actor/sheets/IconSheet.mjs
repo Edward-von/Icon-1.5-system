@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -56,6 +56,16 @@ function _comboMark(s) {
 }
 
 /**
+ * The "Mark:" block of the alternate combo an unlocked mastery adds, or null:
+ * Rot's mastery adds REGROWTH (p.186), a mark of its own next to Regenerate
+ * (key `<item id>:combo-alt`), so it gets its own Mark button too.
+ */
+function _altComboMark(s) {
+  const alt = alternateCombo(s);
+  return alt ? _comboMark({ isCombo: true, comboEffect: alt.text }) : null;
+}
+
+/**
  * The text the area button reads when the tags carry no area: the ability's
  * own, then the upgrades in play (selected talent, unlocked mastery, armed
  * combo) — the same texts the area choice offers (_areaVariantsFor). Sow's
@@ -69,11 +79,12 @@ function _areaText(s, comboArmed) {
 }
 
 /** Marks an ability has on the scene: the base mark, then the combo's own (labelled with its name). */
-function _abilityMarks(actorId, itemId, comboMark) {
+function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
   const row = (m, version = "") => ({ uuid: m.uuid, targetName: m.targetName, stacks: m.stacks, version });
   return [
     ...marksBy(actorId, itemId).map(m => row(m)),
     ...(comboMark ? marksBy(actorId, `${itemId}:combo`).map(m => row(m, comboMark.name)) : []),
+    ...(altMark ? marksBy(actorId, `${itemId}:combo-alt`).map(m => row(m, altMark.name)) : []),
   ];
 }
 
@@ -338,7 +349,8 @@ export class IconSheet extends BaseActorSheet {
     // preview panels under the ability slots grid in the Combat tab. Click on
     // a slot toggles the matching panel.
     context.abilityDetails = await Promise.all(context.abilityItems.map(async a => {
-      const s = a.system ?? {};
+      // The combo chosen for this use (normal or the mastery's alternate, see _pickCombo).
+      const s = this._comboSystem(a);
       const talentSelected  = s.talentSelected ?? 0;
       const masteryUnlocked = !!s.masteryUnlocked;
       const parsed = _parseAbilityDamage(s);
@@ -368,8 +380,9 @@ export class IconSheet extends BaseActorSheet {
         // text when the header has no area (Tsunami, p.233) → area button
         areaLabel:   abilityArea(tags, _areaText(s, comboArmed))?.label ?? "",
         // Mark abilities: Mark button + the marks this ability currently has on the scene
-        canMark:     markFromTags(tags).can || !!_comboMark(s),
-        comboMark:   _comboMark(s),
+        canMark:     markFromTags(tags).can || !!_comboMark(a.system) || !!_altComboMark(a.system),
+        comboMark:   _comboMark(a.system),
+        altComboMark: _altComboMark(a.system),
         // Stance abilities: stance button, lit while this is the stance in play
         canStance:   tags.some(t => tagKey(t) === "stance"),
         stanceOn:    IconActor.stancesOf(actor).includes(a.name),
@@ -379,7 +392,7 @@ export class IconSheet extends BaseActorSheet {
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id),
-        marks:       _abilityMarks(actor.id, a.id, _comboMark(s)),
+        marks:       _abilityMarks(actor.id, a.id, _comboMark(a.system), _altComboMark(a.system)),
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -1514,11 +1527,49 @@ export class IconSheet extends BaseActorSheet {
     return token || this.document.getFlag("icon-system", "comboSpentOnItem") === item.id;
   }
 
+  /**
+   * The ability's data with the combo version chosen for this use: the mastery's
+   * alternate combo (Fantasia, Regrowth, Fists of Heaven and Hell, Gran Judicata)
+   * in comboEffect / comboTags once it was picked in _pickCombo, the item's own
+   * data otherwise.
+   */
+  _comboSystem(item) {
+    const choice = this.document.getFlag("icon-system", "comboChoice");
+    return withActiveCombo(item?.system ?? {}, !!choice?.alternate && choice?.itemId === item?.id);
+  }
+
+  /**
+   * An unlocked mastery that adds an alternate combo ("You can choose this
+   * ability or Fleet when you spend a token", p.177): while the combo is armed,
+   * ask once which combo this use is, and remember it (flag comboChoice) for
+   * the card, attack and damage clicks that follow. False when the dialog is closed.
+   */
+  async _pickCombo(item) {
+    if (!item || !this._comboArmed(item)) return true;
+    const alt = alternateCombo(item.system);
+    if (!alt) return true;
+    if (this.document.getFlag("icon-system", "comboChoice")?.itemId === item.id) return true;
+    const normal = comboDisplayName(item.system.comboEffect) || "Combo";
+    const pick = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${item.name} — choose the combo` },
+      content: `<p>Your mastery gives ${escapeHTML(item.name)} an alternate combo. Which one do you use with this token?</p>`,
+      buttons: [
+        { action: "normal",    label: normal,   icon: "fa-solid fa-bolt", default: true },
+        { action: "alternate", label: alt.name, icon: "fa-solid fa-star" },
+      ],
+      rejectClose: false,
+    });
+    if (pick !== "normal" && pick !== "alternate") return false;
+    _log(`pickCombo — "${item.name}" | ${pick === "alternate" ? alt.name : normal}`);
+    await this.document.setFlag("icon-system", "comboChoice", { itemId: item.id, alternate: pick === "alternate" });
+    return true;
+  }
+
   async _getAbilityDetail(itemId, { comboMode = null } = {}) {
     const item = this.document.items.get(itemId);
     if (!item) return null;
     await loadSummonIndex();   // chat cards can be posted before any sheet render
-    const s = item.system ?? {};
+    const s = this._comboSystem(item);
     const parsed = _parseAbilityDamage(s);
     const parsedCombo = parseComboAbilityDamage(s);
     // Combo version in play: its tags replace the ability's (Hades gains True
@@ -1541,15 +1592,16 @@ export class IconSheet extends BaseActorSheet {
       tags,
       areaLabel:   abilityArea(tags, _areaText(s, combo))?.label ?? "",
       comboArmed:  combo,
-      canMark:     markFromTags(tags).can || !!_comboMark(s),
-      comboMark:   _comboMark(s),
+      canMark:     markFromTags(tags).can || !!_comboMark(item.system) || !!_altComboMark(item.system),
+      comboMark:   _comboMark(item.system),
+      altComboMark: _altComboMark(item.system),
       canStance:   tags.some(t => tagKey(t) === "stance"),
       stanceOn:    IconActor.stancesOf(this.document).includes(item.name),
       canGamble:   abilityGambles(s, tags),
       actorUuid:   this.document.uuid,
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id),
-      marks:       _abilityMarks(this.document.id, item.id, _comboMark(s)),
+      marks:       _abilityMarks(this.document.id, item.id, _comboMark(item.system), _altComboMark(item.system)),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -1610,6 +1662,7 @@ export class IconSheet extends BaseActorSheet {
   static async #onAbilityShowInChat(event, target) {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
+    if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
 
@@ -1619,7 +1672,8 @@ export class IconSheet extends BaseActorSheet {
     // Statuses the text inflicts → "Inflict" buttons for the current targets
     // (non-attack abilities like Implode / Gentleness only have this card).
     const item = this.document.items.get(itemId);
-    const statusHtml = statusBlockHtml(abilityStatusEntries(item?.system, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
+    const sys  = this._comboSystem(item);
+    const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
 
     // Combo version: the blocks are rebuilt with the combo text merged in, so
     // an ability whose combo only ADDS something (Low Blow / The Hook) still
@@ -1627,12 +1681,12 @@ export class IconSheet extends BaseActorSheet {
     const cardAb = comboMode
       ? { ...ab,
           // "Devil Hand", with "God Hand combo" beside it (the base name when the combo has none).
-          name:    comboDisplayName(item?.system?.comboEffect) || ab.name,
-          comboOf: comboDisplayName(item?.system?.comboEffect) ? ab.name : "",
-          blocks: await buildAbilityBlocks(item?.system ?? {}, {
-            sections: parseAbilitySections(item?.system?.description).sections,
+          name:    comboDisplayName(sys.comboEffect) || ab.name,
+          comboOf: comboDisplayName(sys.comboEffect) ? ab.name : "",
+          blocks: await buildAbilityBlocks(sys, {
+            sections: parseAbilitySections(sys.description).sections,
             enrich:   t => this._enrichAbility(t),
-            comboText: item?.system?.comboEffect ?? "",
+            comboText: sys.comboEffect ?? "",
           }) }
       : ab;
 
@@ -1970,10 +2024,12 @@ export class IconSheet extends BaseActorSheet {
     if (!item) return;
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
-    const comboMark = target.dataset.combo === "1" ? _comboMark(item.system) : null;
+    // data-combo="1": the combo's own mark (Regenerate); "alt": the mastery's alternate combo (Regrowth).
+    const altMark   = target.dataset.combo === "alt";
+    const comboMark = altMark ? _altComboMark(item.system) : target.dataset.combo === "1" ? _comboMark(item.system) : null;
     if (comboMark) {
       _log(`abilityMark — "${item.name}" combo "${comboMark.name}" on ${targets[0].name}`);
-      await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `${item.id}:combo`,
+      await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `${item.id}:${altMark ? "combo-alt" : "combo"}`,
         abilityName: `${item.name} (${comboMark.name})`, text: comboMark.text, stackText: comboMark.stackText });
       return;
     }
@@ -2010,7 +2066,7 @@ export class IconSheet extends BaseActorSheet {
    * swirling aura 1 … until the start of your next turn").
    */
   #auraText(ab) {
-    const s = this.document.items.get(ab.id)?.system ?? {};
+    const s = this._comboSystem(this.document.items.get(ab.id));
     return [
       ab.hasCombo && ab.comboArmed ? s.comboEffect : "",
       s.description, s.effect, s.areaEffect, s.hitEffect,
@@ -2025,7 +2081,7 @@ export class IconSheet extends BaseActorSheet {
   _areaVariantsFor(ab) {
     // Base area from the tags + the shapes the combo / charge / unlocked
     // upgrade texts describe ("Area becomes Arc 4", "Charge: Large Blast")
-    const s = this.document.items.get(ab.id)?.system ?? {};
+    const s = this._comboSystem(this.document.items.get(ab.id));
     // A talent / mastery / combo whose tags change the area (Draken Cross
     // Talent II: Medium Blast, range 5) still lets the base area be placed:
     // the book's upgrade is often conditional ("Charge: … may be increased"),
@@ -2110,6 +2166,7 @@ export class IconSheet extends BaseActorSheet {
   static async #onAbilityAttackRoll(event, target) {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
+    if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
     _log(`abilityAttackRoll — "${ab.name}" | isAttack: ${ab.isAttack} | autoHit: ${ab.isAutoHit}`);
@@ -2152,7 +2209,7 @@ export class IconSheet extends BaseActorSheet {
     // combo text replaces the normal one on the card and for the statuses, and
     // ab.tags / ab.isAutoHit already come from the combo version (_getAbilityDetail).
     const comboArmed = ab.comboArmed;
-    const statusEntries = abilityStatusEntries(this.document.items.get(itemId)?.system, { comboMode: comboArmed, sourceName: this.document.name });
+    const statusEntries = abilityStatusEntries(this._comboSystem(this.document.items.get(itemId)), { comboMode: comboArmed, sourceName: this.document.name });
 
     if (ab.isAutoHit) {
       // Auto-hit: no d20 roll, just announce and (optionally) chain into damage.
@@ -2204,7 +2261,7 @@ export class IconSheet extends BaseActorSheet {
     // into the Hit box.
     let card = { hit: ab.hitEffect, miss: ab.missEffect, exceed: ab.exceedEffect, crit: ab.critEffect, effects: [] };
     if (comboArmed) {
-      const sys = this.document.items.get(itemId)?.system ?? {};
+      const sys = this._comboSystem(this.document.items.get(itemId));
       const blocks = await buildAbilityBlocks(sys, {
         sections: parseAbilitySections(sys.description).sections, enrich: t => this._enrichAbility(t), comboText: sys.comboEffect ?? "" });
       const keysOf = (b) => String(b.key ?? "").split("+");
@@ -2237,7 +2294,7 @@ export class IconSheet extends BaseActorSheet {
     }
 
     await combatRoll({
-      abilityName:  comboArmed ? comboTitle(ab.name, this.document.items.get(itemId)?.system?.comboEffect) : ab.name,
+      abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect) : ab.name,
       costLabel:    ab.cost,
       // `ab.tags` is an array of {raw, label, tooltip} — combatRoll expects plain strings
       tags:         ab.tags.map(t => t.label ?? t.raw ?? ""),
@@ -2271,6 +2328,7 @@ export class IconSheet extends BaseActorSheet {
   static async #onAbilityDamageRoll(event, target) {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
+    if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
     const combat = this.document.system.combat;
@@ -2291,8 +2349,10 @@ export class IconSheet extends BaseActorSheet {
     if (!mods) return;
 
     const useCombo = !!(mods.useCombo && ab.parsedCombo);
+    // Read before the flags go: the card title names the combo chosen for this use.
+    const comboText = this._comboSystem(this.document.items.get(itemId)).comboEffect;
     if (comboSpentOn === itemId) {
-      await this.document.unsetFlag("icon-system", "comboSpentOnItem");
+      await this.document.update({ "flags.icon-system.-=comboSpentOnItem": null, "flags.icon-system.-=comboChoice": null });
     }
 
     await postAbilityDamageCard(this.document, {
@@ -2300,7 +2360,7 @@ export class IconSheet extends BaseActorSheet {
       outcome:     mods.outcome,
       damagedie:   combat.damagedie,
       fray:        combat.fray,
-      abilityName: useCombo ? comboTitle(ab.name, this.document.items.get(itemId)?.system?.comboEffect) : ab.name,
+      abilityName: useCombo ? comboTitle(ab.name, comboText) : ab.name,
       bonusDice:   mods.bonusDice,
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
@@ -2937,6 +2997,7 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({
       "system.combat.classResources.comboToken.value": next,
       "flags.icon-system.-=comboSpentOnItem": null,
+      "flags.icon-system.-=comboChoice": null,
     });
   }
 

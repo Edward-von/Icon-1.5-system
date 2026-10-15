@@ -215,9 +215,13 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       che apre la finestra del danno in modalità libera (solo i campi di Other: dadi [D] del PG, fisso, fray, area,
       più Source per la card) con tutti i modificatori, tipi e istanze; card e Apply quelli delle abilità. La macro
       del pack resta com'è. Solo codice.)
-- [ ] **R28. Combo alternativa data dalla mastery** (M)
+- [x] **R28. Combo alternativa data dalla mastery** (M)
       Felicity (scelta tra Fleet e Fantasia con un menù allo Show in Chat), God Hand, Justice, Rot (marcare per
       Regrowth invece che per Regenerate).
+      (FATTO il 15 ottobre 2026, versione 1.15.32: con la mastery sbloccata e il token armato, Show in Chat / Attack /
+      Damage chiedono quale combo usare (normale o della mastery, letta dal campo mastery); la scelta vale per
+      card, attacco, danno, status e tag, e si azzera col token, a fine turno e a fine combattimento. Rot ha un
+      bottone "Mark target (Regrowth)" a parte. Solo codice.)
 - [ ] **R29. Dervish: con la mastery, stampare in chat entrambi gli effetti** (S)
 - [ ] **R30. Segno su un personaggio che non conta come mark** (M)
       Grand Banishment, The Tower ("probably just mark, renamed").
@@ -285,10 +289,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
       damage to itself") potrebbe proporre 10 come danno inflitto, come faceva Provoke con "to you"; da verificare
       sulla scheda del foe ed eventualmente saltare anche "to itself" in `ability-damage.mjs`.
-- [ ] **Emerso lavorando su R16 — Fists of Heaven and Hell con i talenti** (S, dipende da R28): la combo alternativa
+- [x] **Emerso lavorando su R16 — Fists of Heaven and Hell con i talenti** (S, dipende da R28): la combo alternativa
       della mastery di God Hand "gains all talent effects of this ability" (p.192), ma oggi non si può usare (R28).
       Quando R28 la renderà usabile, la sua card dell'attacco deve ricevere il talento come la base e Devil Hand
       (`talentAttackBlocks` in `ability-blocks.mjs`, usato in `IconSheet.mjs` prima di `combatRoll`).
+      (FATTO con R28, versione 1.15.32: la card dell'attacco aggiunge già il talento a ogni versione, Fists compresa.)
 - [ ] **Emerso lavorando su R16 — talenti e mastery nella card auto-hit e mastery nella card dell'attacco** (S/M, non
       verificato): la card degli attacchi auto-hit (True Strike ecc.) non mostra né Exceed né il talento; la mastery
       sbloccata non entra in nessuna card dell'attacco (solo nello Show in Chat). Da controllare se ci sono mastery
