@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, comboDisplayName, comboTitle } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates } from "../../canvas/area-templates.mjs";
@@ -404,6 +404,8 @@ export class IconSheet extends BaseActorSheet {
         isCombo:     !!(s.isCombo),
         comboEffect: await enrichHTML(s.comboEffect),
         hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
+        // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
+        comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
         // Talent visibility:
         //   - Show Talent I only if it has content AND (no choice yet OR I is chosen)
         //   - Show Talent II only if it has content AND (no choice yet OR II is chosen)
@@ -1544,6 +1546,8 @@ export class IconSheet extends BaseActorSheet {
       isCombo:     !!(s.isCombo),
       comboEffect: await enrichHTML(s.comboEffect),
       hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
+      // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
+      comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
       // Only show a talent in chat once it has actually been unlocked/selected.
       // talentSelected: 0 = none unlocked, 1 = Talent I, 2 = Talent II.
       hasTalent1: !!(s.talent1 && s.talent1.trim()) && (s.talentSelected ?? 0) === 1,

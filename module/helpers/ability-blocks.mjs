@@ -100,7 +100,7 @@ const COMBO_FIELD_LABELS = [
 /** Every label a combo text can start a block with, longest first. */
 const COMBO_LABEL_RE = new RegExp(
   String.raw`(?:^|[.!?…)\]]\s+|—\s*|-\s+|\n\s*)(` +
-  ["On hit", "Auto[\s-]?hit", "Hit", "Miss", "Area effect", "Area", ...SECTION_LABELS].join("|") +
+  ["On hit", String.raw`Auto[\s-]?hit`, "Hit", "Miss", "Area effect", "Area", ...SECTION_LABELS].join("|") +
   String.raw`):\s*`, "gi");
 
 /**
@@ -110,24 +110,38 @@ const COMBO_LABEL_RE = new RegExp(
  *   "The Hook: Gains range 2 and effect: Shove character 1 towards you."
  *     → { name: "The Hook", lead: "Gains range 2 and effect: …", blocks: [] }
  *   "REAP — Attack: On hit: [D]+fray. Miss: Fray. Effect: Summon a Thrall…"
- *     → { name: "REAP", lead: "", blocks: [hit, miss, Effect] }
+ *     → { name: "REAP", lead: "", blocks: [hit, miss, Effect], whole: true }
+ *
+ * `whole` is true when the combo is a complete ability of its own. The book
+ * (p.173: "you use the combo version instead") prints those under a name in
+ * capitals ("Combo: CHARISM", "Combo: DEVIL HAND") with every block written
+ * out again, so nothing of the base version carries over — not its Charge,
+ * its Mark or its seal. The combos written as a change to the base ("The
+ * Hook: Gains range 2 and effect: …", "Sweet Torment: As above, but…") have
+ * a name in normal case and merge into the base instead.
  */
 export function parseComboText(comboText) {
   let text = String(comboText ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim();
-  if (!text) return { name: "", lead: "", blocks: [] };
+  if (!text) return { name: "", lead: "", blocks: [], whole: false };
 
   // "REAP — …" / "The Hook: …" — the book names the combo version first.
   let name = "";
   const dash = text.match(/^([A-Z][A-Za-z' -]{1,28}?)\s*[—–]\s*/);
   const colon = text.match(/^([A-Z][A-Za-z' -]{1,28}?):\s+(?=[A-Z])/);
   if (dash) { name = dash[1].trim(); text = text.slice(dash[0].length); }
-  else if (colon && !COMBO_FIELD_LABELS.some(([re]) => re.test(colon[1])) 
+  else if (colon && !COMBO_FIELD_LABELS.some(([re]) => re.test(colon[1]))
            && !SECTION_LABELS.some(l => new RegExp(`^${l}$`, "i").test(colon[1]))) {
     name = colon[1].trim(); text = text.slice(colon[0].length);
   }
+  const whole = !!dash && /[A-Z]/.test(name) && name === name.toUpperCase();
 
   // "Attack:" only introduces the attack lines that follow it.
   text = text.replace(/\bAttack:\s*/gi, "");
+  // "As above, but replace the base effect with: …" (Sweet Torment) /
+  // "Gains True Strike and replaces the base effect with: …" (Indignation):
+  // the rest is the new Effect block, which takes the base Effect's place.
+  text = text.replace(/^As above,?\s*but\s+/i, "")
+             .replace(/\s*,?\s*(?:and\s+)?replaces?\s+the\s+base\s+effect\s+with:\s*/i, "\nEffect: ");
 
   const hits = [];
   COMBO_LABEL_RE.lastIndex = 0;
@@ -141,7 +155,12 @@ export function parseComboText(comboText) {
     const key  = COMBO_FIELD_LABELS.find(([re]) => re.test(h.label))?.[1] ?? "";
     return { key, label: _canonComboLabel(h.label), text: body };
   }).filter(b => b.text);
-  return { name, lead, blocks };
+  return { name, lead, blocks, whole };
+}
+
+/** True when the combo version is a complete ability that replaces the base one (see parseComboText). */
+export function comboReplacesBase(comboText) {
+  return parseComboText(comboText).whole;
 }
 
 /**
@@ -223,9 +242,11 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
   }
 
   // Combo version: overwrite the blocks it rewrites, append the ones it adds,
-  // and put its modifier sentence at the top.
+  // and put its modifier sentence at the top. A complete combo ability keeps
+  // nothing of the base blocks.
   if (comboText) {
     const combo = parseComboText(comboText);
+    if (combo.whole) out.length = 0;
     for (const cb of combo.blocks) {
       const at = out.findIndex(b => (cb.key && b.key === cb.key)
                                  || (!cb.key && String(b.label).toLowerCase() === String(cb.label).toLowerCase() && !b.comboDone));

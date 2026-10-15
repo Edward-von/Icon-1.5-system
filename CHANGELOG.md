@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Le combo non ereditano più la versione base (versione 1.15.3)
+
+### Round di debug del 15 ottobre, punto R1
+
+- **Combo con nome proprio (Charism, Dawn, Fleet, Purgatorio, Fortuna, Reap, Hades…)**: con il combo token la chat
+  stampava la combo più il resto della base (Charge di Chastise / Dervish / Felicity / Pandaemonium / Holy, seal e
+  Mark di Sow, effetti di Astra) e offriva i bottoni degli status della base → il sistema fondeva sempre la combo
+  sulla base, tenendo i blocchi che la combo non riscrive; ma il manuale (p.173: "you use the combo version
+  instead") stampa queste combo come abilità complete, sotto un nome in maiuscolo → ora una combo così sostituisce
+  tutta la base: card della chat, card dell'attacco, bottoni degli status, danno e tag (Reap perde il Mark, Regenerate
+  di Rot lo tiene perché ha il suo).
+- **Bleak Mercy (Sweet Torment) e Revenge (Indignation)**: "replace the base effect with: …" finiva in cima come
+  aggiunta e l'Effect della base restava → ora prende il posto dell'Effect della base; Hit, Miss e Heroic restano.
+- **Low Blow sulla scheda**: con il token attivo il testo della base era barrato come se la combo lo sostituisse,
+  mentre The Hook aggiunge soltanto → ora si barra solo per le combo complete.
+- **Fortuna (Astra)**: la riga "Auto hit: [D]+fray" non era riconosciuta (finiva nella frase iniziale e la card
+  dell'attacco restava senza Hit) → l'etichetta "Auto hit" con lo spazio ora è letta.
+
 ## 13 ottobre 2026 — Correzioni del playtest della 1.15.1 (versione 1.15.2)
 
 ### Playtest locale (Foundry locale, mondo "test", attori di prova poi cancellati)

@@ -33,6 +33,8 @@
  * GM relay) lives in inflict-status.mjs.
  */
 
+import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
+
 /* -------------------------------------------------- */
 /*  Status vocabulary                                  */
 /* -------------------------------------------------- */
@@ -553,8 +555,11 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   // doesn't mention keeps the base wording. "The Hook: Gains range 2 and
   // effect: Shove…" only adds a line, so the base statuses still apply; Devil
   // Hand writes its own Effect blocks, so God Hand's "Seal your foe" doesn't.
+  // A complete combo ability ("CHARISM — Effect: …") replaces every block, so
+  // Chastise's seal or Sow's mark don't ride along with it.
   const combo = comboMode ? String(s.comboEffect ?? "").replace(/<[^>]+>/g, " ") : "";
-  const rewrites = (re) => comboMode && re.test(combo);
+  const whole = comboMode && comboReplacesBase(s.comboEffect);
+  const rewrites = (re) => comboMode && (whole || re.test(combo));
   if (comboMode) add(s.comboEffect, "Combo");
   if (!rewrites(/\b(?:On hit|Hit):/i))              add(s.hitEffect, "Hit");
   if (!rewrites(/\bMiss(?: or area(?: effect)?)?:/i)) add(s.missEffect, "Miss");

@@ -589,7 +589,7 @@
     {{!-- Preview panels — one per equipped ability, hidden by default.
          Clicking a slot above toggles the matching panel. --}}
     {{#each abilityDetails as |ab|}}
-      <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ../comboActive ab.hasCombo)}}icon-ability-preview--combo-active{{/if}}"
+      <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ../comboActive ab.comboWhole)}}icon-ability-preview--combo-active{{/if}}"
            data-ability-id="{{ab.id}}" data-toggle-key="ability-{{ab.id}}" hidden>
         {{#if ../isEditable}}{{#unless ../abilitiesLocked}}
           <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner icon-btn--corner-lg"

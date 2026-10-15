@@ -31,7 +31,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 
 ### Bug
 
-- [ ] **R1. Combo che ereditano tag ed effetti della versione base** (M/L, bug — priorità media nel documento)
+- [x] **R1. Combo che ereditano tag ed effetti della versione base** (M/L, bug — priorità media nel documento)
+      (FATTO il 15 ottobre 2026, versione 1.15.3: le combo con nome in maiuscolo sostituiscono tutta la base,
+      "replace the base effect with" sostituisce l'Effect, barrato sulla scheda solo per le combo complete)
       "Combo tokens with new effects will often inherit tags they shouldn't." Casi:
       - Chastise, Dervish, Felicity: con il combo token la chat stampa sia l'effetto combo sia quello base, compreso
         il tag Charge, che la combo non eredita.
@@ -138,6 +140,18 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       giocarle non scrive niente in chat. Maar non consiglia di legarle alla scheda; con il sistema di carte di
       Foundry servirebbero gli effetti sulle carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms
       of workload."
+
+### Emersi lavorando
+
+- [ ] **Emerso lavorando su R1 — Incubus / Succubus** (S): "Instead of the mark, gain Effect: …" non toglie il Mark
+      della base (stesso problema di Sweet Torment, scritto in un altro modo). Va controllato sul manuale.
+- [ ] **Emerso lavorando su R1 — tag di Reap** (S, dati): i tag della combo di Sow ("attack, range-4, mark, pierce")
+      sono copiati dalla base; il Mark ora lo toglie il codice, ma Reap è un attacco melee (Special) e range 4 resta.
+      Correzione dati nel pack + `COMBO_TAGS_BY_NAME` in `migrations.mjs` per i mondi già esistenti.
+- [ ] **Emerso lavorando su R1 — barrato parziale** (S/M): con Sweet Torment / Indignation sulla scheda si potrebbe
+      barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
+- [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
+      True Strike come se fosse uno status (c'era anche prima).
 
 ---
 

@@ -6,6 +6,8 @@
  * moved here because it's combat logic, not presentation.
  */
 
+import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
+
 /**
  * Extract structured damage info from an ability's free-text fields. The
  * source JSON uses patterns like:
@@ -126,7 +128,9 @@ export function parseComboAbilityDamage(itemSystem) {
   // A combo that restates its trigger is the whole ability written out again
   // (Justice → Judgement: "Interrupt 1. Gamble. Trigger: … Effect: …", no
   // Area Effect line): nothing is inherited from the base version.
-  if (/\btrigger\s*:/i.test(text)) return combo;
+  // Same for a complete combo ability written under a name in capitals
+  // ("PURGATORIO — Attack: …", see comboReplacesBase).
+  if (/\btrigger\s*:/i.test(text) || comboReplacesBase(s.comboEffect)) return combo;
   // No labelled chunk at all but damage-shaped prose: parseAbilityDamage put it in `hit`.
   const anyLabel = rewrites.hit || rewrites.miss || rewrites.area;
   const deals = (c) => c.mult > 0 || c.flat > 0 || c.fray;

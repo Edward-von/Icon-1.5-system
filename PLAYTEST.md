@@ -1656,6 +1656,33 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R1 — combo che ereditavano la versione base (15 ottobre 2026, versione 1.15.3)
+
+Setup: un PG Mendicant con le abilità combo citate sotto (Chanter, Harvester, Sealer, Seer); un PG Stalwart Knave con
+Bleak Mercy, Revenge e Low Blow; per Death Blossom un PG Vagabond;
+un foe da bersagliare. Accendere COMBO ON prima di ogni prova.
+
+- [ ] **Chastise → Charism**: Show in Chat → la card ha solo l'Effect di Charism; niente "Auto hit: Fray", niente
+      "Foe is sealed", niente Charge. Nessun bottone Sealed. Il bottone del danno non tira nulla (Charism non fa danno).
+- [ ] **Dervish → Dawn** e **Felicity → Fleet**: solo l'Effect della combo, senza Charge e senza il testo della base.
+- [ ] **Pandaemonium → Purgatorio**: niente Charge "Increase area to Large Blast"; Hit, Area e i due Effect della combo.
+- [ ] **Astra → Fortuna**: card con riga "Combo — Fortuna: Range 5, Medium Blast.", poi Hit "[D]+fray", Area e Summon.
+      Il gamble e il testo della base non compaiono. Attack: la card dell'attacco mostra la riga Hit di Fortuna.
+- [ ] **Sow → Reap**: niente seal né Mark della base; niente bottone "Mark target" e niente tag Mark nella testata
+      della scheda con la combo accesa (con COMBO OFF il Mark di Sow c'è).
+- [ ] **Holy → Hades**: niente Charge "Grant 3 vigor"; True Strike e Medium Blast nei tag.
+- [ ] **Rot → Regenerate**: il bottone "Mark target (Regenerate)" c'è ancora (la combo ha il suo Mark).
+- [ ] **God Hand → Devil Hand**: come prima (Teleport 1, attacco, esplosione, Exceed "Repeat the effect").
+- [ ] **Bleak Mercy → Sweet Torment**: Hit e Miss della base restano; l'Effect diventa "until the end of your next turn,
+      gain aura 1…" e quello della base ("gains true strike and ignores defiance…") sparisce; niente riga "As above, but".
+- [ ] **Revenge → Indignation**: riga "Gains True Strike", Effect sostituito (vigilance + counter), niente "Gain
+      unstoppable and counter" della base.
+- [ ] **Low Blow → The Hook**: card completa della base più la riga della combo. Sulla scheda, con COMBO ON, il testo
+      di Low Blow **non** è barrato.
+- [ ] **Barrato sulla scheda**: con COMBO ON, il testo base di Chastise / Felicity / Sow è barrato; quello di Bleak
+      Mercy, Revenge, Low Blow, Death Blossom no.
+- [ ] **Death Blossom → Flying Sleeves** (controllo che non sia cambiato): Arc 4 in range 2, danno 2[D]+fray.
+
 ## Esito playtest della 1.15.1 (13 ottobre 2026, Foundry locale, mondo "test", attori di prova poi cancellati)
 
 Provato da un solo client GM, con PG e foe "TEST" creati per l'occasione e poi cancellati insieme ai messaggi, al

@@ -13,6 +13,8 @@
  * Wright p.204-205) + per-job bulleted rule lists + quick-reference tables.
  */
 
+import { comboReplacesBase } from "./ability-blocks.mjs";
+
 /**
  * Each entry is either:
  *   - a string: the full tooltip text
@@ -266,6 +268,11 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   const selfArea = (t) => /^(?:burst-\d+-self|aura(?:-\d+)?)$/i.test(String(t).replace(/\s+/g, "-"));
   if (current !== base && !current.some(isRange) && !current.some(selfArea)) {
     current = [...current, ...base.filter(isRange)];
+  }
+  // A complete combo ability marks only if it writes its own "Mark:" block:
+  // Sow's REAP is a melee attack with no mark, but its tags were copied from Sow.
+  if (comboMode && comboReplacesBase(s.comboEffect) && !/\bMark:/.test(_plainText(s.comboEffect))) {
+    current = current.filter(t => String(t).toLowerCase() !== "mark");
   }
 
   return current.map(formatTag).filter(Boolean).map(tag => {
