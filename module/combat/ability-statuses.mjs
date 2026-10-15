@@ -33,7 +33,7 @@
  * GM relay) lives in inflict-status.mjs.
  */
 
-import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
+import { comboReplacesBase, masteryGainsBothEffects } from "../helpers/ability-blocks.mjs";
 
 /* -------------------------------------------------- */
 /*  Status vocabulary                                  */
@@ -562,8 +562,10 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   // A complete combo ability ("CHARISM — Effect: …") replaces every block, so
   // Chastise's seal or Sow's mark don't ride along with it.
   const combo = comboMode ? String(s.comboEffect ?? "").replace(/<[^>]+>/g, " ") : "";
-  const whole = comboMode && comboReplacesBase(s.comboEffect);
-  const rewrites = (re) => comboMode && (whole || re.test(combo));
+  // A mastery that gives both versions at once (Dervish, p.178) rewrites nothing: base and combo both apply.
+  const both  = comboMode && masteryGainsBothEffects(s);
+  const whole = comboMode && comboReplacesBase(s.comboEffect, s);
+  const rewrites = (re) => comboMode && !both && (whole || re.test(combo));
   if (comboMode) add(s.comboEffect, "Combo");
   if (!rewrites(/\b(?:On hit|Hit):/i))              add(s.hitEffect, "Hit");
   if (!rewrites(/\bMiss(?: or area(?: effect)?)?:/i)) add(s.missEffect, "Miss");

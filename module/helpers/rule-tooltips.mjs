@@ -337,7 +337,7 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   }
   // A complete combo ability marks only if it writes its own "Mark:" block:
   // Sow's REAP is a melee attack with no mark, but its tags were copied from Sow.
-  if (comboMode && comboReplacesBase(s.comboEffect) && !/\bMark:/.test(_plainText(s.comboEffect))) {
+  if (comboMode && comboReplacesBase(s.comboEffect, s) && !/\bMark:/.test(_plainText(s.comboEffect))) {
     current = current.filter(t => String(t).toLowerCase() !== "mark");
   }
 

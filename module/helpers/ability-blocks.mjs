@@ -158,9 +158,25 @@ export function parseComboText(comboText) {
   return { name, lead, blocks, whole };
 }
 
-/** True when the combo version is a complete ability that replaces the base one (see parseComboText). */
-export function comboReplacesBase(comboText) {
-  return parseComboText(comboText).whole;
+/**
+ * True when the combo version is a complete ability that replaces the base one
+ * (see parseComboText) — unless the ability's unlocked mastery gives both
+ * versions at once (pass the ability's system data to check that).
+ */
+export function comboReplacesBase(comboText, system = null) {
+  return parseComboText(comboText).whole && !masteryGainsBothEffects(system);
+}
+
+/**
+ * True when the ability's unlocked mastery uses the base and the combo version
+ * together: Dervish's BEACON OF HOPE "You can empower this ability to gain both
+ * effects at once and automatically activate their charge effects" (p.178).
+ * Read from the mastery text, so any mastery worded this way behaves the same.
+ */
+export function masteryGainsBothEffects(system) {
+  const s = system ?? {};
+  if (!s.isCombo || !s.masteryUnlocked || !String(s.comboEffect ?? "").trim()) return false;
+  return /\bgain both effects\b/i.test(String(s.mastery ?? "").replace(/<[^>]+>/g, " "));
 }
 
 /**
@@ -344,11 +360,19 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
 
   // Combo version: overwrite the blocks it rewrites, append the ones it adds,
   // and put its modifier sentence at the top. A complete combo ability keeps
-  // nothing of the base blocks.
+  // nothing of the base blocks. A mastery that gives both versions at once
+  // (Dervish, p.178) keeps the base blocks and adds the combo's after them,
+  // labelled with the combo's name ("Dawn — Effect").
   if (comboText) {
     const combo = parseComboText(comboText);
-    if (combo.whole) out.length = 0;
+    const both  = masteryGainsBothEffects(s);
+    if (combo.whole && !both) out.length = 0;
     for (const cb of combo.blocks) {
+      if (both) {
+        const name = comboDisplayName(comboText);
+        out.push({ key: cb.key || "section", label: name ? `${name} — ${cb.label}` : cb.label, text: cb.text, fromText: true, combo: true, comboDone: true });
+        continue;
+      }
       const at = out.findIndex(b => (cb.key && b.key === cb.key)
                                  || (!cb.key && String(b.label).toLowerCase() === String(cb.label).toLowerCase() && !b.comboDone));
       if (at >= 0) out[at] = { ...out[at], text: cb.text, combo: true, comboDone: true };

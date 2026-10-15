@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Dervish: base e combo insieme con la mastery (versione 1.15.33)
+
+### Round di debug del 15 ottobre, punto R29
+
+- **Dervish con la mastery**: Maar chiedeva che, con la mastery sbloccata, la card in chat stampasse entrambi gli
+  effetti, come comportamento predefinito. La mastery BEACON OF HOPE dice "You can empower this ability to gain both
+  effects at once and automatically activate their charge effects. This also counts as spending a combo token,
+  though you don't actually need to spend one" (p.178) → con la mastery sbloccata, **Show in Chat** di Dervish posta
+  una card "Dervish + Dawn" con l'Effect e il Charge di Dervish e, sotto, il blocco "Dawn — Effect" (aura 1, +1 boon
+  ai tiri salvezza), anche senza token combo; i bottoni Inflict prendono gli status di entrambe le versioni. Se il
+  token è acceso viene speso come prima, se è spento resta spento. Sulla scheda, col token acceso, il testo base non
+  è più barrato. Il comportamento è letto dal testo della mastery ("gain both effects"), non dal nome
+  dell'abilità. Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — Combo alternativa data dalla mastery (versione 1.15.32)
 
 ### Round di debug del 15 ottobre, punto R28

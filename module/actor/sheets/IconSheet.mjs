@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -442,7 +442,7 @@ export class IconSheet extends BaseActorSheet {
         comboEffect: await this._enrichAbility(s.comboEffect),
         hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
         // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
-        comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
+        comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect, s)),
         // Talent visibility:
         //   - Show Talent I only if it has content AND (no choice yet OR I is chosen)
         //   - Show Talent II only if it has content AND (no choice yet OR II is chosen)
@@ -1648,7 +1648,7 @@ export class IconSheet extends BaseActorSheet {
       comboEffect: await this._enrichAbility(s.comboEffect),
       hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
       // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
-      comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect)),
+      comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect, s)),
       // Only show a talent in chat once it has actually been unlocked/selected.
       // talentSelected: 0 = none unlocked, 1 = Talent I, 2 = Talent II.
       hasTalent1: !!(s.talent1 && s.talent1.trim()) && (s.talentSelected ?? 0) === 1,
@@ -1662,16 +1662,20 @@ export class IconSheet extends BaseActorSheet {
   static async #onAbilityShowInChat(event, target) {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
-    if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
-    const ab = await this._getAbilityDetail(itemId);
+    const item = this.document.items.get(itemId);
+    if (!(await this._pickCombo(item))) return;
+    // A mastery that gives both versions at once (Dervish's BEACON OF HOPE,
+    // p.178: "gain both effects at once … you don't actually need to spend"
+    // a combo token) prints the base and the combo together, token or not.
+    const both = masteryGainsBothEffects(item?.system);
+    const ab = await this._getAbilityDetail(itemId, both ? { comboMode: true } : {});
     if (!ab) return;
 
     const comboMode = ab.comboArmed;
-    _log(`abilityShowInChat — "${ab.name}" | comboMode: ${comboMode}`);
+    _log(`abilityShowInChat — "${ab.name}" | comboMode: ${comboMode} | both: ${both}`);
 
     // Statuses the text inflicts → "Inflict" buttons for the current targets
     // (non-attack abilities like Implode / Gentleness only have this card).
-    const item = this.document.items.get(itemId);
     const sys  = this._comboSystem(item);
     const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
 
@@ -1681,8 +1685,10 @@ export class IconSheet extends BaseActorSheet {
     const cardAb = comboMode
       ? { ...ab,
           // "Devil Hand", with "God Hand combo" beside it (the base name when the combo has none).
-          name:    comboDisplayName(sys.comboEffect) || ab.name,
-          comboOf: comboDisplayName(sys.comboEffect) ? ab.name : "",
+          // Both versions at once: "Dervish + Dawn".
+          name:    both ? [ab.name, comboDisplayName(sys.comboEffect)].filter(Boolean).join(" + ")
+                        : comboDisplayName(sys.comboEffect) || ab.name,
+          comboOf: !both && comboDisplayName(sys.comboEffect) ? ab.name : "",
           blocks: await buildAbilityBlocks(sys, {
             sections: parseAbilitySections(sys.description).sections,
             enrich:   t => this._enrichAbility(t),
@@ -1698,7 +1704,8 @@ export class IconSheet extends BaseActorSheet {
       content,
     });
 
-    if (comboMode) {
+    // Both versions printed without an armed token: there is no token to spend.
+    if (comboMode && this._comboArmed(item)) {
       // Consume the token, but remember which ability it was spent on: the
       // damage roll comes as a separate click afterwards, and by then the
       // token reads 0 — the stash lets the damage dialog default to the

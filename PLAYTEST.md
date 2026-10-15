@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R29 — Dervish: base e combo insieme con la mastery (15 ottobre 2026, versione 1.15.33)
+
+Setup: un PG Chanter con Dervish (Mendicant), un alleato sulla mappa e targettato.
+
+- [ ] **Senza mastery niente cambia**: mastery non sbloccata, token spento → Show in Chat posta Dervish normale;
+      token acceso → posta "Dawn (Dervish combo)" con il solo Effect di Dawn, e il token si spegne.
+- [ ] **Con la mastery, senza token**: sbloccare la mastery, token spento → Show in Chat posta "Dervish + Dawn" con
+      badge COMBO: Effect di Dervish (fly 1, whisk), Charge (second ally), poi "Dawn — Effect" (aura 1, +1 boon sui
+      save) col fulmine, e la riga ★ Mastery. Il token resta spento.
+- [ ] **Con la mastery e il token acceso**: stessa card "Dervish + Dawn"; il token si spegne come per ogni combo.
+- [ ] **Scheda**: mastery sbloccata, token acceso → nell'anteprima dell'abilità il testo base di Dervish non è
+      barrato (senza mastery lo è).
+- [ ] **Le altre combo non cambiano**: con il token acceso, God Hand (Devil Hand) e Sow (Reap) postano ancora solo
+      la versione combo, con o senza mastery.
+
 ## R28 — Combo alternativa data dalla mastery (15 ottobre 2026, versione 1.15.32)
 
 Setup: un PG Chanter con Felicity, un Harvester con Rot, un Sealer con God Hand (Talent I o II scelto) e Justice; un
