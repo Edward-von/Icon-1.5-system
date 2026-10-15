@@ -682,6 +682,18 @@
               </span>
             {{/each}}
           {{/if}}
+          {{#if ab.canTrack}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--mark"
+                    data-action="abilityTrack" data-item-id="{{ab.id}}"
+                    title="Track the targeted token: a reminder of who this ability is on, not a mark (it doesn't replace your marks). Target exactly one token first: hover it and press T">
+              <i class="fa-solid fa-location-dot"></i> Track target
+            </button>
+            {{#each ab.trackMarks as |m|}}
+              <span class="icon-mark-chip" title="Tracked by {{ab.name}} (not a mark)"><i class="fa-solid fa-location-dot"></i> {{m.targetName}}
+                <button type="button" class="icon-mark-chip__x" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="Stop tracking">✕</button>
+              </span>
+            {{/each}}
+          {{/if}}
           {{#if ab.areaLabel}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--area"
                     data-action="abilityPlaceArea" data-item-id="{{ab.id}}"

@@ -17,6 +17,12 @@
  *     The mark rule is written as "each ability TYPICALLY places only one mark"
  *     (p.95): multimark is that exception, so only the one-mark-per-ability
  *     sweep is lifted. One mark per marker → target pair still holds.
+ *   Tracker — not a mark: a reminder on a character an ability designates for
+ *     a while without marking it (Grand Banishment p.193, "Until the end of
+ *     that foe's next turn…"; The Tower p.203, "At the end of that foe's
+ *     turn, gamble…"). Same effect and chips as a mark, flagged `tracked`,
+ *     named "Tracked — …": it neither replaces nor is replaced by the
+ *     marker's marks, and doesn't end when the marker is defeated.
  *   Stacking marks — a few foe marks say so in their text ("This mark can be
  *     placed more than once and stacks indefinitely", Royal Guard's Battalion
  *     of Limbs p.332; Malice, Vessel Knight). Placing such a mark again on the
@@ -70,6 +76,19 @@ export function markFromTags(tags) {
   const keys = (Array.isArray(tags) ? tags : []).map(tagKey);
   const multi = keys.includes("multimark") || keys.includes("multi-mark");
   return { can: multi || keys.includes("mark"), multi };
+}
+
+/**
+ * Does this ability designate a character something happens to later, so a
+ * "Track target" reminder is worth having? Read from the text: "that foe's
+ * (next) turn" / "that character's next turn" (Grand Banishment, The Tower,
+ * Showdown, Assassinate, Great Giorgios, Pyroclast). Marking abilities
+ * already have their mark, so they get no tracker.
+ */
+export function abilityTracks(system, tags = []) {
+  if (markFromTags(tags).can) return false;
+  const text = Object.values(system ?? {}).filter(v => typeof v === "string").join(" ").replace(/<[^>]+>/g, " ");
+  return /\bthat (?:foe|character|ally)['’]s (?:next )?turn\b/i.test(text);
 }
 
 /** Can this client write effects on `actor` directly? Otherwise relay to the GM. */
@@ -239,7 +258,8 @@ export function markStacks(text) {
 }
 
 /** Effect name of a mark, with its stack count when it has more than one. */
-function _markName(abilityName, sourceName, stacks) {
+function _markName(abilityName, sourceName, stacks, tracked = false) {
+  if (tracked) return `Tracked — ${abilityName} (${sourceName})`;
   return `Marked${stacks > 1 ? ` ×${stacks}` : ""} — ${abilityName} (${sourceName})`;
 }
 
@@ -270,16 +290,18 @@ export function marksBy(actorId, abilityKey = null) {
  * @param {boolean} [opts.multi]     `multimark` ability: it keeps its older marks
  * @param {string} [opts.stackText]  every text of the ability, read to tell whether the mark stacks
  *                                   (defaults to `text`)
+ * @param {boolean} [opts.track]     a tracker, not a mark (see the header): no stacks, and it
+ *                                   leaves the marker's marks on the target alone
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false }) {
   if (!source || !target) return null;
   if (_needsRelay(target)) {
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText });
-    ui.notifications.info(`Mark sent to the GM to place on "${target.name}".`);
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track });
+    ui.notifications.info(`${track ? "Tracker" : "Mark"} sent to the GM to place on "${target.name}".`);
     return null;
   }
   // A stacking mark placed again on the same character: one more stack.
-  if (markStacks(stackText ?? text)) {
+  if (!track && markStacks(stackText ?? text)) {
     const same = marksOn(target).find(m => m.sourceActorId === source.id && m.abilityKey === abilityKey);
     const eff = same && await fromUuid(same.uuid);
     if (eff) {
@@ -299,23 +321,25 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
     const eff = await fromUuid(m.uuid);
     if (eff) { await eff.delete(); _log(`mark of ${abilityName} moved from ${m.targetName}`); }
   }
-  // One mark from this character on the target: an older one from another ability is replaced.
-  for (const m of marksOn(target).filter(m => m.sourceActorId === source.id)) {
+  // One mark from this character on the target: an older one from another ability
+  // is replaced. Trackers aren't marks: they don't replace, and aren't replaced.
+  if (!track) for (const m of marksOn(target).filter(m => m.sourceActorId === source.id && !m.tracked)) {
     const eff = await fromUuid(m.uuid);
     if (eff) { await eff.delete(); _log(`${target.name}: mark ${m.abilityName} from ${source.name} replaced`); }
   }
   const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
   const [effect] = await target.createEmbeddedDocuments("ActiveEffect", [{
-    name: _markName(abilityName, source.name, 1),
+    name: _markName(abilityName, source.name, 1, track),
     img:  MARK_IMG,
     description: plain,
     flags: { [NS]: { isStatus: false, isMark: true, mark: {
       sourceActorId: source.id, sourceActorUuid: source.uuid, sourceName: source.name,
-      abilityKey, abilityName, text: plain, stacks: 1,
+      abilityKey, abilityName, text: plain, stacks: 1, ...(track ? { tracked: true } : {}),
     } } },
   }]);
-  _log(`${source.name} marks ${target.name} with ${abilityName}`);
-  await _chat(source, `<strong><i class='fa-solid fa-crosshairs'></i> ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
+  _log(`${source.name} ${track ? "tracks" : "marks"} ${target.name} with ${abilityName}`);
+  if (track) await _chat(source, `<strong><i class='fa-solid fa-location-dot'></i> ${escapeHTML(source.name)}</strong> tracks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong> <em>(a reminder, not a mark)</em>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
+  else await _chat(source, `<strong><i class='fa-solid fa-crosshairs'></i> ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
   _refreshSheet(source);   // the chip on the marker's panel lives on another actor's sheet
   return effect;
 }
@@ -328,7 +352,7 @@ export async function removeMark(effectUuid, { silent = false } = {}) {
   if (_needsRelay(target)) { _relay({ method: "removeMark", effectUuid }); return true; }
   const mark = effect.getFlag(NS, "mark") ?? {};
   await effect.delete();
-  if (!silent) await _chat(target, `The mark <strong>${escapeHTML(mark.abilityName ?? effect.name)}</strong> on <strong>${escapeHTML(target?.name ?? "")}</strong> ends.`);
+  if (!silent) await _chat(target, `The ${mark.tracked ? "tracker" : "mark"} <strong>${escapeHTML(mark.abilityName ?? effect.name)}</strong> on <strong>${escapeHTML(target?.name ?? "")}</strong> ends.`);
   if (mark.sourceActorUuid) _refreshSheet(await fromUuid(mark.sourceActorUuid));
   return true;
 }
@@ -338,9 +362,9 @@ function _refreshSheet(actor) {
   try { if (actor?.sheet?.rendered) actor.sheet.render(false); } catch { /* sheet gone */ }
 }
 
-/** All marks placed by an actor end (p.103: when the marker is defeated). */
+/** All marks placed by an actor end (p.103: when the marker is defeated). Trackers aren't marks: they stay. */
 export async function removeMarksBy(actorId, reason = "") {
-  const marks = marksBy(actorId);
+  const marks = marksBy(actorId).filter(m => !m.tracked);
   for (const m of marks) {
     const eff = await fromUuid(m.uuid);
     if (eff) await eff.delete();
@@ -380,7 +404,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track });
       break;
     }
     case "removeMark":

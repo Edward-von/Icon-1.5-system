@@ -14,7 +14,7 @@ import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.m
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
          areasInText, areaDrawnFromTarget } from "../../canvas/area-templates.mjs";
-import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
+import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
 import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses } from "../../combat/ability-statuses.mjs";
@@ -154,6 +154,7 @@ export class IconSheet extends BaseActorSheet {
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
       abilityMark:        IconSheet.#onAbilityMark,
+      abilityTrack:       IconSheet.#onAbilityTrack,
       removeMark:         IconSheet.#onRemoveMark,
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
@@ -393,6 +394,9 @@ export class IconSheet extends BaseActorSheet {
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id),
         marks:       _abilityMarks(actor.id, a.id, _comboMark(a.system), _altComboMark(a.system)),
+        // Track button: a reminder on the designated character that isn't a mark (marks.mjs)
+        canTrack:    abilityTracks(s, tags),
+        trackMarks:  marksBy(actor.id, `${a.id}:track`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
@@ -849,7 +853,7 @@ export class IconSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
-    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks, tracked: !!m.tracked }));
     context.conditions = {
       // Statuses the sheet trackers / marks replace are left out (tracker-statuses.mjs)
       negative: markActive(visibleStatuses(actor, groups.negative)),
@@ -1602,6 +1606,8 @@ export class IconSheet extends BaseActorSheet {
       summons:     summonsForAbility(s, s.jobName),
       infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id),
       marks:       _abilityMarks(this.document.id, item.id, _comboMark(item.system), _altComboMark(item.system)),
+      canTrack:    abilityTracks(s, tags),
+      trackMarks:  marksBy(this.document.id, `${item.id}:track`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
       talentSelected:  s.talentSelected ?? 0,
       masteryUnlocked: !!s.masteryUnlocked,
       powerDie:    powerDieView(s),
@@ -2046,6 +2052,27 @@ export class IconSheet extends BaseActorSheet {
     _log(`abilityMark — "${item.name}" on ${targets[0].name}`);
     const multi = markFromTags(resolveAbilityTags(item.system, { comboMode: this._comboArmed(item) })).multi;
     await applyMark({ source: this.document, target: targets[0].actor, abilityKey: item.id, abilityName: item.name, text, multi });
+  }
+
+  /**
+   * Track the targeted token with this ability: a reminder that isn't a mark
+   * (Grand Banishment, The Tower — marks.mjs applyMark `track`). Its text is
+   * the ability's own rules text; one tracker per ability.
+   */
+  static async #onAbilityTrack(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
+    if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to track it (hover it and press T)."); return; }
+    // The Tower keeps "At the end of that foe's turn…" in its Area Effect field, not in the description.
+    const s = item.system;
+    const text = [
+      ...parseAbilitySections(s.description).sections.map(sec => `${sec.label}: ${sec.text}`),
+      ...[["Hit", s.hitEffect], ["Area Effect", s.areaEffect]].filter(([, t]) => typeof t === "string" && t.trim()).map(([l, t]) => `${l}: ${t}`),
+    ].join(" ");
+    _log(`abilityTrack — "${item.name}" on ${targets[0].name}`);
+    await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `${item.id}:track`, abilityName: item.name, text, track: true });
   }
 
   /** ✕ on a mark chip (ability panel) or in the Conditions tab list. */

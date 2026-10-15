@@ -226,8 +226,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.33: con la mastery sbloccata ("gain both effects", p.178) Show in Chat
       posta "Dervish + Dawn" con i blocchi base, il Charge e "Dawn — Effect", e gli status di entrambe, anche senza
       token; il token si spende solo se acceso. Letto dal testo della mastery. Solo codice.)
-- [ ] **R30. Segno su un personaggio che non conta come mark** (M)
+- [x] **R30. Segno su un personaggio che non conta come mark** (M)
       Grand Banishment, The Tower ("probably just mark, renamed").
+      (FATTO il 15 ottobre 2026, versione 1.15.34: bottone "Track target" sulle abilità PG senza mark il cui testo dice
+      "that foe's / that character's (next) turn" (Grand Banishment p.193, The Tower p.203, anche Showdown,
+      Assassinate, Great Giorgios, Pyroclast): segno "Tracked — …" con la grafica e la rimozione dei mark, ma non
+      rimpiazza né viene rimpiazzato dai mark (p.95), non finisce alla sconfitta del PG, uno per abilità. Solo codice.)
 - [ ] **R31. Pubblicare in chat solo il trigger o la sotto-azione della mastery** (S/M)
       Symphony, Spirit Shrine.
 - [ ] **R32. Dimensione dell'aura con +/-** (S/M)

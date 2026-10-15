@@ -266,7 +266,7 @@ export class LegendSheet extends BaseActorSheet {
             : (actor.statuses?.has(s.id) ?? false),
       };
     });
-    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks }));
+    context.marksOnActor = marksOn(actor).map(m => ({ uuid: m.uuid, abilityName: m.abilityName, sourceName: m.sourceName, text: m.text, stacks: m.stacks, tracked: !!m.tracked }));
     context.conditions = {
       // Statuses the sheet trackers / marks replace are left out (tracker-statuses.mjs)
       negative: markActive(visibleStatuses(actor, groups.negative)),

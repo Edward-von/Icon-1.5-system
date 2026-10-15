@@ -67,7 +67,7 @@ function _statusesFor(actor) {
   }
   // Ability-specific marks: one row each, × ends the mark (relayed to the GM if needed)
   for (const m of marksOn(actor)) {
-    out.push({ id: `mark:${m.uuid}`, name: `${m.abilityName} (${m.sourceName})`, img: m.img, count: 0, adjustable: false, title: m.text ?? "" });
+    out.push({ id: `mark:${m.uuid}`, name: `${m.tracked ? "Tracked: " : ""}${m.abilityName} (${m.sourceName})`, img: m.img, count: 0, adjustable: false, title: m.text ?? "" });
   }
   return out;
 }

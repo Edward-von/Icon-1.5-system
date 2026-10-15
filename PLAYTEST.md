@@ -1656,6 +1656,32 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R30 — Track target: un segno che non è un mark (15 ottobre 2026, versione 1.15.34)
+
+Setup: un PG Sealer con Grand Banishment e una qualsiasi abilità con Mark (es. Divine Aegis), un PG Seer con The
+Tower; due foe sulla mappa.
+
+- [ ] **Bottone**: nell'anteprima di Grand Banishment e di The Tower c'è **Track target** (icona segnaposto); su
+      Divine Aegis (mark) c'è solo Mark target, niente Track; su un'abilità qualunque senza "that foe's turn" (es.
+      Sanctify) nessuno dei due.
+- [ ] **Senza target / due target**: Track target senza token targettato o con due → avviso "Target exactly one
+      token to track it", nessun segno.
+- [ ] **Track**: targettare il foe A, Track target su Grand Banishment → in chat "<PG> tracks <A> — Grand
+      Banishment (a reminder, not a mark)" col testo; sotto l'abilità compare il chip "A ✕"; nel tab Conditions di A
+      la riga "Tracked: Grand Banishment — from <PG>" col testo; nel pannello status del token di A la riga
+      "Tracked: Grand Banishment (<PG>)".
+- [ ] **The Tower**: Track target su The Tower → il testo del segno contiene "Area Effect: At the end of that foe's
+      turn, gamble…".
+- [ ] **Non conta come mark**: con A tracciato da Grand Banishment, Mark target di Divine Aegis su A → il segno resta
+      e il mark si aggiunge; poi Track target di nuovo su A → il mark di Divine Aegis resta.
+- [ ] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato).
+- [ ] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
+      chat "The tracker Grand Banishment on B ends.".
+- [ ] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta.
+- [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono.
+- [ ] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
+      (GM connesso).
+
 ## R29 — Dervish: base e combo insieme con la mastery (15 ottobre 2026, versione 1.15.33)
 
 Setup: un PG Chanter con Dervish (Mendicant), un alleato sulla mappa e targettato.

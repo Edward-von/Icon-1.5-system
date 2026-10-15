@@ -126,7 +126,11 @@
         {{#each marksOnActor as |m|}}
           <li class="icon-mark-list__item">
             <div class="icon-mark-list__head">
-              <strong><i class="fa-solid fa-crosshairs"></i> {{m.abilityName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}</strong>
+              {{#if m.tracked}}
+                <strong><i class="fa-solid fa-location-dot"></i> Tracked: {{m.abilityName}}</strong>
+              {{else}}
+                <strong><i class="fa-solid fa-crosshairs"></i> {{m.abilityName}}{{#if (gt m.stacks 1)}} ×{{m.stacks}}{{/if}}</strong>
+              {{/if}}
               <span class="icon-mark-list__source">from {{m.sourceName}}</span>
               {{#if ../isEditable}}
                 <button type="button" class="icon-btn icon-btn--sm icon-btn--remove" data-action="removeMark" data-effect-uuid="{{m.uuid}}" title="End this mark">✕ End mark</button>

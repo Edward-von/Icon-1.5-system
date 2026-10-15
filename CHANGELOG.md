@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Track target: un segno che non è un mark (versione 1.15.34)
+
+### Round di debug del 15 ottobre, punto R30
+
+- **Segno che non conta come mark**: Maar chiedeva un modo di segnare il personaggio scelto da Grand Banishment
+  (Sealer, p.193: "choose a foe in range… Until the end of that foe's next turn, they take 3 divine damage…") e da
+  The Tower (Seer, p.203: "At the end of that foe's turn, gamble…"), che non sono mark, senza che conti come mark →
+  le abilità del PG il cui testo parla di "that foe's / that character's (next) turn" e che non hanno già il tag
+  mark hanno un bottone **Track target** (icona a segnaposto): con un solo token targettato mette sul bersaglio un
+  segno "Tracked — <abilità> (<PG>)" con il testo dell'abilità, che si vede come i mark (chip con ✕ sotto
+  l'abilità, riga "Tracked: …" nel tab Conditions del bersaglio e nel pannello status del token) e si toglie allo
+  stesso modo. Per le regole non è un mark (p.95, "a character can only mark another character with one mark at a
+  time"): non rimpiazza i mark del PG sullo stesso bersaglio e non viene rimpiazzato da loro, non finisce quando il
+  PG è sconfitto, non ha stack; un nuovo Track della stessa abilità sposta il segno. Finisce a fine combattimento come
+  i mark. Oltre alle due abilità il bottone compare anche su Showdown, Assassinate, Great Giorgios e Pyroclast (stesso
+  schema "alla fine del turno di quel nemico"). Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — Dervish: base e combo insieme con la mastery (versione 1.15.33)
 
 ### Round di debug del 15 ottobre, punto R29
