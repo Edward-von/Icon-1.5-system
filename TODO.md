@@ -16,6 +16,131 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
+## Round di debug del 15 ottobre 2026 — documento "15.10.2026.docx"
+
+Versione aggiornata del documento del 9 ottobre (vedi "Feedback di Maar — documento Icon VTT Bugs" più sotto), con in più
+la sezione **Ability Bugs** (Mendicant e Stalwart completi; il Vagabond "ill do this later lol"; sezione "FAQ
+Changes/Editions" ancora vuota). I commenti nel documento sono di Turz Ven. Un punto = un `/prossimo` = un commit.
+
+Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.15.2):
+- Save automatici doppi con più GM: fatto nella 1.16.5 (dentro la 1.15.1 pubblica). Commento: "Will test this out
+  sometime soon- not often this comes up LOL".
+- Bottoni dell'Encounter planner piccoli: fatto nella 1.15.0 (Sessione A).
+- Skin/temi per fazione: scartata da Edoardo il 9 ottobre (commento: "low priority request").
+- Feedback positivi (planner, save automatici, keyword al passaggio del mouse, scheda, clock, GIF dei bersagli, guida).
+
+### Bug
+
+- [ ] **R1. Combo che ereditano tag ed effetti della versione base** (M/L, bug — priorità media nel documento)
+      "Combo tokens with new effects will often inherit tags they shouldn't." Casi:
+      - Chastise, Dervish, Felicity: con il combo token la chat stampa sia l'effetto combo sia quello base, compreso
+        il tag Charge, che la combo non eredita.
+      - Pandaemonium: la combo eredita Charge.
+      - Astra: "Combo version inherits the effects of the non-combo".
+      - Sow: la combo eredita il mark della base.
+      - Bleak Mercy, Revenge: la combo non sostituisce l'effetto (Revenge: in chat).
+      - Caso opposto, Low Blow: la combo è un effetto *in più*, ma la scheda barra il testo combo come se lo
+        sostituisse.
+      Probabilmente è una sola logica ("la combo sostituisce" contro "la combo aggiunge"). Va controllata sul manuale
+      abilità per abilità. Se le cause sono diverse, dividere il punto.
+- [ ] **R2. Vigor oltre il massimo** (S/M, bug — priorità media)
+      "Players cannot increase vigor amount by above maximum (required by abilities like Gran Reversa's Mastery
+      benefit)". Verificare sul manuale la mastery di Gran Reversa e quanto può superare il massimo.
+- [ ] **R3. Nessun avviso quando scade un'aura** (S/M, bug — priorità bassa)
+      "No prompt on removing aura effects in chatbox or ability sheet for when an aura effect expires, requiring the
+      player to go into" (la frase nel documento si interrompe lì; probabilmente: andare a toglierla a mano).
+- [ ] **R4. Abilità trascinate dal compendio senza la scelta di talenti/mastery** (M, bug — priorità bassa)
+      "Seems to only happen when adding many abilities quickly, so might be a menu issue."
+- [ ] **R5. Tag grigi senza tooltip** (S, bug)
+      Dropkick: "Sacrifice" grigio e senza tooltip. Comet: "Medium Blast" grigio. Catapult: "Interrupt 1" in cima
+      alla card senza tooltip; con la mastery spuntata compare "Interrupt 3" ("Maybe an old implementation of the tag
+      system?").
+- [ ] **R6. Parole del testo di colore evidenziate come keyword** (S, bug)
+      Battering Ram "flying", Six Hells Trigram "summon" (come se fosse il tipo di personaggio Summon), Revenge "armor".
+- [ ] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
+- [ ] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
+- [ ] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)
+      Nella card (foto nel documento) "Trigger: A foe enters or exits the area." sta in cima come se fosse il trigger
+      dell'abilità, e "Spirit Away —" resta appeso in fondo al Terrain Effect. Testo giusto secondo il documento:
+      "Terrain effect: End your turn and create a ring of mushrooms, a burst 2 (self) terrain effect. The ring can be
+      created overlapping any terrain and underneath characters. The ring lasts until this ability is used again.
+      While the ring is active, gain the following interrupt:" e poi l'interrupt (Spirit Away). Controllare sul manuale.
+- [ ] **R10. Testo del Wild Card ripetuto per intero in Chaos Tarot e Sleight of Hand** (S, dati)
+- [ ] **R11. Tabelle poco leggibili** (S/M)
+      Monogatari ("Some line breaks would be useful"), tabella del gamble di Chaos Tarot.
+- [ ] **R12. Raging Wolf ed Eclipse formattati male** (S/M, dati)
+      Eclipse: "Formatted strangely. Please revisit." Raging Wolf: "formatted poorly and hard to read".
+- [ ] **R13. The Tower: la mastery raddoppia il danno sbagliato** (S, regola)
+      Il manuale dice doppio danno dai meteoriti di *Eclipse*, il sistema lo applica al meteorite della Tower.
+      "Strange, but that's how it was written." Verificare la pagina.
+- [ ] **R14. Provoke: la card del danno propone 1 invece di 2** (S, bug)
+      Va bene per il danno subito, ma il danno base rimandato indietro è 2.
+- [ ] **R15. Gentleness: il tiro del danno non seleziona Divine** (S, bug)
+- [ ] **R16. God Hand: Talent 1 e 2 non danno i bonus a Devil Hand (combo) e a Fists of Heaven and Hell (mastery)
+      nella card dell'attacco** (S/M, bug)
+- [ ] **R17. Polaris: il Talent 1 non permette di marcare un personaggio** (S/M, bug)
+- [ ] **R18. Intimidate: la mastery non propone Unstoppable** (S, bug)
+      Né il bottone per applicarlo a sé, né il testo di promemoria.
+- [ ] **R19. Aure mancanti o sbagliate** (M, bug)
+      - Endless Battlement: chiede la dimensione dell'aura (proposta 3) anche se è sempre 1, e la mette solo su chi
+        la lancia, mentre va su un alleato.
+      - Dervish Talent 1: non dà il tag aura e non si applica facilmente a sé.
+      - Shieldmaster (tratto): niente aura su di sé.
+      - Bleak Mercy combo e Dark Knight mastery: niente scelta dell'aura.
+      Endless Battlement potrebbe essere un problema separato: se la causa è diversa, dividere.
+- [ ] **R20. Sow: l'Arc 4 della mastery non è piazzabile come area** (S, bug)
+- [ ] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
+
+### Richieste
+
+- [ ] **R22. FAQ narrativa: difficoltà dei tiri (Trivial, Risky/standard, Heroic)** (S)
+- [ ] **R23. Danno extra delle mastery** (M)
+      Harvest: l'area della mastery si piazza, ma il danno della mastery non si tira facilmente (secondo bottone?).
+      Draken Cross: i 2 danni divine della mastery non si tirano senza metterli nel danno dell'area.
+      Commento di Turz Ven: "I think most issues of this variety can be solved by simply adding a 'Other' option onto
+      the damage roller."
+- [ ] **R24. Più istanze dello stesso danno nel damage roller** (M)
+      Abilità che infliggono lo stesso danno più volte (per la sinergia con Vulnerable), es. Strongarm.
+- [ ] **R25. Gamble cliccabile** (M)
+      Bottone per il gamble sulle abilità che lo hanno (es. Riposte), con dadi da aggiungere o togliere al momento, e
+      spazio per i tratti del Fool che fissano quei numeri. Commento di Turz Ven: "Remember that like armor/Vigilance,
+      gamble only cares about the highest number rolled; so, 3d6kh1, not 3d6."
+- [ ] **R26. [D] che mostra i dadi veri nelle card delle abilità** (M)
+      Sulla scheda di un PG "2d10" invece di "2[D]"; resta [D] prima della scelta o fuori dalla scheda. Il damage
+      roller lo fa già.
+- [ ] **R27. "Damage Utility" sulla scheda PG** (M)
+      La macro del danno anche in fondo alla scheda, come la finestra del danno standard ma più modulare.
+- [ ] **R28. Combo alternativa data dalla mastery** (M)
+      Felicity (scelta tra Fleet e Fantasia con un menù allo Show in Chat), God Hand, Justice, Rot (marcare per
+      Regrowth invece che per Regenerate).
+- [ ] **R29. Dervish: con la mastery, stampare in chat entrambi gli effetti** (S)
+- [ ] **R30. Segno su un personaggio che non conta come mark** (M)
+      Grand Banishment, The Tower ("probably just mark, renamed").
+- [ ] **R31. Pubblicare in chat solo il trigger o la sotto-azione della mastery** (S/M)
+      Symphony, Spirit Shrine.
+- [ ] **R32. Dimensione dell'aura con +/-** (S/M)
+      Gentleness: l'aura della mastery cresce; stessi controlli della larghezza della Line.
+- [ ] **R33. Oggetti e segni piazzabili sulla mappa** (L/XL, da decidere)
+      Symphony (motes, terrain effect), Fairy Ring (megamushroom della mastery), Comet ("thrown weapon"), Spirit
+      Shrine (santuario con la sua aura), Gates of Hell (flash step della mastery), Eclipse (il singolo dangerous
+      terrain dove cade la stella), Astra (medium blast messo sui foe), Polaris (uno spazio a terra), Blood Grove
+      (disegnare più spazi per il Talent 2).
+- [ ] **R34. Open the Gates riformattata** (S, da decidere: è il manuale a essere ambiguo)
+      Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
+      versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed.
+- [ ] **R35. Righteous Disdain usabile dalle card del danno** (L, da decidere)
+      Commento di Turz Ven: "If you don't have a clean way to implement this (and probably make it modular so other
+      interrupts could do similar on damage cards as needed), then I wouldn't do it. Keep in mind there are weird
+      interrupts like Dire Parry's mastery which lets it bank interrupt usages, or the ones from seer that wholly
+      prevent damage."
+- [ ] **R36. Carte del Seer** (XL, da decidere)
+      "Currently practically nonfunctional": i tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e
+      giocarle non scrive niente in chat. Maar non consiglia di legarle alla scheda; con il sistema di carte di
+      Foundry servirebbero gli effetti sulle carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms
+      of workload."
+
+---
+
 ## ⚠️ Già fatto nel round 4 (commit e87b2d8, 30 agosto) — CONFERMATI da Edoardo il 1 ottobre 2026
 
 Maar li elenca ancora come bug il 5 settembre: o usa una build vecchia, o il fix non copre il suo caso.

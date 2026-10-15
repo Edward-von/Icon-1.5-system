@@ -13,3 +13,6 @@ _installed-backup-*/
 # OS noise
 Thumbs.db
 Desktop.ini
+
+# Playtester feedback documents (private, never published)
+docs debug/
