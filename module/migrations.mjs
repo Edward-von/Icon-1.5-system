@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 23;
+export const CURRENT_SCHEMA_VERSION = 24;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -894,6 +894,32 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 23: ${n} copy/copies of Eclipse / Raging Wolf now show their list one item per row`);
+  },
+
+  /* 24 — The Tower's mastery Superbolide (Seer, p.203) says the chosen
+   * character takes double damage "from Eclipse's meteor effect": that is
+   * the book's wording, odd as it is. The pack dropped "Eclipse's", so it
+   * read as doubling The Tower's own meteor. Restore it on the copies that
+   * still carry the old text word for word. */
+  24: async () => {
+    const OLD = "SUPERBOLIDE: If the chosen character is at 25% hp or lower, they take double damage from the meteor effect, and the effect also ignores defiance.";
+    const NEW = "SUPERBOLIDE: If the chosen character is at 25% hp or lower, they take double damage from Eclipse's meteor effect, and the effect also ignores defiance.";
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "The Tower"
+      && String(item.system?.mastery ?? "").replace(/\s+/g, " ").trim() === OLD;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.mastery": NEW }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.mastery": NEW });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 24: ${n} copy/copies of The Tower's mastery now name Eclipse's meteor, as on p.203`);
   },
 };
 

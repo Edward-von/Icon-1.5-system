@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R13 — Superbolide della Tower fedele al libro (15 ottobre 2026, versione 1.15.15)
+
+Setup: un mondo con un PG Seer (Mendicant) con The Tower aggiunta PRIMA dell'aggiornamento (per la migrazione 24) e
+un'altra copia trascinata dal compendio Jobs DOPO; tab Combat.
+
+- [ ] **Migrazione**: al primo avvio dopo l'aggiornamento, in console (F12) compare "Migration 24: … The Tower's
+      mastery …" e la copia vecchia ha lo stesso testo di quella nuova.
+- [ ] **Testo della mastery**: sulla scheda, nella card in chat (Show in Chat) e nella scheda dell'abilità la mastery
+      Superbolide dice "…they take double damage from Eclipse's meteor effect, and the effect also ignores
+      defiance." (come a p.203).
+- [ ] **Nient'altro cambiato**: Talent I e II, Attack, Area Effect e Terrain effect di The Tower sono come prima;
+      usando l'abilità il danno proposto e lo status sealed sono gli stessi di prima.
+
 ## R12 — Eclipse e Raging Wolf con gli elenchi a righe (15 ottobre 2026, versione 1.15.14)
 
 Setup: un mondo con un PG Seer (Mendicant) con Eclipse e un PG Colossus (Stalwart) con Raging Wolf, aggiunte PRIMA

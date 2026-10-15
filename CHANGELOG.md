@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Superbolide della Tower fedele al libro (versione 1.15.15)
+
+### Round di debug del 15 ottobre, punto R13
+
+- **La mastery della Tower raddoppiava il danno sbagliato**: la mastery Superbolide di The Tower (Seer, Mendicant)
+  diceva che il personaggio scelto, a 25% hp o meno, "take double damage from the meteor effect", cioè dal meteorite
+  della Tower stessa → il libro (p.203) dice "take double damage from Eclipse's meteor effect": strano, ma è scritto
+  così; nel compendio dei job la parola "Eclipse's" era stata tolta → il compendio ora riporta la frase alla lettera
+  del libro. Il sistema non automatizza il raddoppio (è solo testo), quindi non cambia nient'altro. Migrazione 24: le
+  copie di The Tower già sulle schede e nella sidebar che hanno ancora il testo vecchio parola per parola vengono
+  aggiornate; quelle modificate a mano no.
+
 ## 15 ottobre 2026 — Eclipse e Raging Wolf con gli elenchi a righe (versione 1.15.14)
 
 ### Round di debug del 15 ottobre, punto R12

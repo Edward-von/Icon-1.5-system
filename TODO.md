@@ -104,9 +104,12 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       Comeback di Raging Wolf le tre soglie di hp una per riga (p.137); nel compendio erano un paragrafo unico. Ora
       ogni voce è su una riga "•" nel compendio e la resa le mostra una sotto l'altra; migrazione 23 per le copie già
       sulle schede.)
-- [ ] **R13. The Tower: la mastery raddoppia il danno sbagliato** (S, regola)
+- [x] **R13. The Tower: la mastery raddoppia il danno sbagliato** (S, regola)
       Il manuale dice doppio danno dai meteoriti di *Eclipse*, il sistema lo applica al meteorite della Tower.
       "Strange, but that's how it was written." Verificare la pagina.
+      (FATTO il 15 ottobre 2026, versione 1.15.15: il libro (p.203) dice davvero "double damage from Eclipse's
+      meteor effect"; il compendio aveva tolto "Eclipse's". Testo riportato alla lettera nel compendio Jobs;
+      migrazione 24 per le copie già sulle schede. Il raddoppio non è automatizzato.)
 - [ ] **R14. Provoke: la card del danno propone 1 invece di 2** (S, bug)
       Va bene per il danno subito, ma il danno base rimandato indietro è 2.
 - [ ] **R15. Gentleness: il tiro del danno non seleziona Divine** (S, bug)
