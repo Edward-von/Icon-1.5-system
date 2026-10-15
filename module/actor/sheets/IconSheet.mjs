@@ -12,7 +12,8 @@ import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../help
 import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, talentAttackBlocks } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
-         areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates } from "../../canvas/area-templates.mjs";
+         areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
+         areasInText, areaDrawnFromTarget } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -51,6 +52,19 @@ function _comboMark(s) {
   if (!mark) return null;
   const name = head ? head[1].toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "Combo";
   return { name, text: mark.text, stackText: raw };
+}
+
+/**
+ * The text the area button reads when the tags carry no area: the ability's
+ * own, then the upgrades in play (selected talent, unlocked mastery, armed
+ * combo) — the same texts the area choice offers (_areaVariantsFor). Sow's
+ * mastery "Reap and Sow also create an arc 4 area" (p.185) is in neither the
+ * base tags nor REAP's, so the button was missing while the combo was armed.
+ */
+function _areaText(s, comboArmed) {
+  const talent = { 1: s.talent1, 2: s.talent2 }[Number(s.talentSelected ?? 0)];
+  return [s.description, talent, s.masteryUnlocked ? s.mastery : "", comboArmed ? s.comboEffect : ""]
+    .filter(t => typeof t === "string" && t).join(" ");
 }
 
 /** Marks an ability has on the scene: the base mark, then the combo's own (labelled with its name). */
@@ -349,7 +363,7 @@ export class IconSheet extends BaseActorSheet {
         comboArmed,
         // "Medium Blast" / "Line 4" / … from the tags, or from the ability's own
         // text when the header has no area (Tsunami, p.233) → area button
-        areaLabel:   abilityArea(tags, s.description)?.label ?? "",
+        areaLabel:   abilityArea(tags, _areaText(s, comboArmed))?.label ?? "",
         // Mark abilities: Mark button + the marks this ability currently has on the scene
         canMark:     markFromTags(tags).can || !!_comboMark(s),
         comboMark:   _comboMark(s),
@@ -1505,7 +1519,7 @@ export class IconSheet extends BaseActorSheet {
       costUpgraded: cost.upgraded,
       chapter:     s.chapter ?? 1,
       tags,
-      areaLabel:   abilityArea(tags, s.description)?.label ?? "",
+      areaLabel:   abilityArea(tags, _areaText(s, combo))?.label ?? "",
       comboArmed:  combo,
       canMark:     markFromTags(tags).can || !!_comboMark(s),
       comboMark:   _comboMark(s),
@@ -2020,7 +2034,13 @@ export class IconSheet extends BaseActorSheet {
         ab.hasMastery ? ["Mastery",   s.mastery]      : null,
       ].filter(Boolean),
     });
-    return variants;
+    // An area the upgrade text draws from the target (Sow's Spectral Scythe,
+    // p.185: "drawn from your target as the origin space") is placed next to
+    // that target, whether it came from the tags or from the text.
+    const fromTarget = new Set([
+      ab.hasTalent1 && s.talent1, ab.hasTalent2 && s.talent2, ab.hasMastery && s.mastery, ab.comboArmed && s.comboEffect,
+    ].filter(t => t && areaDrawnFromTarget(t)).flatMap(t => areasInText(t).map(a => a.label)));
+    return variants.map(v => fromTarget.has(v.label) ? { ...v, area: { ...v.area, fromTarget: true } } : v);
   }
 
   static async #onAbilityPlaceArea(event, target) {
@@ -2078,14 +2098,19 @@ export class IconSheet extends BaseActorSheet {
     // No area on the map yet for this ability: the same choice as the area button (base
     // area, talent / combo / charge shapes) instead of always the tags' one.
     let areaChoice;
+    // An extra area drawn from the target (Sow's Spectral Scythe, p.185) is
+    // not the attack's area: the attack keeps its target and the area goes
+    // down with the area button. Placing it here retargeted the area instead.
+    const allVariants = this._areaVariantsFor(ab);
+    const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !v.area?.fromTarget);
+    const noAttackArea = !attackVariants.length && allVariants.some(v => v.area?.fromTarget);
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {
-      const variants = this._areaVariantsFor(ab).filter(v => v.area?.kind !== "aura");
-      if (variants.length > 1) {
-        areaChoice = await chooseAreaVariant(variants, ab.name);
+      if (attackVariants.length > 1) {
+        areaChoice = await chooseAreaVariant(attackVariants, ab.name);
         if (!areaChoice) return;   // closing the "which area?" dialog calls the attack off
       }
     }
-    const placement = await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), area: areaChoice });
+    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
     const areaHtml = placement ? areaSummaryHtml(placement) : "";
 

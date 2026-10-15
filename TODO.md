@@ -165,7 +165,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       (FATTO il 15 ottobre 2026, versione 1.15.23: un tratto sbloccato il cui testo dà un'aura a sé ha nell'intestazione
       un bottone "Aura N" (stesso stile delle abilità) che la piazza attorno al proprio token e la fa seguire; durata
       letta dal testo come per le abilità. Solo codice.)
-- [ ] **R20. Sow: l'Arc 4 della mastery non è piazzabile come area** (S, bug)
+- [x] **R20. Sow: l'Arc 4 della mastery non è piazzabile come area** (S, bug)
+      (FATTO il 15 ottobre 2026, versione 1.15.24: la mastery Spectral Scythe, p.185, crea un arco IN PIÙ che parte dal
+      bersaglio; il bottone area ora legge anche talento scelto / mastery sbloccata / combo armata (c'è anche con REAP
+      e sulle copie vecchie), l'arco parte accanto al token bersagliato e non lo copre, il tiro d'attacco non lo
+      piazza più e tiene il bersaglio. Copre anche le altre aree scritte solo nel testo di talenti/mastery. Solo codice.)
 - [ ] **R21. Dropkick: con la mastery il tiro del danno non propone il danno ad area** (S/M, bug)
 
 ### Richieste

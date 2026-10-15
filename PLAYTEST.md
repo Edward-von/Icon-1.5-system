@@ -1656,6 +1656,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R20 — L'Arc 4 della mastery di Sow si piazza dal bersaglio (15 ottobre 2026, versione 1.15.24)
+
+Setup: un mondo con un PG Harvester (Mendicant) con Sow e la mastery Spectral Scythe sbloccata (va bene una copia
+aggiunta prima dell'aggiornamento), il suo token e almeno tre token foe/alleati su una scena a griglia quadrata;
+tab Combat.
+
+- [ ] **Bottone senza combo**: senza combo token, Sow ha il bottone area "Arc 4".
+- [ ] **Bottone con REAP**: prendere il combo token (Sow passa alla versione REAP) → il bottone "Arc 4" c'è ancora.
+- [ ] **Arco dal bersaglio**: bersagliare (T) un solo foe a 4 spazi → premere "Arc 4" → il primo spazio si può
+      mettere solo accanto al foe bersagliato (anche dalla parte opposta, a 5 spazi dall'Harvester); lo spazio del
+      foe e quello dell'Harvester non si possono dipingere; dopo 4 spazi l'arco si chiude e i bersagli diventano i
+      token dentro l'arco.
+- [ ] **Senza bersaglio**: togliere i bersagli e premere "Arc 4" → avviso "This area is drawn from your target…" e
+      l'arco si piazza come prima (primo spazio entro range 4 dall'Harvester). Con due bersagli: stesso avviso.
+- [ ] **Il tiro d'attacco tiene il bersaglio**: senza archi sulla mappa, bersagliare un foe e premere l'attacco di
+      Sow → nessuna richiesta di piazzare l'arco, la card auto-hit esce e il bersaglio resta il foe scelto.
+- [ ] **Mastery bloccata**: togliere la mastery → nessun bottone area su Sow.
+- [ ] **Altre aree solo nel testo**: un Ace (o un'altra abilità con l'area solo nel talento, es. Exorcism Talent II)
+      con il talento scelto ha il bottone area con la forma del testo (Medium Blast / Large Blast); senza il talento
+      scelto non lo ha.
+- [ ] **Invariati**: Death Blossom (Burst 1 / con la combo Arc 4 e Arc 8), Flying Sleeves e Draken Cross offrono le
+      stesse aree di prima; il tiro d'attacco di Death Blossom piazza ancora l'area.
+
 ## R19c — I tratti che danno un'aura hanno il bottone area (15 ottobre 2026, versione 1.15.23)
 
 Setup: un mondo con un PG Bastion (Stalwart) con il tratto Shieldmaster e un PG Stormbender con Pelagic Rage

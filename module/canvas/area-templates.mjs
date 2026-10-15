@@ -202,6 +202,18 @@ export function areasInText(text) {
 }
 
 /**
+ * Does a rules text draw its area from the target instead of the user? Sow's
+ * mastery Spectral Scythe (p.185): "Reap and Sow also create an arc 4 area
+ * effect drawn from your target as the origin space, that cannot include your
+ * target". Such an area is placed next to the targeted token (placeAreaTemplate).
+ * @param {string} text
+ */
+export function areaDrawnFromTarget(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return /\bfrom (?:your|the) target as (?:the|its) origin\b/i.test(plain);
+}
+
+/**
  * The area to offer for an ability: the one in its tags, or — when the tags
  * carry none — the first one named in its own rules text. The book prints the
  * shape of most terrain-effect abilities in the prose rather than the header
@@ -647,8 +659,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     cells = cellsInRange(sourceCells, area.size).concat(sourceCells);
     originCell = sourceCells[0];
   } else {
-    const rangeCells = Number.isFinite(area.range) ? cellsInRange(sourceCells, Math.max(1, area.range)) : null;
-    const placed = await new AreaPlacement({ area, sourceCells, rangeCells }).run();
+    // An area drawn from the target (Sow's Spectral Scythe, p.185) starts next
+    // to the targeted token instead of in the ability's range (p.97: no range
+    // of its own = adjacent to the origin) and never covers that token.
+    const anchor = area.fromTarget ? targetAnchorToken(token) : null;
+    const originCells = anchor ? tokenCells(anchor.document) : sourceCells;
+    const range = anchor ? 1 : area.range;
+    const rangeCells = Number.isFinite(range) ? cellsInRange(originCells, Math.max(1, range)) : null;
+    const blocked = anchor ? [...originCells, ...sourceCells] : sourceCells;
+    const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells }).run();
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
   }
@@ -707,6 +726,22 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   _log(`placed ${area.label} for "${abilityName}" — ${cells.length} cells, ${targets.length} target(s)`);
   ui.notifications.info(`${area.label} placed — ${targets.length ? targets.map(t => t.name).join(", ") : "no one"} in the area.`);
   return { template, cells, targets, area };
+}
+
+/**
+ * The token an area drawn from the target starts from (areaDrawnFromTarget):
+ * the one token the user has targeted other than their own. With no such
+ * target (or several) the area is drawn from the user as usual, with a warning.
+ * @param {Token} token  the user's token
+ * @returns {Token|null}
+ */
+function targetAnchorToken(token) {
+  const targets = Array.from(game.user?.targets ?? []).filter(t => t.id !== token.id && t.actor);
+  if (targets.length === 1) return targets[0];
+  ui.notifications.warn(targets.length
+    ? "This area is drawn from your target: target only that token, then place it again. Drawn from you for now."
+    : "This area is drawn from your target: target that token, then place it again. Drawn from you for now.");
+  return null;
 }
 
 /**

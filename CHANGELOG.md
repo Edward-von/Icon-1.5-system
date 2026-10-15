@@ -1,5 +1,25 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — L'Arc 4 della mastery di Sow si piazza dal bersaglio (versione 1.15.24)
+
+### Round di debug del 15 ottobre, punto R20
+
+- **Sow: l'Arc 4 della mastery non si poteva usare**: la mastery Spectral Scythe (Harvester, p.185) dice "Reap and
+  Sow also create an arc 4 area effect drawn from your target as the origin space, that cannot include your
+  target": è un'area **in più**, non sostituisce il bersaglio, e parte dal bersaglio, non da chi usa l'abilità. Tre
+  cause: (1) con il combo token (REAP) i tag della combo non hanno l'arco, e il bottone area guardava solo i tag e il
+  testo base, quindi spariva; lo stesso succedeva con le copie di Sow aggiunte prima dei tag delle mastery; (2) il
+  primo spazio dell'arco doveva stare entro range 4 da chi usa Sow, quindi non si poteva disegnare oltre un bersaglio
+  lontano; (3) il tiro d'attacco piazzava l'arco come area dell'attacco e sostituiva il bersaglio con chi stava
+  nell'arco (che per regola non può contenerlo) → ora il bottone area legge anche il testo del talento scelto, della
+  mastery sbloccata e della combo armata; un'area il cui testo dice "from your target as the origin" parte dal token
+  bersagliato (primo spazio adiacente al bersaglio, p.97) e non può coprirlo né coprire chi la usa; senza un solo
+  bersaglio un avviso e l'arco parte da chi lo usa come prima; il tiro d'attacco non la piazza più e tiene il
+  bersaglio. La prima parte vale anche per le altre abilità con un'area scritta solo nel testo di un talento o di una
+  mastery (es. Ace Talent I, Sidhe Talent II, Exorcism Talent II, Morrigan, Showdown): ora hanno il bottone area quando
+  il talento è scelto o la mastery sbloccata. Solo codice: nessun cambio al compendio, vale anche per le copie già
+  sulle schede.
+
 ## 15 ottobre 2026 — I tratti che danno un'aura hanno il bottone area (versione 1.15.23)
 
 ### Round di debug del 15 ottobre, punto R19c
