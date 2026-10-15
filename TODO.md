@@ -210,6 +210,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R5 — costo grezzo nei riquadri delle abilità** (S): i sei riquadri della tab Combat
       mostrano il costo come è salvato ("1action", "interrupt-1") invece di "1 Action" / "Interrupt 1"
       (`icon-combat.hbs`, `item.system.cost`), e non seguono la mastery di Catapult.
+- [ ] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
+      damage to itself") potrebbe proporre 10 come danno inflitto, come faceva Provoke con "to you"; da verificare
+      sulla scheda del foe ed eventualmente saltare anche "to itself" in `ability-damage.mjs`.
 
 ---
 
