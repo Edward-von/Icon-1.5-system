@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R7 — nessun summon di un altro job sulle abilità (15 ottobre 2026, versione 1.15.9)
+
+Setup: un PG con Raging Wolf (Colossus, Stalwart), Blackstar (Enochian) e Mist Strider (Warden), più un'abilità che
+evoca davvero (Apex o Strength of the Pack del Warden, Carnevale del Fool, Sow del Harvester), tab Combat.
+
+- [ ] **Raging Wolf**: nell'anteprima dell'abilità non compare più il summon "Beast" (né altri summon).
+- [ ] **Blackstar**: nessun "Bomb" proposto.
+- [ ] **Mist Strider**: propone solo "Beast", non più "Shadow".
+- [ ] **Abilità che evocano davvero**: Apex / Strength of the Pack propongono ancora "Beast", Carnevale "Bomb", Sow
+      "Thrall"; trascinare il summon sulla mappa funziona come prima.
+- [ ] **Show in Chat** di Raging Wolf: nessun summon sulla card.
+
 ## R6 — testo di colore delle abilità senza tooltip delle keyword (15 ottobre 2026, versione 1.15.8)
 
 Setup: un PG con Battering Ram (Valiant, Stalwart), Six Hells Trigram e Revenge (da GM si possono aggiungere da

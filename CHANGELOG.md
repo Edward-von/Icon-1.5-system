@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 15 ottobre 2026 — Raging Wolf e altre abilità senza summon di un altro job (versione 1.15.9)
+
+### Round di debug del 15 ottobre, punto R7
+
+- **Raging Wolf offriva il Beast del Warden**: nell'anteprima di Raging Wolf (Colossus, Stalwart) compariva il summon
+  "Beast" da trascinare sulla mappa → il sistema collega i summon cercandone il nome nel testo dell'abilità, e la
+  mastery si chiama "Beast Within"; il controllo che doveva scartare i summon di un altro job non scartava mai niente
+  (era sempre vero per costruzione) → ora un'abilità di un job offre solo i summon del proprio job. Nei compendi
+  nessuna abilità evoca davvero il summon di un altro job, mentre lo stesso errore toccava anche Blackstar (Enochian,
+  "Great Spirit Bomb" → Bomb del Fool) e Mist Strider (Warden, "whose form is shadow" → Shadow dello Shade). Le
+  abilità senza job (create a mano) continuano a cercare tra tutti i summon. Nessun dato del pack modificato.
+
 ## 15 ottobre 2026 — Il testo di colore delle abilità senza tooltip delle keyword (versione 1.15.8)
 
 ### Round di debug del 15 ottobre, punto R6

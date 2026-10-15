@@ -66,9 +66,11 @@ export function summonsForAbility(system, jobName = "") {
     // Word-boundary match so "plant" doesn't fire on "implanted".
     const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}s?\\b`, "i");
     if (!re.test(text)) continue;
-    // A summon belonging to another job is only offered when this ability is
-    // that job's (Mist Strider, a Warden ability, summons a Shade's Shadow).
-    if (entry.job && job && entry.job.toLowerCase() !== job && !text.includes(name)) continue;
+    // A summon belonging to another job is never offered: in the jobs pack
+    // every real summon is its own job's, and the cross-job hits are just
+    // words (Raging Wolf's "Beast Within", Blackstar's "Great Spirit Bomb",
+    // Mist Strider's "form is shadow"). Abilities without a job still match.
+    if (entry.job && job && entry.job.toLowerCase() !== job) continue;
     out.push({ uuid: entry.uuid, name: entry.name, img: entry.img });
   }
   return out;

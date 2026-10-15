@@ -73,7 +73,9 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       Battering Ram "flying", Six Hells Trigram "summon" (come se fosse il tipo di personaggio Summon), Revenge "armor".
       (FATTO il 15 ottobre 2026, versione 1.15.8: il testo di colore non riceve più i tooltip delle keyword
       nell'anteprima sulla scheda del PG, nella card in chat e nella scheda dell'abilità; i blocchi di regole sì.)
-- [ ] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
+- [x] **R7. Raging Wolf ha collegato il summon "beast" del Warden** (S, bug di dati)
+      (FATTO il 15 ottobre 2026, versione 1.15.9: non era un dato del pack ma il collegamento per nome — "Beast Within"
+      nella mastery; ora un'abilità offre solo i summon del proprio job. Corretti anche Blackstar → Bomb e Mist Strider → Shadow.)
 - [ ] **R8. Massive Overhead: la prima riga delle regole è nel testo di colore** (S, bug di dati)
 - [ ] **R9. Fairy Ring: trigger al posto sbagliato** (S, bug di dati)
       Nella card (foto nel documento) "Trigger: A foe enters or exits the area." sta in cima come se fosse il trigger
