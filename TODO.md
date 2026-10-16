@@ -228,10 +228,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Draken Cross potrebbe valere anche qui, ma Heave-Ho non è un attacco.)
       (FATTO il 16 ottobre 2026, versione 1.15.54: il libro (p.234) stampa Trigger, Effect, poi il testo dell'area e
       Collide; Heave-Ho nel compendio ha ora l'ordine dei blocchi "effect, area", la migrazione 26 lo mette sulle copie.)
-- [ ] **R54. Eye of the Storm: "Special" e ordine Area / Effect** (S, dati)
+- [x] **R54. Eye of the Storm: "Special" e ordine Area / Effect** (S, dati)
       "The second line of flavor text is actually supposed to be a Special: keyword. (The book forgets the 'special' part
       of this.)" e "Should be formatted Area: [D]. Effect: Instead of how it currently is formatted (missing highlights and
       keywording)". Assorbe la voce "Emerso lavorando su R8 — Eye of the Storm".
+      (FATTO il 16 ottobre 2026, versione 1.15.55: il libro (p.236) stampa la riga "This attack has no attack space…"
+      senza etichetta, poi Area effect: [D], poi Effect; nel compendio la riga ha ora "Special:", l'Effect è uscito dal campo
+      dell'area ed è un blocco suo, ordine "special, area, effect"; la migrazione 27 lo fa sulle copie.)
 - [ ] **R55. Helix Heel: la prima riga del testo di colore è il primo effetto** (S, dati)
       "The first line of flavor text is actually the first effect of the ability." Assorbe la voce "Emerso lavorando su R8 —
       Helix Heel" (p.219, "Effect: Release a shockwave in a line 3 area effect…").

@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 26;
+export const CURRENT_SCHEMA_VERSION = 27;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1002,6 +1002,43 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 26: ${n} copy/copies of Heave-Ho now show Effect before Area, as on p.234`);
+  },
+
+  /* 27 — Eye of the Storm (Stormbender, p.236) prints an unlabelled rules
+   * line after its flavour ("This attack has no attack space. …": the book
+   * forgets its "Special:" label), then "Area effect: [D]", then "Effect: If
+   * an ally is in the center space …". The pack kept the rules line in the
+   * flavour and stored the Effect inside areaEffect ("[D]. Effect: …"), so it
+   * showed as part of the Area line, unlabelled and without keywords. The pack
+   * now labels the line "Special:", moves the Effect into the description and
+   * pins "special, area, effect". Same on the copies that still hold the old
+   * texts (an edited copy is left alone). */
+  27: async () => {
+    const OLD_DESC = "A storm of vigorous thunder and acid rain descends at your command, but the center remains calm. This attack has no attack space. Instead, the attack space is clear and exempt from this area. Infuse 3: AEONCLOUD — Increase area effect to a large blast and damage to [D]+fray. The center space is still clear.";
+    const OLD_AREA = "[D]. Effect: If an ally is in the center space, they may fly 4 after the ability resolves. If an enemy is in the center space, they become vulnerable.";
+    const NEW = {
+      "system.description": "A storm of vigorous thunder and acid rain descends at your command, but the center remains calm. Special: This attack has no attack space. Instead, the attack space is clear and exempt from this area. Effect: If an ally is in the center space, they may fly 4 after the ability resolves. If an enemy is in the center space, they become vulnerable. Infuse 3: AEONCLOUD — Increase area effect to a large blast and damage to [D]+fray. The center space is still clear.",
+      "system.areaEffect": "[D]",
+      "system.blockOrder": "special, area, effect",
+    };
+    const norm = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Eye of the Storm"
+      && norm(item.system?.description) === OLD_DESC && norm(item.system?.areaEffect) === OLD_AREA
+      && !norm(item.system?.blockOrder);
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, ...NEW }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update(NEW);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 27: ${n} copy/copies of Eye of the Storm given the p.236 Special / Area / Effect blocks`);
   },
 };
 

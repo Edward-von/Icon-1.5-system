@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Eye of the Storm: blocchi Special, Area ed Effect come nel libro (versione 1.15.55)
+
+### Round di debug del 16 ottobre, punto R54
+
+- **Eye of the Storm** (Stormbender, p.236: "This attack has no attack space. Instead, the attack space is clear and
+  exempt from this area. / Area effect: [D] / Effect: If an ally is in the center space, they may fly 4 …"): la riga
+  "This attack has no attack space…" finiva nel testo di colore in corsivo, e l'Effect compariva attaccato alla riga
+  Area ("Area: [D]. Effect: If an ally…"), senza etichetta propria né parole chiave evidenziate → il libro stampa quella
+  riga di regole senza etichetta (dimentica il "Special:"), e nel compendio l'Effect era salvato dentro il campo
+  dell'area → nel compendio Jobs la riga ha ora l'etichetta "Special:", l'Effect è un blocco suo e l'ordine è fissato a
+  Special, Area ([D]), Effect, poi Infuse 3: AEONCLOUD. Il testo resta quello del libro. La migrazione 27 fa lo stesso
+  sulle copie già sulle schede e nella sidebar (solo quelle con i testi originali, non quelle modificate a mano).
+
 ## 16 ottobre 2026 — Heave-Ho: l'Effect prima dell'Area (versione 1.15.54)
 
 ### Round di debug del 16 ottobre, punto R53

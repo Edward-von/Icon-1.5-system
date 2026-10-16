@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R54 — Eye of the Storm: Special, Area, Effect (16 ottobre 2026, versione 1.15.55)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbender al capitolo 3 che ha già Eye of the
+Storm sulla scheda da prima di questa versione, e un PG Stormbender nuovo.
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 27: … Eye of
+      the Storm given the p.236 Special / Area / Effect blocks".
+- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Eye of the Storm: in corsivo solo "A storm of vigorous thunder
+      … the center remains calm."; poi Special ("This attack has no attack space. Instead, the attack space is clear
+      and exempt from this area."), poi Area ("[D]"), poi Effect ("If an ally is in the center space, they may fly 4
+      …"), poi Infuse 3: AEONCLOUD. Nell'Effect le parole chiave (es. "vulnerable") hanno il tooltip.
+- [ ] **Copia nuova dal compendio**: trascina Eye of the Storm dal compendio Jobs su un PG → stesso ordine e stesse
+      etichette.
+- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Special → Area → Effect → Infuse 3.
+- [ ] **Danno**: tiro del danno dell'area → [D] come prima; con Infuse 3 (Aeoncloud) → [D]+fray e large blast.
+- [ ] **Altre abilità invariate**: Heave-Ho (Effect prima dell'Area) e Comet (Area prima dell'Effect) come prima.
+
 ## R53 — Heave-Ho: l'Effect prima dell'Area (16 ottobre 2026, versione 1.15.54)
 
 Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbender che ha già Heave-Ho sulla scheda da
