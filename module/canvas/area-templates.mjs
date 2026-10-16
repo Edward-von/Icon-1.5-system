@@ -41,6 +41,8 @@
  * bounds the text writes ("to a maximum of 3 or a minimum of 1", Gentleness'
  * Gentle Prayer p.179), else 1 to 5 (resizeAura).
  */
+import { areaTerrainAt } from "../helpers/area-terrain.mjs";
+
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
 // Local escape: importing enrich.mjs here would close an import loop
 // (enrich → keywords → reference → this module).
@@ -186,7 +188,8 @@ export function areaLabel(area) {
  * @returns {object[]}  area specs (without range)
  */
 export function areasInText(text) {
-  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").toLowerCase();
+  const orig = String(text ?? "").replace(/<[^>]+>/g, " ");
+  const plain = orig.toLowerCase();
   const out = [];
   const seen = new Set();
   // "blasts": Draken Cross Talent II, "all areas may be increased to medium blasts".
@@ -207,6 +210,11 @@ export function areasInText(text) {
       area.centeredOn = centre;
       if (area.kind === "burst" && !area.self && !area.target && centre !== "object") area[centre] = true;
     }
+    // R33c: an area whose sentence is a terrain effect lasts on the map and carries what its spaces are
+    // (Morrigan's Dark Wing p.171, "a small blast terrain effect in range 3. The area is dangerous terrain for
+    // foes"); the same text's other areas (Magnabio's Large Blast attack, p.218) don't.
+    const terrain = areaTerrainAt(orig, m.index);
+    if (terrain) area.terrain = terrain;
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
     seen.add(area.label);
@@ -230,6 +238,8 @@ function centreOf(before, rest) {
   // characters in a medium blast area centered on it") and "them" after objects (Helix Heel p.219, "all
   // objects this line passed through resonate, releasing a burst 1 area effect centered on them") go on an
   // object's token now that objects are on the map ("object": the targeted object, else placed by hand).
+  // R33c: "create a small blast terrain effect of smoke on you" (Showdown's Quench, p.157) is on the user too.
+  if (/^\s*(?:area effect|terrain effect|area)?\s*(?:of [a-z' -]{1,30}?\s)?on (?:you|yourself)\b/.test(rest)) return "self";
   const m = /\bcent(?:er|r)ed on (you|yourself|them|it|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
   if (!m) return "";
   if (m[1] === "it") return "object";
@@ -756,6 +766,9 @@ class AreaPlacement {
   }
 }
 
+/** Is an area being placed right now? (R33c: the Shift + arrow moves stay out of its way.) */
+export const isPlacingArea = () => AreaPlacement.active;
+
 /**
  * Place an area for an ability and target the tokens inside it.
  * Resolves with { template, cells, targets } or null when cancelled / not
@@ -769,12 +782,43 @@ class AreaPlacement {
  * @param {boolean} [opts.replace=true]  delete this actor's previous template for the same ability
  * @param {boolean} [opts.lasting=false] a terrain effect: not cleared at the user's next turn (areaLasts)
  * @param {string}  [opts.text=""]      the ability's text, read for an aura's duration (auraExpiry)
+ * @param {object|null} [opts.terrain]  R33c: what the area's spaces are (helpers/area-terrain.mjs terrainOfBlock),
+ *   stored as the `terrain` flag terrain-spaces.mjs reads when a character moves in or out
+ * @param {number}  [opts.stack=1]      R33c: how many of this ability's areas may stay at once (areaStackLimit);
+ *   above 1, an earlier one is not replaced without asking
+ * @param {string}  [opts.stackRule=""] the sentence that allows it, shown in the question
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "" }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "" }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
   if (!token) { ui.notifications.warn(`${actor?.name ?? "The actor"} has no token on this scene — place one to use area templates.`); return null; }
+
+  // R33c: several areas of the same ability at once ("you cannot have more than three areas active", Gust's
+  // NORTHSOUL p.234; "Create a second cloud", Mist Strider p.170): ask before placing instead of replacing.
+  let removeIds = null;   // null = the usual replacement of every earlier one
+  if (replace && stack > 1) {
+    const earlier = findAreaTemplates({ actorId: actor.id, abilityKey })
+      .filter(t => !t.flags[FLAG_NS].followTokenId)
+      .sort((a, b) => (a._stats?.createdTime ?? 0) - (b._stats?.createdTime ?? 0));
+    if (earlier.length) {
+      const full = earlier.length >= stack;
+      let choice = null;
+      try {
+        choice = await foundry.applications.api.DialogV2.wait({
+          window: { title: `${abilityName || "Area"} — another area?` },
+          content: `<p>${earlier.length} area${earlier.length > 1 ? "s" : ""} of <strong>${escapeHTML(abilityName)}</strong> already on this scene.</p>${stackRule ? `<p><small>${escapeHTML(stackRule)}</small></p>` : ""}<p>Up to ${stack} at once.</p>`,
+          buttons: [
+            { action: "add", label: full ? "Add (removes the oldest)" : `Add another (${earlier.length + 1} of ${stack})`, default: true },
+            { action: "replace", label: "Replace them" },
+          ],
+          rejectClose: false,
+        });
+      } catch { choice = null; }
+      if (!choice) return null;
+      removeIds = choice === "add" ? earlier.slice(0, Math.max(0, earlier.length - stack + 1)).map(t => t.id) : earlier.map(t => t.id);
+    }
+  }
 
   area = { ...area };
   if ((area.kind === "line" || area.kind === "arc" || area.kind === "aura") && !area.size) {
@@ -834,7 +878,10 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     ({ cells, origin: originCell } = placed);
   }
 
-  if (replace) await deleteAreaTemplates({ actorId: actor.id, abilityKey });
+  if (replace && removeIds) {
+    const own = removeIds.filter(id => canvas.scene.templates.get(id)?.isOwner || game.user.isGM);
+    if (own.length) await canvas.scene.deleteEmbeddedDocuments("MeasuredTemplate", own);
+  } else if (replace) await deleteAreaTemplates({ actorId: actor.id, abilityKey });
 
   // Origin = blast/burst centre, first space of a line/arc (control icon + ruler text sit there).
   const origin = canvas.grid.getCenterPoint(originCell);
@@ -853,6 +900,9 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       followTokenId: isAura ? holder.id : null,
       // "until the end of your next turn": counted down by tickAuraExpiry
       expiry,
+      // R33c: a terrain effect's spaces (dangerous, difficult, what entering sets off), read at movement by
+      // terrain-spaces.mjs as for its single spaces
+      ...(terrain && !isAura ? { terrain: { group: "", source: "", ...terrain, kind: "area", creatorId: actor.id, itemId: abilityKey ?? "" } } : {}),
     } },
   };
   let template = null;
@@ -874,7 +924,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     // A terrain effect: it stays where it was put, nothing to target.
     if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
     _log(`placed ${area.label} for "${abilityName}" around space ${originCell.i},${originCell.j}`);
-    ui.notifications.info(`${area.label} placed; it stays on the map until removed or replaced.`);
+    ui.notifications.info(`${area.label} placed; it stays on the map until removed or replaced. Shift + arrow keys with the mouse over it move it 1 space.`);
     return { template, cells, targets: [], area };
   }
 
@@ -895,7 +945,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // Switching to the template layer released the token: give it back its selection.
   if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
   _log(`placed ${area.label} for "${abilityName}" — ${cells.length} cells, ${targets.length} target(s)`);
-  ui.notifications.info(`${area.label} placed — ${targets.length ? targets.map(t => t.name).join(", ") : "no one"} in the area.`);
+  ui.notifications.info(`${area.label} placed — ${targets.length ? targets.map(t => t.name).join(", ") : "no one"} in the area.${lasting ? " It stays on the map: Shift + arrow keys with the mouse over it move it 1 space." : ""}`);
   // R33a3: the user's objects that trigger when an area includes them (Aethershard p.210: 2 piercing per
   // shard to all characters in the area, then destroyed, +1 Aether). Lazy import, as for the wild cards.
   try {
@@ -1170,7 +1220,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null }) {
   // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
   const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
@@ -1179,7 +1229,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain });
 }
 
 /**

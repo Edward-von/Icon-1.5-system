@@ -1656,6 +1656,62 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c — Aree terrain effect che durano, si muovono o crescono (16 ottobre 2026, versione 1.15.70)
+
+Setup: scena a griglia quadrata, GM + giocatore connessi, un foe (ostile) e un PG alleato sulla scena, un combat con
+tutti dentro. PG: Stormbender con Tsunami, Waterspout e Gust (mastery NORTHSOUL in una prova), Spellblade con Bifröst
+(Talent II in una prova) e Blitz (mastery GUNGNIR), Warden con Mist Strider e Morrigan (mastery DARK WING), Shade con
+Nocturne, Freelancer con Showdown (mastery QUENCH), Geomancer con Bio (mastery MAGNABIO), Harvester con Blood Grove, un
+Ätherwand con Talent II. Solo JS: F5 dopo il deploy.
+
+- [ ] **Aree dei talenti / mastery**: Morrigan con DARK WING sbloccata → bottone area "Small Blast"; piazzata in range 3 resta
+      a inizio del turno dopo. Blitz con GUNGNIR → "Small Blast" (range 3), resta. Showdown con QUENCH → "Small Blast" va
+      da sola centrata sul PG (nessun clic) e resta. Senza mastery sbloccata quei bottoni non ci sono.
+- [ ] **Non più tutto "lasting"**: Bio con MAGNABIO sbloccata ma non armata → la Small Blast dell'attacco sparisce a inizio
+      del turno dopo (prima restava). Land Waster con la mastery Ajax: la Burst 1 sparisce anch'essa. Con MAGNABIO armata,
+      "Medium Blast" resta, "Large Blast" no.
+- [ ] **Dangerous dell'area**: trascinare il foe dentro l'area di DARK WING → domanda "Dangerous terrain — Take 2 damage";
+      trascinarci il PG alleato → nessuna domanda ("for foes"). Tsunami: dentro o fuori chiunque → domanda (difficult e
+      dangerous); di nuovo nello stesso turno → nessuna domanda. GUNGNIR, MAGNABIO (Medium Blast): domanda per tutti. Nocturne
+      (shadow clouds): nessuna domanda (difficult, non dangerous).
+- [ ] **Promemoria all'entrata**: Gust (Line 3) → trascinare un personaggio dentro → card "enters the Terrain (Gust)" con la
+      frase "Characters that enter any end space …" e Remove. Bifröst → un alleato che entra ha la card ("Yourself and
+      allies …"), un foe no.
+- [ ] **Più aree insieme**: Gust con NORTHSOUL: secondo piazzamento → domanda "Add another (2 of 3) / Replace them"; Add →
+      due Line sulla mappa; al quarto "Add (removes the oldest)" toglie la prima. Senza NORTHSOUL: sostituisce senza
+      domanda come prima. Mist Strider ("Create a second cloud"): "Add another (2 of 2)". Bifröst (HEIMDALL): lo stesso.
+      Chiudere la domanda con la X → niente piazzato, niente tolto.
+- [ ] **Tsunami, il bordo**: piazzarla (Alt per metterla lontano dal PG, contro un bordo) → domanda "which edge?" (Top /
+      Bottom / Left / Right); scelto Bottom → card "placed: it moves now, and at the start of your turns" con "Move 4 toward
+      the bottom edge" e le quattro frecce di STORMLASH. Move 4 → l'area scende di 4 caselle, il bottone diventa grigio,
+      card "moves 4 spaces toward the bottom edge". Chiudere la domanda del bordo → la card ha i quattro bottoni del bordo
+      da scegliere.
+- [ ] **Tsunami, chi c'è dentro**: con un token dentro, Move → card "In it when it moved: …" con la frase del libro e "Drag
+      them with it"; il clic apre la lista con le caselle spuntate; "Drag them" li sposta delle stesse caselle; un giocatore
+      che non possiede il foe riceve "Ask the GM". Senza il clic nessun token si muove. Dopo il trascinamento nessuna domanda
+      di dangerous (restano dentro).
+- [ ] **Tsunami, bordo della mappa**: muovere finché uno spazio uscirebbe → domanda "edge of the map … Remove it?"; Remove la
+      toglie, Keep la lascia dov'è. Con Talent I: la card del movimento ricorda "creates a pit in its center space …".
+- [ ] **Tsunami a inizio turno**: Next turn fino al turno dello Stormbender → card "Start of …'s turn — areas" con Move 4 (dal
+      GM attivo, una sola card con due GM). Con LEGENDARY STORM sbloccata e round 4+: bottoni 1, 2, 3, 4 al posto di Move 4.
+      STORMLASH (frecce nella card del piazzamento): muove di 2 tutte le Tsunami dello stesso PG.
+- [ ] **Shift + frecce**: mouse sopra un'area che resta (Tsunami, Gust, un pit, una mote) → Shift + freccia la sposta di 1
+      casella, avviso "moved 1 down"; la domanda di dangerous scatta poi per chi entra / esce dalla nuova posizione. Con il
+      mouse fuori dalla mappa, su una scheda, o in un campo di testo, Shift + freccia fa quello di sempre. Un giocatore non può
+      muovere l'area di un altro. Durante il piazzamento di un'area non fa niente.
+- [ ] **Waterspout**: chip "Waterspout · 1" sull'abilità → un clic su uno spazio → casella viola "Waterspout", card con
+      "difficult terrain: +1 movement to exit". A inizio turno dello Stormbender: card con "Once during your turn, you may move
+      the waterspout 1 space" e quattro frecce; una freccia lo sposta di 1 e le altre diventano grigie. Con Talent II una
+      seconda riga di frecce da 3. Con HURRICANE sbloccata e round 4+: "Grow to Small Blast" → la casella diventa una croce di
+      5 con etichetta "Waterspout · Dangerous & difficult"; entrarci chiede i 2 danni.
+- [ ] **Ätherwand Talent II**: a inizio turno del PG card con "At the start of your turn, you can move the area 1 space" e
+      le frecce.
+- [ ] **Bifröst Talent II**: area piazzata, fine del round (Next round) → card "End of round N — Bifröst" con la frase, "When
+      they grow, deal 1 piercing damage …" e "Add 2 spaces": il clic fa cliccare 2 caselle adiacenti all'area, che si
+      aggiungono; card "the area grows by 2 spaces". All'avvio del combat (round 1) nessuna card. Senza Talent II nessuna card.
+- [ ] **Blood Grove ancora**: "Area +2" (Talent II) trova ancora l'area piazzata (ora ha il flag terrain "Dangerous (foes)")
+      e la estende; un foe che ci entra riceve la domanda dei 2 danni, un alleato no.
+
 ## R33b — Spazi di terreno: pit, dangerous, difficult, segni con nome (16 ottobre 2026, versione 1.15.69)
 
 Setup: scena a griglia quadrata, GM + giocatore connessi, un foe (ostile) e un PG alleato sulla scena. PG: Geomancer con

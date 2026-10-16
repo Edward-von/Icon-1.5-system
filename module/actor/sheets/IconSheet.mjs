@@ -24,6 +24,8 @@ import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
 import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
+import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
+import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
@@ -2308,10 +2310,27 @@ export class IconSheet extends BaseActorSheet {
    * template for the same ability.
    */
   /** Is this ability's area a terrain effect, kept past the next turn? (area-templates.mjs areaLasts) */
-  #areaLasts(ab) {
+  #areaLasts(ab, area = null) {
+    // R33c: an area whose own sentence is a terrain effect lasts (Morrigan's Dark Wing, p.171). The rest lasts
+    // when the ability's own text is one — not because a talent or the mastery makes something else a terrain
+    // effect (Land Waster's Ajax boulder, Bio's Magnabio cloud: their Burst 1 / Small Blast attack used to stay).
+    if (area?.terrain) return true;
     const s = this.document.items.get(ab.id)?.system ?? {};
-    const text = Object.values(s).filter(v => typeof v === "string").join(" ");
-    return areaLasts(ab.tags, text);
+    return areaLasts(ab.tags, baseAreaText(s));
+  }
+
+  /**
+   * What a placed area of this ability carries (R33c): lasting, the terrain its spaces are (dangerous, difficult,
+   * what entering sets off: the area's own block, else the ability's "Terrain effect:" block), and how many may
+   * stay at once (Gust's NORTHSOUL "no more than three", Mist Strider's "second cloud").
+   */
+  #areaPlacementOpts(ab, area) {
+    const s = this.document.items.get(ab.id)?.system ?? {};
+    const lasting = this.#areaLasts(ab, area);
+    if (!lasting || area?.kind === "aura") return { lasting };
+    const terrain = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
+    const stack = areaStackLimit(activeAreaTexts(s));
+    return { lasting, terrain, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
   }
 
   /**
@@ -2425,7 +2444,10 @@ export class IconSheet extends BaseActorSheet {
     const area = await chooseAreaVariant(variants, ab.name);
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
-    await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), text: this.#auraText(ab) });
+    const opts = this.#areaPlacementOpts(ab, area);
+    const placed = await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, text: this.#auraText(ab), ...opts });
+    // R33c: Tsunami's edge, the moves and growth it has (area-motion.mjs).
+    if (placed?.template && opts.lasting) await afterAreaPlaced(placed.template, this.document, this.document.items.get(ab.id));
   }
 
   /**
@@ -2508,7 +2530,8 @@ export class IconSheet extends BaseActorSheet {
         if (!areaChoice) return;   // closing the "which area?" dialog calls the attack off
       }
     }
-    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), area: areaChoice });
+    const areaOpts = this.#areaPlacementOpts(ab, areaChoice ?? areaFromTags(ab.tags));
+    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
     const areaHtml = placement ? areaSummaryHtml(placement) : "";
 

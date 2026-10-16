@@ -38,6 +38,7 @@ import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
 import { terrainTurnStart } from "../canvas/terrain-spaces.mjs";
+import { areaTurnStart, areaRoundEnd } from "../canvas/area-motion.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -881,6 +882,11 @@ export function registerCombatHooks() {
         // "At the start of round 5…" traits, foe "Round 3+" actions (R62).
         try { await postRoundReminders(combat); }
         catch (err) { console.warn("[ICON | IconCombat] round reminders failed", err); }
+        // Areas that grow at the end of each round: Bifröst Talent II (p.226; R33c). Not when combat starts.
+        if ((combat.round ?? 1) > 1) {
+          try { await areaRoundEnd(combat); }
+          catch (err) { console.warn("[ICON | IconCombat] area growth failed", err); }
+        }
       }
 
       /* --- Start-of-activation housekeeping for the NOW-active combatant --- */
@@ -904,6 +910,10 @@ export function registerCombatHooks() {
           // Named terrain marks they start their turn on: Symphony's motes, "or starts their turn there" (R33b).
           try { await terrainTurnStart(current); }
           catch (err) { console.warn("[ICON | IconCombat] terrain turn reminders (start) failed", err); }
+          // Their areas that move at the start of their turn or once during it, or grow from a round on:
+          // Tsunami, Waterspout, Ätherwand Talent II, Hurricane (R33c).
+          try { await areaTurnStart(current); }
+          catch (err) { console.warn("[ICON | IconCombat] area turn reminders (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

@@ -185,9 +185,9 @@ export async function createTerrainSpaces(scene, cells, spec, { actor = null, ab
   const color = TERRAIN_COLORS[kind] ?? TERRAIN_COLORS.mark;
   const terrain = {
     kind, name: spec.name ?? "", label, group, source, creatorId: actor?.id ?? "", itemId,
-    dangerous: kind === "dangerous" || !!spec.dangerous, difficult: kind === "difficult", pit: kind === "pit",
+    dangerous: kind === "dangerous" || !!spec.dangerous, difficult: kind === "difficult" || !!spec.difficult, pit: kind === "pit",
     foesOnly: !!spec.foesOnly, rules: spec.rules ?? "",
-    onEnter: spec.onEnter ?? "", enterFoes: !!spec.enterFoes, enterExit: !!spec.enterExit, onStart: !!spec.onStart,
+    onEnter: spec.onEnter ?? "", enterFoes: !!spec.enterFoes, enterAllies: !!spec.enterAllies, enterExit: !!spec.enterExit, onStart: !!spec.onStart,
   };
   const token = actor ? sourceTokenFor(actor) : null;
   const data = cells.map(c => {
@@ -286,7 +286,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     try { await clearInfusion(actor); } catch (err) { console.warn("[ICON | TerrainSpaces] could not clear the infusion", err); }
   }
   const what = [sp.dangerous && sp.kind !== "dangerous" ? (sp.foesOnly ? "dangerous terrain for foes" : "dangerous terrain") : "", sp.kind === "pit" ? "one level lower than its base space (p.89)" : "",
-    sp.kind === "difficult" ? "+1 movement to exit (p.89)" : "", sp.kind === "dangerous" ? "2 piercing damage on entering or exiting, once a turn (p.89)" : ""].filter(Boolean).join("; ");
+    sp.kind === "difficult" || sp.difficult ? "difficult terrain: +1 movement to exit (p.89)" : "", sp.kind === "dangerous" ? "2 piercing damage on entering or exiting, once a turn (p.89)" : ""].filter(Boolean).join("; ");
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain">
@@ -327,26 +327,41 @@ export async function removeTerrainOfChip(actor, itemId, index) {
  */
 async function extendArea(actor, item, sp) {
   const scene = canvas.scene;
+  // R33c: the area may carry a terrain flag of its own (kind "area": Blood Grove is dangerous for foes).
   const area = scene.templates.find(t => {
     const f = t.flags?.[NS];
-    return f?.cells?.length && f.actorId === actor.id && f.abilityKey === item.id && !f[FLAG] && !f.followTokenId;
+    return f?.cells?.length && f.actorId === actor.id && f.abilityKey === item.id && (!f[FLAG] || f[FLAG].kind === "area") && !f.followTokenId;
   });
   if (!area) { ui.notifications.warn(`Place the area of ${item.name} first (its area button), then extend it.`); return; }
-  if (!(area.isOwner || game.user.isGM)) { ui.notifications.warn("Only the one who placed the area or the GM can extend it."); return; }
+  await extendAreaTemplate(area, sp.count, { actor, name: item.name, source: sp.source });
+}
+
+/**
+ * Add `count` spaces to an area already on the map, each adjacent to it (or to one just added): Blood Grove's
+ * "Area +N" chips (R33b), Bifröst Talent II's "grow by 2 spaces … at the end of each round" (R33c, area-motion.mjs).
+ * @param {MeasuredTemplateDocument} area
+ * @param {number} count
+ * @param {{actor?: Actor, name?: string, source?: string, note?: string}} [opts]
+ * @returns {Promise<number>} spaces added
+ */
+export async function extendAreaTemplate(area, count, { actor = null, name = "", source = "", note = "" } = {}) {
+  if (!area?.parent || area.parent !== canvas?.scene) { ui.notifications.warn("Open the scene of that area first."); return 0; }
+  if (!(area.isOwner || game.user.isGM)) { ui.notifications.warn("Only the one who placed the area or the GM can extend it."); return 0; }
   const own = area.flags[NS].cells;
   const keys = new Set(own.map(cellKey));
   const check = (c, picked) => {
     if (keys.has(cellKey(c))) return "That space is already in the area.";
     return [...own, ...picked].some(o => cheb(o, c) <= 1) ? "" : "Pick a space adjacent to the area.";
   };
-  const cells = await pickSpaces({ max: sp.count, color: area.fillColor ?? TERRAIN_COLORS.mark, check,
-    hint: `${item.name}${sp.source ? ` (${sp.source})` : ""}: add ${sp.count} space${sp.count > 1 ? "s" : ""} adjacent to the area.` });
-  if (!cells?.length) return;
+  const cells = await pickSpaces({ max: count, color: area.fillColor ?? TERRAIN_COLORS.mark, check,
+    hint: `${name}${source ? ` (${source})` : ""}: add ${count} space${count > 1 ? "s" : ""} adjacent to the area.` });
+  if (!cells?.length) return 0;
   await area.update({ [`flags.${NS}.cells`]: [...own, ...cells] });
   await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ actor }),
-    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-expand"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: the area grows by ${cells.length} space${cells.length > 1 ? "s" : ""} (${own.length + cells.length} in all).</div>`,
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-expand"></i> ${esc(name)}</strong>${source ? ` <small>(${esc(source)})</small>` : ""}: the area grows by ${cells.length} space${cells.length > 1 ? "s" : ""} (${own.length + cells.length} in all).${note ? `<br><small>${esc(note)}</small>` : ""}</div>`,
   });
+  return cells.length;
 }
 
 /**
@@ -413,7 +428,7 @@ async function offerTerrainOnMove(td, prev, to) {
     const was = touches(before, keys), now = touches(after, keys);
     if (was === now) continue;
     if (f.dangerous && (!f.foesOnly || hostile) && !danger) danger = { f, entered: now, doc };
-    if (f.onEnter && (now || f.enterExit) && (!f.enterFoes || hostile)) reminders.push({ doc, f, entered: now });
+    if (f.onEnter && (now || f.enterExit) && (!f.enterFoes || hostile) && !(f.enterAllies && hostile)) reminders.push({ doc, f, entered: now });
   }
   if (reminders.length) {
     await ChatMessage.create({

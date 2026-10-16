@@ -121,7 +121,7 @@ export function terrainLabel(s) {
  */
 export function terrainSpacesInText(text, { itemName = "" } = {}) {
   const t = plain(text);
-  if (!t || !/\b(?:pits?|terrain|motes?|mines?|runes?|afterimages?|brands?|choose a space|extend the area)\b/i.test(t)) return [];
+  if (!t || !/\b(?:pits?|terrain|motes?|mines?|runes?|afterimages?|brands?|waterspouts?|choose a space|extend the area)\b/i.test(t)) return [];
   const replace = REPLACE.test(t);
   const found = [];
   const add = (at, spec) => {
@@ -166,7 +166,9 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
     add(m.index, { kind: m[2].toLowerCase(), count: Number(m[1]), fixed: true });
 
   // Named marks: a mote, a mine, a rune, an afterimage, a brand — made by a verb earlier in the sentence.
-  for (const m of t.matchAll(/\b(motes?|mines?|runes?|afterimages?|brands?)\b/gi)) {
+  // R33c: "Summon a waterspout in a space in range that is difficult terrain" (Waterspout p.235) — a one-space mark
+  // that moves ("you may move the waterspout 1 space", area-motion.mjs).
+  for (const m of t.matchAll(/\b(motes?|mines?|runes?|afterimages?|brands?|waterspouts?)\b/gi)) {
     const [s0, s1] = sentenceBounds(t, m.index);
     const before = t.slice(s0, m.index);
     const verb = [...before.matchAll(/\b(?:creat(?:e|es|ing)|summon(?:s|ing)?|throw(?:s|ing)?|inscribes?|places?)\b/gi)].pop();
@@ -189,6 +191,7 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
       })();
     add(m.index, {
       kind: "mark", name, count, fixed: count > 1, ...danger,
+      difficult: /\bthat is difficult terrain\b/i.test(rest),
       under: /\b(?:on|in) the space (?:underneath|under|beneath) you\b/i.test(rest) ? "self" : "",
       // Symphony's motes: "None can be placed adjacent to each other or overlap"
       apart: /\bnone can be placed adjacent to each other\b/i.test(t),

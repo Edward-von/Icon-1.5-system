@@ -1,5 +1,60 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aree terrain effect che durano, si muovono o crescono (versione 1.15.70)
+
+### Round di debug del 15 ottobre, punto R33c
+
+- **Aree terrain senza effetto sul terreno**: le aree che restano (Terrain effects p.96) erano solo disegni: "The area is
+  a medium blast terrain effect that is difficult and dangerous terrain" (Tsunami p.233), "The area is dangerous terrain
+  for foes" (Blood Grove p.186, DARK WING di Morrigan p.171), "The area is dangerous terrain" (GUNGNIR di Blitz p.225,
+  MAGNABIO di Bio p.218), "All spaces of this terrain effect are shadow clouds" (Nocturne p.163; Shadow Cloud p.161
+  "Difficult terrain … blinded+") → nessuno leggeva il blocco dell'area → ora ogni area terrain piazzata porta il flag
+  `terrain` di R33b letto dal suo blocco (fino all'etichetta dopo): entrando o uscendo da un'area dangerous esce la stessa
+  domanda dei 2 piercing (una volta a turno, "for foes" solo per i foe); la frase "enter" diventa un promemoria
+  (Gust p.234 "Characters that enter any end space of the line …"; Bifröst p.226 "Yourself and allies that enter …",
+  solo per gli alleati).
+- **Tutto "lasting" per colpa di un talento**: un'abilità restava sulla mappa se *qualunque* suo testo diceva "terrain
+  effect" → la Small Blast dell'attacco di Bio (per il cloud di MAGNABIO) e la Burst 1 di Land Waster (per il boulder di
+  Ajax) non sparivano mai → ora resta l'area la cui frase è un terrain effect, o l'area dell'abilità quando è il testo
+  base (non talenti / mastery) a dirlo. Con MAGNABIO armata, la Medium Blast resta, la Large Blast no.
+- **Quench**: "create a small blast terrain effect of smoke on you" (Showdown p.157) si piazzava a mano in range 3 → ora
+  "… on you" la centra sul PG come "centered on you". Le aree di talenti / mastery (DARK WING, GUNGNIR, QUENCH, Nocturne
+  Talent II) erano già offerte dal bottone area solo con il talento scelto / la mastery sbloccata: ora restano anche loro.
+- **Più aree insieme**: "Gust's area is not replaced if the ability is used again, though you cannot have more than three
+  areas active" (NORTHSOUL p.234), "Create a second cloud" (Mist Strider p.170), "Create a new line 3 terrain effect, which
+  cannot overlap the first" (HEIMDALL di Bifröst), "creating a second line 3 area" (PATH TO ERENHELION p.226) → il secondo
+  piazzamento sostituiva il primo → ora, con un'area già sulla mappa, una domanda "Add another (2 of 3) / Replace them";
+  pieno, "Add" toglie la più vecchia. Limite letto dal testo; senza quelle frasi si sostituisce come prima.
+- **Muovere un'area**: nessun modo di spostare un'area piazzata → ora con il mouse sopra un'area che resta (anche un pit o
+  una mote di R33b) **Shift + freccia** la sposta di 1 casella (chi l'ha piazzata o il GM, come il + / − delle aure di R32);
+  il flag terrain va con lei.
+- **Tsunami**: "choose another edge of the map … at the start of your turns, your tsunami moves 4 spaces in a straight line
+  towards that edge. When a space of the tsunami would move off the map, the effect ends" (p.233) → ora al piazzamento
+  chiede il bordo (Top / Bottom / Left / Right) e lo salva nell'area; la card ha "Move 4 toward the bottom edge" (anche a
+  inizio turno del PG, dal GM attivo); con LEGENDARY STORM sbloccata, dal round 4, bottoni 1-4; STORMLASH ("Your active
+  tsunamis move 2 spaces in that direction") con quattro frecce che muovono tutte le Tsunami del PG. Se uno spazio uscirebbe
+  dalla mappa chiede se toglierla. "Any non-flying characters in Tsunami when it moves are dragged with it": la card dice chi
+  c'era dentro e **Drag them with it** apre la lista da spuntare (i volanti si tolgono); niente si muove senza il clic.
+  Talent I: la card ricorda il pit al centro.
+- **Waterspout**: "Summon a waterspout in a space in range that is difficult terrain … Once during your turn, you may move the
+  waterspout 1 space" (p.235) → non aveva niente da piazzare → ora chip "Waterspout · 1" (segno di una casella, difficult);
+  a inizio turno del PG una card con le frecce di 1 (Talent II: anche da 3), una volta. HURRICANE "At round 4 or later,
+  waterspouts grow to a small blast area instead of a single space. They become dangerous terrain": dal round 4 la card ha
+  "Grow to Small Blast".
+- **Ätherwand Talent II**: "At the start of your turn, you can move the area 1 space in any direction" (p.226) → le frecce a
+  inizio turno, letto dalla stessa regola del Waterspout.
+- **Bifröst Talent II**: "Bifröst areas grow by 2 spaces at the end of each round. When they grow, deal 1 piercing damage to all
+  characters inside" (p.226) → ora a fine round (non all'avvio del combat) una card con la frase e **Add 2 spaces**: si
+  cliccano due caselle adiacenti, come "Area +N" di Blood Grove (stessa funzione, `extendAreaTemplate`).
+- Scelte mie: i movimenti e la crescita sono letti al momento dal testo in gioco (talento scelto, mastery sbloccata), come la
+  crescita dei geyser; Shift + frecce e non frecce sole (le frecce muovono i token); il bordo della Tsunami si chiede una volta
+  e resta sull'area; le card di turno e di round le manda il GM attivo; i token trascinati non fanno domande degli oggetti.
+  Controllato su tutto il pack jobs con uno script (copia del pack): il "lasting" cambia solo per otto abilità il cui
+  terrain effect è in un talento / mastery (Apex, Bio, Blitz, Gates of Hell, Growing Season, Land Waster, Morrigan,
+  Showdown); di queste, solo Bio e Land Waster hanno un'area propria che ora sparisce, le aree terrain di talento / mastery
+  restano. Nessun pack, nessuna migrazione. Il resto (status per chi sta dentro, danni
+  dell'area, risucchio del Waterspout, sovrapposizione di HEIMDALL…) è in TODO, R33c2.
+
 ## 16 ottobre 2026 — Spazi di terreno: pit, dangerous, difficult e segni con nome (versione 1.15.69)
 
 ### Round di debug del 15 ottobre, punto R33b

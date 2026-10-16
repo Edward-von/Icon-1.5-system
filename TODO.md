@@ -752,12 +752,42 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
         afterimage libero e piazzarsi lì) senza bottone; Bio Talent I / II (pit, oggetti e difficult che diventano dangerous;
         2 piercing a chi è nel / accanto al dangerous) e Terraforming "Remove any difficult or dangerous terrain" a mano.
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come gli oggetti, R33a5).
-- [ ] **R33c. Aree terrain effect che durano, si muovono o crescono** (L)
+- [x] **R33c. Aree terrain effect che durano, si muovono o crescono** (L) (FATTO il 16 ottobre 2026, versione 1.15.70:
+      le aree terrain portano il flag `terrain` letto dal loro blocco (dangerous / difficult / for foes, shadow clouds,
+      frase "enter"), così la domanda dei 2 danni e i promemoria valgono anche per Tsunami, Blood Grove, Dark Wing, Gungnir,
+      Magnabio, Gust, Bifröst; "lasting" deciso per area e non per tutta l'abilità; Quench centrata sul PG; più aree insieme
+      con la domanda "Add another / Replace" (NORTHSOUL 3, second cloud / HEIMDALL / ERENHELION 2); Shift + frecce sopra
+      un'area la spostano di 1; Tsunami con il bordo chiesto e salvato, "Move 4", STORMLASH, LEGENDARY STORM, "Drag them
+      with it" con conferma, fine mappa; Waterspout come segno di una casella con le frecce a inizio turno e "Grow" di
+      HURRICANE; Ätherwand Talent II; Bifröst Talent II "Add 2 spaces" a fine round. Il resto in R33c2. Solo codice.)
       Partendo dalle aree "lasting" che ci sono già: muovere un'area già piazzata (Tsunami 4 spazi verso un bordo a
       inizio turno, Stormlash 2; Waterspout 1 spazio, Hurricane small blast), farla crescere (Bifröst Talent II +2
       spazi a fine round; Blood Grove), più aree insieme invece di sostituirle (Gust Northsoul fino a tre, Mist Strider
       charge "second cloud", Bifröst Heimdall seconda line), e le aree terrain dei talenti / mastery: Nocturne (shadow
       clouds), Mist Strider, Morrigan Dark Wing, Showdown Quench, Blitz Gungnir, Bio Magnabio (toxic cloud).
+- [ ] **R33c2. Aree terrain effect: quello che resta dopo R33c** (M/L)
+      Oggi le aree si piazzano, restano, portano dangerous / difficult e si muovono o crescono con un clic. Restano a mano:
+      - Status per chi sta dentro: "Foes inside are blinded+" (Mist Strider p.169), shadow clouds "characters are blinded+"
+        (p.161), "characters inside are shattered+" (Magnabio p.218), "Foes inside Tsunami take +1 curse on saves"
+        (Tsunami Talent II p.233), "allies in the area have cover" (Dark Wing p.171), Quench "grants cover … exiting the
+        area can gain stealth" (p.157): solo nel testo, nessuno status dato o tolto entrando / uscendo.
+      - Danni dell'area: Bifröst Talent II "When they grow, deal 1 piercing damage to all characters inside" (oggi solo la
+        frase sulla card), GUNGNIR "At the start and end of your turn, you may deal 1 piercing damage to all characters in
+        the area" (p.225, nessun promemoria), Mist Strider River Guardians "Foes that start their turn inside the area that
+        end their turn outside of it take 2 damage and are dazed".
+      - Tsunami (p.233): il piazzamento "as long as its edge is adjacent to an edge of the map" non è controllato (serve Alt
+        per piazzarla lontano dal PG); collisioni dei trascinati ("If they are blocked by obstructions, they collide") e
+        "also affects flying foes" (LEGENDARY STORM) a giudizio del tavolo; Talent I: il pit al centro si mette dal chip.
+      - Waterspout (p.235): risucchiare e risputare i personaggi ("removed from the battlefield … placing them in any other
+        free space in range 2"), Talent I shove, Talent II "leaves a space of difficult terrain in one space that it
+        vacates", HURRICANE "characters that start their turns adjacent to the area are shoved 1"; la "Small Blast" del
+        bottone area con HURRICANE è un'area a parte, non il waterspout cresciuto.
+      - Bifröst: HEIMDALL "cannot overlap the first" e PATH TO ERENHELION "bounces if its end space lands in the space of an
+        object" non controllati (si può solo aggiungere la seconda line); "grab on … teleport" a mano. Ätherwand Talent I
+        ("doesn't replace the old area, but extends it") e HELLERWIND (impassable terrain).
+      - Mist Strider: "consume a cloud … summoning a beast in any of its spaces" a inizio turno senza promemoria; Nocturne
+        Talent I (teleport dentro / fuori) e Trap Door Spider Technique a mano.
+      - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come R33a5 / R33b2).
 - [ ] **R33d. Segni che seguono un personaggio** (M)
       Un segno di R33b / R33c messo su un personaggio invece che su uno spazio: Polaris Talent I ("follow a character
       as a mark"), Party Favor mastery Amico, Implode mastery Waking Void.

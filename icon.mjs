@@ -107,6 +107,7 @@ import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { registerMapObjectHooks } from "./module/canvas/map-objects.mjs";
 import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
+import { registerAreaMotion } from "./module/canvas/area-motion.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble } from "./module/combat/gamble.mjs";
@@ -255,6 +256,9 @@ Hooks.once("init", () => {
 
   // ---- Terrain spaces a PC's ability / trait marks: pits, dangerous / difficult terrain, named marks (R33b) ----
   registerTerrainSpaceHooks();
+
+  // ---- Terrain-effect areas that move or grow: Tsunami, Waterspout, Bifröst Talent II, Shift + arrows (R33c) ----
+  registerAreaMotion();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();
