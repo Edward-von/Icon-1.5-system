@@ -190,7 +190,7 @@ const ADJ_AFTER_RE = new RegExp(`^(?:\\+?\\s*(?:,|/|\\bor\\b|\\band\\b|,\\s*(?:o
 const CHAIN_BETWEEN_RE = /^\+?(?:\s*,\s*|\s+(?:and|or)\s+|\s*,\s*(?:and|or)\s+)$/i;
 
 /** Words before a mention (in the same clause) that mean "not an infliction". */
-const SKIP_BEFORE_RE = /\b(?:if|while|whenever|against|already|immune|immunity|cannot|can't|can not|unless|instead of|for each|following|bonus damage to|damage to|damage against|cures?|cured|curing|remove[sd]?|removing|ends?|ended|ending|clears?|cleared|purged?|ignores?|ignoring|no longer|not|isn't|aren't|rather than|as if|counts? as|treated as|than|would be|being|were|was|had|has been|have been)\b/i;
+const SKIP_BEFORE_RE = /\b(?:if|while|whenever|against|already|immune|immunity|cannot|can't|can not|unless|instead of|for each|following|bonus damage to|damage to|damage against|cures?|cured|curing|remove[sd]?|removing|(?:ends?|ended|ending)(?!\s+(?:their|its|your|his|her|a|the)\s+turns?\b)|clears?|cleared|purged?|ignores?|ignoring|no longer|not|isn't|aren't|rather than|as if|counts? as|treated as|than|would be|being|were|was|had|has been|have been)\b/i;
 
 /** "you" as the subject (self) — but not "adjacent to you" / "hatred of you". */
 const PREP = "(?:to|of|from|with|by|towards?|near|around|against|for|on|at|under|beside|behind|between|inside|within|through|over|under|onto|into)";

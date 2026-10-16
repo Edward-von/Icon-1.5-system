@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R42b — Inflict per gli status dati a chi "finisce il turno" in un'area (16 ottobre 2026, versione 1.15.44)
+
+Setup: PG di prova con Mist Strider e Ätherwand (dal compendio Jobs o già sulla scheda: è solo codice); un foe sulla
+mappa.
+
+- [ ] **Mist Strider, mastery**: sbloccare la mastery → Show in Chat → riquadro Inflict, gruppo "River Guardians":
+      bottone Dazed. Resta il Blinded del Terrain effect.
+- [ ] **Mist Strider senza mastery**: il Dazed non compare.
+- [ ] **Ätherwand**: Show in Chat → riquadro Inflict, gruppo "Terrain Effect": bottone Shattered.
+- [ ] **Abilità che tolgono uno status (non devono cambiare)**: un'abilità con "ends" / "removes" uno status (es. una
+      cura) non propone l'Inflict di quello status.
+
 ## R42 — Gain dei talenti con "one of them" e "Grant you and your ally" (16 ottobre 2026, versione 1.15.43)
 
 Setup: PG di prova Shade con Shadow Play ed Enochian con Blazing Bond (vanno bene anche quelli già sulla scheda: è solo

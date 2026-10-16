@@ -119,11 +119,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       nominati prima nella frase ora dà il Gain agli alleati (Shadow Play Talent II, Evasion), e "Grant both you and
       your ally defiance" dà il Gain a te e all'alleato (Blazing Bond Talent II). Di riflesso anche Crimson Bloom
       Talent I, Divine Aegis Talent II e la mastery di Wish ("they also gain defiance"). Solo codice.)
-- [ ] **R42b. Mist Strider: il dazed della mastery non va nell'Inflict** (S, bug)
+- [x] **R42b. Mist Strider: il dazed della mastery non va nell'Inflict** (S, bug)
       Mastery River Guardians (p.170): "Foes that start their turn inside the area that end their turn outside of it
       take 2 damage and are dazed." Causa diversa da R42: la lettura scarta lo status perché nella frase c'è "end"
       ("end their turn"), che per il parser vuol dire "togliere uno status" ("ends the dazed"). Va escluso "end(s)
       their / its / your turn" da quella parola.
+      (FATTO il 16 ottobre 2026, versione 1.15.44: "end / ends / ended / ending" seguito da "their / its / your / a /
+      the turn" non conta più come "togliere uno status". Mist Strider con la mastery propone l'Inflict Dazed; di
+      riflesso anche Ätherwand ("Foes that end their turn in the area are shattered", p.226) propone lo Shattered.
+      Solo codice.)
 - [ ] **R43. Summon del proprio job su abilità che non lo creano** (S, bug)
       Harrow: "Currently has a shadow in the ability, despite only consuming them, rather than placing them." Shadow Play:
       "Has the shadow summon in it's ability card, despite not placing shadows." (Harrow Talent II: "consume a shadow"; in

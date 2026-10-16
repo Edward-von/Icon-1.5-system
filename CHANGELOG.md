@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Inflict per gli status dati a chi "finisce il turno" in un'area (versione 1.15.44)
+
+### Round di debug del 16 ottobre, punto R42b
+
+- **La mastery di Mist Strider non proponeva il Dazed**: "Foes that start their turn inside the area that end their
+  turn outside of it take 2 damage and are dazed" (River Guardians, p.170) → la lettura del testo scarta uno status
+  se prima, nella stessa frase, c'è una parola che vuol dire "togliere" ("ends the dazed", "removes", "cures"); fra
+  queste c'era "end", e qui "end their turn" vuol dire solo "finire il turno" → "end / ends / ended / ending" seguito
+  da "their / its / your / his / her / a / the turn" non conta più come "togliere": con la mastery sbloccata compare il
+  bottone Inflict Dazed (gruppo "River Guardians").
+- Confronto prima/dopo su tutte le abilità del compendio Jobs (base, combo, Talent I, Talent II, mastery): cambiano
+  solo **Mist Strider** (mastery: Dazed) ed **Ätherwand** ("Foes that end their turn in the area are shattered",
+  p.226: ora c'è l'Inflict Shattered nel gruppo "Terrain Effect", in tutte le versioni). Nessun'altra abilità cambia.
+  Solo codice, nessun dato modificato: vale anche per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Gain dei talenti con "one of them" e "Grant you and your ally" (versione 1.15.43)
 
 ### Round di debug del 16 ottobre, punto R42
