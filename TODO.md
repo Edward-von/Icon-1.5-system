@@ -358,7 +358,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (p.178): la Small Blast va su di te da sola, ma "Medium Blast" e "Large Blast" si piazzano a mano (il "centered on
       you" è solo nella prima frase). Lo stesso per le aree centrate su pit / oggetti (Holy Talent I, Pandaemonium
       combo, Helix Heel), che restano a mano finché pit e oggetti non sono sulla mappa (R33).
-- [ ] **Emerso lavorando su R53 — la migrazione 25 non riconosce i testi con più spazi** (S): in `migrations.mjs` la
+- [x] **Emerso lavorando su R53 — la migrazione 25 non riconosce i testi con più spazi** (S) (FATTO il 16 ottobre 2026, versione 1.15.64: regex corrette; la 25 non era mai stata eseguita in nessun mondo, quindi corretta lì senza una migrazione nuova): in `migrations.mjs` la
       funzione `flat` della migrazione 25 usa `replace(/s+/g, " ")` (manca la barra: toglie le lettere "s" invece di
       unire gli spazi), quindi confronta un testo storpiato con quello vecchio e non aggiorna nessuna copia dei sei Limit
       Break di R39. Va corretta con `/\s+/g` in una nuova migrazione (la 25 è già stata eseguita nei mondi aggiornati).
@@ -366,7 +366,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       dice "you can keep extending the line by 3 spaces, but can only extend it once per object", il libro (p.219) "by 3
       spaces this way each time, but can only extend it once per object". Ripristinare "this way each time" (pack +
       migrazione sulle copie).
-- [ ] **Emerso lavorando su R60 — R59: due regex con un carattere "backspace" al posto di `\b`** (S, bug): nel commit
+- [x] **Emerso lavorando su R60 — R59: due regex con un carattere "backspace" al posto di `\b`** (S, bug) (FATTO il 16 ottobre 2026, versione 1.15.64: regex corrette; la 25 non era mai stata eseguita in nessun mondo, quindi corretta lì senza una migrazione nuova): nel commit
       di R59 (1.15.60) il `\b` delle regex è finito nel file come carattere di controllo 0x08. In
       `module/actor/sheets/IconSheet.mjs` (riga ~739, `regain = /…spend (\d+) Aether any time to regain it…/i`) la regex
       cerca un backspace prima di "spend" e non trova mai niente → il bottone "Regain (2 Aether)" di Aether Deflection

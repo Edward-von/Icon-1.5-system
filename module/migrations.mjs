@@ -957,7 +957,7 @@ const MIGRATIONS = {
         new: "A flash of the scythe, and the line between life and death is blurred. Summon: You slash an adjacent foe with your weapon, knocking their soul out of their body. Draw a line 4 area effect from your foe facing directly away from you and summon the soul in the last available space.\nSevered Soul — Size 1, intangible, immobile. Summon Effect: While they have their soul knocked out, foes can act normally. However, the soul can be targeted as if it was the body, transferring all damage or effects it would take to the body, no matter the distance or line of sight. Damage becomes divine. Abilities that are able to target both the body and soul of the foe (such as AoEs) can hit both.\nThe soul lasts until the end of your next turn, or until the affected character is defeated.",
       },
     };
-    const flat = (t) => String(t ?? "").replace(/s+/g, " ").trim();
+    const flat = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
     const lbStale = (item) => item.type === "limit-break" && FIX[(item.name ?? "").trim()]
       && flat(item.system?.effect) === FIX[item.name.trim()].old;
     const tplStale = (item) => item.type === "job-template" && FIX[(item.system?.limitBreak?.name ?? "").trim()]

@@ -43,7 +43,7 @@ export function infuseName(text) {
  * Nothing is rolled for it, so it is spent and posted at once, not armed.
  */
 export function isStandaloneInfusion(text) {
-  return /^\s*[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}\(\s*(?:[Ff]ree [Aa]ction|\d+\s+[Aa]ctions?|[Ii]nterrupt[^)]*)\s*\)\s*[—–-]/.test(String(text ?? ""));
+  return /^\s*[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}\(\s*(?:[Ff]ree [Aa]ction|\d+\s+[Aa]ctions?|[Ii]nterrupt\b[^)]*)\s*\)\s*[—–-]/.test(String(text ?? ""));
 }
 
 /**

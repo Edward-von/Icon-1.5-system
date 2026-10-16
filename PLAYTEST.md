@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Regex rotte di R39 e R59 (16 ottobre 2026, versione 1.15.64)
+
+Prima di provare: in un mondo con schema vecchio (ultimo deploy 1.15.2), un PG con il Limit Break Gran Levincross o
+Death Sentence preso **prima** dell'aggiornamento. Solo JS: F5 dopo il deploy.
+
+- [ ] **Migrazione 25**: al caricamento (GM) la console dice "Migration 25" con un numero > 0; il Limit Break del PG
+      ora ha "Effect:" e i capoversi come nel compendio (test R39 più sotto).
+- [ ] **Regain di Aether Deflection**: rifai i test R59 su Aether Deflection: il bottone "Regain (2 Aether)" compare
+      sul tratto, è spento con meno di 2 Aether e, premuto, toglie 2 Aether e scrive in chat.
+- [ ] **Stormlash** (controllo che non si sia rotto niente): Infuse 1 di Tsunami speso subito, senza restare armato.
+
 ## R62 — Promemoria "round N or later" a inizio round (16 ottobre 2026, versione 1.15.63)
 
 Setup: un combat con un PG Wright Spellblade con Drifting Leaf (mastery GREAT CYCLONE sbloccata) e il tratto Storm

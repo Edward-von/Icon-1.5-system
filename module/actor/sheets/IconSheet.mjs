@@ -740,7 +740,7 @@ export class IconSheet extends BaseActorSheet {
       }
       // "You can spend 2 Aether any time to regain it" (Aether Deflection,
       // Spellblade p.224): a button that pays the Aether and says so in chat.
-      const regain = /spend (\d+) Aether any time to regain it/i.exec(String(t.system?.description ?? "").replace(/<[^>]+>/g, " "));
+      const regain = /\bspend (\d+) Aether any time to regain it\b/i.exec(String(t.system?.description ?? "").replace(/<[^>]+>/g, " "));
       if (regain) {
         const cost = Number(regain[1]), aether = cr.aether?.value ?? 0;
         return { type: "aetherRegain", cost, aether, short: aether < cost };

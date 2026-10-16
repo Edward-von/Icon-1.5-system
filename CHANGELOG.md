@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Tre regex rotte di questo round (versione 1.15.64)
+
+### Round di debug del 16 ottobre, voci emerse su R53 e R60
+
+- **Limit Break non aggiornati sulle schede (R39)**: la migrazione 25 doveva sostituire il testo vecchio di sei Limit
+  Break già presi (Gran Levincross, Death Sentence, …) → la sua funzione di confronto aveva `/s+/` invece di `/\s+/`,
+  quindi toglieva le lettere "s" dal testo invece di unire gli spazi e non riconosceva mai il testo vecchio → corretta
+  la regex. Nessun mondo l'ha ancora eseguita (l'ultimo deploy è la 1.15.2, schema 19), quindi basta correggerla lì
+  senza una migrazione nuova.
+- **Bottone "Regain (2 Aether)" di Aether Deflection mai visibile (R59)**: "you can spend 2 Aether any time to regain
+  it" (p.224) → nella regex i due `\b` erano finiti nel file come carattere invisibile "backspace" (0x08), quindi
+  cercava un backspace prima di "spend" e non trovava niente → rimessi i `\b`.
+- **Versioni Infuse scritte "(Interrupt …)"**: stessa causa in `isStandaloneInfusion` (`[Ii]nterrupt` seguito dal
+  carattere 0x08) → rimesso il `\b`. Nel compendio nessuna versione usa questa forma oggi; Stormlash funzionava già.
+- Controllato tutto il codice (`module/`, `macros/`, template): non restano altri caratteri di controllo né regex con
+  la barra persa.
+
 ## 16 ottobre 2026 — Promemoria "round N or later" a inizio round (versione 1.15.63)
 
 ### Round di debug del 16 ottobre, punto R62
