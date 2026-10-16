@@ -212,9 +212,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       manuale cosa cambia al capitolo 3.
       (FATTO il 16 ottobre 2026, versione 1.15.53: al capitolo 3 Death's Apprentice permette 2 Stacked Dice (p.150);
       il template passava un massimo vuoto al click, che si fermava a 1. Ora il secondo dado si accende.)
-- [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati)
+- [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati) (in attesa di risposta)
       "(This is an error with the book) Ability tag says 'Power Die' despite not utilizing die mechanics." Verificare
       sul manuale; se è un errore del libro, decidere se toglierlo (pack + migrazione) o lasciarlo come nel libro.
+      Verificato: il libro (p.152) stampa davvero "1 action / Mark, Power die", ma né il testo né altro usa un dado
+      (Cheat Time fa un Gamble, non un power die; Chronotemper non ha talenti né mastery). Nel compendio Jobs ha tags
+      ["mark","power-die"] e nessun dado: sulla scheda compare solo l'etichetta "Power Die" con il suo tooltip,
+      nessun contatore.
+      Domanda per Edoardo: (a) togliere il tag "power-die" da Chronotemper nel compendio Jobs, con una migrazione che lo
+      toglie anche dalle schede dove l'abilità è già presa (si discosta dal libro, ma l'etichetta non trae in inganno),
+      oppure (b) lasciarlo come stampato nel libro e chiudere il punto senza modifiche?
 - [ ] **R53. Heave-Ho: l'Effect dopo l'Area** (S, dati)
       "The 'Effect' is currently listed after the area, when the effect should go first, as the area is made with the
       effect." (Nel round 4, 30 agosto, era stato separato Trigger/Effect; l'ordine "Effect dopo Area per gli attacchi" di
