@@ -92,7 +92,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       grassetto (Effect, Attack, Aura, Stance, Delay, Infuse…), elenchi "•" una voce per riga, descrizione in corsivo.
       Nel compendio Jobs ripristinati etichette e a capo del libro per Gigaflare, Gran Levincross, Elemental,
       Cataclysm, March of the Saints e Death Sentence; migrazione 25 per le copie sulle schede.)
-- [ ] **R40. Combo che sostituiscono solo una parte della base** (S/M, bug, continua R1)
+- [x] **R40. Combo che sostituiscono solo una parte della base** (S/M, bug, continua R1)
+      (FATTO il 16 ottobre 2026, versione 1.15.41: "Instead of the mark, gain Effect: …" toglie il blocco Mark e il tag
+      Mark (Succubus, p.164); una combo senza blocchi che dice "instead of <verbo>-ing" sostituisce il blocco della
+      base su quel verbo (Penumbra, p.162, al posto di "You may teleport 3"). Toccate solo queste due combo.)
       - Umbra / Penumbra: "Combo text does not properly replace specified effect within the ability string when toggled
         on". Penumbra: "Teleport your foe up to 3 spaces towards you instead of teleporting yourself" (sostituisce
         l'Effect "You may teleport 3 before the attack").
@@ -233,6 +236,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Hell ha le tre distanze (1 space / 2-4 / 5+) come sotto-elenco nel libro (p.127), nel compendio sono in riga;
       Paradiso ha perso la prima frase del blocco Aura ("You gain an aura of supernatural accuracy…", p.155);
       la descrizione di Lycanthropy è tagliata ("…granting you massively increased speed and power", p.168).
+- [ ] **Emerso lavorando su R40 — danno di Succubus** (S): con la combo di Incubus armata, `parseComboAbilityDamage`
+      (`combat/ability-damage.mjs`) legge "deal 3 damage to all characters marked by Incubus" come danno Hit e
+      sostituisce il [D]+fray della base: il Damage Roll propone 3 su Hit invece di [D]+fray (p.164: Succubus cambia
+      solo il Mark). I 3 danni andrebbero sotto Other.
 
 ---
 

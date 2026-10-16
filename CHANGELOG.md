@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Combo "instead of …" che sostituiscono solo una parte della base (versione 1.15.41)
+
+### Round di debug del 16 ottobre, punto R40
+
+- **Penumbra e Succubus stampavano anche la parte della base che sostituiscono**: Maar segnalava che il testo combo
+  di Umbra non sostituiva l'effetto indicato e che quello di Incubus non toglieva il Mark dalla card in chat → R1
+  (1.15.3) riconosceva solo le combo complete (nome in maiuscolo) e la frase "replace the base effect with"; queste
+  due combo dicono invece "instead of …" e finivano intere in una riga "Combo — …" in cima, con sotto la base
+  invariata. Nel libro: Penumbra (Shade, p.162) "Teleport your foe up to 3 spaces towards you instead of
+  teleporting yourself" prende il posto dell'Effect "You may teleport 3 before the attack" (l'Effect "Your foe is
+  blinded" resta); Succubus (p.164) "Instead of the mark, gain Effect: deal 3 damage…" toglie il blocco Mark →
+  ora il testo combo viene letto così, in modo generico ma prudente: "Instead of the <blocco>, gain <Etichetta>: …"
+  toglie il blocco della base con quel nome (solo se è un'etichetta del libro e se subito dopo c'è un blocco con
+  etichetta) e, per Succubus, anche il tag Mark (niente bottone Mark con la combo armata); una combo senza blocchi
+  che dice "instead of <verbo>-ing" sostituisce il primo blocco della base che parla di quel verbo ("teleporting"
+  → l'Effect con "teleport"); se non ne trova nessuno resta in cima come prima. Vale per Show in Chat e per la card
+  d'attacco con la combo armata. Combo toccate nel compendio Jobs: solo **Penumbra** (Umbra) e **Succubus**
+  (Incubus). Controllate tutte le 17 combo del pack: le altre danno gli stessi blocchi e tag di prima (l'unica altra
+  con "instead", DAWN di Dervish, "instead of the end", è una combo completa e non cambia). Solo codice, nessun dato
+  modificato. Il barrato parziale sulla scheda resta da fare (voce "Emerso lavorando su R1 — barrato parziale").
+
 ## 16 ottobre 2026 — Testo dei Limit Break impaginato come nel libro (versione 1.15.40)
 
 ### Round di debug del 16 ottobre, punto R39

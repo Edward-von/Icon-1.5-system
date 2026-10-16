@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R40 — Combo "instead of …" che sostituiscono solo una parte della base (16 ottobre 2026, versione 1.15.41)
+
+Setup: PG Shade di prova con Umbra e Incubus (vanno bene anche quelli già sulla scheda: è solo codice), un combo
+token; un foe sulla mappa come bersaglio.
+
+- [ ] **Penumbra, Show in Chat**: con la combo di Umbra attiva, Show in Chat → la card si intitola "Penumbra (Umbra
+      combo)" e ha un Effect (col segno della combo) "Teleport your foe up to 3 spaces towards you instead of
+      teleporting yourself. A foe can save…" al posto di "You may teleport 3 before the attack"; c'è ancora "Effect:
+      Your foe is blinded." e il bottone Inflict per Blinded. Nessuna riga "Combo — Penumbra" in cima.
+- [ ] **Penumbra, attacco**: con la combo armata, attacco col bersaglio → la card d'attacco elenca l'Effect di
+      Penumbra; Hit / Miss sono quelli di Umbra.
+- [ ] **Succubus, Show in Chat**: con la combo di Incubus attiva → card "Succubus (Incubus combo)" con "Effect: deal 3
+      damage to all characters marked by Incubus, and teleport them 2."; il blocco "Mark: Mark your foe…" non c'è,
+      e nemmeno la riga "Combo — Succubus: Instead of the mark, gain…".
+- [ ] **Succubus, niente Mark**: con la combo armata il tag Mark sparisce dai chip e non c'è il bottone Mark;
+      disarmando la combo tornano tag, bottone e blocco Mark di Incubus.
+- [ ] **Altre combo invariate**: The Hook (Low Blow) mostra ancora "Combo — The Hook" in cima con la base sotto;
+      Sweet Torment / Indignation sostituiscono l'Effect come prima; Reap (Sow), Devil Hand (God Hand) e Dawn
+      (Dervish) come prima.
+
 ## R39 — Testo dei Limit Break impaginato come nel libro (16 ottobre 2026, versione 1.15.40)
 
 Setup: PG di prova; uno alla volta i Limit Break dal compendio Jobs (trascinati sulla scheda o dal cambio di job

@@ -13,7 +13,7 @@
  * Wright p.204-205) + per-job bulleted rule lists + quick-reference tables.
  */
 
-import { comboReplacesBase } from "./ability-blocks.mjs";
+import { comboReplacesBase, parseComboText, masteryGainsBothEffects } from "./ability-blocks.mjs";
 
 /**
  * Each entry is either:
@@ -338,6 +338,10 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   // A complete combo ability marks only if it writes its own "Mark:" block:
   // Sow's REAP is a melee attack with no mark, but its tags were copied from Sow.
   if (comboMode && comboReplacesBase(s.comboEffect, s) && !/\bMark:/.test(_plainText(s.comboEffect))) {
+    current = current.filter(t => String(t).toLowerCase() !== "mark");
+  }
+  // "Instead of the mark, gain Effect: …" (Succubus, p.164): no mark either.
+  if (comboMode && !masteryGainsBothEffects(s) && parseComboText(s.comboEffect).drops.includes("mark")) {
     current = current.filter(t => String(t).toLowerCase() !== "mark");
   }
 

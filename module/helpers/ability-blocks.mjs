@@ -122,7 +122,7 @@ const COMBO_LABEL_RE = new RegExp(
  */
 export function parseComboText(comboText) {
   let text = String(comboText ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim();
-  if (!text) return { name: "", lead: "", blocks: [], whole: false };
+  if (!text) return { name: "", lead: "", blocks: [], whole: false, drops: [], insteadOf: "" };
 
   // "REAP — …" / "The Hook: …" — the book names the combo version first.
   let name = "";
@@ -142,6 +142,22 @@ export function parseComboText(comboText) {
   // the rest is the new Effect block, which takes the base Effect's place.
   text = text.replace(/^As above,?\s*but\s+/i, "")
              .replace(/\s*,?\s*(?:and\s+)?replaces?\s+the\s+base\s+effect\s+with:\s*/i, "\nEffect: ");
+  // "Instead of the mark, gain Effect: …" (Succubus, p.164): the base block
+  // named there goes away and the combo's own block takes its place. Only a
+  // block label the book uses counts ("mark", "effect"…), and only when a
+  // labelled block follows, so a sentence that merely says "instead" stays as written.
+  const drops = [];
+  if (!whole) {
+    const m = text.match(/^Instead\s+of\s+(?:the\s+|your\s+)?([A-Za-z ]+?)\s*,\s*(?:gain\s+)?/i);
+    const rest = m ? text.slice(m[0].length) : "";
+    const isLabel = (l) => SECTION_LABELS.some(x => new RegExp(`^(?:${x})$`, "i").test(l))
+                        || COMBO_FIELD_LABELS.some(([re]) => re.test(l));
+    const next = rest.match(/^([A-Za-z ]+?):/);
+    if (m && isLabel(m[1].trim()) && next && isLabel(next[1].trim())) {
+      drops.push(m[1].trim().toLowerCase());
+      text = rest;
+    }
+  }
 
   const hits = [];
   COMBO_LABEL_RE.lastIndex = 0;
@@ -155,7 +171,17 @@ export function parseComboText(comboText) {
     const key  = COMBO_FIELD_LABELS.find(([re]) => re.test(h.label))?.[1] ?? "";
     return { key, label: _canonComboLabel(h.label), text: body };
   }).filter(b => b.text);
-  return { name, lead, blocks, whole };
+  // "Teleport your foe up to 3 spaces towards you instead of teleporting
+  // yourself." (Penumbra, p.162): a combo with no labelled block that says
+  // what it does "instead of <doing>" rewrites the base block about that
+  // action ("Effect: You may teleport 3 before the attack"), not the whole
+  // ability. `insteadOf` is the verb's stem, matched against the base blocks.
+  let insteadOf = "";
+  if (!whole && !blocks.length && lead) {
+    const m = lead.match(/\binstead\s+of\s+([a-z]{3,})ing\b/i);
+    if (m) insteadOf = m[1].toLowerCase();
+  }
+  return { name, lead, blocks, whole, drops, insteadOf };
 }
 
 /**
@@ -367,6 +393,21 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
     const combo = parseComboText(comboText);
     const both  = masteryGainsBothEffects(s);
     if (combo.whole && !both) out.length = 0;
+    // "Instead of the mark, gain Effect: …": the named base block is dropped.
+    if (!both && combo.drops.length) {
+      for (let i = out.length - 1; i >= 0; i--) {
+        const label = String(out[i].label ?? "").toLowerCase();
+        if (combo.drops.includes(label) || combo.drops.includes(out[i].key)) out.splice(i, 1);
+      }
+    }
+    // "… instead of teleporting yourself": the combo sentence replaces the
+    // base block about that action; with no such block it rides on top as before.
+    let lead = combo.lead;
+    if (!both && combo.insteadOf) {
+      const re = new RegExp(`\\b${combo.insteadOf}`, "i");
+      const at = out.findIndex(b => re.test(_plain(b.text)));
+      if (at >= 0) { out[at] = { ...out[at], text: lead, combo: true, comboDone: true }; lead = ""; }
+    }
     for (const cb of combo.blocks) {
       if (both) {
         const name = comboDisplayName(comboText);
@@ -378,10 +419,10 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
       if (at >= 0) out[at] = { ...out[at], text: cb.text, combo: true, comboDone: true };
       else out.push({ key: cb.key || "section", label: cb.label, text: cb.text, fromText: !cb.key, combo: true, comboDone: true });
     }
-    if (combo.lead) {
+    if (lead) {
       // The card adds the bolt icon in front of every combo block, so the label doesn't carry one.
       const name = comboDisplayName(comboText);
-      out.unshift({ key: "combo", label: `Combo${name ? ` — ${name}` : ""}`, text: combo.lead, fromText: true, combo: true });
+      out.unshift({ key: "combo", label: `Combo${name ? ` — ${name}` : ""}`, text: lead, fromText: true, combo: true });
     }
   }
 
