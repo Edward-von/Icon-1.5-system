@@ -128,11 +128,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       the turn" non conta più come "togliere uno status". Mist Strider con la mastery propone l'Inflict Dazed; di
       riflesso anche Ätherwand ("Foes that end their turn in the area are shattered", p.226) propone lo Shattered.
       Solo codice.)
-- [ ] **R43. Summon del proprio job su abilità che non lo creano** (S, bug)
+- [x] **R43. Summon del proprio job su abilità che non lo creano** (S, bug)
       Harrow: "Currently has a shadow in the ability, despite only consuming them, rather than placing them." Shadow Play:
       "Has the shadow summon in it's ability card, despite not placing shadows." (Harrow Talent II: "consume a shadow"; in
       Shadow Play "shadow" compare solo nel nome della mossa.) Il collegamento per nome di R7 deve ignorare "consume a
       shadow" e simili.
+      (FATTO il 16 ottobre 2026, versione 1.15.45: il summon compare solo se il nome segue un verbo che lo crea
+      ("summon a shadow", "create a plant", "leave a bomb"…), e si leggono tutti i blocchi dell'abilità (Finishing
+      Blow, Slay, Collide…). Perdono il summon Harrow, Shadow Play, Nocturne, Assassinate, Fairy Ring; Harvest passa da
+      Plant a Thrall; guadagnano Underway, Heave-Ho, Cavaliere. Solo codice.)
 - [ ] **R44. Tratti che evocano un summon senza il summon collegato** (S/M, bug)
       Bound Spirit (Freelancer, Astral Seraph), Beast Master (Warden, Great Beast), Selkie (Stormbender) e Cheap Trick
       (Fool, "leave a bomb in an adjacent space"; "Having a bomb summon node on this trait would be useful"). Come per l'aura

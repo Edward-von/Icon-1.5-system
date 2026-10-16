@@ -1,5 +1,32 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Summon solo sulle abilità che lo creano (versione 1.15.45)
+
+### Round di debug del 16 ottobre, punto R43
+
+- **Harrow e Shadow Play mostravano il summon Shadow**: Harrow dice solo "consume a shadow in range 2 of you" (Talent
+  II, p.162), Shadow Play non nomina nessuno shadow fuori dal proprio nome ("At round 4 or later in combat, Shadow Play
+  becomes a free action", p.163) → dal 1.15.9 (R7) un'abilità offriva il summon del proprio job ogni volta che il suo
+  nome compariva nel testo, in qualunque modo → ora il summon compare solo se il nome viene subito dopo un verbo che lo
+  mette in campo, con al massimo un articolo o un numero in mezzo: "summon a shadow", "summon +1 more beasts", "create a
+  plant", "leave a bomb", "becoming a beast summon", thrall che "collapse into plants" (i thrall diventano piante,
+  p.183). "consume a shadow", "shadows in range 2", "shadow clouds", "passes through a plant" non bastano più.
+- Il testo letto ora comprende tutti i blocchi dell'abilità, non solo Effect / Hit / Miss / Area / Combo / talenti /
+  mastery: anche Charge, Heroic, Exceed, Collide, Slay, Crit, Finishing Blow e Comeback. Così Umbra tiene lo Shadow
+  grazie al suo "Finishing Blow: Summon a shadow adjacent to your target" (p.162), non più per il "consume a shadow" del
+  Talent II.
+- Confronto prima/dopo su tutte le abilità del compendio Jobs (script su una copia del pack):
+  - **perdono il summon**: Harrow, Shadow Play, Nocturne ("shadow clouds", "shadow magic") e Assassinate ("the shadow
+    of your foe") → Shadow; Fairy Ring → Plant (la mastery crea un oggetto Megamushroom che "counts as a plant" ma non
+    sparisce quando perde la benedizione, quindi non è il summon Plant);
+  - **cambia**: Harvest perde Plant (fa solo esplodere le piante che attraversa) e guadagna Thrall ("Slay: Summon a
+    Thrall for each foe in the area");
+  - **guadagnano il summon**: Underway → Beast (Charge: "Summon a beast each time you create an underway"), Heave-Ho →
+    Salt Sprite (Collide: "Summon a salt sprite"), Cavaliere → Bomb (Slay e Finishing Blow: "Summon a bomb");
+  - le altre 25 abilità con un summon restano uguali (fra queste Umbra, Umbral Echo, Nightmare, Apex, Morrigan,
+    Gravebirth, Carnevale, Chaos Tarot con Wild Card e Master Card).
+  Solo codice, nessun dato modificato: vale anche per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Inflict per gli status dati a chi "finisce il turno" in un'area (versione 1.15.44)
 
 ### Round di debug del 16 ottobre, punto R42b

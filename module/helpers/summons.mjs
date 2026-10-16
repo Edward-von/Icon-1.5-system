@@ -40,8 +40,54 @@ export async function loadSummonIndex() {
 /** The cached index without loading it (for synchronous contexts). */
 export function summonIndex() { return _index ?? []; }
 
+// Rules text an ability's summons are read from: every block of the ability,
+// not only the main effect (Umbra's "Finishing Blow: Summon a shadow adjacent
+// to your target", p.162).
+const TEXT_FIELDS = ["description", "hitEffect", "missEffect", "areaEffect", "chargeEffect",
+  "heroicEffect", "exceedEffect", "collideEffect", "slayEffect", "critEffect",
+  "finishingBlowEffect", "comebackEffect", "comboEffect", "talent1", "talent2", "mastery"];
+
+// Verbs that put a creature on the table, right before its name with only a
+// count or an article between: "summon a shadow", "summon +1 more beasts",
+// "create a plant", "leave a bomb", "becoming a beast summon", thralls that
+// "turn into plants" (p.183). A name used any other way ("consume a
+// shadow", "shadows in range 2", "Shadow Play", "a massive flock of winged
+// beasts") is only talk about the creature, not a summon of it.
+const CREATE_VERB = String.raw`(?:summon(?:s|ed|ing)?|creat(?:e|es|ed|ing)|leav(?:e|es|ing)|left|plac(?:e|es|ed|ing)|becom(?:e|es|ing)|(?:collaps(?:e|es|ed|ing)|turn(?:s|ed|ing)?|transform(?:s|ed|ing)?)\s+into)`;
+const COUNT = String.raw`(?:(?:a|an|one|two|three|four|\+?\d+|more|another|additional|extra|new|real|regular|single)\s+)*`;
+const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /**
- * The summons an ability's text names, for its own job first.
+ * The summons a piece of rules text creates, out of a summons index.
+ * Pure (no Foundry globals), so the compendium can be checked from Node.
+ *
+ * @param {object} system     the ability's system data
+ * @param {string} jobName    the character's job
+ * @param {Array<{name:string, job:string}>} index
+ */
+export function matchSummons(system, jobName, index) {
+  const s = system ?? {};
+  const text = TEXT_FIELDS.map(k => String(s[k] ?? "")).join(" ")
+    .replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").toLowerCase();
+  if (!text.trim()) return [];
+  const job = String(jobName || s.jobName || "").toLowerCase();
+  const out = [];
+  for (const entry of index) {
+    // A summon belonging to another job is never offered: in the jobs pack
+    // every real summon is its own job's, and the cross-job hits are just
+    // words (Raging Wolf's "Beast Within", Blackstar's "Great Spirit Bomb").
+    // Abilities without a job still match.
+    if (entry.job && job && entry.job.toLowerCase() !== job) continue;
+    // Word boundaries so "plant" doesn't fire on "implanted".
+    const re = new RegExp(String.raw`\b${CREATE_VERB}\s+${COUNT}${esc(entry.name.toLowerCase())}s?\b`, "i");
+    if (!re.test(text)) continue;
+    out.push(entry);
+  }
+  return out;
+}
+
+/**
+ * The summons an ability creates, for its own job.
  *
  * Matching is by name against the pack, so an ability that merely says
  * "summon" with no creature (Waterspout's own spout, Aethershard's object)
@@ -54,24 +100,5 @@ export function summonIndex() { return _index ?? []; }
 export function summonsForAbility(system, jobName = "") {
   const index = summonIndex();
   if (!index.length) return [];
-  const s = system ?? {};
-  const text = [s.description, s.hitEffect, s.missEffect, s.areaEffect, s.comboEffect,
-                s.talent1, s.talent2, s.mastery]
-    .map(v => String(v ?? "")).join(" ").replace(/<[^>]+>/g, " ").toLowerCase();
-  if (!text.trim()) return [];
-  const job = String(jobName || s.jobName || "").toLowerCase();
-  const out = [];
-  for (const entry of index) {
-    const name = entry.name.toLowerCase();
-    // Word-boundary match so "plant" doesn't fire on "implanted".
-    const re = new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}s?\\b`, "i");
-    if (!re.test(text)) continue;
-    // A summon belonging to another job is never offered: in the jobs pack
-    // every real summon is its own job's, and the cross-job hits are just
-    // words (Raging Wolf's "Beast Within", Blackstar's "Great Spirit Bomb",
-    // Mist Strider's "form is shadow"). Abilities without a job still match.
-    if (entry.job && job && entry.job.toLowerCase() !== job) continue;
-    out.push({ uuid: entry.uuid, name: entry.name, img: entry.img });
-  }
-  return out;
+  return matchSummons(system, jobName, index).map(e => ({ uuid: e.uuid, name: e.name, img: e.img }));
 }

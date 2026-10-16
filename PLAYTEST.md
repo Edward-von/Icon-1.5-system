@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R43 — Summon solo sulle abilità che lo creano (16 ottobre 2026, versione 1.15.45)
+
+Setup: PG di prova Shade con Harrow, Shadow Play, Umbra, Umbral Echo; un Harvester con Harvest; un Fool con Cavaliere
+(dal compendio Jobs o già sulla scheda: è solo codice). Il summon compare come chip trascinabile nel pannello
+dell'abilità e nella card di Show in Chat.
+
+- [ ] **Harrow**: nessun chip Shadow (pannello e card), con qualunque talento scelto.
+- [ ] **Shadow Play**: nessun chip Shadow.
+- [ ] **Umbra**: chip Shadow presente (dal Finishing Blow); trascinarlo sulla mappa crea il token.
+- [ ] **Umbral Echo**: chip Shadow presente.
+- [ ] **Harvest**: chip Thrall, nessun chip Plant.
+- [ ] **Cavaliere**: chip Bomb.
+- [ ] **Non devono cambiare**: Nightmare (Shadow), Gravebirth (Plant e Thrall), Chaos Tarot (Wild Card e Master Card),
+      Raging Wolf ancora senza Beast (R7).
+
 ## R42b — Inflict per gli status dati a chi "finisce il turno" in un'area (16 ottobre 2026, versione 1.15.44)
 
 Setup: PG di prova con Mist Strider e Ätherwand (dal compendio Jobs o già sulla scheda: è solo codice); un foe sulla
