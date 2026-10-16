@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Quaking Palm, Sidhe e Dark Sliver: bottone Track target (versione 1.15.57)
+
+### Round di debug del 16 ottobre, punto R56
+
+- **Quaking Palm** (Geomancer, p.221: "Set up lethal vibrations in a foe's body. When they end their next turn, they
+  take 1 piercing damage…"): non c'era modo di segnare il personaggio colpito → il bottone **Track target** (R30) compare
+  solo sulle abilità il cui testo dice "that foe's / that character's (next) turn", e Quaking Palm dice "When they end
+  their next turn" → ora il bottone compare anche quando il testo annuncia un effetto ritardato sul bersaglio: "when they
+  start/end their next turn, they…" oppure "at the start/end of their next turn, they…". Un semplice "until the end of
+  their next turn" (una durata, es. Wish, Geyser, Mock) non conta. Le abilità con Mark restano escluse come prima.
+- **Confronto su tutto il compendio Jobs** (271 voci): prima 8 abilità avevano il bottone (Gigantas Crusher, Chastise,
+  Pyroclast, Showdown, Grand Banishment, The Tower, Great Giorgios, Assassinate), tutte lo tengono. Lo guadagnano 3:
+  **Quaking Palm** (p.221), **Sidhe** (Warden, p.171: "At the end of their next turn, they take 6 damage") e **Dark
+  Sliver** (Harvester, p.187: "If the foe is not occupying that space at the end of their next turn, they take 2
+  piercing damage…"). Nessuna lo perde. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Helix Heel: la prima riga è un Effect, non testo di colore (versione 1.15.56)
 
 ### Round di debug del 16 ottobre, punto R55

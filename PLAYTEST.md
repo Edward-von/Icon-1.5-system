@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R56 — Track target su Quaking Palm, Sidhe e Dark Sliver (16 ottobre 2026, versione 1.15.57)
+
+Setup: un PG Geomancer con Quaking Palm, un PG Warden con Sidhe, un PG Harvester con Dark Sliver; un PG Sealer con
+Grand Banishment; due foe sulla mappa.
+
+- [ ] **Bottone**: nel pannello di Quaking Palm, di Sidhe e di Dark Sliver c'è **Track target**; su Grand Banishment
+      c'è ancora.
+- [ ] **Track**: targettare il foe A, Track target su Quaking Palm → in chat "<PG> tracks <A> — Quaking Palm (a
+      reminder, not a mark)"; chip "A ✕" sotto l'abilità; nel tab Conditions di A la riga "Tracked: Quaking Palm"; nel
+      pannello status del token di A "Tracked: Quaking Palm (<PG>)". ✕ sul chip → segno tolto.
+- [ ] **Niente bottone sulle durate**: Wish (Seer), Geyser (Stormbender), Realignment (Geomancer) e Mock (Knave), che
+      dicono solo "until the end of their next turn", NON hanno Track target.
+- [ ] **Mark invariati**: un'abilità con Mark (es. Divine Aegis) ha solo Mark target, niente Track.
+
 ## R55 — Helix Heel: la prima riga è un Effect (16 ottobre 2026, versione 1.15.56)
 
 Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Geomancer che ha già Helix Heel sulla scheda da

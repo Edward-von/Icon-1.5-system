@@ -241,9 +241,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.56: il libro (p.219) non ha testo di colore e apre con "Effect: Release a
       shockwave…"; nel compendio mancava l'etichetta, ora c'è; la migrazione 28 la mette sulle copie con il testo originale.
       Bottone area (line 3) e danno (2 piercing) invariati.)
-- [ ] **R56. Quaking Palm: niente Track target** (S, bug)
+- [x] **R56. Quaking Palm: niente Track target** (S, bug)
       "Some way to mark the chosen character would be nice." Il testo dice "When they end their next turn" (non "that
       foe's next turn"), quindi il bottone Track target di R30 probabilmente non compare.
+      (FATTO il 16 ottobre 2026, versione 1.15.57: Track target compare anche con "when they end their next turn,
+      they…" / "at the end of their next turn, they…"; sul compendio Jobs lo guadagnano Quaking Palm, Sidhe e Dark
+      Sliver, nessuna abilità lo perde; le semplici durate "until the end of their next turn" restano senza.)
 
 ### Richieste
 

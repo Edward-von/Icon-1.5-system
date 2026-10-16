@@ -82,13 +82,17 @@ export function markFromTags(tags) {
  * Does this ability designate a character something happens to later, so a
  * "Track target" reminder is worth having? Read from the text: "that foe's
  * (next) turn" / "that character's next turn" (Grand Banishment, The Tower,
- * Showdown, Assassinate, Great Giorgios, Pyroclast). Marking abilities
- * already have their mark, so they get no tracker.
+ * Showdown, Assassinate, Great Giorgios, Pyroclast), or a delayed hit on the
+ * target: "when they end their next turn, they…" / "at the end of their next
+ * turn, they…" (Quaking Palm p.221, Sidhe p.171, Dark Sliver p.187). A bare
+ * "until the end of their next turn" is just a duration and doesn't count.
+ * Marking abilities already have their mark, so they get no tracker.
  */
 export function abilityTracks(system, tags = []) {
   if (markFromTags(tags).can) return false;
   const text = Object.values(system ?? {}).filter(v => typeof v === "string").join(" ").replace(/<[^>]+>/g, " ");
-  return /\bthat (?:foe|character|ally)['’]s (?:next )?turn\b/i.test(text);
+  return /\bthat (?:foe|character|ally)['’]s (?:next )?turn\b/i.test(text)
+      || /\b(?:when they (?:start|end)|at the (?:start|end) of) their next turn,? they\b/i.test(text);
 }
 
 /** Can this client write effects on `actor` directly? Otherwise relay to the GM. */
