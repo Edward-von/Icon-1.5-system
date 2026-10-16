@@ -788,9 +788,26 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       - Mist Strider: "consume a cloud … summoning a beast in any of its spaces" a inizio turno senza promemoria; Nocturne
         Talent I (teleport dentro / fuori) e Trap Door Spider Technique a mano.
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come R33a5 / R33b2).
-- [ ] **R33d. Segni che seguono un personaggio** (M)
+- [x] **R33d. Segni che seguono un personaggio** (M) (FATTO il 16 ottobre 2026, versione 1.15.71: con Polaris Talent I,
+      Amico o WAKING VOID in gioco il chip chiede "On a space / On <bersaglio>"; sul personaggio targettato nasce il mark
+      di marks.mjs (Waking Void come tracker) e il GM attivo aggiunge lo spazio sulle sue caselle, che lo segue; mark e
+      spazio vanno via insieme (✕, Delete, creatore sconfitto, fine combat, nuovo mark); conteggio Polaris; Amico "Detonate"
+      a fine di ogni turno non suo (gamble + Medium Blast centrata); Waking Void card quando il personaggio va a 0 hp.
+      Il resto in R33d2. Solo codice.)
       Un segno di R33b / R33c messo su un personaggio invece che su uno spazio: Polaris Talent I ("follow a character
       as a mark"), Party Favor mastery Amico, Implode mastery Waking Void.
+- [ ] **R33d2. Segni sul personaggio: quello che resta dopo R33d** (S/M)
+      - Range non controllato: "any character in range" (Amico, range 3 di Party Favor p.151), il range 6 di Implode,
+        il range 5 di Polaris: si targetta chiunque.
+      - WAKING VOID (p.211): "Implode immediately activates" è solo una card col testo; lo spostamento della large blast
+        verso il personaggio e l'attivazione a inizio del turno lento restano a mano (come Implode su uno spazio, R33b2).
+      - Polaris (p.202): il segno sul personaggio è contato fra gli spazi Polaris sulla card, ma il gamble a fine turno e
+        le esplosioni per numero di spazi restano a mano (R33b2).
+      - Mark p.95 "choosing which gets replaced": come per il bottone Mark, il mark nuovo sostituisce il vecchio dello
+        stesso creatore senza chiedere.
+      - Un personaggio collegato (linked) con token su più scene: lo spazio va sul primo token trovato.
+      - Amico: la card "Detonate" esce a fine di ogni turno non del creatore (sussurrata a lui e al GM), anche quando
+        nessuno ha intenzione di farlo esplodere.
 - [ ] **R34. Open the Gates riformattata** (S)
       Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
       versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed. Il manuale è ambiguo: Edoardo

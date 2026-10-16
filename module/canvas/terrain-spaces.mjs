@@ -72,18 +72,20 @@ export function terrainChips(item) {
         ? `Click to add ${sp.count} space${sp.count > 1 ? "s" : ""} adjacent to this ability's area already on the map`
         : sp.under === "self" ? `Click to mark the ${sp.label} on the space under your token`
           : `Click to mark ${sp.count ? sp.count : "as many as needed"} ${sp.label.toLowerCase()} space${sp.count === 1 ? "" : "s"} on the map (Enter or right-click finishes early, Esc cancels)`;
+      // R33d: the talent / mastery in play lets it go on a character instead (follow-marks.mjs).
+      const onChar = sp.onCharacter ? ` ${sp.onCharacter.source}: or on the one character you target, following them${sp.onCharacter.mark ? " as a mark" : ""} (the click asks).` : "";
       return {
-        index, kind: sp.kind, label, icon: ICONS[sp.kind] ?? ICONS.mark,
-        title: `${sp.source ? `${sp.source}: ` : ""}${what}. Right-click removes them. — ${sp.rules}`,
+        index, kind: sp.kind, label, icon: sp.onCharacter ? "fa-location-crosshairs" : ICONS[sp.kind] ?? ICONS.mark,
+        title: `${sp.source ? `${sp.source}: ` : ""}${what}.${onChar} Right-click removes them. — ${sp.rules}`,
       };
     });
 }
 
 /** Same space of the same item of the same character: what "used again" replaces and right-click removes. */
-const groupOf = (actor, item, sp) => `${actor.id}#${item.id}#${sp.kind}#${sp.name}#${sp.dangerous ? 1 : 0}`;
+export const groupOf = (actor, item, sp) => `${actor.id}#${item.id}#${sp.kind}#${sp.name}#${sp.dangerous ? 1 : 0}`;
 
 /** Cells a token document covers on its own scene, at its place or with its top-left at `at`. */
-function cellsOf(td, at = null) {
+export function cellsOf(td, at = null) {
   const grid = td.parent.grid;
   const half = grid.size / 2;
   const tl = grid.getOffset({ x: (at?.x ?? td.x) + half, y: (at?.y ?? td.y) + half });
@@ -176,9 +178,11 @@ export function pickSpaces({ max = 1, color = TERRAIN_COLORS.mark, hint = "", ch
  * @param {string} [opts.group]          what "used again" replaces / right-click removes
  * @param {string} [opts.source]         "Talent II", "Dagon"…
  * @param {string|null} [opts.followTokenId]  a mark that follows a character (R33d)
+ * @param {boolean} [opts.asOne]         R33d: one template over all the cells (a mark on a big token), not one each
+ * @param {object}  [opts.extra]         R33d: more fields for the terrain flag (onCharacter, detonate, onDefeat…)
  * @returns {Promise<MeasuredTemplateDocument[]>}
  */
-export async function createTerrainSpaces(scene, cells, spec, { actor = null, abilityName = "", abilityKey = "", group = "", source = "", followTokenId = null, itemId = "" } = {}) {
+export async function createTerrainSpaces(scene, cells, spec, { actor = null, abilityName = "", abilityKey = "", group = "", source = "", followTokenId = null, itemId = "", asOne = false, extra = {} } = {}) {
   if (!scene || !cells?.length) return [];
   const kind = spec.kind ?? "mark";
   const label = spec.label ?? terrainLabel(spec);
@@ -188,15 +192,17 @@ export async function createTerrainSpaces(scene, cells, spec, { actor = null, ab
     dangerous: kind === "dangerous" || !!spec.dangerous, difficult: kind === "difficult" || !!spec.difficult, pit: kind === "pit",
     foesOnly: !!spec.foesOnly, rules: spec.rules ?? "",
     onEnter: spec.onEnter ?? "", enterFoes: !!spec.enterFoes, enterAllies: !!spec.enterAllies, enterExit: !!spec.enterExit, onStart: !!spec.onStart,
+    ...extra,
   };
   const token = actor ? sourceTokenFor(actor) : null;
-  const data = cells.map(c => {
+  const data = (asOne ? [cells] : cells.map(c => [c])).map(set => {
+    const c = set[0];
     const o = scene.grid.getCenterPoint(c);
     return {
       t: "rect", x: o.x, y: o.y, distance: 1, direction: 0, width: 0,
       fillColor: color, borderColor: color, hidden: false,
       flags: { [NS]: {
-        cells: [{ i: c.i, j: c.j }], area: { kind: "space", size: 1, self: false, width: 1, label },
+        cells: set.map(g => ({ i: g.i, j: g.j })), area: { kind: "space", size: 1, self: false, width: 1, label },
         actorId: actor?.id ?? "", actorUuid: actor?.uuid ?? "", tokenId: token?.id ?? "", abilityKey, abilityName,
         // Terrain effects last on the battlefield (p.96): never cleared at the turn change.
         lasting: true, followTokenId, expiry: null, [FLAG]: terrain,
@@ -244,6 +250,28 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   if (!sp) { ui.notifications.warn("That terrain space is no longer on the sheet."); return; }
   if (!actor.isOwner) { ui.notifications.warn(`Only the owner of ${actor.name} or the GM can mark its spaces.`); return; }
   if (sp.kind === "extend") return extendArea(actor, item, sp);
+  // R33d: Polaris Talent I, Amico, WAKING VOID — on a space as before, or on the targeted character.
+  if (sp.onCharacter) {
+    const own = new Set(actor.getActiveTokens?.(false, true)?.map(t => t.id) ?? []);
+    const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor && !own.has(t.id));
+    let where = null;
+    try {
+      where = await foundry.applications.api.DialogV2.wait({
+        window: { title: `${item.name} — where?` },
+        content: `<p><small>${esc(sp.onCharacter.source)}: ${esc(sp.onCharacter.rule)}</small></p>${targets.length === 1 ? "" : "<p>To put it on a character, target that one token first (hover it and press T).</p>"}`,
+        buttons: [
+          { action: "space", label: "On a space", default: true },
+          { action: "character", label: targets.length === 1 ? `On ${targets[0].name}` : "On a character" },
+        ],
+        rejectClose: false,
+      });
+    } catch { where = null; }
+    if (!where) return;
+    if (where === "character") {
+      const { placeMarkOnCharacter } = await import("./follow-marks.mjs");
+      return placeMarkOnCharacter(actor, item, sp);
+    }
+  }
 
   const group = groupOf(actor, item, sp);
   const earlier = scene.templates.filter(t => terrainFlag(t)?.group === group);

@@ -39,6 +39,7 @@ import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
 import { terrainTurnStart } from "../canvas/terrain-spaces.mjs";
 import { areaTurnStart, areaRoundEnd } from "../canvas/area-motion.mjs";
+import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -862,6 +863,9 @@ export function registerCombatHooks() {
           // Objects around them at the end of the turn: on a geyser, a foe by an underway, AETHERSHIFT (R33a4).
           try { await objectTurnBoundary(prev, "end"); }
           catch (err) { console.warn("[ICON | IconCombat] object turn reminders (end) failed", err); }
+          // Amico: "gamble at the end of any turn after yours to detonate it" (Party Favor p.151; R33d).
+          try { await followMarkTurnEnd(prev); }
+          catch (err) { console.warn("[ICON | IconCombat] follow mark reminders (end) failed", err); }
           // A combo token spent on an ability with Show in Chat only covers
           // that use (its attack and damage come as separate clicks): it
           // doesn't carry into the next turn.

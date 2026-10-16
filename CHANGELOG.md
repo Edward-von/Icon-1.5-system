@@ -1,5 +1,38 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Segni che seguono un personaggio (versione 1.15.71)
+
+### Round di debug del 15 ottobre, punto R33d
+
+- **Segno su un personaggio**: "You can cause one of your Polaris to follow a character as a mark instead of a space"
+  (Polaris Talent I p.202), "You can throw the party favor at any character in range instead, making it a mark" (AMICO di
+  Party Favor p.151), "You can choose a character with this ability instead of a space" (WAKING VOID di Implode p.211) →
+  il chip di R33b ("Polaris · 1", "Mine · 1", "Implode · 1") sapeva mettere il segno solo su uno spazio → ora, con il
+  talento scelto o la mastery sbloccata, il clic chiede **On a space / On <bersaglio>**. Sul personaggio targettato
+  (uno solo, T sopra il token) nasce il mark del sistema (lo stesso del bottone Mark, che Polaris Talent I e Amico avevano
+  già) e il GM attivo mette lo spazio viola "Polaris (mark)" sulle caselle del token: lo segue quando si muove, come le
+  aure. Nessuna domanda entrando o uscendo (sul personaggio non ci entra nessuno).
+- **Mark e spazio vanno insieme**: regola dei mark p.95 ("Each ability typically places only one mark, and a character can
+  only mark another character with one mark at a time … Marks also end if the character placing them is defeated") →
+  usata quella già fatta in `marks.mjs`. Il mark che finisce (✕ sul chip del mark, creatore a 0 hp, fine del combat, un
+  mark nuovo dello stesso creatore sul personaggio, lo stesso Polaris messo su un altro) toglie lo spazio; lo spazio
+  tolto (Canc sulla mappa, tasto destro sul chip, **End mark** sulla card) chiude il mark; il token cancellato porta via lo
+  spazio. Anche il bottone Mark della scheda ora mette lo spazio.
+- **Polaris**: la card del piazzamento dice quanti spazi Polaris sono attivi, quello sul personaggio compreso ("Each effect
+  … depending on how many spaces are active").
+- **Amico**: "You can gamble at the end of any turn after yours to detonate it, ending the mark and effect" → alla fine di
+  ogni turno che non è del creatore, card sussurrata al creatore e al GM con **Detonate**: apre il gamble dell'abilità
+  (la riga della tabella 1–3 / 4–5 / 6), poi la Medium Blast centrata sul personaggio marcato (targetta chi c'è dentro),
+  poi il mark e lo spazio finiscono. Chiudendo il gamble non succede niente.
+- **WAKING VOID**: "but it doesn't stun the center character. If that character is defeated, Implode immediately activates"
+  → quando il personaggio va a 0 hp, card con la frase e il testo di Implode, e "Done: end it".
+- Scelte mie: un solo chip che chiede dove (non un chip in più); il mark lo scrive marks.mjs, lo spazio il GM attivo (i
+  giocatori non devono poter creare template); WAKING VOID non dice "mark", quindi è un *tracker* (non sostituisce gli
+  altri mark e non finisce se chi ha usato Implode è sconfitto, p.95 vale solo per i mark); Polaris Talent I "one of your
+  Polaris": uno solo sul personaggio alla volta (un mark per abilità). `rollGamble` ora restituisce il risultato.
+  Controllato su una copia del pack jobs: solo Polaris (Talent I), Party Favor (mastery) e Implode (mastery) offrono "On a
+  character". Nessun pack, nessuna migrazione. Il resto (range, attivazione di Implode, gamble di Polaris…) è in TODO, R33d2.
+
 ## 16 ottobre 2026 — Aree terrain effect che durano, si muovono o crescono (versione 1.15.70)
 
 ### Round di debug del 15 ottobre, punto R33c

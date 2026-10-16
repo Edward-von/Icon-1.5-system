@@ -1656,6 +1656,42 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33d — Segni che seguono un personaggio (16 ottobre 2026, versione 1.15.71)
+
+Setup: scena a griglia quadrata, GM + giocatore connessi, due foe (ostili) e un PG alleato, un combat con tutti dentro.
+PG del giocatore: Seer con Polaris (Talent I scelto), Fool con Party Favor (mastery AMICO sbloccata), Enochian con
+Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
+
+- [ ] **Chip che chiede**: Polaris con Talent I → clic su "Polaris · 1" → finestra "On a space / On a character" con la
+      frase del talento. Con un foe targettato il secondo bottone dice "On <nome>". Senza Talent I nessuna domanda (come
+      prima). Stessa cosa per "Mine · 1" con AMICO e "Implode · 1" con WAKING VOID.
+- [ ] **On a space**: sceglie lo spazio come in R33b (nessun cambiamento).
+- [ ] **On <foe>**: dal giocatore → il foe riceve "Marked — Polaris (<PG>)", sulle sue caselle appare lo spazio viola
+      "Polaris (mark)" e una card con la regola, "Polaris spaces active: N" ed **End mark**. Senza target o con due target:
+      avviso "target exactly one character", niente creato.
+- [ ] **Segue il token**: spostare il foe marcato → lo spazio si sposta con lui; nessuna domanda di dangerous terrain né
+      card "enters". Token 2×2: lo spazio copre tutte e quattro le caselle.
+- [ ] **Conteggio Polaris**: un Polaris su uno spazio e uno sul foe → la card dice 2 spaces active. Rimettere Polaris sul
+      personaggio su un altro foe → il primo mark e il suo spazio spariscono (uno solo sul personaggio).
+- [ ] **Mark e spazio insieme**: ✕ sul chip del mark nella scheda del PG → lo spazio sparisce. Rimettere il mark, poi
+      selezionare lo spazio sul layer dei template e Canc (GM) → il mark sul foe finisce ("The mark … ends"). End mark sulla
+      card (dal giocatore) → spariscono tutti e due. Tasto destro sul chip "Polaris · 1" (GM) → tolti anche quelli sul foe.
+- [ ] **Bottone Mark**: Polaris Talent I o Party Favor con AMICO → il bottone Mark della scheda col foe targettato mette
+      anche lo spazio sul foe.
+- [ ] **Creatore sconfitto**: PG con Polaris sul foe → portare il PG a 0 hp → il mark finisce (card di marks.mjs) e lo spazio
+      sparisce. Con WAKING VOID (tracker) lo spazio di Implode resta.
+- [ ] **Un mark per personaggio**: Polaris sul foe, poi dallo stesso PG un'altra abilità con Mark sullo stesso foe → il
+      mark Polaris viene sostituito e il suo spazio sparisce.
+- [ ] **AMICO**: Party Favor sul foe A → fine del turno del Fool: nessuna card. Fine del turno di qualcun altro → card
+      sussurrata (solo GM e giocatore del Fool) con **Detonate** ed End mark. Detonate → finestra del gamble; chiusa senza
+      tirare → niente. Tirato → card del gamble, Medium Blast centrata sul foe A (targetta chi c'è dentro), mark e spazio
+      spariscono; il bottone si spegne.
+- [ ] **WAKING VOID**: Implode sul foe B → card con la frase "doesn't stun the center character" → portare il foe B a 0 hp →
+      card "<foe B> is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode e
+      "Done: end it" (toglie lo spazio e il tracker).
+- [ ] **Fine combat / token cancellato**: fine combat → i mark spariscono e con loro gli spazi. Cancellare il token di un foe
+      marcato → il suo spazio sparisce. Nessun errore in console.
+
 ## R33c — Aree terrain effect che durano, si muovono o crescono (16 ottobre 2026, versione 1.15.70)
 
 Setup: scena a griglia quadrata, GM + giocatore connessi, un foe (ostile) e un PG alleato sulla scena, un combat con

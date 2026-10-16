@@ -223,8 +223,33 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
 }
 
 /**
+ * R33d: a talent / mastery text that lets the ability's space go on a character instead, following them:
+ *   "You can cause one of your Polaris to follow a character as a mark instead of a space" (Polaris Talent I, p.202)
+ *   "You can throw the party favor at any character in range instead, making it a mark. You can gamble at the end
+ *    of any turn after yours to detonate it, ending the mark and effect" (Party Favor's Amico, p.151)
+ *   "You can choose a character with this ability instead of a space, but it doesn't stun the center character. If
+ *    that character is defeated, Implode immediately activates" (Implode's WAKING VOID, p.211)
+ * Only "as a mark" / "making it a mark" is a mark (p.95: one per marker → target, ends when the marker is
+ * defeated); Waking Void doesn't say so and is kept as a tracker.
+ * @param {string} text
+ * @returns {{rule:string, mark:boolean, detonate:boolean, onDefeat:string}|null}
+ */
+export function markOnCharacterIn(text) {
+  const t = plain(text);
+  if (!t || !/\b(?:a|any) character\b[^.;]*\binstead\b|\binstead\b[^.;]*\b(?:a|any) character\b/i.test(t)) return null;
+  return {
+    rule: t,
+    mark: /\b(?:as|making it) a mark\b/i.test(t),
+    detonate: /\bgamble at the end of any turn after yours to detonate\b/i.test(t),
+    onDefeat: /\bif that character is defeated,\s*[^.;]*[.;]?/i.exec(t)?.[0]?.trim() ?? "",
+  };
+}
+
+/**
  * The terrain spaces an ability (or a trait) marks on the map. A talent counts only when it is the selected one,
- * the mastery only once unlocked (as objectsForItem).
+ * the mastery only once unlocked (as objectsForItem). R33d: a named space of the ability's own text gets
+ * `onCharacter` ({source, rule, mark, detonate, onDefeat}) when the talent / mastery in play lets it go on a
+ * character instead (markOnCharacterIn).
  * @param {object} system   the item's system data
  * @param {{trait?: boolean, itemName?: string}} [opts]
  * @returns {Array<object>}  terrainSpacesInText specs, plus `source` (where it comes from) and `field`
@@ -234,16 +259,26 @@ export function terrainSpacesForItem(system, { trait = false, itemName = "" } = 
   const talent = Number(s.talentSelected) || 0;
   const out = [];
   const seen = new Set();
+  let onCharacter = null;
   for (const [field, source] of trait ? [["description", ""]] : ABILITY_FIELDS) {
     if (field === "talent1" && talent !== 1) continue;
     if (field === "talent2" && talent !== 2) continue;
     if (field === "mastery" && !s.masteryUnlocked) continue;
+    if (!trait && ["talent1", "talent2", "mastery"].includes(field) && !onCharacter) {
+      const oc = markOnCharacterIn(s[field]);
+      if (oc) onCharacter = { ...oc, source };
+    }
     for (const sp of terrainSpacesInText(s[field], { itemName })) {
       const key = `${sp.kind}|${sp.name}|${sp.dangerous}|${sp.infuse}`.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
       out.push({ ...sp, source: sp.infuse || source, field });
     }
+  }
+  // The space the base text names (Polaris' space, Party Favor's mine, Implode's centre), not a talent's own.
+  if (onCharacter) {
+    const sp = out.find(x => x.kind === "mark" && x.field === "description" && !x.infuse);
+    if (sp) sp.onCharacter = onCharacter;
   }
   return out;
 }

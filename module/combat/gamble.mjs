@@ -113,4 +113,6 @@ export async function rollGamble(actor, item) {
     update["system.combat.classResources.stackedDice.value"] = Math.max(0, stacked - 1);
   }
   if (Object.keys(update).length) await actor.update(update);
+  // The result, for the callers that act on it (Amico's Detonate, follow-marks.mjs); undefined when cancelled.
+  return result;
 }
