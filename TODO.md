@@ -206,10 +206,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.52: nei testi dei PG il verbo "summon a …" ha il tooltip Summon solo
       se dopo c'è una creatura del compendio Summons; il nome all'inizio di combo, mastery e ultimate non riceve
       keyword. Cambiano 12 testi del compendio Jobs, foe e trofei no.)
-- [ ] **R51. Stack Dice: al capitolo 3 il secondo dado non si può alzare** (S, bug)
+- [x] **R51. Stack Dice: al capitolo 3 il secondo dado non si può alzare** (S, bug)
       "When at chapter 3, the trait properly shows having 2 stacked die to use, but does not allow the user to increment up
       the second dice." Il testo del tratto nel compendio dice "only hold on to one Stacked Die at once": cercare sul
       manuale cosa cambia al capitolo 3.
+      (FATTO il 16 ottobre 2026, versione 1.15.53: al capitolo 3 Death's Apprentice permette 2 Stacked Dice (p.150);
+      il template passava un massimo vuoto al click, che si fermava a 1. Ora il secondo dado si accende.)
 - [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati)
       "(This is an error with the book) Ability tag says 'Power Die' despite not utilizing die mechanics." Verificare
       sul manuale; se è un errore del libro, decidere se toglierlo (pack + migrazione) o lasciarlo come nel libro.

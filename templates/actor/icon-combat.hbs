@@ -491,7 +491,7 @@
                 <span class="icon-vigilance-track icon-vigilance-track--inline">
                   {{#each trait.quick.pips as |p|}}
                     <span class="icon-vigilance-pip icon-stacked-die-pip {{#if p.active}}icon-vigilance-pip--active{{/if}}"
-                          data-action="setStackedDice" data-value="{{p.i}}" data-max="{{../trait.quick.max}}"
+                          data-action="setStackedDice" data-value="{{p.i}}" data-max="{{trait.quick.max}}"
                           title="{{#if p.active}}Spend / drop stacked die{{else}}Gain a stacked die (gamble result becomes 6){{/if}}"><i class="fa-solid fa-dice-d20"></i></span>
                   {{/each}}
                 </span>

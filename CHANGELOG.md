@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Stack Dice: il secondo dado si può alzare al capitolo 3 (versione 1.15.53)
+
+### Round di debug del 16 ottobre, punto R51
+
+- **Stack Dice** (Fool, p.149: "You can only hold on to one Stacked Die at once"; capitolo 3, Death's Apprentice:
+  "You can hold on to 2 stacked dice at once"): al capitolo 3 la scheda mostrava due dadi ("0/2") ma il click sul
+  secondo non lo accendeva → nel template ogni dado diceva il proprio massimo con `../trait.quick.max`, che dentro il
+  ciclo dei dadi punta al posto sbagliato e restituisce vuoto: il click leggeva massimo 1 e si fermava a 1 → il
+  massimo si legge direttamente da `trait.quick.max`, quindi al capitolo 3 si arriva a 2/2. Solo template, nessun dato
+  cambiato.
+
 ## 16 ottobre 2026 — Keyword "summon" e nomi di combo / mastery non più evidenziati a sproposito (versione 1.15.52)
 
 ### Round di debug del 16 ottobre, punto R50

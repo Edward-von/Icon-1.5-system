@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R51 — Stack Dice: il secondo dado al capitolo 3 (16 ottobre 2026, versione 1.15.53)
+
+Setup: PG Fool al capitolo 3 (tratto Death's Apprentice sbloccato) e un PG Fool al capitolo 1 o 2. È solo un template:
+F5 dopo il deploy.
+
+- [ ] **Capitolo 3**: tab Combat, tratto Stack Dice: "Stacked Dice 0/2" con due dadi. Click sul secondo → "2/2",
+      entrambi accesi; click sul primo → "1/2"; click sul primo acceso (l'ultimo) → "0/2".
+- [ ] **Gamble con 2 dadi**: con 2/2 apri la finestra del gamble e usa lo Stacked Die → il risultato è 6 e la scheda
+      torna a "1/2".
+- [ ] **Capitolo 1-2**: un solo dado, "0/1" → "1/1" → "0/1" come prima.
+
 ## R50 — Keyword "summon" sul verbo e nomi delle combo (16 ottobre 2026, versione 1.15.52)
 
 Setup: PG di prova (Warden e Shade) con Morrigan, Death Blossom (combo), Umbra, Dark Sliver (mastery sbloccata),
