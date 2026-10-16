@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Le aree degli Infuse X crescono con l'Aether speso (versione 1.15.49)
+
+### Round di debug del 16 ottobre, punto R47
+
+- **Ätherwand, ÄTHERSTURM** (Infuse X, p.226: "Extend the area by 1 space for every Aether infused, up to a maximum of
+  +3 spaces"): il bottone area proponeva solo Line 3 → la versione Infuse armata veniva letta solo se scriveva una
+  forma ("Change area to Line 8"); "extend the area" non ne nomina nessuna e l'Aether speso non era usato → ora, con
+  ÄTHERSTURM armato, l'area proposta per prima è la Line 3 allungata di uno spazio per Aether speso, al massimo +3
+  (Line 4 / 5 / 6), con la scelta "Infuse X (N Aether)"; la Line 3 base resta nella lista.
+- **Rime, MAGNARIME** (mastery Infuse X, p.233: "The area gains range 6 and becomes Arc 4, plus one per aether
+  infused"): l'arco era sempre Arc 4, e veniva proposto anche senza la mastery armata → ora con MAGNARIME armata l'area
+  è Arc 4 + Aether speso a range 6 (2 Aether: Arc 6), proposta per prima sia dal bottone area sia dall'Attack Roll.
+  Le mastery che sono una versione Infuse (MAGNACRYO, MAGNAGEO, MAGNAPYRE, MAGNABIO, MAGNARIME, GREAT SPIRIT LANCE)
+  cambiano l'area solo quando sono armate: prima la loro forma compariva come scelta "Mastery" anche senza spendere
+  Aether.
+- In generale la versione Infuse armata ora è la prima scelta della finestra "which area?" (prima era dopo la base).
+- Controllo su tutte le versioni Infuse del compendio Jobs (script su una copia del pack, in
+  `icon-compendium-audit/r47-area-sizes/`): cambiano solo ÄTHERSTURM e MAGNARIME; le altre forme fisse restano uguali.
+  Il Talent II di Sturmreiten (una seconda Line 3 in un'altra direzione) è rimasto aperto come R47b. Solo codice,
+  nessun dato cambiato.
+
 ## 16 ottobre 2026 — Il tiro del danno legge la versione Infuse armata (versione 1.15.48)
 
 ### Round di debug del 16 ottobre, punto R46

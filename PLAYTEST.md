@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R47 — Le aree degli Infuse X crescono con l'Aether speso (16 ottobre 2026, versione 1.15.49)
+
+Setup: PG di prova Wright con Ätherwand (Spellblade) e Rime (Stormbender), dal compendio Jobs o già sulla scheda (è
+solo codice); Aether a 6; il token del PG sulla mappa e un foe.
+
+- [ ] **Ätherwand senza Infuse**: bottone area → piazza direttamente la Line 3 (range 4), come prima.
+- [ ] **Ätherwand, ÄTHERSTURM**: Infuse X con 2 Aether → bottone area → finestra "which area?" con prima "Infuse X (2
+      Aether): Line 5", poi "Text: Line 3". Scegliendo la prima la linea è lunga 5. Con 5 Aether la linea è Line 6
+      (massimo +3).
+- [ ] **Rime senza mastery armata**: mastery sbloccata ma MAGNARIME non armata → bottone area: solo Line 6, nessun
+      "Mastery: Arc 4".
+- [ ] **Rime, MAGNARIME**: Infuse X con 2 Aether → bottone area: prima scelta "Infuse X (2 Aether): Arc 6" (range 6),
+      poi Line 6. Con 4 Aether: Arc 8. Anche l'Attack Roll, senza area già sulla mappa, propone la stessa scelta.
+- [ ] **Forme fisse (non devono cambiare)**: Bio con BIOTIC armato offre "Infuse 3: Medium Blast" (range 8) come
+      prima scelta e la Small Blast base subito dopo; Cryo con CRYOTIC piazza la Line 8 come prima.
+
 ## R46 — Il tiro del danno legge la versione Infuse armata (16 ottobre 2026, versione 1.15.48)
 
 Setup: PG di prova Wright con Cryo (Stormbender), Bio e Geo (Geomancer), Eye of the Storm e Nothung (Spellblade), dal

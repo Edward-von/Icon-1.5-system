@@ -13,7 +13,7 @@ import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, ma
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, areaDrawnFromTarget, areaLabel } from "../../canvas/area-templates.mjs";
+         areasInText, areaDrawnFromTarget, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -2202,18 +2202,29 @@ export class IconSheet extends BaseActorSheet {
     const tagSource = changed ? (/^From ([^:]+):/.exec(upgraded?.tooltip ?? "")?.[1] ?? "Upgrade") : "";
     const sourceText = { "Talent I": s.talent1, "Talent II": s.talent2, "Mastery": s.mastery, "Combo": s.comboEffect }[tagSource] ?? "";
     const conditional = /^\s*(?:charge|heroic|exceed|collide|comeback|finishing blow)\s*:/i.test(String(sourceText).replace(/<[^>]+>/g, ""));
+    // The armed Infuse version can change the shape ("CRYOTIC — Change area
+    // to Line 8", "BIOTIC — increase blast size to medium blast") or size it
+    // by the Aether spent (Magnarime p.233 "Arc 4, plus one per aether
+    // infused"; Ätherwand p.226 "Extend the area by 1 space for every Aether
+    // infused, up to a maximum of +3"). It is offered first.
+    const spent = armedInfusion(this.document)?.spent ?? 0;
+    const ownArea = abilityArea(ab.tags, s.description);
+    if (ownArea && !ownArea.range) ownArea.range = rangeFromTags(ab.tags);
+    const lead = (ab.infusions ?? []).filter(i => i.armed).flatMap(i =>
+      infusedAreas(i.text, spent, ownArea).map(area => ({ source: i.cost === null ? `${i.costLabel} (${spent} Aether)` : i.costLabel, area })));
+    // A mastery that is a bigger infusion (MAGNARIME: Infuse X — … becomes
+    // Arc 4) only changes the area while that infusion is armed (lead above).
+    const masteryIsInfusion = masteryInfusion({ ...s, masteryUnlocked: true }).length > 0;
     const variants = areaVariants({
       tags: ab.tags,
       tagSource,
+      lead,
       alt: changed ? [{ source: "Base", area: baseArea }] : [],
       altFirst: conditional,
       texts: [
         // Only when the header has no area: the shape is in the prose instead
         // ("The area is a medium blast terrain effect", p.233).
         areaFromTags(ab.tags) ? null : ["Text", s.description],
-        // The armed Infuse version can change the shape ("CRYOTIC — Change
-        // area to Line 8", "BIOTIC — increase blast size to medium blast").
-        ...(ab.infusions ?? []).filter(i => i.armed).map(i => [i.label, i.text]),
         // The combo's shapes only while the combo version is in play (its tags
         // are then already ab.tags): Flying Sleeves offers Arc 4 / Arc 8, the
         // base Death Blossom just its Burst 1.
@@ -2221,7 +2232,7 @@ export class IconSheet extends BaseActorSheet {
         s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
         ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
         ab.hasTalent2 ? ["Talent II", s.talent2]      : null,
-        ab.hasMastery ? ["Mastery",   s.mastery]      : null,
+        ab.hasMastery && !masteryIsInfusion ? ["Mastery", s.mastery] : null,
       ].filter(Boolean),
     });
     // An area the upgrade text draws from the target (Sow's Spectral Scythe,

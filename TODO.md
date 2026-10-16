@@ -161,12 +161,21 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Area della versione (MAGNABIO, MAGNAGEO, MAGNACRYO, MAGNAPYRE, GREAT SPIRIT LANCE) o il suo "damage to …"
       (CRYOTIC, AEONCLOUD); MAGNACRYO parte con un dado bonus ogni due Aether spesi e si tira per colpire. EXCALIBUR
       rende divine i danni "1 piercing" proposti (Talent I di Nothung). Solo codice.)
-- [ ] **R47. Aree di Infuse e talenti che cambiano dimensione** (S/M, bug)
+- [x] **R47. Aree di Infuse e talenti che cambiano dimensione** (S/M, bug)
       - Ätherwand, Infuse X ÄTHERSTURM ("Extend the area by 1 space for every Aether infused, up to +3"): "Only allows you
         to select line 3".
       - Rime / Magnarime: "variable arc is not properly handled, although it's base arc is listed properly."
       - Sturmreiten Talent II ("Comeback: You may extend Sturmreiten's area by another line 3 area, drawn in a different
         direction"): "A way to use talent 2's extension would be useful."
+      (FATTO il 16 ottobre 2026, versione 1.15.49, solo i primi due: con un Infuse X armato l'area cresce con l'Aether
+      speso — ÄTHERSTURM allunga la Line 3 di Ätherwand di 1 per Aether fino a +3, MAGNARIME fa Arc 4 + Aether a range
+      6 — e la versione armata è la prima scelta; le mastery che sono un Infuse cambiano l'area solo da armate. Solo
+      codice.)
+- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M): "Comeback: You may extend Sturmreiten's area by another
+      line 3 area, drawn in a different direction" (p.227): "A way to use talent 2's extension would be useful." Il
+      piazzamento fa una sola Line alla volta; servirebbe, col Talent II scelto, una seconda Line 3 in un'altra
+      direzione dallo stesso punto (o dalla fine della prima: il testo non lo dice, da chiedere a Edoardo) unita alla
+      prima per i bersagli.
 - [ ] **R48. Aure date ad altri o in alternativa** (M, bug)
       - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
       - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i

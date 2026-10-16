@@ -207,6 +207,40 @@ export function areasInText(text) {
 }
 
 /**
+ * The areas an armed Infuse version is placed with, sized by the Aether spent
+ * on it. Magnarime (p.233): "The area gains range 6 and becomes Arc 4, plus
+ * one per aether infused" → Arc 4 + spent. Ätherwand's ÄTHERSTURM (p.226):
+ * "Extend the area by 1 space for every Aether infused, up to a maximum of +3
+ * spaces" names no shape, so the ability's own area (`baseArea`) grows.
+ * A fixed shape ("CRYOTIC — Change area to Line 8") is returned as written.
+ * @param {string} text      the Infuse block's text
+ * @param {number} spent     Aether spent on it (an Infuse X)
+ * @param {object|null} baseArea  the ability's area without the infusion
+ * @returns {object[]}  area specs, with range
+ */
+export function infusedAreas(text, spent = 0, baseArea = null) {
+  const n = Math.max(0, Number(spent) || 0);
+  let plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  plain = plain.replace(/\b(line|arc|burst) (\d+),? plus one (?:space )?(?:per|for every) aether infused/gi,
+    (_m, kind, size) => `${kind} ${Number(size) + n}`);
+  const r = /\brange\s+(?:to\s+|of\s+)?(\d+)/i.exec(plain);
+  const range = r ? Number(r[1]) : (baseArea?.range ?? 0);
+  const areas = areasInText(plain).map(a => ({ ...a, range }));
+  if (areas.length) return areas;
+  const ext = /\bextend the area by (\d+|one) spaces? (?:for every|per) aether infused(?:,? up to a maximum of \+?(\d+))?/i.exec(plain);
+  if (ext && baseArea && ["line", "arc", "burst"].includes(baseArea.kind) && baseArea.size) {
+    const step = ext[1] === "one" ? 1 : Number(ext[1]);
+    const add = Math.min(step * n, ext[2] ? Number(ext[2]) : Infinity);
+    if (add > 0) {
+      const area = { ...baseArea, size: baseArea.size + add, range };
+      area.label = areaLabel(area);
+      return [area];
+    }
+  }
+  return [];
+}
+
+/**
  * Does a rules text draw its area from the target instead of the user? Sow's
  * mastery Spectral Scythe (p.185): "Reap and Sow also create an arc 4 area
  * effect drawn from your target as the origin space, that cannot include your
@@ -247,9 +281,10 @@ export function abilityArea(tags, description = "") {
  * @param {Array<{source:string, area:object}>} [opts.alt]
  * @param {string} [opts.tagSource]  where the tags' area comes from ("Talent II"), "" for the base
  * @param {boolean} [opts.altFirst]
+ * @param {Array<{source:string, area:object}>} [opts.lead]  areas offered before all others (armed Infuse)
  * @returns {Array<{label:string, source:string, area:object}>}
  */
-export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFirst = false }) {
+export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFirst = false, lead = [] }) {
   const base = areaFromTags(tags);
   const range = base?.range ?? rangeFromTags(tags);
   const out = [];
@@ -262,6 +297,8 @@ export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFi
     out.push({ label: area.label, source, area });
   };
   const alts = () => alt.forEach(a => a?.area && push(a.source ?? "", a.area));
+  // The armed Infuse version's areas come first: the Aether is already spent on them.
+  lead.forEach(a => a?.area && push(a.source ?? "", a.area));
   if (altFirst) alts();
   if (base) push(tagSource, base);
   if (!altFirst) alts();
