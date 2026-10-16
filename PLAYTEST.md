@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R45 — Niente "Hit (no damage)" sulle abilità che danneggiano solo con l'area (16 ottobre 2026, versione 1.15.47)
+
+Setup: PG di prova Geomancer con Dragon Dive e Spellblade con Bifröst (dal compendio Jobs o già sulla scheda: è solo
+codice); un foe con Blunderbuss (Trooper) e uno con un attacco normale; qualche token sulla mappa.
+
+- [ ] **Dragon Dive**: bottone Damage → la finestra non ha la scelta Hit; parte selezionata Area (2 piercing), poi
+      Other. Il tiro fa 2 danni piercing.
+- [ ] **Bifröst**: come sopra, Area 2 piercing, nessuna Hit.
+- [ ] **Comet / Justice / Chaos Tarot**: niente Hit, solo Area (e Other).
+- [ ] **Trooper, Blunderbuss**: Damage dalla scheda del foe → niente Hit, Area 2.
+- [ ] **Attacchi (non devono cambiare)**: un attacco normale del PG (es. con Hit [D]+fray) e un attacco del foe hanno
+      ancora Hit / Crit / Miss come prima; un attacco ad area con il colpo senza danno mostra ancora "Hit (no damage)".
+- [ ] **Damage Utility (non deve cambiare)**: il tiro libero dalla scheda del PG mostra solo il pannello Other.
+
 ## R44 — Summon sui tratti che lo creano (16 ottobre 2026, versione 1.15.46)
 
 Setup: PG di prova Freelancer con Bound Spirit, Warden con Beast Master, Stormbender con Selkie, Fool con Cheap Trick,

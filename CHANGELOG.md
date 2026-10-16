@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Niente "Hit (no damage)" sulle abilità che danneggiano solo con l'area (versione 1.15.47)
+
+### Round di debug del 16 ottobre, punto R45
+
+- **Dragon Dive e Bifröst propongono "Hit (no damage)"**: la finestra del tiro del danno apriva con la scelta Hit, senza
+  danno, anche se l'abilità non è un attacco e tutto il suo danno sta nell'Area effect (Dragon Dive p.218, "dealing 2
+  piercing damage to all characters"; Bifröst p.226, "dealing 2 piercing damage to all characters in the area") → la
+  scelta Hit era mostrata sempre, anche vuota, e siccome è la prima era quella già selezionata → ora Hit compare solo se
+  il colpo fa danno, se l'abilità è un attacco (il bersaglio può prendere solo gli status del colpo mentre l'area fa
+  danno) o se l'abilità non ha nessun altro danno da proporre; altrimenti la finestra apre direttamente su Area. Il
+  danno era letto bene: il problema era solo la scelta in più.
+- Per i foe e le legend la finestra ora sa se l'azione è un attacco (tag attack o riga "On hit:"), con la stessa regola
+  dei bottoni della scheda.
+- Confronto su tutte le abilità dei compendi Jobs e Foe Abilities con il bottone Damage (1382, script su una copia dei
+  pack): perdono la scelta "Hit (no damage)" 5 abilità dei Jobs (**Dragon Dive**, **Bifröst**, **Chaos Tarot**,
+  **Justice**, **Comet**) e 83 azioni dei foe che fanno danno solo con l'area senza essere attacchi (Blunderbuss, Cut
+  Through, Swing Sack, Soul Spark…). Nessun'altra cambia. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Summon sui tratti che lo creano (versione 1.15.46)
 
 ### Round di debug del 16 ottobre, punto R44

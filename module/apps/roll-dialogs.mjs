@@ -426,8 +426,15 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // Damage lines read from the selected talent / unlocked mastery (ability-damage.mjs).
   const extras = Array.isArray(p.extras) ? p.extras : [];
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
+  // "Hit (no damage)" only where a hit can happen: an attack (its target may
+  // take only the hit's statuses while the rest of the area takes damage), or
+  // an ability with no other damage to offer. A non-attack whose damage is
+  // all in its Area effect (Dragon Dive p.218, Bifröst p.226) opens on Area.
+  const deals = (c) => !!(c?.mult > 0 || c?.flat > 0 || c?.fray);
+  const showHit = deals(p.hit) || deals(ab.parsedCombo?.hit) || !!(ab.isAttack ?? p.isAttack)
+               || !(deals(p.miss) || deals(p.area));
   const outcomes = [
-    { value: "hit",  label: "Hit",  formula: chunkFormula(p.hit) || "no damage", show: true },
+    { value: "hit",  label: "Hit",  formula: chunkFormula(p.hit) || "no damage", show: showHit },
     { value: "crit", label: "Crit", formula: p.hit?.mult > 0 ? `${p.hit.mult + 1}[${die}]${p.hit.fray ? ` + fray ${fray}` : ""}` : "", show: p.hit?.mult > 0 },
     { value: "miss", label: "Miss", formula: chunkFormula(p.miss), show: !!(p.miss?.fray || p.miss?.flat > 0 || p.miss?.mult > 0) },
     { value: "area", label: "Area", formula: chunkFormula(p.area), show: !!(p.area?.mult > 0 || p.area?.flat > 0 || p.area?.fray) },

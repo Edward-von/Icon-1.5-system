@@ -448,7 +448,7 @@ export class FoeSheet extends BaseActorSheet {
   /** Dialog for foe damage modifiers: outcome, bonus dice, target mitigation. */
   static async #promptFoeDamageMods(action, parsed, actor) {
     return promptDamageMods(
-      { name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [], parsed, isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
+      { name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [], parsed, isAttack: isFoeActionAttack(action), isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
       { damagedie: actor.system.damagedie || "d6", fray: actor.system.fray ?? 0 },
       { actor },
     );

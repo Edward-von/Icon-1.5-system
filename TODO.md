@@ -144,9 +144,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.46: i tratti sbloccati mostrano il chip del summon che creano, accanto al
       bottone aura; stessa regola delle abilità più il riconoscimento della scheda della creatura nel testo ("place your
       seraph", "summon it"). Hanno il chip Bound Spirit, Beast Master, Selkie, Cheap Trick e Darkside. Solo codice.)
-- [ ] **R45. "Hit (no damage)" proposto dove non serve** (S, bug)
+- [x] **R45. "Hit (no damage)" proposto dove non serve** (S, bug)
       Dragon Dive ("Damage roller has the option of 'hit (no damage') on this despite that not being necessary") e Bifröst
       ("Damage roller says 'Hit (no damage)'"). Capire quando la finestra del danno mostra quella scelta.
+      (FATTO il 16 ottobre 2026, versione 1.15.47: la scelta Hit compare solo se il colpo fa danno, se l'abilità è un
+      attacco o se non c'è altro danno; le abilità non-attacco con solo danno d'area aprono su Area. Cambiano Dragon
+      Dive, Bifröst, Chaos Tarot, Justice, Comet e 83 azioni ad area dei foe. Solo codice.)
 - [ ] **R46. Danno di Infuse e mastery che lo cambiano non aggiornato nel tiro del danno** (M, bug)
       - Cryo, Infuse 3 CRYOTIC: "increase damage to fray damage", ma il tiro resta a 1; idem per la mastery MAGNACRYO
         (Hit 2[D]+fray, Area [D]+fray).

@@ -468,7 +468,7 @@ export class LegendSheet extends BaseActorSheet {
 
   static async #promptLegendDamageMods(action, parsed, actor) {
     return promptDamageMods(
-      { name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [], parsed, isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
+      { name: action.name, cost: abilityCostLabel(action.cost), tags: action.tags ?? [], parsed, isAttack: isFoeActionAttack(action), isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
       { damagedie: actor.system.damagedie || "d8", fray: actor.system.fray ?? 0 },
       { actor },
     );
