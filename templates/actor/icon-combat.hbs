@@ -430,6 +430,13 @@
                 <i class="fa-solid fa-vector-square"></i> {{trait.areaLabel}}
               </button>
             {{/if}}
+            {{#each trait.summons as |sm|}}
+              <span class="icon-summon-chip" draggable="true"
+                    data-summon-uuid="{{sm.uuid}}" data-summon-name="{{sm.name}}"
+                    title="Drag {{sm.name}} onto the map to place it (you need permission to create tokens)">
+                <img src="{{sm.img}}" alt="" width="18" height="18"> {{sm.name}}
+              </span>
+            {{/each}}
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                       data-action="removeItem" data-item-id="{{trait.id}}"

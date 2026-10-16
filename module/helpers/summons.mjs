@@ -102,3 +102,39 @@ export function summonsForAbility(system, jobName = "") {
   if (!index.length) return [];
   return matchSummons(system, jobName, index).map(e => ({ uuid: e.uuid, name: e.name, img: e.img }));
 }
+
+/**
+ * The summons a trait creates: Beast Master (p.168), Selkie (p.232), Bound
+ * Spirit (p.155), Cheap Trick "leave a bomb in an adjacent space" (p.149),
+ * Darkside "you may leave a shadow" (p.161).
+ *
+ * Same verb rule as the abilities, plus one for the traits that carry the
+ * creature's stat block: they name it once with a pronoun or a short name
+ * ("summon it in range 3", "place your seraph in range 2") and then give its
+ * profile as "<Name> — Size 1, …". A stat block and a verb that puts a
+ * creature in play (summon, place, create, leave) is a summon of it. The
+ * whole name must open the block: "Beast" is not the tail of "Great Beast —
+ * Size".
+ * Pure (no Foundry globals), so the compendium can be checked from Node.
+ */
+export function matchTraitSummons(system, jobName, index) {
+  const out = matchSummons(system, jobName, index);
+  const text = String(system?.description ?? "")
+    .replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").toLowerCase();
+  if (!new RegExp(String.raw`\b(?:summon(?:s|ed)?|plac(?:e|es|ed)|creat(?:e|es|ed)|leav(?:e|es))\b`).test(text)) return out;
+  const job = String(jobName || system?.jobName || "").toLowerCase();
+  for (const entry of index) {
+    if (out.includes(entry)) continue;
+    if (entry.job && job && entry.job.toLowerCase() !== job) continue;
+    const block = new RegExp(String.raw`(?<![a-z]\s)\b${esc(entry.name.toLowerCase())}\s*[—–-]+\s*size\b`, "i");
+    if (block.test(text)) out.push(entry);
+  }
+  return out;
+}
+
+/** The summons a trait creates, for its own job (see matchTraitSummons). */
+export function summonsForTrait(system, jobName = "") {
+  const index = summonIndex();
+  if (!index.length) return [];
+  return matchTraitSummons(system, jobName, index).map(e => ({ uuid: e.uuid, name: e.name, img: e.img }));
+}

@@ -137,10 +137,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       ("summon a shadow", "create a plant", "leave a bomb"…), e si leggono tutti i blocchi dell'abilità (Finishing
       Blow, Slay, Collide…). Perdono il summon Harrow, Shadow Play, Nocturne, Assassinate, Fairy Ring; Harvest passa da
       Plant a Thrall; guadagnano Underway, Heave-Ho, Cavaliere. Solo codice.)
-- [ ] **R44. Tratti che evocano un summon senza il summon collegato** (S/M, bug)
+- [x] **R44. Tratti che evocano un summon senza il summon collegato** (S/M, bug)
       Bound Spirit (Freelancer, Astral Seraph), Beast Master (Warden, Great Beast), Selkie (Stormbender) e Cheap Trick
       (Fool, "leave a bomb in an adjacent space"; "Having a bomb summon node on this trait would be useful"). Come per l'aura
       dei tratti (R19c), i tratti non hanno il bottone summon delle abilità.
+      (FATTO il 16 ottobre 2026, versione 1.15.46: i tratti sbloccati mostrano il chip del summon che creano, accanto al
+      bottone aura; stessa regola delle abilità più il riconoscimento della scheda della creatura nel testo ("place your
+      seraph", "summon it"). Hanno il chip Bound Spirit, Beast Master, Selkie, Cheap Trick e Darkside. Solo codice.)
 - [ ] **R45. "Hit (no damage)" proposto dove non serve** (S, bug)
       Dragon Dive ("Damage roller has the option of 'hit (no damage') on this despite that not being necessary") e Bifröst
       ("Damage roller says 'Hit (no damage)'"). Capire quando la finestra del danno mostra quella scelta.

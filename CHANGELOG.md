@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Summon sui tratti che lo creano (versione 1.15.46)
+
+### Round di debug del 16 ottobre, punto R44
+
+- **Bound Spirit, Beast Master, Selkie e Cheap Trick senza summon**: i tratti evocano una creatura (Astral Seraph, Great
+  Beast, Selkie, Bomb) ma sulla scheda non c'era il chip da trascinare sulla mappa come per le abilità → il chip summon
+  (R7, R43) era calcolato solo per le abilità, i tratti avevano solo il bottone aura (R19c) → ora anche ogni tratto
+  sbloccato mostra nell'intestazione, accanto al bottone aura, il chip del summon del proprio job che crea; si trascina
+  sulla mappa come quello delle abilità.
+- Si usa la stessa regola delle abilità (il nome subito dopo un verbo che lo mette in campo: Cheap Trick "leave a bomb
+  in an adjacent space", p.149; Beast Master "summon a great beast in range 2", p.168), più una per i tratti che
+  contengono la scheda della creatura e la nominano con un pronome o un nome corto: Selkie "summon it in range 3"
+  (p.232) e Bound Spirit "place your seraph in range 2 from you" (p.155) contano perché il testo ha un verbo che la
+  mette in campo e il profilo "Selkie — Size 1…" / "Astral Seraph — Size 1…". Serve il nome intero: "Beast" non scatta
+  dentro "Great Beast — Size".
+- Confronto su tutti i 95 tratti del compendio Jobs (script su una copia del pack): hanno il chip **Bound Spirit**
+  (Astral Seraph), **Beast Master** (Great Beast), **Selkie** (Selkie), **Cheap Trick** (Bomb) e **Darkside** (Shadow,
+  "you may leave a shadow", p.161). Restano senza chip Umbral Soul e Meld (scambiano posto con uno shadow, non lo
+  creano), Tumbling, Gardener of Kin e Green Kenning (parlano dei summon in generale). I quattro summon esistono già
+  nel compendio Summons. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Summon solo sulle abilità che lo creano (versione 1.15.45)
 
 ### Round di debug del 16 ottobre, punto R43

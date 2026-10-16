@@ -21,7 +21,7 @@ import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses } from ".
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
-import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
+import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
@@ -711,6 +711,9 @@ export class IconSheet extends BaseActorSheet {
       const auraTag = chapter > currentChapter ? "" : traitAuraTag(t.system?.description);
       return {
         areaLabel:           auraTag ? (areaFromTags([auraTag])?.label ?? "") : "",
+        // Summons the trait puts on the table, as on the abilities (Beast
+        // Master, Selkie, Bound Spirit, Cheap Trick); not while locked.
+        summons:             chapter > currentChapter ? [] : summonsForTrait(t.system, t.system?.jobName),
         quick:               quickFor(t),
         powerDie:            powerDieView(t.system),
         id:                  t.id,

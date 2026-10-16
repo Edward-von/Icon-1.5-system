@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R44 — Summon sui tratti che lo creano (16 ottobre 2026, versione 1.15.46)
+
+Setup: PG di prova Freelancer con Bound Spirit, Warden con Beast Master, Stormbender con Selkie, Fool con Cheap Trick,
+Shade con Darkside, Meld e Umbral Soul (dal compendio Jobs o già sulla scheda: è solo codice). Il chip compare
+nell'intestazione del tratto, nella tab dei tratti.
+
+- [ ] **Bound Spirit**: chip Astral Seraph; trascinarlo sulla mappa crea il token del seraph.
+- [ ] **Beast Master**: chip Great Beast, nessun chip Beast.
+- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token.
+- [ ] **Cheap Trick**: chip Bomb.
+- [ ] **Darkside**: chip Shadow.
+- [ ] **Meld / Umbral Soul**: nessun chip.
+- [ ] **Tratto bloccato**: un tratto di capitolo più alto di quello del PG (lucchetto "Locked") non mostra il chip.
+- [ ] **Abilità (non devono cambiare)**: Umbra ha ancora il chip Shadow, Cavaliere il chip Bomb (R43).
+
 ## R43 — Summon solo sulle abilità che lo creano (16 ottobre 2026, versione 1.15.45)
 
 Setup: PG di prova Shade con Harrow, Shadow Play, Umbra, Umbral Echo; un Harvester con Harvest; un Fool con Cavaliere
