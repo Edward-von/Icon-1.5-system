@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R58 — Casella "Defender has evasion" nella finestra dell'attacco (16 ottobre 2026, versione 1.15.59)
+
+Setup: un PG che attacca, un Foe senza Evasion e un PG Fool (tratto Curse of Chaos) come bersagli; un secondo foe con lo
+status Evasion. È JS + CSS: F5 dopo il deploy.
+
+- [ ] **Casella spenta**: targetta il foe senza Evasion e attacca → nella riga del bersaglio c'è "Defender has evasion"
+      non spuntata; nessuna nota Evasion sotto Modifiers; la card d'attacco non ha il blocco Evasion.
+- [ ] **Casella spuntata a mano**: stesso attacco, spunta la casella → sotto Modifiers compare "Evasion: <nome> rolls
+      1d6 (4+ = miss) before the attack"; tira → la card ha il blocco Evasion con il d6 e "(set in the attack dialog)";
+      con 4+ l'attacco è mancato e il bersaglio è attenuato in "Inflict".
+- [ ] **Curse of Chaos**: un foe attacca il PG Fool da 3+ caselle → spunta la casella, stesso comportamento.
+- [ ] **Spuntata da sola**: targetta il foe con lo status Evasion → casella già spuntata; togli la spunta → la nota
+      sparisce e il tiro non fa il d6 d'Evasion.
+- [ ] **True Strike**: abilità con tag True Strike, casella spuntata → nota "True Strike (tag): ignores Evasion", la card
+      dice "Evasion ignored".
+- [ ] **Area**: attacco ad area con 2+ bersagli → la casella c'è solo sulla riga del bersaglio d'attacco (radio); cambiando
+      il radio la casella passa all'altro e la nota si aggiorna.
+- [ ] **Finestra del danno**: la finestra del tiro di danno NON ha la casella.
+
 ## R57 — Stack Dice: bottone Use (16 ottobre 2026, versione 1.15.58)
 
 Setup: PG Fool con il tratto Stack Dice (uno al capitolo 3 per avere 2 dadi). È template + JS: F5 dopo il deploy.

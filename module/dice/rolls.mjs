@@ -200,6 +200,7 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
  * @param {Array}    [opts.statusEntries] Statuses the ability inflicts (ability-statuses.mjs) → "Inflict" buttons per target
  * @param {Array}    [opts.targets]       Targets of the attack (defenses.mjs#currentTargets; default: the user's targets now)
+ * @param {object}   [opts.evasionOverride] { tokenId: boolean } — the attack dialog's "Defender has evasion" boxes
  * @param {Actor}    [opts.actor]
  * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion}>}
  */
@@ -210,6 +211,7 @@ export async function combatRoll({
   relicInvokes = [], relicNotes = [],
   statusEntries = [],
   targets = null,
+  evasionOverride = null,
   actor,
 } = {}) {
   const net    = boons - curses;
@@ -218,7 +220,7 @@ export async function combatRoll({
   // attack roll. When every target evades there is no attack roll at all: the
   // d20 is still shown for reference but the result is a miss and relic
   // invokes don't trigger.
-  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets(), tags });
+  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets(), tags, evasionOverride });
   const evaded  = evasion.allEvaded;
 
   const d20r   = await new Roll("1d20").evaluate();

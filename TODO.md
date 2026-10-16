@@ -255,9 +255,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       to chat '(character name) used their stacked die' or something similar."
       (FATTO il 16 ottobre 2026, versione 1.15.58: bottone Use accanto ai dadi del tratto, scala di 1 e posta in chat che
       il gamble fa 6; spento a 0; la finestra del gamble spende il suo dado da sola, nessun doppio scalo.)
-- [ ] **R58. Boon of Chaos: evasion del difensore nel tiro d'attacco** (S/M)
+- [x] **R58. Boon of Chaos: evasion del difensore nel tiro d'attacco** (S/M)
       "Currently no way during an attack to toggle that the defender has evasion. Some kind of modal on the attack roller
       would be useful for conditionals like this (evasion if a certain distance away)."
+      (FATTO il 16 ottobre 2026, versione 1.15.59: casella "Defender has evasion" su ogni bersaglio della finestra
+      dell'attacco, spuntata da sola con lo status Evasion e modificabile a mano; il tiro d'Evasion (p.146) usa la casella;
+      il tratto nel libro è Curse of Chaos, p.149.)
 - [ ] **R59. Spendere Aether senza attacco, con messaggio in chat** (S/M)
       Tsunami: l'Infuse si scala solo attaccando, ma Tsunami non tira; "Some alternate button to spend 1 aether and then
       print to chat the stormlash ability would be useful." Aether Deflection (tratto): "you can spend 2 Aether any time

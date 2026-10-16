@@ -2480,6 +2480,7 @@ export class IconSheet extends BaseActorSheet {
       relicNotes,
       statusEntries,
       targets:      rollTargets?.length ? rollTargets : null,
+      evasionOverride: mods.evasion,
       actor:        this.document,
     });
   }
@@ -2612,6 +2613,7 @@ export class IconSheet extends BaseActorSheet {
       hitEffect:   await this._enrichAbility(ab.hitEffect),
       missEffect:  ab.missEffect,
       relicInvokes: attackInvokes(this.document),
+      evasionOverride: mods.evasion,
       relicNotes:   abilityRelicReminders(this.document, profile, { forAttackCard: true }),
       actor:       this.document,
     });

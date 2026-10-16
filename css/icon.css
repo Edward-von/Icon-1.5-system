@@ -5905,6 +5905,12 @@ ol.chat-log .chat-message,
                           border: 1px solid var(--ic-border-vis); border-radius: var(--ic-radius-sm); padding: 0 4px; }
 .icon-roll-target--attack .icon-roll-target__role { visibility: hidden; }
 .icon-roll-target--attack .icon-roll-target__name { color: var(--ic-gold-bright); }
+/* "Defender has evasion" box of the attack dialog (p.146 / Curse of Chaos p.149);
+   with an area only the attack target rolls Evasion, so the others hide it. */
+.icon-roll-target__evasion { display: flex; align-items: center; gap: 4px; flex-basis: 100%; padding-left: 36px;
+                             font-size: .8em; color: var(--ic-text-dim); cursor: pointer; }
+.icon-roll-target__evasion input { accent-color: var(--ic-gold-bright); margin: 0; cursor: pointer; }
+.icon-roll-card--targets[data-pick="1"] .icon-roll-target:not(.icon-roll-target--attack) .icon-roll-target__evasion { display: none; }
 .icon-roll-target__drop { opacity: .55; }
 .icon-roll-target__drop:hover { opacity: 1; }
 .icon-chat-card__target-defs { display: inline-flex; flex-wrap: wrap; gap: 3px; }

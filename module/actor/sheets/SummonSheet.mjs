@@ -111,6 +111,7 @@ export class SummonSheet extends BaseActorSheet {
       curses:  mods.curses,
       defense: mods.defense,
       statusEntries: summonStatusEntries(actor.system.summonAction, { sourceName: actor.name }),
+      evasionOverride: mods.evasion,
       actor,
     });
   }

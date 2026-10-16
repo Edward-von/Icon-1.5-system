@@ -9,7 +9,8 @@
  *
  * Shared by PCs, foes and legends. Return shapes are unchanged from the old
  * prompts so the roll code (combatRoll / postAbilityDamageCard) is untouched:
- *   promptAttackMods → { boons, curses, defense }            | null
+ *   promptAttackMods → { boons, curses, defense, attackTargetId, targetIds,
+ *                        evasion: { tokenId: boolean } }            | null
  *   promptDamageMods → { outcome, targetName, targetIds, attackTargetId,
  *                        bonusDice, vulnerable, resistance, weakened, hatred,
  *                        useCombo, other, instances } | null
@@ -20,7 +21,7 @@
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint } from "../combat/marks.mjs";
-import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores } from "../combat/defenses.mjs";
+import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasionThreshold, hasSureEvasion } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
@@ -63,6 +64,10 @@ function _targets() {
       // Defensive statuses / traits of the target (defenses.mjs)
       defense_: defenseProfile(t.actor),
       defChips: defenseChipsHtml(t.actor),
+      // Evasion threshold / Rigoletto Aspect of the target, also used when the
+      // attacker ticks "Defender has evasion" by hand (Curse of Chaos, p.149).
+      evThreshold: evasionThreshold(t.actor),
+      evSure:  hasSureEvasion(t.actor),
       // The stance the target is in, if any — it usually says what they are
       // about to do, and it was only visible on their own sheet until now.
       stance:  IconActor.stanceOf(t.actor),
@@ -119,7 +124,7 @@ function _hero({ actor, kicker, title, cost, tags, dieLabel, dieSub }) {
  * the picked one gives the Defense to beat and is the only one that rolls
  * Evasion, the others are labelled "area".
  */
-function _targetCard(targets, { showDefense = true, pickAttackTarget = false, areaLabel = "", pickedId = "", pickHint = "" } = {}) {
+function _targetCard(targets, { showDefense = true, pickAttackTarget = false, areaLabel = "", pickedId = "", pickHint = "", evasionToggle = false } = {}) {
   if (!targets.length) {
     return `
       <section class="icon-roll-card icon-roll-card--targets icon-roll-card--empty">
@@ -138,7 +143,8 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
         ${targets.map((t, i) => `
           <li class="icon-roll-target" data-token-id="${esc(t.id)}" data-name="${esc(t.name)}"
               data-defense="${t.defense ?? ""}"
-              data-evasion="${t.defense_?.evasion ? (t.defense_.sureEvasion ? "sure" : String(t.defense_.evasionThreshold ?? 4)) : ""}">
+              data-evasion="${t.defense_?.evasion ? (t.defense_.sureEvasion ? "sure" : String(t.defense_.evasionThreshold ?? 4)) : ""}"
+              data-ev-threshold="${t.evThreshold ?? 4}" data-ev-sure="${t.evSure ? "1" : ""}">
             ${pick ? `<label class="icon-roll-target__pick" title="Attack target — the one you roll the d20 against">
                         <input type="radio" name="attackTarget" value="${esc(t.id)}"${(targets.some(x => x.id === pickedId) ? t.id === pickedId : i === 0) ? " checked" : ""}>
                       </label>` : ""}
@@ -152,6 +158,8 @@ function _targetCard(targets, { showDefense = true, pickAttackTarget = false, ar
               ${t.stance ? `<span class="icon-roll-target__stance" title="Stance(s) the target is in"><i class='fa-solid fa-yin-yang'></i> ${esc(t.stance)}</span>` : ""}
             </span>
             ${t.defChips ? `<span class="icon-roll-target__defs">${t.defChips}</span>` : ""}
+            ${evasionToggle ? `<label class="icon-roll-target__evasion" title="Evasion (p.146): roll a d6 when targeted by an attack; on a ${t.evThreshold ?? 4}+ the attack misses. Ticked by itself when the target has Evasion; tick it by hand for conditional evasion (e.g. Curse of Chaos, p.149: evasion against characters 3 or more spaces away).">
+                <input type="checkbox" data-evasion-toggle${t.defense_?.evasion ? " checked" : ""}> Defender has evasion</label>` : ""}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-roll-target__drop"
                     data-drop="${esc(t.id)}" title="Drop this target from the roll (also untargets it on the map)">✕</button>
           </li>`).join("")}
@@ -193,7 +201,7 @@ function _wireTargetCard(root, onChange) {
     if (!left.length) card.classList.add("icon-roll-card--empty");
     fire();
   });
-  card.addEventListener("change", ev => { if (ev.target.name === "attackTarget") fire(); });
+  card.addEventListener("change", ev => { if (ev.target.name === "attackTarget" || ev.target.matches?.("[data-evasion-toggle]")) fire(); });
   fire();
 }
 
@@ -262,19 +270,22 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
   // Evasion (p.146): rolled automatically with the attack, one d6 per target
   // that has it — tell the attacker up front. Rebuilt in the browser when the
   // attack target changes, so the chip is a placeholder here.
-  const evaders = (pick ? targets.slice(0, 1) : targets).filter(t => t.defense_?.evasion);
+  // Each evader is { name, sure, threshold }; in the browser the row's
+  // "Defender has evasion" box decides who is one (ticked from the status).
+  const evaders = (pick ? targets.slice(0, 1) : targets).filter(t => t.defense_?.evasion)
+    .map(t => ({ name: t.name, sure: t.defense_.sureEvasion, threshold: t.defense_.evasionThreshold }));
   const evasionNote = (list) => !list.length ? "" : (ignoredEvasion
     ? `${ignoredEvasion}: ignores Evasion (${list.map(t => t.name).join(", ")})`
-    : `Evasion: ${list.map(t => t.defense_.sureEvasion
+    : `Evasion: ${list.map(t => t.sure
         ? `${t.name} evades automatically (Rigoletto Aspect, this turn)`
-        : `${t.name} rolls 1d6 (${t.defense_.evasionThreshold}+ = miss)`).join(", ")} before the attack`);
+        : `${t.name} rolls 1d6 (${t.threshold}+ = miss)`).join(", ")} before the attack`);
   const evasionChip = `<span class="icon-roll-auto__chip" data-role="evasion" title="Applied automatically from the ability, the statuses and the elevation"${evaders.length ? "" : " hidden"}>${esc(evasionNote(evaders))}</span>`;
 
   const content = `
     <div class="icon-roll-dialog icon-roll-dialog--attack">
       ${_hero({ actor, kicker: "Attack roll · d20 + boons − curses", title: ab.name ?? "Attack", cost: ab.cost, tags: ab.tags, dieLabel: "d20", dieSub: "crit 20+ · exceed 15+" })}
       <div class="icon-roll-body">
-        ${_targetCard(targets, { pickAttackTarget: pick, areaLabel: area?.label ?? "" })}
+        ${_targetCard(targets, { pickAttackTarget: pick, areaLabel: area?.label ?? "", evasionToggle: true })}
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
           <div class="icon-roll-auto"${notes.length || evaders.length ? "" : " hidden"}>${notes.map(n => `<span class="icon-roll-auto__chip" title="Applied automatically from the ability, the statuses and the elevation">${esc(n)}</span>`).join("")}${evasionChip}</div>
@@ -326,8 +337,8 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
         d.value = defs.length ? Math.min(...defs.map(Number)) : "";
       }
       if (evasionChipEl) {
-        const evading = (pick ? [attackRow] : rows).filter(r => r?.dataset.evasion);
-        const list = evading.map(r => targets.find(t => t.id === r.dataset.tokenId)).filter(Boolean);
+        const evading = (pick ? [attackRow] : rows).filter(r => r?.querySelector("[data-evasion-toggle]")?.checked);
+        const list = evading.map(r => ({ name: r.dataset.name, sure: r.dataset.evSure === "1", threshold: Number(r.dataset.evThreshold) || 4 }));
         const text = evasionNote(list);
         evasionChipEl.hidden = !text;
         evasionChipEl.textContent = text ? `${text}` : "";
@@ -367,6 +378,10 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             defense: defenseVal !== "" && defenseVal != null ? Number(defenseVal) : null,
             attackTargetId,
             targetIds: rows.map(r => r.dataset.tokenId),
+            // "Defender has evasion" per target token: rollEvasion uses it in
+            // place of the Evasion status (conditional evasion, p.149).
+            evasion: Object.fromEntries(rows.filter(r => r.querySelector("[data-evasion-toggle]"))
+              .map(r => [r.dataset.tokenId, !!r.querySelector("[data-evasion-toggle]").checked])),
           };
         },
       },

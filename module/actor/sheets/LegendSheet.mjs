@@ -367,6 +367,7 @@ export class LegendSheet extends BaseActorSheet {
       areaHtml:    placement ? areaSummaryHtml(placement, { attackTargetId: mods.attackTargetId }) : "",
       // Area attacks hit one target, the rest only take the area effect (p.117).
       targets:     rollTargets?.length ? rollTargets : null,
+      evasionOverride: mods.evasion,
       statusEntries: npcActionStatusEntries(action, { sourceName: actor.name }),
       actor,
     });

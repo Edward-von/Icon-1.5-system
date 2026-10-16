@@ -378,18 +378,27 @@ function _rigolettoStrikers(target, allTokens = null) {
  * @param {Array}  [opts.targets]   currentTargets() (default: capture now)
  * @param {Array}  [opts.sceneTokens]  tokens to scan for Rigoletto holders (default: the canvas)
  * @param {Array}  [opts.tags]      tags of the attack ("true strike" / "unerring" ignore Evasion)
+ * @param {object} [opts.evasionOverride]  { tokenId: boolean } from the attack dialog (replaces the Evasion status)
  * @returns {Promise<{results:Array, rolls:Roll[], allEvaded:boolean, anyEvaded:boolean, ignored:string, evadedUuids:Set<string>}>}
  */
-export async function rollEvasion({ attacker, targets = null, sceneTokens = null, tags = [] } = {}) {
+export async function rollEvasion({ attacker, targets = null, sceneTokens = null, tags = [], evasionOverride = null } = {}) {
   const list = targets ?? currentTargets();
   const out  = { results: [], rolls: [], allEvaded: false, anyEvaded: false, ignored: "", evadedUuids: new Set() };
 
   // Who rolls: targets with Evasion (own status or trait), plus targets an
   // allied Rigoletto III holder in range 2 covers (needs a 6).
+  // `evasionOverride` ({ tokenId: boolean }, the attack dialog's "Defender has
+  // evasion" box) replaces the target's own Evasion: ticked by hand for a
+  // conditional one (Curse of Chaos, p.149), unticked to drop it.
   const evaders = [];
   for (const t of list) {
     const p = defenseProfile(t.actor);
-    if (p.evasion) { evaders.push({ ...t, threshold: p.evasionThreshold, sure: p.sureEvasion, via: p.evasionVia, guardian: null }); continue; }
+    const forced = evasionOverride && t.tokenId in evasionOverride ? !!evasionOverride[t.tokenId] : null;
+    if (forced === true && !p.evasion) {
+      evaders.push({ ...t, threshold: evasionThreshold(t.actor), sure: hasSureEvasion(t.actor), via: "set in the attack dialog", guardian: null });
+      continue;
+    }
+    if (p.evasion && forced !== false) { evaders.push({ ...t, threshold: p.evasionThreshold, sure: p.sureEvasion, via: p.evasionVia, guardian: null }); continue; }
     const g = _rigolettoGuardian(t, sceneTokens);
     if (g) evaders.push({ ...t, threshold: 6, sure: false, via: `Rigoletto III of ${g.actor.name}`, guardian: g.actor });
   }

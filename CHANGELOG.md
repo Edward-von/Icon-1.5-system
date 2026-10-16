@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Casella "Defender has evasion" nella finestra dell'attacco (versione 1.15.59)
+
+### Round di debug del 16 ottobre, punto R58
+
+- **Curse of Chaos** (Fool, p.149: "You have evasion against characters that are 3 or more spaces away from you"; Maar
+  lo chiama "Boon of Chaos"): durante un attacco non c'era modo di dire che il difensore ha l'Evasion → il tiro
+  d'Evasion (p.146: "Roll a d6 when targeted by an attack. On a 4+, the attack automatically misses. Check before the
+  attack roll") partiva solo se il bersaglio aveva lo status Evasion (o un tratto NPC che il sistema sa leggere), e un
+  tratto con condizione di distanza non lo dà → nella finestra dell'attacco ogni bersaglio ha ora la casella
+  **Defender has evasion**: spuntata da sola se il bersaglio ha l'Evasion, si può spuntare o togliere a mano. Il tiro
+  usa la casella al posto dello status, con la stessa regola di sempre (d6 prima del d20, 4+ = mancato, 3+ con
+  Rigoletto I, sempre riuscita con l'Aspect, ignorata da True Strike / Unerring). Con un'area la casella c'è solo sul
+  bersaglio dell'attacco, l'unico che tira l'Evasion. La nota "Evasion: … rolls 1d6" sotto Modifiers segue la casella.
+
 ## 16 ottobre 2026 — Stack Dice: bottone Use (versione 1.15.58)
 
 ### Round di debug del 16 ottobre, punto R57
