@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R42 — Gain dei talenti con "one of them" e "Grant you and your ally" (16 ottobre 2026, versione 1.15.43)
+
+Setup: PG di prova Shade con Shadow Play ed Enochian con Blazing Bond (vanno bene anche quelli già sulla scheda: è solo
+codice); un alleato sulla mappa.
+
+- [ ] **Shadow Play, Talent II**: scegliere il Talent II → Show in Chat → riquadro Gain: bottone "Gain Evasion" per gli
+      alleati, con la durata "until the start of their next turn"; restano Stealth (alleati) e Dazed (foe) dell'Effect.
+- [ ] **Shadow Play, Talent I**: con il Talent I scelto l'Evasion non compare.
+- [ ] **Blazing Bond, Talent II**: scegliere il Talent II → Show in Chat → bottoni Gain Defiance su di te e
+      sull'alleato (gruppo "Comeback").
+- [ ] **Crimson Bloom / Divine Aegis**: Talent I di Crimson Bloom, Talent II di Divine Aegis → Gain Defiance per
+      l'alleato.
+- [ ] **Intimidate (non deve cambiare, R18)**: mastery sbloccata → ancora "Gain Unstoppable" su di te.
+
 ## R41 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (16 ottobre 2026, versione 1.15.42)
 
 Setup: PG di prova con Blackstar (Enochian) e Drifting Leaf (dal compendio Jobs: è solo codice, vanno bene anche

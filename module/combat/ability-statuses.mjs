@@ -95,6 +95,15 @@ const GRANT_BY_WORD = (w) => GRANTABLE.find(s => new RegExp(`^(?:${s.re})$`, "i"
 const GRANT_ADJ_AFTER_RE = /^\s+(?:damage|attacks?|effects?|movement|ability|abilities|foes?|characters?|allies|ally|summons?|units?|creatures?|targets?)\b/i;
 /** Verbs that grant a status to the subject before them. */
 const GRANT_VERB_RE = /\b(?:gains?|gained|gaining|have|has|get|gets|regains?|become|becomes|are|is|with|grants?(?:\s+(?:you|them|it|yourself))?)\s*(?:\+\d\s*)?$/i;
+/** "Grant both you and your ally defiance" (Blazing Bond Talent II): the recipients sit between the verb and the status. */
+const GRANT_TO_WHO = "(?:you(?:rself)?|(?:your|an?|each|every|all|one|the)\\s+(?:allies|ally)|allies)";
+const GRANT_TO_RE = new RegExp(`\\bgrants?\\s+(?:both\\s+)?${GRANT_TO_WHO}(?:\\s*(?:,|and|,\\s*and)\\s*${GRANT_TO_WHO})*\\s*$`, "i");
+/**
+ * "If you swap two allies, one of them can gain evasion" (Shadow Play Talent II):
+ * a pronoun subject ("one of them", "they") whose antecedent is in an earlier clause.
+ */
+const PRONOUN_SUBJECT_RE = /^\s*(?:(?:and|then)\s+)?(?:(?:one|each|both|either|any|all)\s+of\s+them|they)\b/i;
+const ANTECEDENT_OTHER_RE = /\b(?:foes?|targets?|enem(?:y|ies)|characters?|creatures?|summons?)\b/gi;
 /**
  * Imperative start of a clause ("Gain stealth", "Become intangible…") = the user.
  * "also" may lead or follow the modal ("…, also become unstoppable", Intimidate's
@@ -459,7 +468,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         const chainedPrev = blockEntries.find(e => e.kind === "gain" && e._sentenceIndex === si && CHAIN_BETWEEN_RE.test(sentence.slice(e.end, start)));
         let target = chainedPrev ? (chainedPrev._targetsAll ?? chainedPrev.target) : "";
         if (!target) {
-          if (!GRANT_VERB_RE.test(before)) continue;
+          if (!GRANT_VERB_RE.test(before) && !GRANT_TO_RE.test(before)) continue;
           const selfAt  = _lastIndex(selfRe, before);
           const otherAt = _lastIndex(OTHER_SUBJECT_RE, before.replace(selfRe, x => " ".repeat(x.length)));
           const allyAt  = _lastIndex(ALLY_SUBJECT_RE, before);
@@ -467,6 +476,12 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           else if (selfAt >= 0 && selfAt > otherAt) target = "self";
           else if (otherAt < 0 && IMPERATIVE_SELF_RE.test(before)) target = "self";
           else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*(?:\+\d\s*)?$/i.test(before)) target = "self";
+          else if (PRONOUN_SUBJECT_RE.test(before)) {
+            // The antecedent of "one of them" is the last group named earlier in the sentence.
+            const prefix = sentence.slice(0, seg.start);
+            const pAlly = _lastIndex(ALLY_SUBJECT_RE, prefix), pOther = _lastIndex(ANTECEDENT_OTHER_RE, prefix);
+            if (pAlly >= 0 && pAlly > pOther) target = "ally";
+          }
           if (!target) continue;
         }
         const until = (UNTIL_RE.exec(after)?.[1] ?? "").trim();

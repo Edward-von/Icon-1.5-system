@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Gain dei talenti con "one of them" e "Grant you and your ally" (versione 1.15.43)
+
+### Round di debug del 16 ottobre, punto R42
+
+- **Il Talent II di Shadow Play non proponeva l'Evasion**: "If you swap two allies, one of them can gain evasion
+  until the start of their next turn" (p.163) → la lettura del testo cerca chi riceve lo status nella stessa parte
+  di frase, e lì c'era solo "one of them": un pronome, che il sistema trattava come "qualcun altro" e quindi
+  scartava → ora, quando chi riceve è "one of them" / "they" e prima nella frase sono nominati gli alleati, il
+  bottone Gain va agli alleati (Evasion, fino all'inizio del loro turno successivo). Di riflesso compaiono anche i Gain
+  Defiance di Crimson Bloom Talent I, Divine Aegis Talent II e della mastery di Wish ("they also gain defiance"),
+  che parlano dell'alleato allo stesso modo.
+- **Il Talent II di Blazing Bond non proponeva la Defiance**: "Comeback: Grant both you and your ally defiance when
+  taking this action" (p.210) → il sistema riconosceva "grant" solo subito prima dello status ("grant you
+  defiance"), non con chi riceve in mezzo ("grant both you and your ally …") → ora "grant" seguito da te e/o dagli
+  alleati vale come Gain: due bottoni, uno su di te e uno sull'alleato. Non c'entrava la lettura di "also" corretta
+  in R18 (Intimidate), che resta com'era.
+- Il terzo caso del punto (Mist Strider, il dazed della mastery) ha una causa diversa e diventa R42b. Solo codice,
+  nessun dato modificato: vale per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (versione 1.15.42)
 
 ### Round di debug del 16 ottobre, punto R41

@@ -109,12 +109,21 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Blackstar: "Shattered effect prompts the user to place shattered on all targets in the area, not just the main
       attack target." Drifting Leaf: "Only the attack target should be prompted for the shatter effect. Inflict currently
       presents all targets in the area." (Drifting Leaf: "Effect: Foe is shattered.")
-- [ ] **R42. Status del talento non proposti nell'Inflict / Gain** (S/M, bug)
+- [x] **R42. Status del talento non proposti nell'Inflict / Gain** (S/M, bug)
       - Shadow Play Talent II: "one of them can gain evasion until the start of their next turn", niente evasion.
       - Blazing Bond Talent II: niente Defiance.
-      - Mist Strider: con la mastery sbloccata il dazed non va nel riquadro Inflict.
+      - Mist Strider: con la mastery sbloccata il dazed non va nel riquadro Inflict. → diviso in R42b (causa diversa).
       Forse è la stessa lettura del testo di R18 ("also become"): "can gain …" / "one of them". Se le cause sono diverse,
       dividere.
+      (FATTO il 16 ottobre 2026, versione 1.15.43: non era la lettura di R18. "one of them" / "they" con gli alleati
+      nominati prima nella frase ora dà il Gain agli alleati (Shadow Play Talent II, Evasion), e "Grant both you and
+      your ally defiance" dà il Gain a te e all'alleato (Blazing Bond Talent II). Di riflesso anche Crimson Bloom
+      Talent I, Divine Aegis Talent II e la mastery di Wish ("they also gain defiance"). Solo codice.)
+- [ ] **R42b. Mist Strider: il dazed della mastery non va nell'Inflict** (S, bug)
+      Mastery River Guardians (p.170): "Foes that start their turn inside the area that end their turn outside of it
+      take 2 damage and are dazed." Causa diversa da R42: la lettura scarta lo status perché nella frase c'è "end"
+      ("end their turn"), che per il parser vuol dire "togliere uno status" ("ends the dazed"). Va escluso "end(s)
+      their / its / your turn" da quella parola.
 - [ ] **R43. Summon del proprio job su abilità che non lo creano** (S, bug)
       Harrow: "Currently has a shadow in the ability, despite only consuming them, rather than placing them." Shadow Play:
       "Has the shadow summon in it's ability card, despite not placing shadows." (Harrow Talent II: "consume a shadow"; in
@@ -247,6 +256,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       dialog dell'attacco, con più token bersagliati (area piazzata) i bottoni Inflict restano su tutti, con il gruppo
       etichettato "attack target only". La card Auto-hit potrebbe chiedere il bersaglio d'attacco (o prendere
       l'attack space dell'area: il centro di un Blast / Burst, p.97) e dividere le righe come la card d'attacco.
+- [ ] **Emerso lavorando su R42 — Wish, mastery: Unstoppable a te invece che all'alleato** (S): "they also gain
+      defiance, then become unstoppable until the end of their next turn" (Star Scorned Hermit): dopo R42 la Defiance
+      va all'alleato, ma "then become unstoppable" è letto come imperativo e il Gain Unstoppable va su di te. In più la
+      Defiance prende la durata dell'Unstoppable ("until the end of their next turn"), che nel testo non è sua.
 
 ---
 
