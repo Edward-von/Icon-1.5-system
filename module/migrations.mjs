@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 28;
+export const CURRENT_SCHEMA_VERSION = 29;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1066,6 +1066,43 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 28: ${n} copy/copies of Helix Heel given the p.219 "Effect:" label`);
+  },
+
+  /* 29 — Open the Gates (Sealer, p.194) prints "Effect: This attack gains +1
+   * boon, cannot miss … the first time it is used in combat." under its
+   * Exceed line, so the sheet showed it after the exceed, as if it depended
+   * on it. Edoardo chose (16 Oct 2026) to show it as a "Special:" in front of
+   * both versions of the attack, like Raging Wolf (p.137). The pack now labels
+   * it "Special:", puts it before "Effect: Teleport 1" and pins "special,
+   * effect, hit, miss, exceed"; same on the copies still carrying the old
+   * text and order (an edited copy is left alone). */
+  29: async () => {
+    const FLAVOUR  = "This aptly named technique can be used to deliver an extremely powerful blow — but focusing the body's aether in such a way takes a long time to recharge.";
+    const TELEPORT = "Effect: Teleport 1.";
+    const RULE     = "This attack gains +1 boon, cannot miss (turn any miss into a hit) and triggers any exceed effects the first time it is used in combat.";
+    const OLD_DESC = `${FLAVOUR} ${TELEPORT} Effect: ${RULE}`;
+    const NEW = {
+      "system.description": `${FLAVOUR} Special: ${RULE} ${TELEPORT}`,
+      "system.blockOrder":  "special, effect, hit, miss, exceed",
+    };
+    const norm = (t) => String(t ?? "").replace(/\s+/g, " ").trim();
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Open the Gates"
+      && norm(item.system?.description) === OLD_DESC
+      && ["", "effect, hit, miss, exceed"].includes(norm(item.system?.blockOrder));
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, ...NEW }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update(NEW);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 29: ${n} copy/copies of Open the Gates given the "Special:" in front of both versions`);
   },
 };
 

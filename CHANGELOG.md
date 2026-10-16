@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Open the Gates: lo Special davanti alle due versioni (versione 1.15.72)
+
+### Round di debug del 15 ottobre, punto R34
+
+- **Open the Gates** (Sealer, p.194: "Effect: This attack gains +1 boon, cannot miss (turn any miss into a hit) and
+  triggers any exceed effects the first time it is used in combat."): sulla scheda quel blocco compariva dopo l'Exceed e
+  sembrava dipendere dall'exceed → il libro lo stampa sotto la riga Exceed, prima della combo, ed è ambiguo; Edoardo ha
+  scelto di leggerlo come regola di tutta l'abilità → nel compendio Jobs il blocco ha ora l'etichetta "Special:" ed è in
+  testa, come lo Special di Raging Wolf (p.137): Special, Effect (Teleport 1), Hit, Miss, Exceed. Parole del libro
+  invariate.
+- **Anche sulla versione combo**: Center the Temple è una combo completa e la card della combo non teneva niente della
+  versione base → ora una combo completa tiene in cima i blocchi "Special" della base (solo Open the Gates ne ha uno fra
+  le abilità combo), quindi Show in Chat con la combo armata mostra lo Special sopra i blocchi di Center the Temple.
+- La migrazione 29 fa lo stesso sulle copie già sulle schede e nella sidebar (solo quelle con il testo e l'ordine
+  originali, non quelle modificate a mano).
+
 ## 16 ottobre 2026 — Segni che seguono un personaggio (versione 1.15.71)
 
 ### Round di debug del 15 ottobre, punto R33d

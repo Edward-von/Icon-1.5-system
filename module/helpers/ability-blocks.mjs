@@ -392,7 +392,14 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
   if (comboText) {
     const combo = parseComboText(comboText);
     const both  = masteryGainsBothEffects(s);
-    if (combo.whole && !both) out.length = 0;
+    // A "Special:" of the base is printed in front of both versions (Open
+    // the Gates, p.194: "+1 boon, cannot miss … the first time it is used in
+    // combat"), so the complete combo keeps it on top.
+    if (combo.whole && !both) {
+      const kept = out.filter(b => b.key === "section" && String(b.label ?? "").toLowerCase() === "special");
+      out.length = 0;
+      out.push(...kept);
+    }
     // "Instead of the mark, gain Effect: …": the named base block is dropped.
     if (!both && combo.drops.length) {
       for (let i = out.length - 1; i >= 0; i--) {

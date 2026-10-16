@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R34 — Open the Gates: lo Special davanti alle due versioni (16 ottobre 2026, versione 1.15.72)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Sealer di capitolo 3 che ha già Open the Gates
+sulla scheda da prima di questa versione, e un PG Sealer nuovo.
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 29: … Open the
+      Gates given the "Special:" in front of both versions".
+- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Open the Gates: sotto il corsivo, prima riga **Special** ("This
+      attack gains +1 boon, cannot miss…"), poi Effect (Teleport 1), Hit, Miss, Exceed. Dopo l'Exceed non c'è più niente
+      (a parte talenti / mastery / combo).
+- [ ] **Copia nuova dal compendio**: trascina Open the Gates dal compendio Jobs su un PG → stessi blocchi, stesso ordine.
+- [ ] **Chat, versione base**: 💬 Show in Chat → la card ha lo stesso ordine (Special in cima).
+- [ ] **Chat, versione combo**: con un combo token, arma la combo e Show in Chat → la card di Center the Temple ha in cima
+      lo Special, poi Effect (Teleport spaces equal to the round number…), Hit, Miss, Exceed della combo; niente
+      "Teleport 1" né "pacified" della base.
+- [ ] **Attacco**: il tiro d'attacco e il danno di entrambe le versioni funzionano come prima.
+- [ ] **Altre combo invariate**: God Hand / Devil Hand e Reap con la combo armata → card come prima (nessun blocco della
+      base in più).
+- [ ] **Raging Wolf invariato**: Special, Comeback, Heroic, Special come prima.
+
 ## R33d — Segni che seguono un personaggio (16 ottobre 2026, versione 1.15.71)
 
 Setup: scena a griglia quadrata, GM + giocatore connessi, due foe (ostili) e un PG alleato, un combat con tutti dentro.
