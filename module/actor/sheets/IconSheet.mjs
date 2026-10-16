@@ -13,7 +13,7 @@ import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, ma
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, areaDrawnFromTarget, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
+         areasInText, aurasInText, areaDrawnFromTarget, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -76,6 +76,15 @@ function _areaText(s, comboArmed) {
   const talent = { 1: s.talent1, 2: s.talent2 }[Number(s.talentSelected ?? 0)];
   return [s.description, talent, s.masteryUnlocked ? s.mastery : "", comboArmed ? s.comboEffect : ""]
     .filter(t => typeof t === "string" && t).join(" ");
+}
+
+/**
+ * The area button's label: the tags' area or the first one in the text, else
+ * an aura the text gives (Fulminate p.226 "The character gains aura 2 while
+ * marked"; Rampant Nail p.227, the spike's aura 2), else "" (no button).
+ */
+function _areaButtonLabel(tags, text) {
+  return abilityArea(tags, text)?.label ?? aurasInText(text)[0]?.label ?? "";
 }
 
 /** Marks an ability has on the scene: the base mark, then the combo's own (labelled with its name). */
@@ -405,7 +414,7 @@ export class IconSheet extends BaseActorSheet {
         comboArmed,
         // "Medium Blast" / "Line 4" / … from the tags, or from the ability's own
         // text when the header has no area (Tsunami, p.233) → area button
-        areaLabel:   abilityArea(tags, _areaText(s, comboArmed))?.label ?? "",
+        areaLabel:   _areaButtonLabel(tags, _areaText(s, comboArmed)),
         // Mark abilities: Mark button + the marks this ability currently has on the scene
         canMark:     markFromTags(tags).can || !!_comboMark(a.system) || !!_altComboMark(a.system),
         comboMark:   _comboMark(a.system),
@@ -1625,7 +1634,7 @@ export class IconSheet extends BaseActorSheet {
       costUpgraded: cost.upgraded,
       chapter:     s.chapter ?? 1,
       tags,
-      areaLabel:   abilityArea(tags, _areaText(s, combo))?.label ?? "",
+      areaLabel:   _areaButtonLabel(tags, _areaText(s, combo)),
       comboArmed:  combo,
       canMark:     markFromTags(tags).can || !!_comboMark(item.system) || !!_altComboMark(item.system),
       comboMark:   _comboMark(item.system),
@@ -2221,6 +2230,10 @@ export class IconSheet extends BaseActorSheet {
       lead,
       alt: changed ? [{ source: "Base", area: baseArea }] : [],
       altFirst: conditional,
+      // The auras the texts give: Phantom Bolts "as an Aura 2 instead" (p.158),
+      // Fulminate's marked character and its talents' Aura 3 / Aura 1 (p.226),
+      // Rook's Heroic "increase aura to Aura 2", Rampant Nail's spike (p.227).
+      auras: true,
       texts: [
         // Only when the header has no area: the shape is in the prose instead
         // ("The area is a medium blast terrain effect", p.233).
@@ -2230,6 +2243,7 @@ export class IconSheet extends BaseActorSheet {
         // base Death Blossom just its Burst 1.
         ab.hasCombo && ab.comboArmed ? ["Combo", s.comboEffect] : null,
         s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
+        s.heroicEffect ? ["Heroic",   s.heroicEffect] : null,
         ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
         ab.hasTalent2 ? ["Talent II", s.talent2]      : null,
         ab.hasMastery && !masteryIsInfusion ? ["Mastery", s.mastery] : null,

@@ -177,13 +177,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       direzione dallo stesso punto (o dalla fine della prima: il testo non lo dice, da chiedere a Edoardo) unita alla
       prima per i bersagli.
       Domanda per Edoardo: la seconda Line 3 parte dallo stesso punto della prima o dalla sua fine? (p.227 non lo dice)
-- [ ] **R48. Aure date ad altri o in alternativa** (M, bug)
+- [x] **R48. Aure date ad altri o in alternativa** (M, bug)
       - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
       - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i
         talenti la portano a 3 o a 1 ("making it a aura that can shift sizes would be useful", vedi R32).
       - Rampant Nail: "No way to give the aura to the area effect" (lo spuntone è un terrain effect con "Aura 2").
       Assorbe la voce "Emerso lavorando su R19 — aure alternative nel testo non proposte" (anche l'Heroic di Rook).
       R19b ha già il caso dell'alleato bersagliato: Fulminate potrebbe riusarlo.
+      (FATTO il 16 ottobre 2026, versione 1.15.50: il bottone area legge anche le aure scritte nel testo: Phantom Bolts
+      offre "Mastery: Aura 2" attorno a te; Fulminate ha il bottone area con Aura 2 attorno al token bersagliato, più
+      Aura 3 / Aura 1 con i talenti; Rampant Nail piazza "Aura 2 (terrain effect)" attorno a uno spazio in range 3, ferma;
+      il testo Heroic è letto (Rook "Heroic: Aura 2", anche Land Waster "Heroic: Burst 2 (target)"). Solo codice.)
 - [ ] **R49. Aree di Slay / Finishing Blow e mastery non piazzabili** (S/M, bug, da verificare)
       Death: "No way to easily place the large blast area effect from slay/finishing blow." Elden Rune: "include a small
       blast version for the Mastery." Eye of the Storm: "A way to place the area effect from mastery would be useful."
@@ -295,6 +299,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       1 piercing"), GRAM di Nothung ("Slay or Infuse 3": in più il blocco "Slay or Infuse" non ha il bottone Infuse,
       `infuseCost` accetta solo "Infuse N"). Con EXCALIBUR il danno di GRAM e dell'Effect di Nothung andrebbe divine,
       ma oggi non è proposto (vedi anche "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
+- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non segue il mark** (S): "The character gains aura 2 while
+      marked" (p.226): l'aura piazzata sul personaggio marcato non sparisce quando il mark viene tolto o passa a un altro
+      bersaglio (nessuna scadenza "while marked"); si toglie a mano. Si potrebbe legarla al mark di Fulminate.
+- [ ] **Emerso lavorando su R48 — aure degli oggetti** (S/M, con R33): Spirit Shrine ("Shrine — Height 1 object. Object
+      Effect: Aura 2", p.192) non ha bottone area: l'aura va attorno al santuario, che è un oggetto da piazzare (R33). Il
+      piazzamento "aura attorno a uno spazio" fatto per Rampant Nail potrebbe servire anche qui.
 
 ---
 

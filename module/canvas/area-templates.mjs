@@ -172,7 +172,7 @@ export function areaLabel(area) {
     case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
-    case "aura":  return area.size ? `Aura ${area.size}` : "Aura";
+    case "aura":  return (area.size ? `Aura ${area.size}` : "Aura") + (area.atSpace ? " (terrain effect)" : "");
   }
   return "Area";
 }
@@ -198,6 +198,47 @@ export function areasInText(text) {
     else if (m[3]) area = { kind: "arc", size: Number(m[3]) };
     else if (m[4]) area = { kind: "burst", size: Number(m[4]), self: m[5] === "self", target: m[5] === "target" };
     else continue;
+    area.label = areaLabel(area);
+    if (seen.has(area.label)) continue;
+    seen.add(area.label);
+    out.push(area);
+  }
+  return out;
+}
+
+/**
+ * Every aura a rules text gives, in order of appearance (areasInText leaves
+ * auras out: most texts that name one are stances already tagged with it).
+ *   "hover around you as an Aura 2 instead" (Warding Bolts' Phantom Bolts, p.158) → [Aura 2]
+ *   "The character gains aura 2 while marked" (Fulminate, p.226)                 → [Aura 2]
+ *   "Terrain effect: The spike has aura 2" (Rampant Nail, p.227)                 → [Aura 2 around a space]
+ * "characters in the aura 1 space" is a teleport distance, not an aura. With
+ * `resize`, a text that changes the size of the ability's aura counts too:
+ * "you can increase the area to 3" / "condense the aura to 1" (Fulminate's
+ * talents) → Aura 3 / Aura 1. An aura a terrain effect has goes around a space
+ * the user picks (`atSpace`), not around a token; an object's aura is left out
+ * (it needs the object on the map first).
+ * @param {string} text
+ * @param {{resize?: boolean}} [opts]
+ * @returns {object[]}  aura specs (without range)
+ */
+export function aurasInText(text, { resize = false } = {}) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  const found = [];
+  for (const m of plain.matchAll(/\baura (\d+)\b(?! spaces?\b)/gi)) {
+    const before = plain.slice(Math.max(0, m.index - 40), m.index);
+    // An object's aura (Spirit Shrine p.192, "Object Effect: Aura 2") goes with an object on the map: not here.
+    if (/object effect\s*:\s*$/i.test(before)) continue;
+    const atSpace = /terrain effect\s*:\s*(?:the [\w-]+ has (?:an )?)?$/i.test(before);
+    found.push({ at: m.index, area: { kind: "aura", size: Number(m[1]), self: !atSpace, ...(atSpace ? { atSpace: true } : {}) } });
+  }
+  if (resize) {
+    for (const m of plain.matchAll(/\b(?:increase|condense|reduce|decrease|shrink|grow|expand)s?\s+(?:the |its |your )?(?:aura|area)(?: size)?\s+to\s+(?:aura\s+)?(\d+)\b/gi))
+      found.push({ at: m.index, area: { kind: "aura", size: Number(m[1]), self: true } });
+  }
+  const out = [];
+  const seen = new Set();
+  for (const { area } of found.sort((a, b) => a.at - b.at)) {
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
     seen.add(area.label);
@@ -282,15 +323,18 @@ export function abilityArea(tags, description = "") {
  * @param {string} [opts.tagSource]  where the tags' area comes from ("Talent II"), "" for the base
  * @param {boolean} [opts.altFirst]
  * @param {Array<{source:string, area:object}>} [opts.lead]  areas offered before all others (armed Infuse)
+ * @param {boolean} [opts.auras]  also offer the auras the texts give (aurasInText): Phantom Bolts'
+ *   "Aura 2 instead", Fulminate's "gains aura 2" and its talents' resized aura, Rook's Heroic Aura 2
  * @returns {Array<{label:string, source:string, area:object}>}
  */
-export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFirst = false, lead = [] }) {
+export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFirst = false, lead = [], auras = false }) {
   const base = areaFromTags(tags);
   const range = base?.range ?? rangeFromTags(tags);
   const out = [];
   const seen = new Set();
   // Same shape at another range is another variant (Small Blast r3 / Medium Blast r5).
-  const key = (a) => `${a.label}@${a.range ?? ""}`;
+  // An aura around a token has no range: Dervish's tag Aura 1 and its Talent I text are one.
+  const key = (a) => a.kind === "aura" && !a.atSpace ? a.label : `${a.label}@${a.range ?? ""}`;
   const push = (source, area) => {
     if (seen.has(key(area))) return;
     seen.add(key(area));
@@ -302,9 +346,12 @@ export function areaVariants({ tags, texts = [], alt = [], tagSource = "", altFi
   if (altFirst) alts();
   if (base) push(tagSource, base);
   if (!altFirst) alts();
+  // "increase the area to 3" only resizes an aura when the ability has one (Fulminate's talents).
+  const resize = auras && (base?.kind === "aura" || texts.some(([, t]) => aurasInText(t).length));
   for (const [source, text] of texts) {
     const r = /\brange\s+(?:to\s+|of\s+)?(\d+)/i.exec(String(text ?? ""));
     for (const area of areasInText(text)) push(source, { ...area, range: r ? Number(r[1]) : range });
+    if (auras) for (const area of aurasInText(text, { resize })) push(source, { ...area, range: area.atSpace ? range : 0 });
   }
   return out;
 }
@@ -360,7 +407,8 @@ export function shapeCells(area, center, { dir = { di: 0, dj: 1 }, flip = false 
   const out = [];
   if (area.kind === "blast") {
     for (const o of BLAST_SHAPES[area.size] ?? BLAST_SHAPES.m) out.push({ i: center.i + o.di, j: center.j + o.dj });
-  } else if (area.kind === "burst") {
+  } else if (area.kind === "burst" || area.kind === "aura") {
+    // An aura around a space (a terrain effect's, Rampant Nail p.227) covers what a burst of its size would.
     const r = Math.max(0, area.size);
     for (let di = -r; di <= r; di++) for (let dj = -r; dj <= r; dj++) out.push({ i: center.i + di, j: center.j + dj });
   } else if (area.kind === "line") {
@@ -450,8 +498,11 @@ class AreaPlacement {
   /** Is a placement running? (The aura + / − keys stay out of its way.) */
   static get active() { return !!AreaPlacement.#active; }
 
-  constructor({ area, sourceCells, rangeCells }) {
+  constructor({ area, sourceCells, rangeCells, originInRange = false }) {
     this.area = area;
+    // The clicked space itself must be in range, not just one space of the
+    // area: a terrain effect's aura goes around "a space in range" (Rampant Nail).
+    this.originInRange = originInRange;
     this.sourceCells = sourceCells;
     this.sourceKeys = new Set(sourceCells.map(cellKey));
     this.rangeKeys = rangeCells ? new Set(rangeCells.map(cellKey)) : null;   // null = no restriction
@@ -554,6 +605,7 @@ class AreaPlacement {
 
   #inRange(cells) {
     if (!this.rangeKeys || this.freePlacement) return true;
+    if (this.originInRange) return !!this.mouseCell && this.rangeKeys.has(cellKey(this.mouseCell));
     return cells.some(c => this.rangeKeys.has(cellKey(c)));
   }
 
@@ -607,7 +659,9 @@ class AreaPlacement {
     const cells = this.#previewCells();
     if (!cells.length) return;
     if (!this.#inRange(cells)) {
-      ui.notifications.warn(`At least one space of the ${this.area.label} must be ${this.area.range ? `within range ${this.area.range}` : "adjacent to you"} (p.97).`);
+      ui.notifications.warn(this.originInRange
+        ? `The centre space of the ${this.area.label} must be ${this.area.range ? `within range ${this.area.range}` : "adjacent to you"}.`
+        : `At least one space of the ${this.area.label} must be ${this.area.range ? `within range ${this.area.range}` : "adjacent to you"} (p.97).`);
       return;
     }
     this.#finish({ cells, origin: this.mouseCell });
@@ -692,10 +746,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     area.label = areaLabel(area);
   }
 
-  const isAura = area.kind === "aura";
+  // A terrain effect's aura ("Terrain effect: The spike has aura 2", Rampant
+  // Nail p.227) goes around a space picked in range and stays there; every
+  // other aura goes around a token and follows it.
+  const atSpace = area.kind === "aura" && !!area.atSpace;
+  const isAura = area.kind === "aura" && !atSpace;
   // An aura the text gives to an ally ("choose an ally in range 4. That ally
-  // gains aura 1", Endless Battlement p.123) goes around that ally's token —
-  // the one the user targeted — and follows it instead of the user.
+  // gains aura 1", Endless Battlement p.123) or to the marked character
+  // (Fulminate p.226) goes around that token — the one the user targeted —
+  // and follows it instead of the user.
   const holder = isAura ? auraHolderToken(text, token) : token;
   const sourceCells = tokenCells(holder.document);
   let cells, originCell;
@@ -712,7 +771,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     const range = anchor ? 1 : area.range;
     const rangeCells = Number.isFinite(range) ? cellsInRange(originCells, Math.max(1, range)) : null;
     const blocked = anchor ? [...originCells, ...sourceCells] : sourceCells;
-    const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells }).run();
+    const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells, originInRange: atSpace }).run();
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
   }
@@ -731,7 +790,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     flags: { [FLAG_NS]: {
       cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label, ...(limits ?? {}) },
       actorId: actor.id, actorUuid: actor.uuid, tokenId: token.id, abilityKey, abilityName: abilityName ?? "",
-      lasting: !!lasting || isAura,
+      lasting: !!lasting || isAura || atSpace,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
       followTokenId: isAura ? holder.id : null,
       // "until the end of your next turn": counted down by tickAuraExpiry
@@ -751,6 +810,13 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
     _log(`placed ${area.label} for "${abilityName}" — follows token ${holder.id}${expiry ? ` — ${expiry.text}` : ""}`);
     ui.notifications.info(`${area.label} placed around ${holder.name}; it follows the token${expiry ? ` (${expiry.text})` : ""}. Mouse over it and press + or − to change its size${limits ? ` (${limits.min} to ${limits.max})` : ""}.`);
+    return { template, cells, targets: [], area };
+  }
+  if (atSpace) {
+    // A terrain effect: it stays where it was put, nothing to target.
+    if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
+    _log(`placed ${area.label} for "${abilityName}" around space ${originCell.i},${originCell.j}`);
+    ui.notifications.info(`${area.label} placed; it stays on the map until removed or replaced.`);
     return { template, cells, targets: [], area };
   }
 
@@ -879,19 +945,25 @@ function auraUnderMouse() {
  */
 export function auraHolderToken(text, token) {
   const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-  if (!/\b(?:that|the|an|your|target|chosen)\s+ally\s+(?:gains?|has)\s+(?:an?\s+)?aura\b/i.test(plain)) return token;
+  const toAlly = /\b(?:that|the|an|your|target|chosen)\s+ally\s+(?:gains?|has)\s+(?:an?\s+)?aura\b/i.test(plain);
+  // Fulminate (p.226): "A character in range 6 is marked. The character gains aura 2 while marked."
+  const toCharacter = !toAlly && /\b(?:that|the|target|marked|chosen)\s+character\s+(?:gains?|has)\s+(?:an?\s+)?aura\b/i.test(plain);
+  if (!toAlly && !toCharacter) return token;
+  const who = toAlly ? "ally" : "character";
   const allies = Array.from(game.user?.targets ?? []).filter(t => t.id !== token.id && t.actor);
   if (allies.length !== 1) {
     ui.notifications.warn(allies.length
-      ? "This aura goes on one ally: target only that ally's token, then place it again. Placed around you for now."
-      : "This aura goes on an ally: target that ally's token, then place it again. Placed around you for now.");
+      ? `This aura goes on one ${who}: target only that ${who}'s token, then place it again. Placed around you for now.`
+      : `This aura goes on ${toAlly ? "an ally" : "another character"}: target that ${who}'s token, then place it again. Placed around you for now.`);
     return token;
   }
   const ally = allies[0];
-  const m = /\bally\s+in\s+range\s+(\d+)/i.exec(plain);
+  const m = /\b(?:ally|character)\s+in\s+range\s+(\d+)/i.exec(plain);
   if (m && !/no maximum range/i.test(plain)) {
     const d = distanceToCellsSet(tokenCells(ally.document), tokenCells(token.document));
-    if (d > Number(m[1])) ui.notifications.warn(`${ally.name} is ${d} spaces away, beyond range ${m[1]}: the aura is not active while your ally is out of range.`);
+    if (d > Number(m[1])) ui.notifications.warn(toAlly
+      ? `${ally.name} is ${d} spaces away, beyond range ${m[1]}: the aura is not active while your ally is out of range.`
+      : `${ally.name} is ${d} spaces away, beyond range ${m[1]}.`);
   }
   return ally;
 }

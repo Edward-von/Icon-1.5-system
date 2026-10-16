@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R48 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect (16 ottobre 2026, versione 1.15.50)
+
+Setup: PG di prova con Warding Bolts (Freelancer, mastery sbloccata), Fulminate e Rampant Nail (Spellblade), Rook e
+Land Waster (Bastion), dal compendio Jobs o già sulla scheda (è solo codice); il token del PG sulla mappa, un alleato e
+un foe.
+
+- [ ] **Warding Bolts, Phantom Bolts**: bottone area → "which area?" con "Text: Small Blast" e "Mastery: Aura 2".
+      Scegliendo l'Aura 2 compare attorno al PG senza clic, lo segue quando si muove, non scade al turno dopo. Senza
+      la mastery sbloccata: piazza direttamente la Small Blast, come prima.
+- [ ] **Fulminate**: ora c'è il bottone area (Aura 2). Bersagliare (T) il foe e premerlo → l'Aura 2 è attorno al foe e
+      lo segue; senza bersaglio → avviso "target that character's token…" e aura attorno al PG. Foe a più di 6 spazi →
+      avviso "beyond range 6".
+- [ ] **Fulminate con i talenti**: con Talent I scelto la finestra offre anche "Talent I: Aura 3"; con Talent II
+      "Talent II: Aura 1". Mouse sopra l'aura piazzata, + / − la allargano o restringono.
+- [ ] **Rampant Nail**: bottone area → "Aura 2 (terrain effect)": si muove un'anteprima 5×5, il range 3 è in blu; il
+      clic con il centro fuori dal range dà l'avviso "The centre space … within range 3"; dentro il range l'aura resta
+      ferma lì, anche dopo l'inizio del turno successivo e se il PG si muove. Usarla di nuovo sostituisce la prima. Con
+      Talent I scelto la finestra offre anche "Talent I: Small Blast". Mouse sopra e + / −: non cambia (non è un'aura
+      su un token).
+- [ ] **Rook, Heroic**: bottone area → "which area?" con "Aura 1" e "Heroic: Aura 2"; entrambe attorno al PG e con la
+      scadenza "until the end of your next turn".
+- [ ] **Land Waster**: bottone area / Attack Roll → scelta tra "Burst 1" e "Heroic: Burst 2 (target)".
+- [ ] **Non devono cambiare**: Endless Battlement (Aura 1 sull'alleato), Dervish con Talent I (una sola Aura 1, non
+      due), Gentleness, Spirit Shrine (nessun bottone area).
+
 ## R47 — Le aree degli Infuse X crescono con l'Aether speso (16 ottobre 2026, versione 1.15.49)
 
 Setup: PG di prova Wright con Ätherwand (Spellblade) e Rime (Stormbender), dal compendio Jobs o già sulla scheda (è

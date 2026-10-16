@@ -1,5 +1,33 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect (versione 1.15.50)
+
+### Round di debug del 16 ottobre, punto R48
+
+- **Warding Bolts, mastery Phantom Bolts** (p.158: "You can cause the area to hover around you as an Aura 2 instead"):
+  "No way to give self aura 2" → il bottone area leggeva nel testo solo Blast / Line / Arc / Burst, mai "aura N" →
+  ora, con la mastery sbloccata, la finestra "which area?" offre "Text: Small Blast" e "Mastery: Aura 2"; l'Aura 2 va
+  attorno a te, ti segue e resta per tutto il combattimento.
+- **Fulminate** (p.226: "A character in range 6 is marked. The character gains aura 2 while marked"): "No way to apply
+  the aura to the marked character" → l'abilità non aveva nemmeno il bottone area, e un'aura data a "the character"
+  non era riconosciuta come data ad altri (R19b leggeva solo "that ally") → ora c'è il bottone area con Aura 2, che va
+  attorno al token bersagliato (T) e lo segue, come l'alleato di Endless Battlement; con il talento scelto si aggiunge
+  "Talent I: Aura 3" ("increase the area to 3") o "Talent II: Aura 1" ("condense the aura to 1"), e sopra l'aura
+  piazzata + / − la cambiano (R32). L'aura non sparisce da sola quando il mark finisce: si toglie a mano.
+- **Rampant Nail** (p.227: "Terrain effect: The spike has aura 2", lo spuntone in "a space in range"): "No way to give
+  the aura to the area effect" → nessun bottone area per l'aura dello spuntone → ora il bottone area offre "Aura 2
+  (terrain effect)": si clicca uno spazio entro range 3 (il centro dev'essere nel range) e l'aura resta lì, ferma, finché
+  non la si toglie o non si usa di nuovo l'abilità (che la sostituisce, come un nuovo spuntone). Lo spuntone come
+  oggetto resta in R33.
+- **Heroic letto per le aree**: il testo Heroic non veniva letto dal bottone area → Rook ("increase aura to Aura 2",
+  p.123) ora offre "Heroic: Aura 2" accanto alla sua Aura 1; per lo stesso motivo Land Waster offre "Heroic: Burst 2
+  (target)".
+- Confronto prima/dopo su tutte le abilità del compendio Jobs (copia del pack, tutti i talenti e la mastery attivi):
+  cambiano solo Warding Bolts, Fulminate, Rampant Nail, Rook e Land Waster (Massive Overhead legge la Small Blast del
+  suo Heroic, ma non ha il bottone area, quindi sulla scheda non cambia nulla). Non
+  vengono lette come aure "aura 1 space" (il teleport di Fulminate) e l'aura di un oggetto (Spirit Shrine, "Object
+  Effect: Aura 2", che resta in R33). Solo codice, vale per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Le aree degli Infuse X crescono con l'Aether speso (versione 1.15.49)
 
 ### Round di debug del 16 ottobre, punto R47
