@@ -13,7 +13,7 @@ import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, ma
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, areaDrawnFromTarget } from "../../canvas/area-templates.mjs";
+         areasInText, areaDrawnFromTarget, areaLabel } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -173,6 +173,7 @@ export class IconSheet extends BaseActorSheet {
       bondShowInChat:      IconSheet.#onBondShowInChat,
       useLimitBreak: IconSheet.#onUseLimitBreak,
       limitBreakDamageRoll: IconSheet.#onLimitBreakDamageRoll,
+      limitBreakPlaceArea:  IconSheet.#onLimitBreakPlaceArea,
       addJob:        IconSheet.#onAddJob,
       removeJob:     IconSheet.#onRemoveJob,
       // Class resources (conditional by primary job class)
@@ -292,6 +293,9 @@ export class IconSheet extends BaseActorSheet {
     context.limitBreakCost = abilityCostLabel(context.limitBreakItem?.system?.cost ?? "");
     // Limit breaks that deal damage get a Damage Roll button, like abilities.
     context.limitBreakDeals = !!context.limitBreakItem && IconSheet.#limitBreakDamage(actor, context.limitBreakItem).dealsDamage;
+    // ... and the ones with an aura or an area get the area button (Paradiso p.155: "You gain Aura 2").
+    const lbAreas = context.limitBreakItem ? IconSheet.#limitBreakAreas(actor, context.limitBreakItem) : [];
+    context.limitBreakArea = lbAreas.length === 1 ? lbAreas[0].label : lbAreas.length ? "Area" : "";
 
     // AP / Mastery spending counters
     // Each owned ability costs 1 AP. Each unlocked talent costs +1 AP.
@@ -2906,6 +2910,67 @@ export class IconSheet extends BaseActorSheet {
       attackTargetId: mods.attackTargetId,
       other:       mods.other,
       instances:   mods.instances,
+    });
+  }
+
+  /** The limit break's rules texts: the effect, and the ultimate from chapter 3 (p.113). */
+  static #limitBreakTexts(actor, lb) {
+    const s = lb.system ?? {};
+    return { effect: s.effect ?? "", ultimate: (actor.system.combat?.chapter ?? 1) >= 3 ? (s.ultimate ?? "") : "" };
+  }
+
+  /**
+   * The areas a limit break can be placed with, read like an ability's: the
+   * tags (Death Sentence "Line 4", Elemental and High Prophecy "Aura 2"), a
+   * bare "aura" tag sized from the text (Paradiso p.155: "You gain Aura 2"),
+   * then the shapes the effect / ultimate name (Cataclysm's medium blast
+   * explosions, Split Heaven and Hell's "line 5 area effect").
+   */
+  static #limitBreakAreas(actor, lb) {
+    const { effect, ultimate } = IconSheet.#limitBreakTexts(actor, lb);
+    const tags = resolveAbilityTags({ ...lb.system, description: effect });
+    const variants = areaVariants({
+      tags,
+      texts: [["Effect", effect], ultimate ? ["Ultimate", ultimate] : null].filter(Boolean),
+    });
+    const plain = String(effect).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    // A line the text gives no length is placed as a Line whose length is
+    // asked (Curtain Call: "draw a line area effect of that many spaces +2").
+    if (!variants.some(v => v.area.kind === "line") && /\bline area\b/i.test(plain)) {
+      const area = { kind: "line", size: 0, range: 0 };
+      area.label = areaLabel(area);
+      variants.push({ label: area.label, source: "", area });
+    }
+    // Its width, when the text gives one (Cataclysm: "a line area 3 spaces wide").
+    const width = Number(/\bline area (\d+) spaces? wide\b/i.exec(plain)?.[1] ?? 0);
+    // With no range of its own, an area the text spreads over the battlefield
+    // goes anywhere on it (Cataclysm: "from one side of the battlefield to the
+    // next", explosions centred on the objects in it), not next to the user.
+    const anywhere = /\bbattlefield\b/i.test(plain);
+    return variants.map(v => {
+      const area = { ...v.area };
+      if (width > 1 && area.kind === "line" && !(area.width > 1)) area.width = width;
+      if (anywhere && area.kind !== "aura" && !area.range) area.range = Infinity;
+      area.label = areaLabel(area);
+      return { ...v, label: area.label, area };
+    });
+  }
+
+  /** Place the limit break's aura or area on the map, as the abilities' area button does. */
+  static async #onLimitBreakPlaceArea(event, target) {
+    event?.stopPropagation?.();
+    const lb = this.document.items.find(i => i.type === "limit-break");
+    if (!lb) return ui.notifications.warn("No Limit Break equipped.");
+    const variants = IconSheet.#limitBreakAreas(this.document, lb);
+    if (!variants.length) return ui.notifications.warn(`"${lb.name}" has no Blast / Line / Arc / Burst / Aura.`);
+    const area = await chooseAreaVariant(variants, lb.name);
+    if (!area) return;
+    const { effect, ultimate } = IconSheet.#limitBreakTexts(this.document, lb);
+    const text = [effect, ultimate].filter(Boolean).join(" ");
+    _log(`limitBreakPlaceArea — "${lb.name}" | ${area.label}`);
+    await placeAreaTemplate({
+      actor: this.document, area, abilityName: lb.name, abilityKey: lb.id,
+      lasting: areaLasts(lb.system.tags ?? [], text), text,
     });
   }
 

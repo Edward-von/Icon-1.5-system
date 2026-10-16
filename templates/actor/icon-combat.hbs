@@ -830,6 +830,12 @@
               <i class="fa-solid fa-burst"></i> Damage Roll
             </button>
           {{/if}}
+          {{#if limitBreakArea}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--area" data-action="limitBreakPlaceArea"
+                    title="Place the limit break's aura or area on the map (an aura goes around your token and follows it; clicking again replaces it)">
+              <i class="fa-solid fa-vector-square"></i> {{limitBreakArea}}
+            </button>
+          {{/if}}
         {{/if}}
       </div>
     {{else}}

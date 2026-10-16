@@ -58,13 +58,26 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       danno, con la finestra e la card delle abilità; il primo danno è Hit, le altre frasi con danno (e dal capitolo 3
       quelle dell'Ultimate) sono in Other; tag Divine → danno divino; Instances da "three times". Infuse esclusi (R38).
       Corretto anche il Divine automatico delle abilità, rotto dalla 1.15.28.)
-- [ ] **R38. Limit Break: effetti speciali non usabili** (M/L, bug, alta priorità)
+- [x] **R38. Limit Break: effetti speciali non usabili** (M/L, bug, alta priorità)
       "ones with special effects (Paradiso's Aura, Gigaflare's infused version, etc) don't allow the player to utilize
       those functions with the limit break properly." Paradiso (Freelancer, tag `aura`: "You gain Aura 2 until the end of
       your next turn"): manca il bottone aura. Gigaflare: "Limit break cannot currently use its infused variant,
       Tetraflare" ("Infuse 6: TETRAFLARE — Deal [D]+fray twice instead"; anche METEOR, Infuse 8). Probabilmente la card
       dei Limit Break non passa da aree / infuse / Inflict delle abilità. Se aura e infuse risultano due cause diverse,
       dividere il punto.
+      (FATTO il 16 ottobre 2026, versione 1.15.38: diviso in due, qui la parte aura / aree. Il riquadro Limit Break non
+      aveva il bottone dell'area: ora c'è quando tag o testo danno un'aura o un'area (Paradiso, High Prophecy, Elemental
+      Aura 2; Death Sentence Line 4; Split Heaven and Hell Line 5; Curtain Call Line; Cataclysm Line larga 3 o Medium
+      Blast, ovunque sulla mappa), piazzata come per le abilità, con la durata dell'aura letta dal testo. Gli Inflict
+      c'erano già sulla card di "Use Limit Break". Gli Infuse sono una causa diversa → R38b.)
+- [ ] **R38b. Limit Break: versioni Infuse** (M, bug, alta priorità; diviso da R38)
+      Gigaflare: "Limit break cannot currently use its infused variant, Tetraflare" ("Infuse 6: TETRAFLARE — Deal
+      [D]+fray twice instead"; l'Ultimate METEOR, "Infuse 8: 6 resolve. Deal [D]+fray four times instead", con il 999
+      divine damage dello "Special effect"); Gran Levincross: "Slay or Infuse 3: RAGNARÖK" e l'Ultimate "GÖTTERDÄMMERUNG
+      — Infuse 6" (2[D]+fray divine). Causa diversa dall'aura: il riquadro Limit Break non ha la scelta Infuse delle
+      abilità (spesa di Aether, versione armata) e il Damage Roll di R37 non legge le righe "Infuse N:". Da fare: scelta
+      della versione Infuse sul Limit Break (Aether speso, testo della versione usata nella card, Instances "twice" /
+      "four times" nel Damage Roll).
 - [ ] **R39. Limit Break: formattazione** (S/M, bug, alta priorità)
       "some of the formatting on them is off". Il documento non dice quali. Guardare tutti i Limit Break (card e scheda)
       e sistemare quelli con blocchi non etichettati o sullo stesso paragrafo (es. Gigaflare ha "Divine, Unerring, True

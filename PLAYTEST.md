@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R38 — Aura e aree dei Limit Break sulla mappa (16 ottobre 2026, versione 1.15.38)
+
+Setup: PG di prova con il token su una scena a griglia quadrata e, uno alla volta, i Limit Break di Freelancer
+(Paradiso), Seer (High Prophecy), Stormbender (Elemental), Harvester (Death Sentence), Geomancer (Cataclysm), Fool
+(Curtain Call); un foe sulla mappa.
+
+- [ ] **Paradiso**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è il bottone "Aura 2".
+      Cliccandolo l'aura di 2 caselle compare attorno al token del PG, con il colore delle sue aure; muovendo il token
+      l'aura lo segue. Ricliccando il bottone l'aura viene sostituita, non duplicata. A fine del turno successivo del PG
+      l'aura sparisce ("until the end of your next turn").
+- [ ] **High Prophecy / Elemental**: bottone "Aura 2"; High Prophecy sparisce all'inizio del turno successivo del PG,
+      Elemental resta (tutto il combattimento).
+- [ ] **Death Sentence**: bottone "Line 4"; si piazza come la Line delle abilità (accanto al PG, + / − e rotella come
+      sempre) e targetta i token dentro.
+- [ ] **Cataclysm**: bottone "Area"; cliccandolo chiede quale area: "Line (width 3)" o "Effect: Medium Blast". La Line
+      chiede la lunghezza e si piazza ovunque sulla mappa (non solo accanto al PG); il Medium Blast si piazza ovunque.
+- [ ] **Curtain Call**: bottone "Line", chiede la lunghezza (il risultato del gamble +2) prima di piazzarla.
+- [ ] **Senza area**: Gigaflare, Mock, Helion, Passage to the Afterlife non hanno il bottone dell'area.
+- [ ] **Resolve**: il bottone dell'area non spende Resolve (la spende solo "Use Limit Break").
+
 ## R37 — Tiro del danno dei Limit Break (16 ottobre 2026, versione 1.15.37)
 
 Setup: PG di prova con, uno alla volta, i Limit Break di Enochian (Gigaflare), Sealer (Passage to the Afterlife),

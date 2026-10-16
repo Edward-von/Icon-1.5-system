@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aura e aree dei Limit Break sulla mappa (versione 1.15.38)
+
+### Round di debug del 16 ottobre, punto R38
+
+- **Aura dei Limit Break non piazzabile**: Maar segnalava che i Limit Break con effetti speciali non si potevano
+  usare davvero, a partire dall'aura di Paradiso (Freelancer, p.155: "You gain Aura 2 until the end of your next
+  turn") → il riquadro Limit Break della scheda aveva solo "Use Limit Break" e "Damage Roll": il bottone dell'area
+  che hanno abilità e tratti non c'era, e nessuno leggeva tag e testo del Limit Break in cerca di un'area → ora,
+  quando il Limit Break ha un'aura o un'area, accanto agli altri bottoni c'è il bottone dell'area (per esempio
+  "Aura 2"), che la piazza sulla mappa come per le abilità: l'aura va attorno al token, lo segue e la sua durata è
+  letta dal testo ("until the end of your next turn"), ricliccare la sostituisce. Letti allo stesso modo delle
+  abilità: Paradiso, Elemental e High Prophecy (Aura 2), Death Sentence (Line 4), Split Heaven and Hell (Line 5 dal
+  testo), Curtain Call (Line, lunghezza chiesta al piazzamento: dipende dal gamble), Cataclysm (Line larga 3 oppure
+  il Medium Blast delle esplosioni, a scelta). Se il testo parla di tutto il campo di battaglia (Cataclysm) e non dà
+  un range, l'area si piazza ovunque invece che accanto al PG. Dal capitolo 3 conta anche il testo dell'Ultimate.
+  Le versioni Infuse (Tetraflare, Meteor, Ragnarök, Götterdämmerung) sono un'altra causa e restano al punto R38b.
+  Solo codice, nessun dato toccato.
+
 ## 16 ottobre 2026 — Tiro del danno dei Limit Break (versione 1.15.37)
 
 ### Round di debug del 16 ottobre, punto R37
