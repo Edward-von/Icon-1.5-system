@@ -105,6 +105,7 @@ import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
 import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
+import { registerMapObjectHooks } from "./module/canvas/map-objects.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble } from "./module/combat/gamble.mjs";
@@ -247,6 +248,9 @@ Hooks.once("init", () => {
 
   // ---- Campaign clocks dragged from the clock board onto the canvas ----
   registerClockTokenHooks();
+
+  // ---- Objects a PC's ability / trait creates, dragged from the sheet onto the canvas (R33a) ----
+  registerMapObjectHooks();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();

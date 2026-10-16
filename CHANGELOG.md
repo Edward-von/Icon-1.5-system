@@ -1,5 +1,36 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Oggetti sulla mappa (versione 1.15.65)
+
+### Round di debug del 15 ottobre, punto R33a
+
+- **Oggetti delle abilità solo a mano**: molte abilità e tratti creano un oggetto ("Create a height 1 boulder object",
+  Geo; "Shrine — Height 1 object. Object Effect: Aura 2", Spirit Shrine p.192; "it becomes an object (Thrown Weapon,
+  height 1)", Comet) e bisognava inventarselo con un token qualunque → non c'era niente che li leggesse → ora la scheda
+  del PG mostra un **chip col cubo** ("Boulder · H1") nel pannello dell'abilità e nella riga del tratto, per ogni oggetto
+  scritto nel testo. Si trascina sulla mappa come i chip dei summon: il GM attivo (anche per il drop di un giocatore,
+  via socket come per i summon dei foe) crea un attore Summon nella cartella "Map Objects", di proprietà dei giocatori
+  del PG, con il PG come summoner e il testo da cui viene l'oggetto (così la tabella delle altezze dello Shrine è a un
+  clic), e piazza un token non collegato "Boulder (height 1)", col nome sempre visibile. Letti: Comet, Spirit Shrine,
+  Stone Double, Geo, Terraforming, Pyroclast (Magma Spire, e Pyrospire alta 3), Astra, Polaris (Talent II), Fairy Ring
+  (Megamushroom della mastery), Underway, Geyser (e Volcanic Geyser), Aethershard; in più, trovati scorrendo tutto il
+  compendio: Massive Overhead, Upheaval, Land Waster, The Tower, Midas, Eye of the Storm (Aethercloud), Growing Season
+  (Blood Tree). Talenti e mastery contano solo se scelti / sbloccati.
+- **Regole del libro sul drop** (p.89, p.95): altezza 1–3; un oggetto si può mettere sopra altri finché il totale non
+  supera 3 (l'elevazione del token è l'altezza sotto; oltre, avviso e niente token); "can't stack" (Underway) rifiuta
+  lo spazio di un altro oggetto; "lasts until this ability is used again" chiede se sostituire il precedente o tenerli
+  tutti e due (Underway ne mette due per uso). Gli oggetti restano quando il creatore è sconfitto (nessun codice li
+  toglie). Un oggetto immune non entra nei bersagli delle aree ("immune to damage and effects unless specified").
+- **Aura dell'oggetto**: "Object Effect: Aura 2" (Spirit Shrine) → l'aura si piazza da sola attorno al token
+  dell'oggetto e lo segue come le altre aure; cancellando il token sparisce anche l'aura (chiude l'emerso di R48).
+- **Scheda dell'oggetto**: badge "Object", altezza con − / + (Shrine "increasing the height by +1", Terraforming "raise
+  height of existing objects by +1"; gli oggetti impilati sopra salgono o scendono con lui; il totale resta entro 3) e,
+  solo per il GM, "Make destructible": 10 hp, colpito automaticamente, fallisce tutti i save (p.89), con barra HP.
+- Scelte mie: un oggetto è un attore Summon con un flag (nessun tipo nuovo, nessun pack toccato, nessuna migrazione);
+  un attore per PG + abilità + oggetto + altezza, un token per copia; le versioni Infuse che cambiano l'oggetto
+  (Pyrospire, Volcanic Geyser) hanno il loro chip sempre visibile, non solo con l'Infuse armato. Quello che resta
+  (effetti degli oggetti sul gioco, aree centrate sugli oggetti, Aethershard nelle aree…) è in TODO, R33a2.
+
 ## 16 ottobre 2026 — Tre regex rotte di questo round (versione 1.15.64)
 
 ### Round di debug del 16 ottobre, voci emerse su R53 e R60

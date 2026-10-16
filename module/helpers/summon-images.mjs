@@ -15,6 +15,10 @@ const BY_NAME = {
   "astral seraph": "angel", "beast": "pawprint", "great beast": "pawprint", "bomb": "explosion",
   "master card": "card-joker", "wild card": "card-joker", "plant": "oak", "salt sprite": "light",
   "selkie": "whale", "severed soul": "terror", "shadow": "invisible", "thrall": "cowled",
+  // PC objects (map-objects.mjs, R33a)
+  "shrine": "temple", "magma spire": "fire", "meteor": "sun", "geyser": "waterfall",
+  "volcanic geyser": "fire", "underway": "portal", "megamushroom": "poison", "aethershard": "radiation",
+  "aethercloud": "lightning", "blood tree": "oak", "boulder": "mountain",
   // Foe summons
   "attack insect": "wing", "crony": "cowled", "dancing light": "light", "decoy": "statue",
   "flapjack": "wing", "junk golem": "clockwork", "lesser root": "oak", "lonely soul": "terror",

@@ -22,6 +22,7 @@ import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
+import { objectChips } from "../../canvas/map-objects.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
@@ -455,6 +456,8 @@ export class IconSheet extends BaseActorSheet {
         canGamble:   abilityGambles(s, tags),
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
+        // Objects this ability puts on the map (R33a): draggable chips too
+        objects:     objectChips(a),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions,
         marks:       _abilityMarks(actor.id, a.id, _comboMark(a.system), _altComboMark(a.system)),
@@ -770,6 +773,7 @@ export class IconSheet extends BaseActorSheet {
         // Summons the trait puts on the table, as on the abilities (Beast
         // Master, Selkie, Bound Spirit, Cheap Trick); not while locked.
         summons:             chapter > currentChapter ? [] : summonsForTrait(t.system, t.system?.jobName),
+        objects:             chapter > currentChapter ? [] : objectChips(t),
         quick:               quickFor(t),
         powerDie:            powerDieView(t.system),
         id:                  t.id,

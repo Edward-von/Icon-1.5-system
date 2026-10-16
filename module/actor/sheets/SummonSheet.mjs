@@ -10,6 +10,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible } from "../../canvas/map-objects.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -33,6 +34,8 @@ export class SummonSheet extends BaseActorSheet {
       configurePrototypeToken: onConfigurePrototypeToken,
       showReference:     onShowReferenceControl,
       toggleIntangible:  SummonSheet.#onToggleIntangible,
+      objectHeight:      SummonSheet.#onObjectHeight,
+      toggleDestructible: SummonSheet.#onToggleDestructible,
       rollSummonAttack:  SummonSheet.#onRollSummonAttack,
       rollSummonDamage:  SummonSheet.#onRollSummonDamage,
     },
@@ -76,6 +79,17 @@ export class SummonSheet extends BaseActorSheet {
       context.summonerName = "—";
     }
 
+    // An object an ability / trait put on the map (R33a, map-objects.mjs): height and destructible.
+    const obj = mapObjectFlag(actor);
+    context.mapObject = obj ? {
+      height:       system.size,
+      canLower:     system.size > 1,
+      canRaise:     system.size < 3,
+      destructible: !system.intangible,
+      aura:         obj.aura || 0,
+      isGM:         game.user.isGM,
+    } : null;
+
     // Save buttons: a summon carries statuses like anyone else (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();
 
@@ -89,6 +103,16 @@ export class SummonSheet extends BaseActorSheet {
     const current = this.document.system.intangible;
     _log(`toggleIntangible — actor: "${this.document.name}" | ${current} → ${!current}`);
     await this.document.update({ "system.intangible": !current });
+  }
+
+  /** Object: height − / + (data-delta), within 1-3 and the stack's 3 (p.89, p.95). */
+  static async #onObjectHeight(event, target) {
+    await changeObjectHeight(this.document, Number(target.dataset.delta) || 0);
+  }
+
+  /** Object, GM only: destructible (10 hp, auto-hit, fails saves, p.89) or immune again. */
+  static async #onToggleDestructible(event, target) {
+    await toggleObjectDestructible(this.document);
   }
 
   /** Roll the summon's attack as a standard combat roll. Speaker is the summon;

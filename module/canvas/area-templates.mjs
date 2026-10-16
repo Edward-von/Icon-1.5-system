@@ -472,11 +472,17 @@ export function cellsInRange(sourceCells, range) {
   return out;
 }
 
-/** Tokens (placeables) standing on any of `cells`. */
+/**
+ * Tokens (placeables) standing on any of `cells`. A PC's map object (R33a)
+ * is left out unless the GM made it destructible: objects are "immune to
+ * damage and effects unless specified", destructible ones "targetable by
+ * anything that targets characters" (p.89).
+ */
 export function tokensInCells(cells, { exclude = [] } = {}) {
   const set = new Set(cells.map(cellKey));
   const skip = new Set(exclude);
-  return canvas.tokens.placeables.filter(t => t.actor && !skip.has(t.id) && tokenCells(t.document).some(c => set.has(cellKey(c))));
+  const immuneObject = (t) => !!t.document?.flags?.[FLAG_NS]?.mapObject && !!t.actor?.system?.intangible;
+  return canvas.tokens.placeables.filter(t => t.actor && !skip.has(t.id) && !immuneObject(t) && tokenCells(t.document).some(c => set.has(cellKey(c))));
 }
 
 /**
@@ -1027,6 +1033,49 @@ export function auraHolderToken(text, token) {
       : `${ally.name} is ${d} spaces away, beyond range ${m[1]}.`);
   }
   return ally;
+}
+
+/**
+ * Put an aura around a token already on a scene, with no click: an object's
+ * own aura ("Shrine — Height 1 object. Object Effect: Aura 2", p.192) goes on
+ * the object's token as soon as it is placed and follows it like any other
+ * aura (followTokenId). Works on the token's own scene, which the active GM
+ * placing a player's object may not be looking at.
+ * @param {TokenDocument} tokenDoc  the token holding the aura
+ * @param {object} opts
+ * @param {Actor}  opts.actor        whose aura it is (the object's creator: colour, ownership of the flags)
+ * @param {number} opts.size         Aura N
+ * @param {string} [opts.abilityName]
+ * @param {string} [opts.abilityKey]
+ * @param {object} [opts.flags]      extra flags for the template
+ * @returns {Promise<MeasuredTemplateDocument|null>}
+ */
+export async function placeAuraOnToken(tokenDoc, { actor, size, abilityName = "", abilityKey = "", flags = {} }) {
+  const scene = tokenDoc?.parent;
+  if (!scene || !(size > 0)) return null;
+  const grid = scene.grid;
+  const half = grid.size / 2;
+  const tl = grid.getOffset({ x: tokenDoc.x + half, y: tokenDoc.y + half });
+  const own = [];
+  for (let di = 0; di < Math.max(1, Math.round(tokenDoc.height ?? 1)); di++)
+    for (let dj = 0; dj < Math.max(1, Math.round(tokenDoc.width ?? 1)); dj++) own.push({ i: tl.i + di, j: tl.j + dj });
+  const cells = cellsInRange(own, size).concat(own);
+  const area = { kind: "aura", size, self: false, width: 1 };
+  area.label = areaLabel(area);
+  const color = areaColor(area, actor);
+  const origin = grid.getCenterPoint(tl);
+  const data = {
+    t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
+    fillColor: color, borderColor: color, hidden: false,
+    flags: { [FLAG_NS]: {
+      cells, area,
+      actorId: actor?.id ?? "", actorUuid: actor?.uuid ?? "", tokenId: tokenDoc.id, abilityKey, abilityName,
+      lasting: true, followTokenId: tokenDoc.id, expiry: null, ...flags,
+    } },
+  };
+  const [template] = await scene.createEmbeddedDocuments("MeasuredTemplate", [data]);
+  _log(`${area.label} placed on "${tokenDoc.name}" for "${abilityName}"`);
+  return template ?? null;
 }
 
 /** Smallest distance between two sets of cells (range counts diagonals, p.85). */

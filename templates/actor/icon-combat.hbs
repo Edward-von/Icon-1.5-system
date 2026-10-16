@@ -437,6 +437,13 @@
                 <img src="{{sm.img}}" alt="" width="18" height="18"> {{sm.name}}
               </span>
             {{/each}}
+            {{#each trait.objects as |ob|}}
+              <span class="icon-summon-chip icon-object-chip" draggable="true"
+                    data-map-object-index="{{ob.index}}" data-item-id="{{trait.id}}" data-object-name="{{ob.name}}"
+                    title="Drag onto the map to place a height {{ob.height}} {{ob.name}} object{{#if ob.aura}}; its Aura {{ob.aura}} follows it{{/if}}. Objects can be stacked up to height 3 (p.95); open the object to change its height.">
+                <i class="fa-solid fa-cube"></i> {{ob.label}}
+              </span>
+            {{/each}}
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                       data-action="removeItem" data-item-id="{{trait.id}}"
@@ -663,6 +670,13 @@
                   data-summon-uuid="{{sm.uuid}}" data-summon-name="{{sm.name}}"
                   title="Drag {{sm.name}} onto the map to place it (you need permission to create tokens)">
               <img src="{{sm.img}}" alt="" width="18" height="18"> {{sm.name}}
+            </span>
+          {{/each}}
+          {{#each ab.objects as |ob|}}
+            <span class="icon-summon-chip icon-object-chip" draggable="true"
+                  data-map-object-index="{{ob.index}}" data-item-id="{{ab.id}}" data-object-name="{{ob.name}}"
+                  title="Drag onto the map to place a height {{ob.height}} {{ob.name}} object{{#if ob.source}} ({{ob.source}}){{/if}}{{#if ob.aura}}; its Aura {{ob.aura}} follows it{{/if}}. Objects can be stacked up to height 3 (p.95); open the object to change its height.">
+              <i class="fa-solid fa-cube"></i> {{ob.label}}
             </span>
           {{/each}}
           {{#if ab.canStance}}

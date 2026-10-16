@@ -9,17 +9,43 @@
       <input class="icon-sheet__name" type="text" name="name"
              value="{{actor.name}}" {{#unless isEditable}}disabled{{/unless}}>
       <div class="icon-sheet__badges">
-        {{#if system.intangible}}
-          <span class="icon-badge icon-badge--intangible">Intangible</span>
+        {{#if mapObject}}
+          {{!-- An object an ability / trait put on the map (R33a): height 1-3, immune unless the GM makes it destructible (p.89) --}}
+          <span class="icon-badge icon-badge--primary">Object</span>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="objectHeight" data-delta="-1" {{#unless mapObject.canLower}}disabled{{/unless}}
+                    title="Lower the object by 1">−</button>
+          {{/if}}
+          <span class="icon-badge" title="Objects are height 1-3; stacked objects can't be past height 3 (p.95)">Height {{mapObject.height}}</span>
+          {{#if isEditable}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="objectHeight" data-delta="1" {{#unless mapObject.canRaise}}disabled{{/unless}}
+                    title="Raise the object by 1 (Spirit Shrine: use the ability again while adjacent; Terraforming: raise height by +1)">+</button>
+          {{/if}}
+          {{#if mapObject.aura}}<span class="icon-badge">Aura {{mapObject.aura}}</span>{{/if}}
+          {{#if mapObject.destructible}}
+            <span class="icon-badge">Destructible — 10 hp</span>
+          {{else}}
+            <span class="icon-badge icon-badge--intangible" title="Immune to damage and effects unless specified (p.89)">Immune</span>
+          {{/if}}
+          {{#if mapObject.isGM}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="toggleDestructible"
+                    title="{{#if mapObject.destructible}}Make the object immune to damage and effects again{{else}}Destructible objects have 10 hp, are targetable like a character, automatically hit by attacks and effects, and fail all saves (p.89){{/if}}">
+              {{#if mapObject.destructible}}Make immune{{else}}Make destructible{{/if}}
+            </button>
+          {{/if}}
         {{else}}
-          <span class="icon-badge">Tangible</span>
+          {{#if system.intangible}}
+            <span class="icon-badge icon-badge--intangible">Intangible</span>
+          {{else}}
+            <span class="icon-badge">Tangible</span>
+          {{/if}}
+          {{#if isEditable}}
+            <button type="button" class="icon-btn" data-action="toggleIntangible">
+              Toggle Intangible
+            </button>
+          {{/if}}
+          <span class="icon-badge">Size {{system.size}}</span>
         {{/if}}
-        {{#if isEditable}}
-          <button type="button" class="icon-btn" data-action="toggleIntangible">
-            Toggle Intangible
-          </button>
-        {{/if}}
-        <span class="icon-badge">Size {{system.size}}</span>
       </div>
     </div>
   </header>
@@ -49,11 +75,13 @@
                value="{{system.sourceAbilityName}}" placeholder="Ability name (or drop an Item)"
                {{#unless isEditable}}disabled{{/unless}}>
       </div>
+      {{#unless mapObject}}
       <div class="icon-field-row">
         <label>Speed</label>
         <input type="number" name="system.speed" value="{{system.speed}}"
                min="0" {{#unless isEditable}}disabled{{/unless}}>
       </div>
+      {{/unless}}
       {{#unless system.intangible}}
         <div class="icon-field-row">
           <label>HP</label>
@@ -71,6 +99,7 @@
       {{/unless}}
     </div>
 
+    {{#unless mapObject}}
     <div class="icon-section">
       <div class="icon-section__header">
         <h3 class="icon-section__title">Summon Action</h3>
@@ -90,9 +119,10 @@
         <textarea name="system.summonAction" class="icon-editor">{{system.summonAction}}</textarea>
       {{/if}}
     </div>
+    {{/unless}}
 
     <div class="icon-section">
-      <h3 class="icon-section__title">Passive Effect</h3>
+      <h3 class="icon-section__title">{{#if mapObject}}Object Rules <small>(the text it comes from)</small>{{else}}Passive Effect{{/if}}</h3>
       <div class="icon-editor-wrap">{{{enrichedSummonEffect}}}</div>
       {{#if isEditable}}
         <textarea name="system.summonEffect" class="icon-editor">{{system.summonEffect}}</textarea>

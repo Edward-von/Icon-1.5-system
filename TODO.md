@@ -350,7 +350,8 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — l'aura di Fulminate non segue il mark** (S): "The character gains aura 2 while
       marked" (p.226): l'aura piazzata sul personaggio marcato non sparisce quando il mark viene tolto o passa a un altro
       bersaglio (nessuna scadenza "while marked"); si toglie a mano. Si potrebbe legarla al mark di Fulminate.
-- [ ] **Emerso lavorando su R48 — aure degli oggetti** (S/M, con R33): Spirit Shrine ("Shrine — Height 1 object. Object
+- [x] **Emerso lavorando su R48 — aure degli oggetti** (S/M, con R33) (FATTO il 16 ottobre 2026, versione 1.15.65, con
+      R33a: l'Aura 2 dello Shrine si piazza attorno al suo token e lo segue): Spirit Shrine ("Shrine — Height 1 object. Object
       Effect: Aura 2", p.192) non ha bottone area: l'aura va attorno al santuario, che è un oggetto da piazzare (R33). Il
       piazzamento "aura attorno a uno spazio" fatto per Rampant Nail potrebbe servire anche qui.
 - [ ] **Emerso lavorando su R49 — Aria: la blast cresciuta non resta centrata su di te** (S): "affecting a small blast
@@ -627,7 +628,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       col Talent II), Blitz (Talent I e mastery), Rampant Nail, Deepwrath (mastery), Geyser (oggetto), Gust (più di uno),
       Rime (pit di Magnarime), Tsunami, Waterspout (anche la mastery); forse Aethershard (R65).
       Darkside: lo Shadow è un summon del pack summons, il chip c'è già da R44 (1.15.46).
-- [ ] **R33a. Oggetti sulla mappa** (L)
+- [x] **R33a. Oggetti sulla mappa** (L) (FATTO il 16 ottobre 2026, versione 1.15.65: chip col cubo sull'abilità / tratto
+      per ogni "height N <nome> object", "<Nome> — Height N object", "object (<Nome>, height N)"; trascinato sulla mappa
+      diventa un token di un attore Summon con flag (cartella "Map Objects", creato dal GM anche per i giocatori);
+      impilabile fino a 3, "can't stack", "lasts until … used again" chiede se sostituire; Aura dell'oggetto piazzata e
+      che lo segue; altezza − / + e "Make destructible" (GM, 10 hp) sulla scheda dell'oggetto. Solo codice.)
       Un "oggetto" piazzabile come token: nome, altezza 1–3, immagine, chi l'ha creato; si può impilare fino ad altezza
       3; resta se chi l'ha creato è sconfitto; "lasts until this ability is used again" lo sostituisce; il GM può
       renderlo distruttibile (10 hp, p.89). Bottone sull'abilità / tratto quando il testo crea un oggetto ("height 1
@@ -637,6 +642,16 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Terraforming (boulder), Pyroclast (magma spire, Pyrospire altezza 3), Astra e Polaris (meteor), Fairy Ring mastery
       (Megamushroom, conta come plant), Underway (portali, niente obstruction), Geyser (Volcanic Geyser), Aethershard
       (R65).
+- [ ] **R33a2. Oggetti sulla mappa: quello che resta dopo R33a** (M/L)
+      Gli effetti degli oggetti oltre al token e all'aura sono ancora da leggere a mano: Spirit Shrine (benefici per
+      altezza totale 1 / 2 / 3+, mastery "Destroy the shrine … 2 divine damage once per height"), Comet (rampart attorno,
+      niente attacchi mentre l'arma è a terra, raccoglierla la toglie), Aethershard (preso in un'area: 2 piercing per
+      shard, poi distrutti e +1 Aether, come le wild card), Underway (teleport tra portali), Megamushroom (blessing token,
+      conta come plant), Geyser (eruzione: rimuovi e piazza chi ci sta sopra, poi Salt Sprite al suo posto), Volcanic
+      Geyser e Pyrospire offerti sempre e non solo con l'Infuse armato, Upheaval mastery ("placed as a height 2 pillar
+      instead", senza la parola object: oggi col +). Aree centrate su un oggetto (Holy Talent I, Helix Heel, Volcanic
+      Geyser "medium blast area centered on it"; vedi l'emerso di R49). Oggetti che bloccano la vista o il movimento
+      (muri di Foundry) e danno copertura: non fatto. Togliendo un oggetto da sotto una pila, quelli sopra non scendono.
 - [ ] **R33b. Spazi di terreno** (L)
       Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
       (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non

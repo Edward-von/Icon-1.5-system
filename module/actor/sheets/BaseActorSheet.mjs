@@ -15,6 +15,7 @@ import { saveRoll } from "../../dice/rolls.mjs";
 import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
 import { foeSummonDragData } from "../foe-summons.mjs";
 import { clockDragData } from "../../canvas/clock-tokens.mjs";
+import { mapObjectDragData } from "../../canvas/map-objects.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -248,6 +249,14 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
           ev.dataTransfer?.setData("text/plain", JSON.stringify(foeSummonDragData(this.document, own.dataset.foeSummonIndex)));
           ev.dataTransfer.effectAllowed = "copy";
           this._log?.(`foe summon drag — "${own.dataset.summonName}"`);
+          return;
+        }
+        // An object an ability / trait creates (R33a): map-objects.mjs builds its actor and token.
+        const objChip = ev.target?.closest?.("[data-map-object-index]");
+        if (objChip) {
+          ev.dataTransfer?.setData("text/plain", JSON.stringify(mapObjectDragData(this.document, objChip.dataset.itemId, objChip.dataset.mapObjectIndex)));
+          ev.dataTransfer.effectAllowed = "copy";
+          this._log?.(`object drag — "${objChip.dataset.objectName}"`);
           return;
         }
         const chip = ev.target?.closest?.("[data-summon-uuid]");

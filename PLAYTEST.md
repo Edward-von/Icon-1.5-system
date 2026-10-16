@@ -1656,6 +1656,39 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a — Oggetti sulla mappa (16 ottobre 2026, versione 1.15.65)
+
+Setup: una scena a griglia quadrata, un GM e un giocatore connessi. PG del giocatore: Sealer con Spirit Shrine, Wright
+Geomancer con Geo, Terraforming e il tratto Stone Double, Warden con Underway, Mendicant Harvester con Fairy Ring
+(mastery bloccata). Token del PG sulla scena. Solo JS e template: F5 dopo il deploy.
+
+- [ ] **Chip**: pannello di Spirit Shrine → accanto ai bottoni c'è un chip col cubo "Shrine · H1" (tooltip: height 1,
+      Aura 2 che lo segue). Geo "Boulder · H1", Terraforming "Boulder · H1", Underway "Underway · H1", tratto Stone
+      Double "Statue · H1" nella riga del tratto. Fairy Ring senza chip finché la mastery è bloccata; sbloccata → chip
+      "Megamushroom · H1".
+- [ ] **Piazzare (giocatore)**: il giocatore trascina "Boulder · H1" sulla mappa → messaggio "sent to the GM", poi il
+      token "Boulder (height 1)" compare nello spazio del drop, col nome sempre visibile; il giocatore lo può muovere.
+      Nella cartella attori "Map Objects" c'è l'attore Boulder.
+- [ ] **Scheda dell'oggetto**: doppio clic sul token → badge "Object", "Height 1" con − / +, "Immune"; la sezione "Object
+      Rules" mostra il testo da cui viene; niente Speed né Summon Action. + → "Height 2" e il token diventa "Boulder
+      (height 2)"; a 3 il + è spento.
+- [ ] **Impilare**: un secondo Boulder sullo stesso spazio del primo (height 1) → va sopra, elevazione 1. Alza il primo a
+      2 → l'oggetto sopra sale a elevazione 2. Un terzo Boulder lì (totale 4) → avviso "can't be past height 3 (p.95)"
+      e nessun token.
+- [ ] **Underway**: trascina il portale → piazzato. Trascinalo di nuovo → domanda "replace?": "Keep both" → due portali.
+      Un portale su un altro oggetto → avviso "can't be stacked". Terza volta, "Replace" → resta solo il nuovo.
+- [ ] **Shrine con aura**: trascina "Shrine · H1" → token "Shrine (height 1)" con un'Aura 2 attorno, nel colore del PG.
+      Muovi il santuario → l'aura lo segue. Cancella il token → l'aura sparisce.
+- [ ] **Shrine riusata**: trascina di nuovo lo Shrine → domanda "replace?"; "Replace" → il vecchio santuario e la sua
+      aura spariscono, resta il nuovo.
+- [ ] **Distruttibile (GM)**: sulla scheda di un oggetto il GM vede "Make destructible" (il giocatore no) → badge
+      "Destructible — 10 hp", campi HP/Defense, barra HP sul token. "Make immune" lo riporta come prima.
+- [ ] **Aree**: piazza una Medium Blast di un attacco sopra un oggetto immune → l'oggetto NON è tra i bersagli; reso
+      distruttibile, sì.
+- [ ] **Creatore sconfitto**: porta il PG a 0 hp / sconfitto → gli oggetti restano sulla mappa.
+- [ ] **Pyroclast / Geyser**: un PG Enochian con Pyroclast ha due chip "Magma Spire · H1" e "Magma Spire · H3"
+      (Pyrospire); uno Stormbender con Geyser ha "Geyser · H1" e "Volcanic Geyser · H1".
+
 ## Regex rotte di R39 e R59 (16 ottobre 2026, versione 1.15.64)
 
 Prima di provare: in un mondo con schema vecchio (ultimo deploy 1.15.2), un PG con il Limit Break Gran Levincross o
