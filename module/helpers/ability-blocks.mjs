@@ -19,7 +19,7 @@
  *     ("Miss or Area: fray", "Charge or Heroic: Rush 3").
  */
 
-import { SECTION_LABELS } from "./enrich.mjs";
+import { SECTION_LABELS, parseAbilitySections } from "./enrich.mjs";
 import { explainTag } from "./rule-tooltips.mjs";
 
 /** Field-backed blocks: key → { field on system, label printed in the book }. */
@@ -466,4 +466,55 @@ export function blockLabelTooltip(label) {
   const key = first.toLowerCase().replace(/\(.*?\)/g, " ").trim().replace(/\s+/g, "-");
   if (!key) return "";
   return explainTag(key) ?? explainTag(key.replace(/-(?:\d+|x)$/, "")) ?? "";
+}
+
+/* -------------------------------------------------- */
+/*  Granted interrupt on its own                       */
+/* -------------------------------------------------- */
+
+/** "Cheat Time — Interrupt 1" → ["Cheat Time", "Interrupt 1"]; null for any other label. */
+export function interruptBlockName(label) {
+  const m = /^(.*\S)\s—\s(Interrupt \d)$/.exec(String(label ?? ""));
+  return m ? [m[1], m[2]] : null;
+}
+
+/**
+ * The interrupt an ability grants inside its text (Chronotemper's Cheat Time,
+ * p.152; Drifting Leaf's Leaf on the Wind, p.227), read for a card of its own:
+ * the "Name — Interrupt N" block's trigger, the Effect block right after it,
+ * any later block of the ability that changes "this interrupt" (PHANTOM BLADE),
+ * then the unlocked mastery and the selected talent when they speak of the
+ * interrupt (or name it, or — for an interrupt with an Infuse line — of the
+ * infuse: GREAT CYCLONE). Revolution, Chronotemper's mastery, rides at the bottom.
+ * @param {object} system  ability data
+ * @param {string} label   the block's label, "Cheat Time — Interrupt 1"
+ * @returns {{name:string, cost:string, lines:Array<{label:string, text:string, mastery?:boolean}>}|null}
+ */
+export function grantedInterrupt(system, label) {
+  const s = system ?? {};
+  const head = interruptBlockName(label);
+  if (!head) return null;
+  const [name, cost] = head;
+  const sections = parseAbilitySections(s.description).sections;
+  const at = sections.findIndex(sec => sec.label === label);
+  if (at < 0) return null;
+
+  const own = String(sections[at].text ?? "").trim();
+  const trig = /^Trigger:\s*/i.exec(own);
+  const lines = [{ label: trig ? "Trigger" : cost, text: trig ? own.slice(trig[0].length) : own }];
+  let next = at + 1;
+  if (sections[next]?.label === "Effect") lines.push({ label: "Effect", text: sections[next++].text });
+
+  const speaksOf = (t) => {
+    const p = _plain(t);
+    return /\binterrupt\b/.test(p) || p.includes(name.toLowerCase());
+  };
+  for (const sec of sections.slice(next)) if (speaksOf(sec.text)) lines.push({ label: sec.label, text: sec.text });
+
+  const infused = lines.some(l => /\bInfuse\b/.test(l.label));
+  const talent  = { 1: ["Talent I", s.talent1], 2: ["Talent II", s.talent2] }[Number(s.talentSelected ?? 0)];
+  if (talent && speaksOf(talent[1])) lines.push({ label: talent[0], text: String(talent[1]).trim() });
+  if (s.masteryUnlocked && (speaksOf(s.mastery) || (infused && /\binfuse\b/.test(_plain(s.mastery)))))
+    lines.push({ label: "Mastery", text: String(s.mastery).trim(), mastery: true });
+  return { name, cost, lines };
 }

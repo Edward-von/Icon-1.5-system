@@ -1656,7 +1656,28 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
-## R60 — Versioni Infuse nella card: solo quella usata (16 ottobre 2026, versione 1.15.61)
+## R61 — Interrupt concessi in chat da soli (16 ottobre 2026, versione 1.15.62)
+
+Setup: un PG Fool con Chronotemper, un PG Wright Spellblade con Drifting Leaf, un PG con Fairy Ring (Harvester) o
+Riposte (Knave). È JS + template: F5 dopo il deploy.
+
+- [ ] **Chronotemper, intestazione**: anteprima dell'abilità nella tab Combat → il blocco Mark finisce con "…use the
+      following interrupt:" (senza "Cheat Time — Interrupt 1." appeso) e sotto c'è il blocco "Cheat Time — Interrupt 1:
+      Trigger: The start or end of any turn other than yours." con accanto il bottone col fumetto; poi Effect.
+- [ ] **Chronotemper, card**: clic sul fumetto → card "Chronotemper" con sotto "Interrupt 1: Cheat Time", badge Fool /
+      Ch / Interrupt 1, righe Trigger ed Effect; nessuna riga Mastery con la mastery bloccata.
+- [ ] **Chronotemper con la mastery**: sblocca Revolution → la stessa card ha in fondo "★ Mastery: Revolution: You can
+      take this interrupt three times a round…".
+- [ ] **Drifting Leaf**: fumetto accanto a "LEAF ON THE WIND — Interrupt 2" → card con sotto "Interrupt 2: Leaf on the
+      Wind", Trigger, Effect, "Infuse 3 or Slay: PHANTOM BLADE — …"; con il talento I scelto c'è anche "Talent I: …its
+      interrupt deals 1 piercing damage twice…", con la mastery sbloccata "★ Mastery: GREAT CYCLONE …".
+- [ ] **Fairy Ring / Riposte**: il blocco "Spirit Away — Interrupt 2" (o "Dire Parry — Interrupt 1") ha il fumetto e
+      la card ha Trigger ed Effect giusti; Riposte con la mastery aggiunge "Strong Left".
+- [ ] **Show in Chat invariato**: Show in Chat di Chronotemper → stessi blocchi della scheda ("Cheat Time — Interrupt
+      1: Trigger: …"), nessun bottone fumetto nella card.
+- [ ] **Abilità senza interrupt concesso**: le altre abilità non hanno fumetti nuovi; i fumetti di mastery e talento di
+      R31 funzionano come prima.
+
 
 Setup: un PG Wright Geomancer con Bio (mastery sbloccata) e Quaking Palm, un Wright Enochian con Pyre e Lance (mastery
 sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 dopo il deploy.

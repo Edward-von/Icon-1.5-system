@@ -311,6 +311,18 @@ export function parseAbilitySections(description, { extraLabels = [] } = {}) {
     all[i - 1].text = all[i - 1].text.slice(0, m.index).trim();
     all[i].label = `${m[1]} — ${all[i].label}`;
   }
+  // The same heading written as a sentence: "Cheat Time — Interrupt 1.
+  // Trigger: …" (Chronotemper p.152, Riposte, Endless Battlement, Deus Ex
+  // Machina, Blazing Bond). The name and cost ended the previous block and the
+  // trigger stood alone; they become one "Cheat Time — Interrupt 1" block
+  // reading "Trigger: …", as in the colon form above.
+  for (let i = 1; i < all.length; i++) {
+    if (all[i].label !== "Trigger") continue;
+    const m = all[i - 1].text.match(/\s*\b([A-Z][A-Za-z' ]{0,40}?)\s*[—–]\s*(Interrupt \d)\.$/);
+    if (!m) continue;
+    all[i - 1].text = all[i - 1].text.slice(0, m.index).trim();
+    all[i] = { label: `${m[1]} — ${m[2]}`, text: `Trigger: ${all[i].text}` };
+  }
   const sections = all.filter(s => s.text);
 
   let trigger = "";

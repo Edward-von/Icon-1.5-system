@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel, enrichLimitBreakText } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -192,6 +192,7 @@ export class IconSheet extends BaseActorSheet {
       setPrimaryJob:     IconSheet.#onSetPrimaryJob,
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
       abilityPartToChat:  IconSheet.#onAbilityPartToChat,
+      abilityInterruptToChat: IconSheet.#onAbilityInterruptToChat,
       abilityGamble:      IconSheet.#onAbilityGamble,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
@@ -469,7 +470,10 @@ export class IconSheet extends BaseActorSheet {
         sections:    await Promise.all(desc.sections.map(async sec => ({ label: sec.label, text: await this._enrichAbility(sec.text) }))),
         // Every rules block (Hit/Miss/Area/Charge… + the parsed ones) in reading
         // order, merged where the book prints one line — see helpers/ability-blocks.mjs
-        blocks:      await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }),
+        // A granted interrupt's block ("Cheat Time — Interrupt 1") gets a chat
+        // button posting that interrupt alone (#onAbilityInterruptToChat).
+        blocks:      (await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }))
+          .map(b => ({ ...b, interruptChat: b.key === "section" && !b.combo && !!interruptBlockName(b.label) })),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still
         // gets a Damage button, and the talent / mastery damage that only the
@@ -1871,6 +1875,46 @@ export class IconSheet extends BaseActorSheet {
       chapter:  s.chapter ?? 1,
       text:     await this._enrichAbility(p.text, { leadName: part === "mastery" }),
       statusHtml: statusBlockHtml(parseInflictedStatuses(p.text, { sourceName: this.document.name, label: p.label }),
+                                  { source: this.document, abilityName: item.name }),
+    };
+    const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+    const content = await renderTemplate("systems/icon-system/templates/chat/ability-part-card.hbs", { pc });
+    await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.document }), content });
+  }
+
+  /**
+   * Post an interrupt granted inside an ability's text on its own (data-label =
+   * its block label, "Cheat Time — Interrupt 1"): trigger, effect, and the
+   * lines that change it — PHANTOM BLADE (Drifting Leaf, p.227), the unlocked
+   * mastery (Revolution, Chronotemper p.152), the selected talent. See
+   * grantedInterrupt() in helpers/ability-blocks.mjs.
+   */
+  static async #onAbilityInterruptToChat(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    if (!item) return;
+    const s = item.system ?? {};
+    const it = grantedInterrupt(s, target.dataset.label);
+    if (!it) return;
+    _log(`abilityInterruptToChat — "${item.name}" | ${it.name} (${it.cost}) | lines: ${it.lines.map(l => l.label).join(", ")}`);
+    // "LEAF ON THE WIND" → "Leaf on the Wind", as the mastery names on R31's card.
+    const title = /[a-z]/.test(it.name) ? it.name
+      : it.name.toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, c => c.toUpperCase())
+          .replace(/\s(?:On|The|Of|And|In|A|An)(?=\s)/g, w => w.toLowerCase());
+    const lines = await Promise.all(it.lines.map(async l => ({
+      label: l.label, mastery: !!l.mastery,
+      text: await this._enrichAbility(l.text, { leadName: !!l.mastery }),
+    })));
+    const raw = it.lines.map(l => l.text).join(" ");
+    const pc = {
+      name:     item.name,
+      label:    it.cost,
+      title,
+      jobName:  s.jobName ?? "",
+      class:    s.class ?? "",
+      chapter:  s.chapter ?? 1,
+      lines,
+      statusHtml: statusBlockHtml(parseInflictedStatuses(raw, { sourceName: this.document.name, label: title }),
                                   { source: this.document, abilityName: item.name }),
     };
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;

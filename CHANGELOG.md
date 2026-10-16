@@ -1,5 +1,33 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Interrupt concessi in chat da soli (versione 1.15.62)
+
+### Round di debug del 16 ottobre, punto R61
+
+- **Postare solo l'interrupt di un'abilità**: Maar chiedeva un modo di mandare in chat il solo interrupt scritto nel
+  testo di Chronotemper (Fool, p.152: "While marked, that character can use the following interrupt: Cheat Time —
+  Interrupt 1. Trigger: The start or end of any turn other than yours. Effect: …"), aggiornato con la mastery
+  (Revolution: "You can take this interrupt three times a round"), e quello di Drifting Leaf (Spellblade, p.227: "Leaf
+  on the Wind — Interrupt 2 … Infuse 3 or Slay: PHANTOM BLADE — Until the start of your next turn, this interrupt has
+  unlimited uses") → nell'anteprima delle abilità sulla scheda PG, accanto all'intestazione di ogni blocco "Nome —
+  Interrupt N" c'è lo stesso bottone col fumetto di R31 (1.15.35): posta una card col titolo dell'abilità, sotto
+  "Interrupt 1: Cheat Time", e le righe **Trigger** ed **Effect** dell'interrupt; in fondo si aggiungono i blocchi
+  dell'abilità che parlano di "this interrupt" (PHANTOM BLADE), il **talento scelto** e la **mastery sbloccata** quando
+  nominano l'interrupt (o il suo nome, o per Drifting Leaf l'infuse: GREAT CYCLONE). Keyword con tooltip e bottoni
+  Inflict / Gain per gli status, come le altre card.
+- **Intestazione dell'interrupt scritta come frase**: in cinque abilità il libro stampa "Cheat Time — Interrupt 1."
+  col punto (Chronotemper, Riposte, Endless Battlement, Deus Ex Machina, Blazing Bond): il nome restava appeso alla
+  fine del blocco Mark / Stance e il Trigger stava da solo → ora, come già per la forma coi due punti (R9, 1.15.11),
+  diventano un unico blocco "Cheat Time — Interrupt 1: Trigger: …", sulla scheda e in Show in Chat. Nessun'altra
+  abilità, Limit Break, mastery o talento del pack jobs cambia i suoi blocchi (confronto su tutti i testi).
+- **Quali blocchi ricevono il bottone** (pack jobs, 8 blocchi): Reverse Fate (Gran Reversa), HEARTFIRE (Blazing Bond),
+  Dire Parry (Riposte, + mastery Strong Left), Heroic Intervention (Endless Battlement, + mastery Perfect Battlement),
+  Divine Intervention (Deus Ex Machina, + mastery Whip of the Thrones, + talento II), Cheat Time (Chronotemper, +
+  mastery Revolution), Spirit Away (Fairy Ring, + mastery SPORE SHROUD, + talento II), LEAF ON THE WIND (Drifting Leaf,
+  + PHANTOM BLADE, + talenti I e II, + mastery GREAT CYCLONE). Gli interrupt scritti dentro una mastery (Soul Proxy di
+  Umbral Echo, Grace of the Spirits di Spirit Shrine, GRAN JUDICATA di Justice) si postano già col bottone della
+  mastery di R31. Script e uscite: `../icon-compendium-audit/r61-interrupt-chat/`. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Versioni Infuse nella card: solo quella usata (versione 1.15.61)
 
 ### Round di debug del 16 ottobre, punto R60

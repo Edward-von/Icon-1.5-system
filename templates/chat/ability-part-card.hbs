@@ -1,6 +1,7 @@
 {{!-- templates/chat/ability-part-card.hbs — one upgrade of an ability posted on
-     its own (unlocked mastery or selected talent), from the button beside it
-     on the PC sheet's ability preview --}}
+     its own (unlocked mastery or selected talent, or an interrupt granted in
+     the ability's text with the lines that change it: pc.lines), from the
+     button beside it on the PC sheet's ability preview --}}
 <div class="icon-chat-card icon-chat-card--ability icon-class--{{pc.class}}">
   <div class="icon-chat-card__header">
     <strong class="icon-chat-card__action">{{pc.name}}<small class="icon-chat-card__combo-of">{{pc.label}}{{#if pc.title}}: {{pc.title}}{{/if}}</small></strong>
@@ -8,6 +9,10 @@
     <span class="icon-badge icon-badge--chapter">Ch {{pc.chapter}}</span>
     <span class="icon-badge icon-badge--primary">{{#if (icon-eq pc.label "Mastery")}}★ {{/if}}{{pc.label}}</span>
   </div>
+  {{#if pc.lines}}
+  {{#each pc.lines as |l|}}<p><strong>{{#if l.mastery}}★ {{/if}}{{l.label}}:</strong> {{{l.text}}}</p>{{/each}}
+  {{else}}
   <p><strong>{{#if (icon-eq pc.label "Mastery")}}★ {{/if}}{{pc.label}}:</strong> {{{pc.text}}}</p>
+  {{/if}}
   {{#if pc.statusHtml}}{{{pc.statusHtml}}}{{/if}}
 </div>

@@ -281,11 +281,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       come riga chiusa col nome; con una versione armata quella è il blocco principale e il titolo la nomina, una
       versione completa (Magna, Great Spirit Lance) chiude anche la base; le versioni su una riga sono spezzate in
       blocchi Hit / Miss / Area / Effect; la card d'attacco usa Hit / Miss della versione armata.)
-- [ ] **R61. Postare da solo un interrupt scritto nel testo dell'abilità** (S/M)
+- [x] **R61. Postare da solo un interrupt scritto nel testo dell'abilità** (S/M)
       Chronotemper (Cheat Time, nel Mark): "Some way to print out just the interrupt part of this ability would be useful
       for legibility. Make this this version updates if the mastery is taken." (mastery Revolution: tre volte per round).
       Drifting Leaf (LEAF ON THE WIND): "A way to ping the interrupt separate from the ability would be useful." Come il
       bottone chat di R31, ma per un blocco "Nome — Interrupt N" dentro la descrizione.
+      (FATTO il 16 ottobre 2026, versione 1.15.62: bottone fumetto accanto a ogni blocco "Nome — Interrupt N"
+      dell'anteprima, card con Trigger ed Effect più le righe che lo cambiano (PHANTOM BLADE, talento scelto, mastery
+      sbloccata: Revolution); la forma col punto "Cheat Time — Interrupt 1." diventa un blocco unico come quella coi due
+      punti; 8 blocchi nel pack jobs, elenco nel CHANGELOG.)
 - [ ] **R62. Promemoria "round N or later" nel tracker** (M)
       Storm Hilt Rage: "having the combat tracker announce the timing of these (based on the players and NPCs within the
       combat) would be incredibly helpful. Many times, PCs have forgotten major buffs they would've gotten. Many, many

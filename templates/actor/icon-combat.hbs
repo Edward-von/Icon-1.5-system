@@ -795,7 +795,7 @@
              Stance, Mark…) and Charge / Heroic / …, reordered by system.blockOrder
              for the abilities the book prints in a different sequence. --}}
         {{#each ab.blocks as |b|}}
-          <p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong> <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
+          <p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong>{{#if b.interruptChat}} <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityInterruptToChat" data-item-id="{{ab.id}}" data-label="{{b.label}}" title="Post only this interrupt to chat"><i class="fa-solid fa-comment"></i></button>{{/if}} <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
         {{/each}}
         {{!-- Chat button beside the selected talent / unlocked mastery: posts that
              text alone (Symphony's mote, Spirit Shrine's interrupt trigger). --}}
