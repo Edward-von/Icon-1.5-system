@@ -31,7 +31,9 @@
       <div class="icon-chat-card__desc">{{{ab.description}}}</div>
     {{/if}}
     {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
+    {{#if ab.infuseArmedHtml}}{{{ab.infuseArmedHtml}}}{{/if}}
     {{#each ab.blocks as |b|}}<p class="{{#if b.combo}}icon-ability-block--combo{{else if b.fromText}}icon-ability-section{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{#if b.combo}}<i class="fa-solid fa-bolt"></i> {{/if}}{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
+    {{#if ab.infuseVersionsHtml}}{{{ab.infuseVersionsHtml}}}{{/if}}
     {{!-- Talents / mastery are permanent upgrades of the ability — they still
          apply (and must be readable) when the combo version is used. --}}
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
@@ -56,8 +58,12 @@
     {{#if ab.hasTrigger}}<p><strong>Trigger:</strong> {{{ab.trigger}}}</p>{{/if}}
     {{!-- Rules blocks in the book's reading order (helpers/ability-blocks.mjs):
          Hit/Miss/Area, the blocks parsed out of the text, Charge/Heroic/…,
-         reordered by system.blockOrder when the ability needs it. --}}
+         reordered by system.blockOrder when the ability needs it.
+         Infuse versions (IconSheet#_infuseCardParts): the armed one first, as
+         the main block; the others as closed rows after the base blocks. --}}
+    {{#if ab.infuseArmedHtml}}{{{ab.infuseArmedHtml}}}{{/if}}
     {{#each ab.blocks as |b|}}<p {{#if b.fromText}}class="icon-ability-section"{{/if}}><strong>{{b.label}}:</strong> {{{b.text}}}</p>{{/each}}
+    {{#if ab.infuseVersionsHtml}}{{{ab.infuseVersionsHtml}}}{{/if}}
     {{#if ab.hasTalent1}}<p><strong>Talent I:</strong> {{{ab.talent1}}}</p>{{/if}}
     {{#if ab.hasTalent2}}<p><strong>Talent II:</strong> {{{ab.talent2}}}</p>{{/if}}
     {{#if ab.hasMastery}}<p><strong>★ Mastery:</strong> {{{ab.mastery}}}</p>{{/if}}

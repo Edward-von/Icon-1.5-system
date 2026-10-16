@@ -22,7 +22,8 @@ import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
-import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions } from "../../helpers/infuse.mjs";
+import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
+         splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
@@ -1737,6 +1738,45 @@ export class IconSheet extends BaseActorSheet {
     };
   }
 
+  /**
+   * The Infuse versions of an ability on its Show in Chat card (p.117). They
+   * used to be printed in full with the base, so Bio with its mastery carried
+   * BIOTIC and the whole of MAGNABIO on one line. Now:
+   *   - nothing armed: the base, and each version as a closed row with its
+   *     name ("Infuse 6 (Mastery): MAGNABIO") that opens on a click;
+   *   - a version armed: that version is the card's main block, labelled like
+   *     an ability (Hit / Miss / Area…), the others stay closed; a version
+   *     that is a complete ability (MAGNABIO: "2 actions, Attack, Range 8")
+   *     closes the base blocks too, an upgrade (BIOTIC) keeps them open.
+   * A mastery that is an infusion is shown here instead of the Mastery line.
+   * @returns {object} fields to merge into the card's ability data ({} when it has no versions)
+   */
+  async _infuseCardParts(ab) {
+    const { base, groups } = splitInfuseBlocks(ab.blocks);
+    const infusions = ab.infusions ?? [];
+    const versions = groups.map(g => ({ label: g.label, text: infusions.find(i => i.label === g.label)?.text ?? "", extra: g.extra }));
+    const fromMastery = infusions.filter(i => i.mastery);
+    for (const i of fromMastery) versions.push({ label: i.label, text: i.text, extra: [] });
+    if (!versions.length) return {};
+    const enrich = t => this._enrichAbility(t);
+    const armed = infusions.find(i => i.armed && !i.standalone);
+    const armedVersion = armed ? versions.find(v => v.label === armed.label) : null;
+    const whole = !!armedVersion && infuseVersionParts(armedVersion.text).whole;
+    const rows = [];
+    if (whole && base.length) {
+      const blocksHtml = base.map(b => `<p class="icon-ability-section"><strong>${escapeHTML(b.label)}:</strong> ${b.text}</p>`).join("");
+      rows.push(`<details class="icon-infuse-version icon-infuse-version--base"><summary>Base version: ${escapeHTML(ab.name)}</summary>${blocksHtml}</details>`);
+    }
+    for (const v of versions) if (v !== armedVersion) rows.push(await infuseVersionHtml(v, { enrich }));
+    return {
+      blocks:             whole ? [] : base,
+      name:               armed?.name ? `${ab.name} — ${armed.name}` : ab.name,
+      infuseArmedHtml:    armedVersion ? await infuseVersionHtml(armedVersion, { enrich, armed: true, spent: armedInfusion(this.document)?.spent ?? 0 }) : "",
+      infuseVersionsHtml: rows.join(""),
+      hasMastery:         fromMastery.length ? false : ab.hasMastery,
+    };
+  }
+
   /** Post the full ability card to chat. When the combo token is active and the
    *  ability has a combo version, posts the combo variant and consumes the token. */
   static async #onAbilityShowInChat(event, target) {
@@ -1762,7 +1802,7 @@ export class IconSheet extends BaseActorSheet {
     // Combo version: the blocks are rebuilt with the combo text merged in, so
     // an ability whose combo only ADDS something (Low Blow / The Hook) still
     // prints in full, with the combo wording marked.
-    const cardAb = comboMode
+    let cardAb = comboMode
       ? { ...ab,
           // "Devil Hand", with "God Hand combo" beside it (the base name when the combo has none).
           // Both versions at once: "Dervish + Dawn".
@@ -1775,6 +1815,8 @@ export class IconSheet extends BaseActorSheet {
             comboText: sys.comboEffect ?? "",
           }) }
       : ab;
+    // Infuse versions: closed rows, or the armed one as the main block.
+    cardAb = { ...cardAb, ...(await this._infuseCardParts(cardAb)) };
 
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/icon-system/templates/chat/ability-card.hbs", { ab: cardAb, comboMode, statusHtml });
@@ -2448,6 +2490,26 @@ export class IconSheet extends BaseActorSheet {
                        .map(b => ({ label: b.label, text: b.text })),
       };
     }
+    // Armed Infuse version (p.117): the card reads it like an ability — its
+    // own Hit / Miss take the base's place (MAGNABIO: "Hit: 2[D]+fray"), its
+    // other lines are listed above them. A complete version drops the base
+    // Exceed / Crit too; the talents still apply ("Benefits from Bio talents").
+    const infused = !comboArmed ? (ab.infusions ?? []).find(i => i.armed && !i.standalone) : null;
+    if (infused) {
+      const parts = infuseVersionParts(infused.text);
+      const enrich = t => this._enrichAbility(t);
+      if (parts.whole) { card.exceed = ""; card.crit = ""; }
+      const tag = `${infused.costLabel}${parts.name ? `: ${parts.name}` : ""}`;
+      if (parts.lead) card.effects.push({ label: tag, text: await enrich(parts.lead), infuse: true });
+      for (const b of parts.blocks) {
+        if (b.label === "Hit" || b.label === "Miss") card[b.label.toLowerCase()] = await enrich(b.text);
+        else card.effects.push({ label: `${b.label} (${parts.name || infused.costLabel})`, text: await enrich(b.text), infuse: true });
+      }
+      // Blocks the book writes after the version belong to it (PRIMAL BURST's Collide, p.221).
+      for (const b of splitInfuseBlocks(ab.blocks).groups.find(g => g.label === infused.label)?.extra ?? [])
+        card.effects.push({ label: `${b.label} (${parts.name || infused.costLabel})`, text: b.text, infuse: true });
+      if (parts.tail) card.effects.push({ label: tag, text: escapeHTML(parts.tail), infuse: true });
+    }
 
     // The unlocked talent applies to every version of the ability (God Hand,
     // p.192: "All versions of this ability gain Exceed: …"), so the base card
@@ -2470,7 +2532,8 @@ export class IconSheet extends BaseActorSheet {
     }
 
     await combatRoll({
-      abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect) : ab.name,
+      abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect)
+                  : infused?.name ? `${ab.name} — ${infused.name}` : ab.name,
       costLabel:    ab.cost,
       // `ab.tags` is an array of {raw, label, tooltip} — combatRoll expects plain strings
       tags:         ab.tags.map(t => t.label ?? t.raw ?? ""),

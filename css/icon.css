@@ -4849,6 +4849,29 @@ ol.chat-log .chat-message,
   background: rgba(80, 48, 160, .12);
 }
 .icon-chat-card__effect-block--combo .icon-chat-card__effect-label { color: #d0b0ff; }
+/* Infuse versions on the Show in Chat card (R60): a closed row per version,
+   the armed one open as the main block; same blue as the Infuse buttons. */
+.icon-infuse-version {
+  margin: 4px 0;
+  padding: 2px 0 2px 8px;
+  border-left: 2px solid #2980b9;
+  background: rgba(41, 128, 185, .08);
+}
+.icon-infuse-version > summary { cursor: pointer; color: #7fc4f0; font-weight: 600; }
+.icon-infuse-version--base { border-left-color: rgba(200, 150, 28, .4); background: transparent; }
+.icon-infuse-version--base > summary { color: var(--ic-gold-bright); font-weight: normal; }
+.icon-infuse-version.icon-infuse-version--base .icon-ability-section strong { color: var(--ic-gold-bright); }
+.icon-infuse-version--armed { background: rgba(41, 128, 185, .16); }
+.icon-infuse-version__title { margin: 2px 0; color: #7fc4f0; font-weight: 600; }
+.icon-infuse-version__lead { margin: 2px 0; }
+.icon-infuse-version__tail { margin: 2px 0; font-style: italic; opacity: .8; }
+.icon-infuse-version .icon-ability-section strong { color: #7fc4f0; }
+/* The armed Infuse version's lines on the attack card. */
+.icon-chat-card .icon-chat-card__effect-block.icon-chat-card__effect-block--infuse {
+  border-color: #2980b9;
+  background: rgba(41, 128, 185, .12);
+}
+.icon-chat-card__effect-block--infuse .icon-chat-card__effect-label { color: #7fc4f0; }
 /* "God Hand combo" beside the combo version's name on the Show in Chat card. */
 .icon-chat-card__combo-of { display: block; font-size: .7em; font-weight: normal; opacity: .75; }
 

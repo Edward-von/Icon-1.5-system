@@ -51,8 +51,8 @@
 
   {{!-- Ability effects (shown inline for quick reference) --}}
   {{#each effects as |e|}}
-    <div class="icon-chat-card__effect-block icon-chat-card__effect-block--combo">
-      <span class="icon-chat-card__effect-label"><i class="fa-solid fa-bolt"></i> {{e.label}}</span>
+    <div class="icon-chat-card__effect-block {{#if e.infuse}}icon-chat-card__effect-block--infuse{{else}}icon-chat-card__effect-block--combo{{/if}}">
+      <span class="icon-chat-card__effect-label"><i class="fa-solid {{#if e.infuse}}fa-wand-sparkles{{else}}fa-bolt{{/if}}"></i> {{e.label}}</span>
       <span class="icon-chat-card__effect-text">{{{e.text}}}</span>
     </div>
   {{/each}}

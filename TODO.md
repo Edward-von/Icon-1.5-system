@@ -268,7 +268,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.60: una versione Infuse con un suo costo d'azione, come STORMLASH (Free
       Action), si usa subito: scala l'Aether e posta in chat senza restare armata; Aether Deflection ha il bottone
       "Regain (2 Aether)" che scala 2 Aether e lo scrive in chat.)
-- [ ] **R60. Versioni Infuse nella card: solo quella usata** (M)
+- [x] **R60. Versioni Infuse nella card: solo quella usata** (M)
       "when an ability isn't infused, printing the base ability doesn't need to print out the infused variant's effects …
       some abilities have multiple different infuse variations, so the base card is massive. Having a base ability not
       including the infuse variants on cast could be useful- or maybe they're collapsibles in the card themselves."
@@ -277,6 +277,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       one is posted."
       Insieme: resa più leggibile delle versioni Infuse / alternative ("make it look mostly similar to an ability
       card"): Bio ("Alternate version card is hard to read"), Lance (versione della mastery), Pyre (versione infusa).
+      (FATTO il 16 ottobre 2026, versione 1.15.61: senza Infuse armato la card Show in Chat mostra la base e ogni versione
+      come riga chiusa col nome; con una versione armata quella è il blocco principale e il titolo la nomina, una
+      versione completa (Magna, Great Spirit Lance) chiude anche la base; le versioni su una riga sono spezzate in
+      blocchi Hit / Miss / Area / Effect; la card d'attacco usa Hit / Miss della versione armata.)
 - [ ] **R61. Postare da solo un interrupt scritto nel testo dell'abilità** (S/M)
       Chronotemper (Cheat Time, nel Mark): "Some way to print out just the interrupt part of this ability would be useful
       for legibility. Make this this version updates if the mastery is taken." (mastery Revolution: tre volte per round).
@@ -354,6 +358,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       dice "you can keep extending the line by 3 spaces, but can only extend it once per object", il libro (p.219) "by 3
       spaces this way each time, but can only extend it once per object". Ripristinare "this way each time" (pack +
       migrazione sulle copie).
+- [ ] **Emerso lavorando su R60 — R59: due regex con un carattere "backspace" al posto di `\b`** (S, bug): nel commit
+      di R59 (1.15.60) il `\b` delle regex è finito nel file come carattere di controllo 0x08. In
+      `module/actor/sheets/IconSheet.mjs` (riga ~739, `regain = /…spend (\d+) Aether any time to regain it…/i`) la regex
+      cerca un backspace prima di "spend" e non trova mai niente → il bottone "Regain (2 Aether)" di Aether Deflection
+      probabilmente non compare. In `module/helpers/infuse.mjs` (`isStandaloneInfusion`, "[Ii]nterrupt…") la variante
+      "(Interrupt …)" non riconosce niente (nel pack jobs nessuna versione la usa, Stormlash funziona). Sostituire i due
+      caratteri con `\b` e riprovare i test R59 in PLAYTEST.md.
 
 ---
 

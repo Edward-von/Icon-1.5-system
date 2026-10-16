@@ -1656,6 +1656,37 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R60 — Versioni Infuse nella card: solo quella usata (16 ottobre 2026, versione 1.15.61)
+
+Setup: un PG Wright Geomancer con Bio (mastery sbloccata) e Quaking Palm, un Wright Enochian con Pyre e Lance (mastery
+sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 dopo il deploy.
+
+- [ ] **Bio senza niente armato**: Show in Chat → la card ha Effect / Hit / Miss or Area / Charge, poi due righe blu
+      chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO"; NON c'è più la riga "★ Mastery" col testo di Magnabio.
+      Clic su una riga → si apre e mostra il suo testo; riclic → si chiude.
+- [ ] **MAGNABIO aperta**: dentro c'è "2 actions, Attack, Range 8, Large Blast." in cima, poi blocchi separati Hit /
+      Miss / Area / Terrain Effect, e "Benefits from Bio talents." in corsivo in fondo.
+- [ ] **Bio con BIOTIC armato**: Infuse 3 sulla scheda → nel messaggio "infuses" il testo è etichettato come una card.
+      Show in Chat → titolo "Bio — BIOTIC", in cima un blocco aperto "Infused — Infuse 3: BIOTIC", sotto i blocchi
+      della base aperti, in fondo la riga chiusa di MAGNABIO.
+- [ ] **Bio con MAGNABIO armato**: Infuse 6 → Show in Chat → titolo "Bio — MAGNABIO", blocco aperto della versione con
+      Hit / Miss / Area / Terrain Effect; la base è chiusa in una riga "Base version: Bio"; BIOTIC chiusa.
+- [ ] **Attacco con MAGNABIO armato**: Attack Roll di Bio sul foe → titolo "Bio — MAGNABIO", Hit "2[D]+fray." e Miss
+      "[D]+fray." (non quelli della base), sopra righe blu con l'icona della bacchetta (riga del costo, Area, Terrain
+      Effect, "Benefits from Bio talents.").
+- [ ] **Attacco senza niente armato**: Attack Roll di Bio → card come prima (Hit / Miss della base, nessuna riga blu).
+- [ ] **Pyre / Magnapyre**: con la mastery, Show in Chat di Pyre senza armare → righe chiuse PYROTIC e MAGNAPYRE;
+      aperta MAGNAPYRE mostra due "Effect:" separati e "Comeback or Exceed:" come blocchi propri.
+- [ ] **Lance / Great Spirit Lance**: Show in Chat → riga chiusa "Infuse 6 (Mastery): GREAT SPIRIT LANCE" con Hit / Miss /
+      Area etichettati.
+- [ ] **Quaking Palm**: Show in Chat → il "Collide: Foe must save or be stunned." non è più tra i blocchi della base ma
+      dentro la riga chiusa "Infuse 3: PRIMAL BURST".
+- [ ] **Tsunami**: Show in Chat → riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 funziona come
+      in 1.15.60 (spende e posta subito).
+- [ ] **Abilità senza Infuse**: Show in Chat di un'abilità qualsiasi di un altro job (e di una con combo) → card
+      identica a prima.
+- [ ] **Tema chiaro**: le righe blu e il blocco "Infused" si leggono anche in tema chiaro.
+
 ## R59 — Aether senza attacco: Stormlash e Aether Deflection (16 ottobre 2026, versione 1.15.60)
 
 Setup: un PG Wright Stormbender con Tsunami e un PG Wright Spellblade (tratto Aether Deflection), entrambi con qualche

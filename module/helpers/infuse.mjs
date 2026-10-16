@@ -14,6 +14,8 @@
  * of combat with the rest of the Wright's Aether.
  */
 
+import { SECTION_LABELS, escapeHTML } from "./enrich.mjs";
+
 const _log = (...a) => console.debug("[ICON | Infuse]", ...a);
 const NS = "icon-system";
 
@@ -106,6 +108,112 @@ export function limitBreakInfusions(system, { ultimate = false } = {}) {
   return out;
 }
 
+/* -------------------------------------------------- */
+/*  The Infuse versions on a chat card                 */
+/* -------------------------------------------------- */
+
+/** Labels an Infuse version writes its blocks with: the ability's own, plus "Terrain" (MAGNAGEO). */
+const _VL = `(?:On hit|Auto[\\s-]?hit|Hit|Miss|Area effect|Area|${SECTION_LABELS.join("|")}|Terrain)`;
+const VERSION_LABEL_RE = new RegExp(`(?:^|[.!?…)\\]]\\s+|[—–]\\s*)(${_VL}(?:\\s+or\\s+${_VL})?):\\s*`, "gi");
+
+/** "On hit" → "Hit", "Area effect" → "Area", each half of "Comeback or Exceed". */
+const _canonVersionLabel = (label) => label.split(/\s+or\s+/i).map(part => {
+  const p = part.trim();
+  if (/^(?:on\s+hit|auto[\s-]?hit)$/i.test(p)) return "Hit";
+  if (/^area(?:\s+effect)?$/i.test(p)) return "Area";
+  return p.charAt(0).toUpperCase() + p.slice(1);
+}).join(" or ");
+
+/**
+ * An Infuse version split into the parts an ability card shows. The pack
+ * writes the bigger versions on one line — "MAGNABIO — 2 actions, Attack,
+ * Range 8, Large Blast. Hit: 2[D]+fray. Miss: [D]+fray. Area: [D]+fray.
+ * Terrain Effect: … Benefits from Bio talents." (Geomancer p.218) — which
+ * read as a wall of text; here each "Label:" is a block of its own, as on the
+ * ability card.
+ *   name   "MAGNABIO"; cost "Free Action" when the version names its own (Stormlash)
+ *   lead   the text before the first block ("2 actions, Attack, Range 8, Large Blast.")
+ *   blocks [{label, text}] in the written order
+ *   tail   "Benefits from Bio talents."
+ *   whole  true when the version is a complete ability (its own action cost
+ *          or its own Hit / Miss): the base blocks don't carry over
+ * @param {string} text  "NAME — rest", as infusionsOf / masteryInfusion give it
+ */
+export function infuseVersionParts(text) {
+  let t = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const name = infuseName(t);
+  let cost = "";
+  if (name) {
+    const head = /^\s*[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}(?:\s*\(([^)]*)\))?\s*[—–-]\s*/.exec(t);
+    if (head) { cost = (head[1] ?? "").trim(); t = t.slice(head[0].length); }
+  }
+  // "Attack: On hit: …" (MAGNAPYRE): "Attack:" only introduces the attack lines.
+  t = t.replace(/\bAttack:\s*/g, "");
+  let tail = "";
+  const tm = /\s*((?:[A-Z][\w']*\s+)?[Bb]enefits from [A-Za-z' ]+ talents\.?)\s*$/.exec(t);
+  if (tm) { tail = tm[1].charAt(0).toUpperCase() + tm[1].slice(1); t = t.slice(0, tm.index).trim(); }
+
+  const hits = [];
+  VERSION_LABEL_RE.lastIndex = 0;
+  for (const m of t.matchAll(VERSION_LABEL_RE)) {
+    if (m[1][0] !== m[1][0].toUpperCase()) continue;     // "gains effect: …" is prose
+    hits.push({ label: m[1], labelStart: m.index + m[0].indexOf(m[1]), bodyStart: m.index + m[0].length });
+  }
+  const lead = (hits.length ? t.slice(0, hits[0].labelStart) : t).trim();
+  const blocks = hits.map((h, i) => ({
+    label: _canonVersionLabel(h.label),
+    text:  t.slice(h.bodyStart, i + 1 < hits.length ? hits[i + 1].labelStart : undefined).trim(),
+  })).filter(b => b.text);
+  const whole = /^\d+\s+actions?\b/i.test(lead) || blocks.some(b => /^(?:Hit|Miss)$/.test(b.label));
+  return { name, cost, lead, blocks, tail, whole };
+}
+
+/**
+ * Take the Infuse blocks out of an ability's card blocks (buildAbilityBlocks),
+ * so the card can show them as their own versions. A description block
+ * written after an Infuse block is part of that version: "Infuse 3: PRIMAL
+ * BURST — … you may shove the affected character … Collide: Foe must save or
+ * be stunned." (Quaking Palm, p.221), INCANDIUS's "Collide: Characters are
+ * vulnerable." (Soul Burn). Field blocks (Comeback, Exceed…) stay with the base.
+ * @returns {{base: object[], groups: Array<{label:string, block:object, extra:object[]}>}}
+ */
+export function splitInfuseBlocks(blocks) {
+  const base = [], groups = [];
+  let cur = null;
+  for (const b of blocks ?? []) {
+    if (infuseCost(b.label) !== undefined) { cur = { label: b.label, block: b, extra: [] }; groups.push(cur); continue; }
+    if (cur && b.fromText && b.key === "section" && !b.combo) { cur.extra.push(b); continue; }
+    cur = null;
+    base.push(b);
+  }
+  return { base, groups };
+}
+
+/**
+ * HTML of one Infuse version on a chat card. Closed (a <details> row with its
+ * name) when it isn't the one in play, open and marked when it is armed.
+ * @param {{label:string, text:string, extra?:object[]}} version  extra: blocks already enriched
+ * @param {object} opts
+ * @param {(t:string) => Promise<string>|string} [opts.enrich]  default: escape only
+ * @param {boolean} [opts.armed]  the armed one: shown open, as the card's main block
+ * @param {number}  [opts.spent]  Aether spent on it (Infuse X)
+ */
+export async function infuseVersionHtml(version, { enrich = escapeHTML, armed = false, spent = 0 } = {}) {
+  const parts = infuseVersionParts(version.text);
+  const title = `${version.label}${parts.name ? `: ${parts.name}` : ""}${parts.cost ? ` (${parts.cost})` : ""}`;
+  const body = [];
+  if (parts.lead) body.push(`<p class="icon-infuse-version__lead">${await enrich(parts.lead)}</p>`);
+  for (const b of parts.blocks) body.push(`<p class="icon-ability-section"><strong>${escapeHTML(b.label)}:</strong> ${await enrich(b.text)}</p>`);
+  for (const b of version.extra ?? []) body.push(`<p class="icon-ability-section"><strong>${escapeHTML(b.label)}:</strong> ${b.text}</p>`);
+  if (parts.tail) body.push(`<p class="icon-infuse-version__tail">${escapeHTML(parts.tail)}</p>`);
+  const icon = `<i class="fa-solid fa-wand-sparkles"></i>`;
+  if (armed) {
+    const note = /\bX\b/.test(version.label) && spent ? ` <small>(${spent} Aether)</small>` : "";
+    return `<div class="icon-infuse-version icon-infuse-version--armed"><p class="icon-infuse-version__title">${icon} Infused — ${escapeHTML(title)}${note}</p>${body.join("")}</div>`;
+  }
+  return `<details class="icon-infuse-version"><summary>${icon} ${escapeHTML(title)}</summary>${body.join("")}</details>`;
+}
+
 /** What the actor currently has infused, or null. */
 export function armedInfusion(actor) {
   const f = actor?.getFlag?.(NS, "infused");
@@ -176,10 +284,17 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
         <strong><i class='fa-solid fa-wand-sparkles'></i> ${foundry.utils.escapeHTML(actor.name)}</strong> ${arm ? "infuses" : "uses the infusion of"}
         <strong>${foundry.utils.escapeHTML(item.name)}</strong>${infusion.name ? ` — <em>${foundry.utils.escapeHTML(infusion.name)}</em>` : ""}
         <br><small>${foundry.utils.escapeHTML(infusion.label)}: ${cost} Aether spent (${pool - cost} left)</small>
-        ${infusion.text ? `<div class="icon-chat-card__desc">${foundry.utils.escapeHTML(infusion.text)}</div>` : ""}
+        ${infusion.text ? await _versionBodyHtml(infusion) : ""}
       </div>`,
   });
   return cost;
+}
+
+/** The version's blocks, labelled as on an ability card, for the "infuses" message. */
+async function _versionBodyHtml(infusion) {
+  const html = await infuseVersionHtml(infusion, { armed: true });
+  // The message already names the version: keep only its blocks.
+  return html.replace(/<p class="icon-infuse-version__title">.*?<\/p>/, "");
 }
 
 /** Give the Aether back and disarm (the ability wasn't used after all). */

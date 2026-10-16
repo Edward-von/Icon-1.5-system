@@ -1,5 +1,34 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Versioni Infuse nella card: solo quella usata (versione 1.15.61)
+
+### Round di debug del 16 ottobre, punto R60
+
+- **Show in Chat delle abilità con Infuse** (Wright, p.117: "Infuse: Wright only. Triggers when Aether is spent on an
+  ability"): la card stampava sempre la base **e** tutte le versioni Infuse per intero, anche senza Aether speso; con la
+  mastery sbloccata la riga "★ Mastery" portava la versione grande su una riga sola (Bio con BIOTIC e MAGNABIO, p.218:
+  "Infuse 6: MAGNABIO — 2 actions, Attack, Range 8, Large Blast. Hit: … Miss: … Area: …") → card enorme e difficile
+  da leggere → ora, **senza niente armato**, la card mostra la base e ogni versione come una **riga chiusa** col nome
+  ("Infuse 3: BIOTIC", "Infuse 6 (Mastery): MAGNABIO") che si apre col clic; **con una versione armata** (bottone
+  Infuse della scheda) quella è il blocco principale, aperto, sotto "Infused — …", e il titolo diventa "Bio — MAGNABIO".
+  Le versioni che sono un'abilità completa (le Magna e Great Spirit Lance: hanno un loro costo d'azione e i loro Hit /
+  Miss) chiudono anche la base in una riga "Base version"; quelle che potenziano la base (BIOTIC, PYROTIC, VOLVAGA…)
+  la lasciano aperta. È la proposta di Turz Ven (il bottone Infuse cambia cosa si posta) insieme a quella di Maar (le
+  righe chiudibili).
+- **Versioni scritte su una riga** (Magnabio, Great Spirit Lance, Magnapyre, Magnageo, Magnacryo): tutto il testo
+  stava in un paragrafo → ora ogni "Hit:", "Miss:", "Area:", "Effect:", "Terrain:", "Comeback or Exceed:" è un blocco
+  etichettato come su una card normale, la riga del costo ("2 actions, Attack, Range 8, Large Blast.") sta in cima e
+  "Benefits from Bio talents." in fondo. Lo stesso formato c'è nel messaggio "<nome> infuses …" che esce quando si arma.
+- **Blocchi che appartengono alla versione**: il "Collide:" scritto dopo PRIMAL BURST (Quaking Palm, p.221) e dopo
+  INCANDIUS (Soul Burn) è parte della versione infusa (la spinta che lei aggiunge) → ora sta dentro la sua riga, non
+  tra i blocchi della base.
+- **Card dell'attacco con una versione armata**: mostrava sempre Hit / Miss della base → ora prende Hit e Miss della
+  versione quando li scrive (MAGNABIO: "Hit: 2[D]+fray"), elenca sopra le sue altre righe in blu e il titolo dice
+  "Bio — MAGNABIO"; una versione completa toglie Exceed / Crit della base, i talenti restano.
+- Confronto prima/dopo su tutte le 22 abilità del pack jobs con Infuse (28 versioni):
+  `../icon-compendium-audit/r60-infuse-card/` (`versions.mjs`, `compare.mjs` e le uscite). Nessun dato cambiato: la
+  scheda (pannello dell'abilità) è come prima.
+
 ## 16 ottobre 2026 — Aether senza attacco: Stormlash e Aether Deflection (versione 1.15.60)
 
 ### Round di debug del 16 ottobre, punto R59
