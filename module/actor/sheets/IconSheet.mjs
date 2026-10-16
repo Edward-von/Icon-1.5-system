@@ -74,9 +74,34 @@ function _altComboMark(s) {
  */
 function _areaText(s, comboArmed) {
   const talent = { 1: s.talent1, 2: s.talent2 }[Number(s.talentSelected ?? 0)];
-  return [s.description, talent, s.masteryUnlocked ? s.mastery : "", comboArmed ? s.comboEffect : ""]
+  return [s.description, talent, s.masteryUnlocked ? s.mastery : "", comboArmed ? s.comboEffect : "",
+    ...TRIGGERED_BLOCKS.map(([, key]) => s[key])]
     .filter(t => typeof t === "string" && t).join(" ");
 }
+
+/** The blocks an attack sets off, in the book's order (p.98-99), with the text the area choice reads. */
+const TRIGGERED_BLOCKS = [
+  ["Exceed", "exceedEffect"], ["Crit", "critEffect"], ["Collide", "collideEffect"],
+  ["Slay", "slayEffect"], ["Finishing Blow", "finishingBlowEffect"], ["Comeback", "comebackEffect"],
+];
+
+/**
+ * The triggered blocks' texts for areaVariants, one entry per distinct text:
+ * Death writes the same explosion under Slay and Finishing Blow (p.155), so it
+ * is offered once as "Slay / Finishing Blow".
+ */
+function _triggeredAreaTexts(s) {
+  const byText = new Map();
+  for (const [source, key] of TRIGGERED_BLOCKS) {
+    const text = String(s[key] ?? "").trim();
+    if (!text) continue;
+    byText.set(text, byText.has(text) ? `${byText.get(text)} / ${source}` : source);
+  }
+  return [...byText].map(([text, source]) => [source, text]);
+}
+
+/** Is this variant source one of _triggeredAreaTexts' ("Slay", "Slay / Finishing Blow")? */
+const _isTriggeredSource = (source) => String(source ?? "").split(" / ").every(p => TRIGGERED_BLOCKS.some(([b]) => b === p));
 
 /**
  * The area button's label: the tags' area or the first one in the text, else
@@ -2244,6 +2269,9 @@ export class IconSheet extends BaseActorSheet {
         ab.hasCombo && ab.comboArmed ? ["Combo", s.comboEffect] : null,
         s.chargeEffect ? ["Charge",   s.chargeEffect] : null,
         s.heroicEffect ? ["Heroic",   s.heroicEffect] : null,
+        // The blocks set off by the attack (Death's Slay / Finishing Blow,
+        // p.155: "explodes in a large blast area effect centered on them").
+        ..._triggeredAreaTexts(s),
         ab.hasTalent1 ? ["Talent I",  s.talent1]      : null,
         ab.hasTalent2 ? ["Talent II", s.talent2]      : null,
         ab.hasMastery && !masteryIsInfusion ? ["Mastery", s.mastery] : null,
@@ -2255,7 +2283,13 @@ export class IconSheet extends BaseActorSheet {
     const fromTarget = new Set([
       ab.hasTalent1 && s.talent1, ab.hasTalent2 && s.talent2, ab.hasMastery && s.mastery, ab.comboArmed && s.comboEffect,
     ].filter(t => t && areaDrawnFromTarget(t)).flatMap(t => areasInText(t).map(a => a.label)));
-    return variants.map(v => fromTarget.has(v.label) ? { ...v, area: { ...v.area, fromTarget: true } } : v);
+    return variants.map(v => {
+      const area = { ...v.area };
+      if (fromTarget.has(v.label)) area.fromTarget = true;
+      // A triggered block's area comes after the attack, never as its area (the attack roll leaves it out).
+      if (_isTriggeredSource(v.source)) area.afterAttack = true;
+      return { ...v, area };
+    });
   }
 
   static async #onAbilityPlaceArea(event, target) {
@@ -2318,8 +2352,10 @@ export class IconSheet extends BaseActorSheet {
     // not the attack's area: the attack keeps its target and the area goes
     // down with the area button. Placing it here retargeted the area instead.
     const allVariants = this._areaVariantsFor(ab);
-    const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !v.area?.fromTarget);
-    const noAttackArea = !attackVariants.length && allVariants.some(v => v.area?.fromTarget);
+    // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character.
+    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target";
+    const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !notTheAttack(v.area));
+    const noAttackArea = !attackVariants.length && allVariants.some(v => notTheAttack(v.area));
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {
       if (attackVariants.length > 1) {
         areaChoice = await chooseAreaVariant(attackVariants, ab.name);

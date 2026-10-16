@@ -168,7 +168,7 @@ export function rangeFromTags(tags) {
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
-    case "blast": return BLAST_LABELS[area.size] ?? "Blast";
+    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : "");
     case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
@@ -190,7 +190,8 @@ export function areasInText(text) {
   const out = [];
   const seen = new Set();
   // "blasts": Draken Cross Talent II, "all areas may be increased to medium blasts".
-  const re = /\b(?:(small|medium|large) blasts?|line (\d+)|arc (\d+)|burst (\d+)(?: \((self|target)\))?)\b/g;
+  // No word boundary after "(target)": "burst 1 (target)." was read as a plain Burst 1.
+  const re = /\b(?:(small|medium|large) blasts?\b|line (\d+)\b|arc (\d+)\b|burst (\d+)(?: \((self|target)\)|\b))/g;
   for (const m of plain.matchAll(re)) {
     let area;
     if (m[1]) area = { kind: "blast", size: m[1][0] };
@@ -198,12 +199,37 @@ export function areasInText(text) {
     else if (m[3]) area = { kind: "arc", size: Number(m[3]) };
     else if (m[4]) area = { kind: "burst", size: Number(m[4]), self: m[5] === "self", target: m[5] === "target" };
     else continue;
+    // "explodes in a large blast area effect centered on them" (Death's Slay /
+    // Finishing Blow, p.155): the area's centre is the character the trigger
+    // names, not a space picked in range; "centered on you" is the user.
+    const centre = centreOf(plain.slice(0, m.index).split(/[.;:]/).pop(), plain.slice(m.index + m[0].length).split(/[.;:]/)[0]);
+    if (centre) {
+      area.centeredOn = centre;
+      if (area.kind === "burst" && !area.self && !area.target) area[centre] = true;
+    }
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
     seen.add(area.label);
     out.push(area);
   }
   return out;
+}
+
+/**
+ * Whom the rest of an area's sentence centres it on: "target" for "centered on
+ * them / the character / your foe / your ally / the attack target", "self" for
+ * "centered on you", else "" (the area is placed in range as usual). "Them"
+ * after objects ("all pits in the area explode … centered on them", Holy's
+ * Talent I; Helix Heel's objects) and "it" (Geyser's geyser) are things on the
+ * map, not a token to target: left to placing by hand.
+ * @param {string} before  the sentence before the shape, lower case
+ * @param {string} rest    the sentence after the shape, lower case
+ */
+function centreOf(before, rest) {
+  const m = /\bcent(?:er|r)ed on (you|yourself|them|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
+  if (!m) return "";
+  if (m[1] === "them" && /\b(?:pits?|objects?|plants?|boulders?|nails?|clouds?)\b/.test(before)) return "";
+  return /^you(?:rself)?$/.test(m[1]) ? "self" : "target";
 }
 
 /**
@@ -758,7 +784,26 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   const holder = isAura ? auraHolderToken(text, token) : token;
   const sourceCells = tokenCells(holder.document);
   let cells, originCell;
-  if (isAura || (area.kind === "burst" && area.self)) {
+  // An area centred on a character (Death's Slay / Finishing Blow, p.155:
+  // "explodes in a large blast area effect centered on them") goes on that
+  // token: the one target, or the user for "centered on you".
+  const centre = area.centeredOn === "self" ? token
+    : area.centeredOn === "target" && !isAura && !atSpace ? centreTargetToken(token) : null;
+  if (centre) {
+    const centreCells = tokenCells(centre.document);
+    if (area.kind === "burst") {
+      cells = cellsInRange(centreCells, area.size).concat(centreCells);
+      originCell = centreCells[0];
+    } else if (centreCells.length === 1) {
+      cells = shapeCells(area, centreCells[0]);
+      originCell = centreCells[0];
+    } else {
+      // A big token has no single centre space: pick one of its spaces.
+      const placed = await new AreaPlacement({ area, sourceCells: [], rangeCells: centreCells, originInRange: true }).run();
+      if (!placed) return null;
+      ({ cells, origin: originCell } = placed);
+    }
+  } else if (isAura || (area.kind === "burst" && area.self)) {
     // Around the user (or the ally holding it), no click needed. An aura keeps following the token.
     cells = cellsInRange(sourceCells, area.size).concat(sourceCells);
     originCell = sourceCells[0];
@@ -854,6 +899,22 @@ function targetAnchorToken(token) {
   ui.notifications.warn(targets.length
     ? "This area is drawn from your target: target only that token, then place it again. Drawn from you for now."
     : "This area is drawn from your target: target that token, then place it again. Drawn from you for now.");
+  return null;
+}
+
+/**
+ * The token an area centred on "them" goes on (areasInText `centeredOn`): the
+ * one token the user has targeted other than their own. With no such target
+ * (or several) the area is placed by hand as usual, with a warning.
+ * @param {Token} token  the user's token
+ * @returns {Token|null}
+ */
+function centreTargetToken(token) {
+  const targets = Array.from(game.user?.targets ?? []).filter(t => t.id !== token.id && t.actor);
+  if (targets.length === 1) return targets[0];
+  ui.notifications.warn(targets.length
+    ? "This area is centered on one character: target only that token, then place it again. Place it by hand for now (Alt ignores the range)."
+    : "This area is centered on a character: target that token, then place it again. Place it by hand for now (Alt ignores the range).");
   return null;
 }
 

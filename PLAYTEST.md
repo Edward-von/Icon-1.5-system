@@ -1656,6 +1656,35 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R49 — Aree di Slay, Finishing Blow, Exceed e Collide; aree "centered on them" (16 ottobre 2026, versione 1.15.51)
+
+Setup: PG di prova con Death (Fool), Soul Shot, Matsuri, Gust, God Hand (mastery sbloccata), Ace (Talent I), Aria,
+Elden Rune (mastery sbloccata) ed Eye of the Storm, dal compendio Jobs o già sulla scheda (è solo codice); il token del
+PG sulla mappa, due foe e un alleato.
+
+- [ ] **Death**: bottone area → "which area?" con "Line 6" e "Slay / Finishing Blow: Large Blast (target)".
+      Bersagliare (T) un foe e scegliere la Large Blast → l'area compare centrata sul foe, senza clic, con i personaggi
+      dentro bersagliati. Senza bersaglio (o con due) → avviso "This area is centered on a character…" e piazzamento a
+      mano (Alt toglie il limite del range).
+- [ ] **Death, Attack Roll**: il tiro d'attacco piazza solo la Line 6 (non chiede "which area?" e non propone la Large
+      Blast dello Slay).
+- [ ] **Soul Shot**: bottone area → "Line 3", "Exceed / Finishing Blow: Large Blast (target)" (e con Talent II "Line 6").
+- [ ] **Matsuri**: ora c'è il bottone area "Large Blast (target)" (Exceed, "centered on your foe"): centrata sul foe
+      bersagliato.
+- [ ] **Gust**: bottone area → "Line 3" e "Collide: Burst 1 (target)": il Burst 1 va attorno al personaggio bersagliato
+      (lui compreso).
+- [ ] **Aria**: bottone area → "Small Blast (self)" centrata sul PG senza clic; "Medium Blast" / "Large Blast" si
+      piazzano a mano come prima.
+- [ ] **God Hand / Ace (Talent I) / Exorcism (Talent II)**: la blast "centered on them" ha "(target)" nel nome e va sul
+      token bersagliato.
+- [ ] **Token grande**: con un foe 2×2 bersagliato, la Large Blast di Death chiede di cliccare uno dei suoi spazi come
+      centro (fuori → avviso "The centre space …").
+- [ ] **Elden Rune** con la mastery: "Mastery: Small Blast" si piazza cliccando lo spazio del PG (la runa è sotto di
+      te), come prima. **Eye of the Storm**: la mastery crea un oggetto (aethercloud, resta in R33); con AEONCLOUD armato
+      il bottone offre la Large Blast (R47).
+- [ ] **Non devono cambiare**: Holy Talent I e Pandaemonium combo (blast "centered on" pit: a mano), Geyser (a mano),
+      Land Waster (ora "Heroic: Burst 2 (target)", a mano come prima), Rook, Fulminate.
+
 ## R48 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect (16 ottobre 2026, versione 1.15.50)
 
 Setup: PG di prova con Warding Bolts (Freelancer, mastery sbloccata), Fulminate e Rampant Nail (Spellblade), Rook e

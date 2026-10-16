@@ -188,11 +188,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       offre "Mastery: Aura 2" attorno a te; Fulminate ha il bottone area con Aura 2 attorno al token bersagliato, più
       Aura 3 / Aura 1 con i talenti; Rampant Nail piazza "Aura 2 (terrain effect)" attorno a uno spazio in range 3, ferma;
       il testo Heroic è letto (Rook "Heroic: Aura 2", anche Land Waster "Heroic: Burst 2 (target)"). Solo codice.)
-- [ ] **R49. Aree di Slay / Finishing Blow e mastery non piazzabili** (S/M, bug, da verificare)
+- [x] **R49. Aree di Slay / Finishing Blow e mastery non piazzabili** (S/M, bug, da verificare)
       Death: "No way to easily place the large blast area effect from slay/finishing blow." Elden Rune: "include a small
       blast version for the Mastery." Eye of the Storm: "A way to place the area effect from mastery would be useful."
       R20 legge le aree di talento, mastery e combo; Slay / Finishing Blow forse no. Prima controllare se sono aree vere
       (area effect) o terrain effect da piazzare (R33).
+      (FATTO il 16 ottobre 2026, versione 1.15.51: il bottone area legge Exceed, Crit, Collide, Slay, Finishing Blow e
+      Comeback; un'area "centered on them / your foe" va da sola sul token bersagliato, "centered on you" su di te:
+      Death offre "Slay / Finishing Blow: Large Blast (target)", poi Soul Shot, Matsuri, Gust, God Hand, Ace e altri;
+      "burst N (target)" nel testo ora letto giusto. Elden Rune offriva già la Small Blast della mastery; la mastery di
+      Eye of the Storm è un oggetto (R33). Solo codice.)
 - [ ] **R50. Keyword evidenziate fuori dal testo di colore** (S, bug)
       - Morrigan: "The first line of the effect text has summon highlighted, as if the flock being summoned from morrigan
         is a summon (character type), but it is not. The second line is correct; don't remove that underlining".
@@ -305,6 +310,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — aure degli oggetti** (S/M, con R33): Spirit Shrine ("Shrine — Height 1 object. Object
       Effect: Aura 2", p.192) non ha bottone area: l'aura va attorno al santuario, che è un oggetto da piazzare (R33). Il
       piazzamento "aura attorno a uno spazio" fatto per Rampant Nail potrebbe servire anche qui.
+- [ ] **Emerso lavorando su R49 — Aria: la blast cresciuta non resta centrata su di te** (S): "affecting a small blast
+      area effect centered on you … the area becomes a medium blast. If you are damaged again, it becomes a large blast"
+      (p.178): la Small Blast va su di te da sola, ma "Medium Blast" e "Large Blast" si piazzano a mano (il "centered on
+      you" è solo nella prima frase). Lo stesso per le aree centrate su pit / oggetti (Holy Talent I, Pandaemonium
+      combo, Helix Heel), che restano a mano finché pit e oggetti non sono sulla mappa (R33).
 
 ---
 

@@ -1,5 +1,34 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aree di Slay / Finishing Blow e aree "centered on them" sulla mappa (versione 1.15.51)
+
+### Round di debug del 16 ottobre, punto R49
+
+- **Death** (Fool, p.150: "Finishing blow or Slay: Character explodes in a large blast area effect centered on them"):
+  "No way to easily place the large blast area effect from slay/finishing blow" → il bottone area leggeva i testi di
+  talenti, mastery, combo, Charge e Heroic, ma non i blocchi che scattano dall'attacco (Exceed, Crit, Collide, Slay,
+  Finishing Blow, Comeback); e una blast "centered on them" si piazzava a mano, entro il range dell'abilità (Death non
+  ne ha: andava messa accanto a te) → ora quei blocchi sono letti e Death offre "Slay / Finishing Blow: Large Blast
+  (target)" (stesso testo nei due blocchi, quindi una voce sola); un'area "centered on them / the character / your foe"
+  va da sola sul token bersagliato (T), "centered on you" su di te. Con un token grande si clicca uno dei suoi spazi;
+  senza un solo bersaglio c'è un avviso e la si piazza a mano. Il tiro d'attacco non la propone: non è l'area
+  dell'attacco.
+- Con gli stessi blocchi: Soul Shot ("Exceed / Finishing Blow: Large Blast (target)", p.158), Matsuri (Exceed, p.192:
+  prima non aveva il bottone area), Gust ("Collide: Burst 1 (target)", p.234), Massive Overhead (ora ha il bottone per
+  la Small Blast di Comeback / Heroic).
+- "Centered on" letto anche dove c'era già un bottone: God Hand (mastery e combo), Ace (Talent I), Pyroclast, Chastise
+  (combo), Midas (Talent II), Exorcism (Talent II), Nocturne, Symphony, Quaking Palm (Charge) vanno sul bersaglio;
+  Aria e Dragon Dive su di te. Restano a mano le aree centrate su pit, oggetti o cose ("all pits in the area explode …
+  centered on them" di Holy e Pandaemonium, Helix Heel, Geyser "centered on it").
+- **"burst N (target)" nel testo**: era letto come un Burst N semplice (la parentesi chiudeva la parola) → ora l'Heroic
+  di Land Waster è davvero "Burst 2 (target)" e BOULDER KICK di Dragon Dive "Burst 1 (target)".
+- **Elden Rune** (p.209, ARKENRUNE "extend to a small blast area") ed **Eye of the Storm** (p.236): da verificare sulla
+  build di Maar. Elden Rune offre già "Mastery: Small Blast" con la mastery sbloccata (si clicca lo spazio del PG);
+  la mastery GREAT AEONCLOUD di Eye of the Storm crea un oggetto (resta in R33), e la Large Blast di AEONCLOUD è già
+  offerta quando l'Infuse è armato (R47).
+- Confronto prima/dopo su tutte le abilità del compendio Jobs (copia del pack, tutti i talenti e la mastery attivi):
+  cambiano solo quelle elencate qui sopra. Solo codice, vale per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect (versione 1.15.50)
 
 ### Round di debug del 16 ottobre, punto R48
