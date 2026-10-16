@@ -384,6 +384,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       il libro (p.210-211) "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then
       destroy all Aethershards activated this way and gain 1 Aether". Il codice di R33a3 legge tutte e due le forme;
       ripristinare il testo del libro (pack + migrazione sulle copie).
+- [ ] **Emerso lavorando su R33b — clic destro durante la scelta di uno spazio degli oggetti** (S): `pickSpace` di
+      `map-objects.mjs` (Teleport here, Erupt, Move dello shard) chiude la scelta col clic destro ma non ferma l'evento: sopra
+      un token potrebbe aprirsi anche l'HUD del token. Il picker nuovo di `terrain-spaces.mjs` lo ferma (`stopPropagation`).
 
 ---
 
@@ -717,7 +720,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (Comet "enter or exit", Megamushroom).
       - Bale Portal: foe "shoved into portals" (spinti dentro un portale) e il "once a round" non sono contati.
       - Comet "or start your turn there": a inizio turno solo una card, non la domanda.
-- [ ] **R33b. Spazi di terreno** (L)
+- [x] **R33b. Spazi di terreno** (L) (FATTO il 16 ottobre 2026, versione 1.15.69: chip colorati sull'abilità / tratto
+      letti dal testo ("Pit · 2", "Dangerous · 3", "Mote · 4", "Area +2"), si cliccano gli spazi sulla mappa; ogni spazio è un
+      template di una casella col flag `terrain` (riusabile da R33c / R33d); tasto destro sul chip o "Remove all" li toglie;
+      domanda dei 2 piercing (senza armatura né vigor, una volta a turno) entrando / uscendo dal dangerous; promemoria di
+      mote, mine ed Elden Rune; Blood Grove estende l'area; dangerous sotto i foe del Volcanic Geyser. Il resto in R33b2.
+      Solo codice.)
       Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
       (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non
       viene riusata. Copre: Symphony (motes non adiacenti), Eclipse (brand + dangerous sotto i foe; Talent I pit), Polaris
@@ -725,6 +733,25 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (afterimage), Apex Talent I, Morrigan Talent II, Blitz Talent I, Pyroclast Talent I e mastery (pit), Bio charge,
       Deepwrath (pit sotto il marcato; Darktide), Rime / Magnarime / Dagon (pit), Tsunami Talent I, Terraforming (pit,
       difficult), Geo charge (pit), Blood Grove Talent II / mastery (spazi aggiunti all'area).
+- [ ] **R33b2. Spazi di terreno: quello che resta dopo R33b** (M/L)
+      Oggi gli spazi si segnano a mano dal chip e il dangerous / i segni con una frase "enters" fanno una domanda o una card.
+      Restano a mano:
+      - Deepwrath (p.235): "create a watery pit under them at the start of their turn" (pit automatico a inizio turno del
+        marcato) e "drag them under … placing them in the space of any other pit in range 3"; DARKTIDE "Marked allies are
+        immune to dangerous terrain, and marked foes take +1 more damage from dangerous terrain" (la domanda dei 2 danni
+        non guarda il mark).
+      - Eclipse (p.203): a inizio del turno lento, controllo dello spazio del brand (personaggio sopra: 2 divine e sealed;
+        nessuno: large blast centrata su quello spazio e dangerous sotto ogni foe); Talent I pit al centro dopo l'esplosione.
+      - Symphony (p.178): la mote che esplode (small blast centrata sul personaggio, pit sotto il foe, tolta da sola) e il
+        conteggio delle blessing tolte; Party Favor (p.151): l'esplosione della mine (medium blast, gamble, mine distrutta).
+      - Polaris (p.202): il gamble a fine turno sugli spazi scelti (blast per numero di spazi, poi rimuoverli) e Talent II
+        (difficult / pit / meteor sotto il centro); Implode: l'attivazione a inizio del turno lento sullo spazio scelto.
+      - Pit: "Pits count as one level lower of elevation than their base space" (p.89) non cambia l'elevazione del token;
+        aree centrate su un pit (Holy Talent I, Pandaemonium) ancora a mano. Difficult: il +1 movimento per uscire non è contato.
+      - Elden Rune: "lasts until the end of the scene" non la toglie da sola; Gates of Hell Flash Step (togliere un
+        afterimage libero e piazzarsi lì) senza bottone; Bio Talent I / II (pit, oggetti e difficult che diventano dangerous;
+        2 piercing a chi è nel / accanto al dangerous) e Terraforming "Remove any difficult or dangerous terrain" a mano.
+      - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come gli oggetti, R33a5).
 - [ ] **R33c. Aree terrain effect che durano, si muovono o crescono** (L)
       Partendo dalle aree "lasting" che ci sono già: muovere un'area già piazzata (Tsunami 4 spazi verso un bordo a
       inizio turno, Stormlash 2; Waterspout 1 spazio, Hurricane small blast), farla crescere (Bifröst Talent II +2

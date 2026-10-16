@@ -37,6 +37,7 @@ import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
+import { terrainTurnStart } from "../canvas/terrain-spaces.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -796,9 +797,9 @@ export function registerCombatHooks() {
          * the active GM applies it through the same shared code path. */
         const actor = await fromUuid(data.actorUuid ?? "");
         if (!actor) return;
-        const { applyArmor = false, half = false, halfReason = "" } = data.options ?? {};
+        const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false } = data.options ?? {};
         await applyDamageToActor(actor, data.amount, {
-          applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60),
+          applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60), ignoreVigor: !!ignoreVigor,
           chatConfirm: true,
           allowRelay:  false,
         });
@@ -900,6 +901,9 @@ export function registerCombatHooks() {
           // Objects around them at the start of the turn: on a geyser, by the Thrown Weapon, AETHERSHIFT (R33a4).
           try { await objectTurnBoundary(current, "start"); }
           catch (err) { console.warn("[ICON | IconCombat] object turn reminders (start) failed", err); }
+          // Named terrain marks they start their turn on: Symphony's motes, "or starts their turn there" (R33b).
+          try { await terrainTurnStart(current); }
+          catch (err) { console.warn("[ICON | IconCombat] terrain turn reminders (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

@@ -745,6 +745,7 @@ export async function eruptObject(actor) {
   });
   if (choice.place) {
     // One click per character, while the geyser is still there (its space isn't free).
+    const landed = [];
     for (const t of placed) {
       const ttd = t.document;
       const max = isHostile(ttd) ? base : allyMax;
@@ -753,6 +754,18 @@ export async function eruptObject(actor) {
       if (!spots.length) { ui.notifications.warn(`No free space up to ${max} away for ${ttd.name}: place them by hand.`); continue; }
       const cell = await pickSpace(spots, `Place ${ttd.name} up to ${max} space${max > 1 ? "s" : ""} away (${info.name}).`);
       if (cell) await moveTokensFor(td, [moveUpdate(ttd, cell)]);
+      landed.push({ td: ttd, cell: cell ?? null });
+    }
+    // R33b: Volcanic Geyser "creates dangerous terrain under foes" (p.234) — a dangerous space under each foe placed,
+    // where it landed (a relayed move may not have arrived yet), after asking.
+    const foes = landed.filter(l => isHostile(l.td));
+    if (info.erupt.dangerous && foes.length) {
+      try {
+        const { offerTerrainUnder } = await import("./terrain-spaces.mjs");
+        const creator = game.actors?.get(mapObjectFlag(actor)?.creatorId) ?? null;
+        await offerTerrainUnder(foes, { kind: "dangerous", label: "Dangerous" },
+          { actor: creator, abilityName: info.name, itemId: mapObjectFlag(actor)?.itemId ?? "", title: `${info.name} — dangerous terrain` });
+      } catch (err) { console.error("ICON 1.5 | dangerous terrain under foes failed", err); }
     }
   } else {
     // The characters to place are targeted, so the player can see them.

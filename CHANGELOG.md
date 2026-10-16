@@ -1,5 +1,54 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Spazi di terreno: pit, dangerous, difficult e segni con nome (versione 1.15.69)
+
+### Round di debug del 15 ottobre, punto R33b
+
+- **Pit e terreno solo a mano**: tante abilità creano singoli spazi di terreno ("Create two pits", Terraforming; "creating
+  2 spaces of dangerous terrain", Pyroclast Talent I; "create a watery pit under them", Deepwrath p.235; "Create a space
+  of dangerous terrain … under every foe", Eclipse e Bio) e bisognava disegnarli con lo strumento dei template di
+  Foundry → niente li leggeva → ora la scheda del PG mostra un **chip colorato** sull'abilità e sul tratto ("Pit · 2",
+  "Dangerous · 3", "Difficult · 1", "Pit · any" quando è uno per ogni personaggio): un clic, poi si cliccano sulla mappa
+  gli spazi (un secondo clic ne toglie uno, Invio o clic destro finisce prima, Esc annulla). Ogni spazio è un template
+  di una casella col suo colore (marrone pit, rosso dangerous, verde oliva difficult, viola i segni) e l'etichetta
+  "Pit · Rime"; resta finché non lo si toglie (p.96: i terrain effect restano anche se chi li crea è sconfitto). Talenti
+  solo se scelti, mastery solo se sbloccata, versioni Infuse (DAGON di Rime, PYROTIC di Pyre) solo con l'Infuse armato,
+  che viene consumato. "The pit is also dangerous terrain" (Eclipse Talent I, MAGMOTIC di Pyroclast) dà un "Dangerous
+  pit".
+- **Segni con nome**: le motes di Symphony ("create pulsing motes … None can be placed adjacent to each other", p.178:
+  chip "Mote · 4", spazi liberi e non adiacenti), la mine di Party Favor (p.151), l'Elden Rune ("Inscribe an Elden Rune
+  on the space underneath you", p.209: messa da sola sotto il token), l'afterimage di Flash Step (Gates of Hell p.129,
+  "dangerous terrain, but only for foes"), il brand di Eclipse (p.203, anche dangerous), lo spazio scelto di Polaris
+  (p.202) e il centro di Implode ("Choose a space in range") col nome dell'abilità.
+- **Togliere gli spazi**: tasto destro sul chip li toglie tutti (dopo una domanda); la card in chat del piazzamento ha
+  "Remove all"; sul layer dei template di Foundry si cancellano anche uno per uno con Canc. "lasts until this ability is
+  used again" chiede "Replace / Keep both" come per gli oggetti.
+- **Dangerous terrain**: "Entering or exiting a dangerous terrain space causes a character to take 2 piercing damage,
+  (ignoring armor and vigor). Characters can only take this damage once a turn" (p.89) → nessuno lo ricordava → ora chi
+  trascina un personaggio dentro o fuori da uno spazio dangerous riceve la domanda "Take 2 damage / Not this time";
+  "Take 2 damage" toglie 2 hp senza armatura né vigor, con la nota "Damage Applied" (nuova opzione `ignoreVigor` di
+  `applyDamageToActor`, passata anche al GM per chi non possiede l'attore). Una domanda sola per turno di combattimento
+  per personaggio; "only for foes" solo per i foe. Mai danno senza il clic.
+- **Promemoria dei segni**: entrando nello spazio di una mote o della mine esce una card con la frase del libro ("Any
+  character that enters an affected space … detonates the mote …", "When any character enters the space, the mine
+  explodes …") e il bottone Remove; l'Elden Rune solo per un foe che entra o esce ("A foe can scrub out an Elden Rune by
+  entering or exiting its space"). A inizio turno di chi sta su una mote ("or starts their turn there") la card la manda
+  il GM attivo.
+- **Blood Grove**: "extend the area by 2 spaces, adding to its total area on any edge" (Talent II) e "extend the area by 1
+  space … adjacent to the area" (HUNGRY GROVE, p.186) → chip "Area +2" / "Area +1": con l'area già piazzata col suo
+  bottone, si cliccano gli spazi adiacenti e si aggiungono a quel template.
+- **Volcanic Geyser**: "creates dangerous terrain under foes" (p.234), lasciato da R33a4 → ora, dopo Erupt con i
+  personaggi ripiazzati a clic, una domanda segna uno spazio dangerous sotto ogni foe dove è atterrato.
+- Scelte mie: template e non Region (i giocatori possono creare template, le Region solo il GM; il disegno a caselle, il
+  "lasting" e il seguire un token ci sono già); il flag `terrain` sul template (tipo, nome, dangerous / foesOnly, frase
+  "enters") vale per qualunque template, di una casella o di tante: R33c (aree che durano e si muovono) e R33d (segni che
+  seguono un personaggio, con `followTokenId`) lo riusano e hanno già il controllo al movimento; si guardano solo la
+  partenza e l'arrivo di un movimento, come per gli oggetti; niente controllo del range (il testo lo dice nella
+  didascalia del chip). Trovati scorrendo tutto il pack jobs con la stessa lettura: 66 spazi in 44 abilità, anche Massive
+  Overhead, Valkyrie, Cryo, Chaos Tarot, Dropkick, Blackstar, Death Blossom, Takedown, Heave-Ho, Harrow, Holy (combo),
+  Eye of the Storm. Nessun pack, nessuna migrazione. Il resto (pit a inizio turno di Deepwrath, controllo del brand di
+  Eclipse, esplosioni di mote / mine, elevazione −1 dei pit, costo del difficult, gamble di Polaris…) è in TODO, R33b2.
+
 ## 16 ottobre 2026 — Oggetti e movimento: portali, arma lanciata, eruzione guidata, pile con personaggi sopra (versione 1.15.68)
 
 ### Round di debug del 15 ottobre, punto R33a4

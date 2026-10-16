@@ -444,6 +444,13 @@
                 <i class="fa-solid fa-cube"></i> {{ob.label}}
               </span>
             {{/each}}
+            {{#each trait.spaces as |sp|}}
+              <span class="icon-summon-chip icon-space-chip icon-space-chip--{{sp.kind}}" role="button"
+                    data-action="placeTerrainSpaces" data-item-id="{{trait.id}}" data-terrain-index="{{sp.index}}"
+                    title="{{sp.title}}">
+                <i class="fa-solid {{sp.icon}}"></i> {{sp.label}}
+              </span>
+            {{/each}}
             {{#if ../isEditable}}
               <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                       data-action="removeItem" data-item-id="{{trait.id}}"
@@ -677,6 +684,13 @@
                   data-map-object-index="{{ob.index}}" data-item-id="{{ab.id}}" data-object-name="{{ob.name}}"
                   title="Drag onto the map to place a height {{ob.height}} {{ob.name}} object{{#if ob.source}} ({{ob.source}}){{/if}}{{#if ob.aura}}; its Aura {{ob.aura}} follows it{{/if}}. Objects can be stacked up to height 3 (p.95); open the object to change its height.">
               <i class="fa-solid fa-cube"></i> {{ob.label}}
+            </span>
+          {{/each}}
+          {{#each ab.spaces as |sp|}}
+            <span class="icon-summon-chip icon-space-chip icon-space-chip--{{sp.kind}}" role="button"
+                  data-action="placeTerrainSpaces" data-item-id="{{ab.id}}" data-terrain-index="{{sp.index}}"
+                  title="{{sp.title}}">
+              <i class="fa-solid {{sp.icon}}"></i> {{sp.label}}
             </span>
           {{/each}}
           {{#if ab.canStance}}

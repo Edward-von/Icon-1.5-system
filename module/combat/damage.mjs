@@ -184,6 +184,8 @@ export async function applyDamagePipeline(attacker, target, {
  * @param {string}  [opts.halfReason=""]     Why it was halved ("Cover", "Resistance") — shown in the chat note.
  * @param {boolean} [opts.chatConfirm=false] Post a "Damage Applied" chat note.
  * @param {boolean} [opts.allowRelay=true]   Relay to GM when caller lacks ownership.
+ * @param {boolean} [opts.ignoreVigor=false] Vigor absorbs nothing: dangerous terrain "2 piercing damage, (ignoring
+ *                                           armor and vigor)" (p.89, R33b).
  * @returns {Promise<object|null>} Breakdown, or null for no-ops/denied calls:
  *   { ok, relayed, isMob, applied, armorBlocked, vigorAbsorbed,
  *     hpBefore, hpAfter, hpLost, woundApplied, fallen, mob }
@@ -194,6 +196,7 @@ export async function applyDamageToActor(actor, amount, {
   halfReason  = "",
   chatConfirm = false,
   allowRelay  = true,
+  ignoreVigor = false,
 } = {}) {
   amount = Math.max(0, Number(amount) || 0);
   if (!actor) return null;
@@ -219,7 +222,7 @@ export async function applyDamageToActor(actor, amount, {
       type:      "applyDamage",
       actorUuid: actor.uuid,
       amount,
-      options:   { applyArmor, half, halfReason },
+      options:   { applyArmor, half, halfReason, ignoreVigor },
     });
     ui.notifications.info(`Damage sent to the GM to apply to "${actor.name}".`);
     return { ...zero, relayed: true };
@@ -264,7 +267,7 @@ export async function applyDamageToActor(actor, amount, {
   const applied      = half ? Math.ceil(afterArmor / 2) : afterArmor;
 
   /* --- Vigor absorbs first, then HP — one atomic update --- */
-  const curVigor      = cont.vigor?.value ?? 0;
+  const curVigor      = ignoreVigor ? 0 : (cont.vigor?.value ?? 0);
   const vigorAbsorbed = Math.min(Math.max(0, curVigor), applied);
   const remaining     = applied - vigorAbsorbed;
   const hpBefore      = cont.hp?.value ?? 0;

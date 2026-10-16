@@ -23,6 +23,7 @@ import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
 import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
+import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
@@ -203,6 +204,7 @@ export class IconSheet extends BaseActorSheet {
       abilityDamageRoll:  IconSheet.#onAbilityDamageRoll,
       traitShowInChat:    IconSheet.#onTraitShowInChat,
       traitPlaceArea:     IconSheet.#onTraitPlaceArea,
+      placeTerrainSpaces: IconSheet.#onPlaceTerrainSpaces,
       relicShowInChat:    IconSheet.#onRelicShowInChat,
       trophyShowInChat:   IconSheet.#onTrophyShowInChat,
       trophyUse:          IconSheet.#onTrophyUse,
@@ -458,6 +460,8 @@ export class IconSheet extends BaseActorSheet {
         summons:     summonsForAbility(s, s.jobName),
         // Objects this ability puts on the map (R33a): draggable chips too
         objects:     objectChips(a),
+        // Terrain spaces it marks (R33b): pits, dangerous / difficult terrain, motes, mines, runes…
+        spaces:      terrainChips(a),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
         infusions,
         marks:       _abilityMarks(actor.id, a.id, _comboMark(a.system), _altComboMark(a.system)),
@@ -774,6 +778,7 @@ export class IconSheet extends BaseActorSheet {
         // Master, Selkie, Bound Spirit, Cheap Trick); not while locked.
         summons:             chapter > currentChapter ? [] : summonsForTrait(t.system, t.system?.jobName),
         objects:             chapter > currentChapter ? [] : objectChips(t),
+        spaces:              chapter > currentChapter ? [] : terrainChips(t),
         quick:               quickFor(t),
         powerDie:            powerDieView(t.system),
         id:                  t.id,
@@ -1019,6 +1024,17 @@ export class IconSheet extends BaseActorSheet {
       });
       slot.addEventListener("dblclick", ev => {
         if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+      });
+    });
+
+    // Terrain space chips (R33b): right-click removes that chip's spaces from the scene. Guarded per element.
+    html.querySelectorAll("[data-terrain-index]").forEach(el => {
+      if (el.dataset.iconTerrainBound) return;
+      el.dataset.iconTerrainBound = "true";
+      el.addEventListener("contextmenu", ev => {
+        ev.preventDefault(); ev.stopPropagation();
+        removeTerrainOfChip(this.document, el.dataset.itemId, el.dataset.terrainIndex)
+          .catch(err => console.warn("[ICON | IconSheet] removing terrain spaces failed", err));
       });
     });
 
@@ -2410,6 +2426,16 @@ export class IconSheet extends BaseActorSheet {
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
     await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, lasting: this.#areaLasts(ab), text: this.#auraText(ab) });
+  }
+
+  /**
+   * Terrain space chip (R33b): click the spaces the ability / trait marks on the map
+   * ("Pit · 2", "Mote · 4", "Area +2"). Right-click on the chip removes them (_onRender).
+   */
+  static async #onPlaceTerrainSpaces(event, target) {
+    event.stopPropagation();
+    _log(`placeTerrainSpaces — item ${target.dataset.itemId} #${target.dataset.terrainIndex}`);
+    await placeTerrainFromChip(this.document, target.dataset.itemId, target.dataset.terrainIndex);
   }
 
   /**

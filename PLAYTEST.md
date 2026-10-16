@@ -1656,6 +1656,54 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b — Spazi di terreno: pit, dangerous, difficult, segni con nome (16 ottobre 2026, versione 1.15.69)
+
+Setup: scena a griglia quadrata, GM + giocatore connessi, un foe (ostile) e un PG alleato sulla scena. PG: Geomancer con
+Terraforming, Stormbender con Rime (mastery MAGNARIME in una prova) e Deepwrath, Chanter con Symphony, Fool con Party Favor,
+Enochian con Elden Rune e Pyroclast (Talent I in una prova, mastery MAGMOTIC in un'altra), Demon Slayer con Gates of Hell
+(mastery sbloccata), Seer con Eclipse e Polaris, Harvester con Blood Grove (Talent II), Wright con Geyser. Solo JS, template
+e CSS: F5 dopo il deploy.
+
+- [ ] **Chip**: Terraforming mostra "Pit · 2" (marrone) e "Difficult · 3" (verde oliva); Pyroclast con Talent I "Dangerous · 2"
+      (rosso), con MAGMOTIC "Dangerous pit · 1"; Eclipse "Brand · 1" e "Dangerous · any"; Symphony "Mote · 4" e "Pit · 1";
+      Polaris "Polaris · 1", Implode "Implode · 1". Senza talento scelto / mastery bloccata i loro chip non ci sono. Mouse
+      sopra un chip → didascalia con la fonte, cosa fa e la frase del libro.
+- [ ] **Piazzare**: clic su "Pit · 2" → avviso "Click up to 2 spaces"; un clic illumina lo spazio, un secondo clic sullo stesso
+      lo toglie; al secondo spazio finisce da solo → due caselle marroni con "Pit · Terraforming", card "Terraforming: 2 ×
+      Pit" con "Remove all". "Dangerous · any": si clicca quanto serve, Invio o clic destro finisce; Esc → niente creato.
+      Clic destro durante la scelta su un token: non si apre l'HUD.
+- [ ] **Da giocatore**: stesso piazzamento con l'utente giocatore (proprietario del PG) → gli spazi compaiono anche per il GM.
+- [ ] **Togliere**: tasto destro sul chip → "Remove the 2 pit spaces of Terraforming?" → spariscono; "Remove all" sulla card →
+      spariscono, il bottone si spegne; layer dei template di Foundry → selezione di uno spazio e Canc → sparisce solo quello.
+      Un template normale (area d'attacco) non viene toccato.
+- [ ] **Restano**: gli spazi non spariscono all'inizio del turno successivo del PG (le aree d'attacco sì).
+- [ ] **Dangerous terrain**: trascina il foe dentro uno spazio dangerous → domanda "Dangerous terrain … Take 2 piercing
+      damage, ignoring armor and vigor?"; "Take 2 damage" → card "Damage Applied", 2 hp in meno anche col vigor pieno e
+      l'armatura. In combattimento, nello stesso turno, uscire o entrare in un altro spazio dangerous non chiede più; al turno
+      dopo chiede di nuovo. "Not this time" → niente danno. Da giocatore su un foe che non possiede: il danno passa dal GM.
+- [ ] **Only for foes**: Gates of Hell mastery → "Afterimage · 1" (solo spazi liberi: su un token → avviso). Un alleato che ci
+      entra: nessuna domanda; un foe: la domanda del dangerous.
+- [ ] **Mote**: Symphony → "Mote · 4": uno spazio accanto a una mote già messa → avviso "can't be adjacent"; su un token →
+      avviso "isn't free". Un personaggio trascinato su una mote → card "<nome> enters the Mote (Symphony)" con la frase
+      "Any character that enters an affected space … detonates the mote …" e Remove. Un personaggio che inizia il turno su una
+      mote → card "Start of <nome>'s turn" (una sola, dal GM).
+- [ ] **Mine**: Party Favor → "Mine · 1" su uno spazio libero; un personaggio ci entra → card con "When any character enters
+      the space, the mine explodes …" e la tabella del gamble; Remove la toglie.
+- [ ] **Elden Rune**: clic sul chip → la runa compare da sola sotto il token del PG, senza clic sulla mappa. Un alleato che ci
+      entra: niente; un foe che entra o esce → card "A foe can scrub out an Elden Rune …".
+- [ ] **Replace**: un'abilità con "lasts until this ability is used again" che crea spazi (se non ce n'è nessuna nel gruppo,
+      saltare) → al secondo uso "Replace / Keep both".
+- [ ] **Infuse**: Rime senza Infuse → nessun chip pit; Infuse 3 DAGON armato → "Pit · 1" (fonte "Dagon"); piazzato → l'Infuse
+      non è più armato. Con MAGNARIME sbloccata → "Pit · any".
+- [ ] **Blood Grove**: Talent II → chip "Area +2". Senza l'area sulla mappa → avviso "Place the area of Blood Grove first". Con
+      la medium blast piazzata: clic su uno spazio non adiacente → avviso; due spazi adiacenti (il secondo può essere accanto al
+      primo nuovo) → l'area cresce, card "the area grows by 2 spaces (11 in all)".
+- [ ] **Volcanic Geyser**: Erupt con "Place them now" e un foe nella medium blast → dopo averlo piazzato, domanda "Volcanic
+      Geyser — dangerous terrain: mark a dangerous space under <foe>?" → "Mark" → spazio rosso dove è atterrato, card con
+      Remove. Un alleato piazzato non lo riceve. Erupt senza "Place them now" → nessuna domanda.
+- [ ] **Tratto**: un tratto con uno spazio nel testo (se il PG ne ha uno) mostra il chip nella riga del tratto; tratto di un
+      capitolo non sbloccato → niente chip.
+
 ## R33a4 — Oggetti e movimento: Underway, Comet, Megamushroom, Geyser, pile con personaggi sopra, Aethershard (16 ottobre 2026, versione 1.15.68)
 
 Setup: come R33a3 (scena a griglia quadrata, GM + giocatore connessi). PG: Harvester con Underway (mastery Bale Portal

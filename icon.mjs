@@ -106,6 +106,7 @@ import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { registerMapObjectHooks } from "./module/canvas/map-objects.mjs";
+import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble } from "./module/combat/gamble.mjs";
@@ -251,6 +252,9 @@ Hooks.once("init", () => {
 
   // ---- Objects a PC's ability / trait creates, dragged from the sheet onto the canvas (R33a) ----
   registerMapObjectHooks();
+
+  // ---- Terrain spaces a PC's ability / trait marks: pits, dangerous / difficult terrain, named marks (R33b) ----
+  registerTerrainSpaceHooks();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();

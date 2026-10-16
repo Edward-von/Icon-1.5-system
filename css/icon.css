@@ -2862,6 +2862,13 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-summon-chip:hover { background: rgba(80,48,160,.28); }
 .icon-summon-chip:active { cursor: grabbing; }
 .icon-summon-chip img { border-radius: 50%; background: #000; }
+/* Terrain space chips (R33b): click to mark spaces on the map, right-click removes them. */
+.icon-summon-chip.icon-space-chip { cursor: pointer; border-style: solid; }
+.icon-summon-chip.icon-space-chip--pit       { border-color: #8a6a3a; background: rgba(107,79,42,.22); }
+.icon-summon-chip.icon-space-chip--dangerous { border-color: #d9480f; background: rgba(217,72,15,.16); }
+.icon-summon-chip.icon-space-chip--difficult { border-color: #8f9a2c; background: rgba(143,154,44,.16); }
+.icon-summon-chip.icon-space-chip--mark      { border-color: #7b5fc9; background: rgba(123,95,201,.16); }
+.icon-summon-chip.icon-space-chip--extend    { border-color: var(--ic-gold-dim); }
 /* The stance a target is in, on the roll dialogs' target rows. */
 .icon-roll-target__stance { color: var(--ic-gold-bright); white-space: nowrap; }
 .icon-mark-chip {
