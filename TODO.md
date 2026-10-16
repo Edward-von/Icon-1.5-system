@@ -70,7 +70,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Aura 2; Death Sentence Line 4; Split Heaven and Hell Line 5; Curtain Call Line; Cataclysm Line larga 3 o Medium
       Blast, ovunque sulla mappa), piazzata come per le abilità, con la durata dell'aura letta dal testo. Gli Inflict
       c'erano già sulla card di "Use Limit Break". Gli Infuse sono una causa diversa → R38b.)
-- [ ] **R38b. Limit Break: versioni Infuse** (M, bug, alta priorità; diviso da R38)
+- [x] **R38b. Limit Break: versioni Infuse** (M, bug, alta priorità; diviso da R38)
       Gigaflare: "Limit break cannot currently use its infused variant, Tetraflare" ("Infuse 6: TETRAFLARE — Deal
       [D]+fray twice instead"; l'Ultimate METEOR, "Infuse 8: 6 resolve. Deal [D]+fray four times instead", con il 999
       divine damage dello "Special effect"); Gran Levincross: "Slay or Infuse 3: RAGNARÖK" e l'Ultimate "GÖTTERDÄMMERUNG
@@ -78,6 +78,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       abilità (spesa di Aether, versione armata) e il Damage Roll di R37 non legge le righe "Infuse N:". Da fare: scelta
       della versione Infuse sul Limit Break (Aether speso, testo della versione usata nella card, Instances "twice" /
       "four times" nel Damage Roll).
+      (FATTO il 16 ottobre 2026, versione 1.15.39: il riquadro Limit Break ha un bottone Infuse per versione, come le
+      abilità (Aether speso, ricliccare lo restituisce; l'Ultimate dal capitolo 3). Armata, "Use Limit Break" ne posta
+      il testo e ne paga la Resolve (Meteor 6); il Damage Roll usa il suo danno "instead" (Tetraflare Instances 2,
+      Meteor 4) e offre in Other Götterdämmerung (armata), Ragnarök (sempre, c'è lo Slay) e il 999 divine del Special
+      effect di Meteor. Meteor costa 8 Aether ma il massimo è 6: vedi Emerso lavorando.)
 - [ ] **R39. Limit Break: formattazione** (S/M, bug, alta priorità)
       "some of the formatting on them is off". Il documento non dice quali. Guardare tutti i Limit Break (card e scheda)
       e sistemare quelli con blocchi non etichettati o sullo stesso paragrafo (es. Gigaflare ha "Divine, Unerring, True
@@ -212,6 +217,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (Colossus, "50% of their max hp as divine damage") e Split Heaven and Hell (Demon Slayer, "100% / 50% / 25% of
       max hp") non hanno un danno tirabile; Gigantas Crusher propone solo il "divine fray damage" dei Legend. Valutare
       un Apply che toglie la percentuale degli hp massimi del bersaglio.
+- [ ] **Emerso lavorando su R38b — Meteor costa più Aether del massimo** (S, da decidere): "Infuse 8: METEOR" (p.208)
+      chiede 8 Aether, ma il sistema tiene l'Aether al massimo a 6 (d6, p.204): con l'Aether normale Meteor non si arma
+      mai, resta solo il Special effect (pagare con la vita). Verificare sul manuale se qualcosa porta l'Aether oltre 6.
+- [ ] **Emerso lavorando su R38b — l'infusione armata non si toglie a fine combattimento** (S): il commento di
+      `helpers/infuse.mjs` dice che l'infusione armata si azzera a fine combattimento con l'Aether, ma `IconCombat`
+      azzera solo l'Aether, non `flags.icon-system.infused` (e nemmeno dopo il tiro: `clearInfusion` non è chiamata da
+      nessuno). Un'infusione armata resta "armed" anche nel combattimento dopo, per abilità e Limit Break.
 
 ---
 

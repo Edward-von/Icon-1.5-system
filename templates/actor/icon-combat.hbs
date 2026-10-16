@@ -812,7 +812,7 @@
         <div class="icon-limit-break__header">
           <strong>{{limitBreakItem.name}}</strong>
           <span class="icon-badge">{{limitBreakCost}}</span>
-          <span class="icon-badge icon-badge--resolve">{{limitBreakItem.system.resolveCost}} Resolve</span>
+          <span class="icon-badge icon-badge--resolve">{{limitBreakResolve}} Resolve</span>
           {{#if isEditable}}
             <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner"
                     data-action="removeItem" data-item-id="{{limitBreakItem.id}}"
@@ -836,6 +836,14 @@
               <i class="fa-solid fa-vector-square"></i> {{limitBreakArea}}
             </button>
           {{/if}}
+          {{!-- Infuse versions (Wright, p.117): spend the Aether to arm one; Use Limit Break and the Damage Roll then use it. --}}
+          {{#each limitBreakInfusions as |inf|}}
+            <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
+                    data-action="limitBreakInfuse" data-label="{{inf.label}}"
+                    title="{{#if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}: {{inf.text}} Aether now: {{inf.aether}}">
+              <i class="fa-solid fa-wand-sparkles"></i> {{#if inf.slay}}Slay or {{/if}}{{inf.label}}{{#if inf.name}} — {{inf.name}}{{/if}}{{#if inf.armed}} — armed{{/if}}
+            </button>
+          {{/each}}
         {{/if}}
       </div>
     {{else}}

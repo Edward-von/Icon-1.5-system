@@ -52,6 +52,49 @@ export function masteryInfusion(system) {
   return [{ label: `Infuse ${m[2].toUpperCase()} (Mastery)`, text: `${m[1].trim().toUpperCase()} — ${m[3]}` }];
 }
 
+/**
+ * The Infuse versions of a Limit Break, as Infuse blocks. Its effect is one
+ * text block with the versions written inline: "Infuse 6: TETRAFLARE — Deal
+ * [D]+fray twice instead." (Gigaflare p.208), "Slay or Infuse 3: RAGNARÖK —
+ * After this ability resolves…" (Gran Levincross); the Ultimate (chapter 3,
+ * p.113) puts the name first: "METEOR — Infuse 8: 6 resolve. Deal [D]+fray
+ * four times instead.", "GÖTTERDÄMMERUNG — Infuse 6: …".
+ * Each block: `label` "Infuse N", `text` "NAME — rest" (read by infuseName),
+ * `body` the rest alone, `source` "Limit Break" / "Ultimate", `slay` when Slay
+ * also triggers it, `resolveCost` when the version names its own ("6 resolve").
+ * @param {object} system  the limit-break item's system data
+ * @param {{ultimate?: boolean}} opts  ultimate unlocked (chapter 3)
+ */
+export function limitBreakInfusions(system, { ultimate = false } = {}) {
+  const plain = (t) => String(t ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const CAPS = "[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\\s]{2,}?";
+  const marker = new RegExp(`(?:\\b(${CAPS})\\s*[—–-]\\s*)?\\b([Ss]lay or )?[Ii]nfuse (\\d+|X)\\s*:\\s*`, "g");
+  const out = [];
+  for (const [source, raw] of [["Limit Break", system?.effect], ultimate ? ["Ultimate", system?.ultimate] : null].filter(Boolean)) {
+    const text = plain(raw);
+    const hits = [...text.matchAll(marker)];
+    hits.forEach((m, i) => {
+      const end = i + 1 < hits.length ? hits[i + 1].index : text.length;
+      let body = text.slice(m.index + m[0].length, end).trim();
+      let name = (m[1] ?? "").trim();
+      if (!name) {                                   // "TETRAFLARE — Deal …"
+        name = infuseName(body);
+        if (name) body = body.replace(/^[^—–-]*[—–-]\s*/, "");
+      }
+      const cost = /^x$/i.test(m[3]) ? "X" : m[3];
+      const resolve = /^(\d+)\s+resolve\b\.?\s*/i.exec(body);
+      out.push({
+        label: `Infuse ${cost}`,
+        text:  name ? `${name} — ${body}` : body,
+        body, name, source,
+        slay:  !!m[2],
+        resolveCost: resolve ? Number(resolve[1]) : null,
+      });
+    });
+  }
+  return out;
+}
+
 /** What the actor currently has infused, or null. */
 export function armedInfusion(actor) {
   const f = actor?.getFlag?.(NS, "infused");
@@ -80,6 +123,10 @@ export function infusionsOf(sections, actor, itemId) {
       mastery: /\(mastery\)/i.test(sec.label),       // the Mastery's bigger version (masteryInfusion)
       costLabel: sec.label.replace(/\s*\(mastery\)\s*$/i, ""),   // "Infuse 6", for the button
       aether:  actor?.system?.combat?.classResources?.aether?.value ?? 0,
+      // Limit Break blocks (limitBreakInfusions) carry these too.
+      source:  sec.source ?? "",
+      slay:    !!sec.slay,
+      resolveCost: sec.resolveCost ?? null,
     });
   }
   return out;

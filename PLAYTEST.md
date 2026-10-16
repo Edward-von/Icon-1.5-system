@@ -1656,6 +1656,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R38b — Versioni Infuse dei Limit Break (16 ottobre 2026, versione 1.15.39)
+
+Setup: PG Wright di prova in un combattimento, con Aether a 6 e Resolve a 8 (personale); uno alla volta i Limit Break
+di Enochian (Gigaflare) e Spellblade (Gran Levincross); un foe sulla mappa come bersaglio. Prima al capitolo 1-2,
+poi al capitolo 3.
+
+- [ ] **Gigaflare, capitolo 1-2**: tab Combat → riquadro Limit Break → c'è il bottone "Infuse 6 — TETRAFLARE" (non
+      quello di Meteor). Cliccandolo l'Aether scende da 6 a 0, in chat esce il messaggio "infuses Gigaflare —
+      TETRAFLARE" e il bottone dice "— armed". Ricliccandolo l'Aether torna a 6.
+- [ ] **Tetraflare nel danno**: con Tetraflare armato, Damage Roll → la finestra si intitola "Gigaflare — TETRAFLARE"
+      e su Hit ha Instances 2, Divine spuntato; la card applica il danno due volte. Senza infusione: Instances 1.
+- [ ] **Tetraflare nella card**: con Tetraflare armato, "Use Limit Break" spende 4 Resolve e la card dice "uses
+      Gigaflare — TETRAFLARE!" con sotto la riga "Infuse 6 — TETRAFLARE (Limit Break): Deal [D]+fray twice instead.".
+- [ ] **Meteor, capitolo 3**: compare anche "Infuse 8 — METEOR"; cliccandolo con 6 Aether esce l'avviso "needs 8
+      Aether" e niente viene speso. Damage Roll → in Other c'è "METEOR — Special effect" con 999 divine.
+- [ ] **Gran Levincross, capitolo 1-2**: bottone "Slay or Infuse 3 — RAGNARÖK"; Damage Roll → Other propone
+      "Slay or Infuse 3 — RAGNARÖK" ([D]+fray divine) anche senza infusione (lo attiva lo Slay).
+- [ ] **Götterdämmerung, capitolo 3**: bottone "Infuse 6 — GÖTTERDÄMMERUNG"; armato, Damage Roll → Other propone
+      anche 2[D]+fray divine; disarmato non lo propone. Il danno Hit resta [D]+fray (non dice "instead").
+- [ ] **Una sola infusione**: con Ragnarök armato, cliccare Götterdämmerung restituisce i 3 Aether di Ragnarök e
+      spende i 6 di Götterdämmerung (ne resta armata una sola).
+- [ ] **Abilità invariate**: i bottoni Infuse delle abilità del Wright (es. Pyre, "Infuse 3: PYROTIC") funzionano
+      come prima.
+
 ## R38 — Aura e aree dei Limit Break sulla mappa (16 ottobre 2026, versione 1.15.38)
 
 Setup: PG di prova con il token su una scena a griglia quadrata e, uno alla volta, i Limit Break di Freelancer

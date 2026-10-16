@@ -22,7 +22,7 @@ import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility } from "../../helpers/summons.mjs";
-import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion } from "../../helpers/infuse.mjs";
+import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
@@ -174,6 +174,7 @@ export class IconSheet extends BaseActorSheet {
       useLimitBreak: IconSheet.#onUseLimitBreak,
       limitBreakDamageRoll: IconSheet.#onLimitBreakDamageRoll,
       limitBreakPlaceArea:  IconSheet.#onLimitBreakPlaceArea,
+      limitBreakInfuse:     IconSheet.#onLimitBreakInfuse,
       addJob:        IconSheet.#onAddJob,
       removeJob:     IconSheet.#onRemoveJob,
       // Class resources (conditional by primary job class)
@@ -296,6 +297,10 @@ export class IconSheet extends BaseActorSheet {
     // ... and the ones with an aura or an area get the area button (Paradiso p.155: "You gain Aura 2").
     const lbAreas = context.limitBreakItem ? IconSheet.#limitBreakAreas(actor, context.limitBreakItem) : [];
     context.limitBreakArea = lbAreas.length === 1 ? lbAreas[0].label : lbAreas.length ? "Area" : "";
+    // Its Infuse versions (Wright, p.117: Gigaflare's Tetraflare, the Ultimate's Meteor), armed like an ability's.
+    context.limitBreakInfusions = context.limitBreakItem ? IconSheet.#limitBreakInfusionList(actor, context.limitBreakItem) : [];
+    context.limitBreakResolve = context.limitBreakItem
+      ? (context.limitBreakInfusions.find(i => i.armed)?.resolveCost ?? context.limitBreakItem.system.resolveCost) : 0;
 
     // AP / Mastery spending counters
     // Each owned ability costs 1 AP. Each unlocked talent costs +1 AP.
@@ -2863,9 +2868,47 @@ export class IconSheet extends BaseActorSheet {
     await this.document.deleteEmbeddedDocuments("Item", [itemId]);
   }
 
-  /** Damage of the limit break (effect, and the ultimate from chapter 3, p.113). */
+  /**
+   * Damage of the limit break (effect, and the ultimate from chapter 3, p.113),
+   * with the armed Infuse version of it, if any (Tetraflare: "twice instead").
+   */
   static #limitBreakDamage(actor, lb) {
-    return parseLimitBreakDamage(lb.system, { ultimate: (actor.system.combat?.chapter ?? 1) >= 3 });
+    const armed = armedInfusion(actor);
+    return parseLimitBreakDamage(lb.system, {
+      ultimate: (actor.system.combat?.chapter ?? 1) >= 3,
+      infused:  armed?.itemId === lb.id ? armed.label : null,
+    });
+  }
+
+  /** The limit break's Infuse versions, ready for the panel (the Ultimate's from chapter 3). */
+  static #limitBreakInfusionList(actor, lb) {
+    const ultimate = (actor.system.combat?.chapter ?? 1) >= 3;
+    return infusionsOf(limitBreakInfusions(lb.system, { ultimate }), actor, lb.id);
+  }
+
+  /**
+   * Infuse the limit break: spend the Aether and arm that version (p.117), as
+   * an ability's Infuse button does. Pressing the armed one again gives the
+   * Aether back. "Use Limit Break" then posts that version's text and pays its
+   * resolve (Meteor: "6 resolve"), and the Damage Roll uses its damage.
+   */
+  static async #onLimitBreakInfuse(event, target) {
+    event?.stopPropagation?.();
+    const lb = this.document.items.find(i => i.type === "limit-break");
+    if (!lb) return;
+    const label = target.dataset.label ?? "";
+    const armed = armedInfusion(this.document);
+    if (armed && armed.itemId === lb.id && armed.label === label) {
+      await cancelInfusion(this.document);
+      ui.notifications.info(`${lb.name}: infusion cancelled, Aether returned.`);
+      return;
+    }
+    const infusion = IconSheet.#limitBreakInfusionList(this.document, lb).find(i => i.label === label);
+    if (!infusion) return;
+    // Only one infuse effect at a time: a different one is refunded first.
+    if (armed) await cancelInfusion(this.document);
+    _log(`limitBreakInfuse — "${lb.name}" | ${infusion.label} ${infusion.name}`);
+    await armInfusion(this.document, lb, infusion);
   }
 
   /**
@@ -2882,8 +2925,10 @@ export class IconSheet extends BaseActorSheet {
     _log(`limitBreakDamageRoll — "${lb.name}" | parsed:`, parsed);
     if (!parsed.dealsDamage) return ui.notifications.warn(`"${lb.name}" does not deal damage.`);
     const combat = this.document.system.combat;
+    // The armed Infuse version names the roll ("Gigaflare — TETRAFLARE").
+    const name = parsed.version?.name ? `${lb.name} — ${parsed.version.name}` : lb.name;
     const ab = {
-      name: lb.name, cost: abilityCostLabel(lb.system.cost ?? ""),
+      name, cost: abilityCostLabel(lb.system.cost ?? ""),
       tags: resolveAbilityTags(lb.system), parsed, parsedCombo: null,
       isAttack: parsed.isAttack, isAutoHit: parsed.isAutoHit, dealsDamage: true,
     };
@@ -2894,7 +2939,7 @@ export class IconSheet extends BaseActorSheet {
       outcome:     mods.outcome,
       damagedie:   combat.damagedie,
       fray:        combat.fray,
-      abilityName: lb.name,
+      abilityName: name,
       bonusDice:   mods.bonusDice,
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
@@ -2977,7 +3022,11 @@ export class IconSheet extends BaseActorSheet {
   static async #onUseLimitBreak(event, target) {
     const lb = this.document.items.find(i => i.type === "limit-break");
     if (!lb) { _log(`useLimitBreak — BLOCKED: no limit-break item`); return ui.notifications.warn("No Limit Break equipped."); }
-    const cost    = lb.system.resolveCost;
+    // The armed Infuse version of it (Tetraflare, Meteor) is the one used: its
+    // text goes on the card, and its own resolve cost replaces the base one
+    // (Meteor: "Infuse 8: 6 resolve").
+    const infusion = IconSheet.#limitBreakInfusionList(this.document, lb).find(i => i.armed) ?? null;
+    const cost    = infusion?.resolveCost ?? lb.system.resolveCost;
     const resolve = this.document.system.combat.resolve;
     const total   = resolve.personal + resolve.party;
     _log(`useLimitBreak — actor: "${this.document.name}" | lb: "${lb.name}" | cost: ${cost} | resolve: ${total} (personal: ${resolve.personal}, party: ${resolve.party})`);
@@ -3036,8 +3085,12 @@ export class IconSheet extends BaseActorSheet {
     const spent = [personalSpend ? `${personalSpend} personal` : "", partySpend ? `${partySpend} party` : ""].filter(Boolean).join(" + ");
     // The statuses the limit break inflicts or grants get their buttons, like an
     // ability card (Mock: slashed+, weakened+, hatred+ "until the end of their next turn").
-    const statusHtml = statusBlockHtml(parseInflictedStatuses(lb.system.effect ?? "", { sourceName: this.document.name, label: "Effect" }), { source: this.document, abilityName: lb.name });
-    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(lb.name)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}${statusHtml}` });
+    const statusHtml = statusBlockHtml(parseInflictedStatuses(`${lb.system.effect ?? ""} ${infusion?.text ?? ""}`, { sourceName: this.document.name, label: "Effect" }), { source: this.document, abilityName: lb.name });
+    const infuseHtml = infusion
+      ? `<div class="icon-chat-card__desc"><strong><i class="fa-solid fa-wand-sparkles"></i> ${escapeHTML(infusion.label)}${infusion.name ? ` — ${escapeHTML(infusion.name)}` : ""}</strong> (${escapeHTML(infusion.source)}): ${escapeHTML(infusion.name ? infusion.text.replace(/^[^—]*—\s*/, "") : infusion.text)}</div>`
+      : "";
+    const title = infusion?.name ? `${lb.name} — ${infusion.name}` : lb.name;
+    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}${infuseHtml}${statusHtml}` });
   }
 
   static async #onAddJob(event, target) {

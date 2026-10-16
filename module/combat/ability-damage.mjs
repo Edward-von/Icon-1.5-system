@@ -7,6 +7,7 @@
  */
 
 import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
+import { limitBreakInfusions } from "../helpers/infuse.mjs";
 
 // Parse a single text blob for dice formula + fray + flat damage.
 function parseChunk(text) {
@@ -223,12 +224,18 @@ export function parseComboAbilityDamage(itemSystem) {
  * limit break"), in the ultimate, is also offered under Other (Cataclysm's
  * explosions, Passage to the Afterlife's Exceed and per-ally divine damage,
  * Dread Mock's divine fray damage). A Divine tag makes all of it divine
- * (p.104). The Infuse versions (Tetraflare, Meteor, Götterdämmerung) are
- * left out: they replace the damage instead of adding to it.
+ * (p.104). The Infuse versions (limitBreakInfusions): the armed one that
+ * deals its damage "instead" replaces the Hit (Tetraflare "Deal [D]+fray
+ * twice instead", Meteor "four times instead"); one that adds damage after
+ * the ability (Ragnarök, Götterdämmerung) is offered under Other when armed,
+ * or always when Slay also triggers it ("Slay or Infuse 3"). A "Special
+ * effect" that needs no Aether (Meteor paid with the user's life, "it deals
+ * 999 divine damage instead") is always offered under Other.
  * @param {object} lbSystem  the limit-break item's system data
- * @param {{ultimate?: boolean}} opts  ultimate unlocked (chapter 3)
+ * @param {{ultimate?: boolean, infused?: string|null}} opts  ultimate unlocked
+ *   (chapter 3); label of the armed Infuse version of this limit break
  */
-export function parseLimitBreakDamage(lbSystem, { ultimate = false } = {}) {
+export function parseLimitBreakDamage(lbSystem, { ultimate = false, infused = null } = {}) {
   const s = lbSystem ?? {};
   const plain = (t) => String(t ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
   // Text before the first Infuse version ("Infuse 6: TETRAFLARE —", "Slay or Infuse 3: RAGNARÖK —").
@@ -241,7 +248,29 @@ export function parseLimitBreakDamage(lbSystem, { ultimate = false } = {}) {
   const typed  = (c) => (divine && !c.type ? { ...c, type: "divine" } : c);
   const deals  = (c) => c.mult > 0 || c.flat > 0 || c.fray;
   const same   = (a, b) => a.mult === b.mult && a.fray === b.fray && a.flat === b.flat && a.times === b.times;
-  const hit = typed(base.hit), area = typed(base.area);
+  const baseHit = typed(base.hit), area = typed(base.area);
+  let hit = baseHit, version = null;
+  const infusionExtras = [];
+  for (const inf of limitBreakInfusions(s, { ultimate })) {
+    const armed = !!infused && inf.label === infused;
+    const [main, special = ""] = inf.body.split(/\bspecial effect\s*:\s*/i);
+    for (const [part, always] of [[main, false], [special, true]]) {
+      for (const sentence of part.split(/(?<=\.)\s+/)) {
+        if (!/\bdamage\b|\[d\]|\bfray\b/i.test(sentence)) continue;
+        const chunk = parseChunk(sentence);
+        if (!deals(chunk)) continue;
+        if (!always && /\binstead\b/i.test(sentence)) {
+          if (armed && !version) { hit = typed(chunk); version = inf; }
+          continue;
+        }
+        if (!(always || armed || inf.slay)) continue;
+        const label = always ? `${inf.name || inf.label} — Special effect`
+                            : `${inf.slay ? "Slay or " : ""}${inf.label}${inf.name ? ` — ${inf.name}` : ""}`;
+        infusionExtras.push(typed({ source: label, text: sentence, ...chunk,
+                                    area: /\b(?:area|blast|arc|line|burst|aura|cross|quarter)\b/i.test(sentence) }));
+      }
+    }
+  }
   // "Miss: Once." (Passage to the Afterlife): the hit damage, dealt once.
   const missOnce = /\bmiss\s*:\s*once\b/i.test(effect) && deals(hit);
   const miss = missOnce ? { ...hit, times: 1 } : typed(base.miss);
@@ -253,16 +282,18 @@ export function parseLimitBreakDamage(lbSystem, { ultimate = false } = {}) {
       const chunk = parseChunk(sentence);
       if (!deals(chunk)) continue;
       // The first damage of the effect is the Hit outcome: not offered twice.
-      if (source === "Limit Break" && !hitSkipped && deals(hit) && same(hit, chunk)) { hitSkipped = true; continue; }
+      if (source === "Limit Break" && !hitSkipped && deals(baseHit) && same(baseHit, chunk)) { hitSkipped = true; continue; }
       extras.push(typed({ source, text: sentence, ...chunk,
                           area: /\b(?:area|blast|arc|line|burst|aura|cross|explosions?)\b/i.test(sentence) }));
     }
   }
+  extras.push(...infusionExtras);
   return {
     isAttack:    base.isAttack,
     isAutoHit:   base.isAutoHit,
     dealsDamage: deals(hit) || deals(area) || miss.fray || extras.length > 0,
     hit, miss, area, extras,
+    version,     // the armed Infuse version whose damage replaced the Hit, or null
   };
 }
 

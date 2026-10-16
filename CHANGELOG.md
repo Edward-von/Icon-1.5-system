@@ -1,5 +1,26 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Versioni Infuse dei Limit Break (versione 1.15.39)
+
+### Round di debug del 16 ottobre, punto R38b
+
+- **Versioni Infuse dei Limit Break non usabili**: Maar segnalava che Gigaflare (Enochian, p.208) non poteva usare
+  la sua versione infusa, Tetraflare ("Infuse 6: TETRAFLARE — Deal [D]+fray twice instead"), né l'Ultimate Meteor;
+  lo stesso per Gran Levincross (Spellblade: "Slay or Infuse 3: RAGNARÖK" e l'Ultimate "GÖTTERDÄMMERUNG — Infuse 6")
+  → il riquadro Limit Break non aveva i bottoni Infuse che hanno le abilità (spesa dell'Aether, versione "armata"),
+  e il Damage Roll di R37 tagliava via tutto quello che viene dopo "Infuse N:" → ora il riquadro ha un bottone per
+  ogni versione Infuse (quelle dell'Ultimate dal capitolo 3, p.113), che funziona come quello delle abilità: spende
+  l'Aether, arma la versione e posta il messaggio; ricliccarlo restituisce l'Aether. Con una versione armata:
+  "Use Limit Break" posta anche il testo di quella versione e ne paga la Resolve se ne ha una sua (Meteor: "6
+  resolve", il badge del riquadro mostra 6); il Damage Roll, quando la versione dice "instead", sostituisce il danno
+  Hit (Tetraflare: Instances 2; Meteor: Instances 4) e la card si intitola "Gigaflare — TETRAFLARE". Le versioni che
+  aggiungono danno dopo l'abilità vanno in Other: Götterdämmerung (2[D]+fray divine) quando è armata, Ragnarök
+  ([D]+fray divine) sempre, perché la attiva anche lo Slay senza spendere Aether. Il "Special effect" di Meteor
+  (pagare con la vita, "999 divine damage instead") è proposto in Other come "METEOR — Special effect" (999 divine,
+  un clic); la morte del PG resta da applicare a mano. Nota: Meteor costa Infuse 8, ma l'Aether arriva al massimo a 6
+  (dado d6, p.204), quindi con l'Aether normale il bottone avvisa che non basta; la strada del libro è il Special
+  effect. Solo codice, nessun dato toccato.
+
 ## 16 ottobre 2026 — Aura e aree dei Limit Break sulla mappa (versione 1.15.38)
 
 ### Round di debug del 16 ottobre, punto R38
