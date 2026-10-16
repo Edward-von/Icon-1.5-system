@@ -1,5 +1,49 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Oggetti e movimento: portali, arma lanciata, eruzione guidata, pile con personaggi sopra (versione 1.15.68)
+
+### Round di debug del 15 ottobre, punto R33a4
+
+- **Underway, teleport a mano**: "you and allies can teleport from any space adjacent to an underway to a free adjacent
+  space to any other underway" (p.168) → bisognava spostare il token a occhio → ora la scheda del portale ha **Teleport
+  here**: il token selezionato (accanto a un altro portale dello stesso PG) vede in verde gli spazi liberi attorno a questo
+  portale e ci va con un clic, senza animazione, con una riga in chat. E quando un personaggio (non un foe) viene
+  trascinato accanto a un portale esce la domanda "teleport?" con gli spazi attorno agli altri portali. Esc o clic destro:
+  non si muove niente.
+- **Bale Portal**: "Foes that … end their turn adjacent to an underway can be teleported … A foe can pass a save … once a
+  round. Bloodied foes fail the save" (p.168) → ora, a fine turno di un foe accanto a un portale (mastery sbloccata), una
+  card lo ricorda; il GM lo sposta con "Teleport here" (il suggerimento ricorda il save). Il save e il "once a round" restano
+  al tavolo.
+- **Comet**: "Spaces adjacent to it have rampart … You can pick your weapon up if you enter or exit any space adjacent to it
+  or start your turn there" (p.128); rampart: "Foes cannot enter or exit a space affected by a rampart effect by dashing,
+  flying, or teleporting" (p.104) → c'era solo il bottone Pick up → ora attorno all'arma c'è un'aura 1 "Rampart" che la
+  segue (solo da vedere: il movimento non viene bloccato) e una nota sulla scheda; quando il Demon Slayer entra o esce da
+  uno spazio accanto, chi l'ha mosso riceve la domanda "pick it up?"; a inizio turno accanto all'arma, una card lo ricorda.
+- **Megamushroom**: la benedizione "can be picked up if yourself or an ally enters its space" (p.184, p.187) → solo
+  bottone → ora chi trascina un personaggio non foe sul suo spazio riceve la domanda "pick up its blessing token?".
+- **Geyser, eruzione guidata e Salt Sprite**: "removing that character from the battlefield, then placing them one or two
+  spaces away … summon a Salt Sprite in its space" (p.232) → la card di R33a3 lasciava tutto a mano → ora Erupt chiede
+  prima (due caselle, tutte e due accese): poi, per ogni personaggio da ripiazzare, gli spazi liberi a 1-2 (GREAT GEYSER:
+  alleati fino a 3) si accendono e un clic ce lo mette (Esc lo lascia lì); il geyser va via e il **Salt Sprite** del pack
+  summons compare nel suo spazio (riusando l'attore del mondo se c'è già). Un foe mosso da un giocatore passa dal GM
+  (socket, solo se il giocatore possiede il geyser). A inizio / fine turno di un personaggio sul geyser una card ricorda
+  "can make it erupt".
+- **Personaggi su una pila che sale o scende**: "Characters can stand on objects" (p.89) → si muovevano solo gli oggetti →
+  ora chi sta in cima alla pila (elevazione uguale all'altezza della pila) sale e scende con − / +, con la crescita del
+  Geyser Talent I, e scende quando l'oggetto sotto viene tolto o spostato; chi vola più in alto non viene toccato. Un
+  oggetto piazzato sullo spazio di un personaggio lo solleva: Pyroclast "Create a height 1 magma spire object under them,
+  pushing them up" (p.221).
+- **Aethershard**: Talent I "you can first remove one of your Aethershards, then place it in any free space up to range 2"
+  (p.210) → ora bottone **Move** sulla scheda dello shard (spazi liberi fino a 2) e, quando il PG spende Aether, un avviso
+  per chi l'ha speso. Mastery AETHERSHIFT "If you start or end your turn adjacent to an Aethershard, gain phasing until the
+  end of your next turn" (p.211) → ora il GM attivo dà Phasing con la sua scadenza al cambio turno, con una card.
+- Scelte mie: niente si sposta senza un clic (le domande vanno solo a chi ha mosso il token, le card di turno solo dal GM
+  attivo, così con due GM non escono doppie); si guardano solo la partenza e l'arrivo di un movimento, non gli spazi in
+  mezzo; i movimenti fatti da queste regole non fanno altre domande; uno spazio "libero" è senza token di nessun tipo;
+  dopo un teletrasporto o un'eruzione chi stava su una pila scende a terra. Nessun pack, nessuna migrazione. Restano in
+  TODO, R33a5: muri di Foundry e copertura degli oggetti, Talent II di Aethershard (pierce), personaggi che salgono /
+  scendono camminando su un oggetto, il rampart che blocca davvero, i foe "shoved into portals".
+
 ## 16 ottobre 2026 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro di Upheaval (versione 1.15.67)
 
 ### Round di debug del 15 ottobre, punto R33a3

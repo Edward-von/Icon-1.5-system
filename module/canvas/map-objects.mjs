@@ -29,7 +29,7 @@
  * Creating actors is a GM job: a player's drop goes to the active GM over the
  * system socket, as for the foes' summons.
  */
-import { objectsForItem, objectsInText, objectTokenName, objectRuleNotes, perHeightDamage, objectUpgrades, turnStartGrowth } from "../helpers/objects.mjs";
+import { objectsForItem, objectsInText, objectTokenName, objectRuleNotes, perHeightDamage, objectUpgrades, turnStartGrowth, objectUpgradeEffects, largestNumber } from "../helpers/objects.mjs";
 import { armedInfusion, clearInfusion } from "../helpers/infuse.mjs";
 import { summonImage } from "../helpers/summon-images.mjs";
 import { placeAuraOnToken, tokenCells, tokensInCells, shapeCells } from "./area-templates.mjs";
@@ -96,6 +96,147 @@ function objectsAt(scene, p, { except = [] } = {}) {
 
 /** Height of an object token (its synthetic actor's, so a raised copy counts as raised). */
 export const tokenHeight = (td) => Math.max(1, Number(td?.actor?.system?.size) || Number(mapObjectFlag(td)?.height) || 1);
+
+/* -------------------------------------------------- */
+/*  Spaces, characters standing on objects (R33a4)     */
+/* -------------------------------------------------- */
+
+const cheb = (a, b) => Math.max(Math.abs(a.i - b.i), Math.abs(a.j - b.j));
+/** Smallest distance between two sets of cells (0 = they share a space, 1 = adjacent, p.85). */
+const gapBetween = (a, b) => { let best = Infinity; for (const x of a) for (const y of b) best = Math.min(best, cheb(x, y)); return best; };
+/** The cells a token document covers on its own scene, at its place or at the top-left point `at`. */
+function cellsOf(td, at = null) {
+  const grid = td.parent.grid;
+  const half = grid.size / 2;
+  const tl = grid.getOffset({ x: (at?.x ?? td.x) + half, y: (at?.y ?? td.y) + half });
+  return footprint(tl, td);
+}
+/** The cells a token of `td`'s size covers with its top-left cell at `tl`. */
+function footprint(tl, td) {
+  const w = Math.max(1, Math.round(td.width ?? 1)), h = Math.max(1, Math.round(td.height ?? 1));
+  const out = [];
+  for (let di = 0; di < h; di++) for (let dj = 0; dj < w; dj++) out.push({ i: tl.i + di, j: tl.j + dj });
+  return out;
+}
+/** A foe for the rules "you and allies" / "foes that …": hostile token, or a foe / legend actor. */
+const isHostile = (td) => td?.disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE || ["foe", "legend"].includes(td?.actor?.type);
+/** Height of the objects stacked on the space whose top-left corner is `p` (0 = the ground). */
+const groundAt = (scene, p, except = []) => objectsAt(scene, p, { except }).reduce((sum, t) => sum + tokenHeight(t), 0);
+
+/**
+ * The characters (not objects) standing on the space with top-left corner `p` at elevation `top`: "Characters can
+ * stand on objects" (p.89). One that flies higher, or stands lower, is left alone.
+ */
+function standersOn(scene, p, top) {
+  const grid = scene.grid;
+  const cell = grid.getOffset({ x: p.x + grid.size / 2, y: p.y + grid.size / 2 });
+  return scene.tokens.filter(t => !mapObjectFlag(t) && (Number(t.elevation) || 0) === top
+    && cellsOf(t).some(c => c.i === cell.i && c.j === cell.j));
+}
+
+/**
+ * Move tokens for an object's rule (stand on a stack, teleport through a portal, a geyser's placing): the tokens
+ * the user may update directly, the others through the active GM (who checks that the user owns the object).
+ * Never animated, and flagged so the movement offers (offerMoveTriggers) don't ask about it.
+ * @param {TokenDocument} objectTd  the object whose rule moves them
+ * @param {Array<{_id:string, x?:number, y?:number, elevation?:number}>} updates
+ */
+async function moveTokensFor(objectTd, updates) {
+  const scene = objectTd?.parent;
+  if (!scene || !updates?.length) return;
+  const mine = game.user.isGM ? updates : updates.filter(u => scene.tokens.get(u._id)?.isOwner);
+  const rest = updates.filter(u => !mine.includes(u));
+  if (mine.length) await scene.updateEmbeddedDocuments("Token", mine, { animate: false, iconObjectMove: true });
+  if (!rest.length) return;
+  if (!game.users.activeGM) { ui.notifications.warn("No GM is connected — move the other tokens by hand."); return; }
+  game.socket.emit(SOCKET, { type: "objectMoveTokens", userId: game.user.id, sceneId: scene.id, objectTokenId: objectTd.id, updates: rest });
+}
+
+/**
+ * The top-left cells where token `td` could stand around `center` within `radius`, on free spaces only (no token
+ * of any kind, inside the scene), that `keep(cell, cells)` accepts.
+ */
+function freeSpots(td, center, radius, keep) {
+  const scene = td.parent;
+  const grid = scene.grid;
+  const size = grid.size;
+  const rect = scene.dimensions.sceneRect;
+  const taken = new Set();
+  for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.add(cellKey(c));
+  const inScene = (c) => { const p = grid.getTopLeftPoint(c); return p.x >= rect.x && p.y >= rect.y && p.x + size <= rect.right && p.y + size <= rect.bottom; };
+  const w = Math.max(1, Math.round(td.width ?? 1)), h = Math.max(1, Math.round(td.height ?? 1));
+  const out = [];
+  for (let i = center.i - radius - h; i <= center.i + radius + h; i++) for (let j = center.j - radius - w; j <= center.j + radius + w; j++) {
+    const c = { i, j };
+    const foot = footprint(c, td);
+    if (foot.some(f => taken.has(cellKey(f)) || !inScene(f))) continue;
+    if (keep(c, foot)) out.push(c);
+  }
+  return out;
+}
+
+const HL_PICK = "IconObjectPick";
+let _picking = null;
+/**
+ * Let the user click one of `cells` on the map (highlighted). Resolves with the cell, or null on Esc /
+ * right-click. Nothing moves until the click.
+ */
+function pickSpace(cells, hint) {
+  if (!cells?.length || !canvas?.ready) return Promise.resolve(null);
+  _picking?.cancel();
+  return new Promise(resolve => {
+    const keys = new Set(cells.map(cellKey));
+    const hl = canvas.interface.grid;
+    hl.addHighlightLayer(HL_PICK);
+    for (const c of cells) {
+      const p = canvas.grid.getTopLeftPoint(c);
+      hl.highlightPosition(HL_PICK, { x: p.x, y: p.y, color: 0x2f9e6e, border: 0x2f9e6e, alpha: 0.30 });
+    }
+    let over = false;
+    const done = (cell) => {
+      if (over) return;
+      over = true;
+      canvas.stage.removeEventListener("pointerdown", down, { capture: true });
+      window.removeEventListener("keydown", key, { capture: true });
+      canvas.app.view.removeEventListener("contextmenu", ctx, { capture: true });
+      try { hl.destroyHighlightLayer(HL_PICK); } catch { /* canvas gone */ }
+      _picking = null;
+      resolve(cell);
+    };
+    const down = (ev) => {
+      const button = ev.button ?? ev.data?.button ?? 0;
+      if (button === 2) { done(null); return; }
+      if (button !== 0) return;
+      ev.stopPropagation();
+      const pos = ev.getLocalPosition(canvas.stage);
+      const cell = canvas.grid.getOffset({ x: pos.x, y: pos.y });
+      if (!keys.has(cellKey(cell))) { ui.notifications.warn("Pick one of the highlighted spaces (right-click or Esc to skip)."); return; }
+      done(cell);
+    };
+    const key = (ev) => { if (ev.key === "Escape") { ev.preventDefault(); ev.stopImmediatePropagation(); done(null); } };
+    const ctx = (ev) => ev.preventDefault();
+    canvas.stage.addEventListener("pointerdown", down, { capture: true });
+    window.addEventListener("keydown", key, { capture: true });
+    canvas.app.view.addEventListener("contextmenu", ctx, { capture: true });
+    _picking = { cancel: () => done(null) };
+    ui.notifications.info(`${hint} Right-click or Esc to skip.`);
+  });
+}
+
+/**
+ * Put token `td` on the cell `cell` for an object's rule. A character standing on a stack where it was comes down
+ * to the ground of the new space; one flying higher keeps its elevation.
+ * @returns {object} the update
+ */
+function moveUpdate(td, cell) {
+  const scene = td.parent;
+  const p = scene.grid.getTopLeftPoint(cell);
+  const elev = Number(td.elevation) || 0;
+  const wasOn = groundAt(scene, { x: td.x, y: td.y });
+  const update = { _id: td.id, x: p.x, y: p.y };
+  if (elev === wasOn) update.elevation = groundAt(scene, p);
+  return update;
+}
 
 /** World actor data for object `obj` of `item` of `owner`. */
 function objectActorData(owner, item, obj, key, folderId) {
@@ -224,6 +365,9 @@ export async function placeMapObject(data, { requester = null } = {}) {
   }
   if (old.length) await scene.deleteEmbeddedDocuments("Token", old);
 
+  // R33a4: a character standing on that space is lifted onto the new object: Pyroclast's "Create a height 1 magma
+  // spire object under them, pushing them up" (p.221); "Characters can stand on objects" (p.89).
+  const lifted = standersOn(scene, p, under);
   const td = await actor.getTokenDocument({ x: p.x, y: p.y, elevation: under, name: objectTokenName(obj.name, obj.height) });
   const [token] = await scene.createEmbeddedDocuments("Token", [td.toObject()]);
   _log(`placed "${obj.name}" h${obj.height} at ${p.x},${p.y} (elevation ${under})${old.length ? `, replacing ${old.length}` : ""}`);
@@ -235,11 +379,22 @@ export async function placeMapObject(data, { requester = null } = {}) {
         abilityKey: `${item.id}:object`, flags: { mapObject: true } });
     } catch (err) { console.error("ICON 1.5 | object aura failed", err); }
   }
+  if (token && lifted.length) {
+    await scene.updateEmbeddedDocuments("Token", lifted.map(t => ({ _id: t.id, elevation: under + obj.height })), { animate: false, iconObjectMove: true });
+    _log(`lifted ${lifted.length} character(s) onto "${obj.name}"`);
+  }
+  // R33a4: Comet's "Spaces adjacent to it have rampart" (p.128) shown as an Aura 1 that follows the weapon.
+  if (token && objectRuleNotes(obj.rules).rampart) {
+    try {
+      await placeAuraOnToken(token, { actor: owner, size: 1, abilityName: `Rampart — ${obj.name} (${item.name})`,
+        abilityKey: `${item.id}:rampart`, flags: { mapObject: true, rampart: true } });
+    } catch (err) { console.error("ICON 1.5 | rampart area failed", err); }
+  }
   // The armed Infuse version (Volcanic Geyser, Pyrospire) has been used by placing its object.
   if (token && obj.infuse && infuseArmedFor(item, obj)) {
     try { await clearInfusion(owner); } catch (err) { console.warn("[ICON | MapObjects] could not clear the infusion", err); }
   }
-  tell(`${objectTokenName(obj.name, obj.height)} placed${under ? ` on height ${under}` : ""}${obj.aura ? ` with Aura ${obj.aura}` : ""} (${owner.name}).`, "info");
+  tell(`${objectTokenName(obj.name, obj.height)} placed${under ? ` on height ${under}` : ""}${obj.aura ? ` with Aura ${obj.aura}` : ""}${lifted.length ? `, lifting ${lifted.map(t => t.name).join(", ")}` : ""} (${owner.name}).`, "info");
 }
 
 /**
@@ -255,17 +410,22 @@ export async function changeObjectHeight(actor, delta) {
   const next = Math.min(MAX_STACK, Math.max(1, now + delta));
   if (next === now) { ui.notifications.info(`Objects are height 1 to ${MAX_STACK} (p.89).`); return false; }
   let above = [];
+  let standers = [];
   if (td?.parent) {
     const stack = objectsAt(td.parent, { x: td.x, y: td.y }, { except: [td.id] });
-    const total = stack.reduce((sum, t) => sum + tokenHeight(t), 0) + next;
+    const others = stack.reduce((sum, t) => sum + tokenHeight(t), 0);
+    const total = others + next;
     if (total > MAX_STACK) { ui.notifications.warn(`This stack would be height ${total}: stacked objects can't be past height ${MAX_STACK} (p.95).`); return false; }
     above = stack.filter(t => (t.elevation ?? 0) > (td.elevation ?? 0));
+    // R33a4: the characters standing on top of the stack go up or down with it (p.89).
+    standers = standersOn(td.parent, { x: td.x, y: td.y }, others + now);
   }
   await actor.update({ "system.size": next });
   const name = mapObjectFlag(actor)?.name ?? actor.name;
   if (td) {
     await td.update({ name: objectTokenName(name, next) });
     if (above.length) await td.parent.updateEmbeddedDocuments("Token", above.map(t => ({ _id: t.id, elevation: (t.elevation ?? 0) + (next - now) })));
+    if (standers.length) await moveTokensFor(td, standers.map(t => ({ _id: t.id, elevation: Math.max(0, (Number(t.elevation) || 0) + (next - now)) })));
   }
   _log(`"${name}" height ${now} → ${next}`);
   return true;
@@ -350,6 +510,9 @@ export function objectSheetInfo(actor) {
     countsAs: notes.countsAs,
     plantNote: notes.countsAs === "plant",
     erupt: notes.erupt ? { ...notes.erupt, placeUpgrades: upgrades.filter(u => /\bplaced\b/i.test(u.text)) } : null,
+    // R33a4: Underway's teleport, Comet's rampart and pick up when moving, the talent / mastery effects on moving.
+    portal: notes.portal, rampart: notes.rampart, pickUpNear: notes.pickUpNear,
+    moves: objectUpgradeEffects(upgrades),
   };
 }
 
@@ -503,11 +666,12 @@ export async function offerAreaObjectTriggers(cells, { actor, abilityName = "" }
  * by the active GM for an ally who doesn't own it.
  * @param {Actor} actor  the object's (synthetic) actor
  */
-export async function pickUpObjectBlessing(actor) {
+export async function pickUpObjectBlessing(actor, { picker: who = null } = {}) {
   const td = objectToken(actor);
   if (!td?.parent) { ui.notifications.warn("Open the sheet of the object's token on the scene to pick its blessing up."); return; }
   if (actor.getFlag(NS, "blessingTaken")) { ui.notifications.info("The blessing token has already been picked up."); return; }
-  const picker = canvas.tokens?.controlled?.find(t => t.actor && !mapObjectFlag(t.document))?.actor ?? game.user.character ?? null;
+  // R33a4: `who` is the character that just entered its space (offerMoveTriggers).
+  const picker = who ?? canvas.tokens?.controlled?.find(t => t.actor && !mapObjectFlag(t.document))?.actor ?? game.user.character ?? null;
   if (!picker?.isOwner) { ui.notifications.warn("Select the token of the character picking the blessing up."); return; }
   const { adjustStatusCharges } = await import("../combat/statuses.mjs");
   await adjustStatusCharges(picker, "blessed", 1);
@@ -540,12 +704,38 @@ export async function eruptObject(actor) {
   const esc = foundry.utils.escapeHTML;
   const blastName = { s: "small", m: "medium", l: "large" }[info.erupt.blast] ?? "";
   const who = placed.length ? esc(placed.map(t => t.name).join(", ")) : "no one";
+
+  // R33a4: how far they go ("one or two spaces away"; GREAT GEYSER "Allies can be placed up to three spaces away"),
+  // and the Salt Sprite out of the summons pack. Asked first: nothing moves without a click.
+  const base = largestNumber(info.erupt.place) || 2;
+  const allyMax = Math.max(base, info.moves?.alliesPlace || 0);
+  let sprite = null;
+  if (info.erupt.summon) {
+    try { const { loadSummonIndex } = await import("../helpers/summons.mjs"); sprite = (await loadSummonIndex()).find(e => sameName(e.name, info.erupt.summon)) ?? null; }
+    catch (err) { console.warn("[ICON | MapObjects] summons index unavailable", err); }
+  }
+  const choice = await foundry.applications.api.DialogV2.wait({
+    window: { title: `${info.name} — erupt` },
+    content: `<p>Removed and placed: <strong>${who}</strong>.</p>
+      ${placed.length ? `<label class="checkbox"><input type="checkbox" name="place" checked> Place them now: click a highlighted free space for each (up to ${base} spaces away${allyMax > base ? `, allies up to ${allyMax}` : ""}); Esc leaves one where it is</label>` : ""}
+      ${info.erupt.summon ? (sprite
+        ? `<label class="checkbox"><input type="checkbox" name="summon" checked> Then summon a ${esc(sprite.name)} in its space</label>`
+        : `<p><em>${esc(info.erupt.summon)} not found in the summons pack: place it by hand.</em></p>`) : ""}`,
+    buttons: [
+      { action: "erupt", label: "Erupt", icon: "fa-solid fa-water", default: true,
+        callback: (_e, button) => ({ place: !!button.form?.elements?.place?.checked, summon: !!button.form?.elements?.summon?.checked }) },
+      { action: "cancel", label: "Cancel" },
+    ],
+    rejectClose: false,
+  });
+  if (!choice || typeof choice !== "object") return;
+
   const lines = [
     `<p><strong>Removed and placed${info.erupt.place ? ` ${esc(info.erupt.place)} spaces away` : ""}:</strong> ${who}${blastName ? ` (everyone in the ${blastName} blast centered on it)` : " (on the geyser)"}.</p>`,
   ];
   for (const u of info.erupt.placeUpgrades) lines.push(`<p><strong>${esc(u.source)}:</strong> ${esc(u.text)}</p>`);
   if (info.erupt.dangerous) lines.push(`<p>Create dangerous terrain under the foes placed.</p>`);
-  lines.push(`<p>The ${esc(info.name.toLowerCase())} is removed.${info.erupt.summon ? ` Then summon a <strong>${esc(info.erupt.summon)}</strong> in its space (drag the chip from ${esc(info.abilityName || "the ability")}).` : ""}</p>`);
+  lines.push(`<p>The ${esc(info.name.toLowerCase())} is removed.${info.erupt.summon ? (choice.summon && sprite ? ` Then a <strong>${esc(sprite.name)}</strong> is summoned in its space.` : ` Then summon a <strong>${esc(info.erupt.summon)}</strong> in its space (drag the chip from ${esc(info.abilityName || "the ability")}).`) : ""}</p>`);
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: game.actors?.get(mapObjectFlag(actor)?.creatorId) ?? actor }),
     content: `<div class="icon-chat-card icon-chat-card--object">
@@ -553,9 +743,245 @@ export async function eruptObject(actor) {
         ${lines.join("")}
       </div>`,
   });
-  // The characters to place are targeted, so the player can see them.
-  try { for (const t of placed) t.setTarget(true, { releaseOthers: false }); } catch { /* targeting is a convenience */ }
+  if (choice.place) {
+    // One click per character, while the geyser is still there (its space isn't free).
+    for (const t of placed) {
+      const ttd = t.document;
+      const max = isHostile(ttd) ? base : allyMax;
+      const tl = cellsOf(ttd)[0];
+      const spots = freeSpots(ttd, tl, max, (c) => { const d = cheb(c, tl); return d >= 1 && d <= max; });
+      if (!spots.length) { ui.notifications.warn(`No free space up to ${max} away for ${ttd.name}: place them by hand.`); continue; }
+      const cell = await pickSpace(spots, `Place ${ttd.name} up to ${max} space${max > 1 ? "s" : ""} away (${info.name}).`);
+      if (cell) await moveTokensFor(td, [moveUpdate(ttd, cell)]);
+    }
+  } else {
+    // The characters to place are targeted, so the player can see them.
+    try { for (const t of placed) t.setTarget(true, { releaseOthers: false }); } catch { /* targeting is a convenience */ }
+  }
+  const spot = { sceneId: td.parent.id, x: td.x, y: td.y, creatorId: mapObjectFlag(actor)?.creatorId ?? "" };
   await removeMapObject(actor);
+  if (choice.summon && sprite) await summonInSpace({ ...spot, uuid: sprite.uuid, name: sprite.name });
+}
+
+/**
+ * Summon a creature of the summons pack on a space (Geyser: "After the geyser is removed, summon a Salt Sprite in its
+ * space", p.232). The world actor imported from the pack is reused if there is one, as a drag from the sheet would.
+ * A player's request goes to the active GM, who checks that they own the creator.
+ */
+async function summonInSpace(data, { requester = null } = {}) {
+  if (!game.user.isGM) {
+    if (!game.users.activeGM) { ui.notifications.warn(`No GM is connected — place the ${data.name} by hand.`); return; }
+    game.socket.emit(SOCKET, { type: "objectSummon", userId: game.user.id, data });
+    return;
+  }
+  const scene = game.scenes.get(data.sceneId);
+  if (!scene) return;
+  if (requester && !game.actors.get(data.creatorId)?.testUserPermission?.(requester, "OWNER")) {
+    console.warn(`[ICON | MapObjects] ${requester.name} doesn't own the creator — ${data.name} not summoned`);
+    return;
+  }
+  const { loadSummonIndex } = await import("../helpers/summons.mjs");
+  const entry = (await loadSummonIndex()).find(e => e.uuid === data.uuid);
+  if (!entry) return;
+  let actor = game.actors.find(a => a._stats?.compendiumSource === entry.uuid || a.flags?.core?.sourceId === entry.uuid);
+  if (!actor) {
+    const src = await fromUuid(entry.uuid);
+    if (!src) return;
+    actor = await Actor.create(game.actors.fromCompendium(src));
+  }
+  const td = await actor.getTokenDocument({ x: data.x, y: data.y });
+  await scene.createEmbeddedDocuments("Token", [td.toObject()]);
+  _log(`summoned "${actor.name}" at ${data.x},${data.y}`);
+}
+
+/* -------------------------------------------------- */
+/*  Moving through and around objects (R33a4)          */
+/* -------------------------------------------------- */
+
+/** The objects of the same character with the same name on `td`'s scene (Underway's portals), `td` left out. */
+const networkOf = (td) => {
+  const flag = mapObjectFlag(td);
+  return td.parent.tokens.filter(t => t.id !== td.id && mapObjectFlag(t)?.creatorId === flag?.creatorId && sameName(mapObjectFlag(t)?.name, flag?.name));
+};
+
+/**
+ * Underway (p.168): "As a free action ability, you and allies can teleport from any space adjacent to an underway to
+ * a free adjacent space to any other underway." Bale Portal: "Foes that are shoved into portals or that end their
+ * turn adjacent to an underway can be teleported to any free space adjacent to any other underway. A foe can pass a
+ * save to avoid it … once a round. Bloodied foes fail the save."
+ * The traveller clicks a highlighted free space next to one of `destinations`.
+ * @param {TokenDocument} traveller
+ * @param {TokenDocument[]} destinations  portals to arrive at
+ * @param {TokenDocument} portal          a portal of the network (rules, permission for relayed moves)
+ */
+async function teleportVia(traveller, destinations, portal) {
+  const info = objectSheetInfo(portal.actor);
+  const hostile = isHostile(traveller);
+  const pull = info?.moves?.pullFoes;
+  if (hostile && !pull && !game.user.isGM) { ui.notifications.warn(`${info?.name ?? "This portal"}: only you and allies can teleport through it (p.168).`); return false; }
+  const spots = [];
+  const seen = new Set();
+  for (const d of destinations) {
+    const pc = cellsOf(d);
+    for (const c of freeSpots(traveller, pc[0], 1 + Math.max(traveller.width ?? 1, traveller.height ?? 1), (_c, foot) => gapBetween(foot, pc) === 1)) {
+      if (!seen.has(cellKey(c))) { seen.add(cellKey(c)); spots.push(c); }
+    }
+  }
+  if (!spots.length) { ui.notifications.warn(`No free space next to ${destinations.length > 1 ? "the other portals" : "that portal"}.`); return false; }
+  const save = hostile && pull ? ` ${pull.source}: the foe can pass a save to avoid it (bloodied foes fail), once a round.` : "";
+  const cell = await pickSpace(spots, `Teleport ${traveller.name}: click a free space next to ${destinations.length > 1 ? "another" : "the"} ${info?.name?.toLowerCase() ?? "portal"}.${save}`);
+  if (!cell) return false;
+  await moveTokensFor(portal, [moveUpdate(traveller, cell)]);
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: traveller }),
+    content: `<div class="icon-chat-card icon-chat-card--object"><strong><i class="fa-solid fa-dungeon"></i> ${foundry.utils.escapeHTML(traveller.name)}</strong>
+      teleports through the <strong>${foundry.utils.escapeHTML(info?.name ?? "portal")}</strong>${hostile && pull ? ` (${foundry.utils.escapeHTML(pull.source)} — save, bloodied foes fail; once a round)` : " (free action, p.168)"}.</div>`,
+  });
+  return true;
+}
+
+/**
+ * The portal's sheet: "Teleport here". The selected token (else the user's character) goes from a space adjacent to
+ * another portal of the same character to a free space next to this one.
+ * @param {Actor} actor  the portal's (synthetic) actor
+ */
+export async function teleportToObject(actor) {
+  const dest = objectToken(actor);
+  const info = objectSheetInfo(actor);
+  if (!info?.portal || !dest?.parent) { ui.notifications.warn("This object has no token on the scene."); return; }
+  if (dest.parent.id !== canvas?.scene?.id) { ui.notifications.warn("View the scene the object is on first."); return; }
+  const traveller = canvas.tokens?.controlled?.find(t => !mapObjectFlag(t.document))?.document
+    ?? game.user.character?.getActiveTokens?.(false, true)?.find(t => t.parent?.id === dest.parent.id) ?? null;
+  if (!traveller) { ui.notifications.warn("Select the token of the character who teleports."); return; }
+  const from = networkOf(dest).find(o => gapBetween(cellsOf(traveller), cellsOf(o)) === 1);
+  if (!from) {
+    if (!game.user.isGM) { ui.notifications.warn(`${traveller.name} must be in a space adjacent to another ${info.name.toLowerCase()} (p.168).`); return; }
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${info.name} — teleport` },
+      content: `<p>${foundry.utils.escapeHTML(traveller.name)} isn't adjacent to another ${foundry.utils.escapeHTML(info.name.toLowerCase())}. Teleport anyway (a foe shoved into a portal, a ruling)?</p>`,
+      rejectClose: false,
+    }) ?? false;
+    if (!ok) return;
+  }
+  await teleportVia(traveller, [dest], dest);
+}
+
+/**
+ * Aethershard Talent I (p.210): "When you take any action that spends Aether, you can first remove one of your
+ * Aethershards, then place it in any free space up to range 2 from its original location." The shard's sheet: click
+ * a highlighted free space.
+ * @param {Actor} actor  the object's (synthetic) actor
+ */
+export async function relocateObject(actor) {
+  const td = objectToken(actor);
+  const rel = objectSheetInfo(actor)?.moves?.relocate;
+  if (!rel || !td?.parent) { ui.notifications.warn("This object has no token on the scene."); return; }
+  if (td.parent.id !== canvas?.scene?.id) { ui.notifications.warn("View the scene the object is on first."); return; }
+  const tl = cellsOf(td)[0];
+  const spots = freeSpots(td, tl, rel.range, (c) => { const d = cheb(c, tl); return d >= 1 && d <= rel.range; });
+  const cell = await pickSpace(spots, `${rel.source}: place the ${(mapObjectFlag(actor)?.name ?? actor.name).toLowerCase()} in a free space up to range ${rel.range}.`);
+  if (!cell) return;
+  const p = td.parent.grid.getTopLeftPoint(cell);
+  await moveTokensFor(td, [{ _id: td.id, x: p.x, y: p.y }]);
+}
+
+/**
+ * After a token moved (by its user, not by these rules): what the objects around offer, one question each.
+ *   Comet (p.128)        "You can pick your weapon up if you enter or exit any space adjacent to it" — its creator
+ *                        entered or left a space adjacent to the Thrown Weapon.
+ *   Megamushroom / plant "can be picked up if yourself or an ally enters its space" (p.184, p.187) — not a foe.
+ *   Underway (p.168)     a character (not a foe) came next to a portal: teleport to another one?
+ * Only the start and the end of the move are looked at.
+ */
+async function offerMoveTriggers(td, prev, to) {
+  const scene = td.parent;
+  if (!scene || scene.id !== canvas?.scene?.id || !td.actor) return;
+  const before = cellsOf(td, prev);
+  // v13: inside updateToken the document may still report the pre-move x/y — the new spot is passed in.
+  const after = cellsOf(td, to);
+  if (before[0].i === after[0].i && before[0].j === after[0].j) return;
+  const hostile = isHostile(td);
+  const esc = foundry.utils.escapeHTML;
+  const ask = (title, html, yes) => foundry.applications.api.DialogV2.confirm({ window: { title }, content: html, yes: { label: yes }, no: { label: "Not now" }, rejectClose: false }).then(r => !!r);
+  const portalsAsked = new Set();
+  for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
+    if (!scene.tokens.get(o.id)) continue;            // gone meanwhile
+    const flag = mapObjectFlag(o);
+    const info = objectSheetInfo(o.actor);
+    if (!info) continue;
+    const oc = cellsOf(o);
+    const wasNear = gapBetween(before, oc) === 1, isNear = gapBetween(after, oc) === 1;
+    if (info.pickUpNear && flag.creatorId === td.actor.id && (wasNear || isNear)) {
+      if (await ask(`${info.name} — pick up?`, `<p>${esc(td.name)} ${isNear ? "entered" : "left"} a space adjacent to the <strong>${esc(info.name)}</strong>: pick it up? It ends the effect and removes the object (p.128).</p>`, "Pick up"))
+        await removeMapObject(o.actor);
+      continue;
+    }
+    if (info.blessing && !info.blessing.taken && !hostile && gapBetween(after, oc) === 0 && gapBetween(before, oc) > 0) {
+      if (await ask(`${info.name} — blessing`, `<p>${esc(td.name)} entered the space of the <strong>${esc(info.name)}</strong>: pick up its blessing token (+1 Blessed; the object stays)?</p>`, "Pick up blessing"))
+        await pickUpObjectBlessing(o.actor, { picker: td.actor });
+      continue;
+    }
+    const net = flag.creatorId + "#" + String(flag.name).toLowerCase();
+    if (info.portal && !hostile && isNear && !wasNear && !portalsAsked.has(net)) {
+      portalsAsked.add(net);
+      const others = networkOf(o);
+      if (!others.length) continue;
+      if (await ask(`${info.name} — teleport?`, `<p>${esc(td.name)} is next to the <strong>${esc(info.name)}</strong>: teleport to a free space next to ${others.length > 1 ? "another" : "the other"} one (free action, p.168)?</p>`, "Teleport"))
+        await teleportVia(td, others, o);
+    }
+  }
+}
+
+/**
+ * At the start or the end of `combatant`'s turn (active GM, from the combat hook), what the objects on the scene
+ * say about it, in one chat card:
+ *   Geyser (p.232)       "If any character either starts or ends their turn on a geyser, you can cause it to erupt"
+ *   Comet (p.128)        its creator starts their turn adjacent to the Thrown Weapon: "or start your turn there"
+ *   Bale Portal (p.168)  a foe ends its turn adjacent to an underway
+ *   AETHERSHIFT (p.211)  "If you start or end your turn adjacent to an Aethershard, gain phasing until the end of your
+ *                        next turn" — applied, with its countdown.
+ * @param {Combatant} combatant
+ * @param {"start"|"end"} at
+ */
+export async function objectTurnBoundary(combatant, at) {
+  const td = combatant?.token;
+  const actor = combatant?.actor;
+  const scene = td?.parent;
+  if (!td || !actor || !scene || mapObjectFlag(td)) return;
+  const mine = cellsOf(td);
+  const esc = foundry.utils.escapeHTML;
+  const lines = [];
+  let gain = null;
+  for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
+    const flag = mapObjectFlag(o);
+    const info = objectSheetInfo(o.actor);
+    if (!info) continue;
+    const g = gapBetween(mine, cellsOf(o));
+    const creator = info.creatorName || "its creator";
+    if (info.erupt && g === 0)
+      lines.push(`${esc(td.name)} ${at === "start" ? "starts" : "ends"} their turn on the <strong>${esc(info.name)}</strong>: ${esc(creator)} can make it erupt (its sheet → Erupt, p.232).`);
+    if (at === "start" && info.pickUpNear && flag.creatorId === actor.id && g === 1)
+      lines.push(`${esc(td.name)} starts their turn adjacent to the <strong>${esc(info.name)}</strong>: they can pick it up (its sheet → Pick up, p.128).`);
+    if (at === "end" && info.portal && info.moves.pullFoes && isHostile(td) && g === 1)
+      lines.push(`${esc(td.name)} ends their turn adjacent to the <strong>${esc(info.name)}</strong> — ${esc(info.moves.pullFoes.source)}: ${esc(creator)} can teleport them next to another one (save to avoid it, bloodied foes fail; once a round). GM: select the foe, open the other portal's sheet → Teleport here.`);
+    if (!gain && info.moves.adjacentGain && flag.creatorId === actor.id && g === 1) gain = { ...info.moves.adjacentGain, name: info.name };
+  }
+  if (gain) {
+    const { applyStatus, hasStatus } = await import("../combat/statuses.mjs");
+    const { expiryFromUntil } = await import("../combat/status-expiry.mjs");
+    const has = hasStatus(actor, gain.status);
+    if (!has) {
+      const expiry = expiryFromUntil(gain.until, { target: actor, source: actor });
+      await applyStatus(actor, gain.status, false, expiry ? { flags: { expiry } } : {});
+    }
+    lines.push(`${esc(td.name)} ${at === "start" ? "starts" : "ends"} their turn adjacent to the <strong>${esc(gain.name)}</strong> — ${esc(gain.source)}: ${has ? `already has ${esc(gain.status)}` : `gains ${esc(gain.status)} ${esc(gain.until)}`}. ${esc(gain.text.replace(/^.*?\bnext turn\.\s*/i, ""))}`);
+  }
+  if (!lines.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card icon-chat-card--object"><strong><i class="fa-solid fa-cube"></i> ${at === "start" ? "Start" : "End"} of ${esc(td.name)}'s turn</strong>
+      ${lines.map(l => `<p>${l}</p>`).join("")}</div>`,
+  });
 }
 
 /**
@@ -599,10 +1025,14 @@ export async function growObjectsAtTurnStart(actor) {
  */
 async function settleStack(scene, p, from, drop, except = []) {
   if (!(drop > 0)) return;
-  const above = objectsAt(scene, p, { except }).filter(t => (t.elevation ?? 0) > from);
-  if (!above.length) return;
-  await scene.updateEmbeddedDocuments("Token", above.map(t => ({ _id: t.id, elevation: Math.max(0, (t.elevation ?? 0) - drop) })));
-  _log(`${above.length} object(s) at ${p.x},${p.y} came down by ${drop}`);
+  const remaining = objectsAt(scene, p, { except });
+  // R33a4: the characters standing on top of the stack come down with it (p.89).
+  const left = remaining.reduce((sum, t) => sum + tokenHeight(t), 0);
+  const standers = standersOn(scene, p, left + drop);
+  const above = remaining.filter(t => (t.elevation ?? 0) > from);
+  if (above.length) await scene.updateEmbeddedDocuments("Token", above.map(t => ({ _id: t.id, elevation: Math.max(0, (t.elevation ?? 0) - drop) })));
+  if (standers.length) await scene.updateEmbeddedDocuments("Token", standers.map(t => ({ _id: t.id, elevation: left })), { animate: false, iconObjectMove: true });
+  if (above.length || standers.length) _log(`${above.length} object(s) and ${standers.length} character(s) at ${p.x},${p.y} came down by ${drop}`);
 }
 
 export function registerMapObjectHooks() {
@@ -650,6 +1080,31 @@ export function registerMapObjectHooks() {
     if (("x" in changed || "y" in changed) && mapObjectFlag(tokenDoc)) options.iconPrevElevation = tokenDoc.elevation ?? 0;
   });
 
+  // R33a4: a character moved by its user next to / onto an object: Comet's pick up, the Megamushroom's blessing,
+  // Underway's teleport — asked on the client that moved it (once), never for the moves these rules make.
+  Hooks.on("updateToken", (tokenDoc, changed, options, userId) => {
+    if (userId !== game.user.id || options?.iconObjectMove || !options?.iconPrevPos) return;
+    if (!("x" in changed || "y" in changed) || mapObjectFlag(tokenDoc)) return;
+    if (!tokenDoc.parent?.tokens?.some(t => mapObjectFlag(t))) return;
+    const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
+    offerMoveTriggers(tokenDoc, options.iconPrevPos, to).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
+  });
+
+  // R33a4: Aethershard Talent I, "When you take any action that spends Aether, you can first remove one of your
+  // Aethershards, then place it in any free space up to range 2" (p.210): a reminder to the user who spent it.
+  const AETHER = "system.combat.classResources.aether.value";
+  Hooks.on("preUpdateActor", (actor, changed, options) => {
+    if (foundry.utils.hasProperty(changed, AETHER)) options.iconPrevAether = Number(foundry.utils.getProperty(actor, AETHER)) || 0;
+  });
+  Hooks.on("updateActor", (actor, changed, options, userId) => {
+    if (userId !== game.user.id || options?.iconPrevAether == null || !canvas?.scene) return;
+    if (!((Number(foundry.utils.getProperty(changed, AETHER)) || 0) < options.iconPrevAether)) return;
+    const shard = canvas.scene.tokens.find(t => mapObjectFlag(t)?.creatorId === actor.id && t.actor && objectSheetInfo(t.actor)?.moves?.relocate);
+    if (!shard) return;
+    const rel = objectSheetInfo(shard.actor).moves.relocate;
+    ui.notifications.info(`${actor.name} spent Aether — ${rel.source}: you can first move one of your ${mapObjectFlag(shard).name.toLowerCase()}s up to range ${rel.range} (its sheet → Move).`);
+  });
+
   game.socket?.on(SOCKET, (msg) => {
     if (msg?.type === "mapObjectNotice") {
       if (msg.userId === game.user.id) ui.notifications[msg.kind === "info" ? "info" : "warn"](msg.msg);
@@ -657,6 +1112,24 @@ export function registerMapObjectHooks() {
     }
     if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
     const requester = game.users.get(msg?.userId) ?? null;
+    if (msg?.type === "objectMoveTokens") {
+      // R33a4: a player's object rule moves tokens they don't own (a foe on a geyser, a character on a rising
+      // stack): only position and elevation, only if they own the object.
+      const scene = game.scenes.get(msg.sceneId);
+      const obj = scene?.tokens.get(msg.objectTokenId);
+      if (!obj || !mapObjectFlag(obj) || !requester || !obj.actor?.testUserPermission?.(requester, "OWNER")) {
+        console.warn(`[ICON | MapObjects] ${requester?.name ?? "?"} doesn't own that object — tokens not moved`);
+        return;
+      }
+      const pick = (u) => { const o = { _id: String(u?._id ?? "") }; for (const k of ["x", "y", "elevation"]) if (Number.isFinite(Number(u?.[k])) && u?.[k] != null) o[k] = Number(u[k]); return o; };
+      const updates = (Array.isArray(msg.updates) ? msg.updates : []).map(pick).filter(u => scene.tokens.get(u._id) && !mapObjectFlag(scene.tokens.get(u._id)));
+      if (updates.length) scene.updateEmbeddedDocuments("Token", updates, { animate: false, iconObjectMove: true }).catch(err => console.error("ICON 1.5 | moving relayed tokens failed", err));
+      return;
+    }
+    if (msg?.type === "objectSummon") {
+      summonInSpace(msg.data ?? {}, { requester }).catch(err => console.error("ICON 1.5 | relayed summon failed", err));
+      return;
+    }
     if (msg?.type === "objectBlessing") {
       // An ally picked up the blessing token of an object they don't own (pickUpObjectBlessing, R33a3).
       const td = game.scenes.get(msg.sceneId)?.tokens.get(msg.tokenId);

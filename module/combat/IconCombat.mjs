@@ -36,7 +36,7 @@ import { handlePromptSocket } from "./remote-prompt.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
-import { growObjectsAtTurnStart } from "../canvas/map-objects.mjs";
+import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -857,6 +857,9 @@ export function registerCombatHooks() {
           await applyEndOfTurnEffects(prev);
           // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
           await _postRelicTurnReminders(prev.actor, "end", "End of turn");
+          // Objects around them at the end of the turn: on a geyser, a foe by an underway, AETHERSHIFT (R33a4).
+          try { await objectTurnBoundary(prev, "end"); }
+          catch (err) { console.warn("[ICON | IconCombat] object turn reminders (end) failed", err); }
           // A combo token spent on an ability with Show in Chat only covers
           // that use (its attack and damage come as separate clicks): it
           // doesn't carry into the next turn.
@@ -894,6 +897,9 @@ export function registerCombatHooks() {
           // Objects that grow at the start of their creator's turn (Geyser Talent I, p.232; R33a3).
           try { await growObjectsAtTurnStart(current.actor); }
           catch (err) { console.warn("[ICON | IconCombat] object growth failed", err); }
+          // Objects around them at the start of the turn: on a geyser, by the Thrown Weapon, AETHERSHIFT (R33a4).
+          try { await objectTurnBoundary(current, "start"); }
+          catch (err) { console.warn("[ICON | IconCombat] object turn reminders (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

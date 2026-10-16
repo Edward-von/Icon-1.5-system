@@ -679,7 +679,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       sugli spazi adiacenti e raccolta automatica quando entri / esci da uno spazio adiacente); oggetti che bloccano vista
       o movimento (muri di Foundry) e copertura; personaggi in piedi su una pila che scende (oggi scendono solo gli
       oggetti); scheda aperta dalla barra laterale (attore del mondo, senza token) che mostra l'altezza totale 1+0.
-- [ ] **R33a4. Oggetti sulla mappa: automazioni sul movimento e il resto dopo R33a3** (M/L)
+- [x] **R33a4. Oggetti sulla mappa: automazioni sul movimento e il resto dopo R33a3** (M/L) (FATTO il 16 ottobre 2026,
+      versione 1.15.68: Underway "Teleport here" e domanda al movimento con scelta dello spazio, promemoria Bale Portal;
+      Comet aura "Rampart" e domanda di raccolta entrando / uscendo; Megamushroom domanda entrando; Erupt con ripiazzamento a
+      clic e Salt Sprite automatico; personaggi in cima a una pila che sale / scende, Magma Spire che solleva; Aethershard
+      Move (Talent I) e Phasing di AETHERSHIFT; card di inizio / fine turno. Muri e il resto in R33a5. Solo codice.)
       Lasciate fuori da R33a3 perché toccano il movimento dei token o i muri di Foundry:
       - Underway (p.168): "you and allies can teleport from any space adjacent to an underway to a free adjacent space
         to any other underway" — un bottone sul portale che sposta il token selezionato, con la scelta dello spazio
@@ -697,6 +701,22 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
         gli oggetti; anche il personaggio spinto su dal Magma Spire di Pyroclast ("pushing them up").
       - Aethershard: Talent I (spostare uno shard di 2 quando spendi Aether), Talent II (pierce contro chi è adiacente a
         uno shard), mastery AETHERSHIFT (phasing se inizi / finisci adiacente) — p.210-211.
+- [ ] **R33a5. Oggetti sulla mappa: quello che resta dopo R33a4** (M/L)
+      Lasciato fuori da R33a4 perché rischioso o non fatto bene:
+      - Muri di Foundry attorno agli oggetti per vista e movimento ("Provides obstruction", p.89; tranne Underway "don't
+        provide obstruction"): creare / spostare / togliere muri insieme al token è rischioso (muri che restano, token
+        bloccati); da decidere con Edoardo se servono.
+      - Copertura: "Characters can … take cover behind them" (p.89), Underway Talent II "Allies adjacent to underways have
+        cover", Geyser Talent I "Allies standing on a geyser have cover from all directions": il calcolo della Cover del
+        tiro non guarda gli oggetti (oggi solo le righe del talento sulla scheda dell'oggetto).
+      - Rampart di Comet che blocca davvero dash / volo / teleport dei foe (p.104): oggi è solo un'aura 1 da vedere.
+      - Aethershard Talent II "Your abilities gain pierce against characters adjacent to Aethershards" (p.210): il pierce
+        della card del danno è per tutta la card, non per bersaglio; oggi solo la riga sulla scheda dello shard.
+      - Personaggi che salgono / scendono camminando su o giù da un oggetto (oggi l'elevazione cambia solo quando è la
+        pila a cambiare, o con teletrasporto / eruzione).
+      - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (Comet "enter or exit", Megamushroom).
+      - Bale Portal: foe "shoved into portals" (spinti dentro un portale) e il "once a round" non sono contati.
+      - Comet "or start your turn there": a inizio turno solo una card, non la domanda.
 - [ ] **R33b. Spazi di terreno** (L)
       Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
       (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non

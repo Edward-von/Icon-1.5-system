@@ -199,7 +199,62 @@ function objectRuleNotesA3(t) {
     blessing:    /\bhas an? blessing token on it\b/i.test(t),
     countsAs:    /\bcounts as an? ([a-z]+)\b/i.exec(t)?.[1]?.toLowerCase() ?? "",
     erupt,
+    ...objectRuleNotesA4(t),
   };
+}
+
+const NUMBER_WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
+/** "one or two" → 2, "three" → 3, "2" → 2: the largest number in a short phrase, else 0. */
+export function largestNumber(phrase) {
+  let best = 0;
+  for (const w of String(phrase ?? "").toLowerCase().split(/[^a-z0-9]+/)) {
+    const n = /^\d+$/.test(w) ? Number(w) : (NUMBER_WORDS[w] ?? 0);
+    best = Math.max(best, n);
+  }
+  return best;
+}
+
+/**
+ * What an object's rules say about moving around it (R33a4):
+ *   portal      "you and allies can teleport from any space adjacent to an underway to a free adjacent space to any
+ *               other underway" (Underway p.168) → true
+ *   rampart     "Spaces adjacent to it have rampart" (Comet p.128) → true
+ *   pickUpNear  "You can pick your weapon up if you enter or exit any space adjacent to it or start your turn there"
+ *               (Comet p.128) → true
+ * @param {string} t  plain text
+ */
+function objectRuleNotesA4(t) {
+  return {
+    portal:     /\bteleport from any space adjacent to an? [\w' -]+? to a free (?:adjacent )?space (?:adjacent )?to any other\b/i.test(t),
+    rampart:    /\bspaces adjacent to it have rampart\b/i.test(t),
+    pickUpNear: /\bpick [^.]*?\bup if you enter or exit any space adjacent to it\b/i.test(t),
+  };
+}
+
+/**
+ * What the selected talent / unlocked mastery lines of an object (objectUpgrades) add to it (R33a4):
+ *   relocate     "you can first remove one of your Aethershards, then place it in any free space up to range 2 from its
+ *                original location" (Aethershard Talent I, p.210) → { range: 2, source }
+ *   adjacentGain "If you start or end your turn adjacent to an Aethershard, gain phasing until the end of your next
+ *                turn" (AETHERSHIFT, p.211) → { status: "phasing", until, source, text }
+ *   pullFoes     "Foes that are shoved into portals or that end their turn adjacent to an underway can be teleported …"
+ *                (Bale Portal, Underway p.168) → { source, text }
+ *   alliesPlace  "Allies can be placed up to three spaces away by a geyser" (GREAT GEYSER, p.232) → 3
+ * @param {Array<{source:string, text:string}>} upgrades
+ */
+export function objectUpgradeEffects(upgrades) {
+  const out = { relocate: null, adjacentGain: null, pullFoes: null, alliesPlace: 0 };
+  for (const u of upgrades ?? []) {
+    const t = plain(u.text);
+    const rel = /\bremove one of your [\w' -]+?, then place it in any free space up to range (\d+) from its original location\b/i.exec(t);
+    if (rel && !out.relocate) out.relocate = { range: Number(rel[1]), source: u.source };
+    const gain = /\bif you start or end your turn adjacent to an? [\w' -]+?, gain ([a-z]+) (until the end of your next turn)\b/i.exec(t);
+    if (gain && !out.adjacentGain) out.adjacentGain = { status: gain[1].toLowerCase(), until: gain[2], source: u.source, text: t };
+    if (!out.pullFoes && /\bfoes that [^.]*?\bend their turn adjacent to an? [\w' -]+? can be teleported\b/i.test(t)) out.pullFoes = { source: u.source, text: t };
+    const allies = /\ballies can be placed up to (\w+) spaces? away\b/i.exec(t);
+    if (allies) out.alliesPlace = Math.max(out.alliesPlace, largestNumber(allies[1]));
+  }
+  return out;
 }
 
 /**

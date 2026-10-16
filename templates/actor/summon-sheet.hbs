@@ -76,6 +76,15 @@
               <button type="button" class="icon-btn icon-btn--sm" data-action="objectBlessing"
                       title="The selected character (yours or an ally entering its space) picks the blessing token up: +1 Blessed. The object stays."><i class="fa-solid fa-hand-sparkles"></i> Pick up blessing</button>
             {{/unless}}{{/if}}
+            {{!-- R33a4: Underway's teleport, Aethershard Talent I's move --}}
+            {{#if mapObject.portal}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="objectTeleport"
+                      title="Select the token next to another portal, then click a highlighted free space next to this one (p.168)"><i class="fa-solid fa-dungeon"></i> Teleport here</button>
+            {{/if}}
+            {{#if isEditable}}{{#if mapObject.moves.relocate}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="objectRelocate"
+                      title="{{mapObject.moves.relocate.source}}: when you spend Aether, first move it to a highlighted free space up to range {{mapObject.moves.relocate.range}} (p.210)"><i class="fa-solid fa-up-down-left-right"></i> Move</button>
+            {{/if}}{{/if}}
           {{/if}}
         </div>
         {{#if mapObject.world}}
@@ -89,6 +98,18 @@
         {{/if}}
         {{#if mapObject.areaTrigger}}
           <p class="icon-object-effect__note"><i class="fa-solid fa-gem"></i> Caught in an area you place: the area card asks to deal {{mapObject.areaTrigger.amount}} {{mapObject.areaTrigger.type}} damage per shard and destroy them{{#if mapObject.areaTrigger.aether}} (+{{mapObject.areaTrigger.aether}} Aether){{/if}}.</p>
+        {{/if}}
+        {{#if mapObject.rampart}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-shield-halved"></i> Spaces adjacent to it have rampart (the Aura 1 around it): foes cannot enter or exit them by dashing, flying or teleporting (p.104).</p>
+        {{/if}}
+        {{#if mapObject.pickUpNear}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-hand"></i> Moving {{#if mapObject.creatorName}}{{mapObject.creatorName}}{{else}}its creator{{/if}} into or out of a space adjacent to it asks to pick it up; starting the turn there is reminded in chat.</p>
+        {{/if}}
+        {{#if mapObject.portal}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-dungeon"></i> Moving a character (not a foe) next to it asks to teleport next to another one{{#if mapObject.moves.pullFoes}}; a foe ending its turn next to it is reminded in chat ({{mapObject.moves.pullFoes.source}}){{/if}}.</p>
+        {{/if}}
+        {{#if mapObject.moves.adjacentGain}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-ghost"></i> {{mapObject.moves.adjacentGain.source}}: starting or ending the turn adjacent to it gives {{mapObject.creatorName}} {{mapObject.moves.adjacentGain.status}} {{mapObject.moves.adjacentGain.until}} (applied at the turn change).</p>
         {{/if}}
         {{#if mapObject.noAttack}}
           <p class="icon-object-effect__warn"><i class="fa-solid fa-ban"></i> While this object is on the map, {{#if mapObject.creatorName}}{{mapObject.creatorName}}{{else}}its creator{{/if}} cannot attack.</p>

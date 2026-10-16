@@ -1656,6 +1656,56 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a4 — Oggetti e movimento: Underway, Comet, Megamushroom, Geyser, pile con personaggi sopra, Aethershard (16 ottobre 2026, versione 1.15.68)
+
+Setup: come R33a3 (scena a griglia quadrata, GM + giocatore connessi). PG: Harvester con Underway (mastery Bale Portal
+sbloccata in una prova), Demon Slayer con Comet, Harvester con Fairy Ring (mastery), Wright con Geyser (mastery GREAT
+GEYSER in una prova), Enochian con Aethershard (Talent I in una prova, mastery AETHERSHIFT in un'altra) e Pyroclast.
+Un foe sulla scena. Solo JS e template: F5 dopo il deploy.
+
+- [ ] **Underway, dalla scheda**: piazza due portali lontani. Metti il PG accanto al primo, selezionalo, apri la scheda del
+      secondo → "Teleport here" → spazi verdi liberi attorno al secondo portale; clic su uno → il token ci va senza
+      animazione, card "<PG> teleports through the Underway (free action, p.168)". Clic su uno spazio non verde → avviso,
+      la scelta resta aperta; Esc o clic destro → non si muove niente. PG non adiacente al primo portale → avviso (per il
+      GM: domanda "Teleport anyway?").
+- [ ] **Underway, al movimento**: trascina un PG (non un foe) accanto a un portale → domanda "Underway — teleport?";
+      "Teleport" → spazi verdi attorno all'altro portale (o agli altri), clic → il PG ci va; "Not now" → resta. Spostarsi
+      tra due spazi già accanto allo stesso portale non chiede di nuovo. Il foe trascinato accanto non chiede niente.
+- [ ] **Bale Portal**: mastery sbloccata, il foe finisce il turno accanto a un portale → card "End of <foe>'s turn … Bale
+      Portal … save to avoid it, bloodied foes fail; once a round". Il GM seleziona il foe, apre l'altro portale →
+      "Teleport here" → il suggerimento ricorda il save. Senza mastery nessuna riga, e un giocatore non può teletrasportare
+      un foe (avviso).
+- [ ] **Comet, rampart**: lancia la Thrown Weapon → attorno al token compare un'aura 1 "Rampart — Thrown Weapon (Comet)" che
+      lo segue; la scheda dice "Spaces adjacent to it have rampart … (p.104)". Pick up → l'aura sparisce con l'oggetto.
+- [ ] **Comet, raccolta al movimento**: trascina il Demon Slayer in uno spazio accanto all'arma → "Thrown Weapon — pick up?"
+      "<PG> entered a space adjacent …"; "Pick up" → l'oggetto sparisce (da giocatore passando dal GM). Allontanandosi da uno
+      spazio adjacente → "left a space adjacent". Un altro PG o un foe accanto → nessuna domanda. A inizio turno del Demon
+      Slayer accanto all'arma → card "Start of <PG>'s turn … can pick it up".
+- [ ] **Megamushroom**: trascina un PG (o un alleato) sullo spazio del Megamushroom → domanda "pick up its blessing token?";
+      "Pick up blessing" → +1 Blessed a quel PG, card, la scheda dice "picked up"; entrando di nuovo non chiede più. Un foe
+      sullo spazio → nessuna domanda.
+- [ ] **Geyser, eruzione guidata**: un PG sul geyser → "Erupt" → finestra con "Removed and placed: <PG>", due caselle
+      ("Place them now …", "Then summon a Salt Sprite in its space"). "Erupt" → card, poi spazi verdi a 1-2 dal PG; clic →
+      il PG ci va (a elevazione 0 se stava sul geyser); il geyser sparisce; un Salt Sprite compare nello spazio del geyser
+      (attore del mondo riusato se c'è già). Caselle tolte → come prima (target, Salt Sprite a mano). "Cancel" → niente.
+      Con GREAT GEYSER: un alleato ha spazi fino a 3, un foe fino a 2. Da giocatore con un foe sul geyser: il foe viene
+      spostato dal GM (socket). Volcanic Geyser: uno dopo l'altro tutti quelli nella medium blast; Esc ne salta uno.
+- [ ] **Geyser, inizio / fine turno**: un personaggio inizia o finisce il turno sul geyser → card "… starts/ends their turn on
+      the Geyser: <PG> can make it erupt".
+- [ ] **In piedi su una pila**: un PG su un Boulder (elevazione 1 messa a mano). Scheda del boulder: + → il PG va a 2; − → torna
+      a 1; Remove → il PG scende a 0. Un PG in volo a elevazione 3 sullo stesso spazio non cambia. Geyser Talent I che cresce
+      a inizio turno: il PG sopra sale con lui. Da giocatore con un foe sopra: il foe viene alzato dal GM.
+- [ ] **Pyroclast, "pushing them up"**: trascina "Magma Spire · H1" sullo spazio di un personaggio → il token dello spire e il
+      personaggio a elevazione 1, avviso "… lifting <nome>". Pyrospire (Infuse) → elevazione 3.
+- [ ] **Aethershard Talent I**: Talent I scelto, uno shard sulla mappa: scheda dello shard → "Move" → spazi verdi fino a 2;
+      clic → lo shard si sposta (la pila si riassesta come prima). Spendi Aether dalla scheda (es. un Infuse) → avviso
+      "spent Aether — Talent I: you can first move one of your aethershards up to range 2". Senza Talent I né bottone né avviso.
+- [ ] **AETHERSHIFT**: mastery sbloccata, l'Enochian finisce il turno accanto a uno shard → status Phasing, card "… gains
+      phasing until the end of your next turn. The spaces of objects cost …"; Phasing finisce alla fine del suo turno dopo.
+      Iniziando il turno accanto → Phasing che dura fino alla fine del turno seguente (non di quello in corso).
+- [ ] **Regressione**: trascinare token lontano dagli oggetti non chiede niente; pile, aure, Erupt senza caselle, Resonate degli
+      Aethershard e Pick up come in R33a3; due GM connessi → le card di inizio / fine turno escono una volta sola.
+
 ## R33a3 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro, scheda dalla barra laterale (16 ottobre 2026, versione 1.15.67)
 
 Setup: come R33a2 (scena a griglia quadrata, GM + giocatore). PG: Enochian con Aethershard e un'abilità con un'area

@@ -10,7 +10,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
-import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject, pickUpObjectBlessing, eruptObject } from "../../canvas/map-objects.mjs";
+import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject, pickUpObjectBlessing, eruptObject, teleportToObject, relocateObject } from "../../canvas/map-objects.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -40,6 +40,8 @@ export class SummonSheet extends BaseActorSheet {
       objectRemove:      SummonSheet.#onObjectRemove,
       objectBlessing:    SummonSheet.#onObjectBlessing,
       objectErupt:       SummonSheet.#onObjectErupt,
+      objectTeleport:    SummonSheet.#onObjectTeleport,
+      objectRelocate:    SummonSheet.#onObjectRelocate,
       rollSummonAttack:  SummonSheet.#onRollSummonAttack,
       rollSummonDamage:  SummonSheet.#onRollSummonDamage,
     },
@@ -148,6 +150,16 @@ export class SummonSheet extends BaseActorSheet {
   /** Object: erupt — Geyser / Volcanic Geyser (p.232; R33a3): a card with whom to place, then it goes. */
   static async #onObjectErupt(event, target) {
     await eruptObject(this.document);
+  }
+
+  /** Object: Underway's "Teleport here" — the selected token goes next to this portal (p.168; R33a4). */
+  static async #onObjectTeleport(event, target) {
+    await teleportToObject(this.document);
+  }
+
+  /** Object: Aethershard Talent I's move up to range 2 (p.210; R33a4). */
+  static async #onObjectRelocate(event, target) {
+    await relocateObject(this.document);
   }
 
   /** Roll the summon's attack as a standard combat roll. Speaker is the summon;
