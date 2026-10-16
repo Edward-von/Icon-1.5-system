@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R50 — Keyword "summon" sul verbo e nomi delle combo (16 ottobre 2026, versione 1.15.52)
+
+Setup: PG di prova (Warden e Shade) con Morrigan, Death Blossom (combo), Umbra, Dark Sliver (mastery sbloccata),
+Geyser e Massive Overhead (mastery sbloccata), dal compendio Jobs o già sulla scheda (è solo codice). F5 dopo il deploy.
+
+- [ ] **Morrigan** (anteprima abilità e Show in Chat): "you summon a massive flock" senza tooltip sulla parola summon;
+      "allied summons in range" con il tooltip Summon; il Collide "Summon a beast" con il tooltip.
+- [ ] **Death Blossom**, riquadro combo: "Flying Sleeves:" senza tooltip su Flying; "allied summon in the area" con
+      il tooltip. Stessa cosa aprendo la scheda item dal compendio.
+- [ ] **Umbra** (Finishing Blow "Summon a shadow"), **Dark Sliver** (mastery "summon a mote of life", e "summon a plant"
+      nella descrizione): tooltip Summon presente come prima.
+- [ ] **Geyser** ("Summon a height 1 geyser object"): niente tooltip Summon sul verbo (il chip del tag "summon" resta).
+- [ ] **Massive Overhead**: mastery "Blood Rush:" senza tooltip su Rush; il bottone 💬 della mastery in chat uguale.
+- [ ] **Non devono cambiare**: un foe che evoca (es. Arachnid Demon, "Chaos Cocoon") e un trofeo (Soul Gem, "summon 3
+      Relict Husks") tengono il tooltip su summon; un talento che inizia con "Slay:" o "Comeback:" ha ancora il tooltip
+      sull'etichetta.
+
 ## R49 — Aree di Slay, Finishing Blow, Exceed e Collide; aree "centered on them" (16 ottobre 2026, versione 1.15.51)
 
 Setup: PG di prova con Death (Fool), Soul Shot, Matsuri, Gust, God Hand (mastery sbloccata), Ace (Talent I), Aria,

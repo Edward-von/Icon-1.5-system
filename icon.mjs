@@ -103,6 +103,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
 import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
 import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
+import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
@@ -348,6 +349,11 @@ Hooks.once("ready", async () => {
   } catch (err) {
     console.error("ICON 1.5 | Data migration failed:", err);
   }
+
+  /* The summons pack index: the rule-keyword tooltips read it to tell "summon a
+   * shadow" (a summon) from "summon a massive flock" (Morrigan, not one). Not
+   * awaited; until it is read every "summon" keeps its tooltip. */
+  loadSummonIndex();
 
   /* Macros dragged into the world are copies and never update by themselves —
    * refresh the ones that came from our compendium, once per system version. */

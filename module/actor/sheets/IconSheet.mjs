@@ -489,7 +489,7 @@ export class IconSheet extends BaseActorSheet {
         comebackEffect:      await this._enrichAbility(s.comebackEffect),
         talent1:             await this._enrichAbility(s.talent1),
         talent2:             await this._enrichAbility(s.talent2),
-        mastery:             await this._enrichAbility(s.mastery),
+        mastery:             await this._enrichAbility(s.mastery, { leadName: true }),
         // Boolean flags for template conditional rendering
         hasHit:     !!(s.hitEffect && s.hitEffect.trim()),
         hasMiss:    !!(s.missEffect && s.missEffect.trim()),
@@ -503,7 +503,7 @@ export class IconSheet extends BaseActorSheet {
         hasFinish:  !!(s.finishingBlowEffect && s.finishingBlowEffect.trim()),
         hasComeback:!!(s.comebackEffect && s.comebackEffect.trim()),
         isCombo:     !!(s.isCombo),
-        comboEffect: await this._enrichAbility(s.comboEffect),
+        comboEffect: await this._enrichAbility(s.comboEffect, { leadName: true }),
         hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
         // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
         comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect, s)),
@@ -1568,7 +1568,7 @@ export class IconSheet extends BaseActorSheet {
   _enrichAbility(html, opts = {}) {
     const combat = this.document.system?.combat ?? {};
     const damageDie = (combat.jobs?.length && combat.damagedie) ? combat.damagedie : null;
-    return enrichHTML(html, { damageDie, ...opts });
+    return enrichHTML(html, { damageDie, summonVerbs: true, ...opts });
   }
 
   /**
@@ -1701,7 +1701,7 @@ export class IconSheet extends BaseActorSheet {
       comebackEffect:      await this._enrichAbility(s.comebackEffect),
       talent1:             await this._enrichAbility(s.talent1),
       talent2:             await this._enrichAbility(s.talent2),
-      mastery:             await this._enrichAbility(s.mastery),
+      mastery:             await this._enrichAbility(s.mastery, { leadName: true }),
       hasDesc:     !!desc.flavor,
       hasTrigger:  !!trigger,
       hasHit:      !!(s.hitEffect && s.hitEffect.trim()),
@@ -1716,7 +1716,7 @@ export class IconSheet extends BaseActorSheet {
       hasFinish:   !!(s.finishingBlowEffect && s.finishingBlowEffect.trim()),
       hasComeback: !!(s.comebackEffect && s.comebackEffect.trim()),
       isCombo:     !!(s.isCombo),
-      comboEffect: await this._enrichAbility(s.comboEffect),
+      comboEffect: await this._enrichAbility(s.comboEffect, { leadName: true }),
       hasCombo:    !!(s.isCombo && s.comboEffect && s.comboEffect.trim()),
       // Complete combo ability: the base text is struck through while the token is held (not for "The Hook: Gains…").
       comboWhole:  !!(s.isCombo && comboReplacesBase(s.comboEffect, s)),
@@ -1818,7 +1818,7 @@ export class IconSheet extends BaseActorSheet {
       jobName:  s.jobName ?? "",
       class:    s.class ?? "",
       chapter:  s.chapter ?? 1,
-      text:     await this._enrichAbility(p.text),
+      text:     await this._enrichAbility(p.text, { leadName: part === "mastery" }),
       statusHtml: statusBlockHtml(parseInflictedStatuses(p.text, { sourceName: this.document.name, label: p.label }),
                                   { source: this.document, abilityName: item.name }),
     };

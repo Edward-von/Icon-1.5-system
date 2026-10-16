@@ -13,6 +13,7 @@
  */
 
 import { GLOSSARY } from "../apps/reference.mjs";
+import { summonIndex } from "./summons.mjs";
 
 /** Plain-text glossary definition for a term (case-insensitive). */
 const _defs = new Map();
@@ -133,6 +134,67 @@ function _lookup(match) {
 
 const SKIP_PARENTS = new Set(["A", "CODE", "PRE", "BUTTON", "INPUT", "TEXTAREA", "SELECT", "SCRIPT", "STYLE"]);
 
+// "summon" used as a verb on something that is not a summon character. The
+// book uses the same verb for objects and terrain ("Characters can often
+// summon or create objects", p.89; "summon a height 1 geyser object",
+// "summon a pit", "summon a waterspout") and for plain effects (Morrigan's
+// "you summon a massive flock of winged beasts", p.171). Only a verb followed
+// by an article or count and the name of a creature of the summons pack
+// ("summon a shadow", "summon two bombs", "summon the soul") keeps the Summon
+// tooltip (summons are characters, p.95); the noun ("allied summons", "a
+// summon you control") always does.
+const SUMMON_VERB = /^summon(?:s|ed|ing)?$/i;
+const SUMMON_OBJECT = /^\s+((?:(?:a|an|the|one|two|three|four|\+?\d+|more|another|additional|extra|new|real|regular|single|each|some|up)\s+)+)([a-z][a-z' -]*)/i;
+function _isSummonCharacter(after, text) {
+  const m = SUMMON_OBJECT.exec(after);
+  if (!m) return true;                         // no object right after it: a noun or a bare verb
+  const names = summonIndex().map(e => String(e.name ?? "").toLowerCase()).filter(Boolean);
+  if (!names.length) return true;              // index not loaded yet: keep the old reading
+  // A creature is named in full ("salt sprite") or by its last word ("the
+  // soul" for the Severed Soul, "a card").
+  const words = [...new Set(names.flatMap(n => [n, n.split(/\s+/).pop()]))];
+  const named = (str) => words.some(w => str.startsWith(w) && /^s?(?![a-z])/.test(str.slice(w.length)));
+  const obj = m[2].toLowerCase();
+  if (named(obj)) return true;
+  // …or the text says what it is: "summon a mote of life … A mote of life is
+  // a plant" (Dark Sliver's mastery, p.187).
+  const low = String(text ?? "").toLowerCase();
+  const head = obj.split(/\s+/).filter(Boolean);
+  for (let k = Math.min(3, head.length); k >= 1; k--) {
+    const thing = head.slice(0, k).join(" ");
+    // `thing` holds only letters, spaces, "'" and "-" (SUMMON_OBJECT): no escaping needed.
+    for (const hit of low.matchAll(new RegExp(String.raw`\b${thing}s? (?:is|are) (?:also )?(?:an? )?`, "g"))) {
+      if (named(low.slice(hit.index + hit[0].length))) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * The rule keywords of one piece of plain text, in order. Pure (no DOM), so
+ * the compendium texts can be checked from Node.
+ * @param {string} text
+ * @param {object} [options]
+ * @param {boolean} [options.summonVerbs=false]  read "summon <something>" as
+ *   above: only for player texts, whose summons are all in the summons pack.
+ *   Foes summon creatures of their own stat block (natals, attack insects),
+ *   so NPC texts keep every "summon".
+ * @returns {Array<{index: number, text: string, entry: object, tip: string}>}
+ */
+export function findRuleKeywords(text, { summonVerbs = false } = {}) {
+  const src = String(text ?? "");
+  const out = [];
+  for (const m of src.matchAll(COMBINED)) {
+    const entry = _lookup(m[0]);
+    const tip = entry ? def(entry.term) : "";
+    if (!tip) continue;
+    if (summonVerbs && entry.term === "Summon" && SUMMON_VERB.test(m[0])
+        && !_isSummonCharacter(src.slice(m.index + m[0].length), src)) continue;
+    out.push({ index: m.index, text: m[0], entry, tip });
+  }
+  return out;
+}
+
 /**
  * Wrap rule keywords in tooltip spans. Safe on plain text and on HTML.
  * @param {string} html
@@ -143,7 +205,7 @@ const SKIP_PARENTS = new Set(["A", "CODE", "PRE", "BUTTON", "INPUT", "TEXTAREA",
  *   Null keeps the [D] symbol (item sheets, compendium, NPCs).
  * @returns {string}
  */
-export function enrichRuleKeywords(html, { damageDie = null } = {}) {
+export function enrichRuleKeywords(html, { damageDie = null, summonVerbs = false } = {}) {
   const src = String(html ?? "");
   if (!src.trim() || typeof document === "undefined") return src;
   if (!COMBINED.test(src)) return src;
@@ -167,12 +229,9 @@ export function enrichRuleKeywords(html, { damageDie = null } = {}) {
     const frag = document.createDocumentFragment();
     const text = node.nodeValue;
     let last = 0;
-    for (const m of text.matchAll(COMBINED)) {
-      const entry = _lookup(m[0]);
-      const tip = entry ? def(entry.term) : "";
-      if (!tip) continue;
-      let before = text.slice(last, m.index);
-      let label = m[0], tooltip = `${entry.term}: ${tip}`;
+    for (const { index, text: word, entry, tip } of findRuleKeywords(text, { summonVerbs })) {
+      let before = text.slice(last, index);
+      let label = word, tooltip = `${entry.term}: ${tip}`;
       if (entry.term === "[D]" && damageDie) {
         // "2[D]" → "2d10": the dice count written right before the symbol joins the die.
         const mult = before.match(/(\d+)$/);
@@ -186,7 +245,7 @@ export function enrichRuleKeywords(html, { damageDie = null } = {}) {
       span.dataset.tooltip = tooltip;
       span.textContent = label;
       frag.appendChild(span);
-      last = m.index + m[0].length;
+      last = index + word.length;
     }
     if (last === 0) continue;
     if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));

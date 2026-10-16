@@ -18,12 +18,43 @@ import { enrichRuleKeywords } from "./keywords.mjs";
  * @param {string|null} [options.damageDie=null]  the character's damage die
  *   ("d10"): "[D]" / "2[D]" are shown as "d10" / "2d10" (PC sheet and its
  *   cards, see IconSheet._enrichAbility). Null keeps the [D] symbol.
+ * @param {boolean} [options.leadName=false]  the text starts with the name of a
+ *   mastery / combo / ultimate ("Flying Sleeves: …"): that name gets no keywords.
+ * @param {boolean} [options.summonVerbs=false]  player text: "summon a <thing>"
+ *   is the Summon keyword only for a creature of the summons pack (keywords.mjs).
  */
-export async function enrichHTML(html, { keywords = true, damageDie = null } = {}) {
+export async function enrichHTML(html, { keywords = true, damageDie = null, leadName = false, summonVerbs = false } = {}) {
+  if (leadName && keywords) {
+    const lead = _leadName(html);
+    if (lead) {
+      const head = await enrichHTML(lead.name, { keywords: false });
+      const rest = await enrichHTML(lead.rest, { damageDie, summonVerbs });
+      return rest ? `${head} ${rest}` : head;
+    }
+  }
   const out = await foundry.applications.ux.TextEditor.implementation.enrichHTML(formatRollTables(formatBulletLists(html)), { async: true });
   if (!keywords) return out;
-  try { return enrichRuleKeywords(out, { damageDie }); }
+  try { return enrichRuleKeywords(out, { damageDie, summonVerbs }); }
   catch (err) { console.warn("[ICON | enrich] keyword enrichment failed", err); return out; }
+}
+
+/**
+ * The name a mastery, combo or ultimate text starts with ("Flying Sleeves:
+ * Area becomes Arc 4…", Death Blossom p.162; "Shukuchi: You can teleport 2…").
+ * It is the name of the version, not rules, so its words ("flying") are not
+ * keywords. A rules label in that place ("Comeback: …", "Slay: …") is not a
+ * name. Plain text only: hand-edited HTML keeps its own markup.
+ * @returns {{name: string, rest: string}|null}  name includes its colon
+ */
+function _leadName(html) {
+  const src = String(html ?? "").trim();
+  if (!src || /<[a-z][^>]*>/i.test(src)) return null;
+  // "HADES — Gains True Strike…" (Holy's combo): a capitalised name before a dash.
+  const dash = /^([A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,44}?)\s*[—–]\s*/.exec(src);
+  if (dash) return { name: dash[0].trim(), rest: src.slice(dash[0].length) };
+  const m = /^([^:.!?\n]{1,45}):\s*/.exec(src);
+  if (!m || _LABEL_ONLY_RE.test(m[1].trim())) return null;
+  return { name: `${m[1].trim()}:`, rest: src.slice(m[0].length) };
 }
 
 /**
@@ -224,6 +255,9 @@ const SECTION_RE = new RegExp(
   `(?:^|[.!?…)\\]]\\s+|—\\s*|>\\s*|\\n\\s*)(${SECTION_LABELS.join("|")}):\\s*`, "gi",
 );
 
+/** A text that is exactly one rules label ("Finishing Blow", "Infuse 3"). */
+const _LABEL_ONLY_RE = new RegExp(`^(?:${SECTION_LABELS.join("|")})$`, "i");
+
 /** Words kept lowercase inside a multi-word label ("End your turn and gain Delay"). */
 const _SMALL_WORDS = new Set(["a", "an", "and", "in", "or", "the", "this", "your", "turn", "gain", "create"]);
 const _canonLabel = (raw) => raw.trim().replace(/\b[a-zA-Z]+/g, (w, i) =>
@@ -292,15 +326,15 @@ export function parseAbilitySections(description, { extraLabels = [] } = {}) {
  * @param {string} description
  * @returns {Promise<string>}
  */
-export async function enrichAbilityDescription(description) {
+export async function enrichAbilityDescription(description, opts = {}) {
   const raw = String(description ?? "");
-  if (/<[a-z][^>]*>/i.test(raw)) return enrichHTML(raw);
+  if (/<[a-z][^>]*>/i.test(raw)) return enrichHTML(raw, opts);
   const { flavor } = parseAbilitySections(raw);
-  if (!flavor) return enrichHTML(raw);
+  if (!flavor) return enrichHTML(raw, opts);
   const text = _flattenText(raw);
   const rest = text.slice(flavor.length).trim();
   const head = await enrichHTML(flavor, { keywords: false });
-  return rest ? `${head} ${await enrichHTML(rest)}` : head;
+  return rest ? `${head} ${await enrichHTML(rest, opts)}` : head;
 }
 
 /**

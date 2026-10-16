@@ -67,6 +67,10 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   async _prepareContext(options) {
     _log(`_prepareContext — item: "${this.document.name}" | type: "${this.document.type}"`);
     const context = await super._prepareContext(options);
+    // Job texts read "summon a <thing>" against the summons pack (keywords.mjs);
+    // foe abilities, templates and trophies summon foe creatures of their own.
+    const summonVerbs = ["ability", "limit-break", "trait", "job-template"].includes(this.document.type);
+    const _enrich = (html, opts = {}) => _enrichText(html, { summonVerbs, ...opts });
     const item    = this.document;
     const system  = item.system;
 
@@ -110,12 +114,12 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
           critEffect:          await _enrich(system.critEffect),
           finishingBlowEffect: await _enrich(system.finishingBlowEffect),
           comebackEffect:      await _enrich(system.comebackEffect),
-          comboEffect:         await _enrich(system.comboEffect),
+          comboEffect:         await _enrich(system.comboEffect, { leadName: true }),
           talent1:             await _enrich(system.talent1),
           talent2:             await _enrich(system.talent2),
-          mastery:             await _enrich(system.mastery),
+          mastery:             await _enrich(system.mastery, { leadName: true }),
           // flavour line stays plain prose (no rule-keyword tooltips)
-          description:         await enrichAbilityDescription(system.description),
+          description:         await enrichAbilityDescription(system.description, { summonVerbs }),
         };
         // Interrupt abilities use a cost of "interrupt-1/2/3" — expose a flag so
         // the sheet can always show the Trigger field (even when still empty),
@@ -125,8 +129,8 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       case "limit-break":
         context.enriched = {
           // book layout: tag line, one labelled block per line (R39)
-          effect:      await enrichLimitBreakText(system.effect),
-          ultimate:    await _enrich(system.ultimate),
+          effect:      await enrichLimitBreakText(system.effect, { enrich: t => _enrich(t) }),
+          ultimate:    await _enrich(system.ultimate, { leadName: true }),
           description: await _enrich(system.description),
         };
         break;
@@ -200,8 +204,8 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       case "job-template":
         context.enriched = {
           description: await _enrich(system.description),
-          lbEffect:    await enrichLimitBreakText(system.limitBreak?.effect),
-          lbUltimate:  await _enrich(system.limitBreak?.ultimate),
+          lbEffect:    await enrichLimitBreakText(system.limitBreak?.effect, { enrich: t => _enrich(t) }),
+          lbUltimate:  await _enrich(system.limitBreak?.ultimate, { leadName: true }),
         };
         context.enrichedJobTraits = await Promise.all((system.traits ?? []).map(async (t, i) => ({
           ...t, i, enrichedDescription: await _enrich(t.description),
@@ -292,6 +296,6 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
   }
 }
 
-async function _enrich(html) {
-  return enrichHTML(html);
+async function _enrichText(html, opts = {}) {
+  return enrichHTML(html, opts);
 }

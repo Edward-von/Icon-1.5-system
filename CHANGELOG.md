@@ -1,5 +1,28 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Keyword "summon" e nomi di combo / mastery non più evidenziati a sproposito (versione 1.15.52)
+
+### Round di debug del 16 ottobre, punto R50
+
+- **Morrigan** (Warden, p.171: "you summon a massive flock of winged beasts … Yourself, allies, and allied summons in
+  range can dash 2"): il primo "summon" aveva il tooltip della keyword Summon, ma lo stormo non è un summon → la parola
+  "summon" era evidenziata sempre, anche usata come verbo su una cosa che non è un personaggio summon (il manuale usa lo
+  stesso verbo per oggetti e terreno: "Characters can often summon or create objects", p.89; i summon sono personaggi,
+  p.95) → nei testi dei PG il verbo "summon a / the / two …" resta evidenziato solo se dopo c'è una creatura del
+  compendio Summons ("summon a shadow", "summon two bombs", "summon the soul" del Severed Soul), o una cosa che il
+  testo stesso dice essere una di queste ("A mote of life is a plant", Dark Sliver p.187). "allied summons" (il nome)
+  resta evidenziato come prima. Oltre a Morrigan, perdono il tooltip solo oggetti e terreno: Aethershard, Geyser,
+  Waterspout, Rampant Nail ("summon the nail"), la mastery di Rime ("summon a pit"), l'eldflame di Gigaflare / Enochian
+  e la frase di colore di Paradiso nella scheda item. Foe, legend e trofei non cambiano: evocano creature del loro
+  blocco statistiche, che non sono nel compendio Summons.
+- **Death Blossom** (Shade, p.162: "COMBO: FLYING SLEEVES"): "Flying" del nome della combo aveva il tooltip di Flying →
+  il nome all'inizio di combo, mastery e ultimate ("Flying Sleeves: …", "HADES — …") era letto come testo di regole →
+  ora quel nome non riceve keyword (scheda PG, card in chat, scheda item). Un'etichetta di regole in quel punto
+  ("Comeback: …") non è un nome e resta evidenziata. Nel compendio Jobs cambiano anche Massive Overhead (mastery "Blood
+  Rush", perde "Rush") e Dark Knight (mastery "Infectious Hatred", perde "Hatred").
+- Confronto prima/dopo su tutti i testi del compendio Jobs (copia del pack): cambiano solo i 12 testi elencati qui
+  sopra; negli altri compendi nessun cambiamento. Solo codice, vale per le copie già sulle schede.
+
 ## 16 ottobre 2026 — Aree di Slay / Finishing Blow e aree "centered on them" sulla mappa (versione 1.15.51)
 
 ### Round di debug del 16 ottobre, punto R49

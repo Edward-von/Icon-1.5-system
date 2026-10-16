@@ -198,11 +198,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Death offre "Slay / Finishing Blow: Large Blast (target)", poi Soul Shot, Matsuri, Gust, God Hand, Ace e altri;
       "burst N (target)" nel testo ora letto giusto. Elden Rune offriva già la Small Blast della mastery; la mastery di
       Eye of the Storm è un oggetto (R33). Solo codice.)
-- [ ] **R50. Keyword evidenziate fuori dal testo di colore** (S, bug)
+- [x] **R50. Keyword evidenziate fuori dal testo di colore** (S, bug)
       - Morrigan: "The first line of the effect text has summon highlighted, as if the flock being summoned from morrigan
         is a summon (character type), but it is not. The second line is correct; don't remove that underlining".
         Nel compendio la descrizione non ha etichette, quindi è tutta regole ("you summon a massive flock").
       - Death Blossom: "the name 'Flying Sleeves'" (nome della combo) evidenziato come keyword.
+      (FATTO il 16 ottobre 2026, versione 1.15.52: nei testi dei PG il verbo "summon a …" ha il tooltip Summon solo
+      se dopo c'è una creatura del compendio Summons; il nome all'inizio di combo, mastery e ultimate non riceve
+      keyword. Cambiano 12 testi del compendio Jobs, foe e trofei no.)
 - [ ] **R51. Stack Dice: al capitolo 3 il secondo dado non si può alzare** (S, bug)
       "When at chapter 3, the trait properly shows having 2 stacked die to use, but does not allow the user to increment up
       the second dice." Il testo del tratto nel compendio dice "only hold on to one Stacked Die at once": cercare sul
