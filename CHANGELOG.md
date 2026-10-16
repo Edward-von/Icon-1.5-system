@@ -1,5 +1,27 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (versione 1.15.42)
+
+### Round di debug del 16 ottobre, punto R41
+
+- **Lo status del bersaglio d'attacco veniva proposto a tutti quelli nell'area**: Maar segnalava che Blackstar
+  ("Effect: Attack target is shattered.", p.212) e Drifting Leaf ("Effect: Foe is shattered.", p.227) mettevano i
+  bottoni Shattered su ogni token dell'area → nel dialog dell'attacco si sceglie già il bersaglio d'attacco, e il
+  d20 e l'Evasion andavano solo a lui, ma il riquadro Inflict della card d'attacco non lo sapeva: prendeva tutti i
+  token bersagliati (quelli dentro l'area) e dava a ciascuno tutti i bottoni. Il manuale distingue le due cose:
+  un'area applica il suo effetto "to all specified characters in the area" (p.94) e, negli attacchi ad area, "For a
+  character in the attack space, make an attack … and apply the attack part of your ability instead of the area
+  effect" (p.97) → ora, quando c'è un bersaglio d'attacco e altri token nell'area, la card d'attacco mette per
+  primo il bersaglio d'attacco, segnato "(attack target)", con i bottoni di Hit / Miss / Crit / Exceed e delle frasi
+  sul bersaglio ("Attack target is …", "Foe is …", "your foe", "the target"); gli altri, segnati "(area)", hanno solo
+  il blocco Area e le frasi che parlano di tutti ("foes in the area", "all foes", "foes inside", come l'Exceed di
+  Soul Shot), che restano anche al bersaglio d'attacco perché anche lui è nell'area; quello che il testo non chiarisce
+  resta a tutti come prima. La regola legge il testo, non il nome: nel compendio Jobs cambia per Cryo, Demon Cutter,
+  Sleight of Hand, Diablo, Bio, Blackstar, Lance, Soul Shot, Drifting Leaf (solo il bersaglio) e Chaos Tarot,
+  Heave-Ho (solo l'area). Vale anche per le azioni dei Foe e dei Legend. Dove il bersaglio d'attacco non è stato
+  scelto (Show in Chat, card Auto-hit) con più token bersagliati, i bottoni restano su tutti ma i gruppi solo per il
+  bersaglio sono etichettati "attack target only". Solo codice, nessun dato modificato.
+
 ## 16 ottobre 2026 — Combo "instead of …" che sostituiscono solo una parte della base (versione 1.15.41)
 
 ### Round di debug del 16 ottobre, punto R40

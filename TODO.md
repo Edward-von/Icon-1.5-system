@@ -102,7 +102,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       - Incubus / Succubus: "Combo version does not properly clear out the mark text from the print-to-chat box"
         ("Instead of the mark, gain Effect: …"). Assorbe la voce "Emerso lavorando su R1 — Incubus / Succubus".
       R1 riconosce "replace the base effect with"; queste due combo dicono "instead of …". Controllare sul manuale.
-- [ ] **R41. Inflict su tutti i bersagli dell'area invece che sul solo bersaglio dell'attacco** (S/M, bug)
+- [x] **R41. Inflict su tutti i bersagli dell'area invece che sul solo bersaglio dell'attacco** (S/M, bug)
+      (FATTO il 16 ottobre 2026, versione 1.15.42: sulla card d'attacco con un bersaglio d'attacco scelto e altri token
+      nell'area, Hit / Miss / Crit / Exceed e le frasi "Attack target is / Foe is / your foe" vanno solo al bersaglio
+      d'attacco, il blocco Area solo agli altri, le frasi su tutti ("foes in the area", "foes inside") a tutti; p.94 e p.97.)
       Blackstar: "Shattered effect prompts the user to place shattered on all targets in the area, not just the main
       attack target." Drifting Leaf: "Only the attack target should be prompted for the shatter effect. Inflict currently
       presents all targets in the area." (Drifting Leaf: "Effect: Foe is shattered.")
@@ -240,6 +243,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (`combat/ability-damage.mjs`) legge "deal 3 damage to all characters marked by Incubus" come danno Hit e
       sostituisce il [D]+fray della base: il Damage Roll propone 3 su Hit invece di [D]+fray (p.164: Succubus cambia
       solo il Mark). I 3 danni andrebbero sotto Other.
+- [ ] **Emerso lavorando su R41 — Show in Chat e card Auto-hit non sanno chi è il bersaglio d'attacco** (S): senza il
+      dialog dell'attacco, con più token bersagliati (area piazzata) i bottoni Inflict restano su tutti, con il gruppo
+      etichettato "attack target only". La card Auto-hit potrebbe chiedere il bersaglio d'attacco (o prendere
+      l'attack space dell'area: il centro di un Blast / Burst, p.97) e dividere le righe come la card d'attacco.
 
 ---
 

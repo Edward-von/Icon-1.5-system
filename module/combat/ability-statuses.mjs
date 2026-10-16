@@ -636,6 +636,34 @@ export function captureTargets() {
   }));
 }
 
+/**
+ * Who an inflict entry is for, on an area attack (p.94: an area effect applies
+ * "to all specified characters in the area"; p.97: "For a character in the
+ * attack space, make an attack … and apply the attack part of your ability
+ * instead of the area effect"):
+ *   "attack" — only the attack target: the Hit / Miss / Crit / Exceed blocks,
+ *              and any sentence about "the attack target", "your target",
+ *              "foe is …", "your foe" (Drifting Leaf "Effect: Foe is shattered",
+ *              Blackstar "Effect: Attack target is shattered");
+ *   "area"   — only the other characters in the area: the Area block;
+ *   ""       — everyone: a sentence about "foes in the area", "all foes",
+ *              "foes inside" (the attack target is in the area too), or
+ *              nothing said — every row gets it, as before.
+ * @param {StatusEntry} e
+ * @returns {"attack"|"area"|""}
+ */
+export function entryScope(e) {
+  const l = String(e?.section ?? "").toLowerCase().trim();
+  if (/^area(?: effect)?$/.test(l)) return "area";
+  const s = String(e?.sentence ?? "");
+  // Said of everyone in the area ("Foes inside take 2 damage and are blinded",
+  // Soul Shot's Exceed): the attack target is in the area too, so every row.
+  if (/\b(?:in|inside|within)\s+(?:the|this|that|its|your)\s+(?:area|aura|blast|line|arc|burst)\b|\b(?:all|every|each)\s+(?:other\s+)?(?:foes?|enemies|characters?|targets?)\b|\b(?:foes|characters)\s+(?:in|inside|caught)\b/i.test(s)) return "";
+  if (/^(?:on hit|hit|auto-?hit|miss|crit(?:ical)?(?: hit)?)$/.test(l) || /^exceed/.test(l)) return "attack";
+  if (/\b(?:attack\s+target|(?:your|the|that|their)\s+(?:attack\s+)?(?:target|foe))\b|(?:^|[.:;]\s*)(?:the\s+)?(?:foe|target)\s+(?:is|are|becomes?|gains?|must)\b/i.test(s)) return "attack";
+  return "";
+}
+
 /** Is a block of this outcome key "on" for the rolled outcome? (null outcome = everything on) */
 function _blockOn(key, outcome) {
   if (!outcome) return true;
@@ -696,9 +724,11 @@ export function pairSaveOutcomes(entries) {
  * @param {object} [opts.outcome]       { isHit, isCrit, isExceed } from the attack roll (null = no roll)
  * @param {Array}  [opts.targets]       captureTargets() result (default: capture now)
  * @param {Set<string>} [opts.evaded]   actor uuids that evaded the attack (defenses.mjs) → their row is dimmed
+ * @param {string} [opts.attackTargetId] area attack: token picked as the attack target (roll-dialogs.mjs).
+ *                                      Its row gets the attack part, the other rows the area part (entryScope).
  * @returns {string} safe HTML ("" when there is nothing to inflict)
  */
-export function statusBlockHtml(entries, { source, abilityName = "", outcome = null, targets = null, evaded = null } = {}) {
+export function statusBlockHtml(entries, { source, abilityName = "", outcome = null, targets = null, evaded = null, attackTargetId = "" } = {}) {
   if (!entries?.length || !source) return "";
   const inflict = pairSaveOutcomes(entries.filter(e => !e.kind || e.kind === "save-damage"));
   const gains   = entries.filter(e => e.kind === "gain");
@@ -722,10 +752,23 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
 
   /* --- Inflict (negative statuses on the targets, save-linked damage) --- */
   if (inflict.length) {
-    const rows = targets ?? captureTargets();
-    const groups = groupsOf(inflict);
-    const buttons = (target) => groups.map(g => {
+    let rows = targets ?? captureTargets();
+    // Area attack with its attack target known and other characters in the
+    // area: the attack target first, and each row only gets what is for it.
+    const split = !!attackTargetId && rows.length > 1 && rows.some(t => t.tokenId === attackTargetId);
+    if (split) rows = [...rows.filter(t => t.tokenId === attackTargetId), ...rows.filter(t => t.tokenId !== attackTargetId)];
+    // Attack target not known (Show in Chat, auto-hit) with several targets:
+    // every row keeps every button, the attack-only groups say so.
+    const flagAttackOnly = !split && rows.length > 1;
+    const forRow = (target) => {
+      if (!split || !target) return inflict;
+      const isAttack = target.tokenId === attackTargetId;
+      return inflict.filter(e => { const sc = entryScope(e); return isAttack ? sc !== "area" : sc !== "attack"; });
+    };
+    const buttons = (target) => groupsOf(forRow(target)).map(g => {
       const on = _blockOn(g.key, outcome);
+      // Hit / Miss / Crit / Exceed are plainly the attack's: only the Effect-like blocks need saying.
+      const attackOnly = flagAttackOnly && g.key === "other" && g.entries.every(e => entryScope(e) === "attack");
       const btns = g.entries.map(e => {
         const save = e.when !== "always";
         const dmg = e.saveDamage;
@@ -750,13 +793,14 @@ export function statusBlockHtml(entries, { source, abilityName = "", outcome = n
           data-target-uuid="${esc(target?.actorUuid ?? "")}" data-target-token="${esc(target?.tokenId ?? "")}"${dmgAttrs}${pairAttr}
           title="${esc(title)}${mods ? ` (${esc(mods)})` : ""}${e.until ? ` — ends ${esc(e.until)}` : ""}&#10;${esc(e.sentence)}">${label}${e.until ? " <small><i class='fa-solid fa-hourglass-half'></i></small>" : ""}</button>`;
       }).join("");
-      return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${g.section ? `<small class="icon-chat-statuses__section">${esc(g.section)}</small>` : ""}${btns}</span>`;
+      const section = attackOnly ? `${g.section ? `${g.section} · ` : ""}attack target only` : g.section;
+      return `<span class="icon-chat-statuses__group${on ? "" : " icon-chat-statuses__group--off"}" ${on ? "" : 'title="Not triggered by this roll"'}>${section ? `<small class="icon-chat-statuses__section"${attackOnly ? ' title="For the attack target only (p.97), not for the other characters in the area"' : ""}>${esc(section)}</small>` : ""}${btns}</span>`;
     }).join("");
 
     const rowsHtml = rows.length
       ? rows.map(t => `<div class="icon-chat-statuses__row${evaded?.has(t.actorUuid) ? " icon-chat-statuses__row--evaded" : ""}" data-target-uuid="${esc(t.actorUuid)}"${evaded?.has(t.actorUuid) ? ' title="This target evaded the attack: only effects that don\'t need a hit apply"' : ""}>
           ${t.img ? `<img class="icon-chat-card__target-img" src="${esc(t.img)}" alt="" width="24" height="24">` : ""}
-          <strong class="icon-chat-statuses__name">${esc(t.name)}${evaded?.has(t.actorUuid) ? " <small>(evaded)</small>" : ""}</strong>
+          <strong class="icon-chat-statuses__name">${esc(t.name)}${evaded?.has(t.actorUuid) ? " <small>(evaded)</small>" : ""}${split ? (t.tokenId === attackTargetId ? " <small>(attack target)</small>" : " <small>(area)</small>") : ""}</strong>
           <span class="icon-chat-statuses__buttons">${buttons(t)}</span>
         </div>`).join("")
       : `<div class="icon-chat-statuses__row icon-chat-statuses__row--live">

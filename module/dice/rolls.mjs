@@ -283,7 +283,11 @@ export async function combatRoll({
     // Inflicted statuses: one button per status and target; the groups of
     // the outcomes this roll did not reach (Miss on a hit, Exceed under 15…)
     // are dimmed, not hidden. Rows of targets that evaded are dimmed too.
-    statusHtml: actor ? statusBlockHtml(statusEntries, { source: actor, abilityName: abilityName ?? "Attack", outcome: { isHit, isCrit, isExceed }, evaded: evasion.evadedUuids }) : "",
+    // `targets` narrowed to one token = the attack target picked in the dialog
+    // of an area attack: its row gets the attack part, the rest of the area
+    // only the area part (p.97).
+    statusHtml: actor ? statusBlockHtml(statusEntries, { source: actor, abilityName: abilityName ?? "Attack", outcome: { isHit, isCrit, isExceed }, evaded: evasion.evadedUuids,
+      attackTargetId: targets?.length === 1 ? (targets[0].tokenId ?? "") : "" }) : "",
   });
 
   const speaker = actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();

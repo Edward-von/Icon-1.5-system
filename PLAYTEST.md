@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R41 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (16 ottobre 2026, versione 1.15.42)
+
+Setup: PG di prova con Blackstar (Enochian) e Drifting Leaf (dal compendio Jobs: è solo codice, vanno bene anche
+quelli già sulla scheda); tre foe vicini sulla mappa.
+
+- [ ] **Blackstar**: Attack → Large Blast piazzato sui tre foe → nel dialog scegliere il foe al centro come bersaglio
+      d'attacco → la card d'attacco, riquadro Inflict: prima riga quel foe con "(attack target)" e il bottone
+      Shattered; le altre due righe con "(area)" e nessun Shattered.
+- [ ] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga.
+- [ ] **Blocco Area**: un'abilità con status nel blocco Area (Heave-Ho: "Characters caught in the area are shoved 1,
+      and foes become vulnerable"; o Chaos Tarot) → Vulnerable / Sealed sulle righe "(area)", non sul bersaglio
+      d'attacco.
+- [ ] **Frasi per tutti**: Soul Shot con un Exceed (15+) → "Foes inside … are blinded": Blinded su tutte le righe,
+      bersaglio d'attacco compreso; il Blinded dell'Effect ("Foe is blinded") solo sul bersaglio d'attacco.
+- [ ] **Foe**: un foe con un'azione ad area che dà uno status al bersaglio → stessa divisione sulla card.
+- [ ] **Senza area / un solo bersaglio**: attacco normale su un foe → riquadro Inflict come prima, senza le scritte
+      "(attack target)" / "(area)".
+- [ ] **Show in Chat**: Blackstar → Show in Chat con tre foe bersagliati → bottoni su tutte e tre le righe, il gruppo
+      Effect etichettato "Effect · attack target only".
+
 ## R40 — Combo "instead of …" che sostituiscono solo una parte della base (16 ottobre 2026, versione 1.15.41)
 
 Setup: PG Shade di prova con Umbra e Incubus (vanno bene anche quelli già sulla scheda: è solo codice), un combo
