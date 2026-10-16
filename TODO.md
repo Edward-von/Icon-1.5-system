@@ -150,13 +150,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.47: la scelta Hit compare solo se il colpo fa danno, se l'abilità è un
       attacco o se non c'è altro danno; le abilità non-attacco con solo danno d'area aprono su Area. Cambiano Dragon
       Dive, Bifröst, Chaos Tarot, Justice, Comet e 83 azioni ad area dei foe. Solo codice.)
-- [ ] **R46. Danno di Infuse e mastery che lo cambiano non aggiornato nel tiro del danno** (M, bug)
+- [x] **R46. Danno di Infuse e mastery che lo cambiano non aggiornato nel tiro del danno** (M, bug)
       - Cryo, Infuse 3 CRYOTIC: "increase damage to fray damage", ma il tiro resta a 1; idem per la mastery MAGNACRYO
         (Hit 2[D]+fray, Area [D]+fray).
       - Bio / Magnabio: "Alternate version (magnabio) does not update the damage die properly."
       - Geo, mastery Infuse 6 MAGNAGEO: l'Area deve diventare [D]+Fray, il tiro propone solo Fray.
       - Nothung, mastery EXCALIBUR: "All 1 piercing damage listed by this ability becomes divine", il tipo non cambia.
       Serve che il tiro del danno legga la versione infusa / della mastery quando è attiva.
+      (FATTO il 16 ottobre 2026, versione 1.15.48: con un Infuse armato il tiro del danno usa le righe Hit / Miss /
+      Area della versione (MAGNABIO, MAGNAGEO, MAGNACRYO, MAGNAPYRE, GREAT SPIRIT LANCE) o il suo "damage to …"
+      (CRYOTIC, AEONCLOUD); MAGNACRYO parte con un dado bonus ogni due Aether spesi e si tira per colpire. EXCALIBUR
+      rende divine i danni "1 piercing" proposti (Talent I di Nothung). Solo codice.)
 - [ ] **R47. Aree di Infuse e talenti che cambiano dimensione** (S/M, bug)
       - Ätherwand, Infuse X ÄTHERSTURM ("Extend the area by 1 space for every Aether infused, up to +3"): "Only allows you
         to select line 3".
@@ -274,6 +278,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       defiance, then become unstoppable until the end of their next turn" (Star Scorned Hermit): dopo R42 la Defiance
       va all'alleato, ma "then become unstoppable" è letto come imperativo e il Gain Unstoppable va su di te. In più la
       Defiance prende la durata dell'Unstoppable ("until the end of their next turn"), che nel testo non è sua.
+- [ ] **Emerso lavorando su R46 — danno aggiunto dalle versioni Infuse delle abilità non proposto in Other** (S/M):
+      come per i Limit Break (R38b), le versioni infuse che aggiungono danno invece di cambiarlo non compaiono in Other:
+      MAGNARIME ("Deal 1 piercing damage to all characters in the area again … for every two aether infused"), BOULDER
+      KICK di Dragon Dive ("2 piercing damage twice instead" se c'è un solo personaggio), INCANDIUS di Soul Burn ("dealing
+      1 piercing"), GRAM di Nothung ("Slay or Infuse 3": in più il blocco "Slay or Infuse" non ha il bottone Infuse,
+      `infuseCost` accetta solo "Infuse N"). Con EXCALIBUR il danno di GRAM e dell'Effect di Nothung andrebbe divine,
+      ma oggi non è proposto (vedi anche "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
 
 ---
 

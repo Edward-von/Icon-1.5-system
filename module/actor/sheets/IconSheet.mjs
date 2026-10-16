@@ -91,11 +91,17 @@ function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
-import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage } from "../../combat/ability-damage.mjs";
+import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage, infusedAbilityDamage } from "../../combat/ability-damage.mjs";
 import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
+
+/** The armed one of an ability's infusions (infusionsOf), with the Aether spent on it, or null. */
+function _armedVersion(infusions, actor) {
+  const armed = (infusions ?? []).find(i => i.armed);
+  return armed ? { ...armed, spent: armedInfusion(actor)?.spent ?? 0 } : null;
+}
 
 export class IconSheet extends BaseActorSheet {
 
@@ -372,9 +378,11 @@ export class IconSheet extends BaseActorSheet {
       const s = this._comboSystem(a);
       const talentSelected  = s.talentSelected ?? 0;
       const masteryUnlocked = !!s.masteryUnlocked;
-      const parsed = _parseAbilityDamage(s);
-      const parsedCombo = parseComboAbilityDamage(s);
       const desc = parseAbilitySections(s.description);
+      const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id);
+      // The armed Infuse version's damage (Magnabio's Hit 2[D]+fray, Cryotic's fray damage).
+      const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, actor));
+      const parsedCombo = parseComboAbilityDamage(s);
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       // While the combo token is held, a combo ability shows the combo's own
       // tags (Hades: True Strike + Medium Blast) — flagged as upgraded — and
@@ -410,7 +418,7 @@ export class IconSheet extends BaseActorSheet {
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
         // Infuse versions (Wright, p.117): cost, name, and whether one is armed
-        infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id),
+        infusions,
         marks:       _abilityMarks(actor.id, a.id, _comboMark(a.system), _altComboMark(a.system)),
         // Track button: a reminder on the designated character that isn't a mark (marks.mjs)
         canTrack:    abilityTracks(s, tags),
@@ -1595,7 +1603,10 @@ export class IconSheet extends BaseActorSheet {
     if (!item) return null;
     await loadSummonIndex();   // chat cards can be posted before any sheet render
     const s = this._comboSystem(item);
-    const parsed = _parseAbilityDamage(s);
+    const desc = parseAbilitySections(s.description);
+    const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id);
+    // The armed Infuse version's damage replaces the base where it writes its own (p.117).
+    const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, this.document));
     const parsedCombo = parseComboAbilityDamage(s);
     // Combo version in play: its tags replace the ability's (Hades gains True
     // Strike and Medium Blast) and its own text says how the attack lands
@@ -1603,7 +1614,6 @@ export class IconSheet extends BaseActorSheet {
     const combo  = comboMode ?? this._comboArmed(item);
     const { tags, ...cost } = resolveAbilityCost(s, resolveAbilityTags(s, { comboMode: combo }));
     const active = combo && parsedCombo ? parsedCombo : parsed;
-    const desc = parseAbilitySections(s.description);
     const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
     return {
       id:          item.id,
@@ -1625,7 +1635,7 @@ export class IconSheet extends BaseActorSheet {
       canGamble:   abilityGambles(s, tags),
       actorUuid:   this.document.uuid,
       summons:     summonsForAbility(s, s.jobName),
-      infusions:   infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id),
+      infusions,
       marks:       _abilityMarks(this.document.id, item.id, _comboMark(item.system), _altComboMark(item.system)),
       canTrack:    abilityTracks(s, tags),
       trackMarks:  marksBy(this.document.id, `${item.id}:track`).map(m => ({ uuid: m.uuid, targetName: m.targetName })),
@@ -2456,7 +2466,9 @@ export class IconSheet extends BaseActorSheet {
       outcome:     mods.outcome,
       damagedie:   combat.damagedie,
       fray:        combat.fray,
-      abilityName: useCombo ? comboTitle(ab.name, comboText) : ab.name,
+      // The armed Infuse version names the roll ("Bio — MAGNABIO").
+      abilityName: useCombo ? comboTitle(ab.name, comboText)
+                 : ab.parsed?.version?.name ? `${ab.name} — ${ab.parsed.version.name}` : ab.name,
       bonusDice:   mods.bonusDice,
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,

@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R46 — Il tiro del danno legge la versione Infuse armata (16 ottobre 2026, versione 1.15.48)
+
+Setup: PG di prova Wright con Cryo (Stormbender), Bio e Geo (Geomancer), Eye of the Storm e Nothung (Spellblade), dal
+compendio Jobs o già sulla scheda (è solo codice); Aether a 6; un foe sulla mappa come bersaglio.
+
+- [ ] **Cryo, CRYOTIC**: Infuse 3 → Damage: Hit "fray", Area "fray" (non più 1). Il titolo della card è "Cryo —
+      CRYOTIC". Disarmato di nuovo (secondo click, Aether restituito) il tiro torna a 1.
+- [ ] **Cryo, MAGNACRYO**: mastery sbloccata, Infuse X con 4 Aether → il bottone dice Attack Roll (non Auto-Hit);
+      Damage: Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray, Bonus dice già a 2 con la nota "MAGNACRYO: +2 bonus dice
+      from the Aether spent". Con 3 Aether i dadi bonus sono 1.
+- [ ] **Bio, MAGNABIO**: mastery sbloccata, Infuse 6 → Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray. Con BIOTIC
+      (Infuse 3) il danno resta quello base ([D]+fray / fray / fray).
+- [ ] **Geo, MAGNAGEO**: Infuse 6 → Area [D]+fray (non solo fray), Miss [D]+fray.
+- [ ] **Eye of the Storm, AEONCLOUD**: Infuse 3 → Area [D]+fray (base [D]).
+- [ ] **Nothung, EXCALIBUR**: mastery sbloccata e Talent I scelto → Damage → Other: il chip del Talent I dice "1
+      divine"; sceglierlo spunta Divine (non Pierce). Senza mastery dice "1 piercing" e spunta Pierce.
+- [ ] **Non deve cambiare**: un'abilità senza Infuse armato tira come prima; un Limit Break con Infuse armato
+      (Gigaflare, Tetraflare) tira come in R38b.
+
 ## R45 — Niente "Hit (no damage)" sulle abilità che danneggiano solo con l'area (16 ottobre 2026, versione 1.15.47)
 
 Setup: PG di prova Geomancer con Dragon Dive e Spellblade con Bifröst (dal compendio Jobs o già sulla scheda: è solo

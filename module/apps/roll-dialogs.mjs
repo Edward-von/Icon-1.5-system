@@ -416,6 +416,11 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   const fbNote   = !fbBlock || !bloodied.length ? ""
     : `Finishing Blow: ${bloodied.map(t => t.name).join(", ")} ${bloodied.length > 1 ? "are" : "is"} bloodied${fbBonus ? " — +1 bonus die added" : " — the block triggers"}`;
 
+  // The armed Infuse version's own bonus damage (MAGNACRYO: "bonus damage for
+  // every two aether spent", see infusedAbilityDamage): one die per instance.
+  const infBonus = Math.max(0, Number(p.bonusDice) || 0);
+  const infNote  = infBonus ? `${p.version?.name || "Infuse"}: +${infBonus} bonus ${infBonus > 1 ? "dice" : "die"} from the Aether spent` : "";
+
   const chunkFormula = (c) => {
     const parts = [];
     if (c?.mult > 0) parts.push(`${c.mult}[${die}]`);
@@ -502,7 +507,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
           <div class="icon-roll-steppers">
-            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus, max: 5 })}
+            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus + infBonus, max: 5 })}
             ${_stepper({ name: "flatBonus", label: "Flat damage", hint: "a fixed amount added after the dice (Harden, blessings, one-off effects)", value: 0, max: 30 })}
             ${_stepper({ name: "instances", label: "Instances ×N", hint: "the same damage dealt N separate times (\"3 damage, three times\", p.92): armor, vulnerable and weakened count on each", value: Math.max(1, p.hit?.times ?? 1), min: 1, max: 10 })}
           </div>
@@ -516,7 +521,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply neither the target's Cover nor its Aetherwall halves the damage."><input type="checkbox" name="unerring" ${ignores.unerring ? "checked" : ""}><span>Unerring <small>${ignores.unerring ? esc(whyTick(ignores.unerring, "Unerring")) : "ignores Cover / Aetherwall"}</small></span></label>
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
-          ${hatred.active || autoHalf.length || dodgers.length || fbNote ? `<div class="icon-roll-auto">
+          ${hatred.active || autoHalf.length || dodgers.length || fbNote || infNote ? `<div class="icon-roll-auto">
+            ${infNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] for each instance and keep the highest (p.102).">${esc(infNote)}</span>` : ""}
             ${fbNote ? `<span class="icon-roll-auto__chip" title="Finishing Blow (Vagabond): triggers when the attack targets a Bloodied foe — at or under 50% HP (p.104).">${esc(fbNote)}</span>` : ""}
             ${hatred.active ? `<span class="icon-roll-auto__chip"><i class='fa-solid fa-triangle-exclamation'></i> ${esc(hatred.note)}</span>` : ""}
             ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}

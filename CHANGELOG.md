@@ -1,5 +1,30 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Il tiro del danno legge la versione Infuse armata (versione 1.15.48)
+
+### Round di debug del 16 ottobre, punto R46
+
+- **Cryo, Bio, Geo con l'Infuse o la mastery armata tirano il danno base**: con CRYOTIC armato ("increase damage to fray
+  damage", p.234) il tiro restava a 1, con MAGNABIO (p.218) a [D]+fray, con MAGNAGEO (p.219) l'Area restava fray →
+  il bottone Infuse spendeva l'Aether e cambiava l'area, ma il tiro del danno leggeva solo il testo base
+  dell'abilità; il lavoro di R38b valeva solo per i Limit Break → ora, con una versione Infuse armata, il tiro usa le
+  righe Hit / Miss / Area scritte nella versione (quelle che non scrive restano le base) oppure il suo "damage to …",
+  che cambia tutti i danni dell'abilità. La card porta il nome della versione ("Bio — MAGNABIO").
+- **MAGNACRYO** (p.234, Infuse X): Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray; "bonus damage for every two aether
+  spent" fa partire la finestra con un dado bonus ogni due Aether spesi (un [D] in più per ogni istanza di bonus damage,
+  glossario p.102), con la nota del perché; e siccome la versione ha Hit e Miss, il bottone diventa Attack Roll invece
+  di Auto-Hit.
+- **EXCALIBUR di Nothung** (p.225, "All 1 piercing damage listed by this ability becomes divine"): il tipo non
+  cambiava → la frase era scartata perché cambia il danno invece di aggiungerne → ora, con la mastery sbloccata, i
+  danni da 1 piercing proposti dalla finestra (oggi il Talent I, "deals 1 piercing damage again") sono divine e la
+  finestra spunta Divine invece di Pierce. Il danno dell'Effect e di GRAM non è ancora proposto in Other: annotato in
+  TODO.
+- Confronto su tutte le 144 abilità del compendio Jobs (script su una copia del pack, in
+  `icon-compendium-audit/r46-infuse-damage/`): cambiano CRYOTIC e MAGNACRYO (Cryo), MAGNAGEO (Geo), MAGNABIO (Bio),
+  MAGNAPYRE (Pyre), GREAT SPIRIT LANCE (Lance), AEONCLOUD (Eye of the Storm, "damage to [D]+fray": Area [D]+fray,
+  p.236) e Nothung con mastery e Talent I. Le altre 22 versioni Infuse non toccano il danno e restano uguali. Senza
+  Infuse armato nessuna abilità cambia. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Niente "Hit (no damage)" sulle abilità che danneggiano solo con l'area (versione 1.15.47)
 
 ### Round di debug del 16 ottobre, punto R45

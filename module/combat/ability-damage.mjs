@@ -91,7 +91,7 @@ export function parseAbilityDamage(itemSystem) {
     const m = s.description.match(/miss\s*[:]\s*([^.]+)/i);
     if (m) missText = m[1];
   }
-  const miss = parseChunk(missText);
+  let miss = parseChunk(missText);
 
   // Area: prefer `areaEffect`; fall back to "Area Effect:" in description
   let areaText = s.areaEffect || "";
@@ -157,6 +157,21 @@ export function parseAbilityDamage(itemSystem) {
     }
   }
 
+  // A mastery that changes the type of some of the ability's damage: "All 1
+  // piercing damage listed by this ability becomes divine" (Nothung's
+  // Excalibur, p.225). The chunks with that amount and type take the new one,
+  // so the dialog ticks Divine instead of Pierce.
+  const retype = s.masteryUnlocked && /\ball\s+(?:(\d+)\s+)?(?:(piercing|divine)\s+)?damage\s+(?:listed|dealt)\s+by\s+this\s+ability\s+becomes\s+(divine|piercing)\b/i
+    .exec(String(s.mastery ?? "").replace(/<[^>]+>/g, " "));
+  if (retype) {
+    const [, amount, from, to] = retype;
+    const fits = (c) => anyDamage(c) && (!from || c.type === from.toLowerCase())
+      && (!amount || (c.flat === Number(amount) && !c.mult && !c.fray));
+    const re = (c) => (fits(c) ? { ...c, type: to.toLowerCase() } : c);
+    hit = re(hit); miss = re(miss); area = re(area);
+    for (let i = 0; i < extras.length; i++) extras[i] = re(extras[i]);
+  }
+
   // Does this ability deal any damage at all?
   const dealsDamage = hit.mult > 0 || hit.flat > 0 || hit.fray ||
                        area.mult > 0 || area.flat > 0 || area.fray ||
@@ -213,6 +228,56 @@ export function parseComboAbilityDamage(itemSystem) {
     dealsDamage: deals(hit) || deals(area) || miss.fray,
     hit, miss, area,
   };
+}
+
+/**
+ * The damage of an ability with its armed Infuse version in play (p.117),
+ * on top of parseAbilityDamage's result. Two ways the book writes it:
+ *  - the version writes its own outcomes: "MAGNABIO: Infuse 6 — 2 actions,
+ *    Attack, Range 8, Large Blast. Hit: 2[D]+fray. Miss: [D]+fray. Area:
+ *    [D]+fray." (Bio p.218, Geo p.219, Cryo p.234): those lines replace the
+ *    base Hit / Miss / Area, a line it doesn't write stays as it was;
+ *  - it changes the damage as a whole: "CRYOTIC — … increase damage to fray
+ *    damage" (Cryo p.234): every outcome of the base that deals damage takes
+ *    the new amount.
+ * "Bonus damage for every two aether spent" (MAGNACRYO, an Infuse X) is one
+ * more [D] per instance of bonus damage (glossary p.102), counted from the
+ * Aether spent on arming it: `bonusDice` is the dialog's starting value.
+ * @param {object} parsed     parseAbilityDamage(...) of the ability
+ * @param {{label?:string, name?:string, text?:string, spent?:number}|null} infusion  the armed one
+ * @returns {object} parsed, with `version` ({label, name}) and `bonusDice` when infused
+ */
+export function infusedAbilityDamage(parsed, infusion) {
+  if (!parsed || !infusion?.text) return parsed;
+  const text = String(infusion.text).replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const deals = (c) => !!(c && (c.mult > 0 || c.flat > 0 || c.fray));
+  const line = (re) => { const m = re.exec(text); return m ? parseChunk(m[1]) : null; };
+  // Keep the base type when the line doesn't name one (Cryo's "fray damage").
+  const typed = (c, base) => (c.type || !base?.type ? c : { ...c, type: base.type });
+  const out = { ...parsed, version: { label: infusion.label ?? "", name: infusion.name ?? "" } };
+  const lines = {
+    hit:  line(/(?:^|[.;—–]\s*)(?:attack\s*:\s*)?(?:on\s+hit|auto[-\s]?hit|hit)\s*:\s*([^.]+)/i),
+    miss: line(/(?:^|[.;—–]\s*)miss\s*:\s*([^.]+)/i),
+    area: line(/(?:^|[.;—–]\s*)area(?:\s+effect)?\s*:\s*([^.]+)/i),
+  };
+  // "Increase damage to fray damage" (Cryotic), "Increase area effect to a
+  // large blast and damage to [D]+fray" (Eye of the Storm's Aeoncloud, p.234).
+  const whole = /\b(?:increase|change|raise)s?\b[^.]*?\bdamage\s+to\s+([^,;.]+)/i.exec(text);
+  const all = whole ? parseChunk(whole[1]) : null;
+  for (const k of ["hit", "miss", "area"]) {
+    if (lines[k]) out[k] = typed(lines[k], parsed[k]);
+    else if (all && deals(all) && deals(parsed[k])) out[k] = typed(all, parsed[k]);
+  }
+  // A version that writes its own Hit and Miss is rolled to hit, even when the
+  // base ability auto-hits (Cryo's MAGNACRYO).
+  if (lines.hit && lines.miss) out.isAutoHit = /auto[-\s]?hit/i.test(text);
+  const every = /\bbonus\s+damage\s+for\s+every\s+(\d+|one|two|three)\s+aether\b/i.exec(text);
+  if (every && Number(infusion.spent) > 0) {
+    const n = Number(every[1]) || { one: 1, two: 2, three: 3 }[every[1].toLowerCase()] || 1;
+    out.bonusDice = Math.floor(Number(infusion.spent) / n);
+  }
+  out.dealsDamage = deals(out.hit) || deals(out.area) || !!out.miss?.fray;
+  return out;
 }
 
 /**
