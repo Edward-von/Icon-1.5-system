@@ -16,6 +16,178 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
+## Round di debug del 16 ottobre 2026 — documento "16.10.2026.docx"
+
+Versione aggiornata del documento del 15 ottobre: tutto quello che c'era ieri è identico, parola per parola. Le novità
+sono la voce **Limit Break** (alta priorità; ieri "None, currently!"), le sezioni **Vagabond** (Fool, Freelancer,
+Shade, Warden) e **Wright** (Enochian, Geomancer, Spellblade, Stormbender) di Ability Bugs, e un commento nuovo di Turz Ven
+(sulle versioni Infuse, vedi R60). La numerazione continua da R37, perché R33-R36 del round di ieri sono ancora aperti.
+La build in cui Maar ha scritto le voci nuove non è nota: le voci "già fatto" sotto vanno verificate sulla 1.15.36 o
+successive.
+
+Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
+- Tutte le voci del documento di ieri: R1-R32 fatti (1.15.3-1.15.36); R33-R36 restano da decidere.
+- Keyword evidenziate nel testo di colore, fatto in 1.15.8 (R6): Diablo "summons", Incubus "slashed", Ätherwand
+  "summon", Fulminate "unstoppable", Nothung "summon", Odinforce "pierce", Rampant Nail "flying", Death Blossom
+  "flying sleeves" nel testo di colore (controllato nel compendio: sono tutte prima della prima etichetta di regole). Morrigan
+  e il nome della combo di Death Blossom invece no → R50.
+- Mist Strider con il summon "shadow" e Blackstar con il "bomb": corretti in 1.15.9 (R7, un'abilità offre solo i summon
+  del suo job).
+- Pelagic Rage, "No way to give yourself the aura 2": fatto in 1.15.23 (R19c, bottone aura sui tratti).
+- Party Favor, la mastery non permette di marcare: fatto in 1.15.19 (R17, cita proprio la mastery di Party Favor).
+- Showdown, "indicate the chosen target without it being a mark": fatto in 1.15.34 (R30, Showdown è tra le abilità
+  con Track target).
+- Gamble di Death e di Spinning Top, anche con lo Stacked Die: fatto in 1.15.29 (R25, la finestra del gamble ha già lo
+  Stacked Die del Fool).
+- Più istanze dello stesso danno: Assassinate, Gwynt, Dragon Dive, Realignment, Blitz, Nothung, "the usual comment",
+  fatto in 1.15.28 (R24). Da verificare che il campo Instances si precompili per ognuno ("twice", "N times", "to a
+  maximum of four times" di Nothung probabilmente no: in quel caso si scrive a mano).
+- Umbral Echo, "ping just the interrupt part of the mastery talent (Bunshin)": l'interrupt Soul Proxy sta dentro la
+  mastery, quindi il bottone chat della mastery (R31, 1.15.35) lo posta già, anche se insieme alla riga "Gain the
+  following interrupt". Gli interrupt scritti nel testo base sono un'altra cosa → R61.
+- Terrain effect, oggetti e segni da piazzare sulla mappa: aggiunti all'elenco di R33 (round di ieri, da decidere).
+
+### Bug
+
+- [ ] **R37. Limit Break che fanno danno senza tiro del danno** (M, bug, alta priorità)
+      "several ones that do damage don't have a damage roller attached". Citato Gigaflare ("Also does not have a
+      damage roller", Enochian: "[D]+fray divine damage to every character on the battlefield"). Controllare tutti i
+      Limit Break dei job che fanno danno (`limit-break`: campi `effect` e `ultimate`) e dare loro il tiro del danno come le
+      abilità, con tipo (divine), istanze ("twice", "four times") e [D] del PG.
+- [ ] **R38. Limit Break: effetti speciali non usabili** (M/L, bug, alta priorità)
+      "ones with special effects (Paradiso's Aura, Gigaflare's infused version, etc) don't allow the player to utilize
+      those functions with the limit break properly." Paradiso (Freelancer, tag `aura`: "You gain Aura 2 until the end of
+      your next turn"): manca il bottone aura. Gigaflare: "Limit break cannot currently use its infused variant,
+      Tetraflare" ("Infuse 6: TETRAFLARE — Deal [D]+fray twice instead"; anche METEOR, Infuse 8). Probabilmente la card
+      dei Limit Break non passa da aree / infuse / Inflict delle abilità. Se aura e infuse risultano due cause diverse,
+      dividere il punto.
+- [ ] **R39. Limit Break: formattazione** (S/M, bug, alta priorità)
+      "some of the formatting on them is off". Il documento non dice quali. Guardare tutti i Limit Break (card e scheda)
+      e sistemare quelli con blocchi non etichettati o sullo stesso paragrafo (es. Gigaflare ha "Divine, Unerring, True
+      Strike." ripetuto in testa all'effetto, già nei tag). Domanda per Maar, se non è evidente: quali Limit Break?
+- [ ] **R40. Combo che sostituiscono solo una parte della base** (S/M, bug, continua R1)
+      - Umbra / Penumbra: "Combo text does not properly replace specified effect within the ability string when toggled
+        on". Penumbra: "Teleport your foe up to 3 spaces towards you instead of teleporting yourself" (sostituisce
+        l'Effect "You may teleport 3 before the attack").
+      - Incubus / Succubus: "Combo version does not properly clear out the mark text from the print-to-chat box"
+        ("Instead of the mark, gain Effect: …"). Assorbe la voce "Emerso lavorando su R1 — Incubus / Succubus".
+      R1 riconosce "replace the base effect with"; queste due combo dicono "instead of …". Controllare sul manuale.
+- [ ] **R41. Inflict su tutti i bersagli dell'area invece che sul solo bersaglio dell'attacco** (S/M, bug)
+      Blackstar: "Shattered effect prompts the user to place shattered on all targets in the area, not just the main
+      attack target." Drifting Leaf: "Only the attack target should be prompted for the shatter effect. Inflict currently
+      presents all targets in the area." (Drifting Leaf: "Effect: Foe is shattered.")
+- [ ] **R42. Status del talento non proposti nell'Inflict / Gain** (S/M, bug)
+      - Shadow Play Talent II: "one of them can gain evasion until the start of their next turn", niente evasion.
+      - Blazing Bond Talent II: niente Defiance.
+      - Mist Strider: con la mastery sbloccata il dazed non va nel riquadro Inflict.
+      Forse è la stessa lettura del testo di R18 ("also become"): "can gain …" / "one of them". Se le cause sono diverse,
+      dividere.
+- [ ] **R43. Summon del proprio job su abilità che non lo creano** (S, bug)
+      Harrow: "Currently has a shadow in the ability, despite only consuming them, rather than placing them." Shadow Play:
+      "Has the shadow summon in it's ability card, despite not placing shadows." (Harrow Talent II: "consume a shadow"; in
+      Shadow Play "shadow" compare solo nel nome della mossa.) Il collegamento per nome di R7 deve ignorare "consume a
+      shadow" e simili.
+- [ ] **R44. Tratti che evocano un summon senza il summon collegato** (S/M, bug)
+      Bound Spirit (Freelancer, Astral Seraph), Beast Master (Warden, Great Beast), Selkie (Stormbender) e Cheap Trick
+      (Fool, "leave a bomb in an adjacent space"; "Having a bomb summon node on this trait would be useful"). Come per l'aura
+      dei tratti (R19c), i tratti non hanno il bottone summon delle abilità.
+- [ ] **R45. "Hit (no damage)" proposto dove non serve** (S, bug)
+      Dragon Dive ("Damage roller has the option of 'hit (no damage') on this despite that not being necessary") e Bifröst
+      ("Damage roller says 'Hit (no damage)'"). Capire quando la finestra del danno mostra quella scelta.
+- [ ] **R46. Danno di Infuse e mastery che lo cambiano non aggiornato nel tiro del danno** (M, bug)
+      - Cryo, Infuse 3 CRYOTIC: "increase damage to fray damage", ma il tiro resta a 1; idem per la mastery MAGNACRYO
+        (Hit 2[D]+fray, Area [D]+fray).
+      - Bio / Magnabio: "Alternate version (magnabio) does not update the damage die properly."
+      - Geo, mastery Infuse 6 MAGNAGEO: l'Area deve diventare [D]+Fray, il tiro propone solo Fray.
+      - Nothung, mastery EXCALIBUR: "All 1 piercing damage listed by this ability becomes divine", il tipo non cambia.
+      Serve che il tiro del danno legga la versione infusa / della mastery quando è attiva.
+- [ ] **R47. Aree di Infuse e talenti che cambiano dimensione** (S/M, bug)
+      - Ätherwand, Infuse X ÄTHERSTURM ("Extend the area by 1 space for every Aether infused, up to +3"): "Only allows you
+        to select line 3".
+      - Rime / Magnarime: "variable arc is not properly handled, although it's base arc is listed properly."
+      - Sturmreiten Talent II ("Comeback: You may extend Sturmreiten's area by another line 3 area, drawn in a different
+        direction"): "A way to use talent 2's extension would be useful."
+- [ ] **R48. Aure date ad altri o in alternativa** (M, bug)
+      - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
+      - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i
+        talenti la portano a 3 o a 1 ("making it a aura that can shift sizes would be useful", vedi R32).
+      - Rampant Nail: "No way to give the aura to the area effect" (lo spuntone è un terrain effect con "Aura 2").
+      Assorbe la voce "Emerso lavorando su R19 — aure alternative nel testo non proposte" (anche l'Heroic di Rook).
+      R19b ha già il caso dell'alleato bersagliato: Fulminate potrebbe riusarlo.
+- [ ] **R49. Aree di Slay / Finishing Blow e mastery non piazzabili** (S/M, bug, da verificare)
+      Death: "No way to easily place the large blast area effect from slay/finishing blow." Elden Rune: "include a small
+      blast version for the Mastery." Eye of the Storm: "A way to place the area effect from mastery would be useful."
+      R20 legge le aree di talento, mastery e combo; Slay / Finishing Blow forse no. Prima controllare se sono aree vere
+      (area effect) o terrain effect da piazzare (R33).
+- [ ] **R50. Keyword evidenziate fuori dal testo di colore** (S, bug)
+      - Morrigan: "The first line of the effect text has summon highlighted, as if the flock being summoned from morrigan
+        is a summon (character type), but it is not. The second line is correct; don't remove that underlining".
+        Nel compendio la descrizione non ha etichette, quindi è tutta regole ("you summon a massive flock").
+      - Death Blossom: "the name 'Flying Sleeves'" (nome della combo) evidenziato come keyword.
+- [ ] **R51. Stack Dice: al capitolo 3 il secondo dado non si può alzare** (S, bug)
+      "When at chapter 3, the trait properly shows having 2 stacked die to use, but does not allow the user to increment up
+      the second dice." Il testo del tratto nel compendio dice "only hold on to one Stacked Die at once": cercare sul
+      manuale cosa cambia al capitolo 3.
+- [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati)
+      "(This is an error with the book) Ability tag says 'Power Die' despite not utilizing die mechanics." Verificare
+      sul manuale; se è un errore del libro, decidere se toglierlo (pack + migrazione) o lasciarlo come nel libro.
+- [ ] **R53. Heave-Ho: l'Effect dopo l'Area** (S, dati)
+      "The 'Effect' is currently listed after the area, when the effect should go first, as the area is made with the
+      effect." (Nel round 4, 30 agosto, era stato separato Trigger/Effect; l'ordine "Effect dopo Area per gli attacchi" di
+      Draken Cross potrebbe valere anche qui, ma Heave-Ho non è un attacco.)
+- [ ] **R54. Eye of the Storm: "Special" e ordine Area / Effect** (S, dati)
+      "The second line of flavor text is actually supposed to be a Special: keyword. (The book forgets the 'special' part
+      of this.)" e "Should be formatted Area: [D]. Effect: Instead of how it currently is formatted (missing highlights and
+      keywording)". Assorbe la voce "Emerso lavorando su R8 — Eye of the Storm".
+- [ ] **R55. Helix Heel: la prima riga del testo di colore è il primo effetto** (S, dati)
+      "The first line of flavor text is actually the first effect of the ability." Assorbe la voce "Emerso lavorando su R8 —
+      Helix Heel" (p.219, "Effect: Release a shockwave in a line 3 area effect…").
+- [ ] **R56. Quaking Palm: niente Track target** (S, bug)
+      "Some way to mark the chosen character would be nice." Il testo dice "When they end their next turn" (non "that
+      foe's next turn"), quindi il bottone Track target di R30 probabilmente non compare.
+
+### Richieste
+
+- [ ] **R57. Stack Dice: bottone "Use"** (S)
+      "Having a 'use' button that automatically decrements the die from 1 to zero could be useful, along with printing
+      to chat '(character name) used their stacked die' or something similar."
+- [ ] **R58. Boon of Chaos: evasion del difensore nel tiro d'attacco** (S/M)
+      "Currently no way during an attack to toggle that the defender has evasion. Some kind of modal on the attack roller
+      would be useful for conditionals like this (evasion if a certain distance away)."
+- [ ] **R59. Spendere Aether senza attacco, con messaggio in chat** (S/M)
+      Tsunami: l'Infuse si scala solo attaccando, ma Tsunami non tira; "Some alternate button to spend 1 aether and then
+      print to chat the stormlash ability would be useful." Aether Deflection (tratto): "you can spend 2 Aether any time
+      to regain it", "Some way to activate and print to chat that you're using aether to regain the use".
+- [ ] **R60. Versioni Infuse nella card: solo quella usata** (M)
+      "when an ability isn't infused, printing the base ability doesn't need to print out the infused variant's effects …
+      some abilities have multiple different infuse variations, so the base card is massive. Having a base ability not
+      including the infuse variants on cast could be useful- or maybe they're collapsibles in the card themselves."
+      Commento di Turz Ven: "Also could be that toggling the 'Infuse' cost button on the card will instead change what is
+      printed out when following buttons are selected. Instead of automatically printing it to chat, it just swaps which
+      one is posted."
+      Insieme: resa più leggibile delle versioni Infuse / alternative ("make it look mostly similar to an ability
+      card"): Bio ("Alternate version card is hard to read"), Lance (versione della mastery), Pyre (versione infusa).
+- [ ] **R61. Postare da solo un interrupt scritto nel testo dell'abilità** (S/M)
+      Chronotemper (Cheat Time, nel Mark): "Some way to print out just the interrupt part of this ability would be useful
+      for legibility. Make this this version updates if the mastery is taken." (mastery Revolution: tre volte per round).
+      Drifting Leaf (LEAF ON THE WIND): "A way to ping the interrupt separate from the ability would be useful." Come il
+      bottone chat di R31, ma per un blocco "Nome — Interrupt N" dentro la descrizione.
+- [ ] **R62. Promemoria "round N or later" nel tracker** (M)
+      Storm Hilt Rage: "having the combat tracker announce the timing of these (based on the players and NPCs within the
+      combat) would be incredibly helpful. Many times, PCs have forgotten major buffs they would've gotten. Many, many
+      times." (Molte mastery dicono "At round 4 or later": Drifting Leaf, Odinforce, Cryo, Tsunami, Shadow Play…)
+- [ ] **R63. Soulfire: cambiare le soglie di crit / exceed nel tiro** (M, da decidere)
+      "Some way to actively modify the crit/exceed values on the roller would be useful here, especially if automated.
+      There's a relic that does something similar (-1 required number per round in game for crit/exceed)". Trovare la
+      relic sul manuale.
+- [ ] **R64. Ridurre il costo in Aether delle abilità** (M/L, da decidere)
+      Conqueror's Edge "and the one from Enochian": "there is no way to reduce aether costs on abilities … how to
+      implement, I have no idea." Domanda per Maar: quale abilità dell'Enochian?
+- [ ] **R65. Aethershard come un summon** (M, da decidere)
+      "Something similar to a summon ability would be useful here." Forse rientra in R33 (oggetti sulla mappa).
+
+---
+
 ## Round di debug del 15 ottobre 2026 — documento "15.10.2026.docx"
 
 Versione aggiornata del documento del 9 ottobre (vedi "Feedback di Maar — documento Icon VTT Bugs" più sotto), con in più
@@ -249,6 +421,11 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       Shrine (santuario con la sua aura), Gates of Hell (flash step della mastery), Eclipse (il singolo dangerous
       terrain dove cade la stella), Astra (medium blast messo sui foe), Polaris (uno spazio a terra), Blood Grove
       (disegnare più spazi per il Talent 2).
+      Aggiunti dal documento del 16 ottobre: Darkside (token Shadow), Nocturne, Apex, Mist Strider, Morrigan (mastery),
+      Underway, Party Favor, Showdown, Elden Rune, Implode (uno spazio), Pyroclast (anche il dangerous terrain dei
+      talenti), Stone Double (oggetto), Bio, Geo (oggetto), Terraforming (scegliere tra i terrain effect), Bifröst (cresce
+      col Talent II), Blitz (Talent I e mastery), Rampant Nail, Deepwrath (mastery), Geyser (oggetto), Gust (più di uno),
+      Rime (pit di Magnarime), Tsunami, Waterspout (anche la mastery); forse Aethershard (R65).
 - [ ] **R34. Open the Gates riformattata** (S, da decidere: è il manuale a essere ambiguo)
       Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
       versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed.
@@ -272,15 +449,15 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R24 — danno scritto negli Effect del testo base non proposto in Other** (S/M): Chastise
       (p.179, "they take 1 divine damage three times") ha il danno in un Effect della base, non in hit/miss/area né in
       talento/mastery: Other non lo propone come scelta rapida, va scritto a mano (Fixed 1, Divine, Instances 3).
-- [ ] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati): stesso difetto di Massive Overhead.
+- [x] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati) (SPOSTATO in R55 del round del 16 ottobre): stesso difetto di Massive Overhead.
       Nel libro (p.219, "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.")
       la prima riga è un Effect, nel compendio è senza etichetta e diventa testo di colore. Pack + migrazione per nome.
 - [ ] **Emerso lavorando su R8 — Boiling Blood: "Defy Death —" appeso al testo di colore** (S, dati): il testo di colore
       finisce con "Defy Death —" (nome dell'interrupt, libro p.138). Da controllare come viene mostrato e sistemare.
-- [ ] **Emerso lavorando su R8 — Eye of the Storm: riga di regole senza etichetta** (S, dati): "This attack has no
+- [x] **Emerso lavorando su R8 — Eye of the Storm: riga di regole senza etichetta** (S, dati) (SPOSTATO in R54 del round del 16 ottobre): "This attack has no
       attack space. Instead, the attack space is clear and exempt from this area." è una regola ma il libro la stampa
       senza etichetta, quindi finisce nel testo di colore. Decidere come mostrarla (es. "Effect:").
-- [ ] **Emerso lavorando su R1 — Incubus / Succubus** (S): "Instead of the mark, gain Effect: …" non toglie il Mark
+- [x] **Emerso lavorando su R1 — Incubus / Succubus** (S) (SPOSTATO in R40 del round del 16 ottobre): "Instead of the mark, gain Effect: …" non toglie il Mark
       della base (stesso problema di Sweet Torment, scritto in un altro modo). Va controllato sul manuale.
 - [ ] **Emerso lavorando su R1 — tag di Reap** (S, dati): i tag della combo di Sow ("attack, range-4, mark, pierce")
       sono copiati dalla base; il Mark ora lo toglie il codice, ma Reap è un attacco melee (Special) e range 4 resta.
@@ -319,7 +496,7 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
 - [ ] **Emerso lavorando su R19 — Painkiller: l'aura di Sweet Torment dovrebbe durare per sempre** (S): con la mastery
       di Bleak Mercy sbloccata ("Sweet Torment's aura lasts indefinitely", p.144) la durata dell'aura viene ancora
       letta dal testo della combo ("until the end of your next turn") e l'aura scade. Da verificare in gioco.
-- [ ] **Emerso lavorando su R19 — aure alternative nel testo non proposte** (S): la mastery Phantom Bolts di Warding
+- [x] **Emerso lavorando su R19 — aure alternative nel testo non proposte** (S) (SPOSTATO in R48 del round del 16 ottobre): la mastery Phantom Bolts di Warding
       Bolts ("hover around you as an Aura 2 instead") e l'Heroic di Rook ("increase aura to Aura 2") non compaiono
       tra le scelte del bottone area (`areasInText` non legge "aura N"). Non verificato in gioco.
 - [ ] **Emerso lavorando su R19 — foe con tag "aura" senza numero** (S): Aura of Slaughter dei sei demoni (Armor,
