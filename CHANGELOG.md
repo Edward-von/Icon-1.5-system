@@ -1,5 +1,43 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Effetti degli oggetti sulla mappa, pile, aree sugli oggetti (versione 1.15.66)
+
+### Round di debug del 15 ottobre, punto R33a2
+
+- **Effetto dell'oggetto da leggere a mano**: con l'oggetto sulla mappa (R33a) il suo testo c'era solo tutto intero
+  nella scheda → nessuno diceva quali benefici sono accesi → ora la scheda dell'oggetto (doppio clic sul token) ha in
+  cima una sezione **Object Effect**: il blocco di testo che crea l'oggetto (dall'etichetta prima, "Effect:" /
+  "Object:" / "Terrain effect:", fino al blocco Infuse / Charge dopo; "Object Effect: …" compreso), l'**altezza
+  totale** della pila (elevazione + altezza propria) e, per lo Spirit Shrine, la lista "1: / 2: / 3+:" con accese le
+  righe raggiunte ("benefits equal to its total height, including other objects it is stacked on", p.192). Sotto, le
+  righe del talento scelto e della mastery sbloccata dell'abilità che nominano l'oggetto (Comet Talent II "adjacent to
+  your weapon", Shrine Talent I "inside the Shrine's aura", Geyser Talent I "all geysers"…). Spirit Patronage
+  ("2 divine damage once to the foe per height of the shrine", p.193) mostra quante volte. Bottone **Chat** che posta
+  tutto questo in una card.
+- **Comet**: "While this object is active, you cannot attack. You can pick your weapon up …" (p.128) → nulla lo
+  ricordava → ora tirare un attacco con la Thrown Weapon sulla mappa chiede "Roll anyway / Cancel", e la scheda
+  dell'oggetto ha la riga "cannot attack" e il bottone **Pick up** (per gli altri oggetti **Remove**). I giocatori in
+  Foundry non possono cancellare token: il loro Pick up passa al GM attivo via socket, come il piazzamento.
+- **Pile che restavano sospese**: togliendo un oggetto da sotto una pila quelli sopra restavano all'elevazione vecchia
+  (p.95) → nessun hook li toccava → ora, quando un oggetto viene cancellato o trascinato via, quelli sopra nello stesso
+  spazio scendono della sua altezza; un oggetto trascinato su un'altra pila prende come elevazione l'altezza sotto
+  (avviso se supera 3).
+- **Pyrospire / Volcanic Geyser sempre offerti**: i chip delle versioni Infuse c'erano anche senza Infuse → ora si
+  vedono solo con quell'infusione armata, come le altre versioni Infuse; piazzare l'oggetto la consuma (l'infusione
+  non resta armata).
+- **Aree centrate su un oggetto**: "medium blast area centered on it" (Volcanic Geyser, p.232) e "burst 1 … centered on
+  them" dopo "objects" (Helix Heel, p.219) si piazzavano a mano → ora l'area si chiama "… (on object)" e, se hai
+  targettato il token dell'oggetto (o un solo altro token, per i summon "centered on it"), si piazza da sola centrata
+  lì; senza target, avviso e piazzamento a mano come prima. "Centered on them" dopo pit / piante / nail resta a mano.
+  Helix Heel: la frase ora viene letta così, ma il suo bottone area offre solo la Line 3 dei tag (il testo della
+  descrizione si legge solo per le abilità senza area nei tag): resta in R33a3.
+- Scelte mie: i benefici dello Shrine sono cumulativi ("additional benefits": a totale 3 valgono 1, 2 e 3+); il danno
+  di Spirit Patronage conta l'altezza dello Shrine, non della pila (il testo dice "height of the shrine", i benefici
+  invece "total height"); il controllo "cannot attack" è una domanda, non un blocco; gli oggetti trascinati su una
+  pila non vengono rifiutati, solo avvisati. Nessun pack, nessuna migrazione. Il resto (Aethershard nelle aree, teleport
+  di Underway, eruzione del Geyser, Megamushroom plant, pilastro di Upheaval, muri / copertura, Helix Heel) è in TODO,
+  R33a3.
+
 ## 16 ottobre 2026 — Oggetti sulla mappa (versione 1.15.65)
 
 ### Round di debug del 15 ottobre, punto R33a

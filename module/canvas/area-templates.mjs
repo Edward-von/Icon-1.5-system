@@ -168,8 +168,8 @@ export function rangeFromTags(tags) {
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
-    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : "");
-    case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : ""}`;
+    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : "");
+    case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : area.centeredOn === "object" ? " (on object)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
     case "aura":  return (area.size ? `Aura ${area.size}` : "Aura") + (area.atSpace ? " (terrain effect)" : "");
@@ -205,7 +205,7 @@ export function areasInText(text) {
     const centre = centreOf(plain.slice(0, m.index).split(/[.;:]/).pop(), plain.slice(m.index + m[0].length).split(/[.;:]/)[0]);
     if (centre) {
       area.centeredOn = centre;
-      if (area.kind === "burst" && !area.self && !area.target) area[centre] = true;
+      if (area.kind === "burst" && !area.self && !area.target && centre !== "object") area[centre] = true;
     }
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
@@ -226,9 +226,15 @@ export function areasInText(text) {
  * @param {string} rest    the sentence after the shape, lower case
  */
 function centreOf(before, rest) {
-  const m = /\bcent(?:er|r)ed on (you|yourself|them|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
+  // R33a2: "centered on it" (Geyser's VOLCANIC GEYSER p.232, "When it erupts, it removes and places all
+  // characters in a medium blast area centered on it") and "them" after objects (Helix Heel p.219, "all
+  // objects this line passed through resonate, releasing a burst 1 area effect centered on them") go on an
+  // object's token now that objects are on the map ("object": the targeted object, else placed by hand).
+  const m = /\bcent(?:er|r)ed on (you|yourself|them|it|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
   if (!m) return "";
-  if (m[1] === "them" && /\b(?:pits?|objects?|plants?|boulders?|nails?|clouds?)\b/.test(before)) return "";
+  if (m[1] === "it") return "object";
+  if (m[1] === "them" && /\b(?:objects?|boulders?|geysers?|aethershards?|shards?)\b/.test(before)) return "object";
+  if (m[1] === "them" && /\b(?:pits?|plants?|nails?|clouds?)\b/.test(before)) return "";
   return /^you(?:rself)?$/.test(m[1]) ? "self" : "target";
 }
 
@@ -794,7 +800,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // "explodes in a large blast area effect centered on them") goes on that
   // token: the one target, or the user for "centered on you".
   const centre = area.centeredOn === "self" ? token
-    : area.centeredOn === "target" && !isAura && !atSpace ? centreTargetToken(token) : null;
+    : area.centeredOn === "target" && !isAura && !atSpace ? centreTargetToken(token)
+    : area.centeredOn === "object" && !isAura && !atSpace ? centreObjectToken(token) : null;
   if (centre) {
     const centreCells = tokenCells(centre.document);
     if (area.kind === "burst") {
@@ -921,6 +928,28 @@ function centreTargetToken(token) {
   ui.notifications.warn(targets.length
     ? "This area is centered on one character: target only that token, then place it again. Place it by hand for now (Alt ignores the range)."
     : "This area is centered on a character: target that token, then place it again. Place it by hand for now (Alt ignores the range).");
+  return null;
+}
+
+/**
+ * The token an area centred on an object goes on (areasInText `centeredOn:
+ * "object"`, R33a2): Volcanic Geyser's "medium blast area centered on it"
+ * (p.232), Helix Heel's "burst 1 … centered on them" (p.219). The targeted
+ * object token — with several objects targeted, the one the user picks by
+ * targeting only it; with no object targeted, the one other token targeted
+ * (a summon "centered on it", as Dancing Light). Otherwise the area is placed
+ * by hand as before, with a hint.
+ * @param {Token} token  the user's token
+ * @returns {Token|null}
+ */
+function centreObjectToken(token) {
+  const targets = Array.from(game.user?.targets ?? []).filter(t => t.id !== token.id);
+  const objects = targets.filter(t => t.document?.flags?.[FLAG_NS]?.mapObject);
+  if (objects.length === 1) return objects[0];
+  if (!objects.length && targets.length === 1) return targets[0];
+  ui.notifications.info(objects.length
+    ? "This area is centered on one object: target only that object's token, then place it again. Place it by hand for now (Alt ignores the range)."
+    : "This area is centered on an object: target the object's token (T over it), then place it again — or place it by hand now (Alt ignores the range).");
   return null;
 }
 

@@ -1656,6 +1656,39 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a2 — Effetti degli oggetti, pile, aree sugli oggetti (16 ottobre 2026, versione 1.15.66)
+
+Setup: come R33a (scena a griglia quadrata, GM + giocatore). PG del giocatore: Sealer con Spirit Shrine (prova anche con
+Talent I scelto e mastery sbloccata), Demon Slayer con Comet e un attacco qualunque, Wright Stormbender con Geyser,
+Enochian con Pyroclast, Geomancer con Geo. Aether del Wright almeno 3. Solo JS, template e CSS: F5 dopo il deploy.
+Nota: il test "Pyroclast / Geyser" di R33a cambia (i chip delle versioni Infuse ora si vedono solo con l'Infuse armato).
+
+- [ ] **Object Effect sulla scheda**: piazza lo Shrine, doppio clic sul token → in cima una sezione "Object Effect" con
+      "total height 1", la lista 1 / 2 / 3+ con la riga 1 accesa (cover e +1 boon) e le altre spente; sotto, il testo
+      dello Shrine (da "Effect: Create a shrine…" a "…have evasion") con le keyword evidenziate. Con Talent I scelto c'è
+      la riga "Talent I: If you or an ally ends their turn inside the Shrine's aura…".
+- [ ] **Shrine per altezza totale**: + sulla scheda → "total height 2", righe 1 e 2 accese. Metti lo Shrine sopra un
+      Boulder di Geo (height 1) → "height 1 on height 1 — total height 2". Con totale 3 → anche "3+" accesa.
+- [ ] **Spirit Patronage**: mastery dello Shrine sbloccata → riga "Mastery: height N → 2 divine damage ×N", N = altezza
+      dello Shrine (non quella della pila).
+- [ ] **Chat**: bottone "Chat" sulla scheda dell'oggetto → card col cubo, altezza, testo, righe accese / "(not yet)".
+- [ ] **Comet, non attaccare**: piazza "Thrown Weapon · H1" → sulla scheda dell'oggetto riga arancione "… cannot
+      attack" e bottone "Pick up". Tira un attacco del Demon Slayer → domanda "you cannot attack": Cancel ferma il tiro,
+      "Roll anyway" lo fa. Talent II scelto → riga "Talent II: … adjacent to your weapon gain 2 vigor".
+- [ ] **Pick up (giocatore)**: il giocatore preme "Pick up" → la scheda si chiude e il GM toglie il token. Di nuovo un
+      attacco → nessuna domanda. Su un Boulder il bottone dice "Remove".
+- [ ] **Pila che scende**: tre Boulder impilati (elevazione 0 / 1 / 2). Togli (Remove o Canc) quello in basso → gli altri
+      due scendono a 0 e 1. Trascina via quello in basso di una pila di due → quello sopra scende a 0; trascinalo sopra
+      un altro Boulder → la sua elevazione diventa 1.
+- [ ] **Infuse armato**: Geyser senza Infuse → solo il chip "Geyser · H1". Arma "Infuse 3: VOLCANIC GEYSER" → compare
+      "Volcanic Geyser · H1"; trascinalo → token piazzato e l'infusione non è più armata (il chip sparisce). Uguale per
+      Pyroclast ("Magma Spire · H3" solo con PYROSPIRE armato).
+- [ ] **Area sull'oggetto**: con un Volcanic Geyser sulla mappa, targetta il suo token (T), poi bottone area di Geyser →
+      "Medium Blast (on object)" → la blast va da sola centrata sul geyser (niente clic). Senza target → avviso "target
+      the object's token" e si piazza a mano come prima.
+- [ ] **Regressione aree**: un'area "centered on them" su un personaggio (Death, Slay) va ancora sul bersaglio; una
+      normale Medium Blast di un attacco si piazza come prima.
+
 ## R33a — Oggetti sulla mappa (16 ottobre 2026, versione 1.15.65)
 
 Setup: una scena a griglia quadrata, un GM e un giocatore connessi. PG del giocatore: Sealer con Spirit Shrine, Wright

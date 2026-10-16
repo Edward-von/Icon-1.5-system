@@ -10,7 +10,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
-import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible } from "../../canvas/map-objects.mjs";
+import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject } from "../../canvas/map-objects.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -36,6 +36,8 @@ export class SummonSheet extends BaseActorSheet {
       toggleIntangible:  SummonSheet.#onToggleIntangible,
       objectHeight:      SummonSheet.#onObjectHeight,
       toggleDestructible: SummonSheet.#onToggleDestructible,
+      objectToChat:      SummonSheet.#onObjectToChat,
+      objectRemove:      SummonSheet.#onObjectRemove,
       rollSummonAttack:  SummonSheet.#onRollSummonAttack,
       rollSummonDamage:  SummonSheet.#onRollSummonDamage,
     },
@@ -89,6 +91,15 @@ export class SummonSheet extends BaseActorSheet {
       aura:         obj.aura || 0,
       isGM:         game.user.isGM,
     } : null;
+    // R33a2: its rules, the total height of its stack and the benefits on now, Comet's pick up.
+    if (context.mapObject) {
+      const info = objectSheetInfo(actor);
+      if (info) {
+        Object.assign(context.mapObject, info, { height: system.size });
+        context.mapObject.enrichedRules = info.rules ? await enrichHTML(foundry.utils.escapeHTML(info.rules)) : "";
+        context.mapObject.enrichedUpgrades = await Promise.all(info.upgrades.map(async u => ({ source: u.source, html: await enrichHTML(foundry.utils.escapeHTML(u.text)) })));
+      }
+    }
 
     // Save buttons: a summon carries statuses like anyone else (BaseActorSheet#rollSave)
     context.saveableStatuses = this._saveableStatuses();
@@ -113,6 +124,16 @@ export class SummonSheet extends BaseActorSheet {
   /** Object, GM only: destructible (10 hp, auto-hit, fails saves, p.89) or immune again. */
   static async #onToggleDestructible(event, target) {
     await toggleObjectDestructible(this.document);
+  }
+
+  /** Object: post its rules and the height benefits on now to chat (R33a2). */
+  static async #onObjectToChat(event, target) {
+    await postObjectToChat(this.document);
+  }
+
+  /** Object: take it off the map — Comet's "Pick up" (R33a2); objects stacked on it come down. */
+  static async #onObjectRemove(event, target) {
+    await removeMapObject(this.document);
   }
 
   /** Roll the summon's attack as a standard combat roll. Speaker is the summon;

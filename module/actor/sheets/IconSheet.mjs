@@ -22,7 +22,7 @@ import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
-import { objectChips } from "../../canvas/map-objects.mjs";
+import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
@@ -2440,6 +2440,18 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
 
+    // Comet: "While this object is active, you cannot attack" (R33a2) — ask before rolling.
+    const forbidding = objectsForbiddingAttacks(this.document);
+    if (forbidding.length) {
+      const names = forbidding.map(t => mapObjectFlag(t)?.name ?? t.name).join(", ");
+      const go = await foundry.applications.api.DialogV2.confirm({
+        window: { title: `${ab.name} — you cannot attack` },
+        content: `<p>Your <strong>${escapeHTML(names)}</strong> is on the map: while this object is active, you cannot attack. Pick it up first (open the object, Pick up).</p><p>Roll the attack anyway?</p>`,
+        yes: { label: "Roll anyway" }, no: { label: "Cancel", default: true }, rejectClose: false,
+      });
+      if (!go) return;
+    }
+
     // Area attack: Blast / Line / Arc / Burst on the map first, targets from it.
     // Cancelling the placement (Escape / right click) no longer kills the roll:
     // the attack is rolled without an area, so the d20 can be thrown before —
@@ -2452,7 +2464,7 @@ export class IconSheet extends BaseActorSheet {
     // down with the area button. Placing it here retargeted the area instead.
     const allVariants = this._areaVariantsFor(ab);
     // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character.
-    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target";
+    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object";
     const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !notTheAttack(v.area));
     const noAttackArea = !attackVariants.length && allVariants.some(v => notTheAttack(v.area));
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {

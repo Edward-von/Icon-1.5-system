@@ -378,6 +378,12 @@
   line-height: 1;
 }
 
+/* Object sheet — Object Effect (R33a2): height benefits on now, Comet's "cannot attack" */
+.icon-object-effect__benefits { margin: 4px 0 6px; padding-left: 18px; }
+.icon-object-effect__benefits li.is-active   { color: #e8d9a8; }
+.icon-object-effect__benefits li.is-inactive { opacity: .45; }
+.icon-object-effect__warn { margin: 4px 0; color: #e0a070; font-weight: bold; }
+
 /* Summon sheet — drop hint */
 .summon-sheet__drop-hint {
   margin: 4px 0 8px;

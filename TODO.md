@@ -642,7 +642,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Terraforming (boulder), Pyroclast (magma spire, Pyrospire altezza 3), Astra e Polaris (meteor), Fairy Ring mastery
       (Megamushroom, conta come plant), Underway (portali, niente obstruction), Geyser (Volcanic Geyser), Aethershard
       (R65).
-- [ ] **R33a2. Oggetti sulla mappa: quello che resta dopo R33a** (M/L)
+- [x] **R33a2. Oggetti sulla mappa: quello che resta dopo R33a** (M/L) (FATTO il 16 ottobre 2026, versione 1.15.66:
+      sezione "Object Effect" sulla scheda dell'oggetto con il suo testo, l'altezza totale della pila e i benefici accesi
+      dello Shrine, righe di talento / mastery, Spirit Patronage ×altezza, bottone Chat; Comet: domanda prima di
+      attaccare e "Pick up"; Remove per gli altri, anche dal giocatore via GM; la pila scende quando si toglie o si
+      sposta un oggetto da sotto; chip Pyrospire / Volcanic Geyser solo con l'Infuse armato, consumato al piazzamento;
+      aree "centered on it / on them (objects)" centrate sul token dell'oggetto targettato. Il resto in R33a3. Solo codice.)
       Gli effetti degli oggetti oltre al token e all'aura sono ancora da leggere a mano: Spirit Shrine (benefici per
       altezza totale 1 / 2 / 3+, mastery "Destroy the shrine … 2 divine damage once per height"), Comet (rampart attorno,
       niente attacchi mentre l'arma è a terra, raccoglierla la toglie), Aethershard (preso in un'area: 2 piercing per
@@ -652,6 +657,18 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       instead", senza la parola object: oggi col +). Aree centrate su un oggetto (Holy Talent I, Helix Heel, Volcanic
       Geyser "medium blast area centered on it"; vedi l'emerso di R49). Oggetti che bloccano la vista o il movimento
       (muri di Foundry) e danno copertura: non fatto. Togliendo un oggetto da sotto una pila, quelli sopra non scendono.
+- [ ] **R33a3. Oggetti sulla mappa: quello che resta dopo R33a2** (M/L)
+      Oggi il testo e i benefici sono sulla scheda dell'oggetto, ma questi effetti restano a mano:
+      Aethershard ("When you include the Aethershard in the area effect of any ability … 2 piercing damage … for every
+      one of your Aethershards caught", poi distrutti e +1 Aether: un controllo all'area piazzata come le wild card di
+      `wild-cards.mjs`); Underway (teleport tra portali, Bale Portal); Geyser (eruzione: rimuovi e piazza chi ci sta
+      sopra, poi togli il geyser e Salt Sprite al suo posto; Talent I "+1 height of all geysers at the start of your
+      turn"); Megamushroom (blessing token, conta come plant); Upheaval mastery ("placed as a height 2 pillar instead",
+      senza la parola object, non letto da `objectsInText`); Helix Heel (la Burst 1 "centered on them" sugli oggetti è
+      letta, ma il bottone area non legge la descrizione delle abilità che hanno già un'area nei tag); Comet (rampart
+      sugli spazi adiacenti e raccolta automatica quando entri / esci da uno spazio adiacente); oggetti che bloccano vista
+      o movimento (muri di Foundry) e copertura; personaggi in piedi su una pila che scende (oggi scendono solo gli
+      oggetti); scheda aperta dalla barra laterale (attore del mondo, senza token) che mostra l'altezza totale 1+0.
 - [ ] **R33b. Spazi di terreno** (L)
       Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
       (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non

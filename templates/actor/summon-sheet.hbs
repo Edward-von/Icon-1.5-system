@@ -52,6 +52,43 @@
 
   <section class="summon-sheet__body">
 
+    {{#if mapObject}}
+      {{!-- R33a2: what the object does at the table, read from the text it comes from --}}
+      <div class="icon-section icon-object-effect">
+        <div class="icon-section__header">
+          <h3 class="icon-section__title">Object Effect
+            <small>{{#if mapObject.below}}height {{mapObject.height}} on height {{mapObject.below}} — total height {{mapObject.total}}{{else}}total height {{mapObject.total}}{{/if}}</small></h3>
+          <button type="button" class="icon-btn icon-btn--sm" data-action="objectToChat"
+                  title="Post the object's rules and what is on now to chat"><i class="fa-solid fa-comment"></i> Chat</button>
+          {{#if isEditable}}{{#if mapObject.onMap}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="objectRemove"
+                    title="{{#if mapObject.pickUp}}Pick the weapon up: removes the object and ends its effect{{else}}Remove the object from the map{{/if}} (objects stacked on it come down)">
+              {{#if mapObject.pickUp}}<i class="fa-solid fa-hand"></i> Pick up{{else}}<i class="fa-solid fa-trash"></i> Remove{{/if}}
+            </button>
+          {{/if}}{{/if}}
+        </div>
+        {{#if mapObject.noAttack}}
+          <p class="icon-object-effect__warn"><i class="fa-solid fa-ban"></i> While this object is on the map, {{#if mapObject.creatorName}}{{mapObject.creatorName}}{{else}}its creator{{/if}} cannot attack.</p>
+        {{/if}}
+        {{#if mapObject.benefits.length}}
+          <ul class="icon-object-effect__benefits">
+            {{#each mapObject.benefits as |b|}}
+              <li class="{{#if b.active}}is-active{{else}}is-inactive{{/if}}"
+                  title="{{#if b.active}}On: total height {{../mapObject.total}}{{else}}Needs total height {{b.label}}{{/if}} (including the objects it is stacked on)">
+                <strong>{{b.label}}:</strong> {{b.text}}</li>
+            {{/each}}
+          </ul>
+        {{/if}}
+        {{#if mapObject.perHeight}}
+          <p><strong>{{mapObject.perHeight.source}}:</strong> height {{mapObject.height}} → {{mapObject.perHeight.amount}} {{mapObject.perHeight.type}} damage ×{{mapObject.perHeight.times}}.</p>
+        {{/if}}
+        {{#if mapObject.enrichedRules}}<div class="icon-editor-wrap">{{{mapObject.enrichedRules}}}</div>{{/if}}
+        {{#each mapObject.enrichedUpgrades as |u|}}
+          <p><strong>{{u.source}}:</strong> {{{u.html}}}</p>
+        {{/each}}
+      </div>
+    {{/if}}
+
     {{#if isEditable}}
       <p class="summon-sheet__drop-hint">
         <i class="fa-solid fa-lightbulb"></i> Drop an <strong>Actor</strong> here to set the summoner, or drop an

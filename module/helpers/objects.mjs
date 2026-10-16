@@ -32,6 +32,27 @@ const plain = (s) => String(s ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g,
 const titleCase = (s) => String(s ?? "").trim().toLowerCase().replace(/(^|[\s(-])([a-zà-ÿ])/g, (_m, a, b) => a + b.toUpperCase());
 const clampHeight = (n) => Math.min(3, Math.max(1, Number(n) || 1));
 
+// The label that opens the block an object is created in ("Effect:", "Object:", "Terrain effect:",
+// "Object Effect:" …) and the labels that open the next, unrelated block (the Infuse versions,
+// Charge, Slay …). "Effect:" is not a stop: Geyser's "Effect: After the geyser is removed,
+// summon a Salt Sprite in its space" is still about the geyser (p.232).
+const BLOCK_START = /\b(?:(?:Object|Terrain|Summon|Area) [Ee]ffect|Effect|Object|Summon)\s*:/g;
+const BLOCK_STOP  = /\s(?:(?:Slay or )?Infuse (?:\d+|X)|Charge|Heroic|Exceed|Collide|Slay|Critical|Comeback|Finishing Blow)\s*:/;
+
+/** The rules of the object created at `at` in `t`: its block, from the label before it to the next Infuse / trigger block. */
+function blockAround(t, at) {
+  let start = 0;
+  for (const m of t.matchAll(BLOCK_START)) { if (m.index > at) break; start = m.index; }
+  const stop = BLOCK_STOP.exec(t.slice(at));
+  return t.slice(start, stop ? at + stop.index : t.length).trim();
+}
+
+/** An Infuse version's own block, from its name to the next block. */
+function infuseBlock(t, at) {
+  const stop = BLOCK_STOP.exec(t.slice(at + 1));
+  return t.slice(at, stop ? at + 1 + stop.index : t.length).trim();
+}
+
 /**
  * The objects one rules text creates, in order of appearance.
  * @param {string} text  plain or HTML
@@ -55,7 +76,8 @@ export function objectsInText(text) {
     if (!n || /^objects?$/i.test(n)) return;
     // "Object Effect: Aura 2" right after the object's own line goes with it (Spirit Shrine p.192).
     const aura = /^[\s.]*object effect\s*:\s*aura (\d+)\b/i.exec(t.slice(end, end + 60));
-    found.push({ at, name: titleCase(n), height: clampHeight(height), variant: "", aura: aura ? Number(aura[1]) : 0, ...field });
+    found.push({ at, name: titleCase(n), height: clampHeight(height), variant: "", infuse: "",
+      aura: aura ? Number(aura[1]) : 0, rules: blockAround(t, at), ...field });
   };
   // "a height 1 boulder object", "two height 1 boulder objects", "a height 1 magma spire object"
   for (const m of t.matchAll(/\bheight ([1-3]) ((?:[a-z][\w'-]*\s+){0,2}?[a-z][\w'-]*)\s+objects?\b/gi))
@@ -71,13 +93,16 @@ export function objectsInText(text) {
   const base = found[0];
   if (base) {
     // "Infuse 3: PYROSPIRE — Terrain space becomes height 3" (Pyroclast p.221): the same object, taller.
+    // `infuse` names the version: its chip is offered while that infusion is armed (R33a2).
     for (const m of t.matchAll(/\b([A-ZÄÖÜ][A-ZÄÖÜ' ]{2,}?)\s+[—–]\s+[^.]*?\bbecomes height ([1-3])\b/g))
-      found.push({ ...base, at: m.index, height: clampHeight(m[2]), variant: titleCase(m[1]), aura: base.aura });
+      found.push({ ...base, at: m.index, height: clampHeight(m[2]), variant: titleCase(m[1]), infuse: titleCase(m[1]),
+        aura: base.aura, rules: `${base.rules} ${infuseBlock(t, m.index)}` });
     // "Infuse 3: VOLCANIC GEYSER — Create a Volcanic Geyser instead" (Geyser p.232): another object, same height.
     for (const m of t.matchAll(/\b([A-ZÄÖÜ][A-ZÄÖÜ' ]{2,}?)\s+[—–]\s+Create an? ([A-Z][\w' -]*?) instead\b/g)) {
       const name = titleCase(m[2]);
       const variant = titleCase(m[1]);
-      found.push({ ...base, at: m.index, name, variant: variant === name ? "" : variant });
+      found.push({ ...base, at: m.index, name, variant: variant === name ? "" : variant, infuse: variant,
+        rules: `${base.rules} ${infuseBlock(t, m.index)}` });
     }
   }
   return found.map(({ at, ...o }) => o);
@@ -107,6 +132,63 @@ export function objectsForItem(system, { trait = false } = {}) {
       seen.add(key);
       out.push({ ...o, source: o.variant || source, field });
     }
+  }
+  return out;
+}
+
+/**
+ * What an object's rules say the table needs to remember (R33a2):
+ *   benefits  "The shrine gains additional benefits equal to its total height, including other objects it is
+ *             stacked on: 1: … 2: … 3+: …" (Spirit Shrine p.192) → [{min:1, text}, {min:2, text}, {min:3, text}]
+ *   noAttack  "While this object is active, you cannot attack" (Comet)
+ *   pickUp    "You can pick your weapon up if you enter or exit any space adjacent to it … removing the object" (Comet)
+ * @param {string} rules  the object's rules (objectsInText → rules), plain
+ */
+export function objectRuleNotes(rules) {
+  const t = plain(rules);
+  const benefits = [];
+  const table = /\btotal height\b[^:]*:\s*(.*)$/i.exec(t);
+  if (table) {
+    for (const m of table[1].matchAll(/(?:^|\s)([1-3])(\+)?:\s*([^.]*\.?)/g))
+      benefits.push({ min: Number(m[1]), plus: !!m[2], text: m[3].trim() });
+  }
+  return {
+    benefits,
+    noAttack: /\byou cannot attack\b/i.test(t),
+    pickUp:   /\bpick (?:\S+ ){0,2}up\b/i.test(t),
+  };
+}
+
+/**
+ * Damage dealt once per height of the object: Spirit Shrine's mastery "Destroy the shrine, then deal 2 divine
+ * damage once to the foe per height of the shrine" (p.193) → { amount: 2, type: "divine" }, else null.
+ */
+export function perHeightDamage(text) {
+  const m = /\b(\d+) (?:(divine|piercing|unerring) )?damage once\b[^.]*?\bper height\b/i.exec(plain(text));
+  return m ? { amount: Number(m[1]), type: (m[2] ?? "").toLowerCase() } : null;
+}
+
+/**
+ * The selected talent and unlocked mastery of the ability an object comes from that speak of
+ * that object ("Yourself and allies that end their turn adjacent to your weapon gain 2 vigor",
+ * Comet Talent II; "If you or an ally ends their turn inside the Shrine's aura …", Spirit Shrine
+ * Talent I): matched on the last word of the object's name, singular or plural.
+ * @param {object} system  the ability's system data
+ * @param {string} name    the object's name ("Thrown Weapon")
+ * @param {string} [field] the field the object itself comes from (left out: already the rules)
+ * @returns {Array<{source:string, text:string}>}
+ */
+export function objectUpgrades(system, name, field = "") {
+  const s = system ?? {};
+  const word = String(name ?? "").trim().split(/\s+/).pop()?.toLowerCase().replace(/s$/, "");
+  if (!word || word.length < 3) return [];
+  const re = new RegExp(`\\b${word.replace(/[^\w]/g, "")}s?\\b`, "i");
+  const talent = Number(s.talentSelected) || 0;
+  const out = [];
+  for (const [f, source, on] of [["talent1", "Talent I", talent === 1], ["talent2", "Talent II", talent === 2], ["mastery", "Mastery", !!s.masteryUnlocked]]) {
+    if (!on || f === field) continue;
+    const text = plain(s[f]);
+    if (text && re.test(text)) out.push({ source, text });
   }
   return out;
 }
