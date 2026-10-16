@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Heave-Ho: l'Effect prima dell'Area (versione 1.15.54)
+
+### Round di debug del 16 ottobre, punto R53
+
+- **Heave-Ho** (Stormbender, p.234: "Effect: After the triggering ability resolves create a crashing wave in a medium
+  blast area effect … Characters caught in the area are shoved 1, and foes become vulnerable"): la scheda e la card in
+  chat mostravano il blocco Area prima dell'Effect che crea l'onda → il testo dell'area sta in un campo a parte e
+  l'ordine di base mette l'Area prima dei blocchi scritti nella descrizione (giusto per abilità come Comet, p.128, che
+  stampano l'Area per prima) → nel compendio Jobs Heave-Ho ha ora l'ordine dei blocchi fissato a "effect, area": Trigger,
+  Effect, Area, Collide come nel libro. La migrazione 26 mette lo stesso ordine sulle copie di Heave-Ho già sulle schede
+  e nella sidebar (solo se non hanno un ordine impostato a mano). Le altre abilità non cambiano.
+
 ## 16 ottobre 2026 — Stack Dice: il secondo dado si può alzare al capitolo 3 (versione 1.15.53)
 
 ### Round di debug del 16 ottobre, punto R51

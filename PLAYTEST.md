@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R53 — Heave-Ho: l'Effect prima dell'Area (16 ottobre 2026, versione 1.15.54)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbender che ha già Heave-Ho sulla scheda da
+prima di questa versione, e un PG Stormbender nuovo.
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 26: … Heave-Ho
+      now show Effect before Area".
+- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Heave-Ho: Trigger in alto, poi Effect ("After the triggering
+      ability resolves, create a crashing wave …"), poi Area ("Characters caught in the area are shoved 1 …"), poi
+      Collide ("Summon a salt sprite").
+- [ ] **Copia nuova dal compendio**: trascina Heave-Ho dal compendio Jobs su un PG → stesso ordine.
+- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Effect → Area → Collide.
+- [ ] **Altre abilità invariate**: Comet (Area prima dell'Effect, p.128) e Draken Cross come prima.
+
 ## R51 — Stack Dice: il secondo dado al capitolo 3 (16 ottobre 2026, versione 1.15.53)
 
 Setup: PG Fool al capitolo 3 (tratto Death's Apprentice sbloccato) e un PG Fool al capitolo 1 o 2. È solo un template:

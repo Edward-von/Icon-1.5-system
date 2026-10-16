@@ -222,10 +222,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Domanda per Edoardo: (a) togliere il tag "power-die" da Chronotemper nel compendio Jobs, con una migrazione che lo
       toglie anche dalle schede dove l'abilità è già presa (si discosta dal libro, ma l'etichetta non trae in inganno),
       oppure (b) lasciarlo come stampato nel libro e chiudere il punto senza modifiche?
-- [ ] **R53. Heave-Ho: l'Effect dopo l'Area** (S, dati)
+- [x] **R53. Heave-Ho: l'Effect dopo l'Area** (S, dati)
       "The 'Effect' is currently listed after the area, when the effect should go first, as the area is made with the
       effect." (Nel round 4, 30 agosto, era stato separato Trigger/Effect; l'ordine "Effect dopo Area per gli attacchi" di
       Draken Cross potrebbe valere anche qui, ma Heave-Ho non è un attacco.)
+      (FATTO il 16 ottobre 2026, versione 1.15.54: il libro (p.234) stampa Trigger, Effect, poi il testo dell'area e
+      Collide; Heave-Ho nel compendio ha ora l'ordine dei blocchi "effect, area", la migrazione 26 lo mette sulle copie.)
 - [ ] **R54. Eye of the Storm: "Special" e ordine Area / Effect** (S, dati)
       "The second line of flavor text is actually supposed to be a Special: keyword. (The book forgets the 'special' part
       of this.)" e "Should be formatted Area: [D]. Effect: Instead of how it currently is formatted (missing highlights and
@@ -327,6 +329,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (p.178): la Small Blast va su di te da sola, ma "Medium Blast" e "Large Blast" si piazzano a mano (il "centered on
       you" è solo nella prima frase). Lo stesso per le aree centrate su pit / oggetti (Holy Talent I, Pandaemonium
       combo, Helix Heel), che restano a mano finché pit e oggetti non sono sulla mappa (R33).
+- [ ] **Emerso lavorando su R53 — la migrazione 25 non riconosce i testi con più spazi** (S): in `migrations.mjs` la
+      funzione `flat` della migrazione 25 usa `replace(/s+/g, " ")` (manca la barra: toglie le lettere "s" invece di
+      unire gli spazi), quindi confronta un testo storpiato con quello vecchio e non aggiorna nessuna copia dei sei Limit
+      Break di R39. Va corretta con `/\s+/g` in una nuova migrazione (la 25 è già stata eseguita nei mondi aggiornati).
 
 ---
 

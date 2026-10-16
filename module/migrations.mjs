@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 25;
+export const CURRENT_SCHEMA_VERSION = 26;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -975,6 +975,33 @@ const MIGRATIONS = {
       else if (tplStale(item)) { await item.update({ "system.limitBreak.effect": FIX[item.system.limitBreak.name.trim()].new }); n++; }
     }
     if (n) console.log(`ICON 1.5 | Migration 25: ${n} limit break(s) now show their blocks one per line, as in the book`);
+  },
+
+  /* 26 — Heave-Ho (Stormbender, p.234) prints its Effect ("create a crashing
+   * wave in a medium blast area effect …") before what the area does
+   * ("Characters caught in the area are shoved 1 …"). The area text lives in
+   * areaEffect, which the default order puts before the description's blocks,
+   * so the sheet showed the area first. The pack now pins "effect, area";
+   * set it on the copies whose order is still empty (a hand-set order is
+   * left alone). */
+  26: async () => {
+    const ORDER = "effect, area";
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Heave-Ho"
+      && !String(item.system?.blockOrder ?? "").trim();
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.blockOrder": ORDER }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.blockOrder": ORDER });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 26: ${n} copy/copies of Heave-Ho now show Effect before Area, as on p.234`);
   },
 };
 
