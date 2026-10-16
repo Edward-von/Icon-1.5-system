@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 24;
+export const CURRENT_SCHEMA_VERSION = 25;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -920,6 +920,61 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 24: ${n} copy/copies of The Tower's mastery now name Eclipse's meteor, as on p.203`);
+  },
+
+  /* 25 — Six limit breaks had lost the book's block layout in the pack (R39):
+   * the "Effect:" label of Gigaflare (p.208), Gran Levincross (p.224) and
+   * Elemental (p.232), Cataclysm's second Effect (p.217), the saints of March
+   * of the Saints and Elemental's benefits as "•" lists, and the paragraph
+   * breaks of Gran Levincross, Cataclysm and Death Sentence (Severed Soul's
+   * "Summon effect:"). The pack now has one block or list item per line.
+   * Rewrite the limit-break items (and world job templates) that still carry
+   * the old text word for word; the wording itself is unchanged. */
+  25: async () => {
+    const FIX = {
+      "Elemental": {
+        old: "You take on a fearsome elemental form, gaining the following benefits for the rest of combat: You gain flying and phasing. You release aura 2 around you. The area is a terrain effect that moves with you that is difficult and dangerous terrain for foes, and allies gain cover from all directions in the area. You can share space with characters. You have resistance to any character sharing your space, and allies have resistance while sharing your space.",
+        new: "Effect: You take on a fearsome elemental form, gaining the following benefits for the rest of combat:\nWhile you are an Elemental:\n• You gain flying and phasing.\n• You release aura 2 around you. The area is a terrain effect that moves with you that is difficult and dangerous terrain for foes, and allies gain cover from all directions in the area.\n• You can share space with characters. You have resistance to any character sharing your space, and allies have resistance while sharing your space.",
+      },
+      "Cataclysm": {
+        old: "Divine. Effect: End your turn. You dive into the earth and off the battlefield. Remove yourself from play. Target a line area 3 spaces wide from one side of the battlefield to the next. Gain Delay: Your next turn must be slow. At the start of that turn, you cause a rolling wave of earth to sweep across this area. Characters within take [D]+fray as an effect and are shoved 1 in the direction of the line. After the first effect resolves, all objects in the area release an explosion for a medium blast area effect centered on them, dealing [D]+fray as an area effect. Characters hit by two or more explosions take 2[D]+fray instead. When this ability resolves, place yourself in any unoccupied space in the area.",
+        new: "Divine. Effect: End your turn. You dive into the earth and off the battlefield. Remove yourself from play. Target a line area 3 spaces wide from one side of the battlefield to the next. Gain Delay: Your next turn must be slow. At the start of that turn, you cause a rolling wave of earth to sweep across this area. Characters within take [D]+fray as an effect and are shoved 1 in the direction of the line.\nEffect: After the first effect resolves, all objects in the area release an explosion for a medium blast area effect centered on them, dealing [D]+fray as an area effect. Characters hit by two or more explosions take 2[D]+fray instead.\nWhen this ability resolves, place yourself in any unoccupied space in the area.",
+      },
+      "March of the Saints": {
+        old: "You sing of the deeds of the first heroes, from the Doom. The Great Chant weaves around your allies and transforms them into echoes of those mighty heroes. Stance: You begin weaving an epic song, a saga of legendary heroes. When you take this action, and when this stance refreshes, you may invest an ally in range 5 with the power of one of the great saints. Each saint must be chosen at least once before it can be chosen again. The effect takes place immediately and lasts until the end of their next turn. Refresh: This stance refreshes automatically at the start of your turns. Parzival: An allied character gains flying and cover from all directions. Leon: An allied character gains dodge and the ability to move diagonally. Angrboda: An allied character gains sturdy, and their attacks gain true strike and shove 1. Farnese: An ally gains 1 blessing and +1 boon on all attacks and saves.",
+        new: "You sing of the deeds of the first heroes, from the Doom. The Great Chant weaves around your allies and transforms them into echoes of those mighty heroes. Stance: You begin weaving an epic song, a saga of legendary heroes. When you take this action, and when this stance refreshes, you may invest an ally in range 5 with the power of one of the great saints. Each saint must be chosen at least once before it can be chosen again. The effect takes place immediately and lasts until the end of their next turn.\nRefresh: This stance refreshes automatically at the start of your turns.\n• Parzival: An allied character gains flying and cover from all directions.\n• Leon: An allied character gains dodge and the ability to move diagonally.\n• Angrboda: An allied character gains sturdy, and their attacks gain true strike and shove 1.\n• Farnese: An ally gains 1 blessing and +1 boon on all attacks and saves.",
+      },
+      "Gigaflare": {
+        old: "Divine, Unerring, True Strike. You summon the eldflame, the primeval force of creation, dealing [D]+fray divine damage to every character on the battlefield, ignoring line of sight. Characters in range 2 of you are exempt from this ability. Infuse 6: TETRAFLARE — Deal [D]+fray twice instead.",
+        new: "Divine, Unerring, True Strike. Effect: You summon the eldflame, the primeval force of creation, dealing [D]+fray divine damage to every character on the battlefield, ignoring line of sight. Characters in range 2 of you are exempt from this ability.\nInfuse 6: TETRAFLARE — Deal [D]+fray twice instead.",
+      },
+      "Gran Levincross": {
+        old: "Divine. Your blade extends and you make two massive cuts across the map, splitting the walls between worlds. Draw a cross section across the map, splitting it into four sections of any size. Deal [D]+fray divine damage to all characters caught in the cross, then remove all characters out of the affected area and place them in the nearest free space of your choice. Characters can pass a save to choose which side they end up on. The affected area becomes a crackling wall of lightning that does not block line of sight, but blocks all movement except teleporting. This effect ends at the end of the next round. Allies can use a free action to teleport across the wall from an adjacent space, placing them on the closest adjacent space on the other side. If any version of this ability has no valid space to teleport a character to, still deal damage, but this ability doesn't create the lightning wall. Slay or Infuse 3: RAGNARÖK — After this ability resolves, scathing divine lightning hits a quarter of the map of your choice. Characters within take [D]+fray divine damage.",
+        new: "Divine. Effect: Your blade extends and you make two massive cuts across the map, splitting the walls between worlds. Draw a cross section across the map, splitting it into four sections of any size. Deal [D]+fray divine damage to all characters caught in the cross, then remove all characters out of the affected area and place them in the nearest free space of your choice. Characters can pass a save to choose which side they end up on.\nThe affected area becomes a crackling wall of lightning that does not block line of sight, but blocks all movement except teleporting. This effect ends at the end of the next round.\nAllies can use a free action to teleport across the wall from an adjacent space, placing them on the closest adjacent space on the other side.\nIf any version of this ability has no valid space to teleport a character to, still deal damage, but this ability doesn't create the lightning wall.\nSlay or Infuse 3: RAGNARÖK — After this ability resolves, scathing divine lightning hits a quarter of the map of your choice. Characters within take [D]+fray divine damage.",
+      },
+      "Death Sentence": {
+        old: "A flash of the scythe, and the line between life and death is blurred. Summon: You slash an adjacent foe with your weapon, knocking their soul out of their body. Draw a line 4 area effect from your foe facing directly away from you and summon the soul in the last available space. Severed Soul — Size 1, intangible, immobile. While they have their soul knocked out, foes can act normally. However, the soul can be targeted as if it was the body, transferring all damage or effects it would take to the body, no matter the distance or line of sight. Damage becomes divine. Abilities that are able to target both the body and soul of the foe (such as AoEs) can hit both. The soul lasts until the end of your next turn, or until the affected character is defeated.",
+        new: "A flash of the scythe, and the line between life and death is blurred. Summon: You slash an adjacent foe with your weapon, knocking their soul out of their body. Draw a line 4 area effect from your foe facing directly away from you and summon the soul in the last available space.\nSevered Soul — Size 1, intangible, immobile. Summon Effect: While they have their soul knocked out, foes can act normally. However, the soul can be targeted as if it was the body, transferring all damage or effects it would take to the body, no matter the distance or line of sight. Damage becomes divine. Abilities that are able to target both the body and soul of the foe (such as AoEs) can hit both.\nThe soul lasts until the end of your next turn, or until the affected character is defeated.",
+      },
+    };
+    const flat = (t) => String(t ?? "").replace(/s+/g, " ").trim();
+    const lbStale = (item) => item.type === "limit-break" && FIX[(item.name ?? "").trim()]
+      && flat(item.system?.effect) === FIX[item.name.trim()].old;
+    const tplStale = (item) => item.type === "job-template" && FIX[(item.system?.limitBreak?.name ?? "").trim()]
+      && flat(item.system.limitBreak.effect) === FIX[item.system.limitBreak.name.trim()].old;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(lbStale).map(i => ({ _id: i.id, "system.effect": FIX[i.name.trim()].new }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (lbStale(item)) { await item.update({ "system.effect": FIX[item.name.trim()].new }); n++; }
+      else if (tplStale(item)) { await item.update({ "system.limitBreak.effect": FIX[item.system.limitBreak.name.trim()].new }); n++; }
+    }
+    if (n) console.log(`ICON 1.5 | Migration 25: ${n} limit break(s) now show their blocks one per line, as in the book`);
   },
 };
 

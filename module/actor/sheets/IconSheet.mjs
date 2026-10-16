@@ -7,7 +7,7 @@ import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
-import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel, enrichLimitBreakText } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
 import { buildAbilityBlocks, comboDisplayName, comboTitle, comboReplacesBase, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
@@ -290,6 +290,11 @@ export class IconSheet extends BaseActorSheet {
       .filter(i => i.type === "ability")
       .sort((a, b) => a.sort - b.sort);
     context.limitBreakItem = actor.items.find(i => i.type === "limit-break");
+    // Its text in the book's layout (R39): tag line, flavour, one labelled block per line.
+    context.limitBreakEffect = context.limitBreakItem
+      ? await enrichLimitBreakText(context.limitBreakItem.system.effect, { enrich: t => this._enrichAbility(t) }) : "";
+    context.limitBreakFlavor = context.limitBreakItem?.system?.description
+      ? await this._enrichAbility(context.limitBreakItem.system.description, { keywords: false }) : "";
     // "1action" / "free" are storage keys — the panel prints "1 Action" / "Free Action".
     context.limitBreakCost = abilityCostLabel(context.limitBreakItem?.system?.cost ?? "");
     // Limit breaks that deal damage get a Damage Roll button, like abilities.
@@ -3090,7 +3095,8 @@ export class IconSheet extends BaseActorSheet {
       ? `<div class="icon-chat-card__desc"><strong><i class="fa-solid fa-wand-sparkles"></i> ${escapeHTML(infusion.label)}${infusion.name ? ` — ${escapeHTML(infusion.name)}` : ""}</strong> (${escapeHTML(infusion.source)}): ${escapeHTML(infusion.name ? infusion.text.replace(/^[^—]*—\s*/, "") : infusion.text)}</div>`
       : "";
     const title = infusion?.name ? `${lb.name} — ${infusion.name}` : lb.name;
-    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<br>${lb.system.effect ?? ""}${infuseHtml}${statusHtml}` });
+    const effectHtml = await enrichLimitBreakText(lb.system.effect, { enrich: t => this._enrichAbility(t) });
+    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<div class="icon-limit-break__effect">${effectHtml}</div>${infuseHtml}${statusHtml}` });
   }
 
   static async #onAddJob(event, target) {

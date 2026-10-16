@@ -242,15 +242,19 @@ const _canonLabel = (raw) => raw.trim().replace(/\b[a-zA-Z]+/g, (w, i) =>
  * @param {string} description  raw description (plain text or light HTML)
  * @returns {{ flavor: string, trigger: string, sections: Array<{label: string, text: string}> }}
  */
-export function parseAbilitySections(description) {
+export function parseAbilitySections(description, { extraLabels = [] } = {}) {
   // <p>/<br> wrappers become whitespace so a label never ends up inside a
   // half-open tag; bullet lines keep their line break (see _flattenText).
   const text = _flattenText(description);
   if (!text) return { flavor: "", trigger: "", sections: [] };
 
+  // Extra labels a caller reads on top of the shared ones (limit breaks: "Attack", "Aura").
+  const re = extraLabels.length
+    ? new RegExp(SECTION_RE.source.replace(`(${SECTION_LABELS.join("|")})`, `(${[...extraLabels, ...SECTION_LABELS].join("|")})`), "gi")
+    : SECTION_RE;
   const hits = [];
-  SECTION_RE.lastIndex = 0;
-  for (const m of text.matchAll(SECTION_RE)) {
+  re.lastIndex = 0;
+  for (const m of text.matchAll(re)) {
     const label = m[1];
     if (label[0] !== label[0].toUpperCase()) continue;           // lowercase → prose, not a label
     const labelStart = m.index + m[0].indexOf(label);
@@ -298,6 +302,58 @@ export async function enrichAbilityDescription(description) {
   const head = await enrichHTML(flavor, { keywords: false });
   return rest ? `${head} ${await enrichHTML(rest)}` : head;
 }
+
+/**
+ * Book layout of a limit break's effect text (sheet panel, "Use Limit Break"
+ * card, item sheet). The pack stores it as plain text: the tag line the book
+ * prints under the cost written as the first sentence ("Divine, Unerring, True
+ * Strike." Gigaflare p.208), then the rules blocks, one per line. It was shown
+ * raw, so line breaks were lost and nothing was labelled. Here:
+ *   - a leading sentence made only of tags becomes its own small line;
+ *   - each line is a paragraph; "•" lines stay with the line above them as a
+ *     list (formatBulletLists), so Lycanthropy's dash benefits are rows;
+ *   - each block label (Effect, Attack, Aura, Stance, Delay, Infuse 6…) is bold
+ *     at the start of its own paragraph, as for abilities; the name of an
+ *     Infuse version joins its label ("Infuse 6: TETRAFLARE").
+ * Hand-edited HTML is enriched as it is.
+ * @param {string} text  the effect text
+ * @param {object} [opts]
+ * @param {(t: string) => Promise<string>} [opts.enrich]  enricher for each block (default enrichHTML)
+ * @returns {Promise<string>}
+ */
+export async function enrichLimitBreakText(text, { enrich = (t) => enrichHTML(t) } = {}) {
+  const raw = String(text ?? "");
+  if (!raw.trim()) return "";
+  if (/<[a-z][^>]*>/i.test(raw)) return enrich(raw);
+  const lines = raw.split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const paras = [];
+  for (const line of lines) {
+    if (line.startsWith("•") && paras.length) paras[paras.length - 1] += `\n${line}`;
+    else paras.push(line);
+  }
+  let tagLine = "";
+  const head = /^([^.:]+)\.\s+/.exec(paras[0] ?? "");
+  if (head && head[1].split(",").every(t => _LB_TAG_RE.test(t.trim()))) {
+    tagLine = head[1].trim();
+    paras[0] = paras[0].slice(head[0].length);
+  }
+  const out = tagLine ? [`<p class="icon-limit-break__tags">${escapeHTML(tagLine)}</p>`] : [];
+  for (const para of paras) {
+    const { flavor, trigger, sections } = parseAbilitySections(para, { extraLabels: ["Attack", "Aura"] });
+    if (flavor) out.push(`<p>${await enrich(flavor)}</p>`);
+    if (trigger) sections.unshift({ label: "Trigger", text: trigger });
+    for (const sec of sections) {
+      let label = sec.label, body = sec.text;
+      const named = /\bInfuse\b/i.test(label) && /^([A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}?)\s*[—–]\s*/.exec(body);
+      if (named) { label = `${label}: ${named[1].trim()}`; body = body.slice(named[0].length); }
+      out.push(`<p class="icon-ability-section"><strong>${escapeHTML(label)}${named ? "" : ":"}</strong> ${await enrich(body)}</p>`);
+    }
+  }
+  return out.join("");
+}
+
+/** The tags a limit break's first sentence may list (Passage to the Afterlife: "Attack, Divine, +1 boon"). */
+const _LB_TAG_RE = /^(?:attack|divine|unerring|true strike|pierce|sacrifice|delay|gamble|stance|aura|summon|end turn|[+-]?\d+ (?:boons?|curses?))$/i;
 
 /** Human label for a foe/legend action cost key. */
 const NPC_COST_LABELS = { "1action": "1 Action", "2actions": "2 Actions", "free": "Free" };

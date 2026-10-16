@@ -1864,6 +1864,11 @@ details[open] > .icon-basic-actions__summary::before {
   margin-bottom: 7px;
 }
 .icon-limit-break__effect { font-size: 0.85em; color: var(--ic-text-normal); }
+/* R39: one block per paragraph, as the book prints them; the tag line under the header */
+.icon-limit-break__effect p { margin: 0 0 4px; }
+.icon-limit-break__effect p:last-child { margin-bottom: 0; }
+.icon-limit-break__tags { font-weight: bold; font-variant: small-caps; letter-spacing: .03em; opacity: .85; }
+.icon-limit-break__flavor { font-size: 0.85em; font-style: italic; opacity: .8; margin-bottom: 4px; }
 
 /* ============================================================
    25. Relics

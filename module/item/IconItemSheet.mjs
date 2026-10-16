@@ -2,7 +2,7 @@
  * IconItemSheet — ApplicationV2 sheet for all ICON item types.
  * Renders type-specific fields via conditional HBS blocks.
  */
-import { enrichHTML, enrichAbilityDescription, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
+import { enrichHTML, enrichAbilityDescription, enrichLimitBreakText, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
 import { TROPHY_UNITS } from "../data/item/TrophyData.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
@@ -124,7 +124,8 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
         break;
       case "limit-break":
         context.enriched = {
-          effect:      await _enrich(system.effect),
+          // book layout: tag line, one labelled block per line (R39)
+          effect:      await enrichLimitBreakText(system.effect),
           ultimate:    await _enrich(system.ultimate),
           description: await _enrich(system.description),
         };
@@ -199,7 +200,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       case "job-template":
         context.enriched = {
           description: await _enrich(system.description),
-          lbEffect:    await _enrich(system.limitBreak?.effect),
+          lbEffect:    await enrichLimitBreakText(system.limitBreak?.effect),
           lbUltimate:  await _enrich(system.limitBreak?.ultimate),
         };
         context.enrichedJobTraits = await Promise.all((system.traits ?? []).map(async (t, i) => ({

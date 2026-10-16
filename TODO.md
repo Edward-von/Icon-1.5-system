@@ -83,10 +83,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       il testo e ne paga la Resolve (Meteor 6); il Damage Roll usa il suo danno "instead" (Tetraflare Instances 2,
       Meteor 4) e offre in Other Götterdämmerung (armata), Ragnarök (sempre, c'è lo Slay) e il 999 divine del Special
       effect di Meteor. Meteor costa 8 Aether ma il massimo è 6: vedi Emerso lavorando.)
-- [ ] **R39. Limit Break: formattazione** (S/M, bug, alta priorità)
+- [x] **R39. Limit Break: formattazione** (S/M, bug, alta priorità)
       "some of the formatting on them is off". Il documento non dice quali. Guardare tutti i Limit Break (card e scheda)
       e sistemare quelli con blocchi non etichettati o sullo stesso paragrafo (es. Gigaflare ha "Divine, Unerring, True
       Strike." ripetuto in testa all'effetto, già nei tag). Domanda per Maar, se non è evidente: quali Limit Break?
+      (FATTO il 16 ottobre 2026, versione 1.15.40: riquadro, card di "Use Limit Break" e scheda oggetto mostravano il
+      testo grezzo, senza a capo né etichette. Ora: tag su una riga loro, un paragrafo per blocco con l'etichetta in
+      grassetto (Effect, Attack, Aura, Stance, Delay, Infuse…), elenchi "•" una voce per riga, descrizione in corsivo.
+      Nel compendio Jobs ripristinati etichette e a capo del libro per Gigaflare, Gran Levincross, Elemental,
+      Cataclysm, March of the Saints e Death Sentence; migrazione 25 per le copie sulle schede.)
 - [ ] **R40. Combo che sostituiscono solo una parte della base** (S/M, bug, continua R1)
       - Umbra / Penumbra: "Combo text does not properly replace specified effect within the ability string when toggled
         on". Penumbra: "Teleport your foe up to 3 spaces towards you instead of teleporting yourself" (sostituisce
@@ -224,6 +229,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       `helpers/infuse.mjs` dice che l'infusione armata si azzera a fine combattimento con l'Aether, ma `IconCombat`
       azzera solo l'Aether, non `flags.icon-system.infused` (e nemmeno dopo il tiro: `clearInfusion` non è chiamata da
       nessuno). Un'infusione armata resta "armed" anche nel combattimento dopo, per abilità e Limit Break.
+- [ ] **Emerso lavorando su R39 — piccole differenze di testo dei Limit Break dal libro** (S, dati): Split Heaven and
+      Hell ha le tre distanze (1 space / 2-4 / 5+) come sotto-elenco nel libro (p.127), nel compendio sono in riga;
+      Paradiso ha perso la prima frase del blocco Aura ("You gain an aura of supernatural accuracy…", p.155);
+      la descrizione di Lycanthropy è tagliata ("…granting you massively increased speed and power", p.168).
 
 ---
 

@@ -1656,6 +1656,33 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R39 — Testo dei Limit Break impaginato come nel libro (16 ottobre 2026, versione 1.15.40)
+
+Setup: PG di prova; uno alla volta i Limit Break dal compendio Jobs (trascinati sulla scheda o dal cambio di job
+primario). Per la migrazione: un mondo con un PG che aveva già Gigaflare o March of the Saints prima
+dell'aggiornamento.
+
+- [ ] **Gigaflare**: tab Combat → riquadro Limit Break → sotto il nome una riga "Divine, Unerring, True Strike" a sé;
+      poi "**Effect:** You summon the eldflame…" (con [D] mostrato col dado del PG) e, a capo, "**Infuse 6:
+      TETRAFLARE** Deal … twice instead.". Nessun "Divine, Unerring, True Strike." in testa all'effetto.
+- [ ] **Helion / Mock**: la descrizione in corsivo sopra; due paragrafi "**Effect:**" separati (Helion), "**Effect:**"
+      e "**Special:**" (Mock).
+- [ ] **Elenchi**: Lycanthropy e Split Heaven and Hell mostrano le voci "•" una per riga; March of the Saints mostra
+      Stance, Refresh e poi i quattro santi (Parzival, Leon, Angrboda, Farnese) uno per riga col nome in grassetto;
+      Elemental mostra "Effect:", "While you are an Elemental:" e tre voci.
+- [ ] **Altri blocchi**: Passage to the Afterlife ha "Attack:", "Exceed:", "Effect:" su righe diverse; High Prophecy e
+      Paradiso "Aura:"; Death Sentence "Summon:", la riga "Severed Soul — Size 1…", "Summon Effect:" e l'ultima
+      riga; Curtain Call ha la tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; Cataclysm due "Effect:" e "Gain Delay:".
+- [ ] **Card in chat**: "Use Limit Break" su Gigaflare → la card ha la stessa impaginazione del riquadro (tag, Effect,
+      Infuse); con Tetraflare armato c'è ancora la riga dell'infusione sotto.
+- [ ] **Scheda oggetto**: aprendo Gigaflare dal compendio (e il job template Enochian, sezione Limit Break) l'Effect è
+      impaginato allo stesso modo.
+- [ ] **Migrazione 25**: nel mondo con un Gigaflare / March of the Saints già sulla scheda, al primo avvio da GM la
+      console dice "Migration 25: N limit break(s)…" e la scheda mostra le nuove righe.
+- [ ] **Nulla cambiato nei numeri**: Damage Roll di Gigaflare, Gran Levincross e Cataclysm propone gli stessi danni di
+      prima (Cataclysm: Hit [D]+fray, Other le esplosioni e 2[D]+fray); i bottoni area (Cataclysm "Area", Death
+      Sentence "Line 4", Elemental "Aura 2") e Infuse funzionano come prima.
+
 ## R38b — Versioni Infuse dei Limit Break (16 ottobre 2026, versione 1.15.39)
 
 Setup: PG Wright di prova in un combattimento, con Aether a 6 e Resolve a 8 (personale); uno alla volta i Limit Break

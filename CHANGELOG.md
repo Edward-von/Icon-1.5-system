@@ -1,5 +1,27 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Testo dei Limit Break impaginato come nel libro (versione 1.15.40)
+
+### Round di debug del 16 ottobre, punto R39
+
+- **Formattazione dei Limit Break sbagliata**: Maar segnalava che "some of the formatting on them is off" → il
+  riquadro Limit Break della scheda, la card di "Use Limit Break" e la scheda dell'oggetto mostravano il testo così
+  com'era salvato: gli a capo sparivano (i due Effect di Helion, la tabella di Curtain Call, il paragrafo sui
+  Legend di Gigantas Crusher finivano tutti attaccati), gli elenchi "•" di Lycanthropy e Split Heaven and Hell
+  restavano una riga sola, nessuna etichetta era in grassetto e i tag ("Divine, Unerring, True Strike." di
+  Gigaflare) stavano in testa all'effetto come una frase. In più, nel compendio sei Limit Break avevano perso
+  parte dell'impaginazione del libro: l'etichetta "Effect:" di Gigaflare (p.208), Gran Levincross (p.224) ed
+  Elemental (p.232), il secondo "Effect:" di Cataclysm (p.217), l'elenco dei santi di March of the Saints (p.176) e
+  dei benefici di Elemental, e gli a capo di Gran Levincross, Cataclysm e Death Sentence (il "Summon effect:" del
+  Severed Soul, p.184) → ora il testo di un Limit Break si legge come quello delle abilità: i tag su una riga loro
+  sotto il nome, ogni blocco (Effect, Attack, Aura, Stance, Delay, Summon Effect, Infuse…) su un paragrafo suo con
+  l'etichetta in grassetto, gli elenchi "•" una voce per riga, le parole chiave con il loro tooltip e [D] col dado
+  del PG; il nome di una versione Infuse va nell'etichetta ("Infuse 6: TETRAFLARE"). La descrizione (Helion, Mock,
+  Paradiso…) compare in corsivo sopra l'effetto. Nel compendio Jobs i sei testi hanno di nuovo etichette e righe
+  del libro, sia nell'oggetto Limit Break sia nel job template; la migrazione 25 aggiorna le copie già sulle
+  schede. Le parole non sono cambiate e Damage Roll, aree e bottoni Infuse leggono gli stessi valori di prima.
+  L'Ultimate resta non mostrato sulla scheda (voce "Emerso lavorando su R37").
+
 ## 16 ottobre 2026 — Versioni Infuse dei Limit Break (versione 1.15.39)
 
 ### Round di debug del 16 ottobre, punto R38b

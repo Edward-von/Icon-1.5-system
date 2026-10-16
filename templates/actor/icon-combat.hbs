@@ -819,7 +819,8 @@
                     title="Remove Limit Break">×</button>
           {{/if}}
         </div>
-        <div class="icon-limit-break__effect">{{{limitBreakItem.system.effect}}}</div>
+        {{#if limitBreakFlavor}}<div class="icon-limit-break__flavor">{{{limitBreakFlavor}}}</div>{{/if}}
+        <div class="icon-limit-break__effect">{{{limitBreakEffect}}}</div>
         {{#if isEditable}}
           <button type="button" class="icon-btn icon-btn--use" data-action="useLimitBreak">
             Use Limit Break
