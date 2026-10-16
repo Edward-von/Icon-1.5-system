@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R59 — Aether senza attacco: Stormlash e Aether Deflection (16 ottobre 2026, versione 1.15.60)
+
+Setup: un PG Wright Stormbender con Tsunami e un PG Wright Spellblade (tratto Aether Deflection), entrambi con qualche
+Aether. È JS + template: F5 dopo il deploy.
+
+- [ ] **Stormlash**: con 3 Aether clicca "Infuse 1" su Tsunami → Aether a 2, in chat "<nome> uses the infusion of
+      Tsunami — STORMLASH" con "Infuse 1: 1 Aether spent (2 left)" e il testo; il bottone NON diventa "armed".
+- [ ] **Stormlash due volte**: ricliccalo → scala un altro Aether (non lo restituisce) e posta di nuovo.
+- [ ] **Con un'altra infusione armata**: arma l'Infuse 3 di Rime (DAGON), poi clicca Stormlash → l'Aether di Dagon non
+      torna indietro e Rime resta "armed".
+- [ ] **Senza Aether**: a 0 Aether clicca Stormlash → avviso "Infuse 1 needs 1 Aether", nessun messaggio in chat.
+- [ ] **Altre infusioni invariate**: Infuse 3 di Rime si arma come prima (bottone "armed", ricliccare restituisce
+      l'Aether, tirando Rime la versione si consuma).
+- [ ] **Aether Deflection**: nella riga del tratto c'è "Aether N" e il bottone "Regain (2 Aether)"; con 3 Aether
+      cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)".
+- [ ] **Aether insufficiente**: con 1 Aether il bottone è spento; su una scheda di un altro giocatore (solo
+      osservatore) è spento.
+
 ## R58 — Casella "Defender has evasion" nella finestra dell'attacco (16 ottobre 2026, versione 1.15.59)
 
 Setup: un PG che attacca, un Foe senza Evasion e un PG Fool (tratto Curse of Chaos) come bersagli; un secondo foe con lo

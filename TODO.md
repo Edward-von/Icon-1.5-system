@@ -261,10 +261,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.59: casella "Defender has evasion" su ogni bersaglio della finestra
       dell'attacco, spuntata da sola con lo status Evasion e modificabile a mano; il tiro d'Evasion (p.146) usa la casella;
       il tratto nel libro è Curse of Chaos, p.149.)
-- [ ] **R59. Spendere Aether senza attacco, con messaggio in chat** (S/M)
+- [x] **R59. Spendere Aether senza attacco, con messaggio in chat** (S/M)
       Tsunami: l'Infuse si scala solo attaccando, ma Tsunami non tira; "Some alternate button to spend 1 aether and then
       print to chat the stormlash ability would be useful." Aether Deflection (tratto): "you can spend 2 Aether any time
       to regain it", "Some way to activate and print to chat that you're using aether to regain the use".
+      (FATTO il 16 ottobre 2026, versione 1.15.60: una versione Infuse con un suo costo d'azione, come STORMLASH (Free
+      Action), si usa subito: scala l'Aether e posta in chat senza restare armata; Aether Deflection ha il bottone
+      "Regain (2 Aether)" che scala 2 Aether e lo scrive in chat.)
 - [ ] **R60. Versioni Infuse nella card: solo quella usata** (M)
       "when an ability isn't infused, printing the base ability doesn't need to print out the infused variant's effects …
       some abilities have multiple different infuse variations, so the base card is massive. Having a base ability not

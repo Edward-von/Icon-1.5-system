@@ -1,5 +1,28 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aether senza attacco: Stormlash e Aether Deflection (versione 1.15.60)
+
+### Round di debug del 16 ottobre, punto R59
+
+- **Tsunami / Stormlash** (Stormbender, p.233: "Infuse 1: STORMLASH — Free Action — Choose an edge of the map. Your
+  active tsunamis move 2 spaces in that direction"): il bottone Infuse 1 spendeva già l'Aether e scriveva la versione
+  in chat, ma poi la lasciava **armata** in attesa di un tiro di Tsunami che non arriva mai (Stormlash è un'azione a
+  parte, non un potenziamento del prossimo uso) → restava "armed", un secondo clic restituiva l'Aether già usato, e
+  armare un'altra infusione lo rimborsava → una versione Infuse che il libro dà con un suo costo d'azione tra
+  parentesi ("(Free Action)", "(1 action)", "(Interrupt …)") ora si **usa subito**: il clic scala l'Aether, posta
+  "<nome> uses the infusion of Tsunami — STORMLASH" con il testo, e non arma niente (un'altra infusione già armata
+  resta com'è). Nel pack jobs è l'unica versione di questo tipo.
+- **Aether Deflection** (Spellblade, p.224: "You only have one use of this interrupt per combat. However, you can spend
+  2 Aether any time to regain it"): non c'era modo di pagare i 2 Aether e dirlo in chat → nella riga del tratto (tab
+  Combat) c'è ora il bottone **Regain (2 Aether)**: scala 2 Aether e posta "<nome> spends 2 Aether to regain the use of
+  Aether Deflection". È spento con meno di 2 Aether o su una scheda non modificabile. I tratti dei PG non hanno un
+  contatore di usi, quindi non c'è altro da ripristinare. Il bottone compare su qualunque tratto con "spend N Aether
+  any time to regain it".
+- Altri testi con Aether speso senza attacco, cercati in tutti i pack: Conqueror's Edge (Spellblade, "you may infuse 3
+  Aether to trigger the slay effect of any ability": legato a un'abilità, non è lo stesso caso) e Bright Soul
+  (Enochian, cap. 3, "If you are defeated, you can choose to burn off all your aether…": spende tutto, non N, e solo
+  alla sconfitta). Nessuno dei due è stato toccato.
+
 ## 16 ottobre 2026 — Casella "Defender has evasion" nella finestra dell'attacco (versione 1.15.59)
 
 ### Round di debug del 16 ottobre, punto R58

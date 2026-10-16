@@ -221,6 +221,7 @@ export class IconSheet extends BaseActorSheet {
       setVigilance:     IconSheet.#onSetVigilance,
       setStackedDice:   IconSheet.#onSetStackedDice,
       useStackedDie:    IconSheet.#onUseStackedDie,
+      traitSpendAether: IconSheet.#onTraitSpendAether,
       openSummon:       IconSheet.#onOpenSummon,
       spendVigilance:   IconSheet.#onSpendVigilance,
       clearVigilance:   IconSheet.#onClearVigilance,
@@ -731,6 +732,13 @@ export class IconSheet extends BaseActorSheet {
         const max = hasDA ? 2 : 1;
         return { type: "stackedDice", value: sd.value ?? 0, max,
                  pips: Array.from({ length: max }, (_, i) => ({ i: i + 1, active: i + 1 <= (sd.value ?? 0) })) };
+      }
+      // "You can spend 2 Aether any time to regain it" (Aether Deflection,
+      // Spellblade p.224): a button that pays the Aether and says so in chat.
+      const regain = /spend (\d+) Aether any time to regain it/i.exec(String(t.system?.description ?? "").replace(/<[^>]+>/g, " "));
+      if (regain) {
+        const cost = Number(regain[1]), aether = cr.aether?.value ?? 0;
+        return { type: "aetherRegain", cost, aether, short: aether < cost };
       }
       if (t.system?.source !== "class") return null;
       // Only on the class trait that uses the resource (Fortify, Bless,
@@ -3299,6 +3307,9 @@ export class IconSheet extends BaseActorSheet {
     const sections = parseAbilitySections(item.system?.description ?? "").sections;
     const infusion = infusionsOf([...sections, ...masteryInfusion(item.system)], this.document, item.id).find(i => i.label === label);
     if (!infusion) return;
+    // A version that is its own action (Stormlash, "Free Action") has no roll
+    // to wait for: spend and post it now, leaving any armed infusion alone.
+    if (infusion.standalone) { await armInfusion(this.document, item, infusion, { arm: false }); return; }
     // Only one infuse effect can be up at a time (rule-tooltips: "only one
     // infuse effect can trigger at a time"), so a different one is refunded.
     if (armed) await cancelInfusion(this.document);
@@ -3355,6 +3366,24 @@ export class IconSheet extends BaseActorSheet {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content: `<p><strong>${escapeHTML(this.document.name)}</strong> uses a <strong>Stacked Die</strong>: the gamble result is <strong>6</strong> <small>(Stack Dice, p.149)</small>.</p>`,
+    });
+  }
+
+  /** A trait that lets you "spend 2 Aether any time to regain" its interrupt
+   *  (Aether Deflection, Spellblade p.224): pay the Aether and say so in chat.
+   *  Traits keep no use counter, so there is nothing else to reset. */
+  static async #onTraitSpendAether(event, target) {
+    event.stopPropagation();
+    const item = this.document.items.get(target.dataset.itemId);
+    const cost = Number(target.dataset.cost) || 0;
+    if (!item || cost <= 0) return;
+    const pool = this.document.system.combat.classResources.aether?.value ?? 0;
+    if (pool < cost) { ui.notifications.warn(`${item.name} needs ${cost} Aether — ${this.document.name} has ${pool}.`); return; }
+    _log(`traitSpendAether — "${item.name}" | Aether ${pool} → ${pool - cost}`);
+    await this.document.update({ "system.combat.classResources.aether.value": pool - cost });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      content: `<p><strong>${escapeHTML(this.document.name)}</strong> spends <strong>${cost} Aether</strong> to regain the use of <strong>${escapeHTML(item.name)}</strong> <small>(${pool - cost} Aether left)</small>.</p>`,
     });
   }
 

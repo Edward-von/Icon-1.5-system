@@ -34,6 +34,17 @@ export function infuseName(text) {
 }
 
 /**
+ * True when the infused version is an action of its own rather than an
+ * upgrade of the next use: the book gives it its own cost after the name,
+ * "Infuse 1: STORMLASH (Free Action) — Choose an edge of the map. Your active
+ * tsunamis move 2 spaces in that direction." (Tsunami, Stormbender p.233).
+ * Nothing is rolled for it, so it is spent and posted at once, not armed.
+ */
+export function isStandaloneInfusion(text) {
+  return /^\s*[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}\(\s*(?:[Ff]ree [Aa]ction|\d+\s+[Aa]ctions?|[Ii]nterrupt[^)]*)\s*\)\s*[—–-]/.test(String(text ?? ""));
+}
+
+/**
  * The infused version a Mastery adds, as one more Infuse block — or [] when
  * the mastery isn't unlocked or isn't one. Seven Wright masteries are a
  * bigger infusion of their ability: "GREAT SPIRIT LANCE: Infuse 6 — 2
@@ -120,6 +131,7 @@ export function infusionsOf(sections, actor, itemId) {
       name:    infuseName(sec.text),
       text:    sec.text,
       armed:   !!armed && armed.itemId === itemId && armed.label === sec.label,
+      standalone: isStandaloneInfusion(sec.text),    // its own action (Stormlash): spent at once, never armed
       mastery: /\(mastery\)/i.test(sec.label),       // the Mastery's bigger version (masteryInfusion)
       costLabel: sec.label.replace(/\s*\(mastery\)\s*$/i, ""),   // "Infuse 6", for the button
       aether:  actor?.system?.combat?.classResources?.aether?.value ?? 0,
@@ -135,9 +147,11 @@ export function infusionsOf(sections, actor, itemId) {
 /**
  * Spend the Aether and arm this infusion. Returns the amount spent, or null
  * when it couldn't (not enough Aether, or the player cancelled the "how much"
- * prompt of an Infuse X).
+ * prompt of an Infuse X). With `arm: false` (a version that is its own
+ * action, isStandaloneInfusion) the Aether is spent and the version posted,
+ * but nothing stays armed: there is no roll to wait for.
  */
-export async function armInfusion(actor, item, infusion) {
+export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
   const pool = actor.system?.combat?.classResources?.aether?.value ?? 0;
   let cost = infusion.cost;
 
@@ -151,16 +165,15 @@ export async function armInfusion(actor, item, infusion) {
     return null;
   }
 
-  await actor.update({
-    "system.combat.classResources.aether.value": pool - cost,
-    [`flags.${NS}.infused`]: { itemId: item.id, label: infusion.label, name: infusion.name, spent: cost },
-  });
-  _log(`armed "${infusion.label}" on "${item.name}" — ${cost} Aether (${pool} → ${pool - cost})`);
+  const update = { "system.combat.classResources.aether.value": pool - cost };
+  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: cost };
+  await actor.update(update);
+  _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${cost} Aether (${pool} → ${pool - cost})`);
 
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--infuse">
-        <strong><i class='fa-solid fa-wand-sparkles'></i> ${foundry.utils.escapeHTML(actor.name)}</strong> infuses
+        <strong><i class='fa-solid fa-wand-sparkles'></i> ${foundry.utils.escapeHTML(actor.name)}</strong> ${arm ? "infuses" : "uses the infusion of"}
         <strong>${foundry.utils.escapeHTML(item.name)}</strong>${infusion.name ? ` — <em>${foundry.utils.escapeHTML(infusion.name)}</em>` : ""}
         <br><small>${foundry.utils.escapeHTML(infusion.label)}: ${cost} Aether spent (${pool - cost} left)</small>
         ${infusion.text ? `<div class="icon-chat-card__desc">${foundry.utils.escapeHTML(infusion.text)}</div>` : ""}

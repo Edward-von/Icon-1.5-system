@@ -486,6 +486,12 @@
                 <button type="button" class="icon-btn icon-btn--sm" data-action="blessCharacter" {{#unless ../isEditable}}disabled{{/unless}}
                         title="Bless: give a blessing token to a character (one more Blessed charge, +1 boon on a save)"><i class="fa-solid fa-hands-praying"></i> Bless…</button>
               {{/if}}
+              {{#if (icon-eq trait.quick.type "aetherRegain")}}
+                <span class="icon-trait__quick-label">Aether {{trait.quick.aether}}</span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="traitSpendAether" data-item-id="{{trait.id}}" data-cost="{{trait.quick.cost}}"
+                        {{#if ../isEditable}}{{#if trait.quick.short}}disabled{{/if}}{{else}}disabled{{/if}}
+                        title="Spend {{trait.quick.cost}} Aether to regain the use of this interrupt, and post it to chat."><i class="fa-solid fa-rotate-left"></i> Regain ({{trait.quick.cost}} Aether)</button>
+              {{/if}}
               {{#if (icon-eq trait.quick.type "stackedDice")}}
                 <span class="icon-trait__quick-label">Stacked Dice {{trait.quick.value}}/{{trait.quick.max}}</span>
                 <span class="icon-vigilance-track icon-vigilance-track--inline">
@@ -648,7 +654,7 @@
           {{#each ab.infusions as |inf|}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--infuse {{#if inf.armed}}icon-btn--infuse-on{{/if}}"
                     data-action="abilityInfuse" data-item-id="{{ab.id}}" data-label="{{inf.label}}"
-                    title="{{#if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}. Aether now: {{inf.aether}}">
+                    title="{{#if inf.standalone}}Its own action: spends the Aether now ({{inf.label}}) and posts it to chat; nothing stays armed{{else if inf.armed}}Infused and ready — click to take the Aether back{{else}}Spend Aether to use this version ({{inf.label}}){{/if}}{{#if inf.name}} — {{inf.name}}{{/if}}. Aether now: {{inf.aether}}">
               <i class="fa-solid fa-wand-sparkles"></i> {{#if inf.mastery}}{{inf.costLabel}} — {{inf.name}}{{else}}{{inf.label}}{{/if}}{{#if inf.armed}} — armed{{/if}}
             </button>
           {{/each}}
