@@ -1,5 +1,40 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Promemoria "round N or later" a inizio round (versione 1.15.63)
+
+### Round di debug del 16 ottobre, punto R62
+
+- **Buff di round dimenticati**: molte mastery, talenti, tratti e relic si accendono a un certo round (Drifting Leaf,
+  GREAT CYCLONE: "At round 4 or later, Drifting Leaf's infuse is always active"; Storm Hilt Rage: "At the start of round
+  5 and for the rest of combat…"; relic "Round Invoke … For example (Round 5+) relics have effects that are always
+  active at round 5 or later", p.114) e Maar segnalava che i giocatori se ne scordano "many, many times" → il tracker
+  non diceva niente quando il round arrivava → ora, quando inizia un round (anche il round 1 all'avvio), il **GM attivo**
+  (lo stesso controllo `game.users.activeGM` dei save di fine turno, così con due GM non esce doppio) guarda i
+  combattenti e posta una card **"Round N"** con una riga per ogni frase che diventa vera **proprio in quel round**:
+  "Nome — Drifting Leaf (Mastery: GREAT CYCLONE) (now active): At round 4 or later, Drifting Leaf's infuse is always
+  active."
+- **Chi vede cosa**: la card dei **PG è pubblica** (i buff sono dei giocatori); quella di **foe e legend è sussurrata
+  ai GM** (non svela le azioni dei nemici). Quindi al massimo due messaggi per round, uno per pubblico; un flag sul
+  combat impedisce di ripostarli se si torna indietro di un round e si riavanza. Combattenti sconfitti esclusi; più
+  token dello stesso foe danno una sola serie di righe.
+- **Cosa conta per i PG**: solo il testo che il personaggio ha davvero — testo base dell'abilità (la combo solo se
+  l'abilità è combo), il **talento scelto**, la **mastery sbloccata**, i **tratti del capitolo attuale o inferiore**, i
+  **rank di relic sbloccati** (Aspect compreso). Per foe e legend: tratti, azioni, interrupt, round action e fasi.
+- **Frasi lette**: "round N or later / or higher / or greater", "round N+" (anche "Round 3+ only", "Invoke (Round
+  4+)"), "from round N" → annunciate al round N; "at (the start of) round N", "(Round 4)", liste ("round 1, 3, and 5",
+  "round 3 and 5") → in quei round; "… and every two / third / 2 rounds thereafter", "(Round 3, 5, 7, etc)" → ogni k
+  round. Non lette: "round 3 or lower" e "at the end of round N" (una fine, non un inizio: Clot, Warden round 10). Una
+  frase corta prende con sé la successiva, dove sta l'effetto (Phoenix Rage: "…become suffused with immortal flame.
+  Gain defiance…").
+- **Conteggio sui compendi** (tutti i talenti e le mastery come se sbloccati): **Jobs 27 frasi** in 24 documenti (18
+  mastery, 4 talenti, 1 combo — Open the Gates —, 4 tratti "At the start of round 5": Phoenix / Storm Hilt / Pelagic /
+  Orogenic Rage); **Foe Abilities 84 frasi** in 82 abilità (quasi tutte "At round 3+"; Maze Demon ai round 1, 3, 5;
+  Unstable Demon e Bonabra al round 4); **Foes 76** in 68 foe; **Legends 19** in 12 (fasi II al round 4, Midan / Dread
+  Lords / Arkenlich ogni 3 round, Falling Leaf Aesi ogni 2, Warden ogni 2 dal 4); **Relics 5** (Domain e Skipjack
+  Aspect Round 4+, Conquering King I e II Round 5+ / 7+, Arenheir III ai round 3 e 5). Nessuna frase che non scatti mai
+  tra i round 1 e 10. Script e uscita: `../icon-compendium-audit/r62-round-reminders/`. Solo codice
+  (`module/combat/round-reminders.mjs`, hook in `IconCombat.mjs`), nessun dato cambiato.
+
 ## 16 ottobre 2026 — Interrupt concessi in chat da soli (versione 1.15.62)
 
 ### Round di debug del 16 ottobre, punto R61

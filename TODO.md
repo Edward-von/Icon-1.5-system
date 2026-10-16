@@ -290,10 +290,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       dell'anteprima, card con Trigger ed Effect più le righe che lo cambiano (PHANTOM BLADE, talento scelto, mastery
       sbloccata: Revolution); la forma col punto "Cheat Time — Interrupt 1." diventa un blocco unico come quella coi due
       punti; 8 blocchi nel pack jobs, elenco nel CHANGELOG.)
-- [ ] **R62. Promemoria "round N or later" nel tracker** (M)
+- [x] **R62. Promemoria "round N or later" nel tracker** (M)
       Storm Hilt Rage: "having the combat tracker announce the timing of these (based on the players and NPCs within the
       combat) would be incredibly helpful. Many times, PCs have forgotten major buffs they would've gotten. Many, many
       times." (Molte mastery dicono "At round 4 or later": Drifting Leaf, Odinforce, Cryo, Tsunami, Shadow Play…)
+      (FATTO il 16 ottobre 2026, versione 1.15.63: all'inizio di ogni round il GM attivo posta "Round N" con quello che
+      si accende proprio in quel round: card pubblica per i PG (solo talento scelto, mastery sbloccata, tratti del
+      capitolo, rank di relic sbloccati), card sussurrata al GM per foe e legend; letti "round N or later / N+ / from
+      round N", "at the start of round N", liste e "every N rounds thereafter"; conteggio sui pack nel CHANGELOG.)
 - [ ] **R63. Soulfire: cambiare le soglie di crit / exceed nel tiro** (M, da decidere)
       "Some way to actively modify the crit/exceed values on the roller would be useful here, especially if automated.
       There's a relic that does something similar (-1 required number per round in game for crit/exceed)". Trovare la
@@ -369,6 +373,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       probabilmente non compare. In `module/helpers/infuse.mjs` (`isStandaloneInfusion`, "[Ii]nterrupt…") la variante
       "(Interrupt …)" non riconosce niente (nel pack jobs nessuna versione la usa, Stormlash funziona). Sostituire i due
       caratteri con `\b` e riprovare i test R59 in PLAYTEST.md.
+- [ ] **Emerso lavorando su R62 — promemoria "End of round 0" all'avvio del combat** (S, bug): `startCombat` fa
+      `update({ round: 1 })` senza `direction`, e l'hook `updateCombat` (IconCombat.mjs, blocco "Round advanced") lo
+      tratta come un avanzamento di round: posta i promemoria relic "round-end" col titolo "End of round 0" (Paleblood:
+      "Tick the Paleblood die up by 1") e chiama `_nudgeReserves` già al round 1. Saltare la parte "fine round" quando il
+      round nuovo è 1 (il promemoria R62 del round 1 invece va bene lì).
 
 ---
 

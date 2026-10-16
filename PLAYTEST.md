@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R62 — Promemoria "round N or later" a inizio round (16 ottobre 2026, versione 1.15.63)
+
+Setup: un combat con un PG Wright Spellblade con Drifting Leaf (mastery GREAT CYCLONE sbloccata) e il tratto Storm
+Hilt Rage, un PG Stalwart con Massive Overhead (mastery bloccata), un foe importato con un'azione "At round 3+" (es.
+Junk Mage, Sniper o Barkeep), e un secondo token dello stesso foe. Solo JS: F5 dopo il deploy.
+
+- [ ] **Round 1–2**: Begin Combat e Next Round fino al round 2 → nessuna card "Round 1" / "Round 2" (non c'è niente che
+      si accenda lì).
+- [ ] **Round 3, foe**: Next Round → card "Round 3" sussurrata al GM (badge "foes") con UNA riga del foe (non due per i
+      due token): "Junk Mage — … (now active): Round 3+: deals bonus damage…". Un giocatore non la vede.
+- [ ] **Round 4, PG**: Next Round → card pubblica "Round 4" (badge "round") con "Drifting Leaf (Mastery: GREAT
+      CYCLONE) (now active): At round 4 or later, Drifting Leaf's infuse is always active.", senza il nome della mastery
+      ripetuto nel testo; NESSUNA riga di Massive Overhead (mastery bloccata). In un combat nuovo, con la mastery
+      sbloccata, la riga di Massive Overhead c'è.
+- [ ] **Round 5, tratto**: Next Round → card "Round 5" con "Storm Hilt Rage: At the start of round 5 and for the rest
+      of combat…". Al round 6 niente righe dei PG.
+- [ ] **Indietro e avanti**: Previous Round dal 5 al 4, poi Next Round → la card del round 5 NON esce di nuovo.
+- [ ] **Due GM**: con un secondo GM (o assistente) connesso, al nuovo round esce una sola card per pubblico.
+- [ ] **Talento**: PG Wright con Cryo e il talento I scelto → al round 4 "Cryo (Talent I) (now active): At round 4 or
+      later, this ability generates +1 Aether when used."; col talento II scelto, solo la riga del II.
+- [ ] **Relic**: PG con Conquering King al rank I → al round 5 "Conquering King I (now active): Invoke (Round 5+): All
+      abilities deal bonus damage."; al round 7 niente, finché non è al rank II.
+- [ ] **Legend**: Dread Lords in combat → al round 3 e al round 6 la card al GM nomina Eternal Imperium; al 4 e al 5 no.
+- [ ] **Sconfitto**: un foe segnato defeated prima del round 3 non dà righe.
+
 ## R61 — Interrupt concessi in chat da soli (16 ottobre 2026, versione 1.15.62)
 
 Setup: un PG Fool con Chronotemper, un PG Wright Spellblade con Drifting Leaf, un PG con Fairy Ring (Harvester) o

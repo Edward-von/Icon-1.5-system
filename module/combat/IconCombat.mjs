@@ -35,6 +35,7 @@ import { handleInflictSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
+import { postRoundReminders } from "./round-reminders.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -871,6 +872,10 @@ export function registerCombatHooks() {
         for (const c of combat.combatants) {
           if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "round-end", `End of round ${Math.max(0, (combat.round ?? 1) - 1)}`);
         }
+        // What switches on this round: "At round 4 or later…" masteries,
+        // "At the start of round 5…" traits, foe "Round 3+" actions (R62).
+        try { await postRoundReminders(combat); }
+        catch (err) { console.warn("[ICON | IconCombat] round reminders failed", err); }
       }
 
       /* --- Start-of-activation housekeeping for the NOW-active combatant --- */
