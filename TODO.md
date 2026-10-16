@@ -171,11 +171,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       speso — ÄTHERSTURM allunga la Line 3 di Ätherwand di 1 per Aether fino a +3, MAGNARIME fa Arc 4 + Aether a range
       6 — e la versione armata è la prima scelta; le mastery che sono un Infuse cambiano l'area solo da armate. Solo
       codice.)
-- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M): "Comeback: You may extend Sturmreiten's area by another
+- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M, in attesa di risposta): "Comeback: You may extend Sturmreiten's area by another
       line 3 area, drawn in a different direction" (p.227): "A way to use talent 2's extension would be useful." Il
       piazzamento fa una sola Line alla volta; servirebbe, col Talent II scelto, una seconda Line 3 in un'altra
       direzione dallo stesso punto (o dalla fine della prima: il testo non lo dice, da chiedere a Edoardo) unita alla
       prima per i bersagli.
+      Domanda per Edoardo: la seconda Line 3 parte dallo stesso punto della prima o dalla sua fine? (p.227 non lo dice)
 - [ ] **R48. Aure date ad altri o in alternativa** (M, bug)
       - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
       - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i
