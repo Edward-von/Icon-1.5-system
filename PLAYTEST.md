@@ -1656,6 +1656,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R37 — Tiro del danno dei Limit Break (16 ottobre 2026, versione 1.15.37)
+
+Setup: PG di prova con, uno alla volta, i Limit Break di Enochian (Gigaflare), Sealer (Passage to the Afterlife),
+Geomancer (Cataclysm), Knave (Mock), Bastion (Helion); un foe targettato sulla mappa.
+
+- [ ] **Gigaflare**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è "Damage Roll". Cliccandolo si
+      apre la finestra del danno delle abilità con Hit "1[dX] + fray N", Divine, True Strike e Unerring già spuntati,
+      Instances 1. Roll Damage → card del danno con il nome "Gigaflare" e il bottone Apply; Apply sul foe ignora
+      l'armatura. La Resolve NON viene spesa dal Damage Roll (solo da "Use Limit Break").
+- [ ] **Passage to the Afterlife**: Hit "[D] + fray" con Instances 3; Miss mostra "[D] + fray" e passa a Instances 1;
+      Other offre "Limit Break" per l'Exceed ([D] + fray, Instances 2) e per i "2 additional divine damage" per
+      alleato adiacente (fisso 2, Divine).
+- [ ] **Cataclysm**: Hit "[D] + fray" divine; Other offre l'esplosione ([D] + fray, Area effect spuntato) e i 2[D] +
+      fray per chi è preso da due o più esplosioni.
+- [ ] **Ultimate dal capitolo 3**: con il PG al capitolo 1 o 2, Mock (Knave) non ha il bottone Damage Roll; portato
+      al capitolo 3 compare, e Other offre "Ultimate" con + fray e Divine (Dread Mock: "also deals divine fray damage").
+      Con Passage to the Afterlife al capitolo 3, Other offre anche "Ultimate" (2 divine, Instances 2).
+- [ ] **Senza danno**: Helion, Paradiso, Abyssal Ecstasy, Split Heaven and Hell (danno in % degli hp) non hanno il
+      bottone Damage Roll.
+- [ ] **Abilità, Divine automatico**: Gentleness (Chanter, "1 divine damage") → Damage Roll dell'abilità apre con
+      Divine spuntato (era tornato a non spuntarsi dalla 1.15.28).
+- [ ] **Infuse non ancora**: Tetraflare / Meteor (Gigaflare) e Ragnarök / Götterdämmerung (Gran Levincross) non sono
+      proposti: restano per R38; intanto si scrivono a mano in Other o con Instances.
+
 ## R32 — Dimensione dell'aura con + e − (15 ottobre 2026, versione 1.15.36)
 
 Setup: un PG Chanter con Gentleness e la mastery sbloccata, un PG con un tratto ad aura (es. Shieldmaster); un foe

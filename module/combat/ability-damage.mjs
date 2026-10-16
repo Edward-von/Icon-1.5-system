@@ -8,6 +8,44 @@
 
 import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
 
+// Parse a single text blob for dice formula + fray + flat damage.
+function parseChunk(text) {
+  if (!text || typeof text !== "string") {
+    return { mult: 0, fray: false, flat: 0, type: "", times: 1 };
+  }
+  const lower = text.toLowerCase();
+  // dice multiplier: "[D]", "2[D]", "3[d]"
+  const diceMatch = lower.match(/(\d)?\s*\[d\]/);
+  const mult = diceMatch ? (diceMatch[1] ? Number(diceMatch[1]) : 1) : 0;
+  // fray flat bonus
+  const includesFray = /\bfray\b/.test(lower);
+  // explicit flat damage: "3 damage", "2 piercing damage". Damage dealt to
+  // the user ("each adjacent foe deals 1 piercing damage to you", Provoke
+  // p.142) is what they take, not what they deal: skip it. "2 additional
+  // divine damage" (Passage to the Afterlife p.190) counts too.
+  const flatMatch = lower.match(/(\d+)\s+(?:additional\s+)?(?:divine\s+|piercing\s+|true\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
+  const flat = flatMatch ? Number(flatMatch[1]) : 0;
+  // Damage type written next to the amount X
+  // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
+  // the damage dialog can start with Divine / Pierce ticked (p.104).
+  // Same "to you" exclusion as the flat amount. Also "divine fray damage",
+  // with the type first (Dread Mock p.141, Gigantas Crusher on legends).
+  const typeMatch = lower.match(/(?:(?:\d+|\[d\]|\bfray)\s+(?:additional\s+)?(divine|piercing)|\b(divine|piercing)\s+fray)\s+damage(?!\s+to\s+you(?:rself)?\b)/);
+  const type = typeMatch ? (typeMatch[1] || typeMatch[2]) : "";
+  // Repeated damage (p.92: "Some damage is listed as X, Y times […] roll
+  // [D] once, then apply the total damage three separate times"): "1 divine
+  // damage three times" (Chastise), "3 damage, three times", "deals [D]
+  // twice", "deal [D]+fray two more times" (Passage to the Afterlife's Exceed).
+  // Each instance takes armor, vulnerable and weakened on its own
+  // (p.92, p.109), so the damage card applies them one by one.
+  const timesMatch = lower.match(/(?:\bdamage|\[d\]|\bfray)\s*,?\s*(once|twice|thrice|(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:more\s+)?times)\b/);
+  const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
+  const times = !timesMatch ? 1
+    : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
+    : (Number(timesMatch[2]) || WORDS[timesMatch[2]] || 1);
+  return { mult, fray: includesFray, flat, type, times };
+}
+
 /**
  * Extract structured damage info from an ability's free-text fields. The
  * source JSON uses patterns like:
@@ -35,41 +73,6 @@ export function parseAbilityDamage(itemSystem) {
   ].filter(Boolean).join(" ").toLowerCase();
 
   const isAutoHit = /auto[-\s]?hit/.test(combined);
-
-  // Parse a single text blob for dice formula + fray + flat damage
-  const parseChunk = (text) => {
-    if (!text || typeof text !== "string") {
-      return { mult: 0, fray: false, flat: 0, type: "", times: 1 };
-    }
-    const lower = text.toLowerCase();
-    // dice multiplier: "[D]", "2[D]", "3[d]"
-    const diceMatch = lower.match(/(\d)?\s*\[d\]/);
-    const mult = diceMatch ? (diceMatch[1] ? Number(diceMatch[1]) : 1) : 0;
-    // fray flat bonus
-    const includesFray = /\bfray\b/.test(lower);
-    // explicit flat damage: "3 damage", "2 piercing damage". Damage dealt to
-    // the user ("each adjacent foe deals 1 piercing damage to you", Provoke
-    // p.142) is what they take, not what they deal: skip it.
-    const flatMatch = lower.match(/(\d+)\s+(?:divine\s+|piercing\s+|true\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
-    const flat = flatMatch ? Number(flatMatch[1]) : 0;
-    // Damage type written next to the amount X
-    // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
-    // the damage dialog can start with Divine / Pierce ticked (p.104).
-    // Same "to you" exclusion as the flat amount.
-    const typeMatch = lower.match(/(?:\d+|\[d\]|bfray)\s+(divine|piercing)\s+damage(?!\s+to\s+you(?:rself)?b)/);
-    const type = typeMatch ? typeMatch[1] : "";
-    // Repeated damage (p.92: "Some damage is listed as X, Y times […] roll
-    // [D] once, then apply the total damage three separate times"): "1 divine
-    // damage three times" (Chastise), "3 damage, three times", "deals [D]
-    // twice". Each instance takes armor, vulnerable and weakened on its own
-    // (p.92, p.109), so the damage card applies them one by one.
-    const timesMatch = lower.match(/(?:\bdamage|\[d\]|\bfray)\s*,?\s*(once|twice|thrice|(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+times)\b/);
-    const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
-    const times = !timesMatch ? 1
-      : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
-      : (Number(timesMatch[2]) || WORDS[timesMatch[2]] || 1);
-    return { mult, fray: includesFray, flat, type, times };
-  };
 
   // Primary hit: prefer `hitEffect`; fall back to description "On hit:" / "Autohit:" substring
   let hitText = s.hitEffect || "";
@@ -208,6 +211,58 @@ export function parseComboAbilityDamage(itemSystem) {
     isAutoHit:   combo.isAutoHit || (!rewrites.hit && base.isAutoHit),
     dealsDamage: deals(hit) || deals(area) || miss.fray,
     hit, miss, area,
+  };
+}
+
+/**
+ * Damage of a Limit Break, shaped like parseAbilityDamage so the ability
+ * damage dialog and card can roll it. The effect is one text block: its
+ * first damage (or its "On hit:" / "Miss:" lines) is the Hit outcome, like
+ * an ability's description; every sentence with damage, in the effect and,
+ * from chapter 3 (p.113, "Upon entering chapter 3, you unlock the Ultimate
+ * limit break"), in the ultimate, is also offered under Other (Cataclysm's
+ * explosions, Passage to the Afterlife's Exceed and per-ally divine damage,
+ * Dread Mock's divine fray damage). A Divine tag makes all of it divine
+ * (p.104). The Infuse versions (Tetraflare, Meteor, Götterdämmerung) are
+ * left out: they replace the damage instead of adding to it.
+ * @param {object} lbSystem  the limit-break item's system data
+ * @param {{ultimate?: boolean}} opts  ultimate unlocked (chapter 3)
+ */
+export function parseLimitBreakDamage(lbSystem, { ultimate = false } = {}) {
+  const s = lbSystem ?? {};
+  const plain = (t) => String(t ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  // Text before the first Infuse version ("Infuse 6: TETRAFLARE —", "Slay or Infuse 3: RAGNARÖK —").
+  const noInfuse = (t) => t.split(/\b(?:slay\s+or\s+)?infuse\s+\d+\s*:/i)[0].trim();
+  const tags = (s.tags ?? []).map(t => String(t).trim().toLowerCase());
+  const effect = noInfuse(plain(s.effect));
+  const ult    = ultimate ? noInfuse(plain(s.ultimate)) : "";
+  const base   = parseAbilityDamage({ isAttack: tags.includes("attack"), description: effect });
+  const divine = tags.includes("divine");
+  const typed  = (c) => (divine && !c.type ? { ...c, type: "divine" } : c);
+  const deals  = (c) => c.mult > 0 || c.flat > 0 || c.fray;
+  const same   = (a, b) => a.mult === b.mult && a.fray === b.fray && a.flat === b.flat && a.times === b.times;
+  const hit = typed(base.hit), area = typed(base.area);
+  // "Miss: Once." (Passage to the Afterlife): the hit damage, dealt once.
+  const missOnce = /\bmiss\s*:\s*once\b/i.test(effect) && deals(hit);
+  const miss = missOnce ? { ...hit, times: 1 } : typed(base.miss);
+  const extras = [];
+  let hitSkipped = false;
+  for (const [source, text] of [["Limit Break", effect], ["Ultimate", ult]]) {
+    for (const sentence of text.split(/(?<=\.)\s+/)) {
+      if (!/\bdamage\b|\[d\]|\bfray\b/i.test(sentence)) continue;
+      const chunk = parseChunk(sentence);
+      if (!deals(chunk)) continue;
+      // The first damage of the effect is the Hit outcome: not offered twice.
+      if (source === "Limit Break" && !hitSkipped && deals(hit) && same(hit, chunk)) { hitSkipped = true; continue; }
+      extras.push(typed({ source, text: sentence, ...chunk,
+                          area: /\b(?:area|blast|arc|line|burst|aura|cross|explosions?)\b/i.test(sentence) }));
+    }
+  }
+  return {
+    isAttack:    base.isAttack,
+    isAutoHit:   base.isAutoHit,
+    dealsDamage: deals(hit) || deals(area) || miss.fray || extras.length > 0,
+    hit, miss, area, extras,
   };
 }
 

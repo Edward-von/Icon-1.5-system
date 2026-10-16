@@ -824,6 +824,12 @@
           <button type="button" class="icon-btn icon-btn--use" data-action="useLimitBreak">
             Use Limit Break
           </button>
+          {{#if limitBreakDeals}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="limitBreakDamageRoll"
+                    title="Roll the limit break's damage (from chapter 3, the Ultimate's damage is offered under Other)">
+              <i class="fa-solid fa-burst"></i> Damage Roll
+            </button>
+          {{/if}}
         {{/if}}
       </div>
     {{else}}

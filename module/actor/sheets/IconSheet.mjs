@@ -91,7 +91,7 @@ function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
-import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage } from "../../combat/ability-damage.mjs";
+import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage } from "../../combat/ability-damage.mjs";
 import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
@@ -172,6 +172,7 @@ export class IconSheet extends BaseActorSheet {
       resetSessionPowers:  IconSheet.#onResetSessionPowers,
       bondShowInChat:      IconSheet.#onBondShowInChat,
       useLimitBreak: IconSheet.#onUseLimitBreak,
+      limitBreakDamageRoll: IconSheet.#onLimitBreakDamageRoll,
       addJob:        IconSheet.#onAddJob,
       removeJob:     IconSheet.#onRemoveJob,
       // Class resources (conditional by primary job class)
@@ -289,6 +290,8 @@ export class IconSheet extends BaseActorSheet {
     context.limitBreakItem = actor.items.find(i => i.type === "limit-break");
     // "1action" / "free" are storage keys — the panel prints "1 Action" / "Free Action".
     context.limitBreakCost = abilityCostLabel(context.limitBreakItem?.system?.cost ?? "");
+    // Limit breaks that deal damage get a Damage Roll button, like abilities.
+    context.limitBreakDeals = !!context.limitBreakItem && IconSheet.#limitBreakDamage(actor, context.limitBreakItem).dealsDamage;
 
     // AP / Mastery spending counters
     // Each owned ability costs 1 AP. Each unlocked talent costs +1 AP.
@@ -2854,6 +2857,56 @@ export class IconSheet extends BaseActorSheet {
     }
 
     await this.document.deleteEmbeddedDocuments("Item", [itemId]);
+  }
+
+  /** Damage of the limit break (effect, and the ultimate from chapter 3, p.113). */
+  static #limitBreakDamage(actor, lb) {
+    return parseLimitBreakDamage(lb.system, { ultimate: (actor.system.combat?.chapter ?? 1) >= 3 });
+  }
+
+  /**
+   * Damage Roll of the limit break: the ability damage dialog and card, with
+   * the limit break's text read like an ability's (Gigaflare p.208: "[D]+fray
+   * divine damage"; Passage to the Afterlife p.190: "[D]+fray, three times").
+   * Spending the resolve stays on "Use Limit Break".
+   */
+  static async #onLimitBreakDamageRoll(event, target) {
+    event?.stopPropagation?.();
+    const lb = this.document.items.find(i => i.type === "limit-break");
+    if (!lb) return ui.notifications.warn("No Limit Break equipped.");
+    const parsed = IconSheet.#limitBreakDamage(this.document, lb);
+    _log(`limitBreakDamageRoll — "${lb.name}" | parsed:`, parsed);
+    if (!parsed.dealsDamage) return ui.notifications.warn(`"${lb.name}" does not deal damage.`);
+    const combat = this.document.system.combat;
+    const ab = {
+      name: lb.name, cost: abilityCostLabel(lb.system.cost ?? ""),
+      tags: resolveAbilityTags(lb.system), parsed, parsedCombo: null,
+      isAttack: parsed.isAttack, isAutoHit: parsed.isAutoHit, dealsDamage: true,
+    };
+    const mods = await promptDamageMods(ab, combat, { actor: this.document });
+    if (!mods) return;
+    await postAbilityDamageCard(this.document, {
+      parsed,
+      outcome:     mods.outcome,
+      damagedie:   combat.damagedie,
+      fray:        combat.fray,
+      abilityName: lb.name,
+      bonusDice:   mods.bonusDice,
+      vulnerable:  mods.vulnerable,
+      resistance:  mods.resistance,
+      weakened:    mods.weakened,
+      hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
+      targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
+      other:       mods.other,
+      instances:   mods.instances,
+    });
   }
 
   static async #onUseLimitBreak(event, target) {

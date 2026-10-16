@@ -49,11 +49,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 
 ### Bug
 
-- [ ] **R37. Limit Break che fanno danno senza tiro del danno** (M, bug, alta priorità)
+- [x] **R37. Limit Break che fanno danno senza tiro del danno** (M, bug, alta priorità)
       "several ones that do damage don't have a damage roller attached". Citato Gigaflare ("Also does not have a
       damage roller", Enochian: "[D]+fray divine damage to every character on the battlefield"). Controllare tutti i
       Limit Break dei job che fanno danno (`limit-break`: campi `effect` e `ultimate`) e dare loro il tiro del danno come le
       abilità, con tipo (divine), istanze ("twice", "four times") e [D] del PG.
+      (FATTO il 16 ottobre 2026, versione 1.15.37: bottone "Damage Roll" nel riquadro Limit Break quando il testo fa
+      danno, con la finestra e la card delle abilità; il primo danno è Hit, le altre frasi con danno (e dal capitolo 3
+      quelle dell'Ultimate) sono in Other; tag Divine → danno divino; Instances da "three times". Infuse esclusi (R38).
+      Corretto anche il Divine automatico delle abilità, rotto dalla 1.15.28.)
 - [ ] **R38. Limit Break: effetti speciali non usabili** (M/L, bug, alta priorità)
       "ones with special effects (Paradiso's Aura, Gigaflare's infused version, etc) don't allow the player to utilize
       those functions with the limit break properly." Paradiso (Freelancer, tag `aura`: "You gain Aura 2 until the end of
@@ -185,6 +189,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       implement, I have no idea." Domanda per Maar: quale abilità dell'Enochian?
 - [ ] **R65. Aethershard come un summon** (M, da decidere)
       "Something similar to a summon ability would be useful here." Forse rientra in R33 (oggetti sulla mappa).
+
+### Emersi lavorando
+
+- [ ] **Emerso lavorando su R37 — l'Ultimate dei Limit Break non si vede** (S/M): il riquadro Limit Break della
+      scheda e la card di "Use Limit Break" mostrano solo `effect`; il campo `ultimate` (p.113, sbloccato al
+      capitolo 3) non compare da nessuna parte, nemmeno al capitolo 3. Il Damage Roll di R37 ne legge già il danno.
+- [ ] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, da decidere): Gigantas Crusher
+      (Colossus, "50% of their max hp as divine damage") e Split Heaven and Hell (Demon Slayer, "100% / 50% / 25% of
+      max hp") non hanno un danno tirabile; Gigantas Crusher propone solo il "divine fray damage" dei Legend. Valutare
+      un Apply che toglie la percentuale degli hp massimi del bersaglio.
 
 ---
 

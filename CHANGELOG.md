@@ -1,5 +1,27 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Tiro del danno dei Limit Break (versione 1.15.37)
+
+### Round di debug del 16 ottobre, punto R37
+
+- **Limit Break senza tiro del danno**: Maar segnalava che diversi Limit Break che fanno danno non avevano il tiro
+  del danno (Gigaflare, Enochian, p.208: "dealing [D]+fray divine damage to every character on the battlefield") →
+  il riquadro Limit Break della scheda aveva solo "Use Limit Break", che spende la Resolve e posta il testo, ma
+  nessun bottone di danno: il lettore del danno delle abilità non veniva mai chiamato sui Limit Break → ora, quando
+  il testo del Limit Break contiene danno, accanto a "Use Limit Break" c'è "Damage Roll", con la stessa finestra e
+  la stessa card delle abilità ([D] e fray del PG, Instances, Apply). Il primo danno dell'effetto (o le righe "On
+  hit:" / "Miss:") è l'esito Hit; ogni altra frase con danno è proposta in Other (le esplosioni di Cataclysm,
+  l'Exceed e il danno divino per alleato di Passage to the Afterlife); dal capitolo 3 anche quelle dell'Ultimate
+  (p.113: "Upon entering chapter 3, you unlock the Ultimate limit break"), per esempio Dread Mock. Con il tag
+  Divine tutto il danno parte già come divino (p.104); True Strike e Unerring dai tag come per le abilità; "three
+  times" / "two more times" riempiono Instances; "Miss: Once." è il danno del colpo una volta sola. Le versioni
+  Infuse (Tetraflare, Meteor, Ragnarök, Götterdämmerung) non sono lette: sono il punto R38. I danni in percentuale
+  degli hp (Gigantas Crusher, Split Heaven and Hell) non si tirano.
+- **Divine non più spuntato da solo sulle abilità**: nella 1.15.28 la regola che legge il tipo di danno accanto alla
+  quantità ("1 divine damage", "[D]+fray divine damage") aveva perso due barre rovesciate, quindi Divine e Pierce
+  non si spuntavano più da soli → regola corretta; legge anche "divine fray damage" e "2 additional divine damage".
+  Solo codice, nessun dato toccato.
+
 ## 15 ottobre 2026 — Dimensione dell'aura con + e − (versione 1.15.36)
 
 ### Round di debug del 15 ottobre, punto R32
