@@ -2376,6 +2376,15 @@ export class IconSheet extends BaseActorSheet {
         ab.hasMastery && !masteryIsInfusion ? ["Mastery", s.mastery] : null,
       ].filter(Boolean),
     });
+    // R33a3: with an area in the tags the description isn't read above, but an area it centres on objects
+    // is a second one, not the same shape again: Helix Heel (Line 3) "all objects this line passed through
+    // resonate, releasing a burst 1 area effect centered on them" (p.219) offers "Burst 1 (on object)" too.
+    if (areaFromTags(ab.tags)) {
+      const range = rangeFromTags(ab.tags);
+      for (const area of areasInText(s.description).filter(a => a.centeredOn === "object")) {
+        if (!variants.some(v => v.label === area.label)) variants.push({ label: area.label, source: "Text", area: { ...area, range } });
+      }
+    }
     // An area the upgrade text draws from the target (Sow's Spectral Scythe,
     // p.185: "drawn from your target as the origin space") is placed next to
     // that target, whether it came from the tags or from the text.

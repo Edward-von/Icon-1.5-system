@@ -12,15 +12,15 @@
         {{#if mapObject}}
           {{!-- An object an ability / trait put on the map (R33a): height 1-3, immune unless the GM makes it destructible (p.89) --}}
           <span class="icon-badge icon-badge--primary">Object</span>
-          {{#if isEditable}}
+          {{#if isEditable}}{{#unless mapObject.world}}
             <button type="button" class="icon-btn icon-btn--sm" data-action="objectHeight" data-delta="-1" {{#unless mapObject.canLower}}disabled{{/unless}}
                     title="Lower the object by 1">−</button>
-          {{/if}}
-          <span class="icon-badge" title="Objects are height 1-3; stacked objects can't be past height 3 (p.95)">Height {{mapObject.height}}</span>
-          {{#if isEditable}}
+          {{/unless}}{{/if}}
+          <span class="icon-badge" title="{{#if mapObject.world}}Height it is placed with; each token keeps its own (p.89){{else}}Objects are height 1-3; stacked objects can't be past height 3 (p.95){{/if}}">Height {{mapObject.height}}{{#if mapObject.world}} (as placed){{/if}}</span>
+          {{#if isEditable}}{{#unless mapObject.world}}
             <button type="button" class="icon-btn icon-btn--sm" data-action="objectHeight" data-delta="1" {{#unless mapObject.canRaise}}disabled{{/unless}}
                     title="Raise the object by 1 (Spirit Shrine: use the ability again while adjacent; Terraforming: raise height by +1)">+</button>
-          {{/if}}
+          {{/unless}}{{/if}}
           {{#if mapObject.aura}}<span class="icon-badge">Aura {{mapObject.aura}}</span>{{/if}}
           {{#if mapObject.destructible}}
             <span class="icon-badge">Destructible — 10 hp</span>
@@ -57,7 +57,7 @@
       <div class="icon-section icon-object-effect">
         <div class="icon-section__header">
           <h3 class="icon-section__title">Object Effect
-            <small>{{#if mapObject.below}}height {{mapObject.height}} on height {{mapObject.below}} — total height {{mapObject.total}}{{else}}total height {{mapObject.total}}{{/if}}</small></h3>
+            <small>{{#if mapObject.world}}{{#if mapObject.copies.length}}on this scene: {{mapObject.copiesLabel}}{{else}}none on this scene{{/if}}{{else}}{{#if mapObject.below}}height {{mapObject.height}} on height {{mapObject.below}} — total height {{mapObject.total}}{{else}}total height {{mapObject.total}}{{/if}}{{/if}}</small></h3>
           <button type="button" class="icon-btn icon-btn--sm" data-action="objectToChat"
                   title="Post the object's rules and what is on now to chat"><i class="fa-solid fa-comment"></i> Chat</button>
           {{#if isEditable}}{{#if mapObject.onMap}}
@@ -66,7 +66,30 @@
               {{#if mapObject.pickUp}}<i class="fa-solid fa-hand"></i> Pick up{{else}}<i class="fa-solid fa-trash"></i> Remove{{/if}}
             </button>
           {{/if}}{{/if}}
+          {{!-- R33a3: Geyser's eruption, Megamushroom's blessing token --}}
+          {{#if mapObject.onMap}}
+            {{#if mapObject.erupt}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="objectErupt"
+                      title="Erupt: a chat card names the characters to remove and place{{#if mapObject.erupt.place}} {{mapObject.erupt.place}} spaces away{{/if}}, then the object is removed{{#if mapObject.erupt.summon}} and a {{mapObject.erupt.summon}} goes in its space{{/if}} (p.232)"><i class="fa-solid fa-water"></i> Erupt</button>
+            {{/if}}
+            {{#if mapObject.blessing}}{{#unless mapObject.blessing.taken}}
+              <button type="button" class="icon-btn icon-btn--sm" data-action="objectBlessing"
+                      title="The selected character (yours or an ally entering its space) picks the blessing token up: +1 Blessed. The object stays."><i class="fa-solid fa-hand-sparkles"></i> Pick up blessing</button>
+            {{/unless}}{{/if}}
+          {{/if}}
         </div>
+        {{#if mapObject.world}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-circle-info"></i> This is the template in the Map Objects folder: each token on the map is its own copy, with its own height. Double-click a token to see or change its height.</p>
+        {{/if}}
+        {{#if mapObject.blessing}}
+          <p><strong>Blessing token:</strong> {{#if mapObject.blessing.taken}}picked up{{else}}on it{{/if}}.</p>
+        {{/if}}
+        {{#if mapObject.plantNote}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-seedling"></i> Counts as a plant (p.184): its space is dangerous terrain that only affects foes, and you or an ally entering it can pick up the blessing token. Unlike a plant, it stays when the token is picked up.</p>
+        {{/if}}
+        {{#if mapObject.areaTrigger}}
+          <p class="icon-object-effect__note"><i class="fa-solid fa-gem"></i> Caught in an area you place: the area card asks to deal {{mapObject.areaTrigger.amount}} {{mapObject.areaTrigger.type}} damage per shard and destroy them{{#if mapObject.areaTrigger.aether}} (+{{mapObject.areaTrigger.aether}} Aether){{/if}}.</p>
+        {{/if}}
         {{#if mapObject.noAttack}}
           <p class="icon-object-effect__warn"><i class="fa-solid fa-ban"></i> While this object is on the map, {{#if mapObject.creatorName}}{{mapObject.creatorName}}{{else}}its creator{{/if}} cannot attack.</p>
         {{/if}}

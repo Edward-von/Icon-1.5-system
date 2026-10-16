@@ -896,6 +896,12 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
   _log(`placed ${area.label} for "${abilityName}" — ${cells.length} cells, ${targets.length} target(s)`);
   ui.notifications.info(`${area.label} placed — ${targets.length ? targets.map(t => t.name).join(", ") : "no one"} in the area.`);
+  // R33a3: the user's objects that trigger when an area includes them (Aethershard p.210: 2 piercing per
+  // shard to all characters in the area, then destroyed, +1 Aether). Lazy import, as for the wild cards.
+  try {
+    const { offerAreaObjectTriggers } = await import("./map-objects.mjs");
+    await offerAreaObjectTriggers(cells, { actor, abilityName });
+  } catch (err) { console.error("ICON 1.5 | object area check failed", err); }
   return { template, cells, targets, area };
 }
 

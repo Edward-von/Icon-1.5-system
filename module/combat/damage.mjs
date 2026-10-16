@@ -515,6 +515,9 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     hatred = false, targetName = "", targetsOverride = null, targetIds = null, attackTargetId = "",
     flatBonus = 0, pierce = false, divine = false, trueStrike = false, unerring = false,
     other = null, instances = 1,
+    // false: the attacker's Bonus Damage charges are neither added nor spent (an object's own
+    // damage on top of the ability, as the Aethershards' 2 piercing per shard, R33a3)
+    statusBonus = true,
   } = opts;
   instances = Math.min(10, Math.max(1, Math.floor(Number(instances) || 1)));
 
@@ -577,7 +580,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
   // Auto-apply the attacker's "Bonus Damage" condition: each charge adds one
   // extra [D] to the pool, on top of any bonus dice entered in the dialog. The
   // charges are consumed (detached) after the card is posted (see below).
-  const statusBonusDice = getStatusCharges(actor, "bonus-damage");
+  const statusBonusDice = statusBonus ? getStatusCharges(actor, "bonus-damage") : 0;
   const bonus     = Math.max(0, (Number(bonusDice) || 0) + statusBonusDice);
   const bonusNote = statusBonusDice > 0 ? ` (incl. ${statusBonusDice} from Bonus Damage)` : "";
 

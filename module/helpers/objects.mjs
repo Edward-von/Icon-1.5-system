@@ -61,7 +61,9 @@ function infuseBlock(t, at) {
  */
 export function objectsInText(text) {
   const t = plain(text);
-  if (!t || !/\bobjects?\b/i.test(t)) return [];
+  // R33a3: Upheaval's mastery names no "object" ("Boulder may be placed as a height 2 pillar instead", p.136).
+  const INSTEAD = /\b(?:placed|created) as an? height ([1-3]) ((?:[a-z][\w'-]*\s+)?[a-z][\w'-]*) instead\b/gi;
+  if (!t || (!/\bobjects?\b/i.test(t) && !/\b(?:placed|created) as an? height [1-3] /i.test(t))) return [];
   // What the text says about all its objects.
   const field = {
     // "The shrine … lasts until this ability is used again" (p.192), "Portals last until …" (Underway p.168)
@@ -88,6 +90,9 @@ export function objectsInText(text) {
   // "becomes an object (Thrown Weapon, height 1)", "a leafy portal object (Underway, size 1)"
   for (const m of t.matchAll(/\bobject \(([^,()]+), (?:height|size) ([1-3])\)/gi))
     add(m.index, m.index + m[0].length, m[1], m[2]);
+  // "Boulder may be placed as a height 2 pillar instead" (Upheaval, Titan Strength p.136)
+  for (const m of t.matchAll(INSTEAD))
+    add(m.index, m.index + m[0].length, m[2], m[1]);
   found.sort((a, b) => a.at - b.at);
 
   const base = found[0];
@@ -156,7 +161,58 @@ export function objectRuleNotes(rules) {
     benefits,
     noAttack: /\byou cannot attack\b/i.test(t),
     pickUp:   /\bpick (?:\S+ ){0,2}up\b/i.test(t),
+    ...objectRuleNotesA3(t),
   };
+}
+
+/**
+ * The rest of what an object's rules set off (R33a3):
+ *   areaTrigger  "When you include the Aethershard in the area effect of any ability, the ability deals 2 piercing
+ *                damage as an area effect, once, to all characters in the area for every one of your Aethershards
+ *                caught … Then destroy all activated Aethershards and gain 1 Aether" (p.210)
+ *                → { amount: 2, type: "piercing", aether: 1 }
+ *   blessing     "The object has a blessing token on it" (Fairy Ring, Spore Shroud p.187)
+ *   countsAs     "… and counts as a plant" → "plant"
+ *   erupt        "you can cause it to erupt, removing that character from the battlefield, then placing them one or
+ *                two spaces away. Then, remove the geyser. Effect: After the geyser is removed, summon a Salt Sprite in
+ *                its space" (Geyser p.232) → { place: "one or two", blast: "", summon: "Salt Sprite", dangerous }
+ *                Volcanic Geyser: "it removes and places all characters in a medium blast area centered on it, and
+ *                creates dangerous terrain under foes" → blast "m", dangerous true.
+ * @param {string} t  plain text
+ */
+function objectRuleNotesA3(t) {
+  const trig = /\bwhen you include the [^.]*?\bin the area effect of any ability\b[^.]*?\b(\d+) (?:(piercing|divine) )?damage\b/i.exec(t);
+  const aether = /\bgain (\d+) aether\b/i.exec(t);
+  let erupt = null;
+  // "you can cause it to erupt" — not Pyroclast's "the ground beneath them erupts" (p.211), which makes the spire.
+  if (/\bcause (?:it|the [\w-]+) to erupt\b/i.test(t)) {
+    const blast = /\berupts?\b[^.]*?\ball characters in an? (small|medium|large) blast\b/i.exec(t);
+    erupt = {
+      place:     /\bplacing them ((?:\w+ ){0,3}?\w+) spaces? away\b/i.exec(t)?.[1] ?? "",
+      blast:     blast ? blast[1][0].toLowerCase() : "",
+      summon:    /\bsummon an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)?) in its space\b/.exec(t)?.[1] ?? "",
+      dangerous: /\bcreates? dangerous terrain under foes\b/i.test(t),
+    };
+  }
+  return {
+    areaTrigger: trig ? { amount: Number(trig[1]), type: (trig[2] ?? "").toLowerCase(), aether: aether ? Number(aether[1]) : 0 } : null,
+    blessing:    /\bhas an? blessing token on it\b/i.test(t),
+    countsAs:    /\bcounts as an? ([a-z]+)\b/i.exec(t)?.[1]?.toLowerCase() ?? "",
+    erupt,
+  };
+}
+
+/**
+ * Growth at the start of the creator's turn: "Increase the height of all geysers by +1 at the start of your
+ * turn" (Geyser Talent I, p.232) → 1 when it speaks of `name` ("Geyser", "Volcanic Geyser"), else 0.
+ * @param {string} text  a talent / mastery text
+ * @param {string} name  the object's name
+ */
+export function turnStartGrowth(text, name) {
+  const m = /\bincrease the height of (?:all|each|every|your) (?:of your )?([\w' -]+?) by \+?(\d) at the start of your turn\b/i.exec(plain(text));
+  if (!m) return 0;
+  const word = (s) => String(s ?? "").trim().split(/\s+/).pop().toLowerCase().replace(/s$/, "");
+  return word(m[1]) === word(name) ? Number(m[2]) : 0;
 }
 
 /**

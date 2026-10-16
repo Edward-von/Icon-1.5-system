@@ -29,10 +29,10 @@
  * Creating actors is a GM job: a player's drop goes to the active GM over the
  * system socket, as for the foes' summons.
  */
-import { objectsForItem, objectsInText, objectTokenName, objectRuleNotes, perHeightDamage, objectUpgrades } from "../helpers/objects.mjs";
+import { objectsForItem, objectsInText, objectTokenName, objectRuleNotes, perHeightDamage, objectUpgrades, turnStartGrowth } from "../helpers/objects.mjs";
 import { armedInfusion, clearInfusion } from "../helpers/infuse.mjs";
 import { summonImage } from "../helpers/summon-images.mjs";
-import { placeAuraOnToken } from "./area-templates.mjs";
+import { placeAuraOnToken, tokenCells, tokensInCells, shapeCells } from "./area-templates.mjs";
 
 const _log = (...a) => console.debug("[ICON | MapObjects]", ...a);
 const NS = "icon-system";
@@ -40,6 +40,10 @@ const SOCKET = "system.icon-system";
 const FLAG = "mapObject";
 const FOLDER_NAME = "Map Objects";
 const MAX_STACK = 3;
+// Plant (p.184): "A plant space is dangerous terrain that only affects foes, and has a blessing token on it, which
+// can be picked up if yourself or an ally enters its space. When the blessing is removed, remove the plant." The
+// Megamushroom "counts as a plant, but isn't removed if the token is removed" (Spore Shroud p.187).
+const PLANT_NOTE = "Counts as a plant (p.184): its space is dangerous terrain that only affects foes, and you or an ally entering it can pick up the blessing token. Unlike a plant, it stays when the token is picked up.";
 
 export const MAP_OBJECT_DRAG = "IconMapObject";
 
@@ -285,8 +289,18 @@ export async function toggleObjectDestructible(actor) {
 /*  The object's rules at the table (R33a2)            */
 /* -------------------------------------------------- */
 
-/** The token of an object's sheet: the synthetic actor's own, or the one copy on the scene. */
-const objectToken = (actor) => actor?.token ?? actor?.getActiveTokens?.(false, true)?.[0] ?? null;
+/**
+ * The token of an object's sheet: the synthetic actor's own. The world actor of the "Map Objects"
+ * folder (its sheet opened from the sidebar) is only the template its copies are made from: no
+ * token of its own (R33a3; before, it showed "total height 1" whatever the copies were).
+ */
+const objectToken = (actor) => actor?.isToken ? actor.token : null;
+
+/** The copies of a world object actor on the current scene. */
+const worldCopies = (actor) => {
+  const key = mapObjectFlag(actor)?.key;
+  return key && canvas?.scene ? canvas.scene.tokens.filter(t => mapObjectFlag(t)?.key === key) : [];
+};
 
 /**
  * Everything the object's sheet and its chat card show besides the full text:
@@ -317,13 +331,25 @@ export function objectSheetInfo(actor) {
   const field = item ? objectsOfItem(item).find(o => sameName(o.name, flag.name))?.field ?? "" : "";
   const upgrades = item ? objectUpgrades(item.system, flag.name, field) : [];
   const perHeight = upgrades.map(u => ({ ...u, dmg: perHeightDamage(u.text) })).find(u => u.dmg) ?? null;
+  // R33a3: the world actor (sidebar) lists its copies on this scene instead of a height of its own.
+  const world = !actor.isToken;
+  const copies = world ? worldCopies(actor).map(t => {
+    const h = tokenHeight(t), e = Math.max(0, Number(t.elevation) || 0);
+    return { height: h, below: e, total: h + e, label: e ? `height ${h} on height ${e}` : `height ${h}` };
+  }) : [];
   return {
-    name: flag.name, height: own, below, total, onMap: !!td,
+    name: flag.name, height: own, below, total, onMap: !!td, world, copies,
     rules, benefits, upgrades,
     activeBenefits: benefits.filter(b => b.active),
     noAttack: notes.noAttack, pickUp: notes.pickUp,
     perHeight: perHeight ? { source: perHeight.source, amount: perHeight.dmg.amount, type: perHeight.dmg.type, times: own } : null,
     creatorName: creator?.name ?? "", abilityName: flag.abilityName ?? item?.name ?? "",
+    // R33a3: Aethershard caught in an area, Megamushroom's blessing token / "counts as a plant", Geyser's eruption.
+    areaTrigger: notes.areaTrigger,
+    blessing: notes.blessing ? { taken: !!actor.getFlag?.(NS, "blessingTaken") } : null,
+    countsAs: notes.countsAs,
+    plantNote: notes.countsAs === "plant",
+    erupt: notes.erupt ? { ...notes.erupt, placeUpgrades: upgrades.filter(u => /\bplaced\b/i.test(u.text)) } : null,
   };
 }
 
@@ -343,6 +369,8 @@ export async function postObjectToChat(actor) {
   for (const u of info.upgrades) lines.push(`<p><strong>${esc(u.source)}:</strong> ${await enrichHTML(esc(u.text))}</p>`);
   if (info.perHeight) lines.push(`<p><strong>${esc(info.perHeight.source)}:</strong> height ${info.height} → ${info.perHeight.amount} ${esc(info.perHeight.type)} damage ×${info.perHeight.times}.</p>`);
   if (info.noAttack) lines.push(`<p><em>While this object is on the map, ${esc(info.creatorName || "its creator")} cannot attack.</em></p>`);
+  if (info.blessing) lines.push(`<p><strong>Blessing token:</strong> ${info.blessing.taken ? "picked up" : "on it"}.</p>`);
+  if (info.plantNote) lines.push(`<p><em>${esc(PLANT_NOTE)}</em></p>`);
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: game.actors?.get(mapObjectFlag(actor)?.creatorId) ?? actor }),
     content: `<div class="icon-chat-card icon-chat-card--object">
@@ -378,6 +406,186 @@ export function objectsForbiddingAttacks(actor) {
   const scene = canvas?.scene;
   if (!scene || !actor) return [];
   return scene.tokens.filter(t => mapObjectFlag(t)?.creatorId === actor.id && t.actor && objectSheetInfo(t.actor)?.noAttack);
+}
+
+/* -------------------------------------------------- */
+/*  What the objects set off (R33a3)                   */
+/* -------------------------------------------------- */
+
+const cellKey = (c) => `${c.i},${c.j}`;
+/** Character tokens (not objects) in `cells` of the current scene. */
+const charactersIn = (cells) => tokensInCells(cells).filter(t => !mapObjectFlag(t.document));
+
+/**
+ * An area `actor` just placed caught some of their objects whose rules trigger on it: the Aethershard,
+ * "When you include the Aethershard in the area effect of any ability, the ability deals 2 piercing damage as an
+ * area effect, once, to all characters in the area for every one of your Aethershards caught in the same ability.
+ * Then destroy all Aethershards activated this way and gain 1 Aether" (p.210). Asked like the Seer's wild cards
+ * (wild-cards.mjs): on yes, a damage card (2 × shards, piercing, area, once) for the characters in the area, the
+ * shards removed, the Aether gained.
+ * @param {Array<{i:number,j:number}>} cells  the area's cells (after the wild cards)
+ * @param {{actor: Actor, abilityName?: string}} opts
+ */
+export async function offerAreaObjectTriggers(cells, { actor, abilityName = "" } = {}) {
+  const scene = canvas?.scene;
+  if (!scene || !actor || !cells?.length) return;
+  const set = new Set(cells.map(cellKey));
+  const caught = [];
+  for (const td of scene.tokens) {
+    const flag = mapObjectFlag(td);
+    // "every one of YOUR Aethershards"
+    if (!flag || flag.creatorId !== actor.id || !td.actor) continue;
+    if (!tokenCells(td).some(c => set.has(cellKey(c)))) continue;
+    const trigger = objectSheetInfo(td.actor)?.areaTrigger;
+    if (trigger) caught.push({ td, trigger, name: flag.name });
+  }
+  if (!caught.length) return;
+  const esc = foundry.utils.escapeHTML;
+  const n = caught.length;
+  const { amount, type, aether } = caught[0].trigger;
+  const total = amount * n;
+  const name = caught[0].name;
+  const plural = n > 1 ? `${name}s` : name;
+  const targets = charactersIn(cells);
+  const ok = await foundry.applications.api.DialogV2.confirm({
+    window: { title: `${name} caught` },
+    content: `<p>${abilityName ? `<strong>${esc(abilityName)}</strong> includes ` : "This area includes "}<strong>${n}</strong> of your ${esc(plural.toLowerCase())}.</p>
+      <p>Deal <strong>${amount}${type ? ` ${type}` : ""} damage × ${n} = ${total}</strong> as an area effect, once, to all characters in the area
+      (${targets.length ? esc(targets.map(t => t.name).join(", ")) : "no one"}), then destroy ${n > 1 ? "them" : "it"}${aether ? ` and gain ${aether} Aether` : ""} (p.210)?</p>`,
+    yes: { label: "Resonate" }, no: { label: "Not this time" }, rejectClose: false,
+  }) ?? false;
+  if (!ok) return;
+
+  // The shards go first: a damage card can't be undone, a removed shard can be placed again.
+  for (const { td } of caught) {
+    if (game.user.isGM) await td.parent.deleteEmbeddedDocuments("Token", [td.id]).catch(err => console.warn("[ICON | MapObjects] could not destroy", err));
+    else game.socket.emit(SOCKET, { type: "removeMapObject", userId: game.user.id, sceneId: td.parent.id, tokenId: td.id });
+  }
+  if (aether && actor.type === "icon" && actor.isOwner) {
+    const res = actor.system?.combat?.classResources?.aether;
+    if (res) {
+      const next = Math.min(Number(res.max) || 6, (Number(res.value) || 0) + aether);
+      await actor.update({ "system.combat.classResources.aether.value": next });
+    }
+  }
+  if (targets.length && total > 0) {
+    const { postAbilityDamageCard } = await import("../combat/damage.mjs");
+    const none = { mult: 0, fray: false, flat: 0 };
+    await postAbilityDamageCard(actor, {
+      parsed: { hit: { ...none }, miss: { ...none }, area: { ...none }, extras: [] },
+      outcome: "other",
+      other: { mult: 0, fray: false, flat: total, area: true, label: `${n} ${plural}` },
+      damagedie: actor.system?.combat?.damagedie ?? "d6",
+      fray: 0,
+      abilityName: abilityName || name,
+      pierce: type === "piercing",
+      divine: type === "divine",
+      targetIds: targets.map(t => t.id),
+      targetName: targets.map(t => t.name).join(", "),
+      statusBonus: false,
+    });
+  }
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card icon-chat-card--object">
+        <strong><i class="fa-solid fa-gem"></i> ${n} ${esc(plural)}</strong> resonate${abilityName ? ` with <strong>${esc(abilityName)}</strong>` : ""}
+        <br><small>${amount}${type ? ` ${type}` : ""} damage × ${n} = ${total} to all characters in the area, once; the ${esc(n > 1 ? plural.toLowerCase() : name.toLowerCase())} ${n > 1 ? "are" : "is"} destroyed${aether ? ` and ${esc(actor.name)} gains ${aether} Aether` : ""} (p.210).</small>
+      </div>`,
+  });
+  _log(`${n} ${name} caught by "${abilityName}" — ${total} damage to ${targets.length}`);
+}
+
+/**
+ * Megamushroom: "The object has a blessing token on it and counts as a plant" (Spore Shroud p.187), and a plant's
+ * blessing "can be picked up if yourself or an ally enters its space" (p.184). The character picking it up is the
+ * token the user controls (not an object), else their assigned character; it gains one Blessed charge. The object
+ * stays ("isn't removed if the token is removed"). Anyone may pick it up: the object's flag is set by its owner, or
+ * by the active GM for an ally who doesn't own it.
+ * @param {Actor} actor  the object's (synthetic) actor
+ */
+export async function pickUpObjectBlessing(actor) {
+  const td = objectToken(actor);
+  if (!td?.parent) { ui.notifications.warn("Open the sheet of the object's token on the scene to pick its blessing up."); return; }
+  if (actor.getFlag(NS, "blessingTaken")) { ui.notifications.info("The blessing token has already been picked up."); return; }
+  const picker = canvas.tokens?.controlled?.find(t => t.actor && !mapObjectFlag(t.document))?.actor ?? game.user.character ?? null;
+  if (!picker?.isOwner) { ui.notifications.warn("Select the token of the character picking the blessing up."); return; }
+  const { adjustStatusCharges } = await import("../combat/statuses.mjs");
+  await adjustStatusCharges(picker, "blessed", 1);
+  if (actor.isOwner) await actor.setFlag(NS, "blessingTaken", true);
+  else if (game.users.activeGM) game.socket.emit(SOCKET, { type: "objectBlessing", userId: game.user.id, sceneId: td.parent.id, tokenId: td.id });
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: picker }),
+    content: `<div class="icon-chat-card icon-chat-card--object"><strong><i class="fa-solid fa-hand-sparkles"></i> ${foundry.utils.escapeHTML(picker.name)}</strong>
+      picks up the blessing token on the <strong>${foundry.utils.escapeHTML(mapObjectFlag(actor)?.name ?? actor.name)}</strong> (+1 Blessed; the object stays).</div>`,
+  });
+}
+
+/**
+ * Geyser's eruption (p.232): "If any character either starts or ends their turn on a geyser, you can cause it to
+ * erupt, removing that character from the battlefield, then placing them one or two spaces away. Then, remove the
+ * geyser. Effect: After the geyser is removed, summon a Salt Sprite in its space." Volcanic Geyser: "it removes
+ * and places all characters in a medium blast area centered on it, and creates dangerous terrain under foes".
+ * The card names the characters to place (the ones on the geyser, or in the blast around it) and what follows;
+ * placing them and the Salt Sprite stay with the players (the Salt Sprite chip of the ability). The geyser goes.
+ * @param {Actor} actor  the object's (synthetic) actor
+ */
+export async function eruptObject(actor) {
+  const info = objectSheetInfo(actor);
+  const td = objectToken(actor);
+  if (!info?.erupt || !td?.parent) { ui.notifications.warn("This object has no token on the scene."); return; }
+  if (td.parent.id !== canvas?.scene?.id) { ui.notifications.warn("View the scene the object is on first."); return; }
+  const own = tokenCells(td);
+  const cells = info.erupt.blast ? shapeCells({ kind: "blast", size: info.erupt.blast }, own[0]) : own;
+  const placed = charactersIn(cells);
+  const esc = foundry.utils.escapeHTML;
+  const blastName = { s: "small", m: "medium", l: "large" }[info.erupt.blast] ?? "";
+  const who = placed.length ? esc(placed.map(t => t.name).join(", ")) : "no one";
+  const lines = [
+    `<p><strong>Removed and placed${info.erupt.place ? ` ${esc(info.erupt.place)} spaces away` : ""}:</strong> ${who}${blastName ? ` (everyone in the ${blastName} blast centered on it)` : " (on the geyser)"}.</p>`,
+  ];
+  for (const u of info.erupt.placeUpgrades) lines.push(`<p><strong>${esc(u.source)}:</strong> ${esc(u.text)}</p>`);
+  if (info.erupt.dangerous) lines.push(`<p>Create dangerous terrain under the foes placed.</p>`);
+  lines.push(`<p>The ${esc(info.name.toLowerCase())} is removed.${info.erupt.summon ? ` Then summon a <strong>${esc(info.erupt.summon)}</strong> in its space (drag the chip from ${esc(info.abilityName || "the ability")}).` : ""}</p>`);
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: game.actors?.get(mapObjectFlag(actor)?.creatorId) ?? actor }),
+    content: `<div class="icon-chat-card icon-chat-card--object">
+        <div class="icon-chat-card__header"><strong><i class="fa-solid fa-water"></i> ${esc(info.name)} erupts</strong></div>
+        ${lines.join("")}
+      </div>`,
+  });
+  // The characters to place are targeted, so the player can see them.
+  try { for (const t of placed) t.setTarget(true, { releaseOthers: false }); } catch { /* targeting is a convenience */ }
+  await removeMapObject(actor);
+}
+
+/**
+ * At the start of `actor`'s turn their objects grow as the chosen talent says: Geyser Talent I, "Increase the
+ * height of all geysers by +1 at the start of your turn" (p.232). Within the stack's height 3 (p.95). Active GM.
+ * @param {Actor} actor  the combatant whose turn starts
+ */
+export async function growObjectsAtTurnStart(actor) {
+  const scene = canvas?.scene;
+  if (!scene || !actor) return;
+  const grown = [];
+  for (const td of scene.tokens) {
+    const flag = mapObjectFlag(td);
+    if (!flag || flag.creatorId !== actor.id || !td.actor) continue;
+    const item = actor.items?.get(flag.itemId);
+    if (!item) continue;
+    const by = objectUpgrades(item.system, flag.name).reduce((n, u) => n || turnStartGrowth(u.text, flag.name), 0);
+    if (!by) continue;
+    const own = tokenHeight(td);
+    const stack = objectsAt(scene, { x: td.x, y: td.y }).reduce((sum, t) => sum + tokenHeight(t), 0);
+    const step = Math.min(by, MAX_STACK - own, MAX_STACK - stack);
+    if (step <= 0) continue;
+    if (await changeObjectHeight(td.actor, step)) grown.push(`${flag.name} → height ${own + step}`);
+  }
+  if (!grown.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card icon-chat-card--object"><strong><i class="fa-solid fa-arrow-up"></i> Start of ${foundry.utils.escapeHTML(actor.name)}'s turn</strong>
+      <br><small>${foundry.utils.escapeHTML(grown.join(", "))} (talent: "+1 height at the start of your turn"; stacks stay within height 3, p.95).</small></div>`,
+  });
 }
 
 /**
@@ -449,6 +657,12 @@ export function registerMapObjectHooks() {
     }
     if (!game.user.isGM || game.users.activeGM?.id !== game.user.id) return;
     const requester = game.users.get(msg?.userId) ?? null;
+    if (msg?.type === "objectBlessing") {
+      // An ally picked up the blessing token of an object they don't own (pickUpObjectBlessing, R33a3).
+      const td = game.scenes.get(msg.sceneId)?.tokens.get(msg.tokenId);
+      if (td?.actor && mapObjectFlag(td) && requester) td.actor.setFlag(NS, "blessingTaken", true).catch(err => console.warn("[ICON | MapObjects] could not mark the blessing taken", err));
+      return;
+    }
     if (msg?.type === "removeMapObject") {
       // A player picking up / removing an object they own (removeMapObject).
       const td = game.scenes.get(msg.sceneId)?.tokens.get(msg.tokenId);

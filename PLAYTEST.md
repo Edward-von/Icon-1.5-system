@@ -1656,6 +1656,41 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a3 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro, scheda dalla barra laterale (16 ottobre 2026, versione 1.15.67)
+
+Setup: come R33a2 (scena a griglia quadrata, GM + giocatore). PG: Enochian con Aethershard e un'abilità con un'area
+(Aether almeno 0-4, non 6), Wright con Geyser (Talent I scelto in una prova), Harvester con Fairy Ring (mastery sbloccata),
+un PG con Upheaval (mastery sbloccata), Geomancer con Helix Heel. Solo JS, template e CSS: F5 dopo il deploy.
+
+- [ ] **Aethershard nell'area**: piazza due Aethershard, poi un'area dell'Enochian che ne copre uno e un foe → finestra
+      "Aethershard caught": "1 of your aethershards … 2 piercing damage × 1 = 2". "Resonate" → lo shard sparisce, l'Aether
+      sale di 1 (non oltre 6), card del danno "… — 1 Aethershard damage (area)" con 2 piercing e Apply per il foe (niente
+      riga per gli oggetti), card "1 Aethershard resonate". Con due shard nell'area → 2 × 2 = 4, tutti e due tolti, Aether +1.
+- [ ] **Aethershard, casi limite**: "Not this time" → shard restano, nessun danno. Area di un altro PG sopra lo shard →
+      nessuna domanda ("your Aethershards"). Con Bonus Damage sull'Enochian la card degli shard non lo consuma. Da
+      giocatore: lo shard viene tolto dal GM (socket).
+- [ ] **Geyser, eruzione**: piazza un Geyser, metti un PG sopra (stesso spazio). Scheda del geyser → bottone "Erupt" → card
+      "Geyser erupts": "Removed and placed one or two spaces away: <PG> (on the geyser)", "Then summon a Salt Sprite in its
+      space"; il PG è targettato e il geyser sparisce. Con la mastery sbloccata c'è anche la riga "Mastery: GREAT GEYSER …".
+- [ ] **Volcanic Geyser, eruzione**: con l'Infuse armato piazza il Volcanic Geyser, personaggi a 1-2 spazi → "Erupt" →
+      tutti quelli nella medium blast attorno, più la riga "Create dangerous terrain under the foes placed".
+- [ ] **Geyser Talent I**: Talent I scelto, geyser height 1 sulla mappa, combat avviato → all'inizio del turno del Wright
+      il geyser diventa height 2 (nome del token "Geyser (height 2)") e card "Start of <PG>'s turn: Geyser → height 2". A
+      height 3 (o in una pila già alta 3) non cresce più. Senza Talent I non succede niente. Tornare indietro di un turno
+      non lo fa crescere.
+- [ ] **Megamushroom**: trascina "Megamushroom · H1" (mastery di Fairy Ring) → scheda: "Blessing token: on it", nota "Counts as a
+      plant (p.184) …", bottone "Pick up blessing". Seleziona il token di un PG e premi → il PG ha 1 Blessed in più,
+      card in chat, la scheda dice "picked up" e il bottone sparisce; l'oggetto resta. Senza token selezionato e senza
+      personaggio assegnato → avviso.
+- [ ] **Upheaval, pilastro**: mastery sbloccata → oltre a "Boulder · H1" c'è il chip "Pillar · H2"; trascinato diventa
+      "Pillar (height 2)". Mastery non sbloccata → niente chip Pillar.
+- [ ] **Helix Heel**: bottone area → scelta tra "Line 3" e "Text: Burst 1 (on object)". Con il token di un Boulder targettato
+      la Burst 1 va da sola attorno al boulder. L'attacco / il tiro di Helix Heel non offre la Burst come area d'attacco.
+- [ ] **Scheda dalla barra laterale**: Actors → cartella "Map Objects" → apri lo Shrine → niente − / + né Remove, badge
+      "Height 1 (as placed)", "on this scene: height 2, height 1 on height 1" (le copie sulla scena) o "none on this scene",
+      e la nota "This is the template … Double-click a token …". Il doppio clic sul token mostra come prima l'altezza vera.
+- [ ] **Regressione**: Pyroclast non mostra "Erupt" sul Magma Spire; Shrine, Comet (Pick up), pile e aure come in R33a2.
+
 ## R33a2 — Effetti degli oggetti, pile, aree sugli oggetti (16 ottobre 2026, versione 1.15.66)
 
 Setup: come R33a (scena a griglia quadrata, GM + giocatore). PG del giocatore: Sealer con Spirit Shrine (prova anche con

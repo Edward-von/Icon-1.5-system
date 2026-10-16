@@ -379,6 +379,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       tratta come un avanzamento di round: posta i promemoria relic "round-end" col titolo "End of round 0" (Paleblood:
       "Tick the Paleblood die up by 1") e chiama `_nudgeReserves` già al round 1. Saltare la parte "fine round" quando il
       round nuovo è 1 (il promemoria R62 del round 1 invece va bene lì).
+- [ ] **Emerso lavorando su R33a3 — Aethershard: testo del compendio diverso dal libro** (S, dati): il pack dice "the
+      ability deals 2 piercing damage as an area effect … Then destroy all activated Aethershards and gain 1 Aether",
+      il libro (p.210-211) "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then
+      destroy all Aethershards activated this way and gain 1 Aether". Il codice di R33a3 legge tutte e due le forme;
+      ripristinare il testo del libro (pack + migrazione sulle copie).
 
 ---
 
@@ -657,7 +662,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       instead", senza la parola object: oggi col +). Aree centrate su un oggetto (Holy Talent I, Helix Heel, Volcanic
       Geyser "medium blast area centered on it"; vedi l'emerso di R49). Oggetti che bloccano la vista o il movimento
       (muri di Foundry) e danno copertura: non fatto. Togliendo un oggetto da sotto una pila, quelli sopra non scendono.
-- [ ] **R33a3. Oggetti sulla mappa: quello che resta dopo R33a2** (M/L)
+- [x] **R33a3. Oggetti sulla mappa: quello che resta dopo R33a2** (M/L) (FATTO il 16 ottobre 2026, versione 1.15.67:
+      Aethershard presi in un'area → domanda, 2 piercing × shard agli altri nell'area, shard tolti, +1 Aether; bottone
+      Erupt sul Geyser / Volcanic Geyser (card con chi ripiazzare, Salt Sprite da ricordare, geyser tolto); Geyser
+      Talent I +1 altezza a inizio turno; Megamushroom con "Pick up blessing" e nota plant; pilastro di Upheaval letto
+      come oggetto; Burst 1 di Helix Heel sugli oggetti offerta dal bottone area; scheda dalla barra laterale con le
+      copie sulla scena. Il resto in R33a4. Solo codice.)
       Oggi il testo e i benefici sono sulla scheda dell'oggetto, ma questi effetti restano a mano:
       Aethershard ("When you include the Aethershard in the area effect of any ability … 2 piercing damage … for every
       one of your Aethershards caught", poi distrutti e +1 Aether: un controllo all'area piazzata come le wild card di
@@ -669,6 +679,24 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       sugli spazi adiacenti e raccolta automatica quando entri / esci da uno spazio adiacente); oggetti che bloccano vista
       o movimento (muri di Foundry) e copertura; personaggi in piedi su una pila che scende (oggi scendono solo gli
       oggetti); scheda aperta dalla barra laterale (attore del mondo, senza token) che mostra l'altezza totale 1+0.
+- [ ] **R33a4. Oggetti sulla mappa: automazioni sul movimento e il resto dopo R33a3** (M/L)
+      Lasciate fuori da R33a3 perché toccano il movimento dei token o i muri di Foundry:
+      - Underway (p.168): "you and allies can teleport from any space adjacent to an underway to a free adjacent space
+        to any other underway" — un bottone sul portale che sposta il token selezionato, con la scelta dello spazio
+        libero; mastery Bale Portal (foe spinti nei portali / a fine turno adiacenti: save, una volta per round,
+        bloodied falliscono).
+      - Comet (p.128): rampart sugli spazi adiacenti all'arma e raccolta automatica quando il PG entra / esce da uno
+        spazio adiacente (oggi c'è il bottone "Pick up").
+      - Megamushroom / plant (p.184, p.187): raccolta della benedizione quando tu o un alleato entrate nello spazio (oggi
+        bottone "Pick up blessing").
+      - Geyser (p.232): Salt Sprite piazzato da solo nello spazio del geyser dopo l'eruzione e spostamento guidato dei
+        personaggi "one or two spaces away" (oggi card + target); il dangerous terrain del Volcanic Geyser è di R33b.
+      - Oggetti che bloccano vista o movimento (muri di Foundry attorno al token, tranne "don't provide obstruction")
+        e copertura ("Characters can … take cover behind them", p.89) nel calcolo della Cover.
+      - Personaggi in piedi su una pila che scende o sale (p.89 "Characters can stand on objects"): oggi si muovono solo
+        gli oggetti; anche il personaggio spinto su dal Magma Spire di Pyroclast ("pushing them up").
+      - Aethershard: Talent I (spostare uno shard di 2 quando spendi Aether), Talent II (pierce contro chi è adiacente a
+        uno shard), mastery AETHERSHIFT (phasing se inizi / finisci adiacente) — p.210-211.
 - [ ] **R33b. Spazi di terreno** (L)
       Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
       (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non

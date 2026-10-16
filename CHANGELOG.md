@@ -1,5 +1,48 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro di Upheaval (versione 1.15.67)
+
+### Round di debug del 15 ottobre, punto R33a3
+
+- **Aethershard da contare a mano**: "When you include the Aethershard in the area effect of any ability … 2 piercing
+  damage as an area effect, once, to all characters in the area for every one of your Aethershards caught … Then
+  destroy all Aethershards activated this way and gain 1 Aether" (p.210) → nessuno guardava se l'area copriva uno shard
+  → ora, piazzata un'area (dopo le wild card), se copre uno o più Aethershard **di chi la piazza** esce una domanda
+  come per le wild card: "Resonate" toglie gli shard (il giocatore passa dal GM via socket), dà +1 Aether (massimo 6)
+  e posta una card del danno "Other, area" con 2 × shard piercing per i personaggi nell'area (gli oggetti esclusi), con
+  i soliti Apply. La regola è letta dal testo dell'oggetto, non dal nome. La card degli shard non usa né consuma il
+  Bonus Damage del PG (nuova opzione `statusBonus` di `postAbilityDamageCard`): è il danno degli shard, non dell'abilità.
+- **Eruzione del Geyser**: "you can cause it to erupt, removing that character from the battlefield, then placing them one
+  or two spaces away. Then, remove the geyser. Effect: After the geyser is removed, summon a Salt Sprite in its space"
+  (p.232) → tutto a mano → ora la scheda del geyser ha **Erupt**: card con chi va tolto e ripiazzato (chi sta sullo
+  spazio del geyser; per il Volcanic Geyser tutti nella medium blast attorno, più "dangerous terrain under foes"), la
+  riga della mastery GREAT GEYSER se sbloccata, il promemoria del Salt Sprite; quei personaggi restano targettati e il
+  geyser viene tolto. Spostare i personaggi e piazzare il Salt Sprite (dal suo chip) resta a mano: la scelta dello
+  spazio è del giocatore.
+- **Geyser Talent I**: "Increase the height of all geysers by +1 at the start of your turn" (p.232) → ora, all'inizio
+  del turno del creatore (GM attivo, non quando si torna indietro), i suoi geyser crescono di 1, entro l'altezza 3 della
+  pila (p.95), con una riga in chat. Letto in generale ("increase the height of all <oggetti> by +N at the start of
+  your turn"); nel pack jobs c'è solo questo.
+- **Megamushroom**: "The object has a blessing token on it and counts as a plant, but isn't removed if the token is
+  removed" (Spore Shroud p.187); plant: "dangerous terrain that only affects foes … blessing token … can be picked up if
+  yourself or an ally enters its space" (p.184) → ora la scheda dice "Blessing token: on it", ha la nota sulla plant e
+  il bottone **Pick up blessing**: il token selezionato (o il personaggio dell'utente) prende +1 Blessed, l'oggetto
+  resta; se chi lo prende non possiede l'oggetto, lo segna il GM via socket.
+- **Pilastro di Upheaval**: "Boulder may be placed as a height 2 pillar instead" (Titan Strength p.136) non contiene la
+  parola "object" → nessun chip → ora "placed / created as a height N <nome> instead" è letto: chip "Pillar · H2" con
+  la mastery sbloccata. Unico testo del pack jobs che cambia (confronto prima / dopo su tutto il pack).
+- **Helix Heel**: la "burst 1 area effect centered on them" sugli oggetti (p.219) era letta, ma con la Line 3 nei tag il
+  bottone area non leggeva la descrizione → ora le aree della descrizione centrate su un oggetto si aggiungono alla
+  scelta ("Text: Burst 1 (on object)"); il tiro d'attacco continua a non offrirle.
+- **Scheda dalla barra laterale**: l'attore della cartella "Map Objects" mostrava "total height 1" qualunque fosse la
+  copia sulla mappa → è solo il modello delle copie → ora niente − / + né Remove, badge "Height N (as placed)", l'elenco
+  delle copie sulla scena con la loro altezza e una nota "doppio clic sul token".
+- Scelte mie: gli shard tolti prima di postare il danno (una card non si annulla, uno shard si ripiazza); la Resonate
+  vale solo per gli shard del PG che piazza l'area; "Erupt" non sposta nessuno da solo. Nessun pack, nessuna
+  migrazione. Quello che resta (teleport di Underway e Bale Portal, rampart e raccolta automatica di Comet, muri e
+  copertura, personaggi sopra una pila che scende, Salt Sprite piazzato da solo, raccolta della benedizione entrando
+  nello spazio, talenti e mastery di Aethershard) è in TODO, R33a4.
+
 ## 16 ottobre 2026 — Effetti degli oggetti sulla mappa, pile, aree sugli oggetti (versione 1.15.66)
 
 ### Round di debug del 15 ottobre, punto R33a2

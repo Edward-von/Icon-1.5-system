@@ -383,6 +383,7 @@
 .icon-object-effect__benefits li.is-active   { color: #e8d9a8; }
 .icon-object-effect__benefits li.is-inactive { opacity: .45; }
 .icon-object-effect__warn { margin: 4px 0; color: #e0a070; font-weight: bold; }
+.icon-object-effect__note { margin: 4px 0; font-size: .92em; opacity: .85; }
 
 /* Summon sheet — drop hint */
 .summon-sheet__drop-hint {

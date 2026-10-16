@@ -36,6 +36,7 @@ import { handlePromptSocket } from "./remote-prompt.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
+import { growObjectsAtTurnStart } from "../canvas/map-objects.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -890,6 +891,9 @@ export function registerCombatHooks() {
           catch (err) { console.warn("[ICON | IconCombat] status expiry (start) failed", err); }
           try { await tickAuraExpiry(current.actor, "start"); }
           catch (err) { console.warn("[ICON | IconCombat] aura expiry (start) failed", err); }
+          // Objects that grow at the start of their creator's turn (Geyser Talent I, p.232; R33a3).
+          try { await growObjectsAtTurnStart(current.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] object growth failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

@@ -10,7 +10,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
-import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject } from "../../canvas/map-objects.mjs";
+import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject, pickUpObjectBlessing, eruptObject } from "../../canvas/map-objects.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -38,6 +38,8 @@ export class SummonSheet extends BaseActorSheet {
       toggleDestructible: SummonSheet.#onToggleDestructible,
       objectToChat:      SummonSheet.#onObjectToChat,
       objectRemove:      SummonSheet.#onObjectRemove,
+      objectBlessing:    SummonSheet.#onObjectBlessing,
+      objectErupt:       SummonSheet.#onObjectErupt,
       rollSummonAttack:  SummonSheet.#onRollSummonAttack,
       rollSummonDamage:  SummonSheet.#onRollSummonDamage,
     },
@@ -96,6 +98,8 @@ export class SummonSheet extends BaseActorSheet {
       const info = objectSheetInfo(actor);
       if (info) {
         Object.assign(context.mapObject, info, { height: system.size });
+        // R33a3: the sidebar's world actor is the template of its copies: no height of its own to change.
+        if (info.world) Object.assign(context.mapObject, { canLower: false, canRaise: false, copiesLabel: info.copies.map(c => c.label).join(", ") });
         context.mapObject.enrichedRules = info.rules ? await enrichHTML(foundry.utils.escapeHTML(info.rules)) : "";
         context.mapObject.enrichedUpgrades = await Promise.all(info.upgrades.map(async u => ({ source: u.source, html: await enrichHTML(foundry.utils.escapeHTML(u.text)) })));
       }
@@ -134,6 +138,16 @@ export class SummonSheet extends BaseActorSheet {
   /** Object: take it off the map — Comet's "Pick up" (R33a2); objects stacked on it come down. */
   static async #onObjectRemove(event, target) {
     await removeMapObject(this.document);
+  }
+
+  /** Object: pick its blessing token up — Megamushroom (Spore Shroud p.187, plant p.184; R33a3). */
+  static async #onObjectBlessing(event, target) {
+    await pickUpObjectBlessing(this.document);
+  }
+
+  /** Object: erupt — Geyser / Volcanic Geyser (p.232; R33a3): a card with whom to place, then it goes. */
+  static async #onObjectErupt(event, target) {
+    await eruptObject(this.document);
   }
 
   /** Roll the summon's attack as a standard combat roll. Speaker is the summon;
