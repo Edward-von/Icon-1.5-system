@@ -609,7 +609,14 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       1 attorno al token che la porta; limiti letti dal testo al piazzamento ("maximum of 3 or a minimum of 1",
       Gentle Prayer p.179), altrimenti 1-5 come la Line; l'avviso ripete "When you do, foes inside must save or be
       pacified". Solo chi l'ha piazzata o il GM. Solo codice.)
-- [ ] **R33. Oggetti e segni piazzabili sulla mappa** (L/XL, da decidere)
+Il 16 ottobre 2026 Edoardo ha deciso che R33–R36 non servono a Maar: non sono più "da decidere", sono divisi in
+sotto-punti da fare in ordine (ogni sotto-punto usa quello prima). Regole del libro: Object p.89 ("Categorized by
+height, 1-3. Provides obstruction … immune to damage and effects unless specified"; distruttibili dal GM: "10 hp …
+automatically hit … fail all saves"), Objects p.95 ("size 1-3 … can be stacked … total height … isn't past 3 … not
+removed when you are defeated"), Terrain effects p.96 ("passive effects that modify the terrain spaces … can overlap
+… not removed if you are defeated"), Pit / Dangerous / Difficult p.89.
+
+- [ ] **R33. Oggetti e segni piazzabili sulla mappa** — elenco originale, diviso in R33a–R33d qui sotto.
       Symphony (motes, terrain effect), Fairy Ring (megamushroom della mastery), Comet ("thrown weapon"), Spirit
       Shrine (santuario con la sua aura), Gates of Hell (flash step della mastery), Eclipse (il singolo dangerous
       terrain dove cade la stella), Astra (medium blast messo sui foe), Polaris (uno spazio a terra), Blood Grove
@@ -619,19 +626,63 @@ Già fatti o già decisi (nessun lavoro, solo da far verificare a Maar sulla 1.1
       talenti), Stone Double (oggetto), Bio, Geo (oggetto), Terraforming (scegliere tra i terrain effect), Bifröst (cresce
       col Talent II), Blitz (Talent I e mastery), Rampant Nail, Deepwrath (mastery), Geyser (oggetto), Gust (più di uno),
       Rime (pit di Magnarime), Tsunami, Waterspout (anche la mastery); forse Aethershard (R65).
-- [ ] **R34. Open the Gates riformattata** (S, da decidere: è il manuale a essere ambiguo)
+      Darkside: lo Shadow è un summon del pack summons, il chip c'è già da R44 (1.15.46).
+- [ ] **R33a. Oggetti sulla mappa** (L)
+      Un "oggetto" piazzabile come token: nome, altezza 1–3, immagine, chi l'ha creato; si può impilare fino ad altezza
+      3; resta se chi l'ha creato è sconfitto; "lasts until this ability is used again" lo sostituisce; il GM può
+      renderlo distruttibile (10 hp, p.89). Bottone sull'abilità / tratto quando il testo crea un oggetto ("height 1
+      boulder object", "Shrine — Height 1 object", "becomes an object (Thrown Weapon, height 1)"). Con l'oggetto sulla
+      mappa, la sua aura ("Object Effect: Aura 2") lo segue e il suo testo è a portata (Shrine: altezza +1 riusando
+      l'abilità). Copre: Comet (Thrown Weapon), Spirit Shrine (con l'aura, emerso R48), Stone Double (statue), Geo e
+      Terraforming (boulder), Pyroclast (magma spire, Pyrospire altezza 3), Astra e Polaris (meteor), Fairy Ring mastery
+      (Megamushroom, conta come plant), Underway (portali, niente obstruction), Geyser (Volcanic Geyser), Aethershard
+      (R65).
+- [ ] **R33b. Spazi di terreno** (L)
+      Segnare uno o più spazi singoli, ognuno con il suo tipo: pit, dangerous, difficult, oppure un segno con nome
+      (mote, afterimage, rune, mine, brand, Polaris). Il segno resta finché non lo si toglie, o finché l'abilità non
+      viene riusata. Copre: Symphony (motes non adiacenti), Eclipse (brand + dangerous sotto i foe; Talent I pit), Polaris
+      (spazi scelti), Implode (centro; Talent II pit), Party Favor (mine), Elden Rune (sotto di te), Gates of Hell mastery
+      (afterimage), Apex Talent I, Morrigan Talent II, Blitz Talent I, Pyroclast Talent I e mastery (pit), Bio charge,
+      Deepwrath (pit sotto il marcato; Darktide), Rime / Magnarime / Dagon (pit), Tsunami Talent I, Terraforming (pit,
+      difficult), Geo charge (pit), Blood Grove Talent II / mastery (spazi aggiunti all'area).
+- [ ] **R33c. Aree terrain effect che durano, si muovono o crescono** (L)
+      Partendo dalle aree "lasting" che ci sono già: muovere un'area già piazzata (Tsunami 4 spazi verso un bordo a
+      inizio turno, Stormlash 2; Waterspout 1 spazio, Hurricane small blast), farla crescere (Bifröst Talent II +2
+      spazi a fine round; Blood Grove), più aree insieme invece di sostituirle (Gust Northsoul fino a tre, Mist Strider
+      charge "second cloud", Bifröst Heimdall seconda line), e le aree terrain dei talenti / mastery: Nocturne (shadow
+      clouds), Mist Strider, Morrigan Dark Wing, Showdown Quench, Blitz Gungnir, Bio Magnabio (toxic cloud).
+- [ ] **R33d. Segni che seguono un personaggio** (M)
+      Un segno di R33b / R33c messo su un personaggio invece che su uno spazio: Polaris Talent I ("follow a character
+      as a mark"), Party Favor mastery Amico, Implode mastery Waking Void.
+- [ ] **R34. Open the Gates riformattata** (S)
       Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
-      versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed.
-- [ ] **R35. Righteous Disdain usabile dalle card del danno** (L, da decidere)
+      versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed. Il manuale è ambiguo: Edoardo
+      ha scelto la proposta (16 ottobre 2026).
+- [ ] **R35. Righteous Disdain usabile dalle card del danno** — diviso in R35a–R35c.
       Commento di Turz Ven: "If you don't have a clean way to implement this (and probably make it modular so other
       interrupts could do similar on damage cards as needed), then I wouldn't do it. Keep in mind there are weird
       interrupts like Dire Parry's mastery which lets it bank interrupt usages, or the ones from seer that wholly
       prevent damage."
-- [ ] **R36. Carte del Seer** (XL, da decidere)
-      "Currently practically nonfunctional": i tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e
-      giocarle non scrive niente in chat. Maar non consiglia di legarle alla scheda; con il sistema di carte di
-      Foundry servirebbero gli effetti sulle carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms
-      of workload."
+- [ ] **R35a. Interrupt dalle card del danno: la base** (L)
+      Sulla card del danno, per il personaggio colpito (e per chi ha un interrupt con trigger "damaged" / "an ally …
+      is damaged"), un bottone per ogni interrupt che quel danno fa scattare: spende un uso, posta Trigger ed Effect
+      (come R61). Modulare, come chiede Turz Ven: un solo punto dove dire "questo interrupt scatta sul danno".
+- [ ] **R35b. Righteous Disdain** (M)
+      Il suo effetto applicato dalla card del danno, sopra R35a.
+- [ ] **R35c. Interrupt strani sul danno** (M/L)
+      Dire Parry mastery (usi messi da parte), interrupt del Seer che annullano il danno: il bottone di R35a toglie
+      o riduce il danno già calcolato sulla card.
+- [ ] **R36. Carte del Seer** — "Currently practically nonfunctional", diviso in R36a–R36c.
+      I tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e giocarle non scrive niente in chat.
+      Maar non consiglia di legarle alla scheda; con il sistema di carte di Foundry servirebbero gli effetti sulle
+      carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms of workload."
+- [ ] **R36a. Il testo di ogni carta** (M)
+      Ogni carta dei mazzi del Seer con il suo effetto preso dal libro (pagina citata).
+- [ ] **R36b. Carta giocata in chat** (M)
+      Giocare una carta dalla mano posta una card in chat con il suo effetto (keyword, Inflict / Gain come le
+      abilità) e la sposta negli scarti.
+- [ ] **R36c. Bersagli delle carte** (M)
+      Le carte con bersaglio o area usano i bersagli correnti e i bottoni area già esistenti.
 
 ### Emersi lavorando
 
