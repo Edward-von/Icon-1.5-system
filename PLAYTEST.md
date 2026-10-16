@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R57 — Stack Dice: bottone Use (16 ottobre 2026, versione 1.15.58)
+
+Setup: PG Fool con il tratto Stack Dice (uno al capitolo 3 per avere 2 dadi). È template + JS: F5 dopo il deploy.
+
+- [ ] **Bottone**: tab Combat, tratto Stack Dice: accanto ai pallini c'è **Use**; con "0/1" è spento (grigio, non
+      cliccabile).
+- [ ] **Uso**: accendi un dado ("1/1"), clicca Use → la scheda torna a "0/1" e in chat c'è "<PG> uses a Stacked Die: the
+      gamble result is 6 (Stack Dice, p.149)" a nome del PG; Use torna spento.
+- [ ] **Capitolo 3**: con "2/2" Use → "1/2", di nuovo Use → "0/2"; due messaggi in chat.
+- [ ] **Niente doppio scalo**: con "1/1" usa la finestra Gamble di un'abilità e scegli "Stacked Die" → risultato 6 e
+      scheda a "0/1" (una sola volta); nessun messaggio extra di Use.
+- [ ] **Player senza permessi**: sulla scheda di un PG altrui (solo osservatore) Use è spento.
+
 ## R56 — Track target su Quaking Palm, Sidhe e Dark Sliver (16 ottobre 2026, versione 1.15.57)
 
 Setup: un PG Geomancer con Quaking Palm, un PG Warden con Sidhe, un PG Harvester con Dark Sliver; un PG Sealer con

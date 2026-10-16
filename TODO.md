@@ -250,9 +250,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 
 ### Richieste
 
-- [ ] **R57. Stack Dice: bottone "Use"** (S)
+- [x] **R57. Stack Dice: bottone "Use"** (S)
       "Having a 'use' button that automatically decrements the die from 1 to zero could be useful, along with printing
       to chat '(character name) used their stacked die' or something similar."
+      (FATTO il 16 ottobre 2026, versione 1.15.58: bottone Use accanto ai dadi del tratto, scala di 1 e posta in chat che
+      il gamble fa 6; spento a 0; la finestra del gamble spende il suo dado da sola, nessun doppio scalo.)
 - [ ] **R58. Boon of Chaos: evasion del difensore nel tiro d'attacco** (S/M)
       "Currently no way during an attack to toggle that the defender has evasion. Some kind of modal on the attack roller
       would be useful for conditionals like this (evasion if a certain distance away)."

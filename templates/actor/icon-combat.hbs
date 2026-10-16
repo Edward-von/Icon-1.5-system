@@ -495,6 +495,9 @@
                           title="{{#if p.active}}Spend / drop stacked die{{else}}Gain a stacked die (gamble result becomes 6){{/if}}"><i class="fa-solid fa-dice-d20"></i></span>
                   {{/each}}
                 </span>
+                <button type="button" class="icon-btn icon-btn--sm" data-action="useStackedDie"
+                        {{#if ../isEditable}}{{#unless trait.quick.value}}disabled{{/unless}}{{else}}disabled{{/if}}
+                        title="Use a Stacked Die outside the gamble window (p.149): spends 1 and posts to chat that the gamble result is 6. The Gamble window of an ability spends it on its own."><i class="fa-solid fa-dice-six"></i> Use</button>
               {{/if}}
             </div>
           {{/if}}

@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Stack Dice: bottone Use (versione 1.15.58)
+
+### Round di debug del 16 ottobre, punto R57
+
+- **Stack Dice** (Fool, p.149: "You can use this die when you gamble to make the gamble result 6, consuming the die"):
+  per usare uno Stacked Die fuori dalla finestra del gamble bisognava spegnere il pallino a mano e niente lo diceva in
+  chat → mancava un comando apposta → accanto ai pallini del tratto (tab Combat) c'è ora il bottone **Use**: toglie un
+  dado e posta in chat "<nome> uses a Stacked Die: the gamble result is 6". È spento quando non ci sono dadi (o la scheda
+  non è modificabile). La finestra del gamble di un'abilità continua a spendere il dado da sola quando si sceglie
+  "Stacked Die": il bottone serve solo per un gamble risolto fuori da lì, quindi il dado non si scala due volte.
+
 ## 16 ottobre 2026 — Quaking Palm, Sidhe e Dark Sliver: bottone Track target (versione 1.15.57)
 
 ### Round di debug del 16 ottobre, punto R56

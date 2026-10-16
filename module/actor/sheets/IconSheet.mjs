@@ -220,6 +220,7 @@ export class IconSheet extends BaseActorSheet {
       // Class resources (conditional by primary job class)
       setVigilance:     IconSheet.#onSetVigilance,
       setStackedDice:   IconSheet.#onSetStackedDice,
+      useStackedDie:    IconSheet.#onUseStackedDie,
       openSummon:       IconSheet.#onOpenSummon,
       spendVigilance:   IconSheet.#onSpendVigilance,
       clearVigilance:   IconSheet.#onClearVigilance,
@@ -3339,6 +3340,20 @@ export class IconSheet extends BaseActorSheet {
     const next    = Math.max(0, Math.min(max, clicked === current ? clicked - 1 : clicked));
     _log(`setStackedDice — actor: "${this.document.name}" | ${current} → ${next}`);
     await this.document.update({ "system.combat.classResources.stackedDice.value": next });
+  }
+
+  /** Fool — spend one Stacked Die by hand (p.149) and say so in chat. The
+   *  Gamble window spends its own die (combat/gamble.mjs), so this is only for
+   *  a gamble resolved outside it. */
+  static async #onUseStackedDie(event, target) {
+    const current = this.document.system.combat.classResources.stackedDice?.value ?? 0;
+    if (current <= 0) return;
+    _log(`useStackedDie — actor: "${this.document.name}" | ${current} → ${current - 1}`);
+    await this.document.update({ "system.combat.classResources.stackedDice.value": current - 1 });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      content: `<p><strong>${escapeHTML(this.document.name)}</strong> uses a <strong>Stacked Die</strong>: the gamble result is <strong>6</strong> <small>(Stack Dice, p.149)</small>.</p>`,
+    });
   }
 
   /** Open the sheet of a summon attached to this PC. */
