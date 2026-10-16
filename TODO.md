@@ -235,9 +235,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 16 ottobre 2026, versione 1.15.55: il libro (p.236) stampa la riga "This attack has no attack space…"
       senza etichetta, poi Area effect: [D], poi Effect; nel compendio la riga ha ora "Special:", l'Effect è uscito dal campo
       dell'area ed è un blocco suo, ordine "special, area, effect"; la migrazione 27 lo fa sulle copie.)
-- [ ] **R55. Helix Heel: la prima riga del testo di colore è il primo effetto** (S, dati)
+- [x] **R55. Helix Heel: la prima riga del testo di colore è il primo effetto** (S, dati)
       "The first line of flavor text is actually the first effect of the ability." Assorbe la voce "Emerso lavorando su R8 —
       Helix Heel" (p.219, "Effect: Release a shockwave in a line 3 area effect…").
+      (FATTO il 16 ottobre 2026, versione 1.15.56: il libro (p.219) non ha testo di colore e apre con "Effect: Release a
+      shockwave…"; nel compendio mancava l'etichetta, ora c'è; la migrazione 28 la mette sulle copie con il testo originale.
+      Bottone area (line 3) e danno (2 piercing) invariati.)
 - [ ] **R56. Quaking Palm: niente Track target** (S, bug)
       "Some way to mark the chosen character would be nice." Il testo dice "When they end their next turn" (non "that
       foe's next turn"), quindi il bottone Track target di R30 probabilmente non compare.
@@ -336,6 +339,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       funzione `flat` della migrazione 25 usa `replace(/s+/g, " ")` (manca la barra: toglie le lettere "s" invece di
       unire gli spazi), quindi confronta un testo storpiato con quello vecchio e non aggiorna nessuna copia dei sei Limit
       Break di R39. Va corretta con `/\s+/g` in una nuova migrazione (la 25 è già stata eseguita nei mondi aggiornati).
+- [ ] **Emerso lavorando su R55 — Helix Heel: mancano tre parole del libro** (S, dati): il secondo Effect nel compendio
+      dice "you can keep extending the line by 3 spaces, but can only extend it once per object", il libro (p.219) "by 3
+      spaces this way each time, but can only extend it once per object". Ripristinare "this way each time" (pack +
+      migrazione sulle copie).
 
 ---
 

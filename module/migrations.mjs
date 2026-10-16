@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 27;
+export const CURRENT_SCHEMA_VERSION = 28;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1039,6 +1039,33 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 27: ${n} copy/copies of Eye of the Storm given the p.236 Special / Area / Effect blocks`);
+  },
+
+  /* 28 — Helix Heel (Geomancer, p.219) has no flavour text in the book: it
+   * opens with "Effect: Release a shockwave in a line 3 area effect, dealing
+   * 2 piercing damage to all foes." The pack stored that first line without
+   * its label, so the sheet showed it as the italic flavour line (as Massive
+   * Overhead, migration 20). The pack now labels it "Effect:"; same on the
+   * copies still carrying the old text word for word. */
+  28: async () => {
+    const OLD = "Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes. Effect: If an object is in the end space of the line, you can extend this line by 3 more spaces in any direction, drawn from the object. If a new object is at the end space of this line, you can keep extending the line by 3 spaces, but can only extend it once per object. Effect: Then, all objects this line passed through resonate, releasing a burst 1 area effect centered on them and dealing 2 piercing damage to all characters inside.";
+    const NEW = `Effect: ${OLD}`;
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Helix Heel"
+      && String(item.system?.description ?? "").replace(/\s+/g, " ").trim() === OLD;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, "system.description": NEW }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update({ "system.description": NEW });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 28: ${n} copy/copies of Helix Heel given the p.219 "Effect:" label`);
   },
 };
 

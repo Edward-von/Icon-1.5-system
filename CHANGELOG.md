@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 16 ottobre 2026 — Helix Heel: la prima riga è un Effect, non testo di colore (versione 1.15.56)
+
+### Round di debug del 16 ottobre, punto R55
+
+- **Helix Heel** (Geomancer, p.219: "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to
+  all foes."): la prima riga compariva in corsivo come testo di colore → il libro non ha testo di colore per questa
+  abilità e apre subito con un Effect, ma nel compendio quella riga era salvata senza l'etichetta "Effect:" (stesso
+  difetto di Massive Overhead, R8) → nel compendio Jobs la riga ha ora l'etichetta "Effect:", quindi la scheda e la chat
+  mostrano tre blocchi Effect e niente corsivo. Il testo resta quello del libro. Bottone area (line 3) e tiro del danno
+  (2 piercing) leggono come prima. La migrazione 28 fa lo stesso sulle copie già sulle schede e nella sidebar (solo
+  quelle con il testo originale, non quelle modificate a mano).
+
 ## 16 ottobre 2026 — Eye of the Storm: blocchi Special, Area ed Effect come nel libro (versione 1.15.55)
 
 ### Round di debug del 16 ottobre, punto R54

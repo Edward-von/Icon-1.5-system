@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R55 — Helix Heel: la prima riga è un Effect (16 ottobre 2026, versione 1.15.56)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Geomancer che ha già Helix Heel sulla scheda da
+prima di questa versione, e un PG Geomancer nuovo.
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 28: … Helix Heel
+      given the p.219 "Effect:" label".
+- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Helix Heel: niente riga in corsivo; tre blocchi Effect ("Release
+      a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.", "If an object is in the end space…",
+      "Then, all objects this line passed through resonate…"), poi Charge. "line 3", "piercing" ecc. hanno il tooltip.
+- [ ] **Copia nuova dal compendio**: trascina Helix Heel dal compendio Jobs su un PG → stessi blocchi.
+- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card mostra gli stessi tre Effect, senza corsivo in cima.
+- [ ] **Area e danno**: il bottone area piazza una Line 3 come prima; il tiro del danno propone 2 piercing damage.
+- [ ] **Massive Overhead invariato**: apre ancora con Effect ("End your turn…"), come dopo R8.
+
 ## R54 — Eye of the Storm: Special, Area, Effect (16 ottobre 2026, versione 1.15.55)
 
 Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbender al capitolo 3 che ha già Eye of the
