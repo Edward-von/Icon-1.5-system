@@ -541,10 +541,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (CHIUSO il 17 ottobre 2026: nessuna abilità ha sia combo sia Infuse — le 17 abilità combo sono Mendicant /
       Stalwart / Vagabond, i 32 item con Infuse sono tutti Wright, nessun incrocio in reliquie, bond power, gear kit e
       trofei; Infuse è "Wright only", p.117; senza combo sull'abilità il token non cambia il danno.)
-- [ ] **Emerso lavorando su R46 — Excalibur sull'Effect di base di Nothung** (S): "Effect: Teleport 1, then deal 1
+- [x] **Emerso lavorando su R46 — Excalibur sull'Effect di base di Nothung** (S): "Effect: Teleport 1, then deal 1
       piercing damage again to your target for every foe or ally adjacent to them, to a maximum of four times" (p.225)
       non è proposto in Other, quindi con EXCALIBUR non diventa divine; fa parte della voce "Emerso lavorando su R24 —
       danno scritto negli Effect del testo base".
+      (FATTO il 17 ottobre 2026, versione 1.15.100, con la voce del Mark di Incubus: la chip Effect di Nothung in
+      Other diventa divine con EXCALIBUR.)
 - [ ] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, da decidere): un secondo
       Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
       danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
@@ -1081,13 +1083,17 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 
 ### Emersi lavorando
 
-- [ ] **Emerso lavorando su R24 — "2 unerring damage" non letto come danno** (S): Showdown (p.157,
+- [x] **Emerso lavorando su R24 — "2 unerring damage" non letto come danno** (S): Showdown (p.157,
       "they take 2 unerring damage from you twice") — il parser del danno riconosce solo "divine" / "piercing" tra il
       numero e "damage", quindi l'importo non viene letto (né la ripetizione). Aggiungere "unerring" ai tipi in
       `parseChunk` (ability-damage.mjs) e spuntare Unerring di conseguenza.
-- [ ] **Emerso lavorando su R24 — danno scritto negli Effect del testo base non proposto in Other** (S/M): Chastise
+      (FATTO il 17 ottobre 2026, versione 1.15.100, con la voce del Mark di Incubus del round del 16 ottobre:
+      "unerring" conta come tipo di danno; Showdown ha il suo Damage Roll, 2 ×2.)
+- [x] **Emerso lavorando su R24 — danno scritto negli Effect del testo base non proposto in Other** (S/M): Chastise
       (p.179, "they take 1 divine damage three times") ha il danno in un Effect della base, non in hit/miss/area né in
       talento/mastery: Other non lo propone come scelta rapida, va scritto a mano (Fixed 1, Divine, Instances 3).
+      (FATTO il 17 ottobre 2026, versione 1.15.100, con la voce del Mark di Incubus del round del 16 ottobre: Chastise
+      propone in Other la chip "Effect — 1 divine" con 3 istanze.)
 - [x] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati) (SPOSTATO in R55 del round del 16 ottobre): stesso difetto di Massive Overhead.
       Nel libro (p.219, "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.")
       la prima riga è un Effect, nel compendio è senza etichetta e diventa testo di colore. Pack + migrazione per nome.
