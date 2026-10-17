@@ -784,7 +784,8 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   const shardPierce = (tokenId) => (!cardPierce && attackerActor && tokenId) ? objectPierceAgainst(attackerActor, tokenId) : null;
   const shardPierceChip = (row) => {
     const p = shardPierce(row.dataset.tokenId);
-    return p ? `<span class="icon-def-chip icon-def-chip--trait icon-def-chip--on" title="${foundry.utils.escapeHTML(`${p.source} (p.210): adjacent to the ${p.name}, this damage pierces — the target's Armor is ignored on Apply.`)}">Pierce (${foundry.utils.escapeHTML(p.name)})</span>` : "";
+    const back = Number(dmgFlags.weakened) || 0;
+    return p ? `<span class="icon-def-chip icon-def-chip--trait icon-def-chip--on" title="${foundry.utils.escapeHTML(`${p.source} (p.210): adjacent to the ${p.name}, this damage pierces — the target's Armor is ignored on Apply${back ? `, and the Weakened −${back} comes back: pierce "cannot be reduced by armor or weakened" (p.104)` : ""}.`)}">Pierce (${foundry.utils.escapeHTML(p.name)})${back ? ` +${back}` : ""}</span>` : "";
   };
 
   // Defensive chips on each target row (Dodge / Cover ½ / Resistance ½ …),
@@ -821,12 +822,16 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       ev.stopPropagation();
 
       const uuid   = btn.dataset.actorUuid;
-      const amount = Number(btn.dataset.amount) || 0;
+      let   amount = Number(btn.dataset.amount) || 0;
       // Repeated damage ("3 damage, three times", p.92): the same amount is
       // applied as separate instances, so armor (p.92) and the ½ come off each.
       const instances = Math.min(10, Math.max(1, Math.floor(Number(btn.dataset.instances) || 1)));
       let   half   = btn.dataset.half === "true";
-      const pierce = btn.dataset.pierce === "true" || !!shardPierce(btn.dataset.tokenId);
+      const ownPierce = btn.dataset.pierce !== "true" && !!shardPierce(btn.dataset.tokenId);
+      const pierce = btn.dataset.pierce === "true" || ownPierce;
+      // Pierce "cannot be reduced by armor or weakened" (p.104): the card took
+      // Weakened off for everyone; a target pierced only here gets it back.
+      if (ownPierce) amount += Number(dmgFlags.weakened) || 0;
       // Divine (p.104): can't be reduced, mitigated or negated in any way
       // except immunity — so no armor, no Cover / Resistance halving (not
       // even the ½ button) and it "bypasses vigor".

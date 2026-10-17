@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Pierce degli Aethershard ridà il weakened (versione 1.15.188)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Pierce degli shard e weakened**: con l'attaccante weakened, il bersaglio vicino a un Aethershard (Talent II,
+  p.210) prendeva comunque il −2 → il weakened viene tolto dal totale quando la card nasce, e il pierce degli shard si
+  decide solo all'Apply, per bersaglio → ora la card si segna quanto ha tolto il weakened. All'Apply, un bersaglio che
+  il danno trafigge solo grazie allo shard riprende quel valore, perché il pierce "cannot be reduced by armor or
+  weakened" (p.104). La chip "Pierce (Aethershard) +2" lo dice. Solo codice.
+
 ## 17 ottobre 2026 — Great Soul Bond usabile dalla card del danno (versione 1.15.187)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

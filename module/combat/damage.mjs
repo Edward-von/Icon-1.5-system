@@ -658,8 +658,12 @@ export async function postAbilityDamageCard(actor, opts = {}) {
     steps.push({ label: "Hatred (½ — not the hated foe)", value: halved - running, isNegative: true });
     running = halved;
   }
+  // What Weakened actually took off (never below 0): Apply gives it back to a
+  // target this damage pierces on its own (Aethershard Talent II, R33a5).
+  let weakenedTaken = 0;
   if (weakened) {
     const pen = ICON.rules.weakenedPenalty;
+    weakenedTaken = Math.min(pen, Math.max(0, running));
     running = Math.max(0, running - pen);
     steps.push({ label: `Weakened −${pen}`, value: -pen, isNegative: true });
   }
@@ -734,6 +738,9 @@ export async function postAbilityDamageCard(actor, opts = {}) {
           divine: !!divine,
           trueStrike: !!trueStrike,
           unerring:   !!unerring,
+          // Pierce "cannot be reduced by armor or weakened" (p.104): for a target
+          // only pierced on Apply, this much comes back.
+          weakened:   weakenedTaken,
           targets: targets.map(t => t.actorUuid),
         },
       },
