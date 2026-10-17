@@ -1441,8 +1441,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
 (FATTO il 17 ottobre 2026, versione 1.15.189: casella nella finestra dell'attacco per Blood Festival (primo uso nel
       combattimento, facoltativa) e Burial Fist (dal round 4); la card mostra l'Exceed con il nome della mastery.)
-- [ ] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
+- [x] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
       Collide ("Instead of the normal collide effect"), ma la card dell'attacco non lo dice.
+(FATTO il 17 ottobre 2026, versione 1.15.190: la mastery Izuna Drop sbloccata compare sulla card dell'attacco come
+      Collide che sostituisce quello normale.)
 - [x] **Emerso lavorando su R36 — resto della Wheel of Fate** (S/M): il sistema non aiuta con la pesca a inizio
       combattimento fino a 5, Skein (1 carta a inizio turno, +1 a fine turno se non ha attaccato), il limite di 7
       carte a fine turno, il rimescolare gli scarti nel mazzo e Bend Fate (scartare carte dopo un gamble per un dado
@@ -1556,6 +1558,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R16 — resto di Blood Festival** (S): "increase all its teleports by +2, it deals bonus
       damage" (p.192) non arriva né alla finestra del danno né alla card. Lo stesso vale per il bonus damage di Burial
       Fist.
+- [ ] **Emerso lavorando su R16 — Collide e altri blocchi sulla card dell'attacco** (S): la card dell'attacco mostra
+      solo Hit / Miss / Exceed / Crit e le righe del talento. Il Collide normale, Effect, Heroic, Charge ecc. non ci
+      sono (Gigaton Whip: "They take fray damage"). Il danno doppio di Izuna Drop ("fray damage twice") non è proposto
+      dalla finestra del danno.
 
 ---
 

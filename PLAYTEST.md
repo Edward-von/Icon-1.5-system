@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Izuna Drop sulla card dell'attacco di Gigaton Whip (17 ottobre 2026, versione 1.15.190)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Gigaton Whip con Izuna Drop sbloccata: tirare l'attacco. Sotto Miss la card mostra il blocco "Collide — Izuna
+      Drop (Mastery, replaces the normal collide)" con il testo della mastery.
+- [ ] Gigaton Whip senza la mastery sbloccata: il blocco non c'è.
+- [ ] Con un talento di Gigaton Whip selezionato, la sua riga resta sulla card insieme al blocco della mastery.
+
 ## Emerso R16 — Blood Festival e Burial Fist fanno scattare l'Exceed (17 ottobre 2026, versione 1.15.189)
 
 Setup: solo codice (F5 basta).

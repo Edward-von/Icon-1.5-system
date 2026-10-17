@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Izuna Drop sulla card dell'attacco di Gigaton Whip (versione 1.15.190)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Izuna Drop al posto del Collide**: con la mastery IZUNA DROP sbloccata la card dell'attacco di Gigaton Whip non
+  diceva che il Collide era cambiato → la card dell'attacco non mostra il blocco Collide e la mastery non ci entrava →
+  ora una mastery che dice "Instead of the normal collide effect" (p.137) va sulla card in un blocco "Collide — Izuna
+  Drop (Mastery, replaces the normal collide)" con il suo testo. Solo codice.
+
 ## 17 ottobre 2026 — Blood Festival e Burial Fist fanno scattare l'Exceed (versione 1.15.189)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

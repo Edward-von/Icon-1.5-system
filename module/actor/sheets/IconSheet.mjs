@@ -2859,6 +2859,16 @@ export class IconSheet extends BaseActorSheet {
         talentEffects.push({ label: tb.label ? `${tb.label} (${talentName})` : talentName, text: tb.text });
       }
     }
+    // A mastery that takes the place of the Collide (IZUNA DROP, Gigaton Whip p.137: "Instead of the
+    // normal collide effect, on collide you can do the legendary Izuna drop") goes on the card, saying so.
+    {
+      const sys = abilityItem?.system ?? {};
+      const plain = String(sys.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+      if (sys.masteryUnlocked && /\binstead of the normal collide effect\b/i.test(plain)) {
+        const name = /^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(plain)?.[1] ?? "Mastery";
+        talentEffects.push({ label: `Collide — ${name} (Mastery, replaces the normal collide)`, text: await this._enrichAbility(sys.mastery, { leadName: true }) });
+      }
+    }
 
     await combatRoll({
       abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect)
