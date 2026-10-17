@@ -166,7 +166,7 @@ export class LegendSheet extends BaseActorSheet {
       const phaseLabel = a.phaseIndex == null
         ? "All"
         : (system.phases?.[a.phaseIndex]?.label ?? `Phase ${a.phaseIndex + 1}`);
-      const parsed = _parseAbilityDamage(a);
+      const parsed = _parseAbilityDamage(a, { baseBlocks: true, foe: true });
       const mode   = a.damageMode ?? "none";
       // When the GM has set an explicit damageMode we trust that over the
       // text parser. Otherwise fall back to the parser's dealsDamage flag.
@@ -447,7 +447,7 @@ export class LegendSheet extends BaseActorSheet {
     // those structured values; otherwise fall back to parsing the text.
     const mode   = action.damageMode ?? "none";
     const parsed = mode === "none"
-      ? _parseAbilityDamage(action)
+      ? _parseAbilityDamage(action, { baseBlocks: true, foe: true })
       : {
           dealsDamage: true,
           hit:  { mult: action.damageHitDice  ?? 0, fray: !!action.damageHitFray,  flat: 0 },

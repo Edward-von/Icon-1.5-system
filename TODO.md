@@ -709,10 +709,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       resta anche la chip "Mark" della base; andrebbe nascosta con il combo in uso.
 (FATTO il 17 ottobre 2026, versione 1.15.126: con la Combo version spuntata la chip "Mark" della base è nascosta,
       perché Succubus scrive "Instead of the mark". Solo codice.)
-- [ ] **Emerso lavorando su R40 — danno dei blocchi Effect di foe e legend** (M): azioni di foe e legend come Kelpie
+- [x] **Emerso lavorando su R40 — danno dei blocchi Effect di foe e legend** (M): azioni di foe e legend come Kelpie
       Savage Fang, Overpower, Mighty Smite e Heavy Arquebus scrivono danni extra nei loro "Effect:" che non vengono
       proposti; allargare la regola vuol dire circa 150 frasi da controllare (i blocchi Collide / Exceed / Charge
       finirebbero sotto "Effect").
+(FATTO il 17 ottobre 2026, versione 1.15.145: lettura dei blocchi base estesa a foe e legend con l'opzione `foe`;
+      esclusi Collide / Exceed / Charge / Slay / Heroic / Comeback / Critical / Finishing Blow; 227 chip nuove, nessun
+      cambio a Hit / Miss / Area né ai jobs. Solo codice.)
 - [x] **Emerso lavorando su R40 — chip senza Unerring né ×N** (S): la chip di Astral Chain non spunta Unerring; le
       chip non mostrano "×N" anche quando la card applica N istanze (Chastise ×3); Blitz scrive due istanze da 1
       piercing nella stessa frase e propone una sola chip.

@@ -100,17 +100,23 @@ function _masteryRetype(s) {
  * — the resonance card deals it when an area catches the shards. Foe and
  * legend actions keep reading it: their Damage button is how the GM rolls a
  * torpedo's or a munition's blast.
+ * `opts.foe` (with baseBlocks, a foe / legend action on its sheet): the same
+ * "Other" lines from its Effect blocks (Kelpie's Savage Fang "Effect: Deal 3
+ * damage to all other foes adjacent to the Kelpie", Overpower, Mighty Smite),
+ * keeping the Summon / Object Effect text as it is.
  */
 // A "Summon Effect:" / "Object Effect:" block, up to the end of its paragraph
 // (a new line, or "</p>" in an HTML text) or the next label that opens a
 // block of the ability itself.
 const SUMMON_EFFECT_BLOCK = /\b(?:summon|object)\s+effect\s*:[^\n]*?(?=\n|<\/p>|[\s>](?:summon\s+action|(?:area\s+|terrain\s+)?effect|attack|on\s+hit|auto[-\s]?hit|miss|infuse\s+(?:\d+|x)|charge|heroic|exceed|collide|slay|critical|comeback|finishing\s+blow)\s*:|$)/gi;
 
-export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
+export function parseAbilityDamage(itemSystem, { baseBlocks = false, foe = false } = {}) {
   const s0 = itemSystem ?? {};
   // Object.create, not a spread: the system can be a data model, or already a
   // shadowing copy (withActiveCombo) whose fields sit on its prototype.
-  const s = baseBlocks && typeof s0.description === "string" && s0.description.search(SUMMON_EFFECT_BLOCK) >= 0
+  // `foe` (a foe / legend action, with baseBlocks): the Summon / Object
+  // Effect stays, see above.
+  const s = baseBlocks && !foe && typeof s0.description === "string" && s0.description.search(SUMMON_EFFECT_BLOCK) >= 0
     ? Object.create(s0, { description: { value: s0.description.replace(SUMMON_EFFECT_BLOCK, " "), enumerable: true } })
     : s0;
   const isAttack = !!s.isAttack;
@@ -206,20 +212,28 @@ export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
   // Infuse versions (infusedAbilityDamage has those), and a sentence that
   // changes the damage instead of adding some.
   if (baseBlocks && !descAsHit && s.description) {
-    const BLOCK_RE = /\b(mark|(?:terrain\s+|special\s+|summon\s+|area\s+)?effect|(?:gain\s+)?stance|special|refresh|trigger|object|summon|gamble|attack|on\s+hit|auto[-\s]?hit|hit|miss)\s*:/gi;
+    // Collide / Exceed / Charge / Slay / Heroic / Comeback / Critical /
+    // Finishing Blow: damage dealt only when that condition is met, labelled
+    // so their sentences don't fall under the Effect before them, and skipped.
+    const BLOCK_RE = /\b(mark|(?:terrain\s+|special\s+|summon\s+|area\s+)?effect|(?:gain\s+)?stance|special|refresh|trigger|object|summon|gamble|attack|on\s+hit|auto[-\s]?hit|hit|miss|collide|exceed|charge|slay|heroic|comeback|critical|finishing\s+blow)\s*:/gi;
     const desc = String(s.description).replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ")
       .replace(/\b(?:slay\s+or\s+)?infuse\s+(?:\d+|x)\b(?:\s+or\s+slay)?\s*:.*$/i, "");
     let block = "";
     for (const sentence of desc.split(/(?<=\.)\s+/)) {
-      const labels = [...sentence.matchAll(BLOCK_RE)].map(m => m[1].toLowerCase().replace(/\s+/g, " "));
-      if (labels.length) block = labels.at(-1).replace(/^gain /, "");
-      if (!block || !/\bdamage\b/i.test(sentence)) continue;
-      if (/^(?:attack|on hit|auto[-\s]?hit|hit|miss|trigger|refresh)$/.test(block)) continue;
-      if (block === "area effect" && anyDamage(area)) continue;
+      const found = [...sentence.matchAll(BLOCK_RE)].map(m => ({ at: m.index, label: m[1].toLowerCase().replace(/\s+/g, " ").replace(/^gain /, "") }));
+      // The damage belongs to the last label written before it, the next
+      // sentences to the last one of this sentence: Razer's Aether Split
+      // "Area effect: 2 damage, Effect: teleport all characters in the area 1."
+      const dmgAt = sentence.search(/\bdamage\b/i);
+      const label = found.filter(x => x.at < dmgAt).at(-1)?.label ?? block;
+      if (found.length) block = found.at(-1).label;
+      if (dmgAt < 0 || !label) continue;
+      if (/^(?:attack|on hit|auto[-\s]?hit|hit|miss|trigger|refresh|collide|exceed|charge|slay|heroic|comeback|critical|finishing blow)$/.test(label)) continue;
+      if (label === "area effect" && anyDamage(area)) continue;
       if (/\b(?:instead|increases?|becomes|bonus\s+damage)\b|\+\s*\d+\s+damage/i.test(sentence)) continue;
       const chunk = parseChunk(sentence);
       if (!anyDamage(chunk)) continue;
-      const source = block.replace(/\b\w/g, ch => ch.toUpperCase());
+      const source = label.replace(/\b\w/g, ch => ch.toUpperCase());
       // Two separate damages in one sentence, one after the other: Blitz
       // (p.225) "then deal 1 piercing damage to a foe in range 3, then
       // teleport 1, then deal 1 piercing damage to a foe in range 3" — one

@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other (versione 1.15.145)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Kelpie Savage Fang, Overpower, Mighty Smite e altre azioni di foe e legend**: il danno extra scritto nei loro
+  "Effect:" non compariva nel dialog del danno → la lettura dei blocchi base (Mark, Effect…) valeva solo per le
+  abilità dei PG → vale anche per foe e legend (FoeSheet e LegendSheet con l'opzione `foe`): ogni frase con danno
+  diventa una chip sotto Other, con il nome del blocco; restano fuori Collide / Exceed / Charge / Slay / Heroic /
+  Comeback / Critical / Finishing Blow e le frasi che cambiano il danno, e il testo Summon / Object Effect dei foe
+  resta letto come prima (il pulsante Damage di Torpedo e simili non cambia). Su tutti i pack: 227 chip nuove (89 foe,
+  24 legend, 114 foe-abilities, in gran parte copie), zero cambi a Hit / Miss / Area / pulsante Damage e ai jobs. Solo
+  codice.
+
 ## 17 ottobre 2026 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N (versione 1.15.144)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

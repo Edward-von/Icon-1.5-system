@@ -111,7 +111,7 @@ export class FoeSheet extends BaseActorSheet {
       ...t, i, enrichedDescription: await enrich(t.description),
     })));
     context.enrichedActions = await Promise.all(system.actions.map(async (a, i) => {
-      const parsed = _parseAbilityDamage(a);
+      const parsed = _parseAbilityDamage(a, { baseBlocks: true, foe: true });
       return {
         combo: comboView(actor, a),   // foe-combo.mjs: next part / waiting
         ...a, i,
@@ -434,7 +434,7 @@ export class FoeSheet extends BaseActorSheet {
     const action = actor.system.actions[idx];
     if (!action) return;
 
-    const parsed = _parseAbilityDamage(action);
+    const parsed = _parseAbilityDamage(action, { baseBlocks: true, foe: true });
     _log(`rollFoeDamage — actor: "${actor.name}" | action[${idx}]: "${action.name}" | parsed:`, parsed);
     if (!parsed.dealsDamage) {
       ui.notifications.warn(`"${action.name}" does not deal damage.`);

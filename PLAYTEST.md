@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other (17 ottobre 2026, versione 1.15.145)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Kelpie, Savage Fang, Damage → Other: c'è la chip "Effect 3"; Hit / Miss sono gli stessi di prima.
+- [ ] Knuckle o Tomb Guard, Overpower: chip "Effect" (2 o fray).
+- [ ] Janissary o Hotshot, Heavy Arquebus: nessuna chip per l'Exceed (1 piercing ×2).
+- [ ] Azurian Weapon (legend): Torpedo ha ancora il pulsante Damage con [D]+fray; Flak Blast ha la chip "1 piercing
+      ×3".
+- [ ] Razer, Aether Split: solo l'esito Area da 2, nessuna chip doppia.
+- [ ] Basic Mob, Rabble: chip "2 · up to ×3" e Instances con tetto 3.
+- [ ] Una legend con damageMode impostato a mano (hit / hit-miss): il dialog usa ancora i valori impostati.
+
 ## Emerso R40 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N (17 ottobre 2026, versione 1.15.144)
 
 Setup: solo codice (F5 basta).
