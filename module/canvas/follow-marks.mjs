@@ -160,7 +160,7 @@ async function onMarkCreated(effect) {
     oc.detonate ? `<small>At the end of any turn after yours a card offers <em>Detonate</em> (gamble, medium blast centred on ${esc(td.name)}).</small>` : "",
     oc.onDefeat ? `<small>If ${esc(td.name)} is defeated, a card reminds you: ${esc(oc.onDefeat)}</small>` : "",
     activatesAtTurnStart(item) ? `<small>At the start of ${esc(creator.name)}'s next turn a card offers the large blast centred on ${esc(td.name)}.</small>` : "",
-    oc.mark ? `<small>The mark ends if ${esc(creator.name)} is defeated (p.95); a new mark from ${esc(creator.name)} on ${esc(td.name)} replaces it.</small>` : "",
+    oc.mark ? `<small>The mark ends if ${esc(creator.name)} is defeated (p.95); if ${esc(creator.name)} marks ${esc(td.name)} again with another ability, they choose which mark stays.</small>` : "",
   ].filter(Boolean);
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor: creator }),

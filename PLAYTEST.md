@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33d2 — Segnare di nuovo: si sceglie quale mark resta (17 ottobre 2026, versione 1.15.154)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con due abilità che segnano, stesso bersaglio: la seconda chiede. "Replaces it" toglie la vecchia, "Keep"
+      lascia la vecchia e non mette la nuova.
+- [ ] Giocatore che non possiede il bersaglio: la domanda la vede il giocatore, non il GM.
+- [ ] Stessa abilità due volte, mark con stack, Track target: nessuna domanda.
+- [ ] Amico su un personaggio che ha già un mark del Fool, "Keep": niente spazio sulla mappa.
+
 ## R33d2 — Implode su un personaggio: la large blast con un clic (17 ottobre 2026, versione 1.15.153)
 
 Setup: solo codice (F5 basta).

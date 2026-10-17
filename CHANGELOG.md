@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Segnare di nuovo: si sceglie quale mark resta (versione 1.15.154)
+
+### Round di debug del 15 ottobre, R33d2
+
+- **Mark che si sostituiscono**: segnando di nuovo lo stesso personaggio con un'altra abilità, il mark vecchio spariva
+  senza chiedere → il libro dice "choosing which gets replaced if they mark that character again" (p.95) → ora una
+  finestra chiede "<nuovo> replaces it / Keep <vecchio>" a chi segna, sul suo client; quando il mark viene passato al
+  GM la risposta viaggia con lui, quindi il GM non riceve la domanda. Chiudendo la finestra non viene messo niente. La
+  stessa abilità di nuovo (spostata, rinnovata, stack) e i tracker non chiedono. Vale per i bottoni Mark di tutte le
+  schede e per il chip "On a character" (`applyMark`). Solo codice.
+
 ## 17 ottobre 2026 — Implode su un personaggio: la large blast con un clic (versione 1.15.153)
 
 ### Round di debug del 15 ottobre, R33d2

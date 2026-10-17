@@ -8,8 +8,8 @@
  *     an un-targetable or immune character (p.108).
  *   Mark (p.103) — an ongoing effect on a specific character. Each ability
  *     places one mark at a time; a character can mark another with one mark
- *     at a time (a new one replaces the old — the book lets you choose which
- *     to keep); marks end when the marker is defeated or under the ability's
+ *     at a time (marking again with another ability asks which one stays,
+ *     "choosing which gets replaced", p.95); marks end when the marker is defeated or under the ability's
  *     own conditions. Any number of marks from different characters can sit
  *     on one character (p.108).
  *   Multimark — the tag the foe stat blocks put on marking abilities that keep
@@ -298,8 +298,14 @@ export function marksBy(actorId, abilityKey = null) {
  *                                   leaves the marker's marks on the target alone
  * @param {number} [opts.auraSize]   the "while marked" aura size the marker chose before a relay (follow-marks.mjs)
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null, replaceChecked = false }) {
   if (!source || !target) return null;
+  // p.95 "a character can only mark another character with one mark at a time, choosing which gets replaced if
+  // they mark that character again": the marker picks, on their own client (a relayed mark carries the answer).
+  if (!track && !replaceChecked) {
+    if (!(await _replaceChosen(source, target, abilityKey, abilityName))) return null;
+    replaceChecked = true;
+  }
   if (_needsRelay(target)) {
     // The aura "while marked" (Fulminate p.226, Talent I "Aura 2 / 3") is chosen here, by the marker, not by the GM
     // who will create the mark: the size goes with the request (follow-marks.mjs).
@@ -307,7 +313,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
       const { whileMarkedAuraSize } = await import("../canvas/follow-marks.mjs");
       auraSize = await whileMarkedAuraSize(source, target, abilityKey);
     }
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize });
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize, replaceChecked });
     ui.notifications.info(`${track ? "Tracker" : "Mark"} sent to the GM to place on "${target.name}".`);
     return null;
   }
@@ -354,6 +360,30 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
   else await _chat(source, `<strong><i class='fa-solid fa-crosshairs'></i> ${escapeHTML(source.name)}</strong> marks <strong>${escapeHTML(target.name)}</strong> — <strong>${escapeHTML(abilityName)}</strong>${plain ? `<div class="icon-chat-card__desc" style="margin-top:4px">${escapeHTML(plain)}</div>` : ""}`);
   _refreshSheet(source);   // the chip on the marker's panel lives on another actor's sheet
   return effect;
+}
+
+/**
+ * `source` marks `target` again with another ability while an older mark of theirs is on it (p.95): which stays?
+ * True when the new mark goes on (the old one is then replaced by applyMark), false to keep the old one. No older
+ * mark, or the same ability again (moved / refreshed / stacked): true without asking.
+ */
+async function _replaceChosen(source, target, abilityKey, abilityName) {
+  const older = marksOn(target).filter(m => m.sourceActorId === source.id && !m.tracked && m.abilityKey !== abilityKey);
+  if (!older.length) return true;
+  const names = older.map(m => escapeHTML(m.abilityName ?? m.name)).join(", ");
+  try {
+    const pick = await foundry.applications.api.DialogV2.wait({
+      window: { title: `Mark ${target.name} again — which stays?` },
+      content: `<p><strong>${escapeHTML(target.name)}</strong> already has <strong>${escapeHTML(source.name)}</strong>'s mark <strong>${names}</strong>. A character can mark another with one mark at a time, choosing which gets replaced (p.95).</p>`,
+      buttons: [
+        { action: "new", label: `${abilityName} replaces it`, default: true },
+        { action: "old", label: `Keep ${older.map(m => m.abilityName ?? m.name).join(", ")}` },
+      ],
+      rejectClose: false,
+    });
+    if (pick === "old") ui.notifications.info(`${target.name} keeps ${older.map(m => m.abilityName ?? m.name).join(", ")}: ${abilityName} is not placed.`);
+    return pick === "new";
+  } catch { return false; }
 }
 
 /** Remove one mark by its effect uuid (works for the marker, the target's owner and the GM). */
@@ -416,7 +446,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null, replaceChecked: !!data.replaceChecked });
       break;
     }
     case "removeMark":
