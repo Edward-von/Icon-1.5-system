@@ -591,6 +591,24 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
       `module/canvas/area-templates.mjs` (~riga 1084) il commento dice "Holy's area is kept as a terrain effect, so
       those count": ora non è più così (il codice funziona lo stesso).
+- [ ] **Emerso lavorando su R38b — un secondo Damage Roll per il "again" di MAGNARIME cancella l'infusione** (S, dalla
+      revisione di R46 + R38b): `startInfusionStep` (`helpers/infuse.mjs` ~266) tratta ogni Damage Roll dopo il primo
+      come un uso nuovo, ma MAGNARIME ("Deal 1 piercing damage to all characters in the area again after the ability
+      resolves for every two aether infused", p.233), MAGNAPYRE e GREAT SPIRIT LANCE si tirano a parte dopo il danno
+      base: al secondo Damage Roll l'infusione è cancellata, il chip "Infuse X — MAGNARIME" sparisce e il tiro esce
+      base con l'Aether già speso. Possibile fix: nello stesso turno, il passo danno non cancella se la versione
+      armata ha danni aggiunti (R46), oppure gli extra della versione usata restano offerti fino a fine turno.
+- [ ] **Emerso lavorando su R38b — PHANTOM BLADE usata scade a fine turno ma dura "until the start of your next
+      turn"** (S, dalla revisione): `armedInfusion` (`helpers/infuse.mjs` ~240) nasconde un'infusione usata appena
+      cambia il turno; "Infuse 3 or Slay: PHANTOM BLADE — Until the start of your next turn, this interrupt has
+      unlimited uses" (Drifting Leaf p.227) nel turno del foe non risulta più attiva e il bottone Infuse si può
+      ripagare. La scadenza a fine turno dovrebbe valere solo per le versioni che non durano oltre il turno.
+- [ ] **Emerso lavorando su R38b — annullare un'infusione armata in un round precedente sblocca Inner Furnace una
+      seconda volta** (S, dalla revisione): `cancelInfusion` (`helpers/infuse.mjs` ~467) azzera sempre
+      `flags.icon-system.innerFurnace`, anche quando il flag è stato riscritto da un altro uso nel round corrente (es.
+      STORMLASH standalone): armata con Inner Furnace nel round 1 e non usata, annullata nel round 2 dopo un altro
+      Inner Furnace → si può usare una seconda volta nel round 2 ("Once a round", p.208). Azzerare il flag solo se è
+      ancora quello scritto da questo armo (stesso combat / round).
 
 ---
 
