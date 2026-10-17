@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Deepwrath crea e usa i pit dalle card (17 ottobre 2026, versione 1.15.170)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Marcare un foe con Deepwrath: a inizio del suo turno la card ha "Create watery pit"; il clic crea il pit sotto
+      di lui e il clic destro sul chip Pit lo toglie.
+- [ ] Il foe finisce il turno in un pit e c'è un altro pit libero entro 3: il GM clicca "Drag under" e poi quel pit,
+      il token ci va. Un pit occupato, troppo lontano o quello di partenza viene rifiutato.
+- [ ] Con DARKTIDE sbloccata, il foe marcato si muove nel suo turno: compare la domanda "Leave it", solo la prima
+      volta nel turno.
+- [ ] Con DARKTIDE: un alleato marcato entra in terreno dangerous e non c'è nessuna domanda (solo un avviso); un foe
+      marcato riceve la domanda "Take 3 damage".
+- [ ] Un giocatore senza permessi sul foe clicca "Drag under": compare l'avviso "ask the GM".
+
 ## R33c2 — Mist Strider: consumare una nuvola (17 ottobre 2026, versione 1.15.169)
 
 Setup: solo codice (F5 basta).

@@ -1453,6 +1453,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
       lands in the space of an object, creating a second line 3 area" (p.226) resta a mano. Domanda per Edoardo: in
       quale direzione rimbalza la seconda line (il libro non lo dice)?
+- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
+      advantage dei foe contro di loro, bonus damage e shattered+ "while inside pits" (p.235): solo testo, il codice
+      non sa chi è in un pit al momento del tiro.
 
 ---
 

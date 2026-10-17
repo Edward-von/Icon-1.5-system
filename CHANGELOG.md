@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Deepwrath crea e usa i pit dalle card (versione 1.15.170)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Deepwrath**: il pit sotto il marcato a inizio turno, il "drag under" e DARKTIDE (p.235) andavano fatti a mano → il
+  codice delle caselle guardava solo chi entra o esce, non i mark → a inizio turno del marcato la card ha "Create
+  watery pit"; a fine turno, se è in un pit, c'è "Drag under" (si clicca un altro pit libero entro range 3 e il token
+  va lì); con DARKTIDE la prima casella che il marcato lascia nel suo turno chiede se lasciarci terreno dangerous, gli
+  alleati marcati non ricevono la domanda dei danni da terreno dangerous e i foe marcati prendono 3 danni invece di 2.
+  Solo codice.
+
 ## 17 ottobre 2026 — Mist Strider: consumare una nuvola (versione 1.15.169)
 
 ### Round di debug del 15 ottobre, R33c2

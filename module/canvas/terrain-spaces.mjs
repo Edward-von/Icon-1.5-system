@@ -27,6 +27,7 @@
 import { terrainSpacesForItem, terrainLabel } from "../helpers/terrain-spaces.mjs";
 import { armedInfusion, clearInfusion } from "../helpers/infuse.mjs";
 import { tokenCells, sourceTokenFor } from "./area-templates.mjs";
+import { marksOn } from "../combat/marks.mjs";
 
 const _log = (...a) => console.debug("[ICON | TerrainSpaces]", ...a);
 const NS = "icon-system";
@@ -497,7 +498,15 @@ async function offerTerrainOnMove(td, prev, to) {
       }).join("")}</div>`,
     });
   }
+  // R33b2: DARKTIDE (Deepwrath's mastery, p.235) — the marked character's first vacated space this turn.
+  const dark = terrainMarksOn(td.actor).filter(x => x.mastery);
+  await offerDarktideLeave(td, before, after, dark);
   if (!danger) return;
+  // DARKTIDE: "Marked allies are immune to dangerous terrain, and marked foes take +1 more damage from it".
+  const immune = dark.find(x => DARK_IMMUNE.test(x.mastery) && !isFoeOf(td, x.creator));
+  if (immune) { ui.notifications.info(`${td.name} is immune to dangerous terrain (${immune.item.name}, DARKTIDE).`); return; }
+  const extra = dark.reduce((n, x) => { const m = DARK_EXTRA.exec(x.mastery); return n + (m && isFoeOf(td, x.creator) ? Number(m[1]) : 0); }, 0);
+  const amount = 2 + extra;
   const key = turnKey();
   const who = td.actor.id;
   if (key && _dangerAsked.get(who) === key) return;
@@ -506,12 +515,12 @@ async function offerTerrainOnMove(td, prev, to) {
   const ok = await foundry.applications.api.DialogV2.confirm({
     window: { title: "Dangerous terrain" },
     content: `<p><strong>${esc(td.name)}</strong> ${danger.entered ? "entered" : "left"} a dangerous terrain space (${esc(danger.f.label)}${by ? `, ${esc(by)}` : ""}).</p>
-      <p>Take <strong>2 piercing damage</strong>, ignoring armor and vigor? Only once a turn, even entering more dangerous spaces (p.89).</p>`,
-    yes: { label: "Take 2 damage" }, no: { label: "Not this time" }, rejectClose: false,
+      <p>Take <strong>${amount} piercing damage</strong>${extra ? ` (2, +${extra} from DARKTIDE: marked foes take more damage from dangerous terrain)` : ""}, ignoring armor and vigor? Only once a turn, even entering more dangerous spaces (p.89).</p>`,
+    yes: { label: `Take ${amount} damage` }, no: { label: "Not this time" }, rejectClose: false,
   }) ?? false;
   if (!ok) return;
   const { applyDamageToActor } = await import("../combat/damage.mjs");
-  await applyDamageToActor(td.actor, 2, { ignoreVigor: true, chatConfirm: true });
+  await applyDamageToActor(td.actor, amount, { ignoreVigor: true, chatConfirm: true });
 }
 
 /** Does an area's inside effect (area-terrain.mjs insideEffectsOf) concern the character of `td`? */
@@ -619,6 +628,13 @@ export async function terrainTurnStart(combatant) {
     const by = doc.flags[NS].abilityName;
     lines.push(`<p><strong>${esc(td.name)}</strong> starts their turn on the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${removeSpacesButton(scene, [doc])}</div>`);
   }
+  // R33b2: Deepwrath (p.235) "While marked, create a watery pit under them at the start of their turn" — a button.
+  for (const { creator, item, base } of terrainMarksOn(td.actor)) {
+    const m = PIT_AT_START.exec(base);
+    if (!m) continue;
+    lines.push(`<p><strong>${esc(td.name)}</strong> is marked by <strong>${esc(item.name)}</strong> (${esc(creator.name)}).</p><p><small>${esc(m[0])}.</small></p>
+      <div>${actButton("pitUnder", { scene: scene.id, token: td.id, creator: creator.id, item: item.id, label: titleCaseWord(m[1]) }, `Create ${m[1].toLowerCase()}`, "fa-circle-down", `Mark a ${m[1].toLowerCase()} under ${td.name}`)}</div>`);
+  }
   if (!lines.length) return;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ token: td }),
@@ -626,13 +642,193 @@ export async function terrainTurnStart(combatant) {
   });
 }
 
+/* -------------------------------------------------- */
+/*  Abilities that work the spaces later (R33b2)       */
+/* -------------------------------------------------- */
+// Cards with one button per thing the ability does on the map: nothing moves or appears before that click.
+
+const plainOf = (s) => String(s ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+const titleCaseWord = (s) => String(s ?? "").trim().replace(/(^|\s)([a-z])/g, (_m, a, b) => a + b.toUpperCase());
+
+// Deepwrath (p.235): the mark, its Effect and DARKTIDE (mastery).
+const PIT_AT_START = /\bwhile marked, create (?:a|an) ((?:[\w-]+ )?pit) under them at the start of their turn\b/i;
+const DRAG_UNDER = /\bif the marked character ends their turn inside a pit, you can drag them under\b[^.]*?\bany other pit in range (\d+)[^.]*\./i;
+const DARK_IMMUNE = /\bmarked allies are immune to dangerous terrain\b/i;
+const DARK_EXTRA = /\bmarked foes take \+(\d+) more damage from dangerous terrain\b/i;
+const DARK_LEAVE = /\bthe first time the marked character vacates a space during their turn, they leave a dangerous terrain space behind them\b/i;
+
+/** The marks on `actor`, each with its creator, the item that made it, its base text and its mastery (once unlocked). */
+function terrainMarksOn(actor) {
+  return marksOn(actor).map(mark => {
+    const creator = game.actors?.get(mark.sourceActorId) ?? (mark.sourceActorUuid ? fromUuidSync(mark.sourceActorUuid) : null);
+    const item = creator?.items?.get(mark.abilityKey);
+    if (!item) return null;
+    const s = item.system ?? {};
+    return { mark, creator, item, base: plainOf(s.description), mastery: s.masteryUnlocked ? plainOf(s.mastery) : "" };
+  }).filter(Boolean);
+}
+
+/** Is `td` a foe of `creator`? The other side of the creator's token, else a hostile one. */
+function isFoeOf(td, creator) {
+  const own = creator ? sourceTokenFor(creator)?.document : null;
+  return own ? isHostile(td) !== isHostile(own) : isHostile(td);
+}
+
+/** A card button handled by bindTerrainActs: `op` and its JSON arguments. */
+function actButton(op, args, label, icon = "fa-location-dot", title = "") {
+  return `<button type="button" class="icon-btn icon-btn--sm" data-action="terrainAct" data-op="${esc(op)}" data-args="${esc(JSON.stringify(args))}" title="${esc(title || label)}"><i class="fa-solid ${esc(icon)}"></i> ${esc(label)}</button>`;
+}
+
+/** The pit spaces on `scene`, as cell keys. */
+const pitKeysOn = (scene) => new Set(terrainOn(scene).filter(x => x.f.pit).flatMap(x => [...x.keys]));
+
+/** Put `td` on `cell` (its top-left), without animation; the GM or the token's owner only. */
+async function placeTokenAt(td, cell) {
+  if (!(td.isOwner || game.user.isGM)) { ui.notifications.warn(`Only the GM or the owner of ${td.name} can move them: ask the GM to click.`); return false; }
+  const p = td.parent.grid.getTopLeftPoint(cell);
+  await td.update({ x: p.x, y: p.y }, { animate: false });
+  return true;
+}
+
+// DARKTIDE "the first time … during their turn": the turns already offered, on this client.
+const _darkLeft = new Set();
+
+/**
+ * DARKTIDE (p.235): "The first time the marked character vacates a space during their turn, they leave a dangerous
+ * terrain space behind them." Asked to the mover, on their own turn, once a turn per mark.
+ */
+async function offerDarktideLeave(td, before, after, dark) {
+  const leave = dark.find(x => DARK_LEAVE.test(x.mastery));
+  const combat = game.combat;
+  if (!leave || !combat?.started || combat.combatant?.tokenId !== td.id) return;
+  const key = `${turnKey()}#${td.id}#${leave.creator.id}#${leave.item.id}`;
+  if (_darkLeft.has(key)) return;
+  _darkLeft.add(key);
+  const left = before.filter(c => !after.some(a => cellKey(a) === cellKey(c)));
+  if (!left.length) return;
+  const ok = await foundry.applications.api.DialogV2.confirm({
+    window: { title: `${leave.item.name} — DARKTIDE` },
+    content: `<p><strong>${esc(td.name)}</strong> vacates a space for the first time this turn.</p><p><small>${esc(DARK_LEAVE.exec(leave.mastery)[0])}.</small></p><p>Leave a dangerous terrain space where they were?</p>`,
+    yes: { label: "Leave it" }, no: { label: "Not now" }, rejectClose: false,
+  }) ?? false;
+  if (!ok) return;
+  const spec = { kind: "dangerous", name: "", rules: DARK_LEAVE.exec(leave.mastery)[0] };
+  const docs = await createTerrainSpaces(td.parent, [left[0]], spec, { actor: leave.creator, abilityName: leave.item.name, abilityKey: `${leave.item.id}:terrain`,
+    group: groupOf(leave.creator, leave.item, spec), source: "DARKTIDE", itemId: leave.item.id });
+  if (docs.length) await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: td }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-fire"></i> ${esc(leave.item.name)}</strong> <small>(DARKTIDE)</small>: ${esc(td.name)} leaves a dangerous terrain space behind them.<div>${removeSpacesButton(td.parent, docs)}</div></div>`,
+  });
+}
+
+/**
+ * End of `prev`'s turn (active GM, from IconCombat): Deepwrath's "If the marked character ends their turn inside a
+ * pit, you can drag them under … placing them in the space of any other pit in range 3 from their original location"
+ * (p.235) — a card with Drag under.
+ * @param {Combatant} prev
+ */
+export async function terrainTurnEnd(prev) {
+  const td = prev?.token;
+  const scene = td?.parent;
+  if (!td?.actor || !scene || isMapObject(td)) return;
+  const lines = [];
+  const pits = pitKeysOn(scene);
+  const inPit = cellsOf(td).some(c => pits.has(cellKey(c)));
+  for (const { creator, item, base } of terrainMarksOn(td.actor)) {
+    const m = DRAG_UNDER.exec(base);
+    if (!m || !inPit) continue;
+    lines.push(`<p><strong>${esc(td.name)}</strong> ends their turn inside a pit, marked by <strong>${esc(item.name)}</strong> (${esc(creator.name)}).</p><p><small>${esc(m[0])}</small></p>
+      <div>${actButton("dragUnder", { scene: scene.id, token: td.id, creator: creator.id, item: item.id, range: Number(m[1]) || 3 }, "Drag under", "fa-water", `Click another free pit in range ${m[1]} of ${td.name}; they are placed there`)}</div>`);
+  }
+  if (!lines.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: td }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-down"></i> End of ${esc(td.name)}'s turn</strong>${lines.join("")}</div>`,
+  });
+}
+
+/** The card buttons' work. Each returns true when done (the button is then greyed out). */
+const TERRAIN_ACTS = {
+  /** Deepwrath: a pit under the marked character, where they stand now. */
+  async pitUnder({ scene: sid, token, creator: cid, item: iid, label }) {
+    const scene = game.scenes?.get(sid);
+    const td = scene?.tokens?.get(token);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!td || !item) { ui.notifications.warn("That character or ability is gone."); return true; }
+    const spec = { kind: "pit", name: "", label: label || "Pit", rules: PIT_AT_START.exec(plainOf(item.system.description))?.[0] ?? "" };
+    const docs = await createTerrainSpaces(scene, cellsOf(td), spec, { actor: creator, abilityName: item.name, abilityKey: `${item.id}:terrain`,
+      group: groupOf(creator, item, spec), itemId: item.id, asOne: true });
+    if (!docs.length) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-down"></i> ${esc(item.name)}</strong>: a <strong>${esc(spec.label.toLowerCase())}</strong> under ${esc(td.name)} (one level lower than its base space, p.89).<div>${removeSpacesButton(scene, docs)}</div></div>`,
+    });
+    return true;
+  },
+  /** Deepwrath: from the pit they are in to another free pit in range. */
+  async dragUnder({ scene: sid, token, item: iid, creator: cid, range }) {
+    const scene = game.scenes?.get(sid);
+    const td = scene?.tokens?.get(token);
+    if (!td) { ui.notifications.warn("That character is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of that character first."); return false; }
+    if (!(td.isOwner || game.user.isGM)) { ui.notifications.warn(`Only the GM or the owner of ${td.name} can move them: ask the GM to click.`); return false; }
+    const r = Number(range) || 3;
+    const from = cellsOf(td);
+    const fromKeys = new Set(from.map(cellKey));
+    const pits = pitKeysOn(scene);
+    const taken = new Set();
+    for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.add(cellKey(c));
+    const check = (c) => {
+      const k = cellKey(c);
+      if (!pits.has(k)) return "Pick a pit space.";
+      if (fromKeys.has(k)) return "Pick another pit, not the one they are in.";
+      if (taken.has(k)) return "That pit isn't free.";
+      return from.some(o => cheb(o, c) <= r) ? "" : `That pit is beyond range ${r} of where they are.`;
+    };
+    const name = game.actors?.get(cid)?.items?.get(iid)?.name ?? "Deepwrath";
+    const cells = await pickSpaces({ max: 1, color: TERRAIN_COLORS.pit, check, hint: `${name}: drag ${td.name} under — another pit in range ${r}.` });
+    if (!cells) return false;
+    if (!(await placeTokenAt(td, cells[0]))) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ token: td }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-water"></i> ${esc(name)}</strong>: ${esc(td.name)} is dragged under and comes up in another pit.</div>`,
+    });
+    return true;
+  },
+};
+
+/** Bind the terrainAct buttons of a chat card (GM or the creator's owner). */
+function bindTerrainActs(html) {
+  for (const btn of html.querySelectorAll('[data-action="terrainAct"]')) {
+    if (btn.dataset.iconBound) continue;
+    btn.dataset.iconBound = "true";
+    let args = {};
+    try { args = JSON.parse(btn.dataset.args || "{}"); } catch { /* malformed: nothing to do */ }
+    const off = (why) => { btn.disabled = true; btn.title = why; btn.style.opacity = "0.5"; };
+    const creator = args.creator ? game.actors?.get(args.creator) : null;
+    if (!game.user.isGM && !creator?.isOwner) { off("Only the GM or the owner of the one who made it"); continue; }
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      const act = TERRAIN_ACTS[btn.dataset.op];
+      if (!act || btn.disabled) return;
+      btn.disabled = true;
+      let done = false;
+      try { done = await act(args, btn); } catch (err) { console.warn(`[ICON | TerrainSpaces] ${btn.dataset.op} failed`, err); }
+      if (done) off("Done"); else btn.disabled = false;
+    });
+  }
+}
+
 export function registerTerrainSpaceHooks() {
+  Hooks.on("renderChatMessageHTML", (_message, html) => bindTerrainActs(html));
   // A character moved by this user: dangerous terrain and named marks (area-templates.mjs' preUpdateToken leaves
   // the old position in options.iconPrevPos). Objects (R33a) don't set anything off.
   Hooks.on("updateToken", (tokenDoc, changed, options, userId) => {
     if (userId !== game.user.id || !options?.iconPrevPos) return;
     if (!("x" in changed || "y" in changed) || isMapObject(tokenDoc)) return;
-    if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t))) return;
+    // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet.
+    if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerTerrainOnMove(tokenDoc, options.iconPrevPos, to).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });

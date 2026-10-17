@@ -39,7 +39,7 @@ import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
-import { terrainTurnStart } from "../canvas/terrain-spaces.mjs";
+import { terrainTurnStart, terrainTurnEnd } from "../canvas/terrain-spaces.mjs";
 import { areaTurnStart, areaTurnEnd, areaRoundEnd } from "../canvas/area-motion.mjs";
 import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
@@ -886,6 +886,9 @@ export function registerCombatHooks() {
           // Areas that deal damage at the end of the turn: GUNGNIR (p.225), River Guardians (p.169; R33c2).
           try { await areaTurnEnd(prev); }
           catch (err) { console.warn("[ICON | IconCombat] area turn reminders (end) failed", err); }
+          // Marks that work the terrain at the end of the turn: Deepwrath's drag under (p.235; R33b2).
+          try { await terrainTurnEnd(prev); }
+          catch (err) { console.warn("[ICON | IconCombat] terrain turn reminders (end) failed", err); }
           // A combo token spent on an ability with Show in Chat only covers
           // that use (its attack and damage come as separate clicks): it
           // doesn't carry into the next turn.
