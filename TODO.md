@@ -1256,9 +1256,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [x] **Emerso lavorando su R19 — aure alternative nel testo non proposte** (S) (SPOSTATO in R48 del round del 16 ottobre): la mastery Phantom Bolts di Warding
       Bolts ("hover around you as an Aura 2 instead") e l'Heroic di Rook ("increase aura to Aura 2") non compaiono
       tra le scelte del bottone area (`areasInText` non legge "aura N"). Non verificato in gioco.
-- [ ] **Emerso lavorando su R19 — foe con tag "aura" senza numero** (S): Aura of Slaughter dei sei demoni (Armor,
+- [x] **Emerso lavorando su R19 — foe con tag "aura" senza numero** (S): Aura of Slaughter dei sei demoni (Armor,
       Gaping, Horn, Starving, Nail, Battle) ha il tag "aura" senza dimensione; le schede foe non passano da
       `resolveAbilityTags`, quindi probabilmente chiedono ancora la dimensione (proposta 3). Non verificato.
+(FATTO il 17 ottobre 2026, versione 1.15.114: confermato; il tag "aura" senza numero dei sei demoni faceva chiedere la
+      dimensione sulle schede foe; ora la dimensione si prende dal testo dell'azione ("gains aura 2", p.407), anche
+      per le legend e per i foe già importati. Solo codice.)
 - [ ] **Emerso lavorando su R23 — finestra del danno dei summon senza "Other"** (S): la scheda summon usa ancora una
       sua finestra semplice (`SummonSheet.#promptSummonDamageMods`, select Hit/Crit/Miss/Area) e non quella condivisa
       di `roll-dialogs.mjs`, quindi non ha l'esito Other né Pierce/Divine/True Strike.

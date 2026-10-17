@@ -372,7 +372,15 @@ export function lineExtensionInText(text) {
  * @returns {object|null}
  */
 export function abilityArea(tags, description = "") {
-  return areaFromTags(tags) ?? areasInText(description)[0] ?? null;
+  const area = areaFromTags(tags);
+  // A bare "aura" tag takes its size from the text, so the placer does not ask
+  // for it: the demons' Aura of Slaughter "(stance, aura): … gains aura 2"
+  // (p.407). Player abilities get the same from resolveAbilityTags.
+  if (area?.kind === "aura" && !area.size) {
+    const size = aurasInText(description)[0]?.size;
+    if (size) { area.size = size; area.label = areaLabel(area); }
+  }
+  return area ?? areasInText(description)[0] ?? null;
 }
 
 /**

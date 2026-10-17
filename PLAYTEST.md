@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R19 — Aure dei foe senza numero (17 ottobre 2026, versione 1.15.114)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Battle Demon (o Armor / Gaping / Horn / Starving / Nail Demon) importato dal compendio: l'azione Aura of
+      Slaughter ha il bottone area "Aura 2" (non "Aura").
+- [ ] Clic sul bottone area: l'aura 2 si piazza attorno al token del demone, senza la finestra che chiede la
+      dimensione.
+- [ ] Controllo: un'azione foe con Blast / Line / Arc numerati si piazza come prima; un "line" o "arc" senza numero
+      chiede ancora la dimensione.
+- [ ] Controllo PG: Endless Battlement continua a dare Aura 1 senza domanda.
+
 ## Emerso R38b — Annullare un'infusione non sblocca più Inner Furnace due volte (17 ottobre 2026, versione 1.15.113)
 
 Setup: solo codice (F5 basta).

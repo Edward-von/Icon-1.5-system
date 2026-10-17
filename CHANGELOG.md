@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aure dei foe senza numero (versione 1.15.114)
+
+### Round di debug del 15 ottobre, voce emersa su R19
+
+- **Aura of Slaughter dei demoni**: piazzando l'aura dei sei demoni (Armor, Gaping, Horn, Starving, Nail, Battle), la
+  scheda chiedeva la dimensione (proposta 3) e mostrava "Aura" senza numero → il loro tag "aura" non ha numero, e le
+  schede foe / legend leggevano solo i tag, senza guardare il testo come fanno le schede PG → in `abilityArea` un tag
+  "aura" senza numero prende la dimensione dal testo dell'azione ("gains aura 2", p.407): Aura 2, senza domanda. Vale
+  anche per le legend e per i foe già importati. Solo codice.
+
 ## 17 ottobre 2026 — Annullare un'infusione non sblocca più Inner Furnace due volte (versione 1.15.113)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b
