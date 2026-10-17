@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R55 — Helix Heel: tornano le tre parole del libro (17 ottobre 2026, versione 1.15.87)
+
+Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 32 (parte da sola al caricamento del mondo, da GM).
+
+- [ ] **Compendio**: Jobs → Helix Heel (Geomancer) → il secondo Effect dice "…you can keep extending the line by 3
+      spaces this way each time, but can only extend it once per object."
+- [ ] **Copia già sulla scheda**: un PG Geomancer che aveva Helix Heel prima dell'aggiornamento → dopo il caricamento
+      del mondo (console: "Migration 32: N copy/copies of Helix Heel…") la scheda mostra lo stesso testo. Il resto
+      dell'abilità (Effect iniziale, bottone line 3, Charge) è invariato.
+
 ## Emerso R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (17 ottobre 2026, versione 1.15.86)
 
 Setup: solo codice (F5 basta).

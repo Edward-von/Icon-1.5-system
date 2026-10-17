@@ -418,7 +418,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       funzione `flat` della migrazione 25 usa `replace(/s+/g, " ")` (manca la barra: toglie le lettere "s" invece di
       unire gli spazi), quindi confronta un testo storpiato con quello vecchio e non aggiorna nessuna copia dei sei Limit
       Break di R39. Va corretta con `/\s+/g` in una nuova migrazione (la 25 è già stata eseguita nei mondi aggiornati).
-- [ ] **Emerso lavorando su R55 — Helix Heel: mancano tre parole del libro** (S, dati): il secondo Effect nel compendio
+- [x] **Emerso lavorando su R55 — Helix Heel: mancano tre parole del libro** (S, dati) (FATTO il 17 ottobre 2026, versione 1.15.87: pack jobs corretto con `r55b-helix-heel-text/fix-helix-heel.mjs`, migrazione 32 sulle copie): il secondo Effect nel compendio
       dice "you can keep extending the line by 3 spaces, but can only extend it once per object", il libro (p.219) "by 3
       spaces this way each time, but can only extend it once per object". Ripristinare "this way each time" (pack +
       migrazione sulle copie).

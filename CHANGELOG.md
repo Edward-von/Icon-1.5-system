@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Helix Heel: tornano le tre parole del libro (versione 1.15.87)
+
+### Round di debug del 16 ottobre, voce emersa su R55
+
+- **Helix Heel, secondo Effect**: nel compendio diceva "you can keep extending the line by 3 spaces, but can only
+  extend it once per object" → al testo del pack mancavano tre parole del libro (p.219: "by 3 spaces this way each
+  time, but can only extend it once per object") → il pack dei job ora ha "this way each time", e la migrazione 32
+  aggiunge le stesse parole alle copie già sulle schede che hanno ancora la frase vecchia. Nient'altro cambia
+  (bottone dell'area line 3, danno, Charge).
+
 ## 17 ottobre 2026 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (versione 1.15.86)
 
 ### Round di debug del 16 ottobre, voce emersa su R41

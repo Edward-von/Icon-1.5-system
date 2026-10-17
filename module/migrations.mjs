@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 31;
+export const CURRENT_SCHEMA_VERSION = 32;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1181,6 +1181,35 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 31: ${n} limit break(s) now match the book (Split Heaven and Hell, Paradiso, Lycanthropy)`);
+  },
+
+  /* 32 — Helix Heel (Geomancer, p.219), second Effect: the book says "you can
+   * keep extending the line by 3 spaces this way each time, but can only
+   * extend it once per object"; the pack had lost "this way each time"
+   * (emerged on R55). Patch the copies that still carry the old phrase. */
+  32: async () => {
+    const FROM = "extending the line by 3 spaces, but can only extend it once per object";
+    const TO   = "extending the line by 3 spaces this way each time, but can only extend it once per object";
+    const patch = (item) => {
+      if (item.type !== "ability" || (item.name ?? "").trim() !== "Helix Heel") return null;
+      const old = String(item.system?.description ?? "");
+      return old.split(FROM).length === 2 ? { "system.description": old.replace(FROM, TO) } : null;
+    };
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = patch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = patch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 32: ${n} copy/copies of Helix Heel given back "this way each time" (p.219)`);
   },
 };
 
