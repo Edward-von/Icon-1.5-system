@@ -1,7 +1,7 @@
 /**
  * SummonSheet — ApplicationV2 sheet for Summon tokens (type: "summon").
  */
-import { enrichHTML } from "../../helpers/enrich.mjs";
+import { enrichHTML, summonRulesHTML } from "../../helpers/enrich.mjs";
 import { combatRoll } from "../../dice/rolls.mjs";
 import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
@@ -69,7 +69,8 @@ export class SummonSheet extends BaseActorSheet {
     context.isEditable = this.isEditable;
 
     context.enrichedSummonAction = await enrichHTML(system.summonAction);
-    context.enrichedSummonEffect = await enrichHTML(system.summonEffect);
+    // A foe's summon copies its rules as written ("… • a • b"): one line per bullet, as on the foe sheet.
+    context.enrichedSummonEffect = await enrichHTML(summonRulesHTML(system.summonEffect));
     context.enrichedNotes        = await enrichHTML(system.notes);
 
     const parsed = _parseAbilityDamage({ description: system.summonAction });

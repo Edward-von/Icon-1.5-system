@@ -1418,10 +1418,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R1 — Blessing of Faith "gain True Strike on that ability"** (S, da decidere): Blessing of
       Faith (e il tratto del Chanter) propone ancora "Gain True Strike" agli alleati come status, ma anche lì è il tag
       di una sola abilità. Domanda per Edoardo: lasciarlo (lo status fa ignorare Dodge all'attacco) o toglierlo?
-- [ ] **Emerso lavorando su R12 — elenchi "•" nella scheda del Summon trascinato da un foe** (S): trascinando il chip
+- [x] **Emerso lavorando su R12 — elenchi "•" nella scheda del Summon trascinato da un foe** (S): trascinando il chip
       sulla mappa, `foe-summons.mjs` copia `sm.rules` in `system.summonEffect` dell'attore Summon e `SummonSheet` lo
       passa a `enrichHTML` così com'è, quindi lì l'elenco resta su una riga; usare `summonRulesHTML` anche per
       `enrichedSummonEffect`, o al momento della copia.
+(FATTO il 17 ottobre 2026, versione 1.15.179: SummonSheet passa summonEffect da summonRulesHTML prima di enrichHTML.)
 - [x] **Emerso lavorando su R5 — × e combo acceso sui riquadri pieni** (S): in `icon-combat.hbs`, dentro il
       `{{#with}}` dei riquadri pieni, `../isEditable`, `../abilitiesLocked` e `../comboActive` puntano al numero del
       riquadro e non alla scheda, quindi la × per togliere l'abilità dal riquadro non compare mai e il badge combo non
@@ -1506,6 +1507,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       vedere il testo?
 - [ ] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
       spende anche se il PG è Stunned, mentre il bottone della card del danno lo blocca.
+- nessuno
 
 ---
 

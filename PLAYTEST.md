@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R12 — Elenchi puntati nella scheda del Summon di un foe (17 ottobre 2026, versione 1.15.179)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Foe con un summon che ha un elenco "•" nelle regole: trascinare il chip sulla mappa, aprire la scheda del Summon
+      → ogni punto dell'elenco sta sulla sua riga, come sulla scheda del foe.
+- [ ] Un Summon dello stesso tipo trascinato prima di questa versione: riaprendo la scheda, anche lui mostra l'elenco
+      su righe separate.
+- [ ] Il Summon di un PG (da un'abilità) si vede come prima.
+- [ ] Modificare il testo dell'effetto nella textarea della scheda Summon: il testo salvato resta quello scritto (con
+      i "•" in fila).
+
 ## Emerso R35 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno (17 ottobre 2026, versione 1.15.178)
 
 Setup: solo codice (F5 basta).

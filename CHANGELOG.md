@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Elenchi puntati nella scheda del Summon di un foe (versione 1.15.179)
+
+### Round di debug del 15 ottobre, voce emersa su R12
+
+- **Elenchi "•" nel Summon trascinato da un foe**: dopo aver trascinato il chip di un summon di un foe sulla mappa,
+  sulla scheda del Summon le regole con l'elenco "•" restavano tutte su una riga → `foe-summons.mjs` copia `sm.rules`
+  così com'è in `system.summonEffect`, e `SummonSheet` lo passava a `enrichHTML` senza `summonRulesHTML` → ora la
+  scheda passa il testo da `summonRulesHTML` prima di arricchirlo, come fa la scheda del foe. Il testo salvato non
+  cambia, quindi si sistemano anche i summon già sulla mappa. Solo codice.
+
 ## 17 ottobre 2026 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno (versione 1.15.178)
 
 ### Round di debug del 15 ottobre, voce emersa su R35
