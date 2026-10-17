@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Sturmreiten: la seconda Line 3 del Talent II (versione 1.15.73)
+
+### Round di debug del 16 ottobre, punto R47b
+
+- **Sturmreiten, Talent II** (Spellblade, p.227: "Comeback: You may extend Sturmreiten's area by another line 3 area,
+  drawn in a different direction"): non c'era modo di aggiungere la seconda Line → il piazzamento faceva una sola Line
+  alla volta e il testo del talento non veniva letto → ora, col Talent II scelto, dopo aver piazzato la Line 3 si apre
+  la domanda "another Line 3?": **From the first space / From the last space / No extension** (il libro non dice da
+  dove parte; Maar: dal primo o dall'ultimo spazio, a scelta). Si clicca una delle caselle evidenziate accanto a quello
+  spazio e la seconda Line 3 parte da lì, in una direzione diversa da quella della prima e senza sovrapporsi a lei. Le
+  due Line diventano un solo template ("Line 3 + Line 3") e i bersagli sono quelli di entrambe.
+- **Comeback**: se il PG non è bloodied la domanda lo dice e propone "No extension" come scelta di default; si può
+  comunque estendere (decide il tavolo).
+- Senza il talento, o con l'Arc 5 della mastery MJÖLLNIR, non cambia niente. Solo codice, nessun dato cambiato.
+
 ## 16 ottobre 2026 — Open the Gates: lo Special davanti alle due versioni (versione 1.15.72)
 
 ### Round di debug del 15 ottobre, punto R34

@@ -1656,6 +1656,29 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R47b — Sturmreiten Talent II, seconda Line 3 (17 ottobre 2026, versione 1.15.73)
+
+Setup: scena a griglia quadrata, un PG Spellblade con Sturmreiten (capitolo 2) e il Talent II scelto, qualche foe sparso
+attorno al PG.
+
+- [ ] **Domanda dopo la prima Line**: bottone area di Sturmreiten → piazza la Line 3 → si apre "Sturmreiten — another
+      Line 3?" con il testo del Talent II e i bottoni From the first space / From the last space / No extension.
+- [ ] **Dal primo spazio**: From the first space → caselle evidenziate accanto al primo spazio della Line (non quella
+      dentro la Line); si clicca una di esse e la seconda Line 3 parte da lì, allontanandosi dal primo spazio.
+      Anche la direzione opposta alla prima Line (prolungamento all'indietro) è permessa.
+- [ ] **Dall'ultimo spazio**: From the last space → solo le due caselle ai lati dell'ultimo spazio (la stessa direzione
+      della prima Line e quella che torna indietro sono escluse); cliccandone un'altra compare l'avviso.
+- [ ] **Rotella**: durante la seconda Line, girarla con la rotella → la preview diventa chiara e il clic dà l'avviso "The
+      extra Line 3 goes away from …"; rimessa nella direzione giusta si piazza.
+- [ ] **Un solo template**: alla fine sulla mappa c'è un solo template con le due Line unite (bordo unico), la notifica
+      dice "Line 3 + Line 3 placed — …" e sono targettati i personaggi di entrambe le Line.
+- [ ] **No / Esc**: "No extension" o Esc durante la seconda Line → resta solo la prima Line, targettata come prima.
+- [ ] **Comeback**: PG non bloodied → nella domanda c'è la riga "Comeback: you are not bloodied…" e il bottone di default
+      è No extension; da bloodied la riga sparisce e il default è From the first space.
+- [ ] **Senza talento**: tolto il Talent II, Sturmreiten piazza la Line 3 senza nessuna domanda; con la mastery
+      (Arc 5) nessuna domanda.
+- [ ] **Altre Line invariate**: un'altra abilità con una Line (es. Helix Heel, Ätherwand) si piazza come prima.
+
 ## R34 — Open the Gates: lo Special davanti alle due versioni (16 ottobre 2026, versione 1.15.72)
 
 Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Sealer di capitolo 3 che ha già Open the Gates

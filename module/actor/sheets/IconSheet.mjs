@@ -13,7 +13,7 @@ import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayN
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, aurasInText, areaDrawnFromTarget, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
+         areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -2327,10 +2327,23 @@ export class IconSheet extends BaseActorSheet {
   #areaPlacementOpts(ab, area) {
     const s = this.document.items.get(ab.id)?.system ?? {};
     const lasting = this.#areaLasts(ab, area);
-    if (!lasting || area?.kind === "aura") return { lasting };
+    const extension = area?.kind === "line" ? this.#lineExtension(ab, s) : null;
+    if (!lasting || area?.kind === "aura") return { lasting, extension };
     const terrain = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
     const stack = areaStackLimit(activeAreaTexts(s));
-    return { lasting, terrain, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
+    return { lasting, terrain, extension, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
+  }
+
+  /**
+   * R47b: the second line an upgrade the character has adds to the ability's line (Sturmreiten Talent II,
+   * p.227: "extend Sturmreiten's area by another line 3 area, drawn in a different direction").
+   */
+  #lineExtension(ab, s) {
+    for (const [has, text, source] of [[ab.hasTalent1, s.talent1, "Talent I"], [ab.hasTalent2, s.talent2, "Talent II"], [ab.hasMastery, s.mastery, "Mastery"]]) {
+      const ext = has ? lineExtensionInText(text) : null;
+      if (ext) return { ...ext, source };
+    }
+    return null;
   }
 
   /**
@@ -2531,7 +2544,7 @@ export class IconSheet extends BaseActorSheet {
       }
     }
     const areaOpts = this.#areaPlacementOpts(ab, areaChoice ?? areaFromTags(ab.tags));
-    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, area: areaChoice });
+    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
     const areaHtml = placement ? areaSummaryHtml(placement) : "";
 

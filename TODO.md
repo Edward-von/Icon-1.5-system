@@ -171,7 +171,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       speso — ÄTHERSTURM allunga la Line 3 di Ätherwand di 1 per Aether fino a +3, MAGNARIME fa Arc 4 + Aether a range
       6 — e la versione armata è la prima scelta; le mastery che sono un Infuse cambiano l'area solo da armate. Solo
       codice.)
-- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M, pronto: risposta di Maar del 17 ottobre 2026): "Comeback: You may extend Sturmreiten's area by another
+- [x] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M, pronto: risposta di Maar del 17 ottobre 2026): "Comeback: You may extend Sturmreiten's area by another
       line 3 area, drawn in a different direction" (p.227): "A way to use talent 2's extension would be useful." Il
       piazzamento fa una sola Line alla volta; servirebbe, col Talent II scelto, una seconda Line 3 in un'altra
       direzione dallo stesso punto (o dalla fine della prima: il testo non lo dice, da chiedere a Edoardo) unita alla
@@ -180,6 +180,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Risposta di Maar (17 ottobre 2026): "it should be either-or. So, choosing to place it in either place as the
       extension- first or last square." → l'utente sceglie: la seconda Line 3 parte dal primo o dall'ultimo spazio
       della prima, in un'altra direzione.
+      (FATTO il 17 ottobre 2026, versione 1.15.73: col Talent II scelto, dopo la Line 3 si sceglie From the first space /
+      From the last space / No extension, poi si piazza la seconda Line 3 accanto a quello spazio, in un'altra direzione
+      e senza sovrapporsi; un solo template con le due Line, bersagli di entrambe. Se non si è bloodied (Comeback) la
+      domanda lo dice e il default è No. Solo codice.)
 - [x] **R48. Aure date ad altri o in alternativa** (M, bug)
       - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
       - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i
@@ -406,6 +410,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R33b — clic destro durante la scelta di uno spazio degli oggetti** (S): `pickSpace` di
       `map-objects.mjs` (Teleport here, Erupt, Move dello shard) chiude la scelta col clic destro ma non ferma l'evento: sopra
       un token potrebbe aprirsi anche l'HUD del token. Il picker nuovo di `terrain-spaces.mjs` lo ferma (`stopPropagation`).
+- [ ] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, regola): MJÖLLNIR (p.227) "Create
+      an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
+      l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
+      mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
 
 ---
 

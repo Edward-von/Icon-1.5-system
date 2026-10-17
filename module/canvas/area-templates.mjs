@@ -336,6 +336,21 @@ export function areaDrawnFromTarget(text) {
 }
 
 /**
+ * R47b: a second line a text adds to the ability's line. Sturmreiten Talent II
+ * (p.227): "Comeback: You may extend Sturmreiten's area by another line 3 area,
+ * drawn in a different direction". The book doesn't say where it starts; at the
+ * table (Maar) it starts from the first or the last space of the first line.
+ * @param {string} text
+ * @returns {{size:number, comeback:boolean, rule:string}|null}
+ */
+export function lineExtensionInText(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const m = /\bextend [^.]*?\barea by another line (\d+)(?: area)?,? drawn in a different direction\b/i.exec(plain);
+  if (!m) return null;
+  return { size: Number(m[1]), comeback: /^comeback\s*:/i.test(plain), rule: plain };
+}
+
+/**
  * The area to offer for an ability: the one in its tags, or — when the tags
  * carry none — the first one named in its own rules text. The book prints the
  * shape of most terrain-effect abilities in the prose rather than the header
@@ -546,8 +561,10 @@ class AreaPlacement {
   /** Is a placement running? (The aura + / − keys stay out of its way.) */
   static get active() { return !!AreaPlacement.#active; }
 
-  constructor({ area, sourceCells, rangeCells, originInRange = false }) {
+  constructor({ area, sourceCells, rangeCells, originInRange = false, check = null }) {
     this.area = area;
+    // Extra rule on the placed shape (R47b, a second line): (cells, origin, dir) => warning text or "".
+    this.check = check;
     // The clicked space itself must be in range, not just one space of the
     // area: a terrain effect's aura goes around "a space in range" (Rampant Nail).
     this.originInRange = originInRange;
@@ -670,7 +687,7 @@ class AreaPlacement {
       return;
     }
     const cells = this.#previewCells();
-    const ok = this.#inRange(cells);
+    const ok = this.#inRange(cells) && !this.#checkFails(cells);
     for (const c of cells) paint(c, ok ? 0.4 : 0.15);
   }
 
@@ -712,7 +729,20 @@ class AreaPlacement {
         : `At least one space of the ${this.area.label} must be ${this.area.range ? `within range ${this.area.range}` : "adjacent to you"} (p.97).`);
       return;
     }
-    this.#finish({ cells, origin: this.mouseCell });
+    const failed = this.#checkFails(cells);
+    if (failed) { ui.notifications.warn(failed); return; }
+    this.#finish({ cells, origin: this.mouseCell, dir: this.#lineDir() });
+  }
+
+  /** The direction the Line under the mouse is drawn in (null for other shapes). */
+  #lineDir() {
+    return this.area.kind === "line" && this.mouseCell ? this.#autoDirection(this.mouseCell) : null;
+  }
+
+  /** The extra rule's warning for these cells, "" when they pass. */
+  #checkFails(cells) {
+    if (!this.check || !cells.length) return "";
+    return this.check(cells, this.mouseCell, this.#lineDir()) || "";
   }
 
   /** Resolve with the painted arc (origin = its first space). */
@@ -787,8 +817,9 @@ export const isPlacingArea = () => AreaPlacement.active;
  * @param {number}  [opts.stack=1]      R33c: how many of this ability's areas may stay at once (areaStackLimit);
  *   above 1, an earlier one is not replaced without asking
  * @param {string}  [opts.stackRule=""] the sentence that allows it, shown in the question
+ * @param {object|null} [opts.extension] R47b: a second line the user may add (lineExtensionInText, plus `source`)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "" }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -876,6 +907,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells, originInRange: atSpace }).run();
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
+    // R47b: a second line from the first or last space of this one (Sturmreiten Talent II, p.227).
+    if (extension && area.kind === "line" && placed.dir) {
+      const more = await extendLine({ actor, area, origin: originCell, dir: placed.dir, cells, extension, abilityName });
+      if (more) {
+        const seen = new Set(cells.map(cellKey));
+        cells = cells.concat(more.filter(c => !seen.has(cellKey(c))));
+        area.label = `${area.label} + ${areaLabel({ kind: "line", size: extension.size })}`;
+      }
+    }
   }
 
   if (replace && removeIds) {
@@ -953,6 +993,55 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     await offerAreaObjectTriggers(cells, { actor, abilityName });
   } catch (err) { console.error("ICON 1.5 | object area check failed", err); }
   return { template, cells, targets, area };
+}
+
+/**
+ * R47b: offer the second line a text adds (Sturmreiten Talent II, p.227: "extend
+ * Sturmreiten's area by another line 3 area, drawn in a different direction").
+ * The user picks the first or the last space of the placed line (Maar's ruling,
+ * the book doesn't say), then draws the new line from the space next to it, in
+ * any orthogonal direction but the first line's own and without crossing it.
+ * Resolves the new cells, or null (declined / cancelled: the first line stays).
+ */
+async function extendLine({ actor, area, origin, dir, cells, extension, abilityName }) {
+  const label = areaLabel({ kind: "line", size: extension.size });
+  const notBloodied = extension.comeback && actor?.isBloodied === false;
+  let from = null;
+  try {
+    from = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${abilityName || "Line"} — another ${label}?` },
+      content: `<p><small>${escapeHTML(extension.source ? `${extension.source}: ` : "")}${escapeHTML(extension.rule)}</small></p>`
+        + (notBloodied ? `<p><strong>Comeback</strong>: you are not bloodied, so this doesn't apply right now.</p>` : "")
+        + `<p>Draw the extra ${label} from which end of the first line?</p>`,
+      buttons: [
+        { action: "first", label: "From the first space", default: !notBloodied },
+        { action: "last",  label: "From the last space" },
+        { action: "no",    label: "No extension", default: notBloodied },
+      ],
+      rejectClose: false,
+    });
+  } catch { from = null; }
+  if (from !== "first" && from !== "last") return null;
+  const len = Math.max(1, area.size);
+  const end = from === "first" ? origin : { i: origin.i + dir.di * (len - 1), j: origin.j + dir.dj * (len - 1) };
+  const taken = new Set(cells.map(cellKey));
+  const second = { kind: "line", size: extension.size, label };
+  const dirs = [{ di: 0, dj: 1 }, { di: 1, dj: 0 }, { di: 0, dj: -1 }, { di: -1, dj: 0 }];
+  const sameDir = (a, b) => a.di === b.di && a.dj === b.dj;
+  const allowed = dirs.filter(d => !sameDir(d, dir)
+    && !shapeCells(second, { i: end.i + d.di, j: end.j + d.dj }, { dir: d }).some(c => taken.has(cellKey(c))));
+  if (!allowed.length) { ui.notifications.warn(`No free direction for another ${label} from that space.`); return null; }
+  const starts = allowed.map(d => ({ i: end.i + d.di, j: end.j + d.dj }));
+  const check = (newCells, start, d) => {
+    if (!start || !d) return "";
+    const step = { di: start.i - end.i, dj: start.j - end.j };
+    if (!sameDir(step, d) || !allowed.some(a => sameDir(a, d)))
+      return `The extra ${label} goes away from the ${from} space of the first line, in a different direction (mouse wheel rotates it).`;
+    return "";
+  };
+  ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first line.`);
+  const placed = await new AreaPlacement({ area: second, sourceCells: [end], rangeCells: starts, originInRange: true, check }).run();
+  return placed?.cells ?? null;
 }
 
 /**
@@ -1220,7 +1309,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null }) {
   // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
   const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
@@ -1229,7 +1318,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" ? extension : null });
 }
 
 /**
