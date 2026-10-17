@@ -1247,8 +1247,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       aggiornato, migrazione 35 sulle copie con i tag originali. Compendio Jobs + migrazione.)
 - [ ] **Emerso lavorando su R1 — barrato parziale** (S/M): con Sweet Torment / Indignation sulla scheda si potrebbe
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
-- [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
+- [x] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
       True Strike come se fosse uno status (c'era anche prima).
+(FATTO il 17 ottobre 2026, versione 1.15.130: una frase "Gains true strike / unerring / pierce" senza soggetto è il
+      tag dell'abilità (p.117), non uno status di chi la usa: niente più bottone Gain; su tutti i pack cambiano solo
+      quelle frasi. Solo codice.)
 - [x] **Emerso lavorando su R12 — elenchi "•" in linea nei foe** (M, dati): circa 100 tratti/azioni di foe e legend
       (Imperial Spy, Relict, Eternal Star del Warden, decreti del Majesty Demon, Creeping Cold delle Aesi…) scrivono
       gli elenchi con " • " in linea, senza a capo, quindi restano un paragrafo unico. La resa a righe di R12 vale solo
@@ -1316,6 +1319,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Violence Demon (Blade of Agony) sono salvate come `<p>… • … • …</p>` (`system.summons.N.rules`) e la resa a
       righe salta i testi in HTML; togliere il `<p>` o scriverne uno per voce, controllando come la card in chat
       aggiunge il descrittore (`postNpcTraitCard`).
+- [ ] **Emerso lavorando su R1 — Blessing of Faith "gain True Strike on that ability"** (S, da decidere): Blessing of
+      Faith (e il tratto del Chanter) propone ancora "Gain True Strike" agli alleati come status, ma anche lì è il tag
+      di una sola abilità. Domanda per Edoardo: lasciarlo (lo status fa ignorare Dodge all'attacco) o toglierlo?
 
 ---
 

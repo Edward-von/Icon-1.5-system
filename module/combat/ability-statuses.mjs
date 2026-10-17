@@ -91,6 +91,8 @@ export const GRANTABLE = [
 const GRANT_ALT = GRANTABLE.map(s => s.re).join("|");
 const GRANT_RE  = new RegExp(`\\b(${GRANT_ALT})\\b`, "gi");
 const GRANT_BY_WORD = (w) => GRANTABLE.find(s => new RegExp(`^(?:${s.re})$`, "i").test(w));
+/** Grants that are also attack tags (p.117): a subjectless "Gains true strike" is the ability's, not the user's. */
+const ABILITY_TAG_GRANTS = new Set(["true-strike", "unerring", "pierce"]);
 /** A positive word used as an adjective / part of another term ("divine damage", "flying movement", "counter damage"). */
 const GRANT_ADJ_AFTER_RE = /^\s+(?:damage|attacks?|effects?|movement|ability|abilities|foes?|characters?|allies|ally|summons?|units?|creatures?|targets?)\b/i;
 /** Verbs that grant a status to the subject before them. */
@@ -481,7 +483,10 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           else if (selfAt >= 0 && selfAt > otherAt) target = "self";
           else if (otherAt < 0 && pronounGain && pronounGain.segIndex === segIndex - 1 && /^\s*(?:then|and)\s/i.test(before) && IMPERATIVE_SELF_RE.test(before)) target = pronounGain.target;
           else if (otherAt < 0 && IMPERATIVE_SELF_RE.test(before)) target = "self";
-          else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*(?:\+\d\s*)?$/i.test(before)) target = "self";
+          // "Gains True Strike and becomes Burst 2" (Land Waster, Indignation, Pistolero): with no
+          // subject the ABILITY gains the tag (p.117), so no Gain button for an attack tag.
+          else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*(?:\+\d\s*)?$/i.test(before)
+            && !(ABILITY_TAG_GRANTS.has(def.id) && /^\s*(?:gains|has)\b/i.test(before))) target = "self";
           else if (PRONOUN_SUBJECT_RE.test(before)) {
             // The antecedent of "one of them" is the last group named earlier in the sentence.
             const prefix = sentence.slice(0, seg.start);

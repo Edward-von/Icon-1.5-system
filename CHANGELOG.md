@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — "Gains True Strike" non è più uno status (versione 1.15.130)
+
+### Round di debug del 15 ottobre, voce emersa su R1
+
+- **"Gains True Strike" letto come status**: l'Inflict di Indignation, Land Waster, Takedown, Draken Cross e Rook (e
+  il "Gains unerring" di Pistolero / Razor Shot / Collect Bounty / Stutterslash dei foe) proponeva un bottone "Gain
+  True Strike" → una frase "Gains …" senza soggetto veniva letta come guadagnata da chi usa l'abilità, ma è l'abilità
+  che prende il tag (p.117, p.141) → per true strike, unerring e pierce quella frase non dà più il bottone
+  (`ability-statuses.mjs`); gli altri status ("then gain counter") restano. Confrontati tutti i testi dei pack prima e
+  dopo: cambiano solo quelle frasi. Solo codice.
+
 ## 17 ottobre 2026 — Il dialog del danno riaperto ricorda le scelte (versione 1.15.129)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b

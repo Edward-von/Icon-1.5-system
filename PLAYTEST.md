@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R1 — "Gains True Strike" non è più uno status (17 ottobre 2026, versione 1.15.130)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Revenge con il combo token (Indignation): la card offre "Gain Counter" ma non più "Gain True Strike".
+- [ ] Land Waster Heroic e Takedown Exceed / Heroic: nessun bottone "Gain True Strike" sulla card.
+- [ ] Un foe con Pistolero (es. Scout): nessun bottone "Gain Unerring".
+- [ ] Blessing of Faith / Chanter offrono ancora "Gain True Strike" agli alleati (invariato).
+
 ## Emerso R38b — Il dialog del danno riaperto ricorda le scelte (17 ottobre 2026, versione 1.15.129)
 
 Setup: solo codice (F5 basta).
