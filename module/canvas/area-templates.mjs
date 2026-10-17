@@ -1311,7 +1311,9 @@ function pitBlastCells({ actor, abilityKey, area }) {
 /**
  * Is this token a plant (Harvester, p.184)? Only when it can be told for sure: a Plant from the system's summons
  * pack (core records the pack entry it was imported from in `_stats.compendiumSource`, also on the world copy),
- * or a Megamushroom object, which "counts as a plant" (Spore Shroud p.187). A plant made by hand is not one.
+ * or a Megamushroom object, which "counts as a plant" (Spore Shroud p.187), or a token named "Mote of life"
+ * (Dark Sliver's RECYCLE, p.187: "A mote of life is a plant"), which has no entry of its own in the pack. Any
+ * other plant made by hand is not one.
  * @param {Token} t
  * @param {Set<string>} plantUuids  the summons pack's Plant entries
  */
@@ -1319,6 +1321,7 @@ function isPlantToken(t, plantUuids) {
   const a = t.actor;
   const src = a?._stats?.compendiumSource ?? a?.baseActor?._stats?.compendiumSource ?? "";
   if (src && plantUuids.has(src)) return true;
+  if ([t.document?.name, a?.name].some(n => /^mote of life$/i.test(String(n ?? "").trim()))) return true;
   return /^megamushroom$/i.test(String(t.document?.flags?.[FLAG_NS]?.mapObject?.name ?? "").trim());
 }
 
@@ -1344,7 +1347,7 @@ async function plantBlastCells({ actor, abilityKey, area }) {
   const inArea = new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
   const plants = canvas.tokens.placeables.filter(t => isPlantToken(t, plantUuids) && tokenCells(t.document).some(c => inArea.has(cellKey(c))));
   if (!plants.length) {
-    ui.notifications.warn("No plant inside this ability's area (only Plants from the summons pack and Megamushrooms are recognised): nothing explodes.");
+    ui.notifications.warn("No plant inside this ability's area (only Plants from the summons pack, Megamushrooms and tokens named 'Mote of life' are recognised): nothing explodes.");
     return null;
   }
   const blast = { kind: area.kind, size: area.size };

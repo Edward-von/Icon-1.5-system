@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — HARVEST MOON riconosce la mote of life (versione 1.15.183)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Mote of life ignorata da HARVEST MOON**: le esplosioni delle piante di HARVEST MOON (p.186) non vedevano la mote
+  of life di Dark Sliver (RECYCLE, p.187: "A mote of life is a plant") → come piante venivano riconosciute solo le
+  Plant del pack summons e i Megamushroom, e la mote non ha una voce sua → ora conta come pianta anche un token che si
+  chiama "Mote of life" (nome del token o dell'attore). Anche il messaggio "nessuna pianta" lo dice. Solo codice.
+
 ## 17 ottobre 2026 — La blast del Rampant Nail segue lo spuntone (versione 1.15.182)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
