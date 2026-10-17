@@ -27,7 +27,7 @@
 import { terrainSpacesForItem, terrainLabel } from "../helpers/terrain-spaces.mjs";
 import { armedInfusion, clearInfusion } from "../helpers/infuse.mjs";
 import { tokenCells, sourceTokenFor } from "./area-templates.mjs";
-import { marksOn } from "../combat/marks.mjs";
+import { marksOn, removeMark } from "../combat/marks.mjs";
 
 const _log = (...a) => console.debug("[ICON | TerrainSpaces]", ...a);
 const NS = "icon-system";
@@ -731,8 +731,11 @@ async function offerDarktideLeave(td, before, after, dark) {
  */
 export async function terrainTurnEnd(prev) {
   const td = prev?.token;
-  const scene = td?.parent;
-  if (!td?.actor || !scene || isMapObject(td)) return;
+  const scene = td?.parent ?? canvas?.scene;
+  if (!scene) return;
+  // Polaris (p.202): "you may gamble at the end of any turn after yours".
+  await polarisTurnEnd(prev, scene);
+  if (!td?.actor || isMapObject(td)) return;
   const lines = [];
   const pits = pitKeysOn(scene);
   const inPit = cellsOf(td).some(c => pits.has(cellKey(c)));
@@ -752,6 +755,44 @@ export async function terrainTurnEnd(prev) {
 // Eclipse (p.203): the brand checked at the start of the creator's slow turn; THE HELM keeps it after it goes off.
 const ECLIPSE_CHECK = /\bat the start of that turn, check if there is a character standing in that space\b/i;
 const ECLIPSE_KEEP = /\beffect does not expire after activating\b/i;
+// Implode (p.211): "at the start of that turn, that space explodes with gravitational energy, shoving all characters in
+// a large blast area effect around it as close as possible towards it … Any character in the center space when this
+// ability activates must save or be stunned."
+const IMPLODE_AT_START = /\bat the start of that turn, that space explodes\b/i;
+// Polaris (p.202): "While you have at least one Polaris space active, you may gamble at the end of any turn after
+// yours … A meteor lands in every space chosen by Polaris, exploding … 1: Small blast area effect, deals damage equal
+// to the gamble result. 2: Medium Blast, deals +2 damage. 3: Large Blast, deals +2 damage, and characters in center
+// spaces are stunned. Then, remove all spaces." "Each effect other than the blast size stacks": 3 spaces = +4.
+const POLARIS_GAMBLE = /\bat least one [\w' -]+ space active, you may gamble at the end of any turn after yours\b/i;
+
+/** The Polaris spaces of `item` on `scene` (the ones on a character too, R33d: they count and get a blast). */
+const polarisSpaces = (scene, creator, item) => scene.templates.filter(t => {
+  const f = terrainFlag(t);
+  return f?.creatorId === creator.id && f.itemId === item.id && f.kind === "mark" && t.flags[NS].cells?.length;
+});
+
+/**
+ * End of `prev`'s turn: for every Polaris-like ability with spaces on the scene, whose creator isn't `prev`, a card to
+ * the creator's owners and the GM with Gamble (the meteors land only on that click).
+ */
+async function polarisTurnEnd(prev, scene) {
+  const seen = new Set();
+  for (const { doc, f } of terrainOn(scene)) {
+    if (f.kind !== "mark" || seen.has(`${f.creatorId}#${f.itemId}`)) continue;
+    seen.add(`${f.creatorId}#${f.itemId}`);
+    if (f.creatorId === prev.actor?.id) continue;
+    const src = itemOfSpace(doc);
+    if (!src || !POLARIS_GAMBLE.test(src.base)) continue;
+    const n = polarisSpaces(scene, src.creator, src.item).length;
+    const whisper = game.users.filter(u => u.isGM || src.creator.testUserPermission(u, "OWNER")).map(u => u.id);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: src.creator }), whisper,
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><p><strong><i class="fa-solid fa-meteor"></i> ${esc(src.item.name)}</strong>: end of ${esc(prev.name ?? prev.actor?.name ?? "")}'s turn — ${n} space${n === 1 ? "" : "s"} active; ${esc(src.creator.name)} may gamble.</p>
+        <p><small>${n >= 3 ? "Large Blasts, +4 damage, characters in the center spaces stunned" : n === 2 ? "Medium Blasts, +2 damage" : "Small Blast, damage equal to the gamble result"}; then all the spaces are removed.</small></p>
+        <div>${actButton("polarisGamble", { scene: scene.id, creator: src.creator.id, item: src.item.id }, "Gamble", "fa-dice", "Gamble, then a blast on every space; the spaces are removed")}</div></div>`,
+    });
+  }
+}
 
 /** The tokens (not objects) standing on any of `cells`. */
 function charactersOn(scene, cells) {
@@ -783,6 +824,12 @@ function delayedSpacesAtStart(td, scene) {
     // Only the named space (the brand), not the pits / dangerous spaces the same ability makes.
     if (f.creatorId !== td.actor.id || f.onCharacter || f.kind !== "mark") continue;
     const src = itemOfSpace(doc);
+    if (src && IMPLODE_AT_START.test(src.base)) {
+      // Implode (p.211): the space chosen goes off now. WAKING VOID's one on a character (onCharacter) has its own card.
+      lines.push(`<p><strong>${esc(src.item.name)}</strong>: the space explodes with gravitational energy (large blast around it).</p>
+        <div>${actButton("implode", { scene: scene.id, template: doc.id, creator: src.creator.id, item: src.item.id }, "Activate", "fa-circle-dot", "Place the Large Blast around the space and target who is inside")} ${removeSpacesButton(scene, [doc])}</div>`);
+      continue;
+    }
     if (!src || !ECLIPSE_CHECK.test(src.base)) continue;
     const { creator, item } = src;
     const cells = doc.flags[NS].cells;
@@ -890,6 +937,96 @@ const TERRAIN_ACTS = {
     if (!tds.length) { ui.notifications.warn("Those characters are gone."); return true; }
     const { applyDamageToActor } = await import("../combat/damage.mjs");
     for (const t of tds) await applyDamageToActor(t.actor, Number(amount) || 0, { chatConfirm: true, applyArmor: !!armor });
+    return true;
+  },
+  /** Polaris: gamble, then a blast on every space (size by how many), the spaces removed, a card with the rest. */
+  async polarisGamble({ scene: sid, creator: cid, item: iid }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!scene || !item) { ui.notifications.warn("That ability is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of those spaces first."); return false; }
+    if (!creator.isOwner) { ui.notifications.warn(`Only the owner of ${creator.name} can gamble.`); return false; }
+    const spaces = polarisSpaces(scene, creator, item);
+    if (!spaces.length) { ui.notifications.info(`No ${item.name} space left on this scene.`); return true; }
+    const n = spaces.length;
+    const { rollGamble } = await import("../combat/gamble.mjs");
+    const result = await rollGamble(creator, item);
+    if (result == null) return false;
+    const centres = spaces.map(t => t.flags[NS].cells[0]);
+    const size = n >= 3 ? "l" : n === 2 ? "m" : "s";
+    const placed = await blastOn(creator, item, centres, size, `on the ${item.name} spaces`, "meteor");
+    if (!placed) return false;
+    try { await deleteSpaces(scene, spaces); } catch (err) { console.warn("[ICON | TerrainSpaces] could not remove the spaces", err); }
+    // The one on a character (Talent I) was made by the GM: ending its mark takes it away (follow-marks.mjs).
+    for (const t of spaces.filter(t => terrainFlag(t).onCharacter && scene.templates.get(t.id))) {
+      const holder = scene.tokens.get(t.flags[NS].followTokenId)?.actor;
+      const eff = marksOn(holder).find(m => m.sourceActorId === creator.id && m.abilityKey === item.id);
+      if (eff) { try { await removeMark(eff.uuid); } catch (err) { console.warn("[ICON | TerrainSpaces] could not end the mark", err); } }
+    }
+    const damage = result + (n >= 2 ? 2 : 0) + (n >= 3 ? 2 : 0);
+    const inArea = charactersOn(scene, placed.cells);
+    const onCentre = charactersOn(scene, centres);
+    const base = { scene: scene.id, creator: creator.id, item: item.id };
+    const src = itemOfSpace({ flags: { [NS]: { [FLAG]: { creatorId: creator.id, itemId: item.id } } } });
+    const t2 = src?.talentNo === 2 && /\bcreate a space of difficult terrain under the center space of each\b/i.test(src.talent);
+    const buttons = [
+      inArea.length ? actButton("damageTokens", { ...base, tokens: inArea.map(t => t.id), amount: damage, armor: true }, `${damage} damage to all (${inArea.length})`, "fa-meteor") : "",
+      n >= 3 && onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "stunned", label: "Stunned" }, `Stun the centres (${onCentre.length})`, "fa-star") : "",
+      t2 ? actButton("terrainAtCells", { ...base, cells: centres, kind: "difficult" }, "Talent II: difficult under the centres", "fa-shoe-prints") : "",
+      t2 && result >= 4 ? actButton("terrainAtCells", { ...base, cells: centres, kind: "pit" }, "Talent II: pits instead", "fa-circle-down") : "",
+    ].filter(Boolean).join(" ");
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-meteor"></i> ${esc(item.name)}</strong>: ${n} meteor${n > 1 ? "s" : ""} (gamble ${result}) — ${esc(placed.area?.label ?? "")}, <strong>${damage} damage</strong> to ${inArea.length ? esc(inArea.map(t => t.name).join(", ")) : "no one"}${n >= 3 ? "; characters in the center spaces are stunned" : ""}. All the spaces are removed.
+        ${t2 ? `<p><small>Talent II: ${esc(src.talent)}${result >= 4 ? " (a height 1 meteor object: from the object chip)" : ""}</small></p>` : ""}${buttons ? `<div>${buttons}</div>` : ""}</div>`,
+    });
+    return true;
+  },
+  /** Implode: the Large Blast around the space, the space removed, a card for the shove, the save and the talents. */
+  async implode({ scene: sid, template, creator: cid, item: iid }) {
+    const scene = game.scenes?.get(sid);
+    const doc = scene?.templates?.get(template);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!doc || !item) { ui.notifications.warn("Already activated, or the ability is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of that space first."); return false; }
+    if (!creator.isOwner) { ui.notifications.warn(`Only the owner of ${creator.name} can place the blast.`); return false; }
+    const centre = doc.flags[NS].cells[0];
+    const placed = await blastOn(creator, item, [centre], "l", "around the space", "implode");
+    if (!placed) return false;
+    await deleteSpaces(scene, [doc]);
+    const src = itemOfSpace({ flags: { [NS]: { [FLAG]: { creatorId: creator.id, itemId: item.id } } } });
+    const onCentre = charactersOn(scene, [centre]);
+    const base = { scene: scene.id, creator: creator.id, item: item.id };
+    const t1 = src?.talentNo === 1 && /\bcenter space is also shattered\b/i.test(src.talent);
+    const t2 = src?.talentNo === 2 && /\bcenter space also becomes a pit\b/i.test(src.talent);
+    const buttons = [
+      onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "stunned", label: "Stunned" }, `Failed save: stun ${onCentre.map(t => t.name).join(", ")}`, "fa-star") : "",
+      t1 && onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "shattered", label: "Shattered" }, "Talent I: shatter the centre", "fa-heart-crack") : "",
+      t2 ? actButton("pitAt", { ...base, cell: centre }, "Talent II: the centre becomes a pit", "fa-circle-down") : "",
+    ].filter(Boolean).join(" ");
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-dot"></i> ${esc(item.name)}</strong> activates: shove every character in the area as close as possible towards the centre, in any order you like (by hand).
+        ${onCentre.length ? `<p><small>${esc(onCentre.map(t => t.name).join(", "))} in the center space: save or be stunned.</small></p>` : ""}${buttons ? `<div>${buttons}</div>` : ""}</div>`,
+    });
+    return true;
+  },
+  /** One space of `kind` on each of `cells` (Polaris Talent II). */
+  async terrainAtCells({ scene: sid, cells, creator: cid, item: iid, kind = "difficult" }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!scene || !item || !cells?.length) { ui.notifications.warn("That ability is gone."); return true; }
+    const spec = { kind, name: "" };
+    const docs = await createTerrainSpaces(scene, cells, spec, { actor: creator, abilityName: item.name, abilityKey: `${item.id}:terrain`,
+      group: groupOf(creator, item, spec), itemId: item.id });
+    if (!docs.length) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid ${ICONS[kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>: ${docs.length} × <strong>${esc(terrainLabel(spec))}</strong>.<div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div></div>`,
+    });
     return true;
   },
   /** A status for the listed characters (relayed to the GM when needed). */

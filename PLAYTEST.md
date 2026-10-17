@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Polaris e Implode si attivano dalle card (17 ottobre 2026, versione 1.15.173)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Due caselle Polaris; a fine turno di un altro personaggio esce la card (solo al proprietario e al GM). Gamble:
+      due Medium Blast unite, il danno è risultato +2, le caselle spariscono.
+- [ ] Tre caselle, di cui una su un personaggio (Talent I): Large Blast su tutte e tre; "Stun the centres" mette
+      Stunned; il mark sul personaggio finisce.
+- [ ] A fine turno del creatore non esce nessuna card Polaris.
+- [ ] Talent II: "difficult under the centres"; con risultato 4 o più compare anche "pits instead".
+- [ ] Implode su una casella: a inizio turno del creatore "Activate" fa la Large Blast, poi "Failed save: stun…" per
+      chi è al centro e il pit del Talent II. Con Waking Void su un personaggio non esce la card doppia.
+
 ## R33b2 — Mote e mine esplodono con un clic (17 ottobre 2026, versione 1.15.172)
 
 Setup: solo codice (F5 basta).

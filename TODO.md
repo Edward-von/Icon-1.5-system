@@ -1459,6 +1459,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — blessing tolte da Symphony** (S): "Remove up to four blessings from characters
       anywhere to create pulsing motes" (p.178): il chip lascia piazzare fino a 4 mote senza togliere le blessing;
       servirebbe una scelta di chi le perde (anche personaggi non propri, quindi con relay al GM).
+- [ ] **Emerso lavorando su R33b2 — shove verso il centro di Implode** (M): "shoving all characters … as close as
+      possible towards it … in any order you like" (p.211): oggi solo testo sulla card; servirebbe uno shove guidato,
+      personaggio per personaggio.
 
 ---
 

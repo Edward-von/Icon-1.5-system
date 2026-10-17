@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Polaris e Implode si attivano dalle card (versione 1.15.173)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Polaris / Implode**: il gamble di Polaris e l'attivazione di Implode erano a mano → nessuna card a fine o a inizio
+  turno → a fine di ogni turno non del creatore esce una card sussurrata con "Gamble": tira il dado e fa esplodere un
+  meteor su ogni casella Polaris, compresa quella su un personaggio (Talent I), Small / Medium / Large Blast secondo
+  quante sono, danno = risultato +2 o +4 con tre (p.202), poi i bottoni per il danno, lo stun dei centri e il Talent
+  II, e tutte le caselle vengono tolte (il mark sul personaggio finisce con loro). Implode a inizio turno del creatore
+  ha "Activate": Large Blast intorno alla casella, che poi sparisce, e bottoni per il save fallito, il Talent I e il
+  pit del Talent II (p.211); le caselle di Waking Void su un personaggio hanno già la loro card. Lo shove verso il
+  centro e il meteor object del Talent II di Polaris restano a mano. Solo codice.
+
 ## 17 ottobre 2026 — Mote e mine esplodono con un clic (versione 1.15.172)
 
 ### Round di debug del 15 ottobre, R33b2
