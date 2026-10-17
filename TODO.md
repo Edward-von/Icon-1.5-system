@@ -526,9 +526,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
       GRAN BLITZ armati, la card di attacco mostra il blocco della versione ("Effect (GRAM)") e anche il blocco "Slay
       or Infuse 3" del testo base, che ora resta tra quelli base per non nasconderlo quando lo attiva lo Slay.
-- [ ] **Emerso lavorando su R46 — infusione persa con il token combo** (S): con il token combo tenuto, il Damage Roll
+- [x] **Emerso lavorando su R46 — infusione persa con il token combo** (S): con il token combo tenuto, il Damage Roll
       usa il danno della versione combo e ignora l'infusione armata, compreso il danno in Other appena aggiunto.
       Riguarda solo abilità con sia combo sia Infuse: da verificare se ce ne sono.
+      (CHIUSO il 17 ottobre 2026: nessuna abilità ha sia combo sia Infuse — le 17 abilità combo sono Mendicant /
+      Stalwart / Vagabond, i 32 item con Infuse sono tutti Wright, nessun incrocio in reliquie, bond power, gear kit e
+      trofei; Infuse è "Wright only", p.117; senza combo sull'abilità il token non cambia il danno.)
 - [ ] **Emerso lavorando su R46 — Excalibur sull'Effect di base di Nothung** (S): "Effect: Teleport 1, then deal 1
       piercing damage again to your target for every foe or ally adjacent to them, to a maximum of four times" (p.225)
       non è proposto in Other, quindi con EXCALIBUR non diventa divine; fa parte della voce "Emerso lavorando su R24 —
