@@ -115,7 +115,7 @@ import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, s
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble, bendFate } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
-import { decorateDamageInterrupts, bindInterruptVigorButtons } from "./module/combat/damage-interrupts.mjs";
+import { decorateDamageInterrupts, bindInterruptVigorButtons, decorateAttackInterrupts } from "./module/combat/damage-interrupts.mjs";
 import { injectCardMods, cardModsFor } from "./module/combat/damage-card-mods.mjs";
 
 /* ================================================== */
@@ -967,6 +967,16 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   bindInflictButtons(html);
   // "Heroic: Gain vigor 4" on an interrupt posted from a damage card (Righteous Disdain).
   bindInterruptVigorButtons(message, html);
+});
+
+/**
+ * "When targeted" interrupts on attack cards (R35): Aether Deflection, Endless
+ * Battlement's Heroic Intervention, the foes' "is targeted by an attack" — the
+ * same buttons, uses and posted card as the damage card's (damage-interrupts.mjs).
+ */
+Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  try { decorateAttackInterrupts(message, html); }
+  catch (err) { console.warn("ICON 1.5 | attack-card interrupts failed:", err); }
 });
 
 /**

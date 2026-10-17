@@ -183,6 +183,21 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
 /* ================================================== */
 
 /**
+ * The `icon-system.attack` flag of an attack card: who attacked, with what,
+ * and who was targeted — read by the "when targeted" interrupt buttons
+ * (damage-interrupts.mjs#decorateAttackInterrupts, R35).
+ * @param {{actor?:Actor, abilityName?:string, targets?:Array<{actorUuid, tokenId, name}>}} opts
+ */
+export function attackFlags({ actor = null, abilityName = "", targets = [] } = {}) {
+  return {
+    sourceActorUuid: actor?.uuid ?? "",
+    sourceName:      actor?.name ?? "",
+    abilityName:     abilityName ?? "",
+    targets: (targets ?? []).filter(t => t?.actorUuid).map(t => ({ actorUuid: t.actorUuid, tokenId: t.tokenId ?? "", name: t.name ?? "" })),
+  };
+}
+
+/**
  * Perform a combat attack roll.
  *
  * @param {object} opts
@@ -225,7 +240,8 @@ export async function combatRoll({
   // attack roll. When every target evades there is no attack roll at all: the
   // d20 is still shown for reference but the result is a miss and relic
   // invokes don't trigger.
-  const evasion = await rollEvasion({ attacker: actor, targets: targets ?? currentTargets(), tags, evasionOverride });
+  const attackTargets = targets ?? currentTargets();
+  const evasion = await rollEvasion({ attacker: actor, targets: attackTargets, tags, evasionOverride });
   const evaded  = evasion.allEvaded;
 
   const d20r   = await new Roll("1d20").evaluate();
@@ -314,6 +330,8 @@ export async function combatRoll({
     flavor:  abilityName ?? "Attack",
     content,
     rolls,
+    // Who was targeted: the "when targeted" interrupt buttons (damage-interrupts.mjs, R35).
+    flags: { "icon-system": { attack: attackFlags({ actor, abilityName, targets: attackTargets }) } },
   });
 
   // Arenheir Aspect: each crit lowers the crit threshold of the next attacks.

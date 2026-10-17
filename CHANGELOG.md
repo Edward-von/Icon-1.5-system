@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Interrupt "when targeted" sulla card dell'attacco (versione 1.15.195)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Interrupt "when targeted" sulla card d'attacco**: Aether Deflection (Spellblade, p.224), l'Heroic Intervention di
+  Endless Battlement (p.122) e i foe "is targeted by an attack" non avevano un bottone → i bottoni di R35 c'erano solo
+  sulla card del danno e leggevano solo trigger di danno → ora la card dell'attacco salva chi è stato preso di mira.
+  Vale per l'attacco tirato (PG, foe, legend, summon) e per la card auto-hit dei PG. Sotto la card, per ogni
+  bersaglio, compaiono gli interrupt il cui trigger è "essere preso di mira", per i personaggi che l'utente gioca.
+  Sono gli stessi bottoni della card del danno: spendono un uso e postano Trigger ed Effect. Il sistema ora legge
+  anche i tratti che sono interrupt. Aether Deflection conta il suo uso per combattimento, e "spend 2 Aether to regain
+  it" lo restituisce. Solo codice.
+
 ## 17 ottobre 2026 — Implode: shove guidato verso il centro (versione 1.15.194)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

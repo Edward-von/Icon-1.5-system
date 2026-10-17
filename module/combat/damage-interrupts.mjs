@@ -113,8 +113,27 @@ const DAMAGE_RE = /\b(?:is|are|gets?|being|was) damaged\b|\btakes? damage\b|\bto
  *   about a marked / chosen character the card can't know about
  */
 export function damageTriggerScope(trigger) {
+  return _triggerScope(trigger, DAMAGE_RE);
+}
+
+/** "Targeted" wording of a trigger: being targeted by an ability / attack, a foe targeting someone. */
+const TARGETED_RE = /\b(?:is|are|gets?|being|was) targeted\b|\bwhen targeted\b|\btargets? (?:you|your|an?|the|one|any|them|it|self)\b/;
+
+/**
+ * Who has to be targeted for a trigger to fire (R35, attack card): Aether
+ * Deflection "You are targeted by an ability from a character in range 2",
+ * Endless Battlement's Heroic Intervention "A foe targets your ally with an
+ * ability" (p.122), the foes' "The violence demon is targeted by an attack".
+ * @param {string} trigger  trigger text (plain or HTML)
+ * @returns {"self"|"ally"|"either"|null}
+ */
+export function targetedTriggerScope(trigger) {
+  return _triggerScope(trigger, TARGETED_RE);
+}
+
+function _triggerScope(trigger, re) {
   const t = plainText(trigger).toLowerCase();
-  if (!t || !DAMAGE_RE.test(t)) return null;
+  if (!t || !re.test(t)) return null;
   if (/\b(?:marked|chosen) character\b/.test(t)) return null;
   const ally = /\ball(?:y|ies)\b/.test(t);
   // "You are damaged", "Self or any ally", a foe's own name ("The knight is damaged", "The nixie or an ally…").
@@ -168,6 +187,16 @@ function _readInterrupts(actor) {
   }
   const stances = String(actor.system?.combat?.stance ?? "").split("|").map(s => s.trim()).filter(Boolean);
   for (const item of actor.items ?? []) {
+    // A trait that is an interrupt: "Aether Deflection: Interrupt 1: Trigger: You are targeted by an ability
+    // from a character in range 2. Effect: … You only have one use of this interrupt per combat" (Spellblade, p.224).
+    if (item.type === "trait") {
+      const t = plainText(item.system?.description ?? "");
+      const ti = /\bInterrupt (\d+)\s*[.:]?\s*Trigger:\s*(.+?)\s*Effect:\s*(.+)$/.exec(t);
+      if (ti) out.push({ key: `${item.id}-t`, itemId: item.id, kind: "trait", name: item.name, limit: Number(ti[1]),
+                         cost: `Interrupt ${ti[1]}`, trigger: ti[2], effect: ti[3],
+                         ...(/\bone use of this interrupt per combat\b/i.test(ti[3]) ? { perCombat: true } : {}) });
+      continue;
+    }
     if (item.type !== "ability") continue;
     const s = item.system ?? {};
     const desc = parseAbilitySections(s.description);
@@ -250,16 +279,28 @@ function bankOf(actor, key) {
   return v == null ? 1 : Math.max(0, Number(v) || 0);
 }
 
+/**
+ * Uses spent in the current combat by a once-per-combat interrupt (Aether
+ * Deflection): `interruptCombat.<key> = { combatId, used }`, which the turn
+ * start does not clear. Spending the Aether to regain it unsets it (IconSheet).
+ */
+function combatUsesOf(actor, key) {
+  const f = actor?.getFlag(FLAG_NS, `interruptCombat.${key}`);
+  return f && f.combatId === (game.combat?.id ?? "") ? Number(f.used) || 0 : 0;
+}
+
 /** Uses left and the most there can be: {left, max}. A refresh is always available. */
 export function interruptLeft(actor, it) {
   if (it.kind === "refresh" || it.kind === "soulbond") return { left: 1, max: 1 };
   if (it.bankMax) return { left: bankOf(actor, it.key), max: it.bankMax };
+  if (it.perCombat) return { left: Math.max(0, it.limit - combatUsesOf(actor, it.key)), max: it.limit };
   return { left: Math.max(0, it.limit - interruptUsesOf(actor, it.key)), max: it.limit };
 }
 
 /** Spend one use (also the PC sheet's interrupt chat button, R61). */
 export async function spendUse(actor, it) {
   if (it.bankMax) return actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, Math.max(0, bankOf(actor, it.key) - 1));
+  if (it.perCombat) return actor.setFlag(FLAG_NS, `interruptCombat.${it.key}`, { combatId: game.combat?.id ?? "", used: combatUsesOf(actor, it.key) + 1 });
   return actor.setFlag(FLAG_NS, `interruptUses.${it.key}`, interruptUsesOf(actor, it.key) + 1);
 }
 
@@ -342,6 +383,21 @@ function sceneCharacters() {
  * @returns {Array<{owner:Actor, it:object, uses:number}>}
  */
 export function damageInterruptsFor(target, { tokenId = null, attacker = null } = {}) {
+  return _interruptsFor(target, { tokenId, attacker, soulbond: true, scopeOf: (it) => interruptSpec(it.name).scope ?? damageTriggerScope(it.trigger) });
+}
+
+/**
+ * The interrupts one target of an attack card offers to the current user:
+ * the "when targeted" ones, which go off before the roll (R35).
+ * @param {Actor} target
+ * @param {object} ctx  { tokenId, attacker }
+ * @returns {Array<{owner:Actor, it:object, uses:number}>}
+ */
+export function attackInterruptsFor(target, { tokenId = null, attacker = null } = {}) {
+  return _interruptsFor(target, { tokenId, attacker, scopeOf: (it) => it.kind === "refresh" ? null : targetedTriggerScope(it.trigger) });
+}
+
+function _interruptsFor(target, { tokenId = null, attacker = null, scopeOf, soulbond = false } = {}) {
   if (!target) return [];
   const targetSide = sideOf(target, tokenId);
   const attackerSide = attacker ? sideOf(attacker) : null;
@@ -352,8 +408,8 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
     owners.push({ ...c, self: false });
   }
   const out = [];
-  // Great Soul Bond: the bond's holder and its marked partner; the one not hit presses.
-  for (const o of owners) {
+  // Great Soul Bond: the bond's holder and its marked partner; the one not hit presses (damage card only).
+  for (const o of soulbond ? owners : []) {
     for (const it of interruptsOf(o.actor)) {
       if (it.kind !== "soulbond") continue;
       let presser = null;
@@ -366,8 +422,7 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
     if (!userPlays(o.actor)) continue;
     for (const it of interruptsOf(o.actor)) {
       if (it.kind === "soulbond") continue;
-      const spec = interruptSpec(it.name);
-      const scope = spec.scope ?? damageTriggerScope(it.trigger);
+      const scope = scopeOf(it);
       if (!scope) continue;
       if (o.self ? scope === "ally" : scope === "self") continue;
       // A mark's interrupt: "your ally" is the marked partner only (Heartfire).
@@ -435,6 +490,41 @@ export function decorateDamageInterrupts(message, html) {
     box.innerHTML = `<span class="icon-chat-card__interrupts-label">Interrupt</span>` + list.map(e => buttonHtml(e, target.uuid)).join("");
     row.after(box);
   });
+  _bindButtons(message, html);
+}
+
+/**
+ * Add the "when targeted" interrupt buttons to an attack card (R35): one
+ * line per target of the attack (flags.icon-system.attack, rolls.mjs), for
+ * the characters the current user plays. Same buttons, uses and posted card
+ * as on the damage card; they change nothing on the attack card itself (the
+ * roll is already made: the table applies the effect, as with Dire Parry).
+ * @param {ChatMessage} message
+ * @param {HTMLElement} html
+ */
+export function decorateAttackInterrupts(message, html) {
+  const atk = message?.flags?.[FLAG_NS]?.attack;
+  if (!atk?.targets?.length) return;
+  const card = html.querySelector(".icon-chat-card");
+  if (!card || card.dataset.iconInterrupts) return;
+  card.dataset.iconInterrupts = "true";
+  let attacker = null;
+  try { attacker = atk.sourceActorUuid ? fromUuidSync(atk.sourceActorUuid) : null; } catch { attacker = null; }
+  for (const t of atk.targets) {
+    let target = null;
+    try { target = fromUuidSync(t.actorUuid); } catch { target = null; }
+    const list = attackInterruptsFor(target, { tokenId: t.tokenId || null, attacker });
+    if (!list.length) continue;
+    const box = document.createElement("div");
+    box.className = "icon-chat-card__interrupts icon-chat-card__interrupts--attack";
+    box.innerHTML = `<span class="icon-chat-card__interrupts-label" title="Interrupts whose trigger is being targeted: they go off before the attack roll">Interrupt · ${escapeHTML(t.name ?? target.name)} targeted</span>`
+      + list.map(e => buttonHtml(e, target.uuid)).join("");
+    card.appendChild(box);
+  }
+  _bindButtons(message, html);
+}
+
+function _bindButtons(message, html) {
   html.querySelectorAll('[data-action="damageInterrupt"]').forEach(btn => {
     if (btn.dataset.iconBound) return;
     btn.dataset.iconBound = "true";
@@ -526,8 +616,10 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid, 
   }
   if (hasStatus(owner, "stunned")) { ui.notifications.warn(`${owner.name} is Stunned and can't take interrupts.`); return false; }
   const { left, max } = interruptLeft(owner, it);
-  if (left <= 0) { ui.notifications.warn(`${it.name}: no uses left${it.bankMax ? " in the bank" : " this round"} (0/${max}).`); return false; }
-  const spec = interruptSpec(it.name);
+  if (left <= 0) { ui.notifications.warn(`${it.name}: no uses left${it.bankMax ? " in the bank" : it.perCombat ? " this combat" : " this round"} (0/${max}).`); return false; }
+  // From an attack card (decorateAttackInterrupts): only spent and posted, there is no damage to change.
+  const onAttack = !message?.flags?.[FLAG_NS]?.damage && !!message?.flags?.[FLAG_NS]?.attack;
+  const spec = onAttack ? {} : interruptSpec(it.name);
   if (spec.onUse && target && cardModsFor(message, target.uuid).sources.includes(it.name)) {
     ui.notifications.warn(`${it.name} has already changed this damage for ${target.name}.`);
     return false;
@@ -574,10 +666,13 @@ async function useSoulBond(message, owner, it, target, presser) {
 
 /** The "Used on …" line under the posted interrupt. */
 function usedOnHtml(it, { target, message, usesLeft, max = it.limit }) {
-  const src = message?.flags?.[FLAG_NS]?.damage ?? {};
+  const f = message?.flags?.[FLAG_NS] ?? {};
+  const onAttack = !f.damage && !!f.attack;
+  const src = f.damage ?? f.attack ?? {};
   const what = [src.sourceName, src.abilityName].filter(Boolean).join("'s ");
-  return `<p class="icon-chat-card__interrupt-used"><small><i class="fa-solid fa-bolt"></i> On ${escapeHTML(target?.name ?? "the target")}'s damage`
-       + `${what ? ` from ${escapeHTML(what)}` : ""} — ${usesLeft}/${max} use${max === 1 ? "" : "s"} left${it.bankMax ? " in the bank" : " this round"}.</small></p>`;
+  return `<p class="icon-chat-card__interrupt-used"><small><i class="fa-solid fa-bolt"></i> On ${escapeHTML(target?.name ?? "the target")}`
+       + `${onAttack ? " being targeted" : "'s damage"}`
+       + `${what ? ` from ${escapeHTML(what)}` : ""} — ${usesLeft}/${max} use${max === 1 ? "" : "s"} left${it.bankMax ? " in the bank" : it.perCombat ? " this combat" : " this round"}.</small></p>`;
 }
 
 /**
@@ -601,8 +696,8 @@ export async function postInterruptCard(owner, it, ctx = {}) {
   let raw;
   if (it.kind === "granted") {
     raw = grantedInterrupt(s, it.label)?.lines ?? [];
-  } else if (it.kind === "mastery") {
-    raw = [{ label: "Trigger", text: it.trigger }, { label: "Effect", text: it.effect, mastery: true }];
+  } else if (it.kind === "mastery" || it.kind === "trait") {
+    raw = [{ label: "Trigger", text: it.trigger }, { label: "Effect", text: it.effect, mastery: it.kind === "mastery" }];
   } else {
     const desc = parseAbilitySections(s.description);
     raw = [{ label: "Trigger", text: it.trigger }, ...desc.sections.map(sec => ({ label: sec.label, text: sec.text }))];

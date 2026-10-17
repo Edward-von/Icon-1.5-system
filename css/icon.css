@@ -5968,6 +5968,7 @@ ol.chat-log .chat-message,
 .icon-chat-card--dodged { border-left-color: rgba(46,132,216,.7); }
 /* Interrupts a damage card triggers (R35): a row of gold buttons under the target */
 .icon-chat-card__interrupts { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin: -1px 0 4px 34px; font-size: .82em; }
+.icon-chat-card__interrupts--attack { margin: 4px 0 2px; }
 .icon-chat-card__interrupts-label { color: var(--ic-text-dim); text-transform: uppercase; letter-spacing: .05em; font-size: .85em; }
 .icon-chat-btn--interrupt { background: rgba(200,150,28,.18); color: #e8c868; border-color: rgba(200,150,28,.55); }
 .icon-chat-btn--interrupt:hover { background: rgba(200,150,28,.35); color: #fff; }

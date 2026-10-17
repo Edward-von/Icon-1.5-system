@@ -1,7 +1,7 @@
 /**
  * IconSheet — ApplicationV2 sheet for Player Characters (type: "icon").
  */
-import { narrativeRoll, combatRoll, damageRoll, relicInvokeHtml, relicNotesHtml } from "../../dice/rolls.mjs";
+import { narrativeRoll, combatRoll, damageRoll, relicInvokeHtml, relicNotesHtml, attackFlags } from "../../dice/rolls.mjs";
 import { postAbilityDamageCard, recoverAction, applyDamageToActor } from "../../combat/damage.mjs";
 import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
@@ -2781,6 +2781,9 @@ export class IconSheet extends BaseActorSheet {
                     ${statusBlockHtml(statusEntries, { source: this.document, abilityName: ab.name, outcome: { isHit: true, isCrit: false, isExceed: false }, targets: inCard, attackTargetId })}
                   </div>`,
         rolls,
+        // Who was targeted: the "when targeted" interrupt buttons (damage-interrupts.mjs, R35).
+        flags: { "icon-system": { attack: attackFlags({ actor: this.document, abilityName: ab.name,
+          targets: attackTargetId ? inCard.filter(t => t.tokenId === attackTargetId) : inCard }) } },
       });
       // Chain into damage if the ability deals damage
       if (ab.dealsDamage) {
@@ -3946,7 +3949,7 @@ export class IconSheet extends BaseActorSheet {
 
   /** A trait that lets you "spend 2 Aether any time to regain" its interrupt
    *  (Aether Deflection, Spellblade p.224): pay the Aether and say so in chat.
-   *  Traits keep no use counter, so there is nothing else to reset. */
+   *  The use spent from a chat card's interrupt button is given back. */
   static async #onTraitSpendAether(event, target) {
     event.stopPropagation();
     const item = this.document.items.get(target.dataset.itemId);
@@ -3956,6 +3959,9 @@ export class IconSheet extends BaseActorSheet {
     if (pool < cost) { ui.notifications.warn(`${item.name} needs ${cost} Aether — ${this.document.name} has ${pool}.`); return; }
     _log(`traitSpendAether — "${item.name}" | Aether ${pool} → ${pool - cost}`);
     await this.document.update({ "system.combat.classResources.aether.value": pool - cost });
+    // The once-per-combat use counted by the interrupt buttons of the chat cards (damage-interrupts.mjs) comes back.
+    if (this.document.getFlag("icon-system", `interruptCombat.${item.id}-t`) != null)
+      await this.document.unsetFlag("icon-system", `interruptCombat.${item.id}-t`);
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content: `<p><strong>${escapeHTML(this.document.name)}</strong> spends <strong>${cost} Aether</strong> to regain the use of <strong>${escapeHTML(item.name)}</strong> <small>(${pool - cost} Aether left)</small>.</p>`,

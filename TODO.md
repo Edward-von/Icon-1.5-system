@@ -1466,9 +1466,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       a parte (stesso flag `immune` di damage-card-mods).
 (FATTO il 17 ottobre 2026, versione 1.15.187: Great Soul Bond offerto sulla card del danno al partner non colpito, che
       scende a 1 HP; il colpito diventa immune e il mark di Blazing Bond finisce.)
-- [ ] **Emerso lavorando su R35 — interrupt "when targeted" sulla card d'attacco** (M): Aether Deflection, Endless
+- [x] **Emerso lavorando su R35 — interrupt "when targeted" sulla card d'attacco** (M): Aether Deflection, Endless
       Battlement e i foe "is targeted by an attack" scattano prima del tiro; il posto giusto è la card d'attacco, non
       quella del danno (solo Dire Parry è stato aggiunto al danno come eccezione).
+(FATTO il 17 ottobre 2026, versione 1.15.195: le card dell'attacco salvano i bersagli e offrono gli interrupt "when
+      targeted" con gli stessi bottoni della card del danno; i tratti che sono interrupt vengono letti, e Aether
+      Deflection conta un uso per combattimento.)
 - [ ] **Emerso lavorando su R33d2 — range sul bottone Mark** (S): il bottone Mark delle schede (PG, foe, legend) non
       controlla il range dell'abilità per nessun mark, Polaris Talent I e Amico compresi (il controllo c'è solo sul
       chip "On a character").
@@ -1581,6 +1584,16 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — collisione nello shove di Implode** (S): quando lo shove si ferma contro un
       ostacolo, il libro può prevedere la collisione (p.107 e seguenti); oggi il token si ferma e basta, senza nessun
       promemoria di collisione.
+- [ ] **Emerso lavorando su R35 — "targeted by an ability" senza attacco** (S/M, da decidere): molti trigger dicono
+      "targeted by an ability", ma le abilità che non sono attacchi (Show in Chat) non salvano i bersagli, quindi lì
+      non c'è nessun bottone. Inoltre negli attacchi ad area i bottoni vanno solo al bersaglio dell'attacco e non agli
+      altri nell'area. Domanda per Edoardo: chi è nell'area conta come "targeted"?
+- [ ] **Emerso lavorando su R35 — effetto di Aether Deflection sul danno** (S): "Gain resistance against damage from
+      that ability" resta solo come testo. Si potrebbe aggiungere la resistenza alla card del danno che segue, come
+      Righteous Disdain (damage-card-mods).
+- [ ] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
+      "Interrupt N: Trigger: … Effect: …" vengono letti, un tratto con un trigger di danno comparirebbe anche sulla
+      card del danno. Non è stato controllato quali tratti dei PG lo fanno.
 
 ---
 

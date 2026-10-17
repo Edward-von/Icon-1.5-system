@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Interrupt "when targeted" sulla card dell'attacco (17 ottobre 2026, versione 1.15.195)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un foe attacca un PG Spellblade con Aether Deflection: sotto la card dell'attacco compare "Interrupt · <PG>
+      targeted" con il bottone Aether Deflection 1/1. Premendolo si posta la card con Trigger ed Effect e "On <PG>
+      being targeted … 0/1 use left this combat".
+- [ ] Aether Deflection dopo l'uso: il bottone resta disabilitato anche nei turni successivi dello stesso
+      combattimento. Dopo il bottone "spend 2 Aether" sulla scheda torna 1/1.
+- [ ] PG in stance Endless Battlement, un foe attacca un alleato: il bottone Heroic Intervention compare sotto la card
+      dell'attacco per il giocatore che ha quel PG (non per gli altri).
+- [ ] Foe con interrupt "is targeted by an attack" (es. Violence Demon): un PG lo attacca e solo il GM vede il bottone
+      sotto la card. L'uso si spunta anche sulla scheda del foe.
+- [ ] Riposte / Dire Parry: un foe attacca un alleato e il bottone compare sulla card dell'attacco. Resta anche sulla
+      card del danno come prima.
+- [ ] Attacco ad area con più bersagli: i bottoni compaiono solo per il bersaglio dell'attacco scelto nella finestra.
+- [ ] La card del danno funziona come prima: Righteous Disdain, Wish, Grace of the Spirits e Heartfire cambiano ancora
+      il danno.
+- [ ] Le card d'attacco vecchie (precedenti alla build) non mostrano bottoni e non danno errori in console.
+
 ## Emerso R33 — Implode: shove guidato verso il centro (17 ottobre 2026, versione 1.15.194)
 
 Setup: solo codice (F5 basta).
