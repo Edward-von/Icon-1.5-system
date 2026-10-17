@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Elenchi a righe anche nei foe (versione 1.15.124)
+
+### Round di debug del 15 ottobre, voce emersa su R12
+
+- **Elenchi "•" dei foe in un paragrafo unico**: in circa 50 tratti e azioni di foe e legend (Imperial Spy, Relict,
+  trappola dei Lowlander, Eternal Star del Warden, decreti del Majesty Demon, Creeping Cold delle Aesi…) le voci
+  restavano attaccate in una sola frase → nei compendi gli elenchi erano scritti con " • " in linea, senza a capo, e
+  la resa a righe di R12 vale solo per le voci che iniziano una riga → nei pack foes, legends, foe abilities e foe
+  templates ogni voce ora sta su una riga che inizia con "•" (482 testi, contando le copie dello stesso tratto su più
+  foe), senza cambiare una parola; dove il libro rientra le voci sotto un'altra (azioni libere di Possess del Silent
+  One, "While stuck" dello Static Charge, le altezze di Raze Hell / Raze Heaven) sono sotto-voci "◦"; il testo che nel
+  libro segue l'ultima voce torna a capo come testo normale (controllato sul manuale). Niente migrazione: vale per i
+  foe importati di nuovo dal compendio, non per quelli già nel mondo. Script in
+  `icon-compendium-audit/r12b-foe-bullet-lists/`. Solo compendi.
+
 ## 17 ottobre 2026 — Costo leggibile nei riquadri delle abilità (versione 1.15.123)
 
 ### Round di debug del 15 ottobre, voce emersa su R5

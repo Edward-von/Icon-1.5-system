@@ -1656,6 +1656,28 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R12 — Elenchi a righe anche nei foe (17 ottobre 2026, versione 1.15.124)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Importare di nuovo dal compendio Imperial Spy: il tratto con Commanding Officer / Orders mostra due righe col
+      pallino d'oro e il titolo in grassetto, sulla scheda e nella card in chat.
+- [ ] Un foe Relict qualsiasi (es. Arc Spectre): la frase d'apertura del tratto Relict resta normale, poi due voci a
+      righe.
+- [ ] Warden of the Aeongate, round action Eternal Star: quattro righe (0, 1, 2, 3+) e poi "Phase 2: … Phase 3: …" di
+      nuovo come testo normale.
+- [ ] Head Lopper (legend), God Waster: "Raze Hell:" e "Raze Heaven:" come voci, con le quattro altezze rientrate
+      sotto ciascuna.
+- [ ] Silent One, Possess: le tre azioni libere rientrate sotto la seconda voce, poi "A character may save…" di nuovo
+      come voce piena.
+- [ ] Rider of the Primal Storm, Static Charge: le quattro voci di "While stuck" rientrate.
+- [ ] Fetid Idol, Manifestations: tre righe (1-2, 3-4, 5-6), poi "Phase 2: …" come testo normale, poi la riga "Pit of
+      Sacrifice".
+- [ ] Compendio Foe Abilities: "Cannoneer — Full auto": due voci, poi "They can only exit this stance…" come testo
+      normale.
+- [ ] Applicare il template Lowlander a un foe nuovo: il tratto della trappola arriva già a righe.
+- [ ] Un foe già importato prima di questa build resta col vecchio paragrafo unico: è atteso.
+
 ## Emerso R5 — Costo leggibile nei riquadri delle abilità (17 ottobre 2026, versione 1.15.123)
 
 Setup: solo codice (F5 basta).

@@ -1236,11 +1236,14 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
 - [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
       True Strike come se fosse uno status (c'era anche prima).
-- [ ] **Emerso lavorando su R12 — elenchi "•" in linea nei foe** (M, dati): circa 100 tratti/azioni di foe e legend
+- [x] **Emerso lavorando su R12 — elenchi "•" in linea nei foe** (M, dati): circa 100 tratti/azioni di foe e legend
       (Imperial Spy, Relict, Eternal Star del Warden, decreti del Majesty Demon, Creeping Cold delle Aesi…) scrivono
       gli elenchi con " • " in linea, senza a capo, quindi restano un paragrafo unico. La resa a righe di R12 vale solo
       per "\n•"; per usarla lì bisogna mettere l'a capo nei pack foes/legends, controllando a mano dove finisce l'ultima
       voce (es. "3+: 1 damage. Phase 2: …" dell'Eternal Star).
+(FATTO il 17 ottobre 2026, versione 1.15.124: 482 testi in foes, legends, foe-abilities e foe-templates portati a una
+      voce per riga, con sotto-voci "◦" dove il libro rientra e il testo dopo l'ultima voce di nuovo a capo; parole
+      invariate; restano in linea solo le regole dei summon in HTML, voce emersa a parte. Solo compendi.)
 - [x] **Emerso lavorando su R5 — tag dei foe ancora grigi** (S/M): nel pack delle foe abilities restano senza
       tooltip "per-round-N", "per-combat-N", "repeatable", "usable-when-bloodied", "round-3+(-only)", "area-effect",
       "burst-N-target/self", più i tag da meccanica di fazione ("cauldron-action",
@@ -1295,6 +1298,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (`handlebars.mjs`) non fornisce `@index`, quindi il numero esce vuoto e `#onDropAbilitySlot` lo legge come 0:
       un'abilità trascinata su un riquadro già pieno (es. il quinto) potrebbe finire nel primo. Usare `{{this}}` come
       i riquadri vuoti.
+- [ ] **Emerso lavorando su R12 — elenchi "•" nelle regole dei summon in HTML** (S): le regole dei summon di Churn
+      Baron (Blunderbuss / Arkentech Explosives), Deep Snow Aesi (Icicle), Keeper of the Eldflame (Everforge) e
+      Violence Demon (Blade of Agony) sono salvate come `<p>… • … • …</p>` (`system.summons.N.rules`) e la resa a
+      righe salta i testi in HTML; togliere il `<p>` o scriverne uno per voce, controllando come la card in chat
+      aggiunge il descrittore (`postNpcTraitCard`).
 
 ---
 
