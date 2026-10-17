@@ -1443,6 +1443,8 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       token o si piazza l'area.
 - [ ] **Emerso lavorando su R33c2 — Mist Strider Talent II** (S): "Foes in the area count all characters as having
       evasion" non ha nessun promemoria.
+- [ ] **Emerso lavorando su R33c2 — Ätherwand "Foes that end their turn in the area are shattered"** (S): nessun
+      promemoria a fine turno; si potrebbe fare come River Guardians.
 
 ---
 

@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Aree terrain effect: danni su clic (17 ottobre 2026, versione 1.15.165)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Blitz con GUNGNIR: all'inizio e alla fine del turno compare la card con il bottone; il clic apre la card del
+      danno (1 piercing) per chi è nell'area in quel momento.
+- [ ] Bifröst Talent II: a fine round la card ha "Add 2 spaces" e "1 piercing damage to all inside".
+- [ ] River Guardians: un foe inizia il turno nella nuvola ed esce → a fine turno card con "2 damage" e "Dazed"; se
+      resta dentro, o se non c'era all'inizio, nessuna card.
+- [ ] Area vuota: il clic dice "No one is in …".
+
 ## R33c2 — Aree terrain effect: status per chi sta dentro (17 ottobre 2026, versione 1.15.164)
 
 Setup: solo codice (F5 basta).

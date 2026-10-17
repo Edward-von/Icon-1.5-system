@@ -27,7 +27,7 @@
  */
 import { areaLabel, shapeCells, isPlacingArea } from "./area-templates.mjs";
 import { terrainFlag, extendAreaTemplate } from "./terrain-spaces.mjs";
-import { areaMotion, areaGrowth, markGrowTo, activeAreaTexts, areaTerrainLabel } from "../helpers/area-terrain.mjs";
+import { areaMotion, areaGrowth, markGrowTo, activeAreaTexts, areaTerrainLabel, areaDamage } from "../helpers/area-terrain.mjs";
 
 const _log = (...a) => console.debug("[ICON | AreaMotion]", ...a);
 const NS = "icon-system";
@@ -69,7 +69,36 @@ function rulesOf(doc) {
   if (motion && mark) motion = motion.free && name && motion.free.noun === name ? { free: motion.free, freeAlt: motion.freeAlt } : null;
   let growTo = mark ? markGrowTo(texts) : null;
   if (growTo && growTo.noun !== name) growTo = null;
-  return { actor, item, f, motion, growth: mark ? null : areaGrowth(texts), growTo };
+  return { actor, item, f, motion, growth: mark ? null : areaGrowth(texts), growTo, damage: mark ? null : areaDamage(texts) };
+}
+
+/**
+ * R33c2: a button that posts a damage card for the characters in the area when it is clicked (GUNGNIR, Bifröst
+ * Talent II): the card's own Apply buttons deal it, nothing is dealt on its own.
+ */
+function areaDamageButton(doc, d) {
+  const what = `${d.amount}${d.piercing ? " piercing" : ""} damage`;
+  return `<div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaDamage" data-scene-id="${esc(doc.parent.id)}" data-template-id="${esc(doc.id)}" data-amount="${d.amount}" data-piercing="${d.piercing ? 1 : ""}" title="A damage card for the characters in the area now"><i class="fa-solid fa-bolt"></i> ${esc(what)} to all inside</button></div>`;
+}
+
+/** The damage card of areaDamageButton: the characters in the area's spaces now. */
+async function postAreaDamage(doc, amount, piercing, only = null) {
+  const scene = doc.parent;
+  const targets = only ?? tokensIn(scene, doc.flags[NS].cells ?? []);
+  if (!targets.length) { ui.notifications.info(`No one is in ${nameOf(doc)}.`); return false; }
+  const { actor } = sourceOf(doc);
+  const { postAbilityDamageCard } = await import("../combat/damage.mjs");
+  const none = { mult: 0, fray: false, flat: 0 };
+  await postAbilityDamageCard(actor, {
+    parsed: { hit: { ...none }, miss: { ...none }, area: { ...none }, extras: [] },
+    outcome: "other",
+    other: { mult: 0, fray: false, flat: amount, area: true, label: nameOf(doc) },
+    damagedie: actor?.system?.combat?.damagedie ?? "d6",
+    fray: 0, abilityName: nameOf(doc), pierce: !!piercing,
+    targetIds: targets.map(t => t.id), targetName: targets.map(t => t.name).join(", "),
+    statusBonus: false,
+  });
+  return true;
 }
 
 /** Is `cell` inside the scene's map (not its padding)? */
@@ -286,12 +315,75 @@ export async function areaTurnStart(combatant) {
     if (g && round >= g.round && (doc.flags[NS].cells?.length ?? 0) === 1) {
       parts.push(`<p>${esc(g.source)}: ${esc(g.rule)}</p><div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaGrowTo" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" title="It becomes a ${esc(areaLabel({ kind: "blast", size: g.size }))} around its space"><i class="fa-solid fa-expand"></i> Grow to ${esc(areaLabel({ kind: "blast", size: g.size }))}</button></div>`);
     }
+    // R33c2: GUNGNIR (p.225) "At the start and end of your turn, you may deal 1 piercing damage to all characters in the area".
+    const dt = rules.damage?.turn;
+    if (dt?.start) parts.push(`<p>${esc(dt.source)}: ${esc(dt.rule)}</p>${areaDamageButton(doc, dt)}`);
     if (parts.length) lines.push(`<p><strong>${esc(name)}</strong></p>${parts.join("")}`);
   }
+  noteLeaveStart(combatant, scene);
   if (!lines.length) return;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-arrows-up-down-left-right"></i> Start of ${esc(actor.name)}'s turn — areas</strong>${lines.join("")}</div>`,
+  });
+}
+
+// River Guardians (p.169): the areas with a "start inside, end outside" rule each combatant started their turn in,
+// noted by the active GM at the start of the turn (combatant id → template ids). On this client only: a reload in
+// the middle of a turn loses it, and the end of that turn says nothing.
+const _startedInside = new Map();
+const isFoeToken = (td) => td?.disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE || ["foe", "legend"].includes(td?.actor?.type);
+
+/** The lasting areas on `scene` with a River Guardians rule, with it. */
+function leaveAreas(scene) {
+  if (!scene) return [];
+  return scene.templates.filter(t => t.flags?.[NS]?.lasting && !t.flags[NS].followTokenId)
+    .map(doc => ({ doc, leave: rulesOf(doc)?.damage?.leave })).filter(e => e.leave);
+}
+
+function noteLeaveStart(combatant, scene) {
+  _startedInside.delete(combatant?.id);
+  const td = combatant?.token;
+  if (!td || !isFoeToken(td)) return;
+  const mine = cellsOfToken(td).map(cellKey);
+  const ids = leaveAreas(scene).filter(({ doc }) => (doc.flags[NS].cells ?? []).some(c => mine.includes(cellKey(c)))).map(({ doc }) => doc.id);
+  if (ids.length) _startedInside.set(combatant.id, ids);
+}
+
+/**
+ * End of `combatant`'s turn (active GM, IconCombat): GUNGNIR's "At the start and end of your turn, you may deal 1
+ * piercing damage to all characters in the area" (p.225) for the areas they placed, and River Guardians' "Foes that
+ * start their turn inside the area that end their turn outside of it take 2 damage and are dazed" (Mist Strider's
+ * mastery p.169) for a foe that did. Cards with buttons: nothing is dealt or given without a click.
+ * @param {Combatant} combatant
+ */
+export async function areaTurnEnd(combatant) {
+  const actor = combatant?.actor;
+  const td = combatant?.token;
+  const scene = td?.parent ?? combatant?.parent?.scene ?? canvas?.scene;
+  if (!scene || !actor) return;
+  const lines = [];
+  for (const { doc, rules } of rulesFor(scene, actor)) {
+    const dt = rules.damage?.turn;
+    if (dt?.end) lines.push(`<p><strong>${esc(nameOf(doc))}</strong></p><p>${esc(dt.source)}: ${esc(dt.rule)}</p>${areaDamageButton(doc, dt)}`);
+  }
+  const started = _startedInside.get(combatant.id) ?? [];
+  _startedInside.delete(combatant.id);
+  if (td && started.length) {
+    const mine = cellsOfToken(td).map(cellKey);
+    const { insideStatusButton } = await import("./terrain-spaces.mjs");
+    for (const { doc, leave } of leaveAreas(scene)) {
+      if (!started.includes(doc.id) || (doc.flags[NS].cells ?? []).some(c => mine.includes(cellKey(c)))) continue;
+      const what = `${leave.amount}${leave.piercing ? " piercing" : ""} damage`;
+      lines.push(`<p><strong>${esc(td.name)}</strong> started the turn inside <strong>${esc(nameOf(doc))}</strong> and ends it outside.</p><p><small>${esc(leave.source)}: ${esc(leave.rule)}</small></p>
+        <div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaLeaveDamage" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-token-id="${esc(td.id)}" data-amount="${leave.amount}" data-piercing="${leave.piercing ? 1 : ""}"><i class="fa-solid fa-bolt"></i> ${esc(what)} to ${esc(td.name)}</button>
+        ${leave.status ? insideStatusButton(td, leave.status, { label: `${leave.status[0].toUpperCase()}${leave.status.slice(1)} to ${td.name}` }) : ""}</div>`);
+    }
+  }
+  if (!lines.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-bolt"></i> End of ${esc(actor.name)}'s turn — areas</strong>${lines.join("")}</div>`,
   });
 }
 
@@ -316,7 +408,7 @@ export async function areaRoundEnd(combat) {
         speaker: ChatMessage.getSpeaker({ actor }),
         content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-expand"></i> End of round ${Math.max(1, (Number(combat.round) || 1) - 1)} — ${esc(nameOf(doc))}</strong>
           <p>${esc(g.source)}: ${esc(g.rule)}</p>${g.note ? `<p><small>${esc(g.note)}</small></p>` : ""}
-          <div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaGrow" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-count="${g.count}" data-source="${esc(g.source)}" data-note="${esc(g.note)}" title="Click ${g.count} spaces adjacent to the area"><i class="fa-solid fa-expand"></i> Add ${g.count} space${g.count > 1 ? "s" : ""}</button></div></div>`,
+          <div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaGrow" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-count="${g.count}" data-source="${esc(g.source)}" data-note="${esc(g.note)}" title="Click ${g.count} spaces adjacent to the area"><i class="fa-solid fa-expand"></i> Add ${g.count} space${g.count > 1 ? "s" : ""}</button></div>${rules.damage?.grow ? areaDamageButton(doc, rules.damage.grow) : ""}</div>`,
       });
     }
   }
@@ -407,6 +499,11 @@ export function registerAreaMotion() {
             if (n) { btn.disabled = true; btn.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaGrowTo") {
             if (await growToBlast(doc)) { btn.disabled = true; btn.style.opacity = "0.5"; }
+          } else if (ds.action === "iconAreaDamage" || ds.action === "iconAreaLeaveDamage") {
+            // R33c2: a damage card (GUNGNIR, Bifröst Talent II, River Guardians); its Apply buttons deal it.
+            const only = ds.action === "iconAreaLeaveDamage" ? [scene.tokens.get(ds.tokenId)].filter(Boolean) : null;
+            if (only && !only.length) { ui.notifications.info("That character is no longer on the scene."); return; }
+            if (await postAreaDamage(doc, Number(ds.amount) || 1, !!ds.piercing, only)) { btn.disabled = true; btn.style.opacity = "0.5"; }
           }
         } catch (err) { console.warn("[ICON | AreaMotion] button failed", err); }
       });

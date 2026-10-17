@@ -196,6 +196,31 @@ export function areaGrowth(texts) {
 }
 
 /**
+ * Damage an area deals to the characters in it (R33c2), from the ability's blocks in play:
+ *   turn   "At the start and end of your turn, you may deal 1 piercing damage to all characters in the area"
+ *          (Blitz's GUNGNIR p.225) → { turn: { amount, piercing, start, end } }
+ *   leave  "Foes that start their turn inside the area that end their turn outside of it take 2 damage and are
+ *          dazed" (Mist Strider's River Guardians p.169) → { leave: { amount, piercing, status } }
+ *   grow   "When they grow, deal 1 piercing damage to all characters inside" (Bifröst Talent II p.226) → { grow: … }
+ * @param {Array<[string, string]>} texts
+ * @returns {{turn?: object, leave?: object, grow?: object}|null}
+ */
+export function areaDamage(texts) {
+  let out = null;
+  const set = (k, v) => { (out ??= {})[k] = v; };
+  for (const [source, text] of texts ?? []) {
+    const t = plain(text);
+    let m = /\bat the (start and end|start|end) of your turns?,? you (?:may|can) deal (\d+) (piercing )?damage to all characters (?:in|inside) the area\b/i.exec(t);
+    if (m) set("turn", { amount: Number(m[2]), piercing: !!m[3], start: /start/i.test(m[1]), end: /end/i.test(m[1]), source, rule: sentenceAt(t, m.index) });
+    m = /\bfoes that start their turns? inside the area that end their turns? outside of it take (\d+) (piercing )?damage(?: and are (dazed|blinded|shattered|weakened|vulnerable|slashed|stunned|immobile))?/i.exec(t);
+    if (m) set("leave", { amount: Number(m[1]), piercing: !!m[2], status: m[3] ? (m[3].toLowerCase() === "blinded" ? "blind" : m[3].toLowerCase()) : "", source, rule: sentenceAt(t, m.index) });
+    m = /\bwhen (?:they|it) grows?, deal (\d+) (piercing )?damage to all characters inside\b/i.exec(t);
+    if (m) set("grow", { amount: Number(m[1]), piercing: !!m[2], source, rule: sentenceAt(t, m.index) });
+  }
+  return out;
+}
+
+/**
  * A single-space mark that grows into an area from a round on: HURRICANE (p.235), "At round 4 or later, waterspouts
  * grow to a small blast area instead of a single space. They become dangerous terrain …".
  * @param {Array<[string, string]>} texts

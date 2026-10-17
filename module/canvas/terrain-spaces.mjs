@@ -528,7 +528,7 @@ function insideConcerns(e, td, creatorId) {
 }
 
 /** A chat button that gives or takes a status from one character, on a click (registerTerrainSpaceHooks binds it). */
-function insideStatusButton(td, status, { op = "apply", ongoing = false, label = "" } = {}) {
+export function insideStatusButton(td, status, { op = "apply", ongoing = false, label = "" } = {}) {
   return `<button type="button" class="icon-btn icon-btn--sm" data-action="terrainInsideStatus" data-token-uuid="${esc(td.uuid)}" data-status="${esc(status)}" data-ongoing="${ongoing ? "true" : "false"}" data-op="${op}"><i class="fa-solid ${op === "apply" ? "fa-plus" : "fa-minus"}"></i> ${esc(label)}</button>`;
 }
 

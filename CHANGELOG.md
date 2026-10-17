@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aree terrain effect: danni su clic (versione 1.15.165)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **Danni dell'area**: GUNGNIR (p.225), Bifröst Talent II (p.226) e River Guardians (p.169) scrivevano il danno solo
+  nel testo → nessuna card lo proponeva → GUNGNIR ha il bottone "1 piercing damage to all inside" a inizio e a fine
+  turno del creatore; la card di fine round di Bifröst ha lo stesso bottone accanto a "Add 2 spaces"; un foe che
+  inizia il turno nella nuvola di Mist Strider con River Guardians e lo finisce fuori riceve la card "2 damage to X" +
+  "Dazed to X". Il bottone apre la normale card del danno, con i suoi Apply. Il "start inside" di River Guardians è
+  ricordato solo dal GM attivo (un F5 a metà turno lo perde). Solo codice.
+
 ## 17 ottobre 2026 — Aree terrain effect: status per chi sta dentro (versione 1.15.164)
 
 ### Round di debug del 15 ottobre, R33c2
