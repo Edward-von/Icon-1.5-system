@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R36 — Foretell dal mazzo con la mano vuota (17 ottobre 2026, versione 1.15.200)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Svuotare la mano del Seer e aprirla: al posto di "No cards" c'è il bottone "Foretell from the deck" con l'icona
+      della ruota.
+- [ ] Con un alleato bersagliato, cliccarlo: in chat esce la card della Great Wheel di una carta del mazzo (con il
+      nome del bersaglio e i bottoni Gain), la carta finisce nella pila degli scarti del Seer, la mano resta vuota e
+      il bottone resta lì.
+- [ ] Mazzo esaurito con carte nella pila degli scarti: il bottone rimescola la pila nel mazzo e poi gioca una carta.
+- [ ] Mazzo e pila tutti e due vuoti: compare l'avviso "has no cards left to draw" e non succede altro.
+- [ ] Una mano con carte non mostra il bottone; giocando l'ultima carta con Foretell, il bottone compare.
+- [ ] Da giocatore (non GM) con permesso Owner su mazzo e pila: il bottone funziona. Senza permesso: compare un errore
+      chiaro, nessun blocco.
+
 ## Emerso R36 — Foretell scarta nella pila del proprio Seer (17 ottobre 2026, versione 1.15.199)
 
 Setup: solo codice (F5 basta).

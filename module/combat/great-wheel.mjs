@@ -30,7 +30,7 @@
 import { enrichRuleKeywords } from "../helpers/keywords.mjs";
 import { statusBlockHtml, captureTargets } from "./ability-statuses.mjs";
 import { placeAreaTemplate } from "../canvas/area-templates.mjs";
-import { seerOfHand, seerPile } from "./wheel-of-fate.mjs";
+import { seerOfHand, seerPile, seerDeck, refillDeck } from "./wheel-of-fate.mjs";
 
 const _log = (...a) => console.debug("[ICON | GreatWheel]", ...a);
 
@@ -276,10 +276,53 @@ async function _foretell(hand, card) {
   catch (err) { ui.notifications.error(err.message); }
 }
 
-/** The "Foretell" button on each Great Wheel card of a hand. */
+/**
+ * Foretell with an empty hand (p.199): "If you have no cards in hand, draw the top card of your deck
+ * instead, apply its effects, then discard it." The card goes from the Seer's deck straight to their
+ * discard pile and its chat card is posted. Drawn at random like Skein's draws (seerDraw), the deck
+ * being shuffled; a deck drawn through is refilled from the discard pile first.
+ */
+async function _foretellFromDeck(hand) {
+  const seer = seerOfHand(hand);
+  const pile = seer ? seerPile(seer) : discardPile();
+  const deck = seerDeck(seer, hand, pile);
+  if (!deck) { ui.notifications.warn("No deck found: name the deck after the character."); return; }
+  if (!pile) { ui.notifications.warn("No discard pile found: name a pile \"Discard\" (or after the character)."); return; }
+  try {
+    if (!deck.availableCards.length) await refillDeck(deck, pile);
+    if (!deck.availableCards.length) { ui.notifications.warn(`${deck.name} has no cards left to draw.`); return; }
+    const [card] = deck._drawCards(1, CONST.CARD_DRAW_MODES.RANDOM);
+    const data = { name: card.name, img: card.img, value: card.value, suit: card.suit };
+    await deck.pass(pile, [card.id], { action: "play", chatNotification: false });
+    if (greatWheelEntry(data)) await postGreatWheelCard(data, { from: deck, to: pile });
+    else ui.notifications.info(`${card.name} has no Great Wheel effect: discarded.`);
+  } catch (err) {
+    console.error("ICON 1.5 | Foretell from the deck failed", err);
+    ui.notifications.error(`Could not draw: ${err.message} (the player needs Owner permission on the deck and discard pile).`);
+  }
+}
+
+/** The "Foretell" button on each Great Wheel card of a hand; on an empty hand, "Foretell from the deck". */
 function _addForetellButtons(app, element) {
   const hand = app.document;
   if (hand?.type !== "hand" || hand.pack || !app.isEditable) return;
+  if (!hand.cards.size) {
+    const empty = element.querySelector("ol[data-cards] > li:not([data-card-id])");
+    if (empty && !empty.querySelector(".icon-great-wheel__deck")) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "icon-great-wheel__deck";
+      btn.dataset.tooltip = "No cards in hand: draw a card of your deck, apply its effects, then discard it (p.199)";
+      btn.innerHTML = '<i class="fa-solid fa-dharmachakra"></i> Foretell from the deck';
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        btn.disabled = true;
+        try { await _foretellFromDeck(hand); } finally { btn.disabled = false; }
+      });
+      empty.append(btn);
+    }
+    return;
+  }
   for (const li of element.querySelectorAll("li[data-card-id]")) {
     const card = hand.cards.get(li.dataset.cardId);
     if (!card || !greatWheelEntry(card) || li.querySelector(".icon-great-wheel__play")) continue;

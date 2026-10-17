@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Foretell dal mazzo con la mano vuota (versione 1.15.200)
+
+### Round di debug del 15 ottobre, voce emersa su R36
+
+- **Foretell con la mano vuota**: senza carte in mano non c'era modo di fare Foretell → il bottone Foretell sta solo
+  sulle carte della mano, mentre il manuale dice "If you have no cards in hand, draw the top card of your deck
+  instead, apply its effects, then discard it" (p.199) → una mano vuota ora mostra il bottone "Foretell from the
+  deck": prende una carta dal mazzo del Seer, la mette direttamente nella sua pila degli scarti e pubblica in chat la
+  card della Great Wheel con i suoi effetti. Se il mazzo è finito, prima rimescola la pila degli scarti nel mazzo. La
+  carta è presa a caso, come le pescate di Skein, perché il mazzo è mescolato. Solo codice.
+
 ## 17 ottobre 2026 — Foretell scarta nella pila del proprio Seer (versione 1.15.199)
 
 ### Round di debug del 15 ottobre, voce emersa su R36

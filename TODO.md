@@ -1558,9 +1558,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
       spende anche se il PG è Stunned, mentre il bottone della card del danno lo blocca.
 - nessuno
-- [ ] **Emerso lavorando su R36 — Foretell con la mano vuota** (S): p.199 dice "If you have no cards in hand, draw the
+- [x] **Emerso lavorando su R36 — Foretell con la mano vuota** (S): p.199 dice "If you have no cards in hand, draw the
       top card of your deck instead, apply its effects, then discard it". Il bottone Foretell sta sulle carte della
       mano, quindi con la mano vuota non c'è modo di farlo; servirebbe un bottone "Foretell dal mazzo".
+(FATTO il 17 ottobre 2026, versione 1.15.200: bottone "Foretell from the deck" sulla mano vuota, carta dal mazzo del
+      Seer alla sua pila, con la card in chat)
 - [x] **Emerso lavorando su R36 — Foretell usa sempre la pila "Discard"** (S): il bottone Foretell di great-wheel.mjs
       manda la carta nella pila "Discard" generica, non in quella col nome del Seer che usano le nuove pescate. Con
       due Seer al tavolo gli scarti si mescolano.

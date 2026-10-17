@@ -108,6 +108,18 @@ async function _post(actor, title, body) {
 }
 
 /**
+ * The deck is drawn through: the discard pile's cards from that deck go back into it and it is
+ * shuffled (p.199). @returns {Promise<number>} how many cards went back (0: nothing to reshuffle).
+ */
+export async function refillDeck(deck, pile) {
+  const back = pile?.cards.filter(c => c.origin === deck).map(c => c.id) ?? [];
+  if (!back.length) return 0;
+  await pile.pass(deck, back, { chatNotification: false });
+  await deck.shuffle({ chatNotification: false });
+  return back.length;
+}
+
+/**
  * Draw `n` cards into the Seer's hand. When the deck runs out, the discard
  * pile's cards from that deck go back into it and it is shuffled (p.199).
  * @returns {Promise<{drawn:number, reshuffled:number}|null>}
@@ -125,11 +137,9 @@ export async function seerDraw(actor, n, reason) {
     while (need > 0) {
       const avail = deck.availableCards.length;
       if (!avail) {
-        const back = reshuffled ? [] : (pile?.cards.filter(c => c.origin === deck).map(c => c.id) ?? []);
-        if (!back.length) break;
-        await pile.pass(deck, back, { chatNotification: false });
-        await deck.shuffle({ chatNotification: false });
-        reshuffled = back.length;
+        if (reshuffled) break;
+        reshuffled = await refillDeck(deck, pile);
+        if (!reshuffled) break;
         continue;
       }
       const k = Math.min(need, avail);
