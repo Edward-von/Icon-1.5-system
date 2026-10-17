@@ -1437,9 +1437,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       combattimento fino a 5, Skein (1 carta a inizio turno, +1 a fine turno se non ha attaccato), il limite di 7
       carte a fine turno, il rimescolare gli scarti nel mazzo e Bend Fate (scartare carte dopo un gamble per un dado
       in più, p.199): oggi si fa a mano con i Cards di Foundry.
-- [ ] **Emerso lavorando su R35 — usi degli interrupt dei PG sulla scheda** (S): ora gli usi dei PG si contano (flag
+- [x] **Emerso lavorando su R35 — usi degli interrupt dei PG sulla scheda** (S): ora gli usi dei PG si contano (flag
       `interruptUses`), ma la scheda PG non li mostra né permette di spuntarli come la scheda dei foe; anche il
       bottone "posta in chat" di R61 non spende un uso.
+(FATTO il 17 ottobre 2026, versione 1.15.178: caselline degli usi degli interrupt nell'anteprima dell'abilità; il
+      bottone chat dell'interrupt concesso spende un uso. La scheda dei foe in realtà non mostra gli usi: voce emersa
+      a parte.)
 - [ ] **Emerso lavorando su R35 — Heroic di Righteous Disdain** (S): "Gain vigor 4 after this ability resolves" resta
       solo come testo sulla card postata; non c'è un bottone che dia il vigor.
 - [ ] **Emerso lavorando su R35 — Great Soul Bond (Blazing Bond)** (S): la mastery "the other can reduce themselves to
@@ -1492,6 +1495,17 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       "centered on them" (p.178), ma il token ha già finito il movimento: la Small Blast va dove si è fermato, non
       sulla mote attraversata.
 - nessuno
+- [ ] **Emerso lavorando su R35 — la scheda dei foe non mostra gli usi degli interrupt** (S): `FoeSheet` ha l'azione
+      `tickInterrupt` ma nessun template la usa, e `foe-main.hbs` / `legend-combat.hbs` mostrano solo il limite "/
+      turn", non gli usi spesi. Anche il bottone chat dell'interrupt del foe (`foeInterruptShowInChat`) non spende un
+      uso.
+- [ ] **Emerso lavorando su R35 — "Show in Chat" di un'abilità a costo Interrupt non spende un uso** (S, da decidere):
+      solo il bottone chat dell'interrupt concesso e quello della card del danno spendono un uso; il "Show in Chat"
+      dell'abilità intera (costo "Interrupt N") e il bottone chat della maestria che concede un interrupt (Grace of
+      the Spirits) no. Domanda per Edoardo: anche questi devono spendere un uso, oppure servono anche solo per far
+      vedere il testo?
+- [ ] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
+      spende anche se il PG è Stunned, mentre il bottone della card del danno lo blocca.
 
 ---
 

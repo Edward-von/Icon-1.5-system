@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno (versione 1.15.178)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Usi degli interrupt dei PG**: la scheda PG non mostrava quanti usi restavano agli interrupt (li contavano solo i
+  bottoni della card del danno), e il bottone "posta in chat" dell'interrupt dentro un'abilità (R61) non ne spendeva
+  uno → la scheda non leggeva il flag `interruptUses` / `interruptBank` → ora nell'anteprima di ogni abilità c'è una
+  riga per ciascun suo interrupt (il costo "Interrupt N" dell'abilità, quello che concede nel testo, quello della
+  maestria), con "usi rimasti/massimo" e caselline da cliccare. Il bottone chat dell'interrupt concesso spende un uso,
+  e se gli usi sono finiti avvisa e non posta. Gli usi tornano a inizio turno come prima ("Usable X times per round",
+  p.85). Solo codice.
+
 ## 17 ottobre 2026 — La × e il badge combo tornano sui riquadri delle abilità (versione 1.15.177)
 
 ### Round di debug del 15 ottobre, voce emersa su R5

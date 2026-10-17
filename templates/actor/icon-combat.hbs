@@ -782,6 +782,21 @@
           </div>
         {{/if}}
 
+        {{!-- Interrupt uses this round (the damage card's buttons and the interrupt's
+             chat button spend them; they come back at the start of your turn). --}}
+        {{#each ab.interruptUses as |iu|}}
+          <div class="icon-trait__quick icon-power-die-widget icon-interrupt-uses"
+               title="Uses of {{iu.name}}{{#if iu.banked}} in the bank (up to {{iu.max}}){{else}} left this round{{/if}}. Click a box to spend down to it, or a dark one to get uses back.">
+            <span class="icon-trait__quick-label"><i class="fa-solid fa-bolt"></i> {{iu.name}} {{iu.left}}/{{iu.max}}{{#if iu.banked}} banked{{/if}}</span>
+            <span class="icon-vigilance-track icon-vigilance-track--inline">
+              {{#each iu.pips as |p|}}
+                <span class="icon-vigilance-pip {{#if p.on}}icon-vigilance-pip--active{{/if}}"
+                      {{#if @root.isEditable}}data-action="setInterruptUses" data-key="{{iu.key}}" data-n="{{p.n}}"{{/if}}><i class="fa-solid fa-bolt"></i></span>
+              {{/each}}
+            </span>
+          </div>
+        {{/each}}
+
         {{!-- Talent / Mastery editor — costs 1 AP per talent, 1 mastery per
              mastery unlock. Disabled when the equipped-abilities lock is on
              so a stray click during play can't change the build. --}}

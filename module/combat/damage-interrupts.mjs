@@ -246,10 +246,24 @@ export function interruptLeft(actor, it) {
   return { left: Math.max(0, it.limit - interruptUsesOf(actor, it.key)), max: it.limit };
 }
 
-/** Spend one use. */
-async function spendUse(actor, it) {
+/** Spend one use (also the PC sheet's interrupt chat button, R61). */
+export async function spendUse(actor, it) {
   if (it.bankMax) return actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, Math.max(0, bankOf(actor, it.key) - 1));
   return actor.setFlag(FLAG_NS, `interruptUses.${it.key}`, interruptUsesOf(actor, it.key) + 1);
+}
+
+/**
+ * Set the uses left by hand (the PC sheet's tick boxes): a banked interrupt
+ * stores that many, an ordinary one records limit − left as spent.
+ */
+export async function setInterruptLeft(actor, it, left) {
+  if (it.kind === "refresh") return;
+  if (it.bankMax) {
+    return actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, Math.min(it.bankMax, Math.max(0, left)));
+  }
+  const used = Math.min(it.limit, Math.max(0, it.limit - left));
+  if (used > 0) return actor.setFlag(FLAG_NS, `interruptUses.${it.key}`, used);
+  if (actor.getFlag(FLAG_NS, `interruptUses.${it.key}`) != null) return actor.unsetFlag(FLAG_NS, `interruptUses.${it.key}`);
 }
 
 /** Give a stance's interrupts back (a refresh): a banked one stores one more, up to its cap. */

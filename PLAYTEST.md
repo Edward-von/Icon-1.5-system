@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno (17 ottobre 2026, versione 1.15.178)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con un'abilità a costo "Interrupt 1" o "Interrupt 2": aprendo l'anteprima compare la riga con il fulmine, il
+      nome, "2/2" e due caselline accese.
+- [ ] Clic su una casellina accesa: gli usi scendono fino a lei (es. 2/2, clic sulla seconda → 1/2). Clic su una
+      spenta: gli usi tornano fino a lei.
+- [ ] Usare l'interrupt dal bottone sotto una card del danno: sulla scheda il conteggio scende di 1.
+- [ ] Abilità con un interrupt concesso nel testo (es. Chronotemper "Cheat Time — Interrupt 1"): bottone chat accanto
+      al blocco → posta la card e il contatore va a 0/1; un secondo clic avvisa "no uses left" e non posta nulla.
+- [ ] Interrupt di uno stance (Riposte, Dire Parry): la riga compare solo quando lo stance è preso; con STRONG LEFT
+      mostra "banked" fino a 3.
+- [ ] A inizio turno del PG le caselline tornano tutte accese.
+- [ ] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente.
+
 ## Emerso R5 — La × e il badge combo tornano sui riquadri delle abilità (17 ottobre 2026, versione 1.15.177)
 
 Setup: solo codice (F5 basta).

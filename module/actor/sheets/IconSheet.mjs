@@ -137,6 +137,7 @@ function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
 import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage, parseLimitBreakPercent, infusedAbilityDamage } from "../../combat/ability-damage.mjs";
 import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
+import { interruptsOf, interruptLeft, spendUse, setInterruptLeft } from "../../combat/damage-interrupts.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
 
@@ -211,6 +212,7 @@ export class IconSheet extends BaseActorSheet {
       abilityShowInChat:  IconSheet.#onAbilityShowInChat,
       abilityPartToChat:  IconSheet.#onAbilityPartToChat,
       abilityInterruptToChat: IconSheet.#onAbilityInterruptToChat,
+      setInterruptUses:   IconSheet.#onSetInterruptUses,
       abilityGamble:      IconSheet.#onAbilityGamble,
       abilityAttackRoll:  IconSheet.#onAbilityAttackRoll,
       abilityPlaceArea:   IconSheet.#onAbilityPlaceArea,
@@ -496,6 +498,14 @@ export class IconSheet extends BaseActorSheet {
         talentSelected,
         masteryUnlocked,
         powerDie:    powerDieView(s),
+        // Uses left this round of each interrupt the ability gives (its own
+        // "Interrupt N" cost, a granted or mastery one): the same counts the
+        // damage card's buttons spend (damage-interrupts.mjs).
+        interruptUses: interruptsOf(actor).filter(i => i.itemId === a.id && i.kind !== "refresh").map(i => {
+          const { left, max } = interruptLeft(actor, i);
+          return { key: i.key, name: i.name, left, max, banked: !!i.bankMax,
+                   pips: Array.from({ length: max }, (_, n) => ({ n: n + 1, on: n < left })) };
+        }),
         // Relic integration: reminder lines the character's relics add to this ability
         relicReminders: await this._relicRemindersFor(s, parsed),
         // Book-order rules blocks parsed out of the description (Stance, Mark, Effect…)
@@ -1989,7 +1999,18 @@ export class IconSheet extends BaseActorSheet {
     const s = item.system ?? {};
     const it = grantedInterrupt(s, target.dataset.label);
     if (!it) return;
-    _log(`abilityInterruptToChat — "${item.name}" | ${it.name} (${it.cost}) | lines: ${it.lines.map(l => l.label).join(", ")}`);
+    // Posting the interrupt is using it: spend one use, as the damage card's
+    // button does. Not in the list (a stance not taken, a mark not out): post only.
+    const counted = interruptsOf(this.document).find(i => i.kind === "granted" && i.itemId === item.id && i.label === target.dataset.label);
+    if (counted) {
+      const { left, max } = interruptLeft(this.document, counted);
+      if (left <= 0) {
+        ui.notifications.warn(`${counted.name}: no uses left${counted.bankMax ? " in the bank" : " this round"} (0/${max}).`);
+        return;
+      }
+      await spendUse(this.document, counted);
+    }
+    _log(`abilityInterruptToChat — "${item.name}" | ${it.name} (${it.cost}) | lines: ${it.lines.map(l => l.label).join(", ")} | use spent: ${!!counted}`);
     // "LEAF ON THE WIND" → "Leaf on the Wind", as the mastery names on R31's card.
     const title = /[a-z]/.test(it.name) ? it.name
       : it.name.toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, c => c.toUpperCase())
@@ -2013,6 +2034,22 @@ export class IconSheet extends BaseActorSheet {
     const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
     const content = await renderTemplate("systems/icon-system/templates/chat/ability-part-card.hbs", { pc });
     await ChatMessage.create({ speaker: ChatMessage.getSpeaker({ actor: this.document }), content });
+  }
+
+  /**
+   * Tick box of an interrupt's uses (data-key, data-n = the box clicked, from 1):
+   * clicking a lit box spends down to it, a dark one gives uses back up to it.
+   */
+  static async #onSetInterruptUses(event, target) {
+    event.stopPropagation();
+    if (!this.isEditable) return;
+    const it = interruptsOf(this.document).find(i => i.key === target.dataset.key);
+    if (!it) return;
+    const n = Number(target.dataset.n) || 0;
+    const { left, max } = interruptLeft(this.document, it);
+    const next = n <= left ? n - 1 : n;
+    _log(`setInterruptUses — "${this.document.name}" | ${it.name} | left ${left} → ${next} / ${max}`);
+    await setInterruptLeft(this.document, it, next);
   }
 
   /** Gamble button of an ability: dice dialog, Nd6 keep highest, card (combat/gamble.mjs). */
