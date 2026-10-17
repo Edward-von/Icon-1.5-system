@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R36 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble (17 ottobre 2026, versione 1.15.219)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Apri il dialogo del gamble di un'abilità e passa il mouse su "Set the number": il tooltip nomina solo Silver
+      Rabbit III e Golden Mask, non Bend Fate.
+- [ ] Con un Seer, tira un gamble: il pulsante Bend Fate c'è ancora sulla card e funziona come prima.
+
 ## Emerso R35 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted" (17 ottobre 2026, versione 1.15.218)
 
 Setup: solo codice (F5 basta).

@@ -1595,11 +1595,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       due Seer al tavolo gli scarti si mescolano.
 (FATTO il 17 ottobre 2026, versione 1.15.199: Foretell trova il Seer della mano e scarta nella sua pila, come Skein e
       Bend Fate)
-- [ ] **Emerso lavorando su R36 — "Bend Fate" nell'opzione "numero scelto" del gamble** (S, da decidere): in
+- [x] **Emerso lavorando su R36 — "Bend Fate" nell'opzione "numero scelto" del gamble** (S, da decidere): in
       roll-dialogs.mjs (riga ~923) l'opzione "Set number" del dialogo del gamble mette Bend Fate tra gli effetti che
       permettono di scegliere qualsiasi numero da 1 a 6. Ma p.199 dice di tirare un dado in più per ogni carta e di
       scegliere uno qualunque dei risultati usciti, non un numero libero. Domanda per Edoardo: tolgo Bend Fate da
       quella scritta, adesso che ha il suo bottone?
+(FATTO il 17 ottobre 2026, versione 1.15.219, risposta di Edoardo: Bend Fate tolto dall'opzione "Set the number";
+      resta solo il suo pulsante sulla card.)
 - nessuno
 - [ ] **Emerso lavorando su R33b2 — Charge di Symphony** (S, da decidere): "Charge: Create +2 more spaces" (p.178) non
       viene letto. Ora che il numero di mote è uguale alle blessing tolte, con il Charge bisognerebbe poterne piazzare
@@ -1690,6 +1692,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
       dice ancora "they go off before the attack roll".
+- nessuno
 
 ---
 

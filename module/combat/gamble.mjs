@@ -6,7 +6,7 @@
  * Vigilance charge spent, p.142) and only the highest die counts, as with
  * Vigilance (p.105) — so N dice are rolled as Nd6kh, never added up. The
  * Fool's Stacked Die makes the result 6 (p.149); a few effects let a chosen
- * number stand (Silver Rabbit III p.250, Golden Mask p.340, Bend Fate p.199).
+ * number stand (Silver Rabbit III p.250, Golden Mask p.340).
  *
  * The button sits on the ability preview of the PC sheet and on the Show in
  * Chat card; both open promptGamble() and post templates/chat/gamble-card.hbs.

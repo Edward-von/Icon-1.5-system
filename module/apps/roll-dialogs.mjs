@@ -939,8 +939,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
  * Dire Parry rolls one more d6 per Vigilance charge spent, its Talent I one
  * more for sacrifice 2 (p.142) — and only the HIGHEST die counts, as with
  * Vigilance (p.105). The result can also be set instead of rolled: the Fool's
- * Stacked Die makes it 6 (p.149); Silver Rabbit III, the Golden Mask and the
- * Seer's Bend Fate let a number of your choice stand (pp.199, 250, 340).
+ * Stacked Die makes it 6 (p.149); Silver Rabbit III and the Golden Mask let a
+ * number of your choice stand (pp.250, 340). The Seer's Bend Fate is not one
+ * of them: one extra die per discarded card, then pick among the dice rolled
+ * (p.199) — it has its own button on the gamble card (gamble.mjs bendFate).
  *
  * `vigilance`: charges the actor holds when the ability spends them on the
  * gamble (0 = no field). `stacked`: Stacked Dice held (0 = no option).
@@ -970,7 +972,7 @@ export async function promptGamble(ab, actor, { vigilance = 0, stacked = 0 } = {
               <input type="radio" name="mode" value="stacked">
               <span class="icon-roll-seg__label">Stacked Die<small>result 6 · spends 1 of ${stacked}</small></span>
             </label>` : ""}
-            <label class="icon-roll-seg__opt" title="An effect that lets you pick the number: Silver Rabbit III (any number from 1 to 6), Golden Mask, Bend Fate (choose any result)">
+            <label class="icon-roll-seg__opt" title="An effect that lets you pick the number: Silver Rabbit III (any number from 1 to 6), Golden Mask">
               <input type="radio" name="mode" value="set">
               <span class="icon-roll-seg__label">Set the number<small>no roll</small></span>
             </label>

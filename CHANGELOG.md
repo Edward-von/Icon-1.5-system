@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble (versione 1.15.219)
+
+### Round di debug del 15 ottobre, voce emersa su R36
+
+- **Bend Fate nel dialogo del gamble**: l'opzione "Set the number" diceva che Bend Fate permette di scegliere un
+  numero qualsiasi → il tooltip lo metteva insieme a Silver Rabbit III e alla Golden Mask, ma p.199 dice di tirare un
+  dado in più per ogni carta scartata e scegliere tra i risultati usciti → tolto dal tooltip e dai commenti; Bend Fate
+  resta sul suo pulsante della card del gamble (p.199). Solo codice.
+
 ## 17 ottobre 2026 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted" (versione 1.15.218)
 
 ### Round di debug del 15 ottobre, voce emersa su R35
