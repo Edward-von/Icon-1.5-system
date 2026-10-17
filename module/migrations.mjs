@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 30;
+export const CURRENT_SCHEMA_VERSION = 31;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1127,6 +1127,60 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 30: "power-die" tag removed from ${n} copy/copies of Chronotemper`);
+  },
+
+  /* 31 — Three limit breaks differed from the book (emerged on R39): Split
+   * Heaven and Hell's three distances are a sub-list under Sever Divine
+   * Thread (p.127), now "◦" lines; Paradiso's Aura block had lost its first
+   * sentence (p.155); Lycanthropy's description stopped before "granting you
+   * massively increased speed and power" (p.168). Patch the copies that still
+   * carry the old passage word for word (limit-break items and the job
+   * templates' limitBreak; templates have no limit-break description). */
+  31: async () => {
+    const FIX = {
+      "Split Heaven and Hell": { effect: [
+        "depending on their distance from you: 1 space: 100% of max hp; 2–4 spaces: 50% of max hp; 5+ spaces: 25% of max hp.",
+        "depending on their distance from you:\n◦ 1 space: 100% of max hp\n◦ 2-4 spaces: 50% of max hp\n◦ 5+ spaces: 25% of max hp",
+      ] },
+      "Paradiso": { effect: [
+        "Aura: You gain Aura 2 until",
+        "Aura: You gain an aura of supernatural accuracy, charging your weapons and the weapons of your allies with aether.\nYou gain Aura 2 until",
+      ] },
+      "Lycanthropy": { description: [
+        "claw pours into you.",
+        "claw pours into you, granting you massively increased speed and power.",
+      ] },
+    };
+    /** Update data for one holder (system or system.limitBreak), or null. */
+    const patch = (holder, prefix) => {
+      const fix = FIX[(holder?.name ?? "").trim()];
+      if (!fix) return null;
+      const out = {};
+      for (const [field, [from, to]] of Object.entries(fix)) {
+        const old = String(holder[field] ?? "");
+        if (field in holder && old.split(from).length === 2) out[`${prefix}.${field}`] = old.replace(from, to);
+      }
+      return Object.keys(out).length ? out : null;
+    };
+    const lbPatch = (item) => item.type === "limit-break"
+      ? patch({ ...item.system, name: item.name }, "system") : null;
+    const tplPatch = (item) => item.type === "job-template"
+      ? patch(item.system?.limitBreak, "system.limitBreak") : null;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = lbPatch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = lbPatch(item) ?? tplPatch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 31: ${n} limit break(s) now match the book (Split Heaven and Hell, Paradiso, Lycanthropy)`);
   },
 };
 

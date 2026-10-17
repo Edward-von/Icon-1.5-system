@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso su R39 — testi dei Limit Break come nel libro (17 ottobre 2026, versione 1.15.77)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs). Tre PG che hanno già da prima di questa versione i Limit
+Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy (Warden).
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 31: 3 limit
+      break(s) now match the book…" (più le copie nella sidebar, se ce ne sono).
+- [ ] **Split Heaven and Hell** (p.127): pannello del Limit Break → sotto "Sever Divine Thread" le tre distanze sono
+      tre righe rientrate con "◦" ("1 space: 100% of max hp", "2-4 spaces: 50% of max hp", "5+ spaces: 25% of max hp"),
+      poi "Divine Cancel" e "Divine Delay" tornano a filo come opzioni "•"; "Legend characters…" è un paragrafo sotto.
+      Uguale nella card "Use Limit Break" e nella sheet dell'item.
+- [ ] **Paradiso** (p.155): il blocco **Aura:** dice "You gain an aura of supernatural accuracy, charging your weapons
+      and the weapons of your allies with aether."; "You gain Aura 2 until the end of your next turn…" è il paragrafo
+      sotto. Il bottone area propone ancora Aura 2.
+- [ ] **Lycanthropy** (p.168): il testo di colore finisce con "…pours into you, granting you massively increased speed
+      and power."; i tre "•" del dash restano righe come prima.
+- [ ] **Copia nuova**: trascina il job Demon Slayer (o il Limit Break) dal compendio Jobs su un PG nuovo → stesso testo.
+- [ ] **Altri elenchi invariati**: Eclipse, Raging Wolf, March of the Saints mostrano le righe "•" come prima.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

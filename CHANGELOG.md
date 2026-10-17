@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Tre Limit Break riallineati al libro (versione 1.15.77)
+
+### Round di debug del 16 ottobre, voce emersa su R39
+
+- **Split Heaven and Hell, distanze in riga** (p.127): nel libro "1 space / 2-4 spaces / 5+ spaces" è un sotto-elenco
+  sotto "Sever Divine Thread" → nel compendio erano in una riga separata da ";" → ora sono tre righe "◦", che la scheda,
+  la card e la sheet dell'item mostrano rientrate sotto la riga "•" (nuovo: il sistema sapeva fare solo elenchi a un
+  livello, ora un "◦" a inizio riga è un sotto-punto).
+- **Paradiso senza la prima frase dell'Aura** (p.155): "You gain an aura of supernatural accuracy, charging your
+  weapons and the weapons of your allies with aether." mancava → rimessa come testo del blocco Aura, con "You gain
+  Aura 2…" nel paragrafo sotto come nel libro.
+- **Lycanthropy tagliata** (p.168): il testo di colore finiva a "…pours into you." → aggiunto ", granting you massively
+  increased speed and power."
+- Compendio Jobs corretto (Limit Break e template dei job). Migrazione 31: aggiorna le copie già sulle schede e nella
+  sidebar che hanno ancora il passaggio vecchio parola per parola.
+
 ## 17 ottobre 2026 — Infuse più economico: Conqueror's Edge e Inner Furnace (versione 1.15.76)
 
 ### Round di debug del 16 ottobre, punto R64

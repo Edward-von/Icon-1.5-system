@@ -354,7 +354,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       `helpers/infuse.mjs` dice che l'infusione armata si azzera a fine combattimento con l'Aether, ma `IconCombat`
       azzera solo l'Aether, non `flags.icon-system.infused` (e nemmeno dopo il tiro: `clearInfusion` non è chiamata da
       nessuno). Un'infusione armata resta "armed" anche nel combattimento dopo, per abilità e Limit Break.
-- [ ] **Emerso lavorando su R39 — piccole differenze di testo dei Limit Break dal libro** (S, dati): Split Heaven and
+- [x] **Emerso lavorando su R39 — piccole differenze di testo dei Limit Break dal libro** (S, dati) (FATTO il 17 ottobre 2026, versione 1.15.77): Split Heaven and
       Hell ha le tre distanze (1 space / 2-4 / 5+) come sotto-elenco nel libro (p.127), nel compendio sono in riga;
       Paradiso ha perso la prima frase del blocco Aura ("You gain an aura of supernatural accuracy…", p.155);
       la descrizione di Lycanthropy è tagliata ("…granting you massively increased speed and power", p.168).
@@ -421,6 +421,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
       mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
+- [ ] **Emerso lavorando su R39 — altre parole dei Limit Break diverse dal libro** (S, dati): Split Heaven and Hell
+      (p.127) dice "depending on their distance from you" (libro: "their distance on the line from you") e "(maximum 3
+      width)" (libro: ", to a maximum of 3 width,"); Lycanthropy (p.168) ha perso "(including this one!)" dopo "abilities,
+      summons, or actions" nel secondo "•". Pack + migrazione sulle copie.
 
 ---
 

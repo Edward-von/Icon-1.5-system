@@ -119,10 +119,10 @@ function _rollTableMarks(src) {
  * One row of a roll table or bullet list. A short name before ":" or " - "
  * ("A Tale of Fury: …", "Earth - …", "Bloodied: …") is the row's title.
  */
-function _tableRow(marker, body) {
+function _tableRow(marker, body, { sub = false } = {}) {
   const t = body.match(/^([^:.]{1,45}?)(:|\s[-–—]\s)\s*/);
   if (t) body = `<b class="icon-roll-table__title">${t[1]}${t[2].trim() === ":" ? ":" : ` ${t[2].trim()}`}</b> ${body.slice(t[0].length)}`;
-  return `<span class="icon-roll-table__row"><span class="icon-roll-table__num">${marker}</span>`
+  return `<span class="icon-roll-table__row${sub ? " icon-roll-table__row--sub" : ""}"><span class="icon-roll-table__num">${marker}</span>`
        + `<span class="icon-roll-table__text">${body}</span></span>`;
 }
 
@@ -132,13 +132,15 @@ function _tableRow(marker, body) {
  * row per bullet, as the book prints them (Eclipse p.203, Raging Wolf's
  * Comeback p.137, Lycanthropy). Pack texts mark a list item with a line break
  * followed by "•"; the line after the last bullet goes back to running text.
- * Inline " • " bullets with no line break are left as they are.
+ * Inline " • " bullets with no line break are left as they are. A "◦" line is
+ * a sub-item of the bullet above it, indented one step (Split Heaven and
+ * Hell p.127: the three distances under "Sever Divine Thread").
  * @param {string} text
  * @returns {string}
  */
 export function formatBulletLists(text) {
   const src = String(text ?? "");
-  if (!/\n\s*•/.test(src) || /<[a-z][^>]*>/i.test(src)) return src;
+  if (!/\n\s*[•◦]/.test(src) || /<[a-z][^>]*>/i.test(src)) return src;
   const out = [];
   let rows = [];
   const flush = () => {
@@ -149,6 +151,7 @@ export function formatBulletLists(text) {
     const line = raw.replace(/\s+/g, " ").trim();
     if (!line) continue;
     if (line.startsWith("•")) { rows.push(_tableRow("•", line.slice(1).trim())); continue; }
+    if (line.startsWith("◦")) { rows.push(_tableRow("◦", line.slice(1).trim(), { sub: true })); continue; }
     flush();
     out.push(line);
   }
@@ -158,14 +161,15 @@ export function formatBulletLists(text) {
 
 /**
  * Plain text of an ability description: <p>/<br> wrappers and line breaks
- * become spaces, except around a bullet line ("\n• …"), which keeps its own
- * line for formatBulletLists().
+ * become spaces, except around a bullet line ("\n• …" or a "\n◦ …" sub-item),
+ * which keeps its own line for formatBulletLists().
  */
 function _flattenText(description) {
   const lines = String(description ?? "").replace(/<\/?(?:p|br|div)\b[^>]*>/gi, " ")
     .split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean);
+  const bullet = (l) => /^[•◦]/.test(l);
   return lines.reduce((acc, line, i) => !i ? line
-    : `${acc}${line.startsWith("•") || lines[i - 1].startsWith("•") ? "\n" : " "}${line}`, "");
+    : `${acc}${bullet(line) || bullet(lines[i - 1]) ? "\n" : " "}${line}`, "");
 }
 
 /**
@@ -374,7 +378,7 @@ export async function enrichLimitBreakText(text, { enrich = (t) => enrichHTML(t)
   const lines = raw.split("\n").map(l => l.replace(/\s+/g, " ").trim()).filter(Boolean);
   const paras = [];
   for (const line of lines) {
-    if (line.startsWith("•") && paras.length) paras[paras.length - 1] += `\n${line}`;
+    if (/^[•◦]/.test(line) && paras.length) paras[paras.length - 1] += `\n${line}`;
     else paras.push(line);
   }
   let tagLine = "";

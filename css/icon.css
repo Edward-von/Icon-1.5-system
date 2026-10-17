@@ -2440,6 +2440,7 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-roll-table__num { flex: 0 0 1.2em; text-align: center; font-weight: 700; color: var(--ic-gold); }
 .icon-roll-table__text { flex: 1 1 auto; min-width: 0; }
 .icon-roll-table__title { font-weight: 700; }
+.icon-roll-table__row--sub { padding-left: 1.4em; }
 
 /* Relic reminders on ability cards (sheet panel + chat): a violet-tinted note
    so they read as "from a relic", not as part of the ability text. */
