@@ -623,7 +623,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       space, pit, dangerous terrain, etc) if at least one of their spaces is inside" (p.290): un pit su una casella
       vale per tutto il foe, quindi il pit nella casella in alto a sinistra è già giusto; lo stesso per il Volcanic
       Geyser. Nessuna modifica.)
-- [ ] **Emerso lavorando su R49 — oggetti di un "Terrain effect:" che rendono l'area "lasting"** (S, pronto: risposta del 17 ottobre 2026): Geo
+- [x] **Emerso lavorando su R49 — oggetti di un "Terrain effect:" che rendono l'area "lasting"** (S, pronto: risposta del 17 ottobre 2026): Geo
       ("Terrain effect: Create a height 1 boulder object in free space anywhere in the area", p.218), The Tower
       ("Terrain effect: Then, create a height 1 meteor object in the area", p.203) e Dark Sliver ("Terrain effect: Cut
       away a part of the target's soul…", p.187) restano "lasting" solo per il testo base, quindi la loro area
@@ -633,6 +633,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       effect sono "passive effects that modify the terrain spaces of the battlefield" (p.95-96); in Geo (boulder,
       p.218), The Tower (meteor, p.203) e Dark Sliver (uno spazio scelto, p.187) il terrain effect è l'oggetto o lo
       spazio, non l'area d'attacco.
+(FATTO il 17 ottobre 2026, versione 1.15.103: un "Terrain effect:" che crea solo un oggetto o sceglie uno spazio non
+      fa più restare l'area dell'abilità, e l'elenco dei nomi dei blocchi non conta più; nel pack jobs cambiano solo
+      Geo, The Tower e Dark Sliver. Solo codice.)
 - [ ] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
       `module/canvas/area-templates.mjs` (~riga 1084) il commento dice "Holy's area is kept as a terrain effect, so
       those count": ora non è più così (il codice funziona lo stesso).

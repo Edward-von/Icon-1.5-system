@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa (17 ottobre 2026, versione 1.15.103)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Geo (Geomancer): attaccare con l'Arc 6. Al turno dopo l'area sparisce dalla mappa; il masso creato (se messo)
+      resta.
+- [ ] The Tower (Seer): usarla su un foe. L'area non resta come terrain effect al turno dopo; il meteorite (oggetto)
+      resta.
+- [ ] Dark Sliver (Harvester): attaccare. L'area non resta sulla mappa al turno dopo.
+- [ ] Controllo: Blood Grove, Tsunami e Sanctify restano sulla mappa come prima (dangerous / difficult).
+- [ ] Controllo: Holy è ancora a posto (l'area sparisce, il pit della combo Hades resta).
+
 ## Emerso R47b — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5 (17 ottobre 2026, versione 1.15.102)
 
 Setup: solo codice (F5 basta).

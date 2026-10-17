@@ -235,8 +235,18 @@ export function activeAreaTexts(system) {
  * The ability's base text, without its talents, mastery and combo: whether its own area is a terrain effect.
  * The combo is left out like a talent: Hades' "Terrain Effect: Create a pit under your target" (Holy, p.177)
  * makes a pit, not its Medium Blast a terrain effect that stays.
+ * A "Terrain effect:" block that only creates an object or picks a space is left out too (terrain effects "modify
+ * the terrain spaces of the battlefield", p.95-96): the boulder of Geo (p.218), the meteor of The Tower (p.203), the
+ * space of Dark Sliver (p.187) are the terrain effect, not the attack's area. Blocks that make the area itself
+ * terrain stay (Blood Grove p.186, Tsunami p.233). `blockOrder` only lists the block names, so it is not read.
  */
 export function baseAreaText(system) {
   const s = system ?? {};
-  return Object.entries(s).filter(([k, v]) => typeof v === "string" && !["talent1", "talent2", "mastery", "comboEffect", "comboTags"].includes(k)).map(([, v]) => v).join(" ");
+  const t = plain(Object.entries(s).filter(([k, v]) => typeof v === "string" && !["talent1", "talent2", "mastery", "comboEffect", "comboTags", "blockOrder"].includes(k)).map(([, v]) => v).join(" "));
+  return t.replace(/\bTerrain [Ee]ffect\s*:/g, (label, at) => {
+    const rest = t.slice(at + label.length);
+    const stop = NEXT_LABEL.exec(rest);
+    const block = stop ? rest.slice(0, stop.index) : rest;
+    return /\bcreat\w* an? [^.;]*?\bobject\b|\bchoos\w* an? (?:free )?space\b/i.test(block) ? "Terrain:" : label;
+  });
 }

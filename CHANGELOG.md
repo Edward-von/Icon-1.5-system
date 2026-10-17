@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa (versione 1.15.103)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Aree che restavano come terrain effect**: l'Arc di Geo, l'area di The Tower e quella di Dark Sliver restavano
+  sulla mappa anche dopo il turno, come se fossero terrain effect → il loro "Terrain effect:" crea solo un oggetto o
+  sceglie uno spazio (il masso di Geo p.218, il meteorite di The Tower p.203, lo spazio dell'anima di Dark Sliver
+  p.187), ma il sistema lo leggeva come se rendesse terrain tutta l'area (i terrain effect sono "passive effects that
+  modify the terrain spaces of the battlefield", p.95-96); in più contava anche l'elenco dei nomi dei blocchi ("hit,
+  miss, area, terrain effect…") → quei blocchi e quell'elenco non decidono più se l'area resta: le tre aree spariscono
+  al turno dopo come quella di Holy, mentre i terrain effect che descrivono l'area stessa (Blood Grove, Tsunami,
+  Sanctify…) restano come prima. Simulato sul pack jobs: le aree che restano passano da 25 a 22, cambiano solo queste
+  tre. Solo codice.
+
 ## 17 ottobre 2026 — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5 (versione 1.15.102)
 
 ### Round di debug del 16 ottobre, voce emersa su R47b
