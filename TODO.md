@@ -321,7 +321,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       variabili nel tiro d'attacco (oggi fisse), calcolate da Soulfire e da Arenheir III / Aspected.
       (FATTO il 17 ottobre 2026, versione 1.15.75: stepper "Crit on" / "Exceed on" nel dialog d'attacco, precompilati da
       Soulfire, Arenheir III e Aspect e modificabili a mano; la card in chat usa le soglie scelte.)
-- [ ] **R64. Ridurre il costo in Aether delle abilità** (M/L, pronto: risposta di Maar del 17 ottobre 2026)
+- [x] **R64. Ridurre il costo in Aether delle abilità** (M/L, pronto: risposta di Maar del 17 ottobre 2026)
       Conqueror's Edge "and the one from Enochian": "there is no way to reduce aether costs on abilities … how to
       implement, I have no idea." Domanda per Maar: quale abilità dell'Enochian?
       Risposta di Maar (17 ottobre 2026): "The trait's name is 'Inner furnace'." Inner Furnace (Enochian, p.208):
@@ -329,6 +329,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       to reduce the Aether cost of that ability by 2." Da fare: all'Infuse, se c'è il tratto e non è già stato usato
       nel round, proporre il sacrificio del 25% degli hp massimi per pagare 2 Aether in meno (insieme a Conqueror's
       Edge).
+      (FATTO il 17 ottobre 2026, versione 1.15.76: all'Infuse Conqueror's Edge toglie 1 se un foe è in range 2, Inner
+      Furnace chiede una volta per round se sacrificare VIT hp per 2 Aether in meno; annullare restituisce tutto;
+      l'Infuse X non viene scontato.)
 - [x] **R65. Aethershard come un summon** (M, da decidere)
       "Something similar to a summon ability would be useful here." Forse rientra in R33 (oggetti sulla mappa).
       (CHIUSO il 17 ottobre 2026: Maar conferma che rientra in R33, "That sounds right, yeah." Già fatto in R33a-R33a4,

@@ -1,5 +1,24 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Infuse più economico: Conqueror's Edge e Inner Furnace (versione 1.15.76)
+
+### Round di debug del 16 ottobre, punto R64
+
+- **Costo dell'Infuse sempre pieno**: con Conqueror's Edge o Inner Furnace l'Infuse costava comunque l'Aether stampato
+  → il bottone Infuse toglieva il costo dell'etichetta senza guardare i tratti → ora il costo si riduce prima di pagare,
+  per le abilità e per le versioni Infuse del Limit Break.
+- **Conqueror's Edge** (Spellblade, p.224): −1 automatico se un token ostile è entro range 2 dal token del PG (serve il
+  token sulla scena). La card in chat lo scrive ("Conqueror's Edge: −1, a foe is in range 2").
+- **Inner Furnace** (Enochian, p.208): una volta per round un dialog chiede "Sacrifice N hp" (25% degli hp massimi =
+  VIT, perché le percentuali usano gli hp base, p.106) o "Pay N Aether". Se accetti paghi 2 Aether in meno e perdi quegli
+  hp direttamente, senza armor né resistenze e mai sotto 1 hp (regola Sacrifice, p.103). Il dialog compare anche quando
+  l'Aether da solo non basterebbe ma col −2 sì. Chiuderlo con la ✕ annulla l'Infuse. Fuori combat si può usare sempre.
+- **Annullare** un'infusione armata (ripremere il bottone) restituisce l'Aether pagato e, se c'era Inner Furnace, anche
+  gli hp e l'uso del round.
+- **Scelte nostre** (il libro non lo dice): i due sconti si sommano (Conqueror's Edge prima, poi Inner Furnace); il costo
+  non scende sotto 0; l'Infuse X non viene scontato, perché lì l'Aether scelto è la quantità dell'effetto ("per Aether
+  infused"). Solo codice, nessun dato cambiato.
+
 ## 17 ottobre 2026 — Soglie di crit / exceed variabili: Soulfire, Arenheir e a mano (versione 1.15.75)
 
 ### Round di debug del 16 ottobre, punto R63

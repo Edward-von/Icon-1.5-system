@@ -15,6 +15,7 @@
  */
 
 import { SECTION_LABELS, escapeHTML } from "./enrich.mjs";
+import { gridDistance } from "../combat/defenses.mjs";
 
 const _log = (...a) => console.debug("[ICON | Infuse]", ...a);
 const NS = "icon-system";
@@ -268,26 +269,112 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
     cost = await _promptAmount(pool, infusion);
     if (!cost) return null;
   }
-  if (pool < cost) {
-    ui.notifications.warn(`${infusion.label} needs ${cost} Aether — ${actor.name} has ${pool}.`);
+
+  // Cost reductions: Conqueror's Edge (Spellblade, p.224), Inner Furnace
+  // (Enochian, p.208). They lower a printed cost only: an Infuse X is "per
+  // Aether infused", so the amount chosen is the amount paid.
+  let paid = cost;
+  const notes = [];
+  let sacrifice = 0;
+  if (infusion.cost !== null && paid > 0) {
+    // Conqueror's Edge: "The Infuse cost of your abilities is reduced by 1 if
+    // there's a foe in range 2."
+    if (hasTrait(actor, "conqueror's edge") && foeInRange(actor, 2)) {
+      paid = Math.max(0, paid - 1);
+      notes.push("Conqueror's Edge: −1, a foe is in range 2");
+    }
+    // Inner Furnace: "Once a round, you may burn your own life force when you
+    // Infuse an ability. You can sacrifice 25% of your max hp to reduce the
+    // Aether cost of that ability by 2." "% Health" (p.106): of the max BASE hp, i.e. VIT.
+    if (paid > 0 && innerFurnaceReady(actor) && pool >= Math.max(0, paid - 2)) {
+      const hpCost = Number(actor.system?.combat?.vit) || Math.ceil((actor.system?.combat?.hp?.baseMax ?? 0) / 4);
+      const choice = await _promptInnerFurnace(actor, infusion, { paid, pool, hpCost });
+      if (choice === null) return null;           // dialog closed: no infusion
+      if (choice) {
+        sacrifice = hpCost;
+        paid = Math.max(0, paid - 2);
+        notes.push(`Inner Furnace: −2, sacrificed ${hpCost} hp`);
+      }
+    }
+  }
+  if (pool < paid) {
+    ui.notifications.warn(`${infusion.label} needs ${paid} Aether — ${actor.name} has ${pool}.`);
     return null;
   }
 
-  const update = { "system.combat.classResources.aether.value": pool - cost };
-  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: cost };
+  const update = { "system.combat.classResources.aether.value": pool - paid };
+  // Sacrifice (p.103): can't be reduced or resisted and can't bring hp below 1,
+  // so it goes straight onto the hp bar, not through the damage pipeline.
+  let hpLost = 0;
+  if (sacrifice) {
+    const hpNow = Number(actor.system?.combat?.hp?.value) || 0;
+    const hpNew = Math.max(1, hpNow - sacrifice);
+    hpLost = Math.max(0, hpNow - hpNew);
+    update["system.combat.hp.value"] = hpNew;
+    const combat = game.combat;
+    update[`flags.${NS}.innerFurnace`] = combat?.started ? { combatId: combat.id, round: Number(combat.round) } : null;
+  }
+  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice };
   await actor.update(update);
-  _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${cost} Aether (${pool} → ${pool - cost})`);
+  _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${paid} Aether (${pool} → ${pool - paid})${notes.length ? ` [${notes.join("; ")}]` : ""}`);
 
+  const esc = foundry.utils.escapeHTML;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--infuse">
-        <strong><i class='fa-solid fa-wand-sparkles'></i> ${foundry.utils.escapeHTML(actor.name)}</strong> ${arm ? "infuses" : "uses the infusion of"}
-        <strong>${foundry.utils.escapeHTML(item.name)}</strong>${infusion.name ? ` — <em>${foundry.utils.escapeHTML(infusion.name)}</em>` : ""}
-        <br><small>${foundry.utils.escapeHTML(infusion.label)}: ${cost} Aether spent (${pool - cost} left)</small>
+        <strong><i class='fa-solid fa-wand-sparkles'></i> ${esc(actor.name)}</strong> ${arm ? "infuses" : "uses the infusion of"}
+        <strong>${esc(item.name)}</strong>${infusion.name ? ` — <em>${esc(infusion.name)}</em>` : ""}
+        <br><small>${esc(infusion.label)}: ${paid} Aether spent (${pool - paid} left)</small>
+        ${notes.length ? `<br><small>${notes.map(esc).join("<br>")}</small>` : ""}
         ${infusion.text ? await _versionBodyHtml(infusion) : ""}
       </div>`,
   });
-  return cost;
+  return paid;
+}
+
+/** True when the actor has a trait of that name (case and apostrophe style ignored). */
+function hasTrait(actor, name) {
+  const norm = (s) => String(s ?? "").trim().toLowerCase().replace(/[’‘`]/g, "'");
+  return !!actor?.items?.some(i => i.type === "trait" && norm(i.name) === norm(name));
+}
+
+/** A hostile token within `range` spaces of the actor's token on this scene. */
+function foeInRange(actor, range) {
+  const tok = actor?.getActiveTokens?.(false, false)?.[0];
+  if (!tok) return false;
+  const own = tok.document?.disposition ?? CONST.TOKEN_DISPOSITIONS.FRIENDLY;
+  const enemy = own === CONST.TOKEN_DISPOSITIONS.HOSTILE ? CONST.TOKEN_DISPOSITIONS.FRIENDLY : CONST.TOKEN_DISPOSITIONS.HOSTILE;
+  return (canvas?.tokens?.placeables ?? []).some(t => t !== tok && t.actor && t.document?.disposition === enemy
+    && !t.document?.hidden && gridDistance(tok, t) <= range);
+}
+
+/** Inner Furnace held and not yet used this round (outside combat: always). */
+function innerFurnaceReady(actor) {
+  if (!hasTrait(actor, "inner furnace")) return false;
+  const f = actor.getFlag?.(NS, "innerFurnace");
+  const combat = game.combat;
+  if (!f || !combat?.started) return true;
+  return !(f.combatId === combat.id && Number(f.round) === Number(combat.round));
+}
+
+/** "Burn your life force?" Resolves true / false, or null when closed. */
+async function _promptInnerFurnace(actor, infusion, { paid, pool, hpCost }) {
+  const esc = foundry.utils.escapeHTML;
+  const after = Math.max(0, paid - 2);
+  const short = pool < paid ? `<p><em>Without it you can't pay: you have ${pool} Aether.</em></p>` : "";
+  try {
+    return await foundry.applications.api.DialogV2.wait({
+      window: { title: `Inner Furnace — ${infusion.label}` },
+      content: `<p><strong>Inner Furnace</strong> (once a round): sacrifice <strong>${hpCost} hp</strong> (25% of your max hp)
+        to pay <strong>${after}</strong> Aether instead of ${paid}?</p>${short}
+        <p style="font-size:.9em;opacity:.85">Sacrifice can't be reduced or resisted and can't bring you below 1 hp.</p>`,
+      buttons: [
+        { action: "burn", label: `Sacrifice ${hpCost} hp`, icon: "fa-solid fa-fire", default: true, callback: () => true },
+        { action: "no", label: `Pay ${paid} Aether`, icon: "fa-solid fa-wand-sparkles", callback: () => false },
+      ],
+      rejectClose: false,
+    }) ?? null;
+  } catch { return null; }
 }
 
 /** The version's blocks, labelled as on an ability card, for the "infuses" message. */
@@ -303,11 +390,18 @@ export async function cancelInfusion(actor) {
   if (!armed) return false;
   const pool = actor.system?.combat?.classResources?.aether?.value ?? 0;
   const max  = actor.system?.combat?.classResources?.aether?.max ?? 6;
-  await actor.update({
+  const update = {
     "system.combat.classResources.aether.value": Math.min(max, pool + (armed.spent ?? 0)),
     [`flags.${NS}.infused`]: null,
-  });
-  _log(`cancelled "${armed.label}" — ${armed.spent} Aether returned`);
+  };
+  // Cancelling is an undo: Inner Furnace's hp come back and its use this round too.
+  if (armed.furnace) {
+    const hp = actor.system?.combat?.hp ?? {};
+    update["system.combat.hp.value"] = Math.min(Number(hp.max) || Infinity, (Number(hp.value) || 0) + (Number(armed.hpLost) || 0));
+    update[`flags.${NS}.innerFurnace`] = null;
+  }
+  await actor.update(update);
+  _log(`cancelled "${armed.label}" — ${armed.spent} Aether returned${armed.furnace ? `, ${armed.hpLost} hp back (Inner Furnace)` : ""}`);
   return true;
 }
 

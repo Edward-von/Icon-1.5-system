@@ -1656,6 +1656,30 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
+
+Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner
+Furnace) con Aether 6, i loro token sulla scena, un foe ostile, un combat avviato.
+
+- [ ] **Senza tratti**: un Wright qualsiasi preme "Infuse 3" → paga 3 come prima, nessun dialog, nessuna riga in più.
+- [ ] **Conqueror's Edge, foe vicino**: foe a 2 spazi dallo Spellblade → "Infuse 3" toglie 2 Aether; la card dice
+      "2 Aether spent" e sotto "Conqueror's Edge: −1, a foe is in range 2".
+- [ ] **Conqueror's Edge, foe lontano**: foe a 3+ spazi (o nessun token del PG sulla scena) → paga 3.
+- [ ] **Inner Furnace**: l'Enochian preme "Infuse 3" → dialog con "Sacrifice N hp" (N = VIT, 25% degli hp massimi) e
+      "Pay 3 Aether". Sacrifice → Aether −1, hp −N, la card dice "Inner Furnace: −2, sacrificed N hp".
+- [ ] **Una volta per round**: nello stesso round un altro Infuse non mostra il dialog e paga pieno; al round dopo torna.
+- [ ] **Pay Aether**: scegliendo "Pay 3 Aether" paga 3, gli hp restano, e il dialog si può riavere nello stesso round.
+- [ ] **Hp bassi**: con 3 hp e VIT 10 → dopo il sacrificio hp 1, non 0, e nessun wound.
+- [ ] **Poco Aether**: Aether 1, "Infuse 3" → il dialog compare e avvisa che senza sacrificio non basta; Sacrifice →
+      paga 1; "Pay 3 Aether" → avviso "needs 3 Aether", niente pagato.
+- [ ] **Chiudere il dialog** con la ✕ → nessun Aether né hp tolti, nessuna card.
+- [ ] **Annullare**: dopo un Infuse con Inner Furnace ripremi il bottone armato → tornano Aether e hp, e al prossimo
+      Infuse nello stesso round il dialog ricompare.
+- [ ] **Entrambi i tratti** (aggiungi a mano Conqueror's Edge all'Enochian), foe in range 2: "Infuse 3" con Sacrifice
+      → paga 0, con le due righe in card.
+- [ ] **Infuse X** (es. Ätherwand) con i tratti → chiede quanto, paga esattamente quello, nessuno sconto né dialog.
+- [ ] **Limit Break**: "Infuse 6" di Gigaflare con Conqueror's Edge e foe vicino → paga 5.
+
 ## R63 — Soglie di crit / exceed variabili: Soulfire, Arenheir, a mano (17 ottobre 2026, versione 1.15.75)
 
 Setup: solo codice (F5 basta). Un PG Enochian con il tratto Soulfire, un PG con la relic Arenheir (rank III, poi
