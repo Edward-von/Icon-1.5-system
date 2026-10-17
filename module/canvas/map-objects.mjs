@@ -447,6 +447,90 @@ export async function toggleObjectDestructible(actor) {
 }
 
 /* -------------------------------------------------- */
+/*  Walls around an object (R33a5)                     */
+/* -------------------------------------------------- */
+
+const WALL_FLAG = "objectWall";
+
+/** The walls placed around object token `td` (flagged with its id), on its scene. */
+export function objectWallsOf(td) {
+  const scene = td?.parent;
+  if (!scene?.walls) return [];
+  return scene.walls.filter(w => w.flags?.[NS]?.[WALL_FLAG]?.tokenId === td.id);
+}
+
+/**
+ * The four walls around the footprint of `td` with its top-left corner at `at` (its place by default):
+ * "Objects … provide obstruction" (p.89, p.95) and "You can't move through obstructions … objects are obstructions
+ * by default" (p.88), so they block movement; "By default, objects, characters, and all terrain other than impassable
+ * terrain do not block line of sight" (p.92), so not sight, light or sound. Each wall is one-way: it stops a token
+ * coming from outside but lets out what is inside (the object's own token when it is moved, a character standing on
+ * it, p.89 "Characters can stand on objects"). Square grids only.
+ */
+function objectWallData(td, at = null) {
+  const grid = td.parent.grid;
+  const x0 = at?.x ?? td.x, y0 = at?.y ?? td.y;
+  const x1 = x0 + Math.max(1, Math.round(td.width ?? 1)) * grid.size;
+  const y1 = y0 + Math.max(1, Math.round(td.height ?? 1)) * grid.size;
+  const center = { x: (x0 + x1) / 2, y: (y0 + y1) / 2 };
+  const sides = [[x0, y0, x1, y0], [x1, y0, x1, y1], [x1, y1, x0, y1], [x0, y1, x0, y0]];
+  const { WALL_MOVEMENT_TYPES: MOVE, WALL_SENSE_TYPES: SENSE, WALL_DIRECTIONS: DIR } = CONST;
+  return sides.map((c, side) => {
+    // Foundry ignores a one-way wall for an origin on the side named by its direction (Edge#orientPoint:
+    // orientation < 0 is LEFT): the object's centre is the side that passes.
+    const o = foundry.utils.orient2dFast({ x: c[0], y: c[1] }, { x: c[2], y: c[3] }, center);
+    return {
+      c, move: MOVE.NORMAL, sight: SENSE.NONE, light: SENSE.NONE, sound: SENSE.NONE,
+      dir: o < 0 ? DIR.LEFT : DIR.RIGHT,
+      flags: { [NS]: { [WALL_FLAG]: { tokenId: td.id, side } } },
+    };
+  });
+}
+
+/**
+ * GM, from the object's sheet: put walls around the object's token, or take them away. Only on a click — nothing
+ * builds them by itself. Not for an object that doesn't provide obstruction (Underway p.168 "Portals don't provide
+ * obstruction"). The walls follow the token when it moves and go when it is deleted (hooks below).
+ * @param {Actor} actor  the object's (synthetic) actor
+ */
+export async function toggleObjectWalls(actor) {
+  if (!game.user.isGM) { ui.notifications.warn("Only the GM can add or remove an object's walls."); return; }
+  const td = objectToken(actor);
+  const scene = td?.parent;
+  if (!scene) { ui.notifications.warn("This object has no token on a scene."); return; }
+  const have = objectWallsOf(td);
+  if (have.length) {
+    await scene.deleteEmbeddedDocuments("Wall", have.map(w => w.id));
+    ui.notifications.info(`${td.name}: walls removed.`);
+    return;
+  }
+  if (objectSheetInfo(actor)?.noObstruction) { ui.notifications.warn(`${td.name} doesn't provide obstruction (p.168): no walls.`); return; }
+  if (scene.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Walls around objects need a square grid."); return; }
+  await scene.createEmbeddedDocuments("Wall", objectWallData(td));
+  ui.notifications.info(`${td.name}: walls added — they block movement into its space (not sight) and follow the token. Flying and teleporting ignore objects' obstruction (p.88): use Foundry's teleport, or the GM's unconstrained movement, for those.`);
+}
+
+/** Move the walls of object `td` to its new top-left corner `to` (active GM). */
+async function moveObjectWalls(td, to) {
+  const walls = objectWallsOf(td);
+  if (!walls.length) return;
+  const data = objectWallData(td, to);
+  const updates = walls.map(w => {
+    const d = data[Number(w.flags[NS][WALL_FLAG].side) || 0];
+    return { _id: w.id, c: d.c, dir: d.dir };
+  });
+  await td.parent.updateEmbeddedDocuments("Wall", updates);
+}
+
+/** Active GM, on a scene's load: walls left by an object token that no longer exists go. */
+async function clearOrphanObjectWalls(scene) {
+  const ids = scene?.walls?.filter(w => { const f = w.flags?.[NS]?.[WALL_FLAG]; return f && !scene.tokens.get(f.tokenId); }).map(w => w.id) ?? [];
+  if (!ids.length) return;
+  await scene.deleteEmbeddedDocuments("Wall", ids);
+  _log(`removed ${ids.length} wall(s) of objects no longer on "${scene.name}"`);
+}
+
+/* -------------------------------------------------- */
 /*  The object's rules at the table (R33a2)            */
 /* -------------------------------------------------- */
 
@@ -514,6 +598,9 @@ export function objectSheetInfo(actor) {
     // R33a4: Underway's teleport, Comet's rampart and pick up when moving, the talent / mastery effects on moving.
     portal: notes.portal, rampart: notes.rampart, pickUpNear: notes.pickUpNear,
     moves: objectUpgradeEffects(upgrades),
+    // R33a5: Foundry walls around it (GM button); Underway "Portals don't provide obstruction" (p.168) gets none.
+    noObstruction: !!obj?.noObstruction,
+    walls: td ? objectWallsOf(td).length : 0,
   };
 }
 
@@ -1221,6 +1308,9 @@ export function registerMapObjectHooks() {
     const scene = tokenDoc.parent;
     const ids = scene?.templates.filter(t => t.flags?.[NS]?.mapObject && t.flags[NS].followTokenId === tokenDoc.id).map(t => t.id) ?? [];
     if (ids.length) scene.deleteEmbeddedDocuments("MeasuredTemplate", ids).catch(err => console.warn("[ICON | MapObjects] could not remove the object's aura", err));
+    // R33a5: its walls go with it.
+    const walls = objectWallsOf(tokenDoc).map(w => w.id);
+    if (walls.length) scene.deleteEmbeddedDocuments("Wall", walls).catch(err => console.warn("[ICON | MapObjects] could not remove the object's walls", err));
     // The objects stacked on it come down (R33a2).
     if (scene) settleStack(scene, { x: tokenDoc.x, y: tokenDoc.y }, tokenDoc.elevation ?? 0, tokenHeight(tokenDoc), [tokenDoc.id])
       .catch(err => console.warn("[ICON | MapObjects] could not lower the stack", err));
@@ -1240,6 +1330,8 @@ export function registerMapObjectHooks() {
     // v13: inside updateToken the document may still report the pre-move x/y — the new spot is in `changed`.
     const to = cellCorner(scene, changed.x ?? tokenDoc.x, changed.y ?? tokenDoc.y);
     if (from.x === to.x && from.y === to.y) return;
+    // R33a5: its walls follow it.
+    moveObjectWalls(tokenDoc, { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y }).catch(err => console.warn("[ICON | MapObjects] could not move the object's walls", err));
     const height = tokenHeight(tokenDoc);
     const was = Number(options.iconPrevElevation ?? tokenDoc.elevation) || 0;
     try {
@@ -1251,6 +1343,11 @@ export function registerMapObjectHooks() {
   });
   Hooks.on("preUpdateToken", (tokenDoc, changed, options) => {
     if (("x" in changed || "y" in changed) && mapObjectFlag(tokenDoc)) options.iconPrevElevation = tokenDoc.elevation ?? 0;
+  });
+  // R33a5: walls of objects deleted while no GM was there to take them away.
+  Hooks.on("canvasReady", (cv) => {
+    if (game.users.activeGM?.id !== game.user.id) return;
+    clearOrphanObjectWalls(cv?.scene).catch(err => console.warn("[ICON | MapObjects] could not clear orphan walls", err));
   });
 
   // R33a4: a character moved by its user next to / onto an object: Comet's pick up, the Megamushroom's blessing,

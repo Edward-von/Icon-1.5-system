@@ -32,6 +32,16 @@
                     title="{{#if mapObject.destructible}}Make the object immune to damage and effects again{{else}}Destructible objects have 10 hp, are targetable like a character, automatically hit by attacks and effects, and fail all saves (p.89){{/if}}">
               {{#if mapObject.destructible}}Make immune{{else}}Make destructible{{/if}}
             </button>
+            {{!-- R33a5: Foundry walls around the object, only on the GM's click --}}
+            {{#if mapObject.onMap}}{{#unless mapObject.world}}
+              {{#if mapObject.walls}}
+                <button type="button" class="icon-btn icon-btn--sm" data-action="objectWalls"
+                        title="Delete the walls around this object"><i class="fa-solid fa-border-none"></i> Remove walls</button>
+              {{else}}{{#unless mapObject.noObstruction}}
+                <button type="button" class="icon-btn icon-btn--sm" data-action="objectWalls"
+                        title="Objects provide obstruction (p.89): put walls around it that stop movement into its space (not sight, p.92). They follow the token and go when it is deleted."><i class="fa-solid fa-border-all"></i> Add walls</button>
+              {{/unless}}{{/if}}
+            {{/unless}}{{/if}}
           {{/if}}
         {{else}}
           {{#if system.intangible}}

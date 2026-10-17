@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Muri di Foundry attorno agli oggetti, a clic del GM (versione 1.15.227)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Muri attorno agli oggetti**: un oggetto sulla mappa "Provides obstruction" (p.89, p.95), ma un token ci passava
+  attraverso → il sistema non creava muri di Foundry → sulla scheda dell'oggetto c'è ora un bottone "Add walls /
+  Remove walls", solo per il GM e solo a clic (scelta di Edoardo). Crea quattro muri attorno al token. I muri bloccano
+  il movimento ("objects are obstructions", p.88) ma non la vista ("objects … do not block line of sight", p.92). Sono
+  a senso unico: fermano chi entra da fuori ma lasciano uscire il token dell'oggetto e chi ci sta sopra. Ogni muro è
+  segnato col token dell'oggetto, segue il token quando si sposta e sparisce quando il token viene cancellato.
+  All'apertura della scena il GM toglie da solo i muri rimasti senza oggetto. Underway non ha il bottone ("Portals
+  don't provide obstruction", p.168). Funziona solo con griglia quadrata. Solo codice.
+
 ## 17 ottobre 2026 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (versione 1.15.226)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

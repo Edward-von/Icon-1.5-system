@@ -10,7 +10,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
-import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject, pickUpObjectBlessing, eruptObject, teleportToObject, relocateObject } from "../../canvas/map-objects.mjs";
+import { mapObjectFlag, changeObjectHeight, toggleObjectDestructible, objectSheetInfo, postObjectToChat, removeMapObject, pickUpObjectBlessing, eruptObject, teleportToObject, relocateObject, toggleObjectWalls } from "../../canvas/map-objects.mjs";
 
 const _log = (...args) => console.debug("[ICON | SummonSheet]", ...args);
 
@@ -42,6 +42,7 @@ export class SummonSheet extends BaseActorSheet {
       objectErupt:       SummonSheet.#onObjectErupt,
       objectTeleport:    SummonSheet.#onObjectTeleport,
       objectRelocate:    SummonSheet.#onObjectRelocate,
+      objectWalls:       SummonSheet.#onObjectWalls,
       rollSummonAttack:  SummonSheet.#onRollSummonAttack,
       rollSummonDamage:  SummonSheet.#onRollSummonDamage,
     },
@@ -161,6 +162,12 @@ export class SummonSheet extends BaseActorSheet {
   /** Object: Aethershard Talent I's move up to range 2 (p.210; R33a4). */
   static async #onObjectRelocate(event, target) {
     await relocateObject(this.document);
+  }
+
+  /** GM: walls around the object (R33a5, p.89 "Provides obstruction"), added or removed on the click. */
+  static async #onObjectWalls(event, target) {
+    await toggleObjectWalls(this.document);
+    this.render();
   }
 
   /** Roll the summon's attack as a standard combat roll. Speaker is the summon;

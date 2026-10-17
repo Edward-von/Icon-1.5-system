@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Muri di Foundry attorno agli oggetti, a clic del GM (17 ottobre 2026, versione 1.15.227)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Da GM, piazzare un Boulder e aprire la sua scheda: c'è "Add walls". Cliccarlo: compaiono 4 muri attorno al token
+      e il bottone diventa "Remove walls".
+- [ ] Con i muri, trascinare un foe dentro lo spazio del boulder: Foundry lo ferma. La vista attraverso il boulder
+      resta libera.
+- [ ] Trascinare il token del boulder in un altro spazio: il token esce dai suoi muri e i muri lo seguono.
+- [ ] Cancellare il token del boulder: i suoi muri spariscono.
+- [ ] "Remove walls" toglie solo i muri di quell'oggetto, non gli altri muri della scena.
+- [ ] Piazzare un Underway: sulla sua scheda il bottone "Add walls" non c'è.
+- [ ] Da giocatore, la scheda dell'oggetto non mostra il bottone.
+- [ ] Ricaricare la scena (F5) dopo aver tolto un oggetto con muri a mano: i muri orfani spariscono.
+
 ## Emerso R49 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (17 ottobre 2026, versione 1.15.226)
 
 Setup: solo codice (F5 basta).

@@ -1153,7 +1153,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
         gli oggetti; anche il personaggio spinto su dal Magma Spire di Pyroclast ("pushing them up").
       - Aethershard: Talent I (spostare uno shard di 2 quando spendi Aether), Talent II (pierce contro chi è adiacente a
         uno shard), mastery AETHERSHIFT (phasing se inizi / finisci adiacente) — p.210-211.
-- [ ] **R33a5. Oggetti sulla mappa: quello che resta dopo R33a4** (M/L)
+- [x] **R33a5. Oggetti sulla mappa: quello che resta dopo R33a4** (M/L)
       Lasciato fuori da R33a4 perché rischioso o non fatto bene:
       - Muri di Foundry attorno agli oggetti per vista e movimento ("Provides obstruction", p.89; tranne Underway "don't
         provide obstruction"): creare / spostare / togliere muri insieme al token è rischioso (muri che restano, token
@@ -1178,6 +1178,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       storto, molti aggiornamenti a ogni spostamento, il libro non dice se un oggetto di altezza 1 blocca la vista, e
       vanno tolti a mano se l'oggetto si cancella a Foundry spento. Via di mezzo proposta: un bottone "Add walls /
       Remove walls" sulla scheda dell'oggetto, solo per il GM e solo a clic.
+(FATTO il 17 ottobre 2026, versione 1.15.227: bottone GM "Add walls / Remove walls" sulla scheda dell'oggetto, muri a
+      senso unico solo per il movimento (p.92); seguono il token, spariscono col token, gli orfani si tolgono
+      all'apertura della scena, niente muri per l'Underway. Limite: i muri fermano anche il volo e chi vuole salire
+      camminando; per quei casi teleport di Foundry o movimento libero del GM, e l'avviso lo dice.)
 - [x] **R33b. Spazi di terreno** (L) (FATTO il 16 ottobre 2026, versione 1.15.69: chip colorati sull'abilità / tratto
       letti dal testo ("Pit · 2", "Dangerous · 3", "Mote · 4", "Area +2"), si cliccano gli spazi sulla mappa; ogni spazio è un
       template di una casella col flag `terrain` (riusabile da R33c / R33d); tasto destro sul chip o "Remove all" li toglie;
