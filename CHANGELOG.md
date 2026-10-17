@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Split Heaven and Hell: fascia di distanza misurata sulla linea (versione 1.15.141)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Split Heaven and Hell, "% Max HP"**: la fascia "1 space / 2-4 spaces / 5+ spaces" (p.127, "depending on their
+  distance on the line from you") andava scelta a mano per ogni bersaglio → il dialog non sapeva dove fosse la linea
+  piazzata → ora, se la linea del Limit Break è sulla mappa, il dialog misura per ogni bersaglio la distanza dal token
+  del personaggio alla casella più vicina del bersaglio dentro la linea (contando le diagonali, anche sulle colonne in
+  più date dalla larghezza), preseleziona la fascia giusta e scrive "· N on the line" oppure "· not on the line". Il
+  menu resta modificabile; i Legend restano al loro 25% fisso. Solo codice.
+
 ## 17 ottobre 2026 — Rampant Nail: la Small Blast del Talent I sullo spuntone (versione 1.15.140)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

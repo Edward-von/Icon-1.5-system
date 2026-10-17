@@ -518,6 +518,24 @@ function distanceToCells(cell, cells) {
   return best;
 }
 
+/**
+ * How far along a placed area a token is from the user: the smallest distance (p.85, diagonals count) from the
+ * user's token to a space of the token that is inside the area, or null when the token is not in it. Split
+ * Heaven and Hell (p.127): "Characters in the line take damage depending on their distance on the line from you"
+ * — a line drawn from the user's position has its k-th space k away, its side columns too.
+ * @param {MeasuredTemplateDocument} templateDoc  an ICON area (flags.icon-system.cells)
+ * @param {TokenDocument} tokenDoc  the character in the area
+ * @param {TokenDocument} userDoc   the area's user
+ * @returns {number|null}
+ */
+export function distanceInArea(templateDoc, tokenDoc, userDoc) {
+  const inArea = new Set((templateDoc?.flags?.[FLAG_NS]?.cells ?? []).map(cellKey));
+  if (!inArea.size || !tokenDoc || !userDoc) return null;
+  const own = tokenCells(userDoc);
+  const cells = tokenCells(tokenDoc).filter(c => inArea.has(cellKey(c)));
+  return cells.length ? Math.min(...cells.map(c => distanceToCells(c, own))) : null;
+}
+
 /** Every cell within `range` of the source cells (source cells excluded). */
 export function cellsInRange(sourceCells, range) {
   const src = new Set(sourceCells.map(cellKey));

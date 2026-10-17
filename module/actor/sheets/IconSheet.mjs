@@ -14,7 +14,7 @@ import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.m
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
          areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, areaLabel, infusedAreas, rangeFromTags,
-         attackSpaceTokenId, retargetFromTemplate } from "../../canvas/area-templates.mjs";
+         attackSpaceTokenId, retargetFromTemplate, distanceInArea, sourceTokenFor } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
@@ -3431,11 +3431,27 @@ export class IconSheet extends BaseActorSheet {
     const optLabel = (o, max) => o.fray
       ? `${o.label}: divine fray (${fray})${o.note ? `, ${o.note}` : ""}`
       : `${o.label}: ${o.pct}% → ${Math.ceil(max * o.pct / 100)}`;
+    // Distance bands ("1 space / 2-4 spaces / 5+ spaces", Split Heaven and Hell p.127: "depending on their
+    // distance on the line from you"): measured on this limit break's line on the map, from the user's token,
+    // and preselected; the select stays free to change.
+    const band = (label) => {
+      const m = /^(\d+)\s*(?:[-–]\s*(\d+)|(\+))?\s*spaces?$/i.exec(String(label ?? "").trim());
+      return m ? { lo: Number(m[1]), hi: m[3] ? Infinity : Number(m[2] ?? m[1]) } : null;
+    };
+    const banded = pct.options.length > 1 && pct.options.every(o => band(o.label));
+    const line = banded ? findAreaTemplates({ actorId: this.document.id, abilityKey: lb.id })
+      .filter(t => t.flags?.["icon-system"]?.area?.kind === "line")
+      .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0))[0] : null;
+    const userDoc = line ? (canvas.tokens?.get(line.flags["icon-system"].tokenId)?.document ?? sourceTokenFor(this.document)?.document) : null;
     const rows = tokens.map((t, i) => {
       const a = t.actor, max = baseMax(a);
-      const opts = choicesOf(a).map((o, j) => `<option value="${j}">${esc(optLabel(o, max))}</option>`).join("");
+      const choices = choicesOf(a);
+      const dist = line && userDoc && choices === pct.options ? distanceInArea(line, t.document, userDoc) : null;
+      const pick = dist === null ? -1 : choices.findIndex(o => { const b = band(o.label); return b && dist >= b.lo && dist <= b.hi; });
+      const opts = choices.map((o, j) => `<option value="${j}"${j === pick ? " selected" : ""}>${esc(optLabel(o, max))}</option>`).join("");
+      const where = !line || choices !== pct.options ? "" : dist === null ? " <small>· not on the line</small>" : ` <small>· ${dist} on the line</small>`;
       return `<div style="display:flex; gap:6px; align-items:center">
-          <span style="flex:1"><strong>${esc(t.name ?? a.name)}</strong>${a.type === "legend" ? " (Legend)" : ""} <small>max base hp ${max}</small></span>
+          <span style="flex:1"><strong>${esc(t.name ?? a.name)}</strong>${a.type === "legend" ? " (Legend)" : ""} <small>max base hp ${max}</small>${where}</span>
           <select name="t${i}">${opts}</select></div>`;
     }).join("");
     // Atomos Crusher (Ultimate): +25% to non-legends while the user is at 1 hp or lower.

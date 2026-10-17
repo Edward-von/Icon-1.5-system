@@ -760,9 +760,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R37 — `applyDamagePipeline` non conosce i tipi di danno** (S, da decidere): la funzione
       esportata in `damage.mjs` (nell'API del sistema, senza chiamate interne) non accetta né `pierce` né `divine`,
       quindi da macro non si può far ignorare armor o vigor; valutare se serve.
-- [ ] **Emerso lavorando su R37 — Split Heaven and Hell: distanza misurata sulla linea** (S/M): la fascia "1 space /
+- [x] **Emerso lavorando su R37 — Split Heaven and Hell: distanza misurata sulla linea** (S/M): la fascia "1 space /
       2-4 / 5+" (p.127) si sceglie a mano nel dialog del "% Max HP"; per misurarla servirebbe sapere dove parte la
       linea piazzata e leggere la posizione di ogni bersaglio.
+(FATTO il 17 ottobre 2026, versione 1.15.141: con la linea del Limit Break sulla mappa, il dialog "% Max HP" misura la
+      distanza di ogni bersaglio sulla linea dal personaggio e preseleziona la fascia, che resta modificabile; i
+      Legend restano al 25%. Solo codice.)
 - [x] **Emerso lavorando su R37 — l'annotazione della spesa di resolve resta vecchia** (S):
       `flags.icon-system.limitBreakSpend` non si cancella a fine combattimento: un "% Max HP" con un Legend che salva,
       senza aver riusato il Limit Break, rimborsa l'uso precedente, anche di un altro combattimento. Cancellarla nel

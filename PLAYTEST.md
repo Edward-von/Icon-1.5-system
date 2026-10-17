@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Split Heaven and Hell: fascia di distanza misurata sulla linea (17 ottobre 2026, versione 1.15.141)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Split Heaven and Hell: piazzare la Line 5 dal bottone area del Limit Break, con bersagli a 1, 3 e 5
+      spazi. In "% Max HP" le fasce preselezionate sono 100% / 50% / 25%, e accanto a ogni nome c'è "N on the line".
+- [ ] Un bersaglio fuori dalla linea mostra "not on the line" e resta sulla prima opzione; cambiarla a mano funziona e
+      il danno applicato è quello scelto.
+- [ ] Linea più larga (width 2-3): chi sta nelle colonne di lato alla k-esima casella prende la fascia di distanza k.
+- [ ] Un Legend nella linea: niente indicazione di distanza, resta "Legend: 25%".
+- [ ] Senza linea sulla mappa il dialog è come prima.
+- [ ] Gigantas Crusher (failed / successful save): il dialog non cambia.
+
 ## Emerso R49 — Rampant Nail: la Small Blast del Talent I sullo spuntone (17 ottobre 2026, versione 1.15.140)
 
 Setup: solo codice (F5 basta).
