@@ -564,6 +564,9 @@ export class IconSheet extends BaseActorSheet {
         hasSections: desc.sections.length > 0,
       };
     }));
+    // The six slots above the panels show the same cost as the panel badge
+    // ("1 Action", Catapult's mastery "Interrupt 3"), not the stored key.
+    context.abilityCosts = Object.fromEntries(context.abilityDetails.map(d => [d.id, d]));
 
     // Relic items — enriched detail view for the Relics tab.
     // We can't access RelicData SchemaField descriptions directly in Handlebars

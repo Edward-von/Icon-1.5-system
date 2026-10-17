@@ -1248,9 +1248,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.122: spiegazioni dal manuale con la pagina per tutti i 35 tag dei pack che ne
       erano senza; i tag di fazione rimandano alla loro fazione; nei compendi non resta nessun tag senza spiegazione.
       Solo codice.)
-- [ ] **Emerso lavorando su R5 — costo grezzo nei riquadri delle abilità** (S): i sei riquadri della tab Combat
+- [x] **Emerso lavorando su R5 — costo grezzo nei riquadri delle abilità** (S): i sei riquadri della tab Combat
       mostrano il costo come è salvato ("1action", "interrupt-1") invece di "1 Action" / "Interrupt 1"
       (`icon-combat.hbs`, `item.system.cost`), e non seguono la mastery di Catapult.
+(FATTO il 17 ottobre 2026, versione 1.15.123: i riquadri usano lo stesso costo del badge del pannello, con tooltip e
+      talenti / mastery. Solo codice.)
 - [ ] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
       damage to itself") potrebbe proporre 10 come danno inflitto, come faceva Provoke con "to you"; da verificare
       sulla scheda del foe ed eventualmente saltare anche "to itself" in `ability-damage.mjs`.
@@ -1288,6 +1290,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Sow a qualunque distanza e senza linea di vista, e in quel caso guadagna Unerring (p.185); con il tag Melee il
       sistema considera la portata 1. Controllare se il tiro avvisa o blocca un bersaglio marcato lontano, e se
       Unerring va proposto in quel caso.
+- [ ] **Emerso lavorando su R5 — numero del riquadro vuoto sui riquadri pieni** (S, da verificare): in
+      `icon-combat.hbs` i riquadri già occupati scrivono `data-slot="{{@index}}"`, ma l'helper `icon-range`
+      (`handlebars.mjs`) non fornisce `@index`, quindi il numero esce vuoto e `#onDropAbilitySlot` lo legge come 0:
+      un'abilità trascinata su un riquadro già pieno (es. il quinto) potrebbe finire nel primo. Usare `{{this}}` come
+      i riquadri vuoti.
 
 ---
 

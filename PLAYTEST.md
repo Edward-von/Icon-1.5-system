@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R5 — Costo leggibile nei riquadri delle abilità (17 ottobre 2026, versione 1.15.123)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Tab Combat di un PG: sotto il nome nei sei riquadri si legge "1 Action" / "2 Actions" / "Free Action" /
+      "Interrupt 1", non più "1action".
+- [ ] Catapult con la mastery: il riquadro dice "Interrupt 3", come il badge del pannello; passando il mouse compare
+      la spiegazione.
+- [ ] Il riquadro risponde ancora come prima al clic (apre / chiude il pannello), al doppio clic (apre la scheda) e al
+      trascinamento.
+
 ## Emerso R5 — Spiegazioni per gli ultimi tag grigi dei foe (17 ottobre 2026, versione 1.15.122)
 
 Setup: solo codice (F5 basta).

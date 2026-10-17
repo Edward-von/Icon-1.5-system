@@ -591,7 +591,9 @@
           <div class="icon-ability-slot icon-ability-slot--filled {{icon-class-color item.system.class}}"
                data-slot="{{@index}}" data-item-id="{{item.id}}">
             <span class="icon-ability-slot__name">{{item.name}}</span>
-            <span class="icon-ability-slot__cost">{{item.system.cost}}</span>
+            {{#with (lookup @root.abilityCosts item.id) as |ad|}}
+              <span class="icon-ability-slot__cost"{{#if ad.costTooltip}} data-tooltip="{{ad.costTooltip}}"{{/if}}>{{ad.cost}}</span>
+            {{/with}}
             {{#if (icon-or (icon-or (icon-gt item.system.talentSelected 0) item.system.masteryUnlocked) item.system.isCombo)}}
               <div class="icon-ability-slot__badges">
                 {{#if item.system.isCombo}}

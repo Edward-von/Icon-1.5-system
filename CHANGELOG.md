@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Costo leggibile nei riquadri delle abilità (versione 1.15.123)
+
+### Round di debug del 15 ottobre, voce emersa su R5
+
+- **Costo grezzo nei sei riquadri della tab Combat**: sotto il nome dell'abilità si leggeva "1action" o "interrupt-1",
+  e Catapult con la mastery restava "Interrupt 1" → il riquadro stampava il costo come è salvato, invece di usare il
+  costo già pronto per il pannello sotto (quello che segue talenti e mastery) → ora il riquadro mostra lo stesso costo
+  del pannello ("1 Action", "Interrupt 3" per Catapult con la mastery), con la stessa spiegazione al passaggio del
+  mouse. Solo codice.
+
 ## 17 ottobre 2026 — Spiegazioni per gli ultimi tag grigi dei foe (versione 1.15.122)
 
 ### Round di debug del 15 ottobre, voce emersa su R5
