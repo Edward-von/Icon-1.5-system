@@ -451,6 +451,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
       // the start of your next turn", "allies in range 2 gain sturdy").
       if (stanceOnly) return;
       GRANT_RE.lastIndex = 0;
+      let pronounGain = null;   // { segIndex, target } of the last grant whose subject was "they" / "one of them"
       for (const m of sentence.matchAll(GRANT_RE)) {
         const def = GRANT_BY_WORD(m[1]);
         if (!def) continue;
@@ -472,19 +473,26 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
           const selfAt  = _lastIndex(selfRe, before);
           const otherAt = _lastIndex(OTHER_SUBJECT_RE, before.replace(selfRe, x => " ".repeat(x.length)));
           const allyAt  = _lastIndex(ALLY_SUBJECT_RE, before);
+          // "they also gain defiance, then become unstoppable" (Wish, Star Scorned Hermit
+          // p.203): a clause with no subject of its own, right after a pronoun-subject
+          // clause, keeps that subject; it is not an imperative on the user.
+          const segIndex = segments.indexOf(seg);
           if (allyAt >= 0 && allyAt > otherAt) target = selfAt >= 0 && /\byou\s+and\b/i.test(before) ? "both" : "ally";
           else if (selfAt >= 0 && selfAt > otherAt) target = "self";
+          else if (otherAt < 0 && pronounGain && pronounGain.segIndex === segIndex - 1 && /^\s*(?:then|and)\s/i.test(before) && IMPERATIVE_SELF_RE.test(before)) target = pronounGain.target;
           else if (otherAt < 0 && IMPERATIVE_SELF_RE.test(before)) target = "self";
           else if (otherAt < 0 && /^\s*(?:gains?|have|has|regains?)\s*(?:\+\d\s*)?$/i.test(before)) target = "self";
           else if (PRONOUN_SUBJECT_RE.test(before)) {
             // The antecedent of "one of them" is the last group named earlier in the sentence.
             const prefix = sentence.slice(0, seg.start);
             const pAlly = _lastIndex(ALLY_SUBJECT_RE, prefix), pOther = _lastIndex(ANTECEDENT_OTHER_RE, prefix);
-            if (pAlly >= 0 && pAlly > pOther) target = "ally";
+            if (pAlly >= 0 && pAlly > pOther) { target = "ally"; pronounGain = { segIndex, target }; }
           }
           if (!target) continue;
         }
-        const until = (UNTIL_RE.exec(after)?.[1] ?? "").trim();
+        // A duration after ", then <verb> …" belongs to that later clause ("gain defiance,
+        // then become unstoppable until the end of their next turn": only the Unstoppable lasts).
+        const until = (UNTIL_RE.exec(after.split(/,\s*then\s+(?=[a-z])/i)[0])?.[1] ?? "").trim();
         const targets = target === "both" ? ["self", "ally"] : [target];
         for (const t of targets) {
           if (blockEntries.some(e => e.kind === "gain" && e.id === def.id && e.target === t)) continue;

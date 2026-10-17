@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Wish, mastery: Unstoppable all'alleato, non a te (versione 1.15.85)
+
+### Round di debug del 16 ottobre, voce emersa su R42
+
+- **Wish, Star Scorned Hermit** (Seer, p.203): "they also gain defiance, then become unstoppable until the end of
+  their next turn" dava il Gain Unstoppable a chi usa l'abilità, e la Defiance dell'alleato prendeva la durata
+  dell'Unstoppable → "then become" senza soggetto veniva letto come un ordine a te, e la durata veniva cercata oltre
+  la virgola fino a "until the end of their next turn" → una frase senza soggetto che comincia con "then/and" subito
+  dopo un "they / one of them" tiene lo stesso destinatario (qui l'alleato), e una durata scritta dopo ", then …" vale
+  solo per quella frase. Ora la Defiance va all'alleato senza durata (resta finché non scatta, p.104) e l'Unstoppable
+  va all'alleato "until the end of their next turn". Confrontati vecchio e nuovo su tutti i 4719 testi dei pack:
+  cambia solo Wish. Solo codice.
+
 ## 17 ottobre 2026 — Aria: la blast cresciuta resta centrata su di te (versione 1.15.84)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

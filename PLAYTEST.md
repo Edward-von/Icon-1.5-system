@@ -1780,6 +1780,19 @@ Setup: solo codice (F5 basta).
 - [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
       si piazza ancora a mano nella sua portata.
 
+## voce emersa su R42 — Wish, mastery: Unstoppable all'alleato, non a te (17 ottobre 2026, versione 1.15.85)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
+      bottoni per gli alleati, "Defiance" senza durata e "Unstoppable" con "until the end of their next turn". Nessun
+      Unstoppable su di te.
+- [ ] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
+      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza.
+- [ ] Con la mastery bloccata i due bottoni non compaiono.
+- [ ] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
+      all'alleato) come prima.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

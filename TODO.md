@@ -376,10 +376,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       dialog dell'attacco, con più token bersagliati (area piazzata) i bottoni Inflict restano su tutti, con il gruppo
       etichettato "attack target only". La card Auto-hit potrebbe chiedere il bersaglio d'attacco (o prendere
       l'attack space dell'area: il centro di un Blast / Burst, p.97) e dividere le righe come la card d'attacco.
-- [ ] **Emerso lavorando su R42 — Wish, mastery: Unstoppable a te invece che all'alleato** (S): "they also gain
+- [x] **Emerso lavorando su R42 — Wish, mastery: Unstoppable a te invece che all'alleato** (S): "they also gain
       defiance, then become unstoppable until the end of their next turn" (Star Scorned Hermit): dopo R42 la Defiance
       va all'alleato, ma "then become unstoppable" è letto come imperativo e il Gain Unstoppable va su di te. In più la
       Defiance prende la durata dell'Unstoppable ("until the end of their next turn"), che nel testo non è sua.
+(FATTO il 17 ottobre 2026, versione 1.15.85: una frase senza soggetto ("then become …") subito dopo un "they" riferito
+      all'alleato tiene l'alleato come destinatario, e la durata dopo ", then …" vale solo per quella frase; Wish con
+      la mastery dà Defiance (senza durata) e Unstoppable (fino alla fine del suo turno successivo) all'alleato; fra i
+      pack cambia solo Wish. Solo codice.)
 - [ ] **Emerso lavorando su R46 — danno aggiunto dalle versioni Infuse delle abilità non proposto in Other** (S/M):
       come per i Limit Break (R38b), le versioni infuse che aggiungono danno invece di cambiarlo non compaiono in Other:
       MAGNARIME ("Deal 1 piercing damage to all characters in the area again … for every two aether infused"), BOULDER
