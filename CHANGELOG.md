@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Elenchi "•" a righe nelle regole dei summon di foe e legend (versione 1.15.133)
+
+### Round di debug del 15 ottobre, voce emersa su R12
+
+- **Elenchi nelle regole dei summon**: sulla scheda e nella card in chat le regole dei summon di Churn Baron (Crony:
+  Blunderbuss / Arkentech Explosives), Deep Snow Aesi (Icicle), Keeper of the Eldflame (Everforge) e Violence Demon
+  (Blade of Agony) mostravano l'elenco tutto su una riga → i pack salvano queste regole dentro un `<p>` con i "•" in
+  mezzo al testo, e la resa a righe salta i testi in HTML (e nella card c'è in più il descrittore in HTML) → la scheda
+  e il bottone chat preparano le regole con una nuova funzione (`summonRulesHTML` in `enrich.mjs`) che mette ogni "•"
+  su una riga sua dentro lo stesso paragrafo; cambiano 5 regole su 144, parole invariate, pack non toccati, vale anche
+  per i foe già importati. Solo codice.
+
 ## 17 ottobre 2026 — Painkiller: l'aura di Sweet Torment resta (versione 1.15.132)
 
 ### Round di debug del 15 ottobre, voce emersa su R19

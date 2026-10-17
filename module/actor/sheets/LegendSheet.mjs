@@ -11,7 +11,7 @@ import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../com
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { npcActionStatusEntries, statusBlockHtml, captureTargets } from "../../combat/ability-statuses.mjs";
-import { enrichHTML, escapeHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, escapeHTML, postNpcTraitCard, summonRulesHTML, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
@@ -220,7 +220,7 @@ export class LegendSheet extends BaseActorSheet {
 
     // Summons & objects this legend puts on the map (templates/actor/npc-summons.hbs)
     context.enrichedSummons = await Promise.all((system.summons ?? []).map(async (sm, i) => ({
-      ...sm, i, enrichedRules: await enrich(sm.rules),
+      ...sm, i, enrichedRules: await enrich(summonRulesHTML(sm.rules)),
     })));
 
     context.enrichedRoundActions = await Promise.all(system.roundActions.map(async (r, i) => ({
@@ -336,7 +336,7 @@ export class LegendSheet extends BaseActorSheet {
     const sm = this.document.system.summons?.[Number(target.dataset.summonIndex)];
     if (!sm) return;
     _log(`npcSummonShowInChat — actor: "${this.document.name}" | summon: "${sm.name}"`);
-    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${sm.rules}` });
+    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${summonRulesHTML(sm.rules)}` });
   }
 
   static async #onRollAction(event, target) {

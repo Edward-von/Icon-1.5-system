@@ -160,6 +160,27 @@ export function formatBulletLists(text) {
 }
 
 /**
+ * The rules of a foe's / legend's summon (system.summons.N.rules) with their
+ * list one row per item, before enrichHTML (foe / legend sheet and its chat
+ * card). Pack summon rules are stored as one "<p>…</p>" with the list inline
+ * ("…the following effects. • A • B"), and formatBulletLists() reads neither
+ * HTML nor inline bullets (Churn Baron's Crony, Deep Snow Aesi's Icicle, the
+ * Everforge, the Blade of Agony). A text that is only that one paragraph has
+ * each inline "•" put on its own line and the rows built inside the same <p>;
+ * in these texts the items run to the end, so no running text follows the
+ * last one. Any other text is returned as it is. Words are never changed.
+ * @param {string} rules
+ * @returns {string}
+ */
+export function summonRulesHTML(rules) {
+  const src = String(rules ?? "").trim();
+  const m = /^<p>([^<]*)<\/p>$/i.exec(src);
+  const text = m ? m[1].trim() : src;
+  if (/<[a-z][^>]*>/i.test(text) || !/\s•\s/.test(text)) return rules ?? "";
+  return `<p>${formatBulletLists(text.replace(/\s+•\s+/g, "\n• "))}</p>`;
+}
+
+/**
  * Plain text of an ability description: <p>/<br> wrappers and line breaks
  * become spaces, except around a bullet line ("\n• …" or a "\n◦ …" sub-item),
  * which keeps its own line for formatBulletLists().

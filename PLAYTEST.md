@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R12 — Elenchi "•" a righe nelle regole dei summon di foe e legend (17 ottobre 2026, versione 1.15.133)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Churn Baron (da compendio): nella sezione Summons & Objects, sotto Crony, Blunderbuss e Arkentech Explosives
+      stanno su due righe con "•" e la frase iniziale resta sopra.
+- [ ] Deep Snow Aesi: Icicle mostra tre righe "•" (2 piercing damage / vulnerable+ / difficult terrain).
+- [ ] Keeper of the Eldflame: Everforge mostra il paragrafo e sotto tre righe "•".
+- [ ] Violence Demon: Blade of Agony mostra due righe con "Blade Slash:" e "Blade consume X:" in grassetto.
+- [ ] Bottone chat su ognuno di questi summon: la card mostra il descrittore in corsivo e poi le stesse righe "•"; i
+      tooltip delle parole chiave ci sono ancora.
+- [ ] Un summon senza elenco (es. Bale Troll / Loose Limbs) si vede come prima, su scheda e in chat.
+- [ ] Un Churn Baron già importato in un mondo prima di questa build mostra anche lui le righe.
+
 ## Emerso R19 — Painkiller: l'aura di Sweet Torment resta (17 ottobre 2026, versione 1.15.132)
 
 Setup: solo codice (F5 basta).

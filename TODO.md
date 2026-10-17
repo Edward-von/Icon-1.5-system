@@ -1327,14 +1327,21 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (`handlebars.mjs`) non fornisce `@index`, quindi il numero esce vuoto e `#onDropAbilitySlot` lo legge come 0:
       un'abilità trascinata su un riquadro già pieno (es. il quinto) potrebbe finire nel primo. Usare `{{this}}` come
       i riquadri vuoti.
-- [ ] **Emerso lavorando su R12 — elenchi "•" nelle regole dei summon in HTML** (S): le regole dei summon di Churn
+- [x] **Emerso lavorando su R12 — elenchi "•" nelle regole dei summon in HTML** (S): le regole dei summon di Churn
       Baron (Blunderbuss / Arkentech Explosives), Deep Snow Aesi (Icicle), Keeper of the Eldflame (Everforge) e
       Violence Demon (Blade of Agony) sono salvate come `<p>… • … • …</p>` (`system.summons.N.rules`) e la resa a
       righe salta i testi in HTML; togliere il `<p>` o scriverne uno per voce, controllando come la card in chat
       aggiunge il descrittore (`postNpcTraitCard`).
+(FATTO il 17 ottobre 2026, versione 1.15.133: correzione nel codice, nessun pack toccato; scheda di foe / legend e
+      card in chat preparano le regole con `summonRulesHTML`, che mette ogni "•" su una riga sua; cambiano 5 regole su
+      144, parole invariate, vale anche per i foe già importati. Solo codice.)
 - [ ] **Emerso lavorando su R1 — Blessing of Faith "gain True Strike on that ability"** (S, da decidere): Blessing of
       Faith (e il tratto del Chanter) propone ancora "Gain True Strike" agli alleati come status, ma anche lì è il tag
       di una sola abilità. Domanda per Edoardo: lasciarlo (lo status fa ignorare Dodge all'attacco) o toglierlo?
+- [ ] **Emerso lavorando su R12 — elenchi "•" nella scheda del Summon trascinato da un foe** (S): trascinando il chip
+      sulla mappa, `foe-summons.mjs` copia `sm.rules` in `system.summonEffect` dell'attore Summon e `SummonSheet` lo
+      passa a `enrichHTML` così com'è, quindi lì l'elenco resta su una riga; usare `summonRulesHTML` anche per
+      `enrichedSummonEffect`, o al momento della copia.
 
 ---
 

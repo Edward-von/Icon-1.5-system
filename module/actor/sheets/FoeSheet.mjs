@@ -20,7 +20,7 @@ import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modi
 import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
-import { enrichHTML, postNpcTraitCard, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
+import { enrichHTML, postNpcTraitCard, summonRulesHTML, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
@@ -144,7 +144,7 @@ export class FoeSheet extends BaseActorSheet {
     })));
     // Summons & objects this foe puts on the map (templates/actor/npc-summons.hbs)
     context.enrichedSummons = await Promise.all((system.summons ?? []).map(async (sm, i) => ({
-      ...sm, i, enrichedRules: await enrich(sm.rules),
+      ...sm, i, enrichedRules: await enrich(summonRulesHTML(sm.rules)),
     })));
 
     // Foe templates on this foe (faction / Great Culture / job / special), in the order applied.
@@ -701,7 +701,7 @@ export class FoeSheet extends BaseActorSheet {
     const sm = this.document.system.summons?.[Number(target.dataset.summonIndex)];
     if (!sm) return;
     _log(`npcSummonShowInChat — actor: "${this.document.name}" | summon: "${sm.name}"`);
-    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${sm.rules}` });
+    await postNpcTraitCard(this.document, { name: sm.name, description: `<p><em>${sm.descriptor}</em></p>${summonRulesHTML(sm.rules)}` });
   }
 
   /** ✕ on an applied template: undo what it did (module/actor/foe-templates.mjs). */
