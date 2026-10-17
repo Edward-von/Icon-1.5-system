@@ -186,10 +186,13 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * The `icon-system.attack` flag of an attack card: who attacked, with what,
  * and who was targeted — read by the "when targeted" interrupt buttons
  * (damage-interrupts.mjs#decorateAttackInterrupts, R35).
- * @param {{actor?:Actor, abilityName?:string, targets?:Array<{actorUuid, tokenId, name}>}} opts
+ * @param {{actor?:Actor, abilityName?:string, targets?:Array<{actorUuid, tokenId, name}>, roll?:boolean}} opts
  */
-export function attackFlags({ actor = null, abilityName = "", targets = [] } = {}) {
+export function attackFlags({ actor = null, abilityName = "", targets = [], roll = false } = {}) {
   return {
+    // An attack roll or auto-hit card (not Show in Chat): the damage card that
+    // follows shows its Inflict buttons too (damage.mjs, inflict-status.mjs).
+    ...(roll ? { roll: true } : {}),
     sourceActorUuid: actor?.uuid ?? "",
     sourceName:      actor?.name ?? "",
     abilityName:     abilityName ?? "",
@@ -337,7 +340,7 @@ export async function combatRoll({
     content,
     rolls,
     // Who was targeted: the "when targeted" interrupt buttons (damage-interrupts.mjs, R35).
-    flags: { "icon-system": { attack: attackFlags({ actor, abilityName, targets: attackTargets }) } },
+    flags: { "icon-system": { attack: attackFlags({ actor, abilityName, targets: attackTargets, roll: true }) } },
   });
 
   // Arenheir Aspect: each crit lowers the crit threshold of the next attacks.

@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso status sulla card del danno — I bottoni Inflict anche sulla card del danno (17 ottobre 2026, versione 1.15.231)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG: attacca con un'abilità che infligge uno status (es. Hit: stunned), con un bersaglio. Poi tira il danno:
+      sulla card del danno, sotto Apply, compare il blocco Inflict con la nota "same buttons as the attack card", con
+      la stessa riga del bersaglio e le stesse parti spente (es. Miss spento su un colpo andato a segno).
+- [ ] Clicca lo status sulla card dell'attacco: anche il bottone sulla card del danno diventa "✓ …" e non si clicca
+      più. Rifai la prova al contrario (clic sulla card del danno → bloccato anche sull'attacco).
+- [ ] Clicca uno status sull'attacco PRIMA di tirare il danno: quando la card del danno esce, quel bottone è già
+      bloccato.
+- [ ] F5 dopo aver usato un bottone: resta bloccato su entrambe le card. Il bottone Gain usato su una card d'attacco
+      resta bloccato anche lui.
+- [ ] Abilità auto-hit con uno status: card auto-hit e poi la card del danno in automatico, ed entrambe hanno i
+      bottoni, che si bloccano insieme.
+- [ ] Giocatore che clicca sulla card d'attacco di un altro (o sulla copia nella card del danno): lo status passa dal
+      GM e il bottone risulta "→ GM" su tutte e due le card, anche sul client del GM.
+- [ ] Foe/Legend/Summon: attacco con uno status, poi danno, e il blocco compare anche lì.
+- [ ] Attacco d'area con bersaglio d'attacco scelto: entrambe le card del danno (attacco e Area) mostrano le righe
+      "attack target" e "area" come la card d'attacco.
+- [ ] Damage Utility e il danno dopo un tiro salvezza (bottone con burst) non hanno blocco Inflict. Le card del danno
+      postate prima della build non danno errori in console.
+- [ ] Show in Chat di un'abilità seguito dal tiro del danno (senza tiro d'attacco): la card del danno non mostra il
+      blocco.
+
 ## Emerso R35 — Scritta dei bottoni "targeted" giusta anche senza attacco (17 ottobre 2026, versione 1.15.230)
 
 Setup: solo codice (F5 basta).

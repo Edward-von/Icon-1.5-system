@@ -757,6 +757,11 @@ export async function postAbilityDamageCard(actor, opts = {}) {
           weakened:   weakenedTaken,
           targets: targets.map(t => t.actorUuid),
           ...(pendingMods.length ? { mods: pendingMods } : {}),
+          // The attack / auto-hit card of this use: its Inflict buttons show on
+          // this card too (inflict-status.mjs#decorateInflictCard). Not for the
+          // damage after a save (targetsOverride) nor an object's own damage
+          // (statusBonus false, map-objects / area-motion).
+          ...(!targetsOverride && statusBonus ? { inflictFrom: _inflictAttackCardId(actor, abilityName) } : {}),
         },
       },
     },
@@ -778,6 +783,25 @@ export async function postAbilityDamageCard(actor, opts = {}) {
 /* ================================================== */
 /*  Internal helpers                                   */
 /* ================================================== */
+
+/**
+ * The latest attack / auto-hit card (`attack.roll` flag, rolls.mjs#attackFlags)
+ * of this character's ability among the recent chat messages, when it has
+ * Inflict buttons: its id, or "". "Bio" and "Bio — MAGNABIO" (an Infuse
+ * version) count as the same ability.
+ */
+function _inflictAttackCardId(actor, abilityName) {
+  if (!actor) return "";
+  const name = String(abilityName ?? "");
+  const same = (a) => a === name || a.startsWith(`${name} — `) || name.startsWith(`${a} — `);
+  const msgs = game.messages?.contents ?? [];
+  for (let i = msgs.length - 1, seen = 0; i >= 0 && seen < 50; i--, seen++) {
+    const atk = msgs[i].flags?.["icon-system"]?.attack;
+    if (!atk?.roll || atk.sourceActorUuid !== actor.uuid || !same(String(atk.abilityName ?? ""))) continue;
+    return String(msgs[i].content ?? "").includes('data-action="inflictStatus"') ? msgs[i].id : "";
+  }
+  return "";
+}
 
 async function _setStatus(actor, statusId, active) {
   // Look for existing status effect

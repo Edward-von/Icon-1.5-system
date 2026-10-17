@@ -31,7 +31,7 @@ import { tickStatusExpiry } from "./status-expiry.mjs";
 import { clearCombo } from "./foe-combo.mjs";
 import { deleteAreaTemplates, clearExpiredAreaTemplates, tickAuraExpiry } from "../canvas/area-templates.mjs";
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
-import { handleInflictSocket } from "./inflict-status.mjs";
+import { handleInflictSocket, handleInflictUsedSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
 import { handleCardModSocket } from "./damage-card-mods.mjs";
 import { bankInterruptsAtTurnStart } from "./damage-interrupts.mjs";
@@ -827,6 +827,10 @@ export function registerCombatHooks() {
         /* A player pressed a status button on a card for an actor they don't
          * own (an "Inflict" block, inflict-status.mjs) — the active GM applies it. */
         await handleInflictSocket(data);
+      } else if (data?.type === "inflictUsed") {
+        /* A player used an Inflict button of an attack card they didn't post
+         * (or its copy on the damage card) — the active GM marks it used. */
+        await handleInflictUsedSocket(data);
       } else if (data?.type === "damageCardMod") {
         /* A player used an interrupt that changes a damage card they didn't
          * post (Righteous Disdain, R35b) — the active GM writes the change. */

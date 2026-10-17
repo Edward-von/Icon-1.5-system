@@ -2818,7 +2818,7 @@ export class IconSheet extends BaseActorSheet {
                   </div>`,
         rolls,
         // Who was targeted: the "when targeted" interrupt buttons (damage-interrupts.mjs, R35).
-        flags: { "icon-system": { attack: attackFlags({ actor: this.document, abilityName: ab.name,
+        flags: { "icon-system": { attack: attackFlags({ actor: this.document, abilityName: ab.name, roll: true,
           targets: attackTargetId ? inCard.filter(t => t.tokenId === attackTargetId) : inCard }) } },
       });
       // Chain into damage if the ability deals damage

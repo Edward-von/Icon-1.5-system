@@ -93,6 +93,7 @@ async function _onInflictClick(btn) {
   };
 
   btn.disabled = true;
+  const shared = _sharedKeyOf(btn);
   const results = [];
   for (const t of targets) {
     _log(`"${spec.abilityName}" [${spec.kind}] → ${spec.statusId || spec.label}${spec.ongoing ? "+" : ""} [${spec.when}] on ${t.actor.name}${saveDamage ? ` + damage ${saveDamage.label}` : ""}`);
@@ -102,10 +103,113 @@ async function _onInflictClick(btn) {
   // Feedback: a per-target row locks after use; the "current targets" row stays usable.
   const r = results[0];
   if (!d.targetUuid || !r) { btn.disabled = false; return; }
-  btn.textContent = spec.kind === "save-damage" ? (r.success ? "✓ saved" : "✓ failed — damage rolled")
-                  : r.relayed ? "→ GM" : r.applied ? `✓ ${r.appliedLabel ?? `${spec.label}${spec.ongoing ? "+" : ""}`}` : "✓ saved";
-  btn.classList.add(r.applied ? "icon-chat-btn--done" : "icon-chat-btn--resisted");
+  const state = {
+    text: spec.kind === "save-damage" ? (r.success ? "✓ saved" : "✓ failed — damage rolled")
+        : r.relayed ? "→ GM" : r.applied ? `✓ ${r.appliedLabel ?? `${spec.label}${spec.ongoing ? "+" : ""}`}` : "✓ saved",
+    resisted: !r.applied,
+  };
+  _showUsed(btn, state);
+  await _shareUsed(shared, state);
+}
+
+/* -------------------------------------------------- */
+/*  Shared "used" state: attack card + damage card     */
+/* -------------------------------------------------- */
+
+// The Inflict block of an attack / auto-hit card (attack.roll flag) shows on
+// the damage card of the same use too (damage.inflictFrom flag, damage.mjs).
+// A button used on either card is used on both: the state is kept on the
+// attack card's flags (inflictUsed: { "<block>-<button>": {text, resisted} }).
+const INFLICT_BLOCK = ".icon-chat-statuses:not(.icon-chat-statuses--gain):not(.icon-chat-statuses--notes)";
+const KEY_RE = /^\d+-\d+$/;
+
+/** "<block>-<button>" keys on the status buttons of a card's content. */
+function _keyButtons(root) {
+  root.querySelectorAll(".icon-chat-statuses").forEach((block, b) =>
+    block.querySelectorAll('[data-action="inflictStatus"]').forEach((btn, i) => { btn.dataset.inflictKey = `${b}-${i}`; }));
+}
+
+function _showUsed(btn, state) {
+  btn.textContent = String(state?.text ?? "✓");
+  btn.classList.add(state?.resisted ? "icon-chat-btn--resisted" : "icon-chat-btn--done");
   btn.disabled = true;
+}
+
+/** Lock the buttons already used, from the attack card's flag, under `root`. */
+function _markUsed(root, attackMessage) {
+  const used = attackMessage?.flags?.["icon-system"]?.inflictUsed;
+  if (!used || typeof used !== "object") return;
+  for (const [key, state] of Object.entries(used)) {
+    if (!KEY_RE.test(key)) continue;
+    root.querySelectorAll(`[data-inflict-msg="${attackMessage.id}"] [data-inflict-key="${key}"]`).forEach(b => _showUsed(b, state));
+  }
+}
+
+/** The attack card and key a button's use is kept under ({messageId, key}, or null). */
+function _sharedKeyOf(btn) {
+  const messageId = btn.closest?.("[data-inflict-msg]")?.dataset.inflictMsg ?? "";
+  const key = btn.dataset.inflictKey ?? "";
+  return messageId && KEY_RE.test(key) ? { messageId, key } : null;
+}
+
+/** Show the use on every copy of the button, and keep it on the attack card (or ask the GM to). */
+async function _shareUsed(shared, state) {
+  if (!shared) return;
+  const { messageId, key } = shared;
+  document.querySelectorAll(`[data-inflict-msg="${messageId}"] [data-inflict-key="${key}"]`).forEach(b => _showUsed(b, state));
+  const message = game.messages?.get(messageId);
+  if (!message) return;
+  if (message.isOwner) {
+    await message.update({ [`flags.icon-system.inflictUsed.${key}`]: state });
+    return;
+  }
+  if (!game.users.activeGM) return;
+  game.socket.emit(SOCKET, { type: "inflictUsed", messageId, key, state });
+}
+
+/** GM side of _shareUsed for a player who didn't post the attack card. */
+export async function handleInflictUsedSocket(data) {
+  const message = game.messages?.get(data?.messageId ?? "");
+  const key = String(data?.key ?? "");
+  if (!message?.flags?.["icon-system"]?.attack?.roll || !KEY_RE.test(key)) return;
+  await message.update({ [`flags.icon-system.inflictUsed.${key}`]: { text: String(data.state?.text ?? "✓").slice(0, 80), resisted: !!data.state?.resisted } });
+}
+
+/**
+ * Before binding a rendered card: an attack / auto-hit card gets its buttons
+ * keyed and the used ones locked; a damage card that follows one gets a copy
+ * of its Inflict block (same rows, same Hit / Miss / Exceed dimming), locked
+ * where already used. Cards without these flags (older ones included) are
+ * left as they are.
+ */
+export function decorateInflictCard(message, html) {
+  const f = message?.flags?.["icon-system"];
+  if (!f || !html?.querySelector) return;
+  if (f.attack?.roll) {
+    _keyButtons(html);
+    html.querySelectorAll(".icon-chat-statuses").forEach(b => { b.dataset.inflictMsg = message.id; });
+    _markUsed(html, message);
+    return;
+  }
+  const attack = f.damage?.inflictFrom ? game.messages?.get(f.damage.inflictFrom) : null;
+  if (!attack) return;
+  const tpl = document.createElement("template");
+  tpl.innerHTML = attack.content ?? "";
+  _keyButtons(tpl.content);
+  const block = tpl.content.querySelector(INFLICT_BLOCK);
+  const card = html.querySelector(".icon-chat-card--damage");
+  if (!block || !card) return;
+  block.dataset.inflictMsg = attack.id;
+  block.classList.add("icon-chat-statuses--linked");
+  block.querySelector(".icon-chat-statuses__note")?.insertAdjacentHTML("afterbegin", "same buttons as the attack card · ");
+  card.append(block);
+  _markUsed(html, attack);
+}
+
+/** An attack card's used buttons changed: lock them on the damage cards showing its block. */
+export function onInflictUsedUpdate(message, changed) {
+  if (!foundry.utils.hasProperty(changed ?? {}, "flags.icon-system.inflictUsed")) return;
+  _markUsed(document, message);
 }
 
 /* -------------------------------------------------- */

@@ -112,7 +112,7 @@ import { registerFollowMarks } from "./module/canvas/follow-marks.mjs";
 import { registerGreatWheel } from "./module/combat/great-wheel.mjs";
 import { registerWheelOfFate, buttonUsed, markDone } from "./module/combat/wheel-of-fate.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
-import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
+import { bindInflictButtons, inflictStatus, decorateInflictCard, onInflictUsedUpdate } from "./module/combat/inflict-status.mjs";
 import { rollGamble, bendFate } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 import { decorateDamageInterrupts, bindInterruptVigorButtons, decorateAttackInterrupts } from "./module/combat/damage-interrupts.mjs";
@@ -964,10 +964,16 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
  * for one, then applyStatus (or a relay to the GM). See inflict-status.mjs.
  */
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  // The attack card's Inflict block also on the damage card that follows it,
+  // with the used buttons locked on both (before binding: the copy needs it).
+  try { decorateInflictCard(message, html); }
+  catch (err) { console.warn("ICON 1.5 | linked inflict buttons failed:", err); }
   bindInflictButtons(html);
   // "Heroic: Gain vigor 4" on an interrupt posted from a damage card (Righteous Disdain).
   bindInterruptVigorButtons(message, html);
 });
+
+Hooks.on("updateChatMessage", (message, changed) => onInflictUsedUpdate(message, changed));
 
 /**
  * "When targeted" interrupts on attack cards (R35): Aether Deflection, Endless

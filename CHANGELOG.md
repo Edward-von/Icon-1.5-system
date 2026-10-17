@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — I bottoni Inflict anche sulla card del danno (versione 1.15.231)
+
+### Round di debug del 15 ottobre, voce emersa (status sulla card del danno)
+
+- **Bottoni Inflict sulla card del danno**: i bottoni degli status (Inflict) comparivano solo sulla card dell'attacco
+  o dell'auto-hit, mentre Maar se li aspettava "when damage card is posted" → la card del danno non aveva alcun
+  collegamento con l'attacco da cui veniva → ora (scelta (b) di Edoardo) la card del danno ricorda l'ultima card
+  d'attacco o di auto-hit della stessa abilità dello stesso personaggio (tra gli ultimi 50 messaggi, se ha bottoni
+  Inflict) e ne mostra una copia del blocco Inflict. Restano uguali le righe per bersaglio, le parti spente perché Hit
+  / Miss / Exceed non sono scattati, la riga "attack target / area" (p.97), il controllo Sealed (p.104), il tiro
+  salvezza 10+ (p.94) e l'inoltro al GM. Un bottone usato su una delle due card risulta usato anche sull'altra, e
+  resta così anche dopo un ricaricamento: lo stato è salvato nei flag della card d'attacco, e se chi clicca non può
+  modificarla lo scrive il GM. Le card del danno senza attacco (Damage Utility, danno dopo un tiro salvezza, danno
+  degli oggetti sulla mappa) e le card vecchie restano come prima. Solo codice.
+
 ## 17 ottobre 2026 — Scritta dei bottoni "targeted" giusta anche senza attacco (versione 1.15.230)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

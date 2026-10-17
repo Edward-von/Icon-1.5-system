@@ -1726,6 +1726,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - nessuno
 - nessuno
+- nessuno
 
 ---
 
@@ -2075,9 +2076,12 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — status delle combo e "Seal your foe" — FATTO il 12 ottobre 2026 (versione 1.16.6)
 - [x] God Hand non offriva Sealed (verbo non riconosciuto); con la combo attiva sparivano gli status della base.
-- [ ] **Emerso lavorando — status sulla card del danno** (S/M, da chiedere a Maar): i bottoni Inflict stanno sulla
+- [x] **Emerso lavorando — status sulla card del danno** (S/M, da chiedere a Maar): i bottoni Inflict stanno sulla
       card dell'attacco (o dell'auto-hit), non su quella del danno. Maar dice "when damage card is posted": chiedere se
       li vuole anche lì.
+(FATTO il 17 ottobre 2026, versione 1.15.231: scelta (b) di Edoardo, il blocco Inflict dell'attacco o dell'auto-hit si
+      vede anche sulla card del danno della stessa abilità e lo stato "usato" è condiviso tra le due card. Il
+      collegamento va all'ultima card d'attacco della stessa abilità tra gli ultimi 50 messaggi.)
 
 ### Bug di Maar del 12 ottobre 2026 — card delle versioni combo — FATTO il 12 ottobre 2026 (versione 1.16.7)
 - [x] Show in Chat della combo con il nome base e "⚡ ⚡"; card dell'attacco con tutto il testo combo nel blocco Hit
