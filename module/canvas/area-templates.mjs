@@ -208,6 +208,9 @@ export function areasInText(text) {
     // Finishing Blow, p.155): the area's centre is the character the trigger
     // names, not a space picked in range; "centered on you" is the user.
     const before = plain.slice(0, m.index).split(/[.;:]/).pop();
+    // R33c2: HURRICANE (p.235) "waterspouts grow to a small blast area instead of a single space" is the waterspout
+    // already on the map growing (its Grow button, area-motion.mjs), not a new area to place.
+    if (/\bgrows? to an?\s*$/.test(before) && /^\s*(?:area\s+)?instead of a single space\b/.test(plain.slice(m.index + m[0].length))) continue;
     let centre = centreOf(before, plain.slice(m.index + m[0].length).split(/[.;:]/)[0]);
     // The same area grown later in the text keeps its centre: Aria (p.178) "a small blast area effect
     // centered on you … the area becomes a medium blast. If you are damaged again, it becomes a large blast".

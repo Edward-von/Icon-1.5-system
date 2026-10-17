@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Waterspout: terreno lasciato, HURRICANE (17 ottobre 2026, versione 1.15.167)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Waterspout con Talent II: la freccia da 3 sulla card → bottone per il difficult terrain; il clic lo crea su uno
+      spazio lasciato.
+- [ ] Lo spostamento da 1 (e Shift + freccia) non offre il terreno.
+- [ ] HURRICANE dal round 4: dopo Grow, un personaggio adiacente che inizia il turno riceve la riga "shoved 1".
+- [ ] Il bottone area di Waterspout non propone più "Small Blast".
+
 ## R33c2 — Tsunami si piazza contro un bordo della mappa (17 ottobre 2026, versione 1.15.166)
 
 Setup: solo codice (F5 basta).

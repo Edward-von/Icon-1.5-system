@@ -26,7 +26,7 @@
  * as the objects' growth (map-objects.mjs). Turn and round cards come from the active GM (IconCombat).
  */
 import { areaLabel, shapeCells, isPlacingArea } from "./area-templates.mjs";
-import { terrainFlag, extendAreaTemplate } from "./terrain-spaces.mjs";
+import { terrainFlag, extendAreaTemplate, pickSpaces, createTerrainSpaces, removeSpacesButton, TERRAIN_COLORS } from "./terrain-spaces.mjs";
 import { areaMotion, areaGrowth, markGrowTo, activeAreaTexts, areaTerrainLabel, areaDamage } from "../helpers/area-terrain.mjs";
 
 const _log = (...a) => console.debug("[ICON | AreaMotion]", ...a);
@@ -66,7 +66,7 @@ function rulesOf(doc) {
   const mark = !!tf && tf.kind !== "area";
   const name = String(tf?.name ?? "").toLowerCase();
   let motion = areaMotion(texts);
-  if (motion && mark) motion = motion.free && name && motion.free.noun === name ? { free: motion.free, freeAlt: motion.freeAlt } : null;
+  if (motion && mark) motion = motion.free && name && motion.free.noun === name ? { free: motion.free, freeAlt: motion.freeAlt, vacate: motion.vacate, startShove: motion.startShove } : null;
   let growTo = mark ? markGrowTo(texts) : null;
   if (growTo && growTo.noun !== name) growTo = null;
   return { actor, item, f, motion, growth: mark ? null : areaGrowth(texts), growTo, damage: mark ? null : areaDamage(texts) };
@@ -167,12 +167,18 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
     if (!n) { ui.notifications.warn(`${name} can't move off the map.`); return 0; }
   }
   const inside = tokensIn(scene, f.cells);
+  // R33c2: Waterspout Talent II "leaves a space of difficult terrain in one space that it vacates" (p.235). Read
+  // before the update, which changes the flags in place.
+  const now = new Set(shifted(n).map(cellKey));
+  // Only on the "3 spaces instead" move that sentence goes with, when the text has one.
+  const vacates = !!rules?.motion?.vacate && (!rules.motion.freeAlt || steps === rules.motion.freeAlt.steps);
+  const vacated = vacates ? f.cells.filter(c => !now.has(cellKey(c))).map(c => ({ i: c.i, j: c.j })) : [];
   const size = scene.grid.size;
   await doc.update({ x: doc.x + d.dj * n * size, y: doc.y + d.di * n * size, [`flags.${NS}.cells`]: shifted(n) });
   const how = `${n} space${n > 1 ? "s" : ""} ${edge ? `toward ${d.edge}` : d.word}${n < steps ? ` (stopped at the edge of the map, ${steps} asked)` : ""}`;
   _log(`${name} moved ${how}`);
   const drag = !!rules?.motion?.drag && inside.length;
-  if (quiet && !drag) {
+  if (quiet && !drag && !vacated.length) {
     ui.notifications.info(`${name} moved ${how}.${inside.length ? ` It was over ${inside.map(t => t.name).join(", ")}: they stay where they are.` : ""}`, { console: false });
     return n;
   }
@@ -184,12 +190,44 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
       lines.push(`<div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaDrag" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(inside.map(t => t.id).join(","))}" data-dir="${dir}" data-steps="${n}" title="Ask which ones, then move them by the same spaces"><i class="fa-solid fa-person-walking-arrow-right"></i> Drag them with it</button></div>`);
     }
   }
+  if (vacated.length) {
+    const v = rules.motion.vacate;
+    lines.push(`<p><small>${esc(v.source)}: ${esc(v.rule)}</small></p><div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaVacate" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-kind="${esc(v.kind)}" data-cells="${esc(vacated.map(cellKey).join(";"))}" title="Only if the text's condition is met"><i class="fa-solid fa-shoe-prints"></i> ${esc(v.kind[0].toUpperCase() + v.kind.slice(1))} terrain on a space it left</button></div>`);
+  }
   if (rules?.motion?.afterMove) lines.push(`<p><small>${esc(rules.motion.afterMove.source)}: ${esc(rules.motion.afterMove.rule)}</small></p>`);
   await ChatMessage.create({
     speaker: rules?.actor ? ChatMessage.getSpeaker({ actor: rules.actor }) : ChatMessage.getSpeaker(),
     content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-arrows-up-down-left-right"></i> ${esc(name)}</strong> moves ${esc(how)}.${lines.join("")}</div>`,
   });
   return n;
+}
+
+/**
+ * R33c2: Waterspout Talent II's difficult terrain "in one space that it vacates" (p.235): one of the spaces the move
+ * left (clicked when there are several), marked as a terrain space of the creator (terrain-spaces.mjs).
+ * @param {MeasuredTemplateDocument} doc
+ * @param {string} kind   difficult / dangerous
+ * @param {string} list   "i,j;i,j" — the spaces it left
+ */
+async function leaveTerrainOnVacated(doc, kind, list) {
+  if (!(doc.isOwner || game.user.isGM)) { ui.notifications.warn("Only the one who placed it or the GM can do this."); return false; }
+  if (doc.parent !== canvas?.scene) { ui.notifications.warn("Open the scene of that area first."); return false; }
+  const left = list.split(";").filter(Boolean).map(s => { const [i, j] = s.split(",").map(Number); return { i, j }; });
+  if (!left.length) return false;
+  const keys = new Set(left.map(cellKey));
+  const cells = left.length === 1 ? left : await pickSpaces({ max: 1, color: TERRAIN_COLORS[kind] ?? TERRAIN_COLORS.difficult,
+    hint: `${nameOf(doc)}: one of the spaces it left.`, check: (c) => keys.has(cellKey(c)) ? "" : "Pick one of the spaces it just left." });
+  if (!cells?.length) return false;
+  const rules = rulesOf(doc);
+  const { actor, item } = sourceOf(doc);
+  const docs = await createTerrainSpaces(doc.parent, cells, { kind, name: "", rules: rules?.motion?.vacate?.rule ?? "" },
+    { actor, abilityName: item?.name ?? nameOf(doc), abilityKey: item ? `${item.id}:terrain` : "", itemId: item?.id ?? "", source: rules?.motion?.vacate?.source ?? "" });
+  if (!docs.length) return false;
+  await ChatMessage.create({
+    speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-shoe-prints"></i> ${esc(nameOf(doc))}</strong> leaves a space of ${esc(kind)} terrain behind.<div>${removeSpacesButton(doc.parent, docs)}</div></div>`,
+  });
+  return true;
 }
 
 /** "Drag them with it": the characters ticked move by the area's spaces (the ones this user may move). */
@@ -321,6 +359,7 @@ export async function areaTurnStart(combatant) {
     if (parts.length) lines.push(`<p><strong>${esc(name)}</strong></p>${parts.join("")}`);
   }
   noteLeaveStart(combatant, scene);
+  lines.push(...adjacentShoveLines(combatant, scene));
   if (!lines.length) return;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
@@ -339,6 +378,31 @@ function leaveAreas(scene) {
   if (!scene) return [];
   return scene.templates.filter(t => t.flags?.[NS]?.lasting && !t.flags[NS].followTokenId)
     .map(doc => ({ doc, leave: rulesOf(doc)?.damage?.leave })).filter(e => e.leave);
+}
+
+/**
+ * R33c2: HURRICANE (p.235) "characters that start their turns adjacent to the area are shoved 1 in a direction of
+ * your choice": a line for the character starting its turn next to a grown waterspout (more than one space), any
+ * creator's. The shove is made by hand.
+ */
+function adjacentShoveLines(combatant, scene) {
+  const td = combatant?.token;
+  if (!td || !scene || td.flags?.[NS]?.mapObject) return [];
+  const mine = cellsOfToken(td);
+  const out = [];
+  for (const doc of scene.templates) {
+    const f = doc.flags?.[NS];
+    if (!f?.lasting || f.followTokenId || (f.cells?.length ?? 0) < 2) continue;
+    const s = rulesOf(doc)?.motion?.startShove;
+    if (!s) continue;
+    const keys = new Set(f.cells.map(cellKey));
+    if (mine.some(c => keys.has(cellKey(c)))) continue;
+    const near = mine.some(c => f.cells.some(k => Math.max(Math.abs(k.i - c.i), Math.abs(k.j - c.j)) === 1));
+    if (!near) continue;
+    const by = sourceOf(doc).actor?.name ?? "its creator";
+    out.push(`<p><strong>${esc(td.name)}</strong> starts the turn adjacent to <strong>${esc(nameOf(doc))}</strong>: shoved ${s.steps} in a direction ${esc(by)} chooses (by hand).</p><p><small>${esc(s.source)}: ${esc(s.rule)}</small></p>`);
+  }
+  return out;
 }
 
 function noteLeaveStart(combatant, scene) {
@@ -499,6 +563,8 @@ export function registerAreaMotion() {
             if (n) { btn.disabled = true; btn.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaGrowTo") {
             if (await growToBlast(doc)) { btn.disabled = true; btn.style.opacity = "0.5"; }
+          } else if (ds.action === "iconAreaVacate") {
+            if (await leaveTerrainOnVacated(doc, ds.kind, String(ds.cells ?? ""))) { btn.disabled = true; btn.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaDamage" || ds.action === "iconAreaLeaveDamage") {
             // R33c2: a damage card (GUNGNIR, Bifröst Talent II, River Guardians); its Apply buttons deal it.
             const only = ds.action === "iconAreaLeaveDamage" ? [scene.tokens.get(ds.tokenId)].filter(Boolean) : null;

@@ -170,6 +170,13 @@ export function areaMotion(texts) {
     if (m) set("freeAlt", { steps: num(m[1]), source, rule: sentenceAt(t, m.index) });
     m = /\bat round (\d+)\+?(?: or later)?,[^.;]*?\bmoves? anywhere from (?:to )?(\d+) to (\d+) spaces?\b/i.exec(t);
     if (m) set("range", { round: Number(m[1]), min: Number(m[2]), max: Number(m[3]), source, rule: sentenceAt(t, m.index) });
+    // R33c2: Waterspout Talent II (p.235) "… and leaves a space of difficult terrain in one space that it vacates".
+    m = /\bleaves a space of (difficult|dangerous) terrain in one space that it vacates\b/i.exec(t);
+    if (m) set("vacate", { kind: m[1].toLowerCase(), source, rule: sentenceAt(t, m.index) });
+    // R33c2: HURRICANE (p.235) "characters that start their turns adjacent to the area are shoved 1 in a direction
+    // of your choice" — a reminder at the start of their turn, once the waterspout has grown.
+    m = /\bcharacters that start their turns? adjacent to the area are shoved (\d+)\b/i.exec(t);
+    if (m) set("startShove", { steps: Number(m[1]), source, rule: sentenceAt(t, m.index) });
     // Tsunami Talent I: "Tsunami creates a pit in its center space after completing its movement" — a reminder.
     m = /\bafter completing its movement\b/i.exec(t);
     if (m) set("afterMove", { source, rule: t.slice(sentenceBounds(t, m.index)[0]).split(/(?<=[.;])\s+/).slice(0, 2).join(" ") });

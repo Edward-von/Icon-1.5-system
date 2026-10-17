@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Waterspout: terreno lasciato, HURRICANE (versione 1.15.167)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **Waterspout**: Talent II "leaves a space of difficult terrain in one space that it vacates", la spinta di HURRICANE
+  e la sua Small Blast non erano gestiti, e il bottone area piazzava un'area a parte → ora lo spostamento da 3 (Talent
+  II) offre "Difficult terrain on a space it left" (si clicca uno degli spazi lasciati); a inizio turno chi è
+  adiacente a un waterspout cresciuto riceve il promemoria "shoved 1" (p.235), con la spinta a mano; la Small Blast di
+  HURRICANE non viene più proposta come area da piazzare, resta solo il bottone Grow. Risucchiare / risputare e la
+  spinta del Talent I restano da decidere. Solo codice.
+
 ## 17 ottobre 2026 — Tsunami si piazza contro un bordo della mappa (versione 1.15.166)
 
 ### Round di debug del 15 ottobre, R33c2

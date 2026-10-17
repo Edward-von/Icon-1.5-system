@@ -1445,6 +1445,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       evasion" non ha nessun promemoria.
 - [ ] **Emerso lavorando su R33c2 — Ätherwand "Foes that end their turn in the area are shattered"** (S): nessun
       promemoria a fine turno; si potrebbe fare come River Guardians.
+- [ ] **Emerso lavorando su R33c2 — Waterspout: risucchiare e risputare** (S/M, da decidere): "removed from the
+      battlefield … placing them in any other free space in range 2" (p.235) e la spinta del Talent I restano a mano.
+      Domanda per Edoardo: "removed from the battlefield" come lo rendiamo (token nascosto, token spostato fuori
+      mappa, o solo un promemoria con l'elenco)? E a fine turno la risputata si fa cliccando uno spazio per ciascuno,
+      entro range 2?
 
 ---
 
