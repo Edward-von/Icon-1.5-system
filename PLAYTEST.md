@@ -1688,6 +1688,21 @@ Setup: solo codice (F5 basta).
       compare ancora "Pick one of the highlighted spaces".
 - [ ] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
 
+## voce emersa su R62 — Avvio del combat senza promemoria "End of round 0" (17 ottobre 2026, versione 1.15.79)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
+      "End of round 0" né "Tick the Paleblood die up by 1".
+- [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
+      round 1).
+- [ ] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
+      una volta sola, insieme al promemoria R62 del round 2.
+- [ ] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round.
+- [ ] Riserve dell'Encounter Designer previste a fine round 2: al passaggio al round 3 arriva al GM "Reserves due —
+      end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
+- [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

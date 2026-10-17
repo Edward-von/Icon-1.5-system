@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Avvio del combat senza promemoria "End of round 0" (versione 1.15.79)
+
+### Round di debug del 16 ottobre, voce emersa su R62
+
+- **Promemoria di fine round all'avvio del combat**: premendo "Begin Combat" in chat compariva subito "End of round 0"
+  (Paleblood: "Tick the Paleblood die up by 1"), anche se nessun round era ancora finito; il manuale dice di far
+  salire il dado "at the end of each round" (p.252) → `startCombat` porta il round da 0 a 1 senza indicare una
+  direzione, e l'hook `updateCombat` (`IconCombat.mjs`, blocco "Round advanced") lo trattava come un avanzamento di
+  round normale: postava i promemoria relic "round-end" e controllava le riserve dell'Encounter Designer già al round
+  1 → quella parte ora parte solo quando il round nuovo è 2 o più, come già succedeva per le aree che crescono
+  (Bifröst). Il promemoria "cosa si attiva in questo round" (R62) continua a uscire anche al round 1.
+
 ## 17 ottobre 2026 — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (versione 1.15.78)
 
 ### Round di debug del 16 ottobre, voce emersa su R33b

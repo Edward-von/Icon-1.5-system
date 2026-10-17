@@ -878,16 +878,21 @@ export function registerCombatHooks() {
 
       /* --- Round advanced: reserves due, "end of round" relic effects --- */
       if (roundChanged && (options.direction ?? 1) > 0 && combat.started) {
-        await _nudgeReserves(combat);
-        for (const c of combat.combatants) {
-          if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "round-end", `End of round ${Math.max(0, (combat.round ?? 1) - 1)}`);
+        // A round has ended only from round 2 on: startCombat moves 0 → 1
+        // with no direction, and must not post "End of round 0".
+        const roundEnded = (combat.round ?? 1) > 1;
+        if (roundEnded) {
+          await _nudgeReserves(combat);
+          for (const c of combat.combatants) {
+            if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "round-end", `End of round ${(combat.round ?? 1) - 1}`);
+          }
         }
         // What switches on this round: "At round 4 or later…" masteries,
         // "At the start of round 5…" traits, foe "Round 3+" actions (R62).
         try { await postRoundReminders(combat); }
         catch (err) { console.warn("[ICON | IconCombat] round reminders failed", err); }
         // Areas that grow at the end of each round: Bifröst Talent II (p.226; R33c). Not when combat starts.
-        if ((combat.round ?? 1) > 1) {
+        if (roundEnded) {
           try { await areaRoundEnd(combat); }
           catch (err) { console.warn("[ICON | IconCombat] area growth failed", err); }
         }

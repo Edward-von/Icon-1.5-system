@@ -404,11 +404,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       probabilmente non compare. In `module/helpers/infuse.mjs` (`isStandaloneInfusion`, "[Ii]nterrupt…") la variante
       "(Interrupt …)" non riconosce niente (nel pack jobs nessuna versione la usa, Stormlash funziona). Sostituire i due
       caratteri con `\b` e riprovare i test R59 in PLAYTEST.md.
-- [ ] **Emerso lavorando su R62 — promemoria "End of round 0" all'avvio del combat** (S, bug): `startCombat` fa
+- [x] **Emerso lavorando su R62 — promemoria "End of round 0" all'avvio del combat** (S, bug): `startCombat` fa
       `update({ round: 1 })` senza `direction`, e l'hook `updateCombat` (IconCombat.mjs, blocco "Round advanced") lo
       tratta come un avanzamento di round: posta i promemoria relic "round-end" col titolo "End of round 0" (Paleblood:
       "Tick the Paleblood die up by 1") e chiama `_nudgeReserves` già al round 1. Saltare la parte "fine round" quando il
       round nuovo è 1 (il promemoria R62 del round 1 invece va bene lì).
+(FATTO il 17 ottobre 2026, versione 1.15.79: nell'hook updateCombat il controllo delle riserve e i promemoria relic
+      "round-end" partono solo se il round nuovo è maggiore di 1, stessa condizione già usata per la crescita delle
+      aree; il promemoria R62 del round 1 resta.)
 - [ ] **Emerso lavorando su R33a3 — Aethershard: testo del compendio diverso dal libro** (S, dati): il pack dice "the
       ability deals 2 piercing damage as an area effect … Then destroy all activated Aethershards and gain 1 Aether",
       il libro (p.210-211) "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then
