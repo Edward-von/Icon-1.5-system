@@ -347,13 +347,22 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       system.combat.chapter è sotto 3; dal capitolo 3, stessa soglia di #limitBreakTexts e del Damage Roll di R37, la
       card "Use Limit Break" ne aggiunge testo e bottoni degli status. File: templates/actor/icon-combat.hbs,
       module/actor/sheets/IconSheet.mjs, css/icon.css.)
-- [ ] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, da decidere): Gigantas Crusher
+- [ ] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, pronto: risposta del 17 ottobre 2026): Gigantas Crusher
       (Colossus, "50% of their max hp as divine damage") e Split Heaven and Hell (Demon Slayer, "100% / 50% / 25% of
       max hp") non hanno un danno tirabile; Gigantas Crusher propone solo il "divine fray damage" dei Legend. Valutare
       un Apply che toglie la percentuale degli hp massimi del bersaglio.
-- [ ] **Emerso lavorando su R38b — Meteor costa più Aether del massimo** (S, da decidere): "Infuse 8: METEOR" (p.208)
+      Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): si fa. "Any ability that costs or damages a
+      certain percent of health always considers maximum base hp, and not max hp based on wounds … You can use VIT
+      (25% HP) as a quick shorthand" (p.106); Gigantas Crusher "Your foe takes 50% of their max hp as divine damage,
+      or 25% as divine damage on a successful save", i Legend "may always save" (p.135); Split Heaven and Hell, Legend
+      "always take 25% of max hp" (p.127). Un Apply che toglie la percentuale degli hp massimi base del bersaglio come
+      danno divine.
+- [x] **Emerso lavorando su R38b — Meteor costa più Aether del massimo** (S, da decidere): "Infuse 8: METEOR" (p.208)
       chiede 8 Aether, ma il sistema tiene l'Aether al massimo a 6 (d6, p.204): con l'Aether normale Meteor non si arma
       mai, resta solo il Special effect (pagare con la vita). Verificare sul manuale se qualcosa porta l'Aether oltre 6.
+      (CHIUSO il 17 ottobre 2026: non è un difetto. L'Aether è "a d6 power die" (p.204) e niente nel manuale lo porta
+      oltre 6; Meteor si paga con lo Special effect, "pay the resolve, aether, and action cost of this spell with your
+      entire life force … it deals 999 divine damage instead" (p.208), come il sistema fa già.)
 - [x] **Emerso lavorando su R38b — l'infusione armata non si toglie a fine combattimento** (S): il commento di
       `helpers/infuse.mjs` dice che l'infusione armata si azzera a fine combattimento con l'Aether, ma `IconCombat`
       azzera solo l'Aether, non `flags.icon-system.infused` (e nemmeno dopo il tiro: `clearInfusion` non è chiamata da
@@ -456,15 +465,21 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
       mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
+      Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): sì. MJÖLLNIR "Create an arc 5 area any time you
+      would create an area with this ability instead" (p.227) vale anche per l'area del Talent II: l'estensione è un
+      secondo Arc 5, in una direzione diversa, dal primo o dall'ultimo spazio come per la Line.
 - [x] **Emerso lavorando su R39 — altre parole dei Limit Break diverse dal libro** (S, dati): Split Heaven and Hell
       (p.127) dice "depending on their distance from you" (libro: "their distance on the line from you") e "(maximum 3
       width)" (libro: ", to a maximum of 3 width,"); Lycanthropy (p.168) ha perso "(including this one!)" dopo "abilities,
       summons, or actions" nel secondo "•". Pack + migrazione sulle copie. (FATTO il 17 ottobre 2026, versione 1.15.94:
       pack jobs corretto su Limit Break e template Demon Slayer/Warden, script
       `../icon-compendium-audit/r39-lb-wording/fix-lb-wording.mjs`; migrazione 34 sulle copie col testo vecchio.)
-- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, da decidere): quando
+- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, pronto: risposta del 17 ottobre 2026): quando
       il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
       con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
+      Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): da sola. "The character gains aura 2 while
+      marked" (p.226): l'aura viene con il mark, senza scelta; solo il Talent I ("When marking a character, you can
+      increase the area to 3…") chiede Aura 2 o 3.
 - [x] **Emerso lavorando su R38b — l'infusione armata non si consuma quando si usa l'abilità o il Limit Break** (S/M):
       l'Aether si spende "all'inizio dell'azione" e si sceglie una sola infusione per volta (p.204), quindi la
       versione infusa vale per un uso; ma la card dell'abilità (`IconSheet`, ~riga 2628) e il Limit Break (~riga 3318)
@@ -526,10 +541,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.101: confermato; sulla scheda PG il danno dentro "Summon Effect:" / "Object
       Effect:" non è più danno dell'abilità, quindi Aethershard non ha più il bottone danno; foe e legend invariati;
       nel pack jobs cambia solo Aethershard. Solo codice.)
-- [ ] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, da decidere): la
+- [ ] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, pronto: risposta del 17 ottobre 2026): la
       card di "Use Limit Break" legge gli status da tutto il testo dell'effetto e dell'Ultimate, comprese le versioni
       Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi
       nessun limit break del pack lo fa). Scegliere se togliere dalla ricerca i blocchi Infuse non armati, come fa la
+      card delle abilità con `splitInfuseBlocks`.
+      Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): sì, toglierli. "Only one infusion can be chosen
+      at once, and only one infuse effect can trigger at a time" (p.204): una versione non armata non scatta; come la
       card delle abilità con `splitInfuseBlocks`.
 - [x] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
       GRAN BLITZ armati, la card di attacco mostra il blocco della versione ("Effect (GRAM)") e anche il blocco "Slay
@@ -550,10 +568,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       danno scritto negli Effect del testo base".
       (FATTO il 17 ottobre 2026, versione 1.15.100, con la voce del Mark di Incubus: la chip Effect di Nothung in
       Other diventa divine con EXCALIBUR.)
-- [ ] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, da decidere): un secondo
+- [ ] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, pronto: risposta del 17 ottobre 2026): un secondo
       Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
       danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
       Edoardo: serve?
+      Risposta di Edoardo (17 ottobre 2026): sì, serve. Il libro non ne parla (p.204: l'Aether "is consumed at the
+      start of the action"): aggiungere nel dialog del danno un'opzione "Reroll (same use)" che non consuma
+      l'infusione.
 - [x] **Emerso lavorando su R49 — Dulce Purgatorio su tutti i pit del campo** (S): la Mastery DULCE PURGATORIO (p.178,
       "Pandaemonium's area effect and Purgatorio's pit explosion effect extend to all pits on the battlefield") non è
       letta: l'esplosione prende solo i pit dentro l'area. Basterebbe saltare il filtro "dentro l'area" in
@@ -586,18 +607,29 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       space in the area" (p.177). Domanda per Edoardo: (a) l'area diventa l'area dell'abilità più tutte le caselle con
       un pit (chi sta su un pit viene preso, e si può rimettere anche su un pit), oppure (b) ogni pit conta come
       un'area di forma uguale a quella dell'abilità? Con la (a) basta poco codice.
+      Risposta di Edoardo (17 ottobre 2026): (a). Con DULCE PURGATORIO l'Area Effect di Pandaemonium ("Remove all
+      characters in the area, then place them back in any other space in the area", p.177) prende anche le caselle di
+      tutti i pit del campo (p.178): chi sta su un pit viene preso, e si può rimettere anche su un pit.
 - [ ] **Emerso lavorando su R49 — chip dei pit di Pandaemonium legati tra loro** (S): i due chip finiscono nello
       stesso gruppo, quindi il clic destro su uno dei due toglie dalla scena sia il pit della combo sia quelli sotto i
       foe pacified.
-- [ ] **Emerso lavorando su R49 — pit sotto foe grandi** (S, da decidere): sotto un foe 2x2 o più grande il pit va
+- [x] **Emerso lavorando su R49 — pit sotto foe grandi** (S, da decidere): sotto un foe 2x2 o più grande il pit va
       solo nella casella in alto a sinistra (lo stesso per il terreno sotto i foe del Volcanic Geyser). Domanda per
       Edoardo: un pit su tutte le caselle occupate, o su una sola scelta da chi gioca?
-- [ ] **Emerso lavorando su R49 — oggetti di un "Terrain effect:" che rendono l'area "lasting"** (S, da decidere): Geo
+      (CHIUSO il 17 ottobre 2026: "Large foes count as being 'inside' any effect (such as an aura, difficult terrain
+      space, pit, dangerous terrain, etc) if at least one of their spaces is inside" (p.290): un pit su una casella
+      vale per tutto il foe, quindi il pit nella casella in alto a sinistra è già giusto; lo stesso per il Volcanic
+      Geyser. Nessuna modifica.)
+- [ ] **Emerso lavorando su R49 — oggetti di un "Terrain effect:" che rendono l'area "lasting"** (S, pronto: risposta del 17 ottobre 2026): Geo
       ("Terrain effect: Create a height 1 boulder object in free space anywhere in the area", p.218), The Tower
       ("Terrain effect: Then, create a height 1 meteor object in the area", p.203) e Dark Sliver ("Terrain effect: Cut
       away a part of the target's soul…", p.187) restano "lasting" solo per il testo base, quindi la loro area
       d'attacco resta sulla mappa; è lo stesso caso di Hades (il terrain effect è l'oggetto, non l'area), ma la regola
       di R33c lo accettava. Domanda per Edoardo: queste aree devono sparire al turno dopo come quella di Holy?
+      Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): sì, devono sparire come quella di Holy. I terrain
+      effect sono "passive effects that modify the terrain spaces of the battlefield" (p.95-96); in Geo (boulder,
+      p.218), The Tower (meteor, p.203) e Dark Sliver (uno spazio scelto, p.187) il terrain effect è l'oggetto o lo
+      spazio, non l'area d'attacco.
 - [ ] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
       `module/canvas/area-templates.mjs` (~riga 1084) il commento dice "Holy's area is kept as a terrain effect, so
       those count": ora non è più così (il codice funziona lo stesso).
