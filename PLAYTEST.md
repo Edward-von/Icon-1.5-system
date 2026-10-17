@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Area spostata sopra i personaggi: offerta degli status (17 ottobre 2026, versione 1.15.191)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazzare una nuvola di Mist Strider vicino a un foe, poi spostarla con Shift + frecce sopra di lui: esce una
+      card "is now inside the area" con il bottone Blind+.
+- [ ] Spostarla di nuovo via dal foe (già blinded): card "is no longer inside" con "Remove Blind".
+- [ ] Con Quench, far passare l'area sopra un alleato e poi lontano: compare solo il cover, nessuna offerta di stealth
+      "uscendo".
+- [ ] Tsunami con "Move 4" sopra dei personaggi: arriva la card degli status oltre alla card del movimento; con "Drag
+      them with it" non si rompe niente (i trascinati possono ricevere di nuovo l'offerta "enters").
+
 ## Emerso R16 — Izuna Drop sulla card dell'attacco di Gigaton Whip (17 ottobre 2026, versione 1.15.190)
 
 Setup: solo codice (F5 basta).

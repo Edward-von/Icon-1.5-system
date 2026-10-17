@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Area spostata sopra i personaggi: offerta degli status (versione 1.15.191)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Area spostata sopra i personaggi**: quando un'area terrain effect si muoveva (Tsunami p.233, Waterspout p.235,
+  Shift + frecce), chi ci finiva dentro o ne usciva non riceveva l'offerta degli status (blinded+ di Mist Strider
+  p.169, cover di Dark Wing p.171…) → il controllo partiva solo quando si muoveva il token o si piazzava l'area → ora
+  `moveArea` confronta le caselle di prima e di dopo e manda una card con i bottoni: status a chi ora è coperto
+  dall'area, "Remove" a chi è rimasto fuori. Le regole "uscendo / entrando" (stealth di Quench p.157, Mist Strider
+  Talent I) non scattano, perché il personaggio non si è mosso. Solo codice.
+
 ## 17 ottobre 2026 — Izuna Drop sulla card dell'attacco di Gigaton Whip (versione 1.15.190)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

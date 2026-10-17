@@ -753,8 +753,36 @@ export async function offerInsideOnPlace(doc) {
   });
 }
 
+/**
+ * An area that moved over the characters (Tsunami, Waterspout, Shift + arrows; area-motion.mjs moveArea): the same
+ * offers for those it now covers and no longer covers, as if they had walked in or out. One card, on a click.
+ * @param {MeasuredTemplateDocument} doc  the area, already at its new cells
+ * @param {Array<{i:number, j:number}>} oldCells  its cells before the move
+ */
+export async function offerInsideOnShift(doc, oldCells) {
+  const f = terrainFlag(doc);
+  const scene = doc?.parent;
+  if (!f?.inside?.length || !scene) return;
+  const before = new Set((oldCells ?? []).map(cellKey));
+  const after = new Set((doc.flags[NS].cells ?? []).map(cellKey));
+  const blocks = [];
+  for (const td of scene.tokens) {
+    if (!td.actor || isMapObject(td)) continue;
+    const cells = cellsOf(td);
+    const was = touches(cells, before), now = touches(cells, after);
+    if (was === now) continue;
+    // The character did not enter or exit by itself: only the "while inside" statuses, not Quench's "exiting".
+    blocks.push(...await insideBlocks(td, [{ doc, f, entered: now }], { shifted: true }));
+  }
+  if (!blocks.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker(),
+    content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
+  });
+}
+
 /** The card blocks of offerInsideEffects for one character. */
-async function insideBlocks(td, moves, { placed = false } = {}) {
+async function insideBlocks(td, moves, { placed = false, shifted = false } = {}) {
   const { hasStatus, ICON_STATUSES } = await import("../combat/statuses.mjs");
   const nameOf = (id) => ICON_STATUSES.find(s => s.id === id)?.name ?? id;
   const blocks = [];
@@ -773,13 +801,13 @@ async function insideBlocks(td, moves, { placed = false } = {}) {
       if (e.when === "inside") {
         if (entered && !has) lines.push(`<p>Inside: ${esc(name)}.${src}<br>${insideStatusButton(td, e.status, { ongoing: e.ongoing, label: `${name} to ${td.name}` })}</p>`);
         else if (!entered && has) lines.push(`<p>Left the area: no longer ${esc(name)}?${src}<br>${insideStatusButton(td, e.status, { op: "remove", label: `Remove ${nameOf(e.status)}` })}</p>`);
-      } else if (!placed && ((e.when === "exit" && !entered) || e.when === "move")) {
+      } else if (!placed && !shifted && ((e.when === "exit" && !entered) || e.when === "move")) {
         if (!has) lines.push(`<p><small>${esc(e.rule)}</small>${src}<br>${insideStatusButton(td, e.status, { label: `${td.name} gains ${name}` })}</p>`);
       }
     }
     if (!lines.length) continue;
     const by = doc.flags[NS].abilityName;
-    blocks.push(`<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${placed ? "is inside" : entered ? "enters" : "leaves"} the area${by ? ` of <strong>${esc(by)}</strong>` : ""}.</p>${lines.join("")}`);
+    blocks.push(`<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${placed ? "is inside" : shifted ? (entered ? "is now inside" : "is no longer inside") : entered ? "enters" : "leaves"} the area${by ? ` of <strong>${esc(by)}</strong>` : ""}.</p>${lines.join("")}`);
   }
   return blocks;
 }

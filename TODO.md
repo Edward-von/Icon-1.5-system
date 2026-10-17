@@ -1485,9 +1485,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       viene ridato.
 (FATTO il 17 ottobre 2026, versione 1.15.188: la card del danno si segna il weakened tolto; all'Apply il bersaglio
       trafitto solo dallo shard lo riprende.)
-- [ ] **Emerso lavorando su R33c2 — area spostata sopra i personaggi** (S): quando un'area si muove (Tsunami, Shift +
+- [x] **Emerso lavorando su R33c2 — area spostata sopra i personaggi** (S): quando un'area si muove (Tsunami, Shift +
       frecce) chi ci finisce dentro o ne esce non riceve l'offerta di status; si controlla solo quando si muove il
       token o si piazza l'area.
+(FATTO il 17 ottobre 2026, versione 1.15.191: un'area spostata offre gli status "while inside" a chi ora copre e la
+      loro rimozione a chi ha lasciato fuori.)
 - [ ] **Emerso lavorando su R33c2 — Mist Strider Talent II** (S): "Foes in the area count all characters as having
       evasion" non ha nessun promemoria.
 - [ ] **Emerso lavorando su R33c2 — Ätherwand "Foes that end their turn in the area are shattered"** (S): nessun
@@ -1562,6 +1564,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       solo Hit / Miss / Exceed / Crit e le righe del talento. Il Collide normale, Effect, Heroic, Charge ecc. non ci
       sono (Gigaton Whip: "They take fray damage"). Il danno doppio di Izuna Drop ("fray damage twice") non è proposto
       dalla finestra del danno.
+- [ ] **Emerso lavorando su R33c2 — area che cresce sopra i personaggi** (S): quando un'area si allarga (Bifröst
+      Talent II "Add 2 spaces", Ätherwand Talent I che estende, Blood Grove "Area +N") chi sta nelle caselle nuove non
+      riceve l'offerta di status; si può usare lo stesso `offerInsideOnShift` dentro `extendAreaTemplate`.
 
 ---
 

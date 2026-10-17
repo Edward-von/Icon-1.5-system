@@ -26,7 +26,7 @@
  * as the objects' growth (map-objects.mjs). Turn and round cards come from the active GM (IconCombat).
  */
 import { areaLabel, shapeCells, isPlacingArea } from "./area-templates.mjs";
-import { terrainFlag, extendAreaTemplate, pickSpaces, createTerrainSpaces, removeSpacesButton, TERRAIN_COLORS } from "./terrain-spaces.mjs";
+import { terrainFlag, extendAreaTemplate, pickSpaces, createTerrainSpaces, removeSpacesButton, TERRAIN_COLORS, offerInsideOnShift } from "./terrain-spaces.mjs";
 import { areaMotion, areaGrowth, markGrowTo, activeAreaTexts, areaTerrainLabel, areaDamage } from "../helpers/area-terrain.mjs";
 
 const _log = (...a) => console.debug("[ICON | AreaMotion]", ...a);
@@ -183,6 +183,7 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
   const vacates = !!rules?.motion?.vacate && (!rules.motion.freeAlt || steps === rules.motion.freeAlt.steps);
   const vacated = vacates ? f.cells.filter(c => !now.has(cellKey(c))).map(c => ({ i: c.i, j: c.j })) : [];
   const size = scene.grid.size;
+  const oldCells = f.cells.map(c => ({ i: c.i, j: c.j }));
   await doc.update({ x: doc.x + d.dj * n * size, y: doc.y + d.di * n * size, [`flags.${NS}.cells`]: shifted(n) });
   // The nail's blast stays centered on the moved spike (Rampant Nail Talent I, p.227).
   const onIt = scene.templates.filter(t => t.flags?.[NS]?.onSpike === doc.id).map(t => ({
@@ -192,6 +193,10 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
   if (onIt.length) {
     try { await scene.updateEmbeddedDocuments("MeasuredTemplate", onIt); }
     catch (err) { console.warn("[ICON | AreaMotion] could not move the blast on the nail", err); }
+  }
+  // The statuses of an area for who is inside (blinded+, cover…; R33c2): the characters it now covers or left behind.
+  if (terrainFlag(doc)?.inside?.length) {
+    try { await offerInsideOnShift(doc, oldCells); } catch (err) { console.warn("[ICON | AreaMotion] inside-area check failed", err); }
   }
   const how = `${n} space${n > 1 ? "s" : ""} ${edge ? `toward ${d.edge}` : d.word}${n < steps ? ` (stopped at the edge of the map, ${steps} asked)` : ""}`;
   _log(`${name} moved ${how}`);
