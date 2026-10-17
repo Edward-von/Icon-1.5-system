@@ -1514,9 +1514,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       servirebbe una scelta di chi le perde (anche personaggi non propri, quindi con relay al GM).
 (FATTO il 17 ottobre 2026, versione 1.15.185: il chip Mote chiede di chi togliere le blessing, una mote per blessing,
       relay al GM per i personaggi non propri)
-- [ ] **Emerso lavorando su R33b2 — shove verso il centro di Implode** (M): "shoving all characters … as close as
+- [x] **Emerso lavorando su R33b2 — shove verso il centro di Implode** (M): "shoving all characters … as close as
       possible towards it … in any order you like" (p.211): oggi solo testo sulla card; servirebbe uno shove guidato,
       personaggio per personaggio.
+(FATTO il 17 ottobre 2026, versione 1.15.194: un bottone Shove per personaggio sulla card di Implode, in linea retta
+      verso il centro, nell'ordine dei clic.)
 - [ ] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
       ridotto e Arkenrune small blast non cancellabile (p.209): solo testo.
 - [x] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
@@ -1573,6 +1575,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       riceve l'offerta di status; si può usare lo stesso `offerInsideOnShift` dentro `extendAreaTemplate`.
 - nessuno
 - nessuno
+- [ ] **Emerso lavorando su R33b2 — shove di WAKING VOID** (S): Implode su un personaggio (WAKING VOID, p.211,
+      `implodeOnHolder` in `module/canvas/follow-marks.mjs`) piazza la Large Blast ma lo shove verso il personaggio
+      resta a mano; si può riusare lo stesso bottone "Shove" con la casella del personaggio come centro.
+- [ ] **Emerso lavorando su R33b2 — collisione nello shove di Implode** (S): quando lo shove si ferma contro un
+      ostacolo, il libro può prevedere la collisione (p.107 e seguenti); oggi il token si ferma e basta, senza nessun
+      promemoria di collisione.
 
 ---
 

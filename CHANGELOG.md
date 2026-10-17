@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Implode: shove guidato verso il centro (versione 1.15.194)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Implode, shove verso il centro**: "shoving all characters … as close as possible towards it … in any order you
+  like" (p.211) era solo testo sulla card → nessun bottone faceva lo shove → ora la card di attivazione ha un bottone
+  "Shove <nome>" per ogni personaggio nella Large Blast (non per chi sta già nella casella centrale). Ogni clic sposta
+  quel token in linea retta verso il centro (p.107 "Characters must be shoved in straight lines"), una casella alla
+  volta finché si avvicina; lo fermano un altro personaggio, un oggetto o un muro. L'ordine è quello dei clic. Solo il
+  GM o il proprietario di chi ha usato Implode; per un token che non è suo, il giocatore riceve "ask the GM to click",
+  come per il Drag under di Deepwrath. Solo codice.
+
 ## 17 ottobre 2026 — Ätherwand: shattered a fine turno dentro l'area (versione 1.15.193)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

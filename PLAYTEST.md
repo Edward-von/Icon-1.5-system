@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Implode: shove guidato verso il centro (17 ottobre 2026, versione 1.15.194)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Implode su uno spazio con 3 personaggi intorno a distanze diverse: a inizio turno, "Activate", poi nella card
+      c'è un "Shove <nome>" per ciascuno.
+- [ ] Cliccare prima quello più vicino, poi quello dietro di lui sulla stessa linea: il secondo si ferma accanto al
+      primo.
+- [ ] Un personaggio in diagonale rispetto al centro: si muove in diagonale e si ferma alla distanza minima.
+- [ ] Un muro fra un personaggio e il centro: lo shove si ferma davanti al muro.
+- [ ] Un personaggio già accanto al centro occupato: notifica "can't get any closer", nessun movimento.
+- [ ] Un giocatore (proprietario di chi ha usato Implode) clicca lo shove di un foe: notifica "ask the GM to click";
+      il GM lo fa con lo stesso bottone.
+
 ## Emerso R33 — Ätherwand: shattered a fine turno dentro l'area (17 ottobre 2026, versione 1.15.193)
 
 Setup: solo codice (F5 basta).

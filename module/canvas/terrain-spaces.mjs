@@ -1065,6 +1065,38 @@ function delayedSpacesAtStart(td, scene) {
 }
 
 /**
+ * Implode (p.211) "shoving all characters in a large blast area effect around it as close as possible towards it":
+ * where `td` ends up shoved in a straight line towards `centre` (p.107 "Characters must be shoved in straight
+ * lines"), one space at a time while each space brings them closer and is free: another character, an object or a
+ * wall stops them. Returns the new top-left cell and the spaces moved.
+ */
+function shoveTowardsCell(td, centre) {
+  const scene = td.parent;
+  const dist = (cells) => Math.min(...cells.map(c => cheb(c, centre)));
+  const start = cellsOf(td);
+  const near = start.reduce((a, c) => cheb(c, centre) < cheb(a, centre) ? c : a, start[0]);
+  const di = Math.sign(centre.i - near.i), dj = Math.sign(centre.j - near.j);
+  const taken = new Set();
+  for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.add(cellKey(c));
+  const w = Math.max(1, Math.round(td.width ?? 1)), h = Math.max(1, Math.round(td.height ?? 1));
+  const foot = (tl) => { const out = []; for (let a = 0; a < h; a++) for (let b = 0; b < w; b++) out.push({ i: tl.i + a, j: tl.j + b }); return out; };
+  const centreOf = (tl) => { const p = scene.grid.getTopLeftPoint(tl); return { x: p.x + w * scene.grid.size / 2, y: p.y + h * scene.grid.size / 2 }; };
+  let tl = { i: start[0].i, j: start[0].j };
+  let steps = 0;
+  while (di || dj) {
+    const next = { i: tl.i + di, j: tl.j + dj };
+    const cells = foot(next);
+    if (dist(cells) >= dist(foot(tl)) || cells.some(c => taken.has(cellKey(c)))) break;
+    let wall = false;
+    try { wall = !!td.object?.checkCollision?.(centreOf(next), { origin: centreOf(tl), type: "move", mode: "any" }); } catch { wall = false; }
+    if (wall) break;
+    tl = next;
+    steps++;
+  }
+  return { cell: tl, steps };
+}
+
+/**
  * A blast of `size` ("s" / "m" / "l") centred on each of `centres`, joined (each character once), placed for `creator`
  * with the usual area code (it targets who is inside). Resolves placeAreaTemplate's { template, cells, targets } or null.
  */
@@ -1253,6 +1285,10 @@ const TERRAIN_ACTS = {
     const base = { scene: scene.id, creator: creator.id, item: item.id };
     const t1 = src?.talentNo === 1 && /\bcenter space is also shattered\b/i.test(src.talent);
     const t2 = src?.talentNo === 2 && /\bcenter space also becomes a pit\b/i.test(src.talent);
+    // "Characters are shoved in any order you like": one button per character in the area, clicked in that order.
+    const shoved = charactersOn(scene, placed.cells).filter(t => !onCentre.includes(t));
+    const shoves = shoved.map(t => actButton("implodeShove", { ...base, token: t.id, cell: centre }, `Shove ${t.name}`, "fa-compress",
+      `${t.name} shoved in a straight line as close as possible towards the centre (another character, an object or a wall stops them)`)).join(" ");
     const buttons = [
       onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "stunned", label: "Stunned" }, `Failed save: stun ${onCentre.map(t => t.name).join(", ")}`, "fa-star") : "",
       t1 && onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "shattered", label: "Shattered" }, "Talent I: shatter the centre", "fa-heart-crack") : "",
@@ -1260,8 +1296,24 @@ const TERRAIN_ACTS = {
     ].filter(Boolean).join(" ");
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: creator }),
-      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-dot"></i> ${esc(item.name)}</strong> activates: shove every character in the area as close as possible towards the centre, in any order you like (by hand).
-        ${onCentre.length ? `<p><small>${esc(onCentre.map(t => t.name).join(", "))} in the center space: save or be stunned.</small></p>` : ""}${buttons ? `<div>${buttons}</div>` : ""}</div>`,
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-dot"></i> ${esc(item.name)}</strong> activates: shove every character in the area as close as possible towards the centre, in any order you like${shoves ? " (one button each, in the order you choose)" : ""}.
+        ${shoves ? `<div>${shoves}</div>` : ""}${onCentre.length ? `<p><small>${esc(onCentre.map(t => t.name).join(", "))} in the center space: save or be stunned.</small></p>` : ""}${buttons ? `<div>${buttons}</div>` : ""}</div>`,
+    });
+    return true;
+  },
+  /** Implode: one character shoved as close as possible towards the centre (shoveTowardsCell). */
+  async implodeShove({ scene: sid, token, cell, item: iid, creator: cid }) {
+    const scene = game.scenes?.get(sid);
+    const td = scene?.tokens?.get(token);
+    if (!td || !cell) { ui.notifications.warn("That character is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of that character first."); return false; }
+    const { cell: to, steps } = shoveTowardsCell(td, cell);
+    const name = game.actors?.get(cid)?.items?.get(iid)?.name ?? "Implode";
+    if (!steps) { ui.notifications.info(`${td.name} can't get any closer to the centre of ${name}.`); return true; }
+    if (!(await placeTokenAt(td, to))) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ token: td }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-compress"></i> ${esc(name)}</strong>: ${esc(td.name)} is shoved ${steps} space${steps > 1 ? "s" : ""} towards the centre.</div>`,
     });
     return true;
   },
