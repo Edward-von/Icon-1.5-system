@@ -1131,8 +1131,10 @@ export async function objectTurnBoundary(combatant, at) {
     const creator = info.creatorName || "its creator";
     if (info.erupt && g === 0)
       lines.push(`${esc(td.name)} ${at === "start" ? "starts" : "ends"} their turn on the <strong>${esc(info.name)}</strong>: ${esc(creator)} can make it erupt (its sheet → Erupt, p.232).`);
+    // R33a5: with a Pick up button on the card — clicked by the creator's user, nothing is removed before.
     if (at === "start" && info.pickUpNear && flag.creatorId === actor.id && g === 1)
-      lines.push(`${esc(td.name)} starts their turn adjacent to the <strong>${esc(info.name)}</strong>: they can pick it up (its sheet → Pick up, p.128).`);
+      lines.push(`${esc(td.name)} starts their turn adjacent to the <strong>${esc(info.name)}</strong>: they can pick it up (p.128).
+        <button type="button" class="icon-chat-btn" data-icon-object-pickup="${o.id}" data-scene-id="${scene.id}"><i class="fa-solid fa-hand"></i> Pick up</button>`);
     if (at === "end" && info.portal && info.moves.pullFoes && isHostile(td) && g === 1)
       lines.push(`${esc(td.name)} ends their turn adjacent to the <strong>${esc(info.name)}</strong> — ${esc(info.moves.pullFoes.source)}: ${esc(creator)} can teleport them next to another one (save to avoid it, bloodied foes fail; once a round). GM: select the foe, open the other portal's sheet → Teleport here.`);
     if (!gain && info.moves.adjacentGain && flag.creatorId === actor.id && g === 1) gain = { ...info.moves.adjacentGain, name: info.name };
@@ -1259,6 +1261,22 @@ export function registerMapObjectHooks() {
     if (!tokenDoc.parent?.tokens?.some(t => mapObjectFlag(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null, { elevationMoved: "elevation" in changed }).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
+  });
+
+  // R33a5: the Pick up button of the start-of-turn card (Comet "or start your turn there", p.128).
+  Hooks.on("renderChatMessageHTML", (_message, html) => {
+    for (const btn of html.querySelectorAll?.("[data-icon-object-pickup]") ?? []) {
+      if (btn.dataset.iconBound) continue;
+      btn.dataset.iconBound = "true";
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault();
+        const td = game.scenes.get(btn.dataset.sceneId)?.tokens.get(btn.dataset.iconObjectPickup);
+        if (!td?.actor || !mapObjectFlag(td)) { ui.notifications.info("That object is no longer on the map."); return; }
+        if (!td.actor.isOwner) { ui.notifications.warn(`Only ${objectSheetInfo(td.actor)?.creatorName || "its creator"} can pick it up.`); return; }
+        btn.disabled = true;
+        try { await removeMapObject(td.actor); } catch (err) { btn.disabled = false; console.warn("[ICON | MapObjects] pick up failed", err); }
+      });
+    }
   });
 
   // R33a4: Aethershard Talent I, "When you take any action that spends Aether, you can first remove one of your

@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bottone Pick up a inizio turno per Comet (versione 1.15.163)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Comet a inizio turno**: la card "starts their turn adjacent" rimandava alla scheda dell'arma → c'era solo il testo
+  → ora la card ha un bottone "Pick up", che funziona solo per chi possiede l'oggetto (o per il GM) e toglie l'arma al
+  clic. Solo codice.
+
 ## 17 ottobre 2026 — Bale Portal: foe spinti e una volta per round (versione 1.15.162)
 
 ### Round di debug del 15 ottobre, R33a5
