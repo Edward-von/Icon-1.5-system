@@ -263,12 +263,27 @@ export async function infuseVersionHtml(version, { enrich = escapeHTML, armed = 
  * What the actor currently has infused, or null. An infusion already used
  * (noteInfusionStep) only counts within the combat turn it was used in: its
  * damage and area are rolled and placed then, and the next turn it is spent.
+ * A version that lasts "until the start of your next turn" (PHANTOM BLADE,
+ * Drifting Leaf p.227) stays in play through the other turns until then.
  */
 export function armedInfusion(actor) {
   const f = actor?.getFlag?.(NS, "infused");
   if (!f || !f.itemId) return null;
-  if (f.used && !_sameTurn(f.used, _turnKey())) return null;
+  if (f.used && !_sameTurn(f.used, _turnKey()) && !(f.lasts === "nextTurn" && _beforeOwnNextTurn(actor, f.used))) return null;
   return f;
+}
+
+/** True while the combat that `used` was noted in hasn't reached the actor's next turn yet. */
+function _beforeOwnNextTurn(actor, used) {
+  const c = globalThis.game?.combat;
+  if (!c?.started || !used?.combatId || c.id !== used.combatId) return false;
+  const own = (c.turns ?? []).map((t, i) => (t.actor === actor || t.actorId === actor.id) ? i : -1).filter(i => i >= 0);
+  if (!own.length) return false;
+  const r = Number(used.round) || 0, t = Number(used.turn) || 0;
+  const later = own.find(i => i > t);
+  const next = later !== undefined ? { round: r, turn: later } : { round: r + 1, turn: own[0] };
+  const round = Number(c.round) || 0, turn = Number(c.turn) || 0;
+  return round < next.round || (round === next.round && turn < next.turn);
 }
 
 /** The steps of one use, in order: the area button is not one (it can come at any point). */
@@ -413,7 +428,9 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
     const combat = game.combat;
     update[`flags.${NS}.innerFurnace`] = combat?.started ? { combatId: combat.id, round: Number(combat.round) } : null;
   }
-  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice, used: null };
+  // "Until the start of your next turn" (PHANTOM BLADE): used, it outlasts the turn (armedInfusion).
+  const lasts = /\buntil the start of your next turn\b/i.test(String(infusion.text ?? "")) ? "nextTurn" : "";
+  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice, lasts, used: null };
   await actor.update(update);
   _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${paid} Aether (${pool} → ${pool - paid})${notes.length ? ` [${notes.join("; ")}]` : ""}`);
 

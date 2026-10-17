@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R38b — PHANTOM BLADE resta attiva fino al tuo turno successivo (17 ottobre 2026, versione 1.15.112)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Wright con Drifting Leaf in combattimento: armare "Infuse 3 or Slay: PHANTOM BLADE", usare l'abilità (card,
+      attacco, danno), passare al turno di un foe: il chip "Infused — PHANTOM BLADE" c'è ancora e il bottone Infuse
+      dice "armata", non si paga di nuovo.
+- [ ] Andare avanti fino all'inizio del turno successivo del Wright: l'infusione non è più attiva e si può armare di
+      nuovo.
+- [ ] Ripetere col Wright ultimo nell'ordine dei turni: resta attiva nel round dopo fino al suo turno, poi sparisce.
+- [ ] Un'altra infusione (es. CRYOTIC) usata nel proprio turno scade ancora a fine turno, come prima.
+- [ ] Un'infusione PHANTOM BLADE armata prima di questa build si comporta come prima: scade a fine turno.
+
 ## Emerso R37 — Gigantas Crusher restituisce la resolve quando un Legend salva (17 ottobre 2026, versione 1.15.111)
 
 Setup: solo codice (F5 basta).

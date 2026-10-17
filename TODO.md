@@ -667,11 +667,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (FATTO il 17 ottobre 2026, versione 1.15.108, con il "Reroll (same use)": quando la versione armata aggiunge danni
       suoi sotto Other (MAGNARIME, MAGNAPYRE, GREAT SPIRIT LANCE) la casella parte spuntata, quindi il secondo Damage
       Roll non cancella più l'infusione.)
-- [ ] **Emerso lavorando su R38b — PHANTOM BLADE usata scade a fine turno ma dura "until the start of your next
+- [x] **Emerso lavorando su R38b — PHANTOM BLADE usata scade a fine turno ma dura "until the start of your next
       turn"** (S, dalla revisione): `armedInfusion` (`helpers/infuse.mjs` ~240) nasconde un'infusione usata appena
       cambia il turno; "Infuse 3 or Slay: PHANTOM BLADE — Until the start of your next turn, this interrupt has
       unlimited uses" (Drifting Leaf p.227) nel turno del foe non risulta più attiva e il bottone Infuse si può
       ripagare. La scadenza a fine turno dovrebbe valere solo per le versioni che non durano oltre il turno.
+(FATTO il 17 ottobre 2026, versione 1.15.112: all'armo si segna se la versione dura "until the start of your next
+      turn"; `armedInfusion` la tiene armata dopo l'uso, nello stesso combattimento, fino all'inizio del turno
+      successivo del personaggio. Solo codice.)
 - [ ] **Emerso lavorando su R38b — annullare un'infusione armata in un round precedente sblocca Inner Furnace una
       seconda volta** (S, dalla revisione): `cancelInfusion` (`helpers/infuse.mjs` ~467) azzera sempre
       `flags.icon-system.innerFurnace`, anche quando il flag è stato riscritto da un altro uso nel round corrente (es.

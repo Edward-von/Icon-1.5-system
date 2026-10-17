@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — PHANTOM BLADE resta attiva fino al tuo turno successivo (versione 1.15.112)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **PHANTOM BLADE scadeva a fine turno**: usata Drifting Leaf con "Infuse 3 or Slay: PHANTOM BLADE", nel turno del foe
+  l'infusione non risultava più attiva e il bottone Infuse si poteva pagare di nuovo, ma il libro dice "Until the
+  start of your next turn, this interrupt has unlimited uses" (p.227) → un'infusione già usata valeva solo per il
+  turno in cui era stata usata, qualunque cosa dicesse il testo → all'armo il sistema si segna se il testo della
+  versione dice "until the start of your next turn"; in quel caso, una volta usata, resta armata nei turni degli altri
+  e scade solo all'inizio del turno successivo del personaggio, nello stesso combattimento. Le altre versioni scadono
+  a fine turno come prima. Solo codice.
+
 ## 17 ottobre 2026 — Gigantas Crusher restituisce la resolve quando un Legend salva (versione 1.15.111)
 
 ### Round di debug del 16 ottobre, voce emersa su R37
