@@ -6269,3 +6269,5 @@ ol.chat-log .chat-message,
 .icon-chat-card__buttons { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 2px; }
 .icon-chat-card__buttons .icon-btn { flex: 1 1 auto; }
 .icon-btn.icon-btn--done { opacity: .55; cursor: default; }
+/* Bend Fate's extra dice (gamble-card.hbs): dashed, to tell them from the first roll. */
+.icon-chat-die--added { border-style: dashed; }

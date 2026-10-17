@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bend Fate dalla card del gamble (versione 1.15.181)
+
+### Round di debug del 15 ottobre, voce emersa su R36
+
+- **Bend Fate**: dopo un gamble il Seer doveva scartare a mano, tirare i dadi in più e ricordarsi che può scegliere
+  qualunque risultato → la card del gamble non conosceva Bend Fate (p.199) → ora, dopo un gamble tirato davvero (non
+  con Stacked Die né con il numero scelto), un Seer con carte in mano trova il bottone *Bend Fate*. Il giocatore
+  sceglie quante e quali carte scartare (vanno negli scarti), si tira 1d6 per carta, e una nuova card mostra tutti i
+  dadi fin qui (quelli nuovi tratteggiati) con la riga della tabella 1-6 di ogni risultato. Il giocatore ne sceglie
+  uno qualunque. La nuova card ha di nuovo il bottone, così si può scartare ancora dopo aver visto i dadi. Solo
+  codice.
+
 ## 17 ottobre 2026 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (versione 1.15.180)
 
 ### Round di debug del 15 ottobre, voce emersa su R36

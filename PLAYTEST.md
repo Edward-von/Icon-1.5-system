@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R36 — Bend Fate dalla card del gamble (17 ottobre 2026, versione 1.15.181)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Seer con carte in mano: gamble di un'abilità con tabella 1-6 → sulla card c'è *Bend Fate*. Si scelgono 2 carte:
+      finiscono nella pila degli scarti, esce una card "Bend Fate: 2 cards discarded…" con 3 dadi (2 tratteggiati) e
+      una riga di tabella per ogni risultato diverso.
+- [ ] Sulla nuova card c'è di nuovo *Bend Fate* (se la mano ha ancora carte): un'altra carta aggiunge un quarto dado;
+      il bottone della card precedente risulta già usato.
+- [ ] Gamble con Stacked Die o con "numero scelto": nessun bottone Bend Fate.
+- [ ] Seer con la mano vuota: nessun bottone. PG non Seer: nessun bottone.
+- [ ] Un giocatore che non possiede il Seer vede il bottone spento.
+- [ ] Gli scarti di Bend Fate NON fanno uscire la card dell'effetto della Great Wheel.
+
 ## Emerso R36 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (17 ottobre 2026, versione 1.15.180)
 
 Setup: solo codice (F5 basta).

@@ -110,10 +110,10 @@ import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
 import { registerAreaMotion } from "./module/canvas/area-motion.mjs";
 import { registerFollowMarks } from "./module/canvas/follow-marks.mjs";
 import { registerGreatWheel } from "./module/combat/great-wheel.mjs";
-import { registerWheelOfFate } from "./module/combat/wheel-of-fate.mjs";
+import { registerWheelOfFate, buttonUsed, markDone } from "./module/combat/wheel-of-fate.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
-import { rollGamble } from "./module/combat/gamble.mjs";
+import { rollGamble, bendFate } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 import { decorateDamageInterrupts } from "./module/combat/damage-interrupts.mjs";
 import { injectCardMods, cardModsFor } from "./module/combat/damage-card-mods.mjs";
@@ -977,6 +977,19 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault(); ev.stopPropagation();
       await rollGamble(actor, actor.items.get(btn.dataset.itemId));
+    });
+  });
+  // Bend Fate (Seer, p.199) on a gamble card: discard cards for extra dice. One use per card.
+  html.querySelectorAll('[data-action="bendFate"]').forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    let actor = null;
+    try { actor = fromUuidSync(btn.dataset.actorUuid); } catch { actor = null; }
+    if (!actor?.isOwner) { btn.disabled = true; btn.title = "Only the Seer's owner can bend fate"; return; }
+    if (buttonUsed(actor, message, "bend")) markDone(btn);
+    btn.addEventListener("click", (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      bendFate(message, btn).catch(err => console.error("ICON 1.5 | Bend Fate failed", err));
     });
   });
 });

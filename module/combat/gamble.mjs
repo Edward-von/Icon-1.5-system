@@ -10,11 +10,13 @@
  *
  * The button sits on the ability preview of the PC sheet and on the Show in
  * Chat card; both open promptGamble() and post templates/chat/gamble-card.hbs.
+ * A Seer's gamble card also has the Bend Fate button (p.199, bendFate below).
  */
 import { promptGamble } from "../apps/roll-dialogs.mjs";
 import { enrichHTML, rollTableRow, abilityCostLabel } from "../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost } from "../helpers/rule-tooltips.mjs";
 import { tagKey } from "./defenses.mjs";
+import { isSeer, seerHand, pickHandCards, seerDiscard, buttonUsed, markButtonUsed, markDone, WHEEL_PAGE } from "./wheel-of-fate.mjs";
 
 const _log = (...a) => console.debug("[ICON | gamble]", ...a);
 
@@ -94,13 +96,17 @@ export async function rollGamble(actor, item) {
     if (row) { tableRow = await enrichHTML(row); break; }
   }
 
+  // Bend Fate (Seer, p.199): offered after a real roll, while the hand has cards.
+  const bendFate = pick.mode === "roll" && isSeer(actor) && (seerHand(actor)?.cards.size ?? 0) > 0;
   const content = await renderTemplate("systems/icon-system/templates/chat/gamble-card.hbs", {
     name: item.name, cls: s.class ?? "", dice, result, how, tableRow,
     isSix: result === 6, spentVigilance: pick.mode === "roll" ? pick.vigilance : 0,
+    bendFate, actorUuid: actor.uuid, page: WHEEL_PAGE,
   });
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content,
+    flags: { "icon-system": { gamble: { actorUuid: actor.uuid, itemId: item.id, dice: dice.map(d => d.value) } } },
     ...(roll ? { rolls: [roll] } : {}),   // Dice So Nice reads this
   });
   _log(`gamble — "${actor.name}" / "${item.name}" | ${how} → ${result}`);
@@ -115,4 +121,69 @@ export async function rollGamble(actor, item) {
   if (Object.keys(update).length) await actor.update(update);
   // The result, for the callers that act on it (Amico's Detonate, follow-marks.mjs); undefined when cancelled.
   return result;
+}
+
+/**
+ * Bend Fate (Seer trait, p.199): "You can discard any number of cards after you gamble to roll an extra die
+ * per card discarded, choosing any result. You can repeat this effect any number of times as long as you
+ * have cards, and you can choose to discard after you see each result."
+ * From the button of a gamble card: pick the cards, they go to the discard pile, one d6 each is rolled and a
+ * new card shows every die so far with the table row of each result (the player picks one). That card has the
+ * button again, to discard more after seeing the dice.
+ */
+export async function bendFate(message, btn) {
+  const flag = message?.getFlag("icon-system", "gamble");
+  let actor = null;
+  try { actor = fromUuidSync(flag?.actorUuid ?? btn.dataset.actorUuid); } catch { actor = null; }
+  if (!actor?.isOwner) { ui.notifications.warn("Only the Seer's owner can bend fate."); return; }
+  if (buttonUsed(actor, message, "bend")) { markDone(btn); return; }
+  const hand = seerHand(actor);
+  if (!hand?.cards.size) { ui.notifications.warn(hand ? `${hand.name} has no cards to discard.` : `No Cards hand found for ${actor.name}.`); return; }
+  const ids = await pickHandCards(hand, {
+    title: "Bend Fate",
+    intro: `Discard any number of cards: one extra die per card, then choose any result (p.${WHEEL_PAGE}).`,
+  });
+  if (!ids) return;
+  const names = await seerDiscard(actor, hand, ids);
+  if (!names) return;
+  await markButtonUsed(actor, message, "bend");
+  markDone(btn);
+
+  const item = actor.items.get(flag?.itemId);
+  const s = item?.system ?? {};
+  const roll = await new Roll(`${ids.length}d6`).evaluate();
+  const added = (roll.dice[0]?.results ?? []).map(r => r.result);
+  const before = (flag?.dice ?? []).map(Number).filter(n => n >= 1 && n <= 6);
+  const all = [...before, ...added];
+  const best = Math.max(...all);
+  let picked = false;
+  const dice = all.map((v, i) => {
+    const isPicked = !picked && v === best;
+    if (isPicked) picked = true;
+    return { value: v, picked: isPicked, isSix: v === 6, added: i >= before.length };
+  });
+  // The table row of each result there is, highest first: the player chooses one.
+  const choices = [];
+  const texts = item ? _activeTexts(s) : [];
+  for (const v of [...new Set(all)].sort((a, b) => b - a)) {
+    let row = "";
+    for (const t of texts) {
+      const r = rollTableRow(t, v);
+      if (r) { row = await enrichHTML(r); break; }
+    }
+    if (row) choices.push({ value: v, row });
+  }
+  const content = await renderTemplate("systems/icon-system/templates/chat/gamble-card.hbs", {
+    name: item?.name ?? "Gamble", cls: s.class ?? "", dice, result: best,
+    how: `Bend Fate: ${ids.length} card${ids.length === 1 ? "" : "s"} discarded (${names.join(", ")}), +${ids.length}d6 — choose any result`,
+    tableRow: "", choices, chooseAny: true, isSix: best === 6, spentVigilance: 0,
+    bendFate: hand.cards.size > 0, actorUuid: actor.uuid, page: WHEEL_PAGE,
+  });
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content,
+    flags: { "icon-system": { gamble: { actorUuid: actor.uuid, itemId: flag?.itemId ?? "", dice: all } } },
+    rolls: [roll],
+  });
+  _log(`bend fate — "${actor.name}" | discarded ${names.join(", ")} | dice ${all.join(", ")}`);
 }

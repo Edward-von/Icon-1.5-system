@@ -1434,10 +1434,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
 - [ ] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
       Collide ("Instead of the normal collide effect"), ma la card dell'attacco non lo dice.
-- [ ] **Emerso lavorando su R36 — resto della Wheel of Fate** (S/M): il sistema non aiuta con la pesca a inizio
+- [x] **Emerso lavorando su R36 — resto della Wheel of Fate** (S/M): il sistema non aiuta con la pesca a inizio
       combattimento fino a 5, Skein (1 carta a inizio turno, +1 a fine turno se non ha attaccato), il limite di 7
       carte a fine turno, il rimescolare gli scarti nel mazzo e Bend Fate (scartare carte dopo un gamble per un dado
       in più, p.199): oggi si fa a mano con i Cards di Foundry.
+(FATTO il 17 ottobre 2026, versioni 1.15.180-1.15.181: pesca, Skein, limite di 7, rimescolare, e Bend Fate dalla card
+      del gamble)
 - [x] **Emerso lavorando su R35 — usi degli interrupt dei PG sulla scheda** (S): ora gli usi dei PG si contano (flag
       `interruptUses`), ma la scheda PG non li mostra né permette di spuntarli come la scheda dei foe; anche il
       bottone "posta in chat" di R61 non spende un uso.
@@ -1514,6 +1516,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R36 — Foretell usa sempre la pila "Discard"** (S): il bottone Foretell di great-wheel.mjs
       manda la carta nella pila "Discard" generica, non in quella col nome del Seer che usano le nuove pescate. Con
       due Seer al tavolo gli scarti si mescolano.
+- [ ] **Emerso lavorando su R36 — "Bend Fate" nell'opzione "numero scelto" del gamble** (S, da decidere): in
+      roll-dialogs.mjs (riga ~923) l'opzione "Set number" del dialogo del gamble mette Bend Fate tra gli effetti che
+      permettono di scegliere qualsiasi numero da 1 a 6. Ma p.199 dice di tirare un dado in più per ogni carta e di
+      scegliere uno qualunque dei risultati usciti, non un numero libero. Domanda per Edoardo: tolgo Bend Fate da
+      quella scritta, adesso che ha il suo bottone?
 
 ---
 

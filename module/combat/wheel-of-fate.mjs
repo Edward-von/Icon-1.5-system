@@ -263,7 +263,16 @@ export async function wheelTurnEnd(combatant) {
 
 const _usedKey = (message, op) => `${message.id}:${op}`;
 
-function _markDone(btn) {
+/** Was this button of this message already used for the actor? (One use per card: Bend Fate too.) */
+export function buttonUsed(actor, message, op) {
+  return (actor?.getFlag(FLAG_NS, FLAG_USED) ?? []).includes(_usedKey(message, op));
+}
+export async function markButtonUsed(actor, message, op) {
+  const used = actor.getFlag(FLAG_NS, FLAG_USED) ?? [];
+  await actor.setFlag(FLAG_NS, FLAG_USED, [...used.slice(-40), _usedKey(message, op)]);
+}
+
+export function markDone(btn) {
   btn.disabled = true;
   btn.classList.add("icon-btn--done");
   if (!btn.querySelector(".icon-wheel__done")) btn.insertAdjacentHTML("beforeend", ' <i class="fa-solid fa-check icon-wheel__done"></i>');
@@ -276,7 +285,7 @@ async function _onButton(message, btn) {
   const op = btn.dataset.op;
   const used = actor.getFlag(FLAG_NS, FLAG_USED) ?? [];
   const key = _usedKey(message, op);
-  if (used.includes(key)) { _markDone(btn); return; }
+  if (used.includes(key)) { markDone(btn); return; }
   btn.disabled = true;
   let ok = false;
   try {
@@ -296,7 +305,7 @@ async function _onButton(message, btn) {
   }
   if (!ok) return;
   await actor.setFlag(FLAG_NS, FLAG_USED, [...used.slice(-40), key]);
-  _markDone(btn);
+  markDone(btn);
 }
 
 export function registerWheelOfFate() {
@@ -306,7 +315,7 @@ export function registerWheelOfFate() {
       btn.dataset.iconBound = "true";
       let actor = null;
       try { actor = fromUuidSync(btn.dataset.actorUuid); } catch { actor = null; }
-      if ((actor?.getFlag(FLAG_NS, FLAG_USED) ?? []).includes(_usedKey(message, btn.dataset.op))) _markDone(btn);
+      if ((actor?.getFlag(FLAG_NS, FLAG_USED) ?? []).includes(_usedKey(message, btn.dataset.op))) markDone(btn);
       btn.addEventListener("click", (ev) => {
         ev.preventDefault(); ev.stopPropagation();
         _onButton(message, btn).catch(err => console.error("ICON 1.5 | Wheel of Fate button failed", err));

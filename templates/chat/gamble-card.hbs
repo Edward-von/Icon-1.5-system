@@ -10,16 +10,28 @@
   {{#if dice.length}}
     <div class="icon-chat-card__dice">
       {{#each dice as |die|}}
-        <span class="icon-chat-die {{#if die.picked}}icon-chat-die--picked{{/if}} {{#if die.isSix}}icon-chat-die--six{{/if}}">{{die.value}}</span>
+        <span class="icon-chat-die {{#if die.picked}}icon-chat-die--picked{{/if}} {{#if die.isSix}}icon-chat-die--six{{/if}} {{#if die.added}}icon-chat-die--added{{/if}}">{{die.value}}</span>
       {{/each}}
     </div>
   {{/if}}
   <div class="icon-chat-card__result">
     <strong class="icon-chat-card__value">{{result}}</strong>
-    <span class="icon-chat-card__outcome-label">— gamble result</span>
+    <span class="icon-chat-card__outcome-label">— {{#if chooseAny}}highest die: any die may be chosen (Bend Fate, p.{{page}}){{else}}gamble result{{/if}}</span>
   </div>
   {{#if tableRow}}
     <span class="icon-roll-table"><span class="icon-roll-table__row"><span class="icon-roll-table__num">{{result}}</span><span class="icon-roll-table__text">{{{tableRow}}}</span></span></span>
   {{/if}}
+  {{#if choices.length}}
+    <span class="icon-roll-table">{{#each choices as |c|}}<span class="icon-roll-table__row"><span class="icon-roll-table__num">{{c.value}}</span><span class="icon-roll-table__text">{{{c.row}}}</span></span>{{/each}}</span>
+  {{/if}}
   {{#if spentVigilance}}<p class="icon-chat-card__effect-hint">{{spentVigilance}} Vigilance {{#if (icon-eq spentVigilance 1)}}charge{{else}}charges{{/if}} spent.</p>{{/if}}
+  {{!-- Bend Fate (Seer, p.199): discard cards for extra dice, after seeing each result (gamble.mjs bendFate) --}}
+  {{#if bendFate}}
+    <div class="icon-chat-card__buttons">
+      <button type="button" class="icon-btn icon-btn--sm" data-action="bendFate" data-actor-uuid="{{actorUuid}}"
+              title="Bend Fate: discard any number of cards to roll an extra die per card, choosing any result (p.{{page}})">
+        <i class="fa-solid fa-dharmachakra"></i> Bend Fate
+      </button>
+    </div>
+  {{/if}}
 </div>
