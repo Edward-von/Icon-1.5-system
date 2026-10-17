@@ -1643,10 +1643,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       promemoria di collisione.
 (FATTO il 17 ottobre 2026, versione 1.15.209: lo shove di Implode fermato da un personaggio, un oggetto o un muro
       scrive la collisione (p.117) e l'eventuale effetto Collide; il salire di quota non viene controllato)
-- [ ] **Emerso lavorando su R35 — "targeted by an ability" senza attacco** (S/M, da decidere): molti trigger dicono
+- [x] **Emerso lavorando su R35 — "targeted by an ability" senza attacco** (S/M, da decidere): molti trigger dicono
       "targeted by an ability", ma le abilità che non sono attacchi (Show in Chat) non salvano i bersagli, quindi lì
       non c'è nessun bottone. Inoltre negli attacchi ad area i bottoni vanno solo al bersaglio dell'attacco e non agli
       altri nell'area. Domanda per Edoardo: chi è nell'area conta come "targeted"?
+(FATTO il 17 ottobre 2026, versione 1.15.218: dal manuale, chi è solo nell'area viene colpito dall'effetto d'area ma
+      non è "targeted" (p.97, p.107, p.109); i bottoni vanno al bersaglio dell'attacco, al centro di un Burst o di un
+      blast centrato su un bersaglio, o ai bersagli scelti di un'abilità senza area.)
 - [x] **Emerso lavorando su R35 — effetto di Aether Deflection sul danno** (S): "Gain resistance against damage from
       that ability" resta solo come testo. Si potrebbe aggiungere la resistenza alla card del danno che segue, come
       Righteous Disdain (damage-card-mods).
@@ -1685,6 +1688,8 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       arriva solo dal round 4, insieme all'Exceed (si può cambiare a mano nella finestra del danno). Domanda per
       Edoardo: il danno bonus vale sempre, o anche lui solo dal round 4?
 - nessuno
+- [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
+      dice ancora "they go off before the attack roll".
 
 ---
 

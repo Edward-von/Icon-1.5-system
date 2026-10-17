@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted" (versione 1.15.218)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Interrupt "when targeted" senza attacco**: sotto lo Show in Chat di un'abilità che non è un attacco non
+  comparivano i bottoni degli interrupt con trigger "targeted by an ability" → la card non salvava i bersagli → ora
+  salva i personaggi scelti come bersaglio (escluso chi usa l'abilità), perché "Abilities may specify targets: Self,
+  Ally, Foe…" vale anche per le abilità che non attaccano (p.91-92). Per le aree il manuale distingue: l'effetto
+  d'area colpisce chi è nell'area senza prenderlo di mira ("Abilities that affect or target a space, such as the area
+  effect of an AoE", p.107; Stealth "cannot be targeted directly … but could still be hit by an area effect", p.109).
+  Negli attacchi ad area quindi è "targeted" solo chi sta nell'attack space (p.97), come già succedeva. Nelle abilità
+  ad area che non attaccano, con l'area sulla mappa, è "targeted" solo il personaggio al centro di un Burst ("Affects
+  a targeted space or character", p.97) o di un blast centrato su un bersaglio. Solo codice.
+
 ## 17 ottobre 2026 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero (versione 1.15.217)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

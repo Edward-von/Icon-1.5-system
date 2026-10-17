@@ -1904,6 +1904,21 @@ export class IconSheet extends BaseActorSheet {
       if (placed) attackTargetId = attackSpaceTokenId(placed) || (placed.targets.some(t => t.id === remembered) ? remembered : "");
       if (!cardTargets.some(t => t.tokenId === attackTargetId)) attackTargetId = "";
     }
+    // Who a non-attack ability targets, for the "when targeted" interrupt buttons (R35; an attack's
+    // targets go on its attack card). "Abilities may specify targets: Self, Ally, Foe…" (p.91-92): the
+    // characters picked for it. An area's effect hits the characters in it without targeting them
+    // (Stealth, p.109: "cannot be targeted directly … but could still be hit by an area effect"), so
+    // with its area on the map only the character in the space a Burst (p.97: "Affects a targeted
+    // space or character") or a blast centred on a target is put on is targeted.
+    let targeted = null;
+    if (!ab.isAttack && cardTargets.length) {
+      const tpl = findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id })[0];
+      const placed = tpl ? await retargetFromTemplate(tpl, { retarget: false }) : null;
+      const centred = placed && ((placed.area?.kind === "burst" && !placed.area?.self) || placed.area?.centeredOn === "target");
+      const centreId = centred ? attackSpaceTokenId(placed) : "";
+      targeted = (placed ? cardTargets.filter(t => centreId && t.tokenId === centreId) : cardTargets)
+        .filter(t => t.actorUuid !== this.document.uuid);
+    }
     const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name, targets: cardTargets, attackTargetId });
 
     // Combo version: the blocks are rebuilt with the combo text merged in, so
@@ -1931,6 +1946,7 @@ export class IconSheet extends BaseActorSheet {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content,
+      ...(targeted?.length ? { flags: { "icon-system": { attack: attackFlags({ actor: this.document, abilityName: ab.name, targets: targeted }) } } } : {}),
     });
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.card);
 

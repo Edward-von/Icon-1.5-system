@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted" (17 ottobre 2026, versione 1.15.218)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Abilità non d'attacco con bersaglio singolo (es. una cura su un alleato): prendo di mira il token e faccio Show
+      in Chat → se il bersaglio ha un interrupt "You are targeted by an ability" (es. Aether Deflection), sotto la
+      card compare il suo bottone.
+- [ ] Stessa prova prendendo di mira solo me stesso → nessun bottone "targeted".
+- [ ] Abilità non d'attacco con Burst (target) piazzato sulla mappa, con più token dentro → il bottone "targeted"
+      compare solo per il token al centro.
+- [ ] Abilità non d'attacco con un'area non centrata su un bersaglio (Line, Arc, Blast normale) piazzata sulla mappa →
+      nessun bottone "targeted".
+- [ ] Attacco ad area con più token dentro → i bottoni "targeted" compaiono solo per il bersaglio dell'attacco, non
+      per gli altri nell'area (come prima).
+- [ ] Show in Chat di un'abilità d'attacco → nessun bottone "targeted" (compaiono sulla card dell'attacco).
+
 ## Emerso R35 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero (17 ottobre 2026, versione 1.15.217)
 
 Setup: solo codice (F5 basta).
