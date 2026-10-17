@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Il rimbalzo di Bifröst (PATH TO ERENHELION) (17 ottobre 2026, versione 1.15.224)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Bifröst e la mastery PATH TO ERENHELION sbloccata, un oggetto sulla mappa (es. trascinato dalla scheda):
+      piazza la line 3 in modo che l'ultima casella cada sull'oggetto → compare "Bifröst — bounce?" con il testo della
+      mastery e il nome dell'oggetto.
+- [ ] Scegli Bounce: le 4 caselle accanto a quella finale sono evidenziate; disegna la seconda line 3 in una direzione
+      a scelta (rotella per ruotarla) → un unico template con le due line, etichetta "Line 3 + Line 3", i bersagli
+      comprendono chi sta su tutte e due.
+- [ ] Scegli No bounce → resta solo la prima line.
+- [ ] Line che NON finisce su un oggetto → nessuna domanda.
+- [ ] Senza la mastery sbloccata → nessuna domanda anche se finisce su un oggetto.
+- [ ] Con HEIMDALL (seconda area che non può sovrapporsi) e Talent II (crescita a fine round) il template con il
+      rimbalzo si comporta come una sola area.
+
 ## Emerso R33 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (17 ottobre 2026, versione 1.15.223)
 
 Setup: solo codice (F5 basta).

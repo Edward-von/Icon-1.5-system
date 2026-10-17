@@ -13,7 +13,7 @@ import { ABILITY_BLOCK_FIELDS, buildAbilityBlocks, interruptBlockName, grantedIn
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, areaLabel, infusedAreas, rangeFromTags,
+         areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, lineBounceInText, areaLabel, infusedAreas, rangeFromTags,
          attackSpaceTokenId, retargetFromTemplate, distanceInArea, sourceTokenFor } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
@@ -2466,7 +2466,10 @@ export class IconSheet extends BaseActorSheet {
     // With MJÖLLNIR (p.227) the area is an Arc 5, and so is the Talent II extension.
     const extension = area?.kind === "line" || area?.kind === "arc" ? this.#lineExtension(ab, s) : null;
     const allPits = this.#areaOnAllPits(ab, s, area);
-    if (!lasting || area?.kind === "aura") return { lasting, extension, allPits };
+    // PATH TO ERENHELION (Bifröst's mastery, p.226): the line bounces off an object at its end space.
+    const bounceText = area?.kind === "line" && ab.hasMastery ? lineBounceInText(s.mastery) : null;
+    const bounce = bounceText ? { ...bounceText, source: "Mastery" } : null;
+    if (!lasting || area?.kind === "aura") return { lasting, extension, allPits, bounce };
     const base = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
     // R33c2: what the area does to the characters inside it (blinded+, cover, stealth on exiting…), offered at movement.
     const inside = insideEffectsOf([...activeAreaTexts(s), ["", base.rules ?? ""]]);
@@ -2475,7 +2478,7 @@ export class IconSheet extends BaseActorSheet {
     // R33c2: Ätherwand Talent I extends the old area instead of replacing it; HELLERWIND may make it impassable.
     const extendsOld = areaExtendsOld(activeAreaTexts(s));
     const impassable = impassableAlternative(activeAreaTexts(s));
-    return { lasting, terrain, extension, allPits, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "",
+    return { lasting, terrain, extension, allPits, bounce, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "",
       ...(extendsOld ? { extendsOld } : {}), ...(impassable ? { impassable } : {}) };
   }
 
@@ -2735,7 +2738,7 @@ export class IconSheet extends BaseActorSheet {
       }
     }
     const areaOpts = this.#areaPlacementOpts(ab, areaChoice ?? areaFromTags(ab.tags));
-    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, allPits: !!areaOpts.allPits, area: areaChoice });
+    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, allPits: !!areaOpts.allPits, bounce: areaOpts.bounce ?? null, area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
 
     // Relic integration: "Invoke (Attack, N+)" checks on the raw d20 and the

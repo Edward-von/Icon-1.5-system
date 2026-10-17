@@ -383,6 +383,20 @@ export function lineExtensionInText(text) {
 }
 
 /**
+ * A line that bounces off an object: PATH TO ERENHELION (Bifröst's mastery, p.226) "Bifröst bounces if its end
+ * space lands in the space of an object, creating a second line 3 area that extends the total area effect and
+ * terrain effect area". The book doesn't say which way it bounces: the player picks (Edoardo's ruling).
+ * @param {string} text
+ * @returns {{size:number, rule:string}|null}
+ */
+export function lineBounceInText(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const m = /\bbounces if its end space lands in the space of an object,? creating a second line (\d+)\b/i.exec(plain);
+  if (!m) return null;
+  return { size: Number(m[1]), rule: plain };
+}
+
+/**
  * The area to offer for an ability: the one in its tags, or — when the tags
  * carry none — the first one named in its own rules text. The book prints the
  * shape of most terrain-effect abilities in the prose rather than the header
@@ -896,8 +910,9 @@ export const isPlacingArea = () => AreaPlacement.active;
  *   above 1, an earlier one is not replaced without asking
  * @param {string}  [opts.stackRule=""] the sentence that allows it, shown in the question
  * @param {object|null} [opts.extension] R47b: a second line the user may add (lineExtensionInText, plus `source`)
+ * @param {object|null} [opts.bounce]    a second line from the end space when it is on an object (lineBounceInText)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false, extendsOld = null }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false, extendsOld = null, bounce = null }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -1068,6 +1083,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     // instead", p.227) the area is an Arc 5 and so is the extension.
     if (extension && ((area.kind === "line" && placed.dir) || area.kind === "arc")) {
       const more = await extendLine({ actor, area, origin: originCell, dir: placed.dir, cells, extension, abilityName, blocked });
+      if (more) {
+        const seen = new Set(cells.map(cellKey));
+        cells = cells.concat(more.cells.filter(c => !seen.has(cellKey(c))));
+        area.label = `${area.label} + ${more.label}`;
+      }
+    }
+    // PATH TO ERENHELION (p.226): the line's end space on an object -> a second line from there, the way the player picks.
+    if (bounce && area.kind === "line" && placed.dir) {
+      const more = await bounceLine({ area, origin: originCell, dir: placed.dir, bounce, abilityName });
       if (more) {
         const seen = new Set(cells.map(cellKey));
         cells = cells.concat(more.cells.filter(c => !seen.has(cellKey(c))));
@@ -1262,6 +1286,50 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
   // An arc is painted space by space: the first arc and the user's spaces are off limits (sourceCells).
   const sourceCells = isArc ? [...cells, ...blocked] : [end];
   const placed = await new AreaPlacement({ area: second, sourceCells, rangeCells: starts, originInRange: true, check }).run();
+  return placed?.cells ? { cells: placed.cells, label } : null;
+}
+
+/**
+ * PATH TO ERENHELION (Bifröst's mastery, p.226): "Bifröst bounces if its end space lands in the space of an object,
+ * creating a second line 3 area that extends the total area effect and terrain effect area". When the last space
+ * of the placed line is in an object token's space (map-objects.mjs), the player is asked, then draws the second
+ * line from a space next to that end space, in the direction they pick (the book doesn't say which way).
+ * Resolves { cells, label }, or null (no object there / declined / cancelled: the first line stays).
+ */
+async function bounceLine({ area, origin, dir, bounce, abilityName }) {
+  const len = Math.max(1, area.size);
+  const end = { i: origin.i + dir.di * (len - 1), j: origin.j + dir.dj * (len - 1) };
+  const endKey = cellKey(end);
+  const object = (canvas.tokens?.placeables ?? []).find(t => t.document?.flags?.[FLAG_NS]?.mapObject
+    && tokenCells(t.document).some(c => cellKey(c) === endKey));
+  if (!object) return null;
+  const second = { kind: "line", size: bounce.size };
+  const label = areaLabel(second);
+  second.label = label;
+  const objName = object.document.flags[FLAG_NS].mapObject?.name || object.name || "an object";
+  let go = null;
+  try {
+    go = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${abilityName || "Line"} — bounce?` },
+      content: `<p><small>${escapeHTML(bounce.source ? `${bounce.source}: ` : "")}${escapeHTML(bounce.rule)}</small></p>`
+        + `<p>The line ends on <strong>${escapeHTML(objName)}</strong>: draw the second ${label} from that space, in the direction you choose.</p>`,
+      buttons: [
+        { action: "yes", label: "Bounce", default: true },
+        { action: "no",  label: "No bounce" },
+      ],
+      rejectClose: false,
+    });
+  } catch { go = null; }
+  if (go !== "yes") return null;
+  const dirs = [{ di: 0, dj: 1 }, { di: 1, dj: 0 }, { di: 0, dj: -1 }, { di: -1, dj: 0 }];
+  const starts = dirs.map(d => ({ i: end.i + d.di, j: end.j + d.dj }));
+  const check = (newCells, start, d) => {
+    if (!start || !d) return "";
+    const step = { di: start.i - end.i, dj: start.j - end.j };
+    return step.di === d.di && step.dj === d.dj ? "" : "The bounce goes away from the end space of the first line (mouse wheel rotates it).";
+  };
+  ui.notifications.info("Bounce: click one of the highlighted spaces next to the end of the line, in the direction you choose.");
+  const placed = await new AreaPlacement({ area: second, sourceCells: [end], rangeCells: starts, originInRange: true, check }).run();
   return placed?.cells ? { cells: placed.cells, label } : null;
 }
 
@@ -1645,7 +1713,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null, allPits = false }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null, allPits = false, bounce = null }) {
   // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
   const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
@@ -1654,7 +1722,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null, allPits });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null, allPits, bounce: area.kind === "line" ? bounce : null });
 }
 
 /**

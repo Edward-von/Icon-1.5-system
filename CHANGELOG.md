@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il rimbalzo di Bifröst (PATH TO ERENHELION) (versione 1.15.224)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Rimbalzo di Bifröst**: con la mastery PATH TO ERENHELION, se la line di Bifröst finiva sulla casella di un
+  oggetto, la seconda line 3 andava disegnata a mano → il testo "bounces if its end space lands in the space of an
+  object, creating a second line 3 area" (p.226) non veniva letto → ora, quando l'ultima casella della line è su un
+  token oggetto, compare la domanda "Bounce / No bounce". Con Bounce si disegna la seconda line 3 partendo da una
+  casella accanto a quella finale, nella direzione scelta dal giocatore (il libro non dice quale; risposta di
+  Edoardo). La seconda line entra nella stessa area: stesso danno e stesso terrain effect. Vale sia dal bottone area
+  sia dal tiro. Solo codice.
+
 ## 17 ottobre 2026 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (versione 1.15.223)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

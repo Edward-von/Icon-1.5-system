@@ -1542,9 +1542,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Domanda per Edoardo: "removed from the battlefield" come lo rendiamo (token nascosto, token spostato fuori
       mappa, o solo un promemoria con l'elenco)? E a fine turno la risputata si fa cliccando uno spazio per ciascuno,
       entro range 2?
-- [ ] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
+- [x] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
       lands in the space of an object, creating a second line 3 area" (p.226) resta a mano. Domanda per Edoardo: in
       quale direzione rimbalza la seconda line (il libro non lo dice)?
+(FATTO il 17 ottobre 2026, versione 1.15.224: la direzione del rimbalzo la sceglie il giocatore (il libro non la
+      dice); la seconda line parte accanto all'ultima casella della prima, in una delle 4 direzioni dritte, e conta
+      come la stessa area.)
 - [x] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
       advantage dei foe contro di loro, bonus damage e shattered+ "while inside pits" (p.235): solo testo, il codice
       non sa chi è in un pit al momento del tiro.
