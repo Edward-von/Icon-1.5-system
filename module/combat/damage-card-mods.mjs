@@ -7,9 +7,11 @@
  * the change has to be seen by everyone and survive a reload, so it is written
  * on the card itself, as the flag `icon-system.damage.mods`:
  *
- *   [{ actorUuid, source, half?, minHp?, sturdy?, row? }]
+ *   [{ actorUuid, source, half?, minHp?, reduce?, immune?, sturdy?, row? }]
  *     half    resistance against this damage (Righteous Disdain) — once, with Cover / Resistance
- *     minHp   the damage can't take the character below that HP (Shirahadori)
+ *     minHp   the damage can't take the character below that HP (Shirahadori, Wish)
+ *     reduce  taken off as if by armor (Heartfire)
+ *     immune  no damage at all (Grace of the Spirits)
  *     sturdy  sturdy against the ability's effects (note only)
  *     row     {name, img, tokenId}: the character was not on the card and takes the damage too
  *             (Righteous Disdain: "Apply the damage to both you and your ally")
@@ -33,8 +35,8 @@ export function cardMods(message) {
 
 /**
  * Everything the card's changes do to one character's damage, merged.
- * @returns {{any:boolean, half:boolean, halfReason:string, minHp:number, minHpReason:string,
- *            sturdy:boolean, sources:string[]}}
+ * @returns {{any:boolean, half:boolean, halfReason:string, minHp:number, reduce:number, reduceReason:string,
+ *            immune:boolean, immuneReason:string, sturdy:boolean, sources:string[]}}
  */
 export function cardModsFor(message, actorUuid) {
   const own = cardMods(message).filter(m => m.actorUuid === actorUuid);
@@ -46,6 +48,10 @@ export function cardModsFor(message, actorUuid) {
     halfReason:   names(pick("half")),
     minHp:        Math.max(0, ...own.map(m => Number(m.minHp) || 0)),
     minHpReason:  names(pick("minHp")),
+    reduce:       own.reduce((a, m) => a + (Number(m.reduce) || 0), 0),
+    reduceReason: names(pick("reduce")),
+    immune:       pick("immune").length > 0,
+    immuneReason: names(pick("immune")),
     sturdy:       pick("sturdy").length > 0,
     sources:      [...new Set(own.map(m => m.source))],
   };
@@ -77,8 +83,9 @@ export async function handleCardModSocket(data) {
   if (!message?.flags?.[FLAG_NS]?.damage || !Array.isArray(data.mods)) return;
   const clean = data.mods.slice(0, 6).map(m => ({
     actorUuid: String(m.actorUuid ?? ""), source: String(m.source ?? "").slice(0, 60),
-    ...(m.half ? { half: true } : {}), ...(m.sturdy ? { sturdy: true } : {}),
+    ...(m.half ? { half: true } : {}), ...(m.immune ? { immune: true } : {}), ...(m.sturdy ? { sturdy: true } : {}),
     ...(Number(m.minHp) > 0 ? { minHp: Math.min(99, Math.floor(Number(m.minHp))) } : {}),
+    ...(Number(m.reduce) > 0 ? { reduce: Math.min(99, Math.floor(Number(m.reduce))) } : {}),
     ...(m.row ? { row: { name: String(m.row.name ?? "").slice(0, 80), img: String(m.row.img ?? ""), tokenId: String(m.row.tokenId ?? "") } } : {}),
   })).filter(m => m.actorUuid);
   await addCardMods(message, clean);
@@ -93,12 +100,15 @@ function chip(kind, label, title) {
 }
 
 /** Chips telling what an interrupt changed for this character. */
-function modChipsHtml(m, { divine = false, halvedOnRoll = false } = {}) {
+function modChipsHtml(m, { divine = false, halvedOnRoll = false, pierce = false } = {}) {
   const out = [];
+  if (m.immune) out.push(chip("dodge", `Immune (${m.immuneReason})`, `${m.immuneReason}: immune to all damage from this ability. Apply deals nothing.`));
   if (m.half) {
     const why = divine ? " — not against divine damage (p.104)" : halvedOnRoll ? " — already halved on the roll" : "";
     out.push(chip("resistance", `Resistance ½ (${m.halfReason})`, `${m.halfReason}: resistance to this damage. Halved once on Apply, together with Cover / Resistance${why}.`));
   }
+  if (m.reduce > 0) out.push(chip("resistance", `−${m.reduce} (${m.reduceReason})`, `${m.reduceReason}: ${m.reduce} less damage, as if by armor.`
+    + (divine ? " Not against divine damage (p.104)." : pierce ? " Not against pierce: it ignores armor (p.104)." : "")));
   if (m.minHp > 0) out.push(chip("resistance", `Not below ${m.minHp} HP (${m.minHpReason})`, `${m.minHpReason}: this damage can't reduce the character past ${m.minHp} HP.`));
   if (m.sturdy) out.push(chip("trait", "Sturdy vs. its effects", "Sturdy against this ability's effects: moved by it at most 1 space (glossary)."));
   return out.join("");
@@ -141,7 +151,8 @@ export function injectCardMods(message, html) {
     if (!m.any) return;
     const holder = document.createElement("span");
     holder.className = "icon-chat-card__target-defs icon-chat-card__target-mods";
-    holder.innerHTML = modChipsHtml(m, { divine: !!dmg.divine, halvedOnRoll: !!dmg.halvedOnRoll });
+    holder.innerHTML = modChipsHtml(m, { divine: !!dmg.divine, halvedOnRoll: !!dmg.halvedOnRoll,
+      pierce: !!html.querySelector('[data-action="applyDamage"][data-pierce="true"]') });
     const firstBtn = row.querySelector("button");
     firstBtn ? row.insertBefore(holder, firstBtn) : row.appendChild(holder);
   });

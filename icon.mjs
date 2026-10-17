@@ -859,6 +859,21 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       // Resistance, never divine damage (p.104) or a roll already halved.
       const mods = cardModsFor(message, uuid);
       if (mods.half && !half && !halvedOnRoll && !divine) { half = true; halfReason = mods.halfReason; }
+      // Immunity (Grace of the Spirits, R35c) is the one thing divine damage
+      // doesn't get past (p.104): no damage, on either button.
+      if (mods.immune) {
+        await ChatMessage.create({
+          speaker: { alias: "Damage Applied" },
+          content: `<div class="icon-chat-card icon-chat-card--apply icon-chat-card--dodged">
+                      <strong>${foundry.utils.escapeHTML(actor.name)}</strong>: no damage
+                      <br><small>Immune: ${foundry.utils.escapeHTML(mods.immuneReason)}</small>
+                    </div>`,
+        });
+        btn.disabled = true;
+        btn.textContent = "✓ Immune";
+        btn.style.opacity = "0.5";
+        return;
+      }
 
       // All deduction rules (armor before ½, mob hits, vigor before HP, wound
       // on a PC reaching 0) live in applyDamageToActor — the same code path
@@ -875,6 +890,9 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
             chatConfirm: instances === 1,
             minHp:       mods.minHp,
             minHpReason: mods.minHpReason,
+            // "as if by armor" (Heartfire): only where armor counts, so not pierce / divine
+            extraArmor:  mods.reduce,
+            extraArmorReason: mods.reduceReason,
           });
           if (!result?.ok) break;
           results.push(result);

@@ -30,6 +30,7 @@ import { plainText, parseInflictedStatuses, statusBlockHtml } from "./ability-st
 import { hasStatus } from "./statuses.mjs";
 import { tagKey } from "./defenses.mjs";
 import { addCardMods, cardModsFor } from "./damage-card-mods.mjs";
+import { marksBy } from "./marks.mjs";
 
 const _log = (...a) => console.debug("[ICON | DamageInterrupts]", ...a);
 const FLAG_NS = "icon-system";
@@ -62,6 +63,42 @@ export const INTERRUPT_SPECS = {
       const mods = [{ actorUuid: target.uuid, source: "Righteous Disdain", half: true, sturdy: true }, self];
       if (item?.system?.masteryUnlocked) mods.push({ actorUuid: owner.uuid, source: "Shirahadori", minHp: 1 });
       await addCardMods(message, mods);
+    },
+  },
+
+  /* Dire Parry (Riposte's stance, Knave p.142): "A foe targets an ally in
+   * range 2 with an ability" — a targeting trigger, which the damage card
+   * comes after; it is offered there anyway, on the ally's row, because with
+   * Strong Left (p.143) its uses are banked (up to 3) and the card is where the
+   * table sees the foe's ability land. */
+  "dire parry": { scope: "ally" },
+
+  /* Wish (Seer, p.203): "That damage cannot reduce your ally past 1 hp, and
+   * they are cured after it resolves." The cure and the Seer's sacrifice of
+   * 25% max HP stay on the posted card, for the table. */
+  "wish": {
+    scope: "ally",
+    async onUse({ target, message }) {
+      if (target) await addCardMods(message, [{ actorUuid: target.uuid, source: "Wish", minHp: 1 }]);
+    },
+  },
+
+  /* Grace of the Spirits (Spirit Shrine's mastery SPIRIT PATRONAGE, p.193):
+   * "Your ally becomes immune to all damage from the triggering ability." */
+  "grace of the spirits": {
+    scope: "ally",
+    async onUse({ target, message }) {
+      if (target) await addCardMods(message, [{ actorUuid: target.uuid, source: "Grace of the Spirits", immune: true }]);
+    },
+  },
+
+  /* Heartfire (Blazing Bond, p.210): "You or your ally takes damage […]
+   * Effect: You can choose to reduce that damage by 3 (as if by armor) […] If
+   * you do, the other partner sacrifices 3." Only for the marked partner. */
+  "heartfire": {
+    scope: "either",
+    async onUse({ target, message }) {
+      if (target) await addCardMods(message, [{ actorUuid: target.uuid, source: "Heartfire", reduce: 3 }]);
     },
   },
 };
@@ -97,11 +134,14 @@ export function interruptSpec(name) {
 
 /**
  * Every interrupt a character has, as one shape:
- *   { key, name, limit, cost, trigger, kind: "ability" | "granted" | "npc",
- *     itemId?, label?, index? }
+ *   { key, name, limit, cost, trigger, kind: "ability" | "granted" | "mastery" | "refresh" | "npc",
+ *     itemId?, label?, index?, effect?, partners?, bankMax?, bankOnTurn?, refreshes? }
  * PCs: abilities whose cost is "Interrupt N" (the talent / mastery count, as on
- * the sheet's badge) and interrupts granted inside an ability's text ("Cheat
- * Time — Interrupt 1"; a stance's interrupt only while in the stance).
+ * the sheet's badge), interrupts granted inside an ability's text ("Cheat
+ * Time — Interrupt 1"; a stance's interrupt only while in the stance, a mark's
+ * only while the mark is on someone) or by its unlocked mastery (Grace of the
+ * Spirits), and a stance's damage-triggered Refresh (Riposte), which gives
+ * its interrupt back.
  * Foes / legends: their Interrupts list.
  * @param {Actor} actor
  * @returns {Array<object>}
@@ -138,24 +178,105 @@ function _readInterrupts(actor) {
       out.push({ key: item.id, itemId: item.id, kind: "ability", name: item.name, limit: Number(m[1]),
                  cost: `Interrupt ${m[1]}`, trigger: String(s.interruptTrigger ?? "").trim() || desc.trigger });
     }
+    const mastery = s.masteryUnlocked ? plainText(s.mastery) : "";
+    // An interrupt the unlocked mastery grants: "SPIRIT PATRONAGE: Grace of the
+    // Spirits — Interrupt 1: Trigger: … Effect: …" (Spirit Shrine, p.193).
+    const mi = /([A-Z][A-Za-z' ]{0,40}?)\s*[—–]\s*Interrupt (\d+)[.:]?\s*Trigger:\s*(.+?)\s*Effect:\s*(.+)$/.exec(mastery);
+    if (mi) {
+      out.push({ key: `${item.id}-m`, itemId: item.id, kind: "mastery", name: mi[1].trim(), limit: Number(mi[2]),
+                 cost: `Interrupt ${mi[2]}`, trigger: mi[3], effect: mi[4] });
+    }
     const isStance = tags.some(t => tagKey(t) === "stance");
     if (isStance && !stances.includes(item.name)) continue;
+    // "Mark: … While marked and in range, gain the following interrupt"
+    // (Blazing Bond's Heartfire): only with a mark of this ability on the
+    // scene, and "your ally" is the marked partner.
+    const byMark = desc.sections.some(sec => sec.label === "Mark");
+    const partners = byMark ? marksBy(actor.id, item.id).map(m => m.targetActor?.uuid).filter(Boolean) : null;
+    if (partners && !partners.length) continue;
+    const granted = [];
     desc.sections.forEach((sec, n) => {
       const head = interruptBlockName(sec.label);
       if (!head) return;
       const it = grantedInterrupt(s, sec.label);
       if (!it) return;
       const trig = it.lines.find(l => l.label === "Trigger")?.text ?? "";
-      out.push({ key: `${item.id}-g${n}`, itemId: item.id, label: sec.label, kind: "granted", name: it.name,
-                 limit: Number(/\d+/.exec(it.cost)?.[0] ?? 1), cost: it.cost, trigger: trig });
+      // Riposte's STRONG LEFT (p.143): "Uses of Dire Parry can stack up to 3
+      // times, and you can bank these uses" — a store of uses that the turn
+      // start does not empty.
+      const bank = new RegExp(`uses of ${escapeRegExp(it.name)} can stack up to (\\d+) times`, "i").exec(mastery);
+      // "HEARTFIRE" → "Heartfire", as the sheet titles a capitalised name (R61).
+      const name = /[a-z]/.test(it.name) ? it.name : it.name.toLowerCase().replace(/(^|[\s'’-])\p{L}/gu, c => c.toUpperCase());
+      const entry = { key: `${item.id}-g${n}`, itemId: item.id, label: sec.label, kind: "granted", name,
+                      limit: Number(/\d+/.exec(it.cost)?.[0] ?? 1), cost: it.cost, trigger: trig,
+                      ...(partners ? { partners } : {}), ...(bank ? { bankMax: Number(bank[1]) } : {}),
+                      ...(bank && new RegExp(`refresh ${escapeRegExp(item.name)} at the start of your turn`, "i").test(mastery) ? { bankOnTurn: true } : {}) };
+      granted.push(entry);
+      out.push(entry);
     });
+    // A stance refreshed by damage ("Refresh: Refresh this stance when a foe
+    // damages you or an adjacent ally with an ability", Riposte p.142) gives
+    // its interrupt back: one more button, which spends nothing.
+    const refresh = desc.sections.find(sec => sec.label === "Refresh");
+    if (isStance && granted.length && refresh && damageTriggerScope(refresh.text)) {
+      out.push({ key: `${item.id}-r`, itemId: item.id, kind: "refresh", name: item.name, limit: 1, cost: "Refresh",
+                 trigger: refresh.text, refreshes: granted.map(g => g.key) });
+    }
   }
   return out;
 }
 
+function escapeRegExp(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
 /** Uses spent this round (foes: the same flag the sheet's tick boxes write). */
 export function interruptUsesOf(actor, key) {
   return Number(actor?.getFlag(FLAG_NS, `interruptUses.${key}`) ?? 0) || 0;
+}
+
+/** A banked interrupt's stored uses (1 until the store is first touched: entering the stance gives one). */
+function bankOf(actor, key) {
+  const v = actor?.getFlag(FLAG_NS, `interruptBank.${key}`);
+  return v == null ? 1 : Math.max(0, Number(v) || 0);
+}
+
+/** Uses left and the most there can be: {left, max}. A refresh is always available. */
+export function interruptLeft(actor, it) {
+  if (it.kind === "refresh") return { left: 1, max: 1 };
+  if (it.bankMax) return { left: bankOf(actor, it.key), max: it.bankMax };
+  return { left: Math.max(0, it.limit - interruptUsesOf(actor, it.key)), max: it.limit };
+}
+
+/** Spend one use. */
+async function spendUse(actor, it) {
+  if (it.bankMax) return actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, Math.max(0, bankOf(actor, it.key) - 1));
+  return actor.setFlag(FLAG_NS, `interruptUses.${it.key}`, interruptUsesOf(actor, it.key) + 1);
+}
+
+/** Give a stance's interrupts back (a refresh): a banked one stores one more, up to its cap. */
+async function refreshUses(actor, keys) {
+  const all = interruptsOf(actor);
+  for (const key of keys) {
+    const it = all.find(i => i.key === key);
+    if (!it) continue;
+    if (it.bankMax) await actor.setFlag(FLAG_NS, `interruptBank.${key}`, Math.min(it.bankMax, bankOf(actor, key) + 1));
+    else if (actor.getFlag(FLAG_NS, `interruptUses.${key}`) != null) await actor.unsetFlag(FLAG_NS, `interruptUses.${key}`);
+  }
+}
+
+/**
+ * Start of a PC's turn (IconCombat.mjs): a banked interrupt whose mastery
+ * refreshes its stance "at the start of your turn" (Strong Left) stores one
+ * more use. Ordinary uses are reset there by clearing the interruptUses flag.
+ * @param {Actor} actor
+ */
+export async function bankInterruptsAtTurnStart(actor) {
+  _cache.delete(actor?.uuid);
+  for (const it of interruptsOf(actor)) {
+    if (!it.bankMax || !it.bankOnTurn) continue;
+    const next = Math.min(it.bankMax, bankOf(actor, it.key) + 1);
+    _log(`bankAtTurnStart — "${actor.name}" | ${it.name} → ${next}/${it.bankMax}`);
+    await actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, next);
+  }
 }
 
 /* -------------------------------------------------- */
@@ -213,9 +334,11 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
       const scope = spec.scope ?? damageTriggerScope(it.trigger);
       if (!scope) continue;
       if (o.self ? scope === "ally" : scope === "self") continue;
+      // A mark's interrupt: "your ally" is the marked partner only (Heartfire).
+      if (it.partners && !o.self && !it.partners.includes(target.uuid)) continue;
       // "…by a foe's ability": a foe of the interrupt's owner, not a friend's area.
       if (/\bfoe/i.test(plainText(it.trigger)) && attackerSide && attackerSide === sideOf(o.actor, o.tokenId)) continue;
-      out.push({ owner: o.actor, it, uses: interruptUsesOf(o.actor, it.key) });
+      out.push({ owner: o.actor, it, ...interruptLeft(o.actor, it) });
     }
   }
   return out;
@@ -225,16 +348,22 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
 /*  Card decoration                                     */
 /* -------------------------------------------------- */
 
-function buttonHtml({ owner, it, uses }, targetUuid) {
-  const left = Math.max(0, it.limit - uses);
+function buttonHtml({ owner, it, left, max }, targetUuid) {
+  if (it.kind === "refresh") {
+    const title = `${it.name} — ${owner.name}. Refresh: ${plainText(it.trigger)}\nGives the stance's interrupt back`
+      + ` (a banked one stores one more). Spends nothing.`;
+    return `<button type="button" class="icon-chat-btn icon-chat-btn--interrupt" data-action="damageInterrupt"
+              data-owner-uuid="${escapeHTML(owner.uuid)}" data-key="${escapeHTML(it.key)}" data-target-uuid="${escapeHTML(targetUuid)}"
+              title="${escapeHTML(title)}"><i class="fa-solid fa-rotate"></i> Refresh ${escapeHTML(it.name)}<small> · ${escapeHTML(owner.name)}</small></button>`;
+  }
   const stunned = hasStatus(owner, "stunned");
-  const title = `${it.name} (${it.cost}) — ${owner.name}. Trigger: ${plainText(it.trigger)}`
+  const title = `${it.name} (${it.cost}${it.bankMax ? `, banks up to ${it.bankMax}` : ""}) — ${owner.name}. Trigger: ${plainText(it.trigger)}`
     + `\nSpends one use and posts the interrupt. Range and the one-interrupt-per-turn rule are up to you.`
     + (stunned ? "\nStunned: can't take interrupts." : "");
   return `<button type="button" class="icon-chat-btn icon-chat-btn--interrupt" data-action="damageInterrupt"
             data-owner-uuid="${escapeHTML(owner.uuid)}" data-key="${escapeHTML(it.key)}" data-target-uuid="${escapeHTML(targetUuid)}"
             title="${escapeHTML(title)}" ${left <= 0 || stunned ? "disabled" : ""}>
-            <i class="fa-solid fa-bolt"></i> ${escapeHTML(it.name)}<small> · ${escapeHTML(owner.name)} ${left}/${it.limit}</small>
+            <i class="fa-solid fa-bolt"></i> ${escapeHTML(it.name)}<small> · ${escapeHTML(owner.name)} ${left}/${max}${it.bankMax ? " banked" : ""}</small>
           </button>`;
 }
 
@@ -270,11 +399,24 @@ export function decorateDamageInterrupts(message, html) {
       btn.disabled = true;
       const ok = await useDamageInterrupt(message, btn.dataset);
       if (!ok) { btn.disabled = false; return; }
-      const small = btn.querySelector("small");
-      if (small) small.textContent = small.textContent.replace(/(\d+)\/(\d+)$/, (_, l, n) => `${Math.max(0, l - 1)}/${n}`);
-      btn.disabled = /\b0\/\d+$/.test(small?.textContent ?? "");
+      // The owner's counts changed: rewrite every button of theirs on this card.
+      html.querySelectorAll(`[data-action="damageInterrupt"][data-owner-uuid="${CSS.escape(btn.dataset.ownerUuid)}"]`)
+        .forEach(b => _refreshButton(b));
     });
   });
+}
+
+/** Re-read one button's uses after a click (actor flags don't re-render a chat card). */
+function _refreshButton(btn) {
+  let owner = null;
+  try { owner = fromUuidSync(btn.dataset.ownerUuid); } catch { owner = null; }
+  const it = owner ? interruptsOf(owner).find(i => i.key === btn.dataset.key) : null;
+  if (!it) { btn.disabled = true; return; }
+  if (it.kind === "refresh") { btn.disabled = false; return; }
+  const { left, max } = interruptLeft(owner, it);
+  const small = btn.querySelector("small");
+  if (small) small.textContent = ` · ${owner.name} ${left}/${max}${it.bankMax ? " banked" : ""}`;
+  btn.disabled = left <= 0 || hasStatus(owner, "stunned");
 }
 
 /* -------------------------------------------------- */
@@ -292,18 +434,30 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid }
   if (!owner) return false;
   const it = interruptsOf(owner).find(i => i.key === key);
   if (!it) { ui.notifications.warn(`${owner.name} no longer has that interrupt.`); return false; }
-  if (hasStatus(owner, "stunned")) { ui.notifications.warn(`${owner.name} is Stunned and can't take interrupts.`); return false; }
-  const uses = interruptUsesOf(owner, it.key);
-  if (uses >= it.limit) { ui.notifications.warn(`${it.name}: no uses left this round (${it.limit}/${it.limit}).`); return false; }
   const target = targetUuid ? await fromUuid(targetUuid) : null;
+  if (it.kind === "refresh") {
+    _log(`refresh — "${owner.name}" | ${it.name} | gives back: ${it.refreshes.join(", ")} | card: ${message?.id}`);
+    await refreshUses(owner, it.refreshes);
+    const back = interruptsOf(owner).filter(i => it.refreshes.includes(i.key))
+      .map(i => { const { left, max } = interruptLeft(owner, i); return `${escapeHTML(i.name)} ${left}/${max}${i.bankMax ? " banked" : ""}`; });
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: owner }),
+      content: `<div class="icon-chat-card"><strong>${escapeHTML(owner.name)}</strong> refreshes <strong>${escapeHTML(it.name)}</strong>`
+             + ` (${escapeHTML(plainText(it.trigger))})<br><small>${back.join(", ")}</small></div>`,
+    });
+    return true;
+  }
+  if (hasStatus(owner, "stunned")) { ui.notifications.warn(`${owner.name} is Stunned and can't take interrupts.`); return false; }
+  const { left, max } = interruptLeft(owner, it);
+  if (left <= 0) { ui.notifications.warn(`${it.name}: no uses left${it.bankMax ? " in the bank" : " this round"} (0/${max}).`); return false; }
   const spec = interruptSpec(it.name);
   if (spec.onUse && target && cardModsFor(message, target.uuid).sources.includes(it.name)) {
     ui.notifications.warn(`${it.name} has already changed this damage for ${target.name}.`);
     return false;
   }
-  _log(`use — "${owner.name}" | ${it.name} (${it.kind}) | uses ${uses} → ${uses + 1} / ${it.limit} | target: "${target?.name ?? "?"}" | card: ${message?.id}`);
-  await owner.setFlag(FLAG_NS, `interruptUses.${it.key}`, uses + 1);
-  await postInterruptCard(owner, it, { target, message, usesLeft: it.limit - uses - 1 });
+  _log(`use — "${owner.name}" | ${it.name} (${it.kind}) | left ${left} → ${left - 1} / ${max}${it.bankMax ? " banked" : ""} | target: "${target?.name ?? "?"}" | card: ${message?.id}`);
+  await spendUse(owner, it);
+  await postInterruptCard(owner, it, { target, message, usesLeft: left - 1, max });
   if (spec.onUse) {
     try { await spec.onUse({ owner, it, item: it.itemId ? owner.items.get(it.itemId) : null, target, message }); }
     catch (err) { console.error(`ICON 1.5 | ${it.name}: changing the damage card failed`, err); }
@@ -312,11 +466,11 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid }
 }
 
 /** The "Used on …" line under the posted interrupt. */
-function usedOnHtml(it, { target, message, usesLeft }) {
+function usedOnHtml(it, { target, message, usesLeft, max = it.limit }) {
   const src = message?.flags?.[FLAG_NS]?.damage ?? {};
   const what = [src.sourceName, src.abilityName].filter(Boolean).join("'s ");
   return `<p class="icon-chat-card__interrupt-used"><small><i class="fa-solid fa-bolt"></i> On ${escapeHTML(target?.name ?? "the target")}'s damage`
-       + `${what ? ` from ${escapeHTML(what)}` : ""} — ${usesLeft}/${it.limit} use${it.limit === 1 ? "" : "s"} left this round.</small></p>`;
+       + `${what ? ` from ${escapeHTML(what)}` : ""} — ${usesLeft}/${max} use${max === 1 ? "" : "s"} left${it.bankMax ? " in the bank" : " this round"}.</small></p>`;
 }
 
 /**
@@ -340,6 +494,8 @@ export async function postInterruptCard(owner, it, ctx = {}) {
   let raw;
   if (it.kind === "granted") {
     raw = grantedInterrupt(s, it.label)?.lines ?? [];
+  } else if (it.kind === "mastery") {
+    raw = [{ label: "Trigger", text: it.trigger }, { label: "Effect", text: it.effect, mastery: true }];
   } else {
     const desc = parseAbilitySections(s.description);
     raw = [{ label: "Trigger", text: it.trigger }, ...desc.sections.map(sec => ({ label: sec.label, text: sec.text }))];
@@ -355,7 +511,7 @@ export async function postInterruptCard(owner, it, ctx = {}) {
   const pc = {
     name:    item.name,
     label:   it.cost,
-    title:   it.kind === "granted" ? it.name : "",
+    title:   it.kind === "granted" || it.kind === "mastery" ? it.name : "",
     jobName: s.jobName ?? "",
     class:   s.class ?? "",
     chapter: s.chapter ?? 1,

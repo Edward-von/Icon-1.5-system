@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Interrupt strani sul danno (versione 1.15.151)
+
+### Round di debug del 15 ottobre, R35c
+
+- **Interrupt che annullano o riducono il danno**: Grace of the Spirits, Wish e Heartfire si postavano ma il danno
+  sulla card restava uguale → la card non aveva modo di segnare immunità, soglia di HP o riduzione → i loro bottoni la
+  cambiano: Grace of the Spirits (p.193) rende l'alleato immune e Apply non fa danno, nemmeno divine; Wish (p.203)
+  l'alleato non scende sotto 1 HP; Heartfire (p.210) −3 come armatura, non contro pierce / divine, e solo per il
+  partner marcato (nuove opzioni `minHp` ed `extraArmor` in `applyDamageToActor`). Ora si leggono anche gli interrupt
+  dati da una mastery sbloccata.
+- **Dire Parry e Strong Left**: gli usi "messi da parte" della mastery (p.143) non esistevano → c'era solo il limite
+  per round → con Strong Left Dire Parry tiene una riserva fino a 3 (+1 a inizio turno, da solo come dice la mastery,
+  −1 a ogni uso); il Refresh di Riposte "when a foe damages you or an adjacent ally" (p.142) ha il suo bottone, che
+  non spende niente. Solo codice.
+
 ## 17 ottobre 2026 — Righteous Disdain dalla card del danno (versione 1.15.150)
 
 ### Round di debug del 15 ottobre, R35b

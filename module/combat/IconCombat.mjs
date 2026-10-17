@@ -34,6 +34,7 @@ import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
 import { handleCardModSocket } from "./damage-card-mods.mjs";
+import { bankInterruptsAtTurnStart } from "./damage-interrupts.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
@@ -808,10 +809,12 @@ export function registerCombatHooks() {
          * the active GM applies it through the same shared code path. */
         const actor = await fromUuid(data.actorUuid ?? "");
         if (!actor) return;
-        const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false, minHp = 0, minHpReason = "" } = data.options ?? {};
+        const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false, minHp = 0, minHpReason = "",
+                extraArmor = 0, extraArmorReason = "" } = data.options ?? {};
         await applyDamageToActor(actor, data.amount, {
           applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60), ignoreVigor: !!ignoreVigor,
           minHp: Math.min(99, Number(minHp) || 0), minHpReason: String(minHpReason ?? "").slice(0, 60),
+          extraArmor: Math.min(99, Number(extraArmor) || 0), extraArmorReason: String(extraArmorReason ?? "").slice(0, 60),
           chatConfirm: true,
           allowRelay:  false,
         });
@@ -959,6 +962,11 @@ export function registerCombatHooks() {
         const actor = current.actor;
         if ((actor?.type === "foe" || actor?.type === "icon") && actor.getFlag(FLAG_NS, "interruptUses") != null) {
           await actor.unsetFlag(FLAG_NS, "interruptUses");
+        }
+        // Banked interrupts (Dire Parry with Strong Left, R35c) store one more use instead.
+        if (actor?.type === "icon") {
+          try { await bankInterruptsAtTurnStart(actor); }
+          catch (err) { console.warn("[ICON | IconCombat] banked interrupts (start) failed", err); }
         }
       }
 

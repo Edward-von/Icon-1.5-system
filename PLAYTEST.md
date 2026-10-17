@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R35c — Interrupt strani sul danno (17 ottobre 2026, versione 1.15.151)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Spirit Shrine con mastery sbloccata e alleato colpito: il bottone "Grace of the Spirits" mette il chip "Immune";
+      Apply e ½ postano "no damage".
+- [ ] Wish su un alleato: chip "Not below 1 HP (Wish)"; un danno letale lo lascia a 1 HP.
+- [ ] Blazing Bond: senza marchio non c'è Heartfire. Col marchio compare sulla riga dell'Enochian e su quella del
+      partner marcato, non su altri alleati. Apply toglie 3 in più come armatura; con pierce non li toglie.
+- [ ] Riposte in stance con Strong Left: Dire Parry mostra "1/3 banked" sulla riga dell'alleato colpito; "Refresh
+      Riposte" porta a 2/3; a inizio turno +1; non supera 3.
+- [ ] Senza mastery: "Refresh Riposte" ridà l'uso di Dire Parry (0/1 → 1/1).
+
 ## R35b — Righteous Disdain dalla card del danno (17 ottobre 2026, versione 1.15.150)
 
 Setup: solo codice (F5 basta).

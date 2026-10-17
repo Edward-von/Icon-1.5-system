@@ -1241,9 +1241,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.150: Righteous Disdain aggiunge il Demon Slayer alla card con resistenza per
       entrambi, Shirahadori = non sotto 1 HP; modifiche alla card in damage-card-mods.mjs, scritte dal GM via socket.
       Solo codice.)
-- [ ] **R35c. Interrupt strani sul danno** (M/L)
+- [x] **R35c. Interrupt strani sul danno** (M/L)
       Dire Parry mastery (usi messi da parte), interrupt del Seer che annullano il danno: il bottone di R35a toglie
       o riduce il danno già calcolato sulla card.
+(FATTO il 17 ottobre 2026, versione 1.15.151: Grace of the Spirits = immune, Wish = non sotto 1 HP, Heartfire = −3
+      come armatura solo per il partner marcato; interrupt da mastery sbloccata letti; Dire Parry con Strong Left a
+      riserva fino a 3, bottone "Refresh Riposte" sul danno. Solo codice.)
 - [x] **R36. Carte del Seer** — "Currently practically nonfunctional", diviso in R36a–R36c.
       I tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e giocarle non scrive niente in chat.
       Maar non consiglia di legarle alla scheda; con il sistema di carte di Foundry servirebbero gli effetti sulle
@@ -1415,6 +1418,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       bottone "posta in chat" di R61 non spende un uso.
 - [ ] **Emerso lavorando su R35 — Heroic di Righteous Disdain** (S): "Gain vigor 4 after this ability resolves" resta
       solo come testo sulla card postata; non c'è un bottone che dia il vigor.
+- [ ] **Emerso lavorando su R35 — Great Soul Bond (Blazing Bond)** (S): la mastery "the other can reduce themselves to
+      1 hp to grant that ally immunity…" non è un interrupt con trigger, quindi non ha bottone; servirebbe una regola
+      a parte (stesso flag `immune` di damage-card-mods).
+- [ ] **Emerso lavorando su R35 — interrupt "when targeted" sulla card d'attacco** (M): Aether Deflection, Endless
+      Battlement e i foe "is targeted by an attack" scattano prima del tiro; il posto giusto è la card d'attacco, non
+      quella del danno (solo Dire Parry è stato aggiunto al danno come eccezione).
 
 ---
 

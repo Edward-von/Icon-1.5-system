@@ -189,6 +189,9 @@ export async function applyDamagePipeline(attacker, target, {
  * @param {number}  [opts.minHp=0]           The damage can't take HP below this (Righteous Disdain's
  *                                           Shirahadori: "cannot reduce you past 1 hp", R35b).
  * @param {string}  [opts.minHpReason=""]    Shown in the chat note.
+ * @param {number}  [opts.extraArmor=0]      Taken off "as if by armor" on top of the actor's armor, only when
+ *                                           armor applies (Heartfire, R35c).
+ * @param {string}  [opts.extraArmorReason=""] Shown in the chat note.
  * @returns {Promise<object|null>} Breakdown, or null for no-ops/denied calls:
  *   { ok, relayed, isMob, applied, armorBlocked, vigorAbsorbed,
  *     hpBefore, hpAfter, hpLost, woundApplied, fallen, mob }
@@ -202,9 +205,12 @@ export async function applyDamageToActor(actor, amount, {
   ignoreVigor = false,
   minHp       = 0,
   minHpReason = "",
+  extraArmor  = 0,
+  extraArmorReason = "",
 } = {}) {
   amount = Math.max(0, Number(amount) || 0);
   minHp  = Math.max(0, Math.floor(Number(minHp) || 0));
+  extraArmor = applyArmor ? Math.max(0, Math.floor(Number(extraArmor) || 0)) : 0;
   if (!actor) return null;
 
   const zero = {
@@ -228,7 +234,7 @@ export async function applyDamageToActor(actor, amount, {
       type:      "applyDamage",
       actorUuid: actor.uuid,
       amount,
-      options:   { applyArmor, half, halfReason, ignoreVigor, minHp, minHpReason },
+      options:   { applyArmor, half, halfReason, ignoreVigor, minHp, minHpReason, extraArmor, extraArmorReason },
     });
     ui.notifications.info(`Damage sent to the GM to apply to "${actor.name}".`);
     return { ...zero, relayed: true };
@@ -265,7 +271,7 @@ export async function applyDamageToActor(actor, amount, {
   const cont = p.container ?? {};
 
   /* --- Armor, then halving (armor applies before the ½, per the manual) --- */
-  const armor        = applyArmor ? getActorArmor(actor) : 0;
+  const armor        = applyArmor ? getActorArmor(actor) + extraArmor : 0;
   const afterArmor   = Math.max(0, amount - armor);
   const armorBlocked = amount - afterArmor;
   // Halves round up (p.86: "Round up to the nearest whole number"; the worked
@@ -298,7 +304,7 @@ export async function applyDamageToActor(actor, amount, {
 
   if (chatConfirm) {
     const parts = [];
-    if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor`);
+    if (armorBlocked > 0)  parts.push(`${armorBlocked} blocked by Armor${extraArmor > 0 ? ` (incl. ${extraArmor} from ${escapeHTML(extraArmorReason || "an interrupt")})` : ""}`);
     if (half)              parts.push(halfReason ? `halved (${escapeHTML(halfReason)})` : "halved");
     if (vigorAbsorbed > 0) parts.push(`${vigorAbsorbed} absorbed by Vigor`);
     parts.push(`${hpBefore - hpAfter} → HP`);
