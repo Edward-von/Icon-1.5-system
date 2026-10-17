@@ -783,9 +783,11 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       e Instances va messo a mano.
 (FATTO il 17 ottobre 2026, versione 1.15.144: "up to a maximum of N times" letto come tetto, "up to ×N" sulla chip e
       Instances da 1 a N nel dialog del danno. Solo codice.)
-- [ ] **Emerso lavorando su R49 — la blast del Rampant Nail non segue lo spuntone spostato** (S): se lo spuntone si
+- [x] **Emerso lavorando su R49 — la blast del Rampant Nail non segue lo spuntone spostato** (S): se lo spuntone si
       sposta con Shift + frecce, la Small Blast del Talent I resta dove era e va ripiazzata a mano (il libro non
       prevede di spostare lo spuntone).
+(FATTO il 17 ottobre 2026, versione 1.15.182: la blast del Talent I si sposta con lo spuntone; Shift + freccia sulla
+      blast sposta lo spuntone)
 - [ ] **Emerso lavorando su R49 — Harvest Moon: "you can" e la plant che esplode** (S, da decidere): oggi esplodono
       tutte le plant attraversate, ma il libro dice "you can", quindi forse serve una casella per ogni plant; dopo
       l'esplosione la plant (che dà la sua blessing) resta sulla mappa e va tolta a mano, e anche la blessing data a
@@ -796,6 +798,7 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       `ability-statuses.mjs` `_dmgChunk` legge "N times" anche dentro "up to a maximum of six times" (Assault Wave del
       Master: "must save or take 3 piercing damage per minion…"), quindi probabilmente mostra ×6 invece di un tetto;
       da verificare sulla card e allineare a `maxTimes`.
+- nessuno
 
 ---
 

@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — La blast del Rampant Nail segue lo spuntone (17 ottobre 2026, versione 1.15.182)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Rampant Nail con Talent I: piazzare lo spuntone (Aura 2) e poi la blast "on nail". Mouse sull'aura fuori dalla
+      blast, Shift + freccia destra: spuntone e blast si spostano insieme di 1 casella.
+- [ ] Mouse sul centro (sopra la blast), Shift + freccia su: si spostano tutte e due, la blast resta centrata sullo
+      spuntone.
+- [ ] Spostare un personaggio dentro la blast dopo lo spostamento: compare l'avviso di terreno pericoloso nelle
+      caselle nuove, non in quelle vecchie.
+- [ ] Rimuovere lo spuntone: sparisce anche la blast, come prima.
+
 ## Emerso R36 — Bend Fate dalla card del gamble (17 ottobre 2026, versione 1.15.181)
 
 Setup: solo codice (F5 basta).

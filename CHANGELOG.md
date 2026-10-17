@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — La blast del Rampant Nail segue lo spuntone (versione 1.15.182)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Rampant Nail, blast che resta indietro**: se si spostava lo spuntone con Shift + frecce, la Small Blast pericolosa
+  del Talent I ("a small blast area centered on the nail is dangerous terrain", p.227) restava dov'era → lo
+  spostamento muoveva solo l'area su cui stava il mouse, e la blast è un'area a parte → ora, quando si sposta lo
+  spuntone, la blast collegata si sposta delle stesse caselle. Se si preme Shift + freccia sopra la blast, si sposta
+  lo spuntone e la blast va con lui. Solo codice.
+
 ## 17 ottobre 2026 — Bend Fate dalla card del gamble (versione 1.15.181)
 
 ### Round di debug del 15 ottobre, voce emersa su R36

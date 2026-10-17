@@ -146,6 +146,13 @@ const nameOf = (doc) => doc.flags[NS].abilityName || doc.flags[NS].area?.label |
  * @returns {Promise<number>} spaces moved
  */
 export async function moveArea(doc, dir, steps, { quiet = false, edge = false } = {}) {
+  // Rampant Nail Talent I (p.227): the dangerous blast is "centered on the nail" — moving the blast moves the
+  // spike it is on, and the spike carries the blast with it (below).
+  const spikeId = doc?.flags?.[NS]?.onSpike;
+  if (spikeId) {
+    const spike = doc.parent?.templates.get(spikeId);
+    if (spike) doc = spike;
+  }
   const scene = doc?.parent;
   const f = doc?.flags?.[NS];
   const d = DIRS[dir];
@@ -177,6 +184,15 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
   const vacated = vacates ? f.cells.filter(c => !now.has(cellKey(c))).map(c => ({ i: c.i, j: c.j })) : [];
   const size = scene.grid.size;
   await doc.update({ x: doc.x + d.dj * n * size, y: doc.y + d.di * n * size, [`flags.${NS}.cells`]: shifted(n) });
+  // The nail's blast stays centered on the moved spike (Rampant Nail Talent I, p.227).
+  const onIt = scene.templates.filter(t => t.flags?.[NS]?.onSpike === doc.id).map(t => ({
+    _id: t.id, x: t.x + d.dj * n * size, y: t.y + d.di * n * size,
+    [`flags.${NS}.cells`]: (t.flags[NS].cells ?? []).map(c => ({ i: c.i + d.di * n, j: c.j + d.dj * n })),
+  }));
+  if (onIt.length) {
+    try { await scene.updateEmbeddedDocuments("MeasuredTemplate", onIt); }
+    catch (err) { console.warn("[ICON | AreaMotion] could not move the blast on the nail", err); }
+  }
   const how = `${n} space${n > 1 ? "s" : ""} ${edge ? `toward ${d.edge}` : d.word}${n < steps ? ` (stopped at the edge of the map, ${steps} asked)` : ""}`;
   _log(`${name} moved ${how}`);
   const drag = !!rules?.motion?.drag && inside.length;
