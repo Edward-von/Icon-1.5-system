@@ -484,6 +484,9 @@ async function offerTerrainOnMove(td, prev, to) {
   for (const { doc, f, keys } of terrainOn(scene)) {
     const was = touches(before, keys), now = touches(after, keys);
     if (was === now) continue;
+    // R33b2: "Difficult Terrain - Costs +1 space of movement to exit" (p.89): a reminder, the movement isn't counted.
+    if (f.difficult && was && !now && !(f.foesOnly && !hostile))
+      ui.notifications.info(`${td.name} leaves difficult terrain (${f.label}): exiting costs +1 space of movement (p.89).`);
     if (f.dangerous && (!f.foesOnly || hostile) && !danger) danger = { f, entered: now, doc };
     if (f.onEnter && (now || f.enterExit) && (!f.enterFoes || hostile) && !(f.enterAllies && hostile)) reminders.push({ doc, f, entered: now });
     if (f.inside?.length) inside.push({ doc, f, entered: now });

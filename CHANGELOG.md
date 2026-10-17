@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il pit conta come un livello più in basso (versione 1.15.174)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Pit / difficult**: un personaggio in un pit valeva la stessa altezza degli altri → l'altezza veniva letta solo
+  dall'elevazione del token → nel dialog del tiro, chi sta a terra in un pit conta 1 più in basso ("Pits count as one
+  level lower of elevation", p.89) per boon e curse d'altezza, senza toccare il token; chi esce da terreno difficile
+  vede l'avviso "+1 space of movement" (p.89), che il sistema non conta. Solo codice.
+
 ## 17 ottobre 2026 — Polaris e Implode si attivano dalle card (versione 1.15.173)
 
 ### Round di debug del 15 ottobre, R33b2

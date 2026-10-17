@@ -89,7 +89,19 @@ function _targets() {
 
 /** Elevation difference vs targets → boons (higher) or curses (lower), p.89. */
 function _elevationMods(actor, targets) {
-  const readEl = (a, tok) => a?.getFlag?.("icon-system", "elevation") ?? tok?.document?.elevation ?? 0;
+  // "Pits count as one level lower of elevation than their base space" (p.89): a character on the ground in a pit
+  // space (terrain-spaces.mjs, `terrain.pit`) counts 1 lower; the token's own elevation is not changed (R33b2).
+  const inPit = (tok) => {
+    const td = tok?.document;
+    const scene = td?.parent;
+    if (!scene || (Number(td.elevation) || 0) > 0) return 0;
+    const half = scene.grid.size / 2;
+    const tl = scene.grid.getOffset({ x: td.x + half, y: td.y + half });
+    const keys = new Set();
+    for (let di = 0; di < Math.max(1, Math.round(td.height ?? 1)); di++) for (let dj = 0; dj < Math.max(1, Math.round(td.width ?? 1)); dj++) keys.add(`${tl.i + di},${tl.j + dj}`);
+    return scene.templates.some(t => t.flags?.["icon-system"]?.terrain?.pit && (t.flags["icon-system"].cells ?? []).some(c => keys.has(`${c.i},${c.j}`))) ? 1 : 0;
+  };
+  const readEl = (a, tok) => (Number(a?.getFlag?.("icon-system", "elevation") ?? tok?.document?.elevation ?? 0) || 0) - inPit(tok);
   const sourceToken = canvas?.tokens?.controlled?.find(t => t.actor?.id === actor?.id) ?? actor?.getActiveTokens?.(false, false)?.[0] ?? null;
   if (!targets.length) return { boons: 0, curses: 0, note: "" };
   const srcEl = readEl(actor, sourceToken);

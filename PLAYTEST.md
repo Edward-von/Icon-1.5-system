@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Il pit conta come un livello più in basso (17 ottobre 2026, versione 1.15.174)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un PG attacca un foe in un pit, alla stessa elevazione: il dialog mostra "Height advantage Δ1".
+- [ ] Il PG nel pit attacca un foe fuori: "+1 curse".
+- [ ] Un token che vola (elevazione 1 o più) sopra un pit non perde il livello.
+- [ ] Uscire da una casella Difficult mostra l'avviso.
+
 ## R33b2 — Polaris e Implode si attivano dalle card (17 ottobre 2026, versione 1.15.173)
 
 Setup: solo codice (F5 basta).
