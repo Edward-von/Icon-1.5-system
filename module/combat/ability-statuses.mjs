@@ -93,6 +93,8 @@ const GRANT_RE  = new RegExp(`\\b(${GRANT_ALT})\\b`, "gi");
 const GRANT_BY_WORD = (w) => GRANTABLE.find(s => new RegExp(`^(?:${s.re})$`, "i").test(w));
 /** Grants that are also attack tags (p.117): a subjectless "Gains true strike" is the ability's, not the user's. */
 const ABILITY_TAG_GRANTS = new Set(["true-strike", "unerring", "pierce"]);
+/** "… gain True Strike on that ability" (Blessing of Faith): the tag goes to one ability, not to the character. */
+const TAG_ON_ABILITY_RE = /^\s*(?:on|for|to)\s+(?:that|this|the|its|their)\s+(?:ability|attack)\b/i;
 /** A positive word used as an adjective / part of another term ("divine damage", "flying movement", "counter damage"). */
 const GRANT_ADJ_AFTER_RE = /^\s+(?:damage|attacks?|effects?|movement|ability|abilities|foes?|characters?|allies|ally|summons?|units?|creatures?|targets?)\b/i;
 /** Verbs that grant a status to the subject before them. */
@@ -479,6 +481,15 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         // "Vigilance +1" is a number of charges (Vigilance X, p.94), not the "+" of an ongoing status.
         const vigAmount = def.id === "vigilance" ? Number(/^\s*\+(\d)/.exec(after)?.[1] ?? /\+(\d)\s*$/.exec(sentence.slice(0, start))?.[1] ?? 0) : 0;
         if (GRANT_ADJ_AFTER_RE.test(after) || /^\s*:/.test(after) || (/^\s*\+/.test(after) && !vigAmount)) continue;
+        // "gain True Strike on that ability" (Blessing of Faith, p.176): the attack tag of one
+        // ability (p.117), not a lasting status — a reminder chip, ticked in that attack's dialog.
+        if (ABILITY_TAG_GRANTS.has(def.id) && TAG_ON_ABILITY_RE.test(after)) {
+          const label = `${def.label} on that ability (tick it in its attack dialog)`;
+          if (!blockEntries.some(e => e.kind === "note" && e.label === label))
+            blockEntries.push({ id: "", label, ongoing: false, when: "always", section, key: outcomeKey(section), sentence: shown[si] ?? sentence,
+              saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "note", _sentenceIndex: si, end });
+          continue;
+        }
         const seg = segOf(start);
         const before = sentence.slice(seg.start, start);
         const beforeLower = before.toLowerCase();

@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Blessing of Faith: True Strike solo su quell'abilità, niente status (versione 1.15.221)
+
+### Round di debug del 15 ottobre, voce emersa su R1
+
+- **Blessing of Faith e True Strike**: la card proponeva agli alleati un pulsante "Gain True Strike" come status → il
+  parser leggeva "gain True Strike" come uno status che dura, ma p.176 dice "gain True Strike on that ability" e True
+  Strike è il tag di un attacco (p.117) → quando un tag (True Strike, Unerring, Pierce) è seguito da "on that
+  ability/attack" diventa un promemoria "True Strike on that ability (tick it in its attack dialog)" invece di un
+  pulsante; la card del tratto non lo propone più. Solo codice.
+
 ## 17 ottobre 2026 — Burial Fist: il round 4 vale anche per il bonus damage (versione 1.15.220)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

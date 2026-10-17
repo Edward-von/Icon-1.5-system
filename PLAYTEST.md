@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R1 — Blessing of Faith: True Strike solo su quell'abilità, niente status (17 ottobre 2026, versione 1.15.221)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Manda in chat il tratto Blessing of Faith del Chanter: non c'è più il pulsante "Gain True Strike".
+- [ ] Attacca con un'abilità e spunta a mano "True Strike" nel dialogo d'attacco: Dodge viene ignorato come prima.
+- [ ] Un'abilità con "Allies in range 2 gain true strike until…" mostra ancora il pulsante Gain True Strike.
+
 ## Emerso R16 — Burial Fist: il round 4 vale anche per il bonus damage (17 ottobre 2026, versione 1.15.220)
 
 Setup: solo codice (F5 basta).

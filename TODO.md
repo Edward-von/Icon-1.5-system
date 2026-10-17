@@ -1451,9 +1451,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.133: correzione nel codice, nessun pack toccato; scheda di foe / legend e
       card in chat preparano le regole con `summonRulesHTML`, che mette ogni "•" su una riga sua; cambiano 5 regole su
       144, parole invariate, vale anche per i foe già importati. Solo codice.)
-- [ ] **Emerso lavorando su R1 — Blessing of Faith "gain True Strike on that ability"** (S, da decidere): Blessing of
+- [x] **Emerso lavorando su R1 — Blessing of Faith "gain True Strike on that ability"** (S, da decidere): Blessing of
       Faith (e il tratto del Chanter) propone ancora "Gain True Strike" agli alleati come status, ma anche lì è il tag
       di una sola abilità. Domanda per Edoardo: lasciarlo (lo status fa ignorare Dodge all'attacco) o toglierlo?
+(FATTO il 17 ottobre 2026, versione 1.15.221: "gain True Strike on that ability" ora è un promemoria e non uno status;
+      il giocatore spunta True Strike nel dialogo d'attacco di quella abilità.)
 - [x] **Emerso lavorando su R12 — elenchi "•" nella scheda del Summon trascinato da un foe** (S): trascinando il chip
       sulla mappa, `foe-summons.mjs` copia `sm.rules` in `system.summonEffect` dell'attore Summon e `SummonSheet` lo
       passa a `enrichHTML` così com'è, quindi lì l'elenco resta su una riga; usare `summonRulesHTML` anche per
@@ -1694,6 +1696,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
       dice ancora "they go off before the attack roll".
+- nessuno
 - nessuno
 - nessuno
 
