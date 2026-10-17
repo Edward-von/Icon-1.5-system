@@ -430,7 +430,9 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
   }
   // "Until the start of your next turn" (PHANTOM BLADE): used, it outlasts the turn (armedInfusion).
   const lasts = /\buntil the start of your next turn\b/i.test(String(infusion.text ?? "")) ? "nextTurn" : "";
-  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice, lasts, used: null };
+  // furnaceAt: the Inner Furnace round this arm wrote, so cancelling frees only that one.
+  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice,
+    furnaceAt: sacrifice ? (update[`flags.${NS}.innerFurnace`] ?? null) : null, lasts, used: null };
   await actor.update(update);
   _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${paid} Aether (${pool} → ${pool - paid})${notes.length ? ` [${notes.join("; ")}]` : ""}`);
 
@@ -524,7 +526,12 @@ export async function cancelInfusion(actor) {
   if (armed.furnace) {
     const hp = actor.system?.combat?.hp ?? {};
     update["system.combat.hp.value"] = Math.min(Number(hp.max) || Infinity, (Number(hp.value) || 0) + (Number(armed.hpLost) || 0));
-    update[`flags.${NS}.innerFurnace`] = null;
+    // Only while the round's use is still this arm's: a later Inner Furnace
+    // (another round, a standalone version) keeps "once a round" spent (p.208).
+    const now = actor.getFlag?.(NS, "innerFurnace") ?? null, at = armed.furnaceAt;
+    const mine = at === undefined || (!now && !at)
+      || (!!now && !!at && now.combatId === at.combatId && Number(now.round) === Number(at.round));
+    if (mine) update[`flags.${NS}.innerFurnace`] = null;
   }
   await actor.update(update);
   _log(`cancelled "${armed.label}" — ${armed.spent} Aether returned${armed.furnace ? `, ${armed.hpLost} hp back (Inner Furnace)` : ""}`);

@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R38b — Annullare un'infusione non sblocca più Inner Furnace due volte (17 ottobre 2026, versione 1.15.113)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Wright con Inner Furnace: nel round 1 armare un'infusione pagandola con Inner Furnace e non usarla; nel round 2
+      usare un'altra infusione con Inner Furnace (es. STORMLASH); poi annullare quella del round 1: tornano Aether e
+      hp, ma una nuova infusione nel round 2 non offre più Inner Furnace.
+- [ ] Armare con Inner Furnace e annullare nello stesso round, senza altri usi: tornano Aether e hp, e Inner Furnace
+      si può usare di nuovo in quel round (come prima).
+- [ ] Fuori combattimento: armare con Inner Furnace e annullare: hp e Aether tornano, Inner Furnace resta disponibile.
+
 ## Emerso R38b — PHANTOM BLADE resta attiva fino al tuo turno successivo (17 ottobre 2026, versione 1.15.112)
 
 Setup: solo codice (F5 basta).

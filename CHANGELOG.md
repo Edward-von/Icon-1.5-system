@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Annullare un'infusione non sblocca più Inner Furnace due volte (versione 1.15.113)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **Inner Furnace usabile due volte nello stesso round**: un'infusione armata con Inner Furnace nel round 1 e non
+  usata, annullata nel round 2 dopo un altro Inner Furnace (es. STORMLASH), permetteva un altro sacrificio nel round
+  2, contro "Once a round" (p.208) → l'annullamento azzerava sempre il segno "Inner Furnace usato", anche quando nel
+  frattempo lo aveva riscritto un altro uso → all'armo il sistema ricorda combattimento e round dell'Inner Furnace di
+  quell'infusione (`furnaceAt`), e l'annullamento lo azzera solo se il segno è ancora quello. I punti ferita
+  sacrificati tornano indietro comunque. Solo codice.
+
 ## 17 ottobre 2026 — PHANTOM BLADE resta attiva fino al tuo turno successivo (versione 1.15.112)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b

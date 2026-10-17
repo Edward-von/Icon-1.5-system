@@ -675,12 +675,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.112: all'armo si segna se la versione dura "until the start of your next
       turn"; `armedInfusion` la tiene armata dopo l'uso, nello stesso combattimento, fino all'inizio del turno
       successivo del personaggio. Solo codice.)
-- [ ] **Emerso lavorando su R38b — annullare un'infusione armata in un round precedente sblocca Inner Furnace una
+- [x] **Emerso lavorando su R38b — annullare un'infusione armata in un round precedente sblocca Inner Furnace una
       seconda volta** (S, dalla revisione): `cancelInfusion` (`helpers/infuse.mjs` ~467) azzera sempre
       `flags.icon-system.innerFurnace`, anche quando il flag è stato riscritto da un altro uso nel round corrente (es.
       STORMLASH standalone): armata con Inner Furnace nel round 1 e non usata, annullata nel round 2 dopo un altro
       Inner Furnace → si può usare una seconda volta nel round 2 ("Once a round", p.208). Azzerare il flag solo se è
       ancora quello scritto da questo armo (stesso combat / round).
+(FATTO il 17 ottobre 2026, versione 1.15.113: all'armo il flag infused ricorda in `furnaceAt` combattimento e round
+      dell'Inner Furnace pagato; `cancelInfusion` azzera `flags.icon-system.innerFurnace` solo se è ancora quello.
+      Solo codice.)
 - [ ] **Emerso lavorando su R40 — chip Mark nel combo Succubus** (S): Succubus dice "Instead of the mark", ma in Other
       resta anche la chip "Mark" della base; andrebbe nascosta con il combo in uso.
 - [ ] **Emerso lavorando su R40 — danno dei blocchi Effect di foe e legend** (M): azioni di foe e legend come Kelpie
