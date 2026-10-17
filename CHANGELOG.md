@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Show in Chat delle azioni foe / legend divide le righe di un'area (versione 1.15.88)
+
+### Round di debug del 16 ottobre, voce emersa su R41
+
+- **Show in Chat di un'azione d'attacco foe / legend con un'area**: con l'area dell'azione ancora sulla mappa e più
+  token bersagliati, la card mostrava a tutti tutti i bottoni Inflict, sia la parte d'attacco sia quella d'area → le
+  schede foe e legend non passavano a `statusBlockHtml` nessun bersaglio d'attacco (la scheda PG lo fa dalla 1.15.86)
+  → ora `#actionStatusHtml` cerca l'area dell'azione sulla mappa (chiave `action:<nome>`): il bersaglio d'attacco è il
+  token al centro di un Blast / Burst (p.97: "The origin space and the attack space (if there is one) is the central
+  space"), altrimenti quello scelto nel dialog d'attacco; lui riceve la parte d'attacco e gli altri solo quella
+  d'area. Se il bersaglio non si conosce restano tutti i bottoni con le etichette "attack target only". Tratti,
+  interrupt e round action non cambiano. Solo codice.
+
 ## 17 ottobre 2026 — Helix Heel: tornano le tre parole del libro (versione 1.15.87)
 
 ### Round di debug del 16 ottobre, voce emersa su R55

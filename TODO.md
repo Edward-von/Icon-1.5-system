@@ -482,10 +482,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       servirebbe: trovare i pit dentro l'area appena piazzata, una Medium Blast centrata su ognuno e bersagliare chi
       sta in almeno una delle aree. Oggi `centreOf` in `area-templates.mjs` lascia apposta a mano le aree "centered on
       them" dopo pits/plants/nails/clouds.
-- [ ] **Emerso lavorando su R41 — Show in Chat delle azioni foe / legend non divide le righe di un'area** (S):
+- [x] **Emerso lavorando su R41 — Show in Chat delle azioni foe / legend non divide le righe di un'area** (S):
       `FoeSheet.#statusHtmlFor` e `LegendSheet` (~riga 380) chiamano `statusBlockHtml` senza `attackTargetId`; con
       un'area dell'azione ancora sulla mappa (abilityKey `action:<nome>`) si potrebbe usare lo stesso centro del Blast
       / Burst (`attackSpaceTokenId`) come sulla scheda PG.
+(FATTO il 17 ottobre 2026, versione 1.15.88: Show in Chat delle azioni d'attacco foe / legend usa come bersaglio
+      d'attacco il token al centro dell'area Blast / Burst ancora sulla mappa, altrimenti quello scelto nel dialog
+      d'attacco, e divide le righe Inflict come sulla scheda PG. Solo codice.)
+- [ ] **Emerso lavorando su R41 — bersaglio d'attacco ricordato per nome dell'azione** (S): `rememberedAttackTarget`
+      lega il bersaglio ad attore + nome dell'azione, non all'area: se l'area viene ripiazzata a mano dopo un vecchio
+      tiro, Show in Chat (PG, foe e legend) può usare il bersaglio scelto per l'area precedente, se quel token è
+      ancora tra i bersagli. Si potrebbe azzerare la scelta quando si piazza una nuova area.
 
 ---
 

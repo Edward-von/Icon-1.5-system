@@ -7,14 +7,15 @@
  * drag-drop from the "Foe Abilities" compendium.
  */
 import { combatRoll } from "../../dice/rolls.mjs";
-import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
+import { promptAttackMods, promptDamageMods, rememberedAttackTarget } from "../../apps/roll-dialogs.mjs";
 import { currentTargets } from "../../combat/defenses.mjs";
 import { abilityCostLabel } from "../../helpers/enrich.mjs";
-import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea, areaLasts } from "../../canvas/area-templates.mjs";
+import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea, areaLasts,
+         findAreaTemplates, attackSpaceTokenId, retargetFromTemplate } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
-import { npcActionStatusEntries, statusBlockHtml } from "../../combat/ability-statuses.mjs";
+import { npcActionStatusEntries, statusBlockHtml, captureTargets } from "../../combat/ability-statuses.mjs";
 import { getActorStatusMods, groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
@@ -314,8 +315,26 @@ export class FoeSheet extends BaseActorSheet {
   }
 
   /** "Inflict" block for a foe action / interrupt / round action card (statuses read from its text). */
-  #statusHtmlFor(action, name) {
-    return statusBlockHtml(npcActionStatusEntries(action, { sourceName: this.document.name }), { source: this.document, abilityName: name });
+  #statusHtmlFor(action, name, { targets = null, attackTargetId = "" } = {}) {
+    return statusBlockHtml(npcActionStatusEntries(action, { sourceName: this.document.name }), { source: this.document, abilityName: name, targets, attackTargetId });
+  }
+
+  /**
+   * Show in Chat of an attack action whose area is still on the map: the token
+   * in its attack space (the centre of a Blast / Burst, p.97), else the attack
+   * target picked in the attack dialog, gets the attack part and the others the
+   * area part, as on the attack card. Nothing asked here: unknown = all buttons.
+   */
+  async #actionStatusHtml(action) {
+    const targets = captureTargets();
+    let attackTargetId = "";
+    if (isFoeActionAttack(action) && targets.length > 1) {
+      const tpl = findAreaTemplates({ actorId: this.document.id, abilityKey: `action:${action.name}` })[0];
+      if (tpl) attackTargetId = attackSpaceTokenId(await retargetFromTemplate(tpl, { retarget: false }))
+                             || rememberedAttackTarget(this.document, action);
+      if (!targets.some(t => t.tokenId === attackTargetId)) attackTargetId = "";
+    }
+    return this.#statusHtmlFor(action, action.name, { targets, attackTargetId });
   }
 
   /** Mark the targeted token with this action (marks.mjs); exactly one target. */
@@ -386,7 +405,7 @@ export class FoeSheet extends BaseActorSheet {
     if (!action) return;
     _log(`foeActionShowInChat — actor: "${actor.name}" | action[${idx}]: "${action.name}"`);
     await noteComboUse(actor, action);
-    await postNpcActionCard(actor, action, { statusHtml: this.#statusHtmlFor(action, action.name) });
+    await postNpcActionCard(actor, action, { statusHtml: await this.#actionStatusHtml(action) });
   }
 
   /** Post a foe round action (name, round, effect) to chat. */

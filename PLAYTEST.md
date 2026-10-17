@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R41 — Show in Chat delle azioni foe / legend divide le righe di un'area (17 ottobre 2026, versione 1.15.88)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Foe con un'azione d'attacco Blast che infligge uno status in parte sul colpo e in parte sull'area. Piazza il
+      Blast con il token A al centro e B, C nell'area, bersaglia tutti e tre e premi Show in Chat: A è "(attack
+      target)" con i bottoni della parte d'attacco; B e C sono "(area)" con solo quelli dell'area.
+- [ ] Stessa prova con una legend: stesso risultato.
+- [ ] Azione Line / Arc: tira l'attacco e scegli B come bersaglio nel dialog, poi Show in Chat con l'area ancora sulla
+      mappa: B è il bersaglio d'attacco, gli altri sono area.
+- [ ] Line / Arc piazzata a mano (bottone area, senza tirare l'attacco), poi Show in Chat: nessuna divisione, tutti i
+      bottoni con le etichette "attack target only".
+- [ ] Con l'area cancellata dalla mappa, Show in Chat non divide nulla, come prima.
+- [ ] Show in Chat di tratti, interrupt e round action del foe / legend: card come prima.
+- [ ] Un solo token bersagliato: card come prima, senza etichette "(attack target)" / "(area)".
+
 ## Emerso R55 — Helix Heel: tornano le tre parole del libro (17 ottobre 2026, versione 1.15.87)
 
 Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 32 (parte da sola al caricamento del mondo, da GM).
