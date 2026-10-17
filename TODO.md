@@ -1274,6 +1274,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Polaris sul personaggio è in R33b2 (1.15.173).)
       Domanda per Edoardo: Amico, va bene una sola card Detonate per volta in chat (l'ultima), o meglio nessuna card
       per turno e un solo bottone Detonate sulla card del piazzamento?
+      Risposta di Edoardo (17 ottobre 2026): Amico resta in chat, una card Detonate per volta (come già fatto).
 - [x] **R34. Open the Gates riformattata** (S)
       Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
       versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed. Il manuale è ambiguo: Edoardo
@@ -1668,11 +1669,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - nessuno
 - nessuno
-- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent II, bonus damage sui danni fissi** (S, da decidere): il "bonus
+- [x] **Emerso lavorando su R33b2 — Deepwrath Talent II, bonus damage sui danni fissi** (S, da decidere): il "bonus
       damage from all sources" (p.235) si aggiunge solo nella finestra del danno. Il libro dice che "bonus damage"
       vuol dire tirare un dado in più e tenere il più alto (p.95), ma per i danni fissi senza dado (terreno
       pericoloso, bottoni "2 damage" delle card) non dice cosa succede. Domanda per Edoardo: li lasciamo senza bonus,
       come oggi, o vuoi una regola tua (per esempio +1 danno, o solo un promemoria nella card)?
+      (CHIUSO il 17 ottobre 2026, risposta di Edoardo: si lascia come oggi, i danni fissi senza dado non ricevono il bonus.)
 - nessuno
 - [ ] **Emerso lavorando su R16 — Burial Fist: il bonus damage vale sempre?** (S, da decidere): "Any version of this
       ability deals bonus damage and always triggers exceed effects at round 4 or later" (p.194). Oggi il dado bonus
@@ -2077,7 +2079,8 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 
 ### Bug di Maar del 12 ottobre 2026 — numeri non modificabili nelle finestre PopOut! — FATTO il 12 ottobre 2026 (versione 1.17.7)
 - [x] I tasti premuti nei campi delle finestre staccate non arrivano più alle scorciatoie di Foundry (1–0 = macro).
-- [ ] **Da segnalare agli autori di PopOut!** (fuori dal nostro codice): il bug è loro, valeva per qualunque sistema.
+- [x] **Da segnalare agli autori di PopOut!** (fuori dal nostro codice): il bug è loro, valeva per qualunque sistema.
+      (ARCHIVIATO il 17 ottobre 2026: a Edoardo PopOut! non interessa.)
 
 ### Domanda di Maar del 12 ottobre 2026 — slow turn e NPC che aprono il round — FATTO il 12 ottobre 2026 (versione 1.17.8)
 - [x] È la regola di p.87 (apre il lato opposto a chi ha chiuso); aggiunta la spiegazione all'indicatore del tracker.
@@ -2091,12 +2094,13 @@ scelta di Edoardo** (9 ottobre 2026). Il resto, diviso in sessioni:
 - [x] Status del save fallito e del save riuscito nello stesso blocco → un solo bottone, un solo tiro.
 
 ### Bug di Maar del 12 ottobre 2026 — tutto doppio con il modulo PopOut! — APERTO (non riprodotto)
-- [ ] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
+- [x] Con una finestra staccata con PopOut! l'automazione di fine turno (status, regeneration…) e altri eventi
       succedono due volte. Letto il sorgente di PopOut!: non carica una seconda copia del sistema (toglie dalla
       finestra nuova tutti gli script tranne poche librerie), non tocca hook né socket e non ri-renderizza le
       finestre. Il nostro fine turno gira solo sul GM attivo. Da chiedere a Maar: quale finestra era staccata, chi
       (GM o giocatore), se c'era un secondo GM o lo stesso GM collegato due volte (stesso sintomo del bug delle 1.16.5,
       che Maar non ha ancora: ha la 1.14.1). Poi riprodurre in locale installando PopOut!.
+      (ARCHIVIATO il 17 ottobre 2026: a Edoardo PopOut! non interessa.)
 
 ### Sessione C — Trofei (L, dati + scheda) — FATTA il 12 ottobre 2026 (versione 1.18.0)
 - [x] **Compendio Trophies**: General Dungeon Trophies (tabella d20, p.243) e trofei di fazione/legend (manuale
