@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Segno sul personaggio: il token giusto su più scene (versione 1.15.155)
+
+### Round di debug del 15 ottobre, R33d2
+
+- **Linked su più scene**: un personaggio collegato con token su più scene riceveva lo spazio sul primo token trovato
+  → il mark non sapeva quale token era stato targettato → il mark ora si ricorda il token targettato (anche quando
+  passa dal GM), e lo spazio e l'aura "while marked" (Fulminate) vanno su quello. I mark vecchi, senza questo dato,
+  cercano come prima. Solo codice.
+
 ## 17 ottobre 2026 — Segnare di nuovo: si sceglie quale mark resta (versione 1.15.154)
 
 ### Round di debug del 15 ottobre, R33d2

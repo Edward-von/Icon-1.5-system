@@ -56,9 +56,14 @@ function effectOf(tpl) {
   return marksOn(actor).find(m => m.sourceActorId === f.creatorId && m.abilityKey === f.itemId) ?? null;
 }
 
-/** The token an actor's effect is on: its own token for an unlinked one, else one on a scene. */
-function tokenOfActor(actor) {
+/**
+ * The token an actor's effect is on: its own token for an unlinked one, else the token the marker targeted
+ * (`tokenUuid`, mark.targetTokenUuid: a linked character on several scenes), else one on a scene.
+ */
+function tokenOfActor(actor, tokenUuid = null) {
   if (actor?.isToken) return actor.token ?? null;
+  const picked = tokenUuid ? fromUuidSync(tokenUuid) : null;
+  if (picked?.actorId === actor?.id && picked?.parent) return picked;
   return canvas?.scene?.tokens?.find(t => t.actorId === actor?.id)
       ?? game.scenes?.active?.tokens?.find(t => t.actorId === actor?.id)
       ?? game.scenes?.find(s => s.tokens.some(t => t.actorId === actor?.id))?.tokens?.find(t => t.actorId === actor?.id)
@@ -134,7 +139,7 @@ async function onMarkCreated(effect) {
   const item = creator?.items?.get(mark.abilityKey);
   const sp = item ? characterSpecOf(item) : null;
   if (!sp) return;
-  const td = tokenOfActor(effect.parent);
+  const td = tokenOfActor(effect.parent, mark.targetTokenUuid);
   const scene = td?.parent;
   if (!scene) { _log(`no token for ${effect.parent?.name}: no space on the map`); return; }
   if (followMarks(scene).some(t => t.flags[NS].followTokenId === td.id && terrainFlag(t).creatorId === creator.id && terrainFlag(t).itemId === item.id)) return;
@@ -364,7 +369,8 @@ export async function whileMarkedAuraSize(source, target, abilityKey) {
   const item = source?.items?.get(abilityKey);
   const aura = await whileMarkedAuraOf(item);
   if (!aura || aura.sizes.length < 2) return null;
-  const placed = (tokenOfActor(target)?.parent?.templates ?? []).some(t => {
+  const targeted = Array.from(game.user?.targets ?? []).find(t => t.actor?.uuid === target.uuid)?.document?.uuid ?? null;
+  const placed = (tokenOfActor(target, targeted)?.parent?.templates ?? []).some(t => {
     const w = t.flags?.[NS]?.whileMarked;
     return w && !w.effectUuid && w.sourceActorId === source.id && w.abilityKey === abilityKey && w.targetActorUuid === target.uuid;
   });
@@ -387,7 +393,7 @@ async function placeWhileMarkedAura(effect, mark) {
   const item = creator?.items?.get(mark.abilityKey);
   const aura = await whileMarkedAuraOf(item);
   if (!aura) return;
-  const td = tokenOfActor(effect.parent);
+  const td = tokenOfActor(effect.parent, mark.targetTokenUuid);
   const scene = td?.parent;
   if (!scene) { _log(`${item.name}: no token for ${effect.parent?.name}, no aura on the map`); return; }
   const { placeAuraOnToken } = await import("./area-templates.mjs");

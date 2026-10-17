@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33d2 — Segno sul personaggio: il token giusto su più scene (17 ottobre 2026, versione 1.15.155)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG linked con un token sulla scena A e uno sulla B: segnato dalla B, lo spazio va sulla B.
+- [ ] Fulminate su quel PG dalla scena B: l'aura va attorno al token della B.
+
 ## R33d2 — Segnare di nuovo: si sceglie quale mark resta (17 ottobre 2026, versione 1.15.154)
 
 Setup: solo codice (F5 basta).

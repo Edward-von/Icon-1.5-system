@@ -298,8 +298,11 @@ export function marksBy(actorId, abilityKey = null) {
  *                                   leaves the marker's marks on the target alone
  * @param {number} [opts.auraSize]   the "while marked" aura size the marker chose before a relay (follow-marks.mjs)
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null, replaceChecked = false }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null, replaceChecked = false, targetTokenUuid = null }) {
   if (!source || !target) return null;
+  // The token the marker targeted: a linked character with tokens on several scenes has its mark's space and aura
+  // put on that one (follow-marks.mjs), not on the first token found.
+  targetTokenUuid ??= Array.from(game.user?.targets ?? []).find(t => t.actor?.uuid === target.uuid)?.document?.uuid ?? null;
   // p.95 "a character can only mark another character with one mark at a time, choosing which gets replaced if
   // they mark that character again": the marker picks, on their own client (a relayed mark carries the answer).
   if (!track && !replaceChecked) {
@@ -313,7 +316,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
       const { whileMarkedAuraSize } = await import("../canvas/follow-marks.mjs");
       auraSize = await whileMarkedAuraSize(source, target, abilityKey);
     }
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize, replaceChecked });
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize, replaceChecked, targetTokenUuid });
     ui.notifications.info(`${track ? "Tracker" : "Mark"} sent to the GM to place on "${target.name}".`);
     return null;
   }
@@ -353,6 +356,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
       sourceActorId: source.id, sourceActorUuid: source.uuid, sourceName: source.name,
       abilityKey, abilityName, text: plain, stacks: 1, ...(track ? { tracked: true } : {}),
       ...(Number(auraSize) > 0 ? { auraSize: Number(auraSize) } : {}),
+      ...(targetTokenUuid ? { targetTokenUuid } : {}),
     } } },
   }]);
   _log(`${source.name} ${track ? "tracks" : "marks"} ${target.name} with ${abilityName}`);
@@ -446,7 +450,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null, replaceChecked: !!data.replaceChecked });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null, replaceChecked: !!data.replaceChecked, targetTokenUuid: data.targetTokenUuid ?? null });
       break;
     }
     case "removeMark":
