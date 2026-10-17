@@ -693,9 +693,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       5 *al posto* dell'area normale (p.227), ma il codice aggiunge l'Arc 5 come variante "Mastery" accanto alla Line
       3, quindi probabilmente chiede ancora di scegliere tra le due invece di usare sempre l'Arc 5 (`_areaVariantsFor`
       / `areaVariants`).
-- [ ] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
+- [x] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
       se il giocatore marca un personaggio che non è suo, il mark lo crea il GM, quindi la finestra "Aura 2 / Aura 3"
       compare al GM e non al giocatore; portare la domanda al client di chi ha marcato prima di passare il mark al GM.
+(FATTO il 17 ottobre 2026, versione 1.15.110: quando il mark va al GM, la misura dell'aura la chiede `applyMark` sul
+      client di chi marca, prima di inoltrarlo; il GM la riceve con la richiesta e la usa senza chiedere. Solo
+      codice.)
 - [x] **Emerso lavorando su R37 — il divine non salta il vigor col bottone Apply delle card** (S): p.104 dice che il
       divine "bypasses vigor"; il nuovo "% Max HP" lo salta, ma il bottone Apply delle card di danno (`icon.mjs`,
       gestione di `data-divine`) non passa `ignoreVigor` per il divine, quindi lì il vigor assorbe ancora il danno

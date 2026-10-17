@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R48 — La misura dell'aura di Fulminate la sceglie chi marca (17 ottobre 2026, versione 1.15.110)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Giocatore con Fulminate e Talent I scelto, GM connesso: marcare un foe del GM. La finestra "Aura 2 / Aura 3"
+      compare al giocatore e non al GM; scegliendo Aura 3, attorno al foe compare un'aura 3 che lo segue.
+- [ ] Stesso caso, chiudendo la finestra senza scegliere: compare un'aura 2.
+- [ ] Fulminate senza Talent I, foe del GM: nessuna domanda a nessuno, compare l'aura 2.
+- [ ] Il giocatore marca un personaggio suo, con Talent I: la domanda compare a lui, come prima.
+- [ ] Il GM marca con un Fulminate con Talent I: la domanda compare al GM, come prima.
+- [ ] Aura messa prima col bottone area, poi mark su un foe del GM: nessuna domanda e nessuna seconda aura.
+- [ ] Togliere il mark (la × sul chip): sparisce anche l'aura.
+
 ## Emerso R37 — Il danno divine salta il vigor anche dalle card (17 ottobre 2026, versione 1.15.109)
 
 Setup: solo codice (F5 basta).

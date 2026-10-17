@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — La misura dell'aura di Fulminate la sceglie chi marca (versione 1.15.110)
+
+### Round di debug del 16 ottobre, voce emersa su R48
+
+- **Talent I di Fulminate con un mark passato al GM**: se il giocatore marcava un personaggio che non è suo, la
+  finestra "Aura 2 / Aura 3" compariva al GM invece che al giocatore → il mark lo crea il GM (via socket), e la
+  domanda partiva sul client di chi crea il mark → ora la domanda compare sul client del giocatore prima di inoltrare
+  il mark; la misura scelta viaggia con la richiesta e resta scritta sul mark, così il GM mette l'aura di quella
+  misura senza chiedere niente (p.226). Solo codice.
+
 ## 17 ottobre 2026 — Il danno divine salta il vigor anche dalle card (versione 1.15.109)
 
 ### Round di debug del 16 ottobre, voce emersa su R37

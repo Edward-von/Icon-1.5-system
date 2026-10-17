@@ -224,25 +224,78 @@ async function onDefeated(actor) {
 }
 
 /**
+ * The aura "while marked" an ability gives (Fulminate p.226), or null: the sizes it can have (the base one first,
+ * then the ones an unlocked text offers, Talent I "increase the area to 3") and those texts.
+ * @param {Item} item
+ * @returns {Promise<{sizes: number[], extra: string[]}|null>}
+ */
+async function whileMarkedAuraOf(item) {
+  const s = item?.system;
+  if (!s) return null;
+  const own = [s.description, s.effect, s.areaEffect, s.hitEffect].filter(v => typeof v === "string" && v).join(" ");
+  const m = /\b(?:that|the|target|marked|chosen)\s+character\s+(?:gains?|has)\s+(?:an?\s+)?aura\s+(\d+)\b[^.]*\bwhile marked\b/i.exec(plainText(own));
+  if (!m) return null;
+  const { aurasInText } = await import("./area-templates.mjs");
+  // The other sizes an unlocked text offers: Talent I "increase the area to 3"; the mastery, if it says one.
+  const extra = [
+    (s.talentSelected ?? 0) === 1 ? s.talent1 : "", (s.talentSelected ?? 0) === 2 ? s.talent2 : "", s.masteryUnlocked ? s.mastery : "",
+  ].filter(t => typeof t === "string" && t.trim());
+  const sizes = [...new Set([Number(m[1]), ...extra.flatMap(t => aurasInText(t, { resize: true }).map(a => a.size))])].filter(n => n > 0);
+  return sizes.length ? { sizes, extra } : null;
+}
+
+/** "Aura 2 / Aura 3": the size, asked only when there is more than one; the first one if the dialog is closed. */
+async function askAuraSize(item, targetName, { sizes, extra }) {
+  if (sizes.length < 2) return sizes[0];
+  try {
+    return await foundry.applications.api.DialogV2.wait({
+      window: { title: `${item.name} — aura` },
+      content: `<p><strong>${esc(targetName)}</strong> is marked and gains an aura. Which size?</p>${extra.map(t => `<p><small>${esc(plainText(t))}</small></p>`).join("")}`,
+      buttons: sizes.map((n, i) => ({ action: String(n), label: `Aura ${n}`, default: i === 0, callback: () => n })),
+      rejectClose: false,
+    }) ?? sizes[0];
+  } catch { return sizes[0]; }
+}
+
+/**
+ * Before a mark is relayed to the GM (marks.mjs applyMark, the marker doesn't own the target): the aura size the
+ * marker picks on their own client, so the GM who creates the mark isn't asked. Null when the ability has no aura
+ * "while marked", or only one size, or the aura is already around that character (placed with the area button).
+ * @param {Actor} source  the marker
+ * @param {Actor} target  the marked character
+ * @param {string} abilityKey  the item id
+ */
+export async function whileMarkedAuraSize(source, target, abilityKey) {
+  const item = source?.items?.get(abilityKey);
+  const aura = await whileMarkedAuraOf(item);
+  if (!aura || aura.sizes.length < 2) return null;
+  const placed = (tokenOfActor(target)?.parent?.templates ?? []).some(t => {
+    const w = t.flags?.[NS]?.whileMarked;
+    return w && !w.effectUuid && w.sourceActorId === source.id && w.abilityKey === abilityKey && w.targetActorUuid === target.uuid;
+  });
+  if (placed) return null;
+  return askAuraSize(item, target.name, aura);
+}
+
+/**
  * A mark whose ability gives the marked character an aura "while marked" (Fulminate p.226: "A character in range 6
  * is marked. The character gains aura 2 while marked."): the aura comes with the mark, no question, around the
  * marked token and following it, tied to that mark (whileMarked, removed with it by area-templates.mjs). Only when
  * a text offers another size ("When marking a character, you can increase the area to 3", Talent I) the user picks.
  * Nothing is placed when that mark's aura is already on the map (placed with the area button before marking).
- * Run on the client that created the mark (the marker's user, or the GM a mark was relayed to).
+ * Run on the client that created the mark (the marker's user, or the GM a mark was relayed to). A relayed mark
+ * carries the size the marker already chose on their own client (mark.auraSize, see whileMarkedAuraSize): the GM
+ * is not asked.
  */
 async function placeWhileMarkedAura(effect, mark) {
   const creator = fromUuidSync(mark.sourceActorUuid);
   const item = creator?.items?.get(mark.abilityKey);
-  const s = item?.system;
-  if (!s) return;
-  const own = [s.description, s.effect, s.areaEffect, s.hitEffect].filter(v => typeof v === "string" && v).join(" ");
-  const m = /\b(?:that|the|target|marked|chosen)\s+character\s+(?:gains?|has)\s+(?:an?\s+)?aura\s+(\d+)\b[^.]*\bwhile marked\b/i.exec(plainText(own));
-  if (!m) return;
+  const aura = await whileMarkedAuraOf(item);
+  if (!aura) return;
   const td = tokenOfActor(effect.parent);
   const scene = td?.parent;
   if (!scene) { _log(`${item.name}: no token for ${effect.parent?.name}, no aura on the map`); return; }
-  const { placeAuraOnToken, aurasInText } = await import("./area-templates.mjs");
+  const { placeAuraOnToken } = await import("./area-templates.mjs");
   // Already there: an aura of this mark (or placed for this character before the mark existed) is not doubled.
   const same = scene.templates.filter(t => {
     const w = t.flags?.[NS]?.whileMarked;
@@ -255,22 +308,8 @@ async function placeWhileMarkedAura(effect, mark) {
     }
     return;
   }
-  // The other sizes an unlocked text offers: Talent I "increase the area to 3"; the mastery, if it says one.
-  const extra = [
-    (s.talentSelected ?? 0) === 1 ? s.talent1 : "", (s.talentSelected ?? 0) === 2 ? s.talent2 : "", s.masteryUnlocked ? s.mastery : "",
-  ].filter(t => typeof t === "string" && t.trim());
-  const sizes = [...new Set([Number(m[1]), ...extra.flatMap(t => aurasInText(t, { resize: true }).map(a => a.size))])].filter(n => n > 0);
-  let size = sizes[0];
-  if (sizes.length > 1) {
-    try {
-      size = await foundry.applications.api.DialogV2.wait({
-        window: { title: `${item.name} — aura` },
-        content: `<p><strong>${esc(td.name)}</strong> is marked and gains an aura. Which size?</p>${extra.map(t => `<p><small>${esc(plainText(t))}</small></p>`).join("")}`,
-        buttons: sizes.map((n, i) => ({ action: String(n), label: `Aura ${n}`, default: i === 0, callback: () => n })),
-        rejectClose: false,
-      }) ?? sizes[0];
-    } catch { size = sizes[0]; }
-  }
+  // The size the marker chose before the mark was relayed, else asked here when a text offers more than one.
+  const size = Number(mark.auraSize) > 0 ? Number(mark.auraSize) : await askAuraSize(item, td.name, aura);
   const effAlive = effect.parent?.effects?.get(effect.id);
   if (!effAlive) return;   // the mark ended while the size was asked
   try {

@@ -296,11 +296,18 @@ export function marksBy(actorId, abilityKey = null) {
  *                                   (defaults to `text`)
  * @param {boolean} [opts.track]     a tracker, not a mark (see the header): no stacks, and it
  *                                   leaves the marker's marks on the target alone
+ * @param {number} [opts.auraSize]   the "while marked" aura size the marker chose before a relay (follow-marks.mjs)
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null }) {
   if (!source || !target) return null;
   if (_needsRelay(target)) {
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track });
+    // The aura "while marked" (Fulminate p.226, Talent I "Aura 2 / 3") is chosen here, by the marker, not by the GM
+    // who will create the mark: the size goes with the request (follow-marks.mjs).
+    if (!track && game.users.activeGM) {
+      const { whileMarkedAuraSize } = await import("../canvas/follow-marks.mjs");
+      auraSize = await whileMarkedAuraSize(source, target, abilityKey);
+    }
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize });
     ui.notifications.info(`${track ? "Tracker" : "Mark"} sent to the GM to place on "${target.name}".`);
     return null;
   }
@@ -339,6 +346,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
     flags: { [NS]: { isStatus: false, isMark: true, mark: {
       sourceActorId: source.id, sourceActorUuid: source.uuid, sourceName: source.name,
       abilityKey, abilityName, text: plain, stacks: 1, ...(track ? { tracked: true } : {}),
+      ...(Number(auraSize) > 0 ? { auraSize: Number(auraSize) } : {}),
     } } },
   }]);
   _log(`${source.name} ${track ? "tracks" : "marks"} ${target.name} with ${abilityName}`);
@@ -408,7 +416,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null });
       break;
     }
     case "removeMark":
