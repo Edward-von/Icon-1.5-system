@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il bottone Mark controlla il range (versione 1.15.198)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Range sul bottone Mark**: il bottone Mark delle schede PG, foe e legend marcava anche un bersaglio lontanissimo →
+  il controllo del range c'era solo sul chip "On a character" → ora il bottone usa lo stesso controllo: prende il
+  range dal tag dell'abilità o, se manca, dal testo ("Mark a character in range 6", Deepwrath p.235). Oltre quel range
+  chiede "Put it on … anyway?", con Cancel come scelta predefinita (come il chip). Vale anche per Polaris Talent I e
+  Amico. Solo codice.
+
 ## 17 ottobre 2026 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa (versione 1.15.197)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -1472,9 +1472,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.195: le card dell'attacco salvano i bersagli e offrono gli interrupt "when
       targeted" con gli stessi bottoni della card del danno; i tratti che sono interrupt vengono letti, e Aether
       Deflection conta un uso per combattimento.)
-- [ ] **Emerso lavorando su R33d2 — range sul bottone Mark** (S): il bottone Mark delle schede (PG, foe, legend) non
+- [x] **Emerso lavorando su R33d2 — range sul bottone Mark** (S): il bottone Mark delle schede (PG, foe, legend) non
       controlla il range dell'abilità per nessun mark, Polaris Talent I e Amico compresi (il controllo c'è solo sul
       chip "On a character").
+(FATTO il 17 ottobre 2026, versione 1.15.198: il bottone Mark di PG/foe/legend chiede conferma oltre il range
+      dell'abilità, come il chip "On a character")
 - [ ] **Emerso lavorando su R33a5 — copertura degli oggetti per direzione** (S, da decidere): "cover against all
       characters past the row of spaces … that their cover is currently occupying" (p.92) si potrebbe calcolare
       all'Apply conoscendo il token dell'attaccante, ma con un oggetto in diagonale non è chiaro se conti la riga o la
@@ -1607,6 +1609,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+- nessuno
 
 ---
 

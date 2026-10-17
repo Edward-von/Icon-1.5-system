@@ -8,6 +8,7 @@ import { abilityCostLabel } from "../../helpers/enrich.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml, abilityArea, areaLasts,
          findAreaTemplates, attackSpaceTokenId, retargetFromTemplate } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags } from "../../combat/marks.mjs";
+import { markRangeConfirmed } from "../../canvas/follow-marks.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { isFoeActionAttack } from "../../combat/ability-damage.mjs";
 import { npcActionStatusEntries, statusBlockHtml, captureTargets } from "../../combat/ability-statuses.mjs";
@@ -408,6 +409,8 @@ export class LegendSheet extends BaseActorSheet {
     if (!action) return;
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    // The action's range, as the "On a character" chip checks it (follow-marks.mjs): beyond it, asked first.
+    if (!(await markRangeConfirmed(this.document, { name: action.name, tags: action.tags, text: action.description }, targets[0]))) return;
     _log(`markActionTarget — "${action.name}" on ${targets[0].name}`);
     await applyMark({ source: this.document, target: targets[0].actor, abilityKey: `action:${action.name}`, abilityName: action.name,
                       text: action.description ?? "", multi: markFromTags(action.tags).multi,

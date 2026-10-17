@@ -76,10 +76,15 @@ function tokenOfActor(actor, tokenUuid = null) {
  */
 async function rangeOfItem(item) {
   const { resolveAbilityTags } = await import("../helpers/rule-tooltips.mjs");
+  return rangeOfAbility(resolveAbilityTags(item.system), item.system?.description);
+}
+
+/** The same for any ability or foe action: its range tag, else the first "in range N" of `text`. */
+async function rangeOfAbility(tags, text) {
   const { rangeFromTags } = await import("./area-templates.mjs");
-  const fromTags = rangeFromTags(resolveAbilityTags(item.system));
+  const fromTags = rangeFromTags(tags);
   if (fromTags) return fromTags;
-  const m = /\bin range (\d+)\b/i.exec(plainText(item.system?.description));
+  const m = /\bin range (\d+)\b/i.exec(plainText(text));
   return m ? Number(m[1]) : 0;
 }
 
@@ -88,7 +93,23 @@ async function rangeOfItem(item) {
  * scene and the target beyond the ability's range, the user is asked before marking (default: no). True to go on.
  */
 async function withinRangeOrConfirmed(actor, item, target) {
-  const range = await rangeOfItem(item);
+  return rangeConfirmed(actor, item.name, await rangeOfItem(item), target);
+}
+
+/**
+ * The sheets' Mark button (PC abilities, foe and legend actions): the same range check as the "On a character" chip,
+ * the ability's range tag or its "Mark a character in range N" (Deepwrath p.235). True to go on.
+ * @param {Actor} actor
+ * @param {{name: string, tags?: Array, text?: string, item?: Item}} ability  an item, or a foe action's tags and text
+ * @param {Token} target
+ */
+export async function markRangeConfirmed(actor, { name, tags = [], text = "", item = null }, target) {
+  const range = item ? await rangeOfItem(item) : await rangeOfAbility(tags, text);
+  return rangeConfirmed(actor, name, range, target);
+}
+
+/** Ask before going on when `target` stands beyond `range` of `actor`'s token on its scene (default: no). */
+async function rangeConfirmed(actor, name, range, target) {
   const own = actor.getActiveTokens?.(false, false)?.find(t => t.document?.parent === target.document?.parent);
   if (!range || !Number.isFinite(range) || !own) return true;
   const { gridDistance } = await import("../combat/defenses.mjs");
@@ -96,8 +117,8 @@ async function withinRangeOrConfirmed(actor, item, target) {
   if (dist <= range) return true;
   try {
     return !!(await foundry.applications.api.DialogV2.confirm({
-      window: { title: `${item.name} — out of range` },
-      content: `<p><strong>${esc(target.name)}</strong> is ${dist} spaces away, beyond ${esc(item.name)}'s range ${range}.</p><p>Put it on ${esc(target.name)} anyway?</p>`,
+      window: { title: `${name} — out of range` },
+      content: `<p><strong>${esc(target.name)}</strong> is ${dist} spaces away, beyond ${esc(name)}'s range ${range}.</p><p>Put it on ${esc(target.name)} anyway?</p>`,
       yes: { label: "Anyway" }, no: { label: "Cancel", default: true },
       rejectClose: false,
     }));

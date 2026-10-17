@@ -27,7 +27,7 @@ import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
 import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
-import { characterSpecOf } from "../../canvas/follow-marks.mjs";
+import { characterSpecOf, markRangeConfirmed } from "../../canvas/follow-marks.mjs";
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
 import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText, insideEffectsOf, areaExtendsOld, impassableAlternative } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
@@ -2369,6 +2369,8 @@ export class IconSheet extends BaseActorSheet {
     if (!item) return;
     const targets = Array.from(game.user?.targets ?? []).filter(t => t.actor);
     if (targets.length !== 1) { ui.notifications.warn("Target exactly one token to mark it (hover it and press T)."); return; }
+    // The ability's range, as the "On a character" chip checks it (follow-marks.mjs): beyond it, asked first.
+    if (!(await markRangeConfirmed(this.document, { name: item.name, item }, targets[0]))) return;
     // data-combo="1": the combo's own mark (Regenerate); "alt": the mastery's alternate combo (Regrowth).
     const altMark   = target.dataset.combo === "alt";
     const comboMark = altMark ? _altComboMark(item.system) : target.dataset.combo === "1" ? _comboMark(item.system) : null;

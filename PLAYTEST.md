@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Il bottone Mark controlla il range (17 ottobre 2026, versione 1.15.198)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Deepwrath (range 6): bersaglia un token a 8 caselle e premi Mark: chiede conferma. Cancel non marca,
+      "Anyway" marca. Entro 6 marca subito.
+- [ ] Foe e legend con un'azione mark con tag range: stesso comportamento dalla loro scheda.
+- [ ] Polaris con Talent I e Party Favor con Amico: il bottone Mark oltre il range chiede conferma come il chip "On a
+      character".
+- [ ] Un mark senza range (né tag né "in range N" nel testo) marca senza chiedere nulla.
+
 ## Emerso R33 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa (17 ottobre 2026, versione 1.15.197)
 
 Setup: solo codice (F5 basta).
