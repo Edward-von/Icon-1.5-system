@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Righteous Disdain: bottone per il vigor del Heroic (17 ottobre 2026, versione 1.15.186)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Demon Slayer con Righteous Disdain, un alleato colpito da un foe: sulla card del danno premere Righteous
+      Disdain. La card postata mostra il bottone "Heroic: gain 4 vigor".
+- [ ] Premere il bottone: il vigor del Demon Slayer sale di 4 (fino alla VIT), compare l'avviso "vigor X → Y" e il
+      bottone si spegne.
+- [ ] F5: il bottone di quella card resta spento. Un giocatore che non possiede il Demon Slayer vede il bottone
+      spento.
+
 ## Emerso R33 — Symphony toglie davvero le blessing (17 ottobre 2026, versione 1.15.185)
 
 Setup: solo codice (F5 basta).

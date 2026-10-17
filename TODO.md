@@ -1453,8 +1453,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.178: caselline degli usi degli interrupt nell'anteprima dell'abilità; il
       bottone chat dell'interrupt concesso spende un uso. La scheda dei foe in realtà non mostra gli usi: voce emersa
       a parte.)
-- [ ] **Emerso lavorando su R35 — Heroic di Righteous Disdain** (S): "Gain vigor 4 after this ability resolves" resta
+- [x] **Emerso lavorando su R35 — Heroic di Righteous Disdain** (S): "Gain vigor 4 after this ability resolves" resta
       solo come testo sulla card postata; non c'è un bottone che dia il vigor.
+(FATTO il 17 ottobre 2026, versione 1.15.186: bottone "gain N vigor" sulla card dell'interrupt postata dalla card del
+      danno, una volta per card, solo per chi possiede il personaggio.)
 - [ ] **Emerso lavorando su R35 — Great Soul Bond (Blazing Bond)** (S): la mastery "the other can reduce themselves to
       1 hp to grant that ally immunity…" non è un interrupt con trigger, quindi non ha bottone; servirebbe una regola
       a parte (stesso flag `immune` di damage-card-mods).
@@ -1537,6 +1539,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       viene letto. Ora che il numero di mote è uguale alle blessing tolte, con il Charge bisognerebbe poterne piazzare
       2 in più. Domanda per Edoardo: le 2 caselle in più del Charge costano anche loro una blessing ciascuna, o sono
       gratis?
+- [ ] **Emerso lavorando su R35 — "Gain vigor 4" non ha chip** (S): la regex dei promemoria vigor in
+      `ability-statuses.mjs` (`NOTE_VIGOR_RE`) legge solo "gain 4 vigor", non "gain vigor 4". Il Heroic di Righteous
+      Disdain quindi non ha la chip promemoria nemmeno dalla scheda.
 
 ---
 

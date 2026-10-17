@@ -115,7 +115,7 @@ import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, s
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble, bendFate } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
-import { decorateDamageInterrupts } from "./module/combat/damage-interrupts.mjs";
+import { decorateDamageInterrupts, bindInterruptVigorButtons } from "./module/combat/damage-interrupts.mjs";
 import { injectCardMods, cardModsFor } from "./module/combat/damage-card-mods.mjs";
 
 /* ================================================== */
@@ -960,6 +960,8 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
  */
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   bindInflictButtons(html);
+  // "Heroic: Gain vigor 4" on an interrupt posted from a damage card (Righteous Disdain).
+  bindInterruptVigorButtons(message, html);
 });
 
 /**

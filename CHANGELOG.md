@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Righteous Disdain: bottone per il vigor del Heroic (versione 1.15.186)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Heroic di Righteous Disdain**: "Heroic: Gain vigor 4 after this ability resolves" (p.128) restava solo come testo
+  sulla card dell'interrupt postata dalla card del danno → nessun codice leggeva le righe "gain vigor N" / "gain N
+  vigor" della card → ora la card postata ha un bottone "Heroic: gain 4 vigor". Solo chi possiede il personaggio può
+  premerlo, e solo una volta per card (resta premuto anche dopo un reload). Il vigor non supera la VIT, come nel
+  Recover. Solo codice.
+
 ## 17 ottobre 2026 — Symphony toglie davvero le blessing (versione 1.15.185)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

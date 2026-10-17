@@ -433,6 +433,36 @@ function _refreshButton(btn) {
   btn.disabled = left <= 0 || hasStatus(owner, "stunned");
 }
 
+/**
+ * The "gain N vigor" button of a posted interrupt card (postInterruptCard):
+ * only the character's owners can press it, once per card (the flag
+ * `icon-system.vigorGiven` keeps it pressed after a reload).
+ * @param {ChatMessage} message
+ * @param {HTMLElement} html
+ */
+export function bindInterruptVigorButtons(message, html) {
+  html.querySelectorAll('[data-action="interruptGainVigor"]').forEach(btn => {
+    if (btn.dataset.iconBound) return;
+    btn.dataset.iconBound = "true";
+    if (message?.getFlag?.(FLAG_NS, "vigorGiven")) { btn.disabled = true; btn.title = "Vigor already given from this card"; return; }
+    let actor = null;
+    try { actor = fromUuidSync(btn.dataset.actorUuid); } catch { actor = null; }
+    if (!actor?.isOwner) { btn.disabled = true; return; }
+    btn.addEventListener("click", async (ev) => {
+      ev.preventDefault(); ev.stopPropagation();
+      btn.disabled = true;
+      const amount = Number(btn.dataset.amount) || 0;
+      const { addVigor } = await import("./damage.mjs");
+      const before = actor.system?.combat?.vigor?.value ?? actor.system?.vigor?.value ?? 0;
+      await addVigor(actor, amount);
+      const after = actor.system?.combat?.vigor?.value ?? actor.system?.vigor?.value ?? 0;
+      _log(`gainVigor — "${actor.name}" | +${amount} | ${before} → ${after} | card: ${message?.id}`);
+      if (message?.isOwner) await message.setFlag(FLAG_NS, "vigorGiven", true);
+      ui.notifications.info(`${actor.name}: vigor ${before} → ${after}.`);
+    });
+  });
+}
+
 /* -------------------------------------------------- */
 /*  Pressing the button                                 */
 /* -------------------------------------------------- */
@@ -522,6 +552,17 @@ export async function postInterruptCard(owner, it, ctx = {}) {
   raw = raw.filter(l => String(l.text ?? "").trim());
   const lines = await Promise.all(raw.map(async l => ({ label: l.label, mastery: !!l.mastery, text: await enrichHTML(l.text) })));
   const text = raw.map(l => l.text).join(" ");
+  // A block that gives the user vigor ("Heroic: Gain vigor 4 after this
+  // ability resolves", Righteous Disdain p.128): a button for it, pressed by
+  // the table when the block applies.
+  const vigor = raw.map(l => {
+    const m = /^\s*gain\s+(?:vigor\s+(\d+)|(\d+)\s+vigor)\b/i.exec(plainText(l.text));
+    if (!m) return "";
+    const amount = Number(m[1] ?? m[2]);
+    return `<button type="button" class="icon-chat-btn" data-action="interruptGainVigor" data-actor-uuid="${escapeHTML(owner.uuid)}"
+              data-amount="${amount}" title="${escapeHTML(`${l.label}: ${plainText(l.text)}\nGives ${owner.name} ${amount} vigor (up to their VIT).`)}">
+              <i class="fa-solid fa-shield-heart"></i> ${escapeHTML(l.label)}: gain ${amount} vigor</button>`;
+  }).join("");
   const pc = {
     name:    item.name,
     label:   it.cost,
@@ -531,7 +572,8 @@ export async function postInterruptCard(owner, it, ctx = {}) {
     chapter: s.chapter ?? 1,
     lines,
     statusHtml: statusBlockHtml(parseInflictedStatuses(text, { sourceName: owner.name, label: it.name }),
-                                { source: owner, abilityName: item.name }) + used,
+                                { source: owner, abilityName: item.name }) + used
+              + (vigor ? `<div class="icon-chat-card__interrupts">${vigor}</div>` : ""),
   };
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
   const content = await renderTemplate("systems/icon-system/templates/chat/ability-part-card.hbs", { pc });
