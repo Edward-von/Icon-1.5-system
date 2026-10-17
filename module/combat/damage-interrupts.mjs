@@ -399,6 +399,61 @@ export async function setInterruptLeft(actor, it, left) {
   if (actor.getFlag(FLAG_NS, `interruptUses.${it.key}`) != null) return actor.unsetFlag(FLAG_NS, `interruptUses.${it.key}`);
 }
 
+/* -------------------------------------------------- */
+/*  An "Interrupt N" ability used from the sheet        */
+/* -------------------------------------------------- */
+
+/** Steps of one use of an interrupt ability, in order: a later step belongs to the same use. */
+const USE_STEPS = { card: 0, attack: 1, damage: 2 };
+
+/** The combat turn now ("combatId:round:turn"), null outside a started combat. */
+function _turnKey() {
+  const c = game.combat;
+  return c?.started ? `${c.id}:${c.round}:${c.turn}` : null;
+}
+
+/**
+ * One use of an ability whose cost is "Interrupt N", taken from the sheet's
+ * Attack Roll / Auto-Hit / Damage Roll (Show in Chat only shows it). Spends one
+ * use, or refuses when Stunned ("Can't take interrupts", p.117) or with none
+ * left. "Only one interrupt during any turn" (p.91): a step taken in the same
+ * combat turn as the spent use (the attack, then its damage; the card's
+ * interrupt button, then the attack) is that same use and spends nothing.
+ * Outside combat a damage roll after the attack (or after the card's button) is
+ * that attack's use.
+ * @param {Actor} actor
+ * @param {string} itemId
+ * @param {"card"|"attack"|"damage"} step
+ * @param {{spend?: boolean}} [opts]  spend:false only checks (before the dialogs)
+ * @returns {Promise<boolean>} false: refused, the roll is called off
+ */
+export async function useAbilityInterrupt(actor, itemId, step, { spend = true } = {}) {
+  const it = interruptsOf(actor).find(i => i.kind === "ability" && i.itemId === itemId);
+  if (!it) return true;
+  const turn = _turnKey();
+  const prev = actor.getFlag(FLAG_NS, `interruptUseTurn.${itemId}`);
+  const same = prev && (turn ? prev.turn === turn : (!prev.turn && USE_STEPS[prev.step] < USE_STEPS[step]));
+  if (same) {
+    if (spend && !turn) await actor.unsetFlag(FLAG_NS, `interruptUseTurn.${itemId}`);
+    _log(`abilityInterrupt — "${actor.name}" | ${it.name} | ${step}: same use as the ${prev.step} (nothing spent)`);
+    return true;
+  }
+  if (hasStatus(actor, "stunned")) { ui.notifications.warn(`${actor.name} is Stunned and can't take interrupts.`); return false; }
+  const { left, max } = interruptLeft(actor, it);
+  if (left <= 0) { ui.notifications.warn(`${it.name}: no uses left this round (0/${max}).`); return false; }
+  if (!spend) return true;
+  _log(`abilityInterrupt — "${actor.name}" | ${it.name} | ${step} | left ${left} → ${left - 1} / ${max}`);
+  await spendUse(actor, it);
+  await markAbilityInterruptUse(actor, it, step);
+  return true;
+}
+
+/** Remember the step that spent an interrupt ability's use (useAbilityInterrupt). */
+async function markAbilityInterruptUse(actor, it, step) {
+  if (it?.kind !== "ability") return;
+  await actor.setFlag(FLAG_NS, `interruptUseTurn.${it.itemId}`, { turn: _turnKey(), step });
+}
+
 /** Give a stance's interrupts back (a refresh): a banked one stores one more, up to its cap. */
 async function refreshUses(actor, keys) {
   const all = interruptsOf(actor);
@@ -707,6 +762,8 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid, 
   }
   _log(`use — "${owner.name}" | ${it.name} (${it.kind}) | left ${left} → ${left - 1} / ${max}${it.bankMax ? " banked" : ""} | target: "${target?.name ?? "?"}" | card: ${message?.id}`);
   await spendUse(owner, it);
+  // An "Interrupt N" ability: its attack / damage from the sheet that follows is this same use.
+  await markAbilityInterruptUse(owner, it, "card");
   await postInterruptCard(owner, it, { target, message, usesLeft: left - 1, max });
   if (spec.onUse) {
     try { await spec.onUse({ owner, it, item: it.itemId ? owner.items.get(it.itemId) : null, target, message }); }

@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero (17 ottobre 2026, versione 1.15.217)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con un'abilità a costo Interrupt 1, in combattimento: Show in Chat → la card esce e i pallini degli usi sulla
+      scheda non cambiano.
+- [ ] Stessa abilità, Attack Roll → conferma il dialogo → gli usi passano da 1/1 a 0/1. Poi Damage Roll nello stesso
+      turno → nessun altro uso speso, il danno si tira.
+- [ ] Abilità Interrupt ad auto-hit con danno: Auto-Hit → il tiro del danno parte da solo → viene speso un uso solo.
+- [ ] Con 0 usi rimasti: Attack Roll e Damage Roll mostrano l'avviso "no uses left" e non tirano.
+- [ ] Personaggio Stunned: Attack Roll dell'abilità Interrupt → avviso "is Stunned and can't take interrupts", nessun
+      tiro.
+- [ ] Bottone interrupt dell'abilità sotto una card d'attacco o di danno (spende 1 uso), poi Attack Roll dalla scheda
+      nello stesso turno → non viene speso un secondo uso.
+- [ ] Attack Roll annullato (chiudo il dialogo dei modificatori) → nessun uso speso.
+- [ ] Al proprio turno successivo gli usi tornano pieni e il primo Attack Roll ne spende di nuovo uno.
+
 ## Emerso R40 — "X damage, twice" sul tiro salvezza: un solo tiro (17 ottobre 2026, versione 1.15.216)
 
 Setup: solo codice (F5 basta).

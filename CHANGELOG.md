@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero (versione 1.15.217)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Abilità a costo "Interrupt N"**: lanciare dalla scheda un'abilità con costo Interrupt (Attack Roll, Auto-Hit,
+  Damage Roll) non toglieva nessun uso, mentre i bottoni nelle card di chat lo toglievano → la scheda non controllava
+  gli usi di queste abilità → ora Attack Roll, Auto-Hit e Damage Roll spendono un uso. Se il personaggio è Stunned
+  ("Can't take interrupts", p.117) o non ha più usi, il tiro non parte. Show in Chat resta gratis: mostra soltanto
+  (scelta di Edoardo). "Only one interrupt during any turn" (p.91): nello stesso turno di combattimento l'attacco e il
+  suo danno, oppure il bottone interrupt della card e il tiro che segue, contano come un uso solo. Fuori combattimento
+  il danno che segue l'attacco (o il bottone della card) conta come lo stesso uso. Solo codice.
+
 ## 17 ottobre 2026 — "X damage, twice" sul tiro salvezza: un solo tiro (versione 1.15.216)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

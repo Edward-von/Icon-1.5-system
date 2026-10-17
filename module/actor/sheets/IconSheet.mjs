@@ -138,7 +138,7 @@ function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
 import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage, parseLimitBreakPercent, infusedAbilityDamage } from "../../combat/ability-damage.mjs";
 import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
-import { interruptsOf, interruptLeft, spendUse, setInterruptLeft } from "../../combat/damage-interrupts.mjs";
+import { interruptsOf, interruptLeft, spendUse, setInterruptLeft, useAbilityInterrupt } from "../../combat/damage-interrupts.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
 
@@ -2681,6 +2681,8 @@ export class IconSheet extends BaseActorSheet {
       ui.notifications.warn(`"${ab.name}" is not an attack ability — it doesn't require an attack roll.`);
       return;
     }
+    // "Interrupt N" cost: the attack is the use (Show in Chat only shows it). Checked here, spent once committed.
+    if (!(await useAbilityInterrupt(this.document, itemId, "attack", { spend: false }))) return;
 
     // Comet: "While this object is active, you cannot attack" (R33a2) — ask before rolling.
     const forbidding = objectsForbiddingAttacks(this.document);
@@ -2758,6 +2760,7 @@ export class IconSheet extends BaseActorSheet {
         rememberAttackTarget(this.document, ab, attackTargetId);
       }
       const autoAreaHtml = placement ? areaSummaryHtml(placement, { attackTargetId }) : "";
+      if (!(await useAbilityInterrupt(this.document, itemId, "attack"))) return;
       await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
       let invokeHtml = "";
       const rolls = [];
@@ -2805,6 +2808,7 @@ export class IconSheet extends BaseActorSheet {
     const forced = exceedTriggers(this.document, abilityItem, { comboArmed: !!ab.comboArmed });
     const mods = await promptAttackMods(ab, this.document, { area: placement?.area ?? null, exceedTriggers: forced });
     if (!mods) return;
+    if (!(await useAbilityInterrupt(this.document, itemId, "attack"))) return;
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
     // "The first time you use Matsuri in a combat": any use counts, taken or not.
     if (forced.some(e => e.firstUse)) await noteFirstUseThisCombat(this.document, abilityItem);
@@ -2971,6 +2975,8 @@ export class IconSheet extends BaseActorSheet {
       ui.notifications.warn(`"${ab.name}" does not deal damage.`);
       return;
     }
+    // "Interrupt N" cost: rolling its damage is using it, unless it is the damage of the attack that spent the use.
+    if (!(await useAbilityInterrupt(this.document, itemId, "damage", { spend: false }))) return;
 
     // Default the "combo version" choice from combo state: token still held,
     // or already spent on this very ability via Show in Chat.
@@ -2989,6 +2995,7 @@ export class IconSheet extends BaseActorSheet {
       sameUse = !!mods.sameUse;
       ab = sameUse ? infused : base;
     }
+    if (!(await useAbilityInterrupt(this.document, itemId, "damage"))) return;
     if (repeat && !sameUse) await startInfusionStep(this.document, itemId, INFUSE_STEP.damage);
     // The area button still reads the version afterwards, until the next use or the end of the turn.
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.damage);

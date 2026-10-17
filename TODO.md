@@ -1571,11 +1571,15 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       uso.
 (FATTO il 17 ottobre 2026, versione 1.15.203: caselline degli usi sotto ogni interrupt di foe e legend, il bottone
       chat spende un uso; il legend ora ha il bottone chat)
-- [ ] **Emerso lavorando su R35 — "Show in Chat" di un'abilità a costo Interrupt non spende un uso** (S, da decidere):
+- [x] **Emerso lavorando su R35 — "Show in Chat" di un'abilità a costo Interrupt non spende un uso** (S, da decidere):
       solo il bottone chat dell'interrupt concesso e quello della card del danno spendono un uso; il "Show in Chat"
       dell'abilità intera (costo "Interrupt N") e il bottone chat della maestria che concede un interrupt (Grace of
       the Spirits) no. Domanda per Edoardo: anche questi devono spendere un uso, oppure servono anche solo per far
       vedere il testo?
+(FATTO il 17 ottobre 2026, versione 1.15.217, risposta di Edoardo: Show in Chat non consuma, l'uso vero sì. Attack
+      Roll, Auto-Hit e Damage Roll consumano un uso, una volta per turno (p.91). Un'abilità Interrupt che non attacca
+      e non fa danno si spende con le caselline o con il bottone nella card; il bottone chat della maestria (Grace of
+      the Spirits) resta gratis come uno Show in Chat.)
 - [x] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
       spende anche se il PG è Stunned, mentre il bottone della card del danno lo blocca.
 (FATTO il 17 ottobre 2026, versione 1.15.204: i bottoni chat degli interrupt di PG, foe e legend si rifiutano se il
