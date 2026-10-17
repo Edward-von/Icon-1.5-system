@@ -589,7 +589,7 @@
       {{#icon-range 0 5}}
         {{#with (lookup ../abilityItems this) as |item|}}
           <div class="icon-ability-slot icon-ability-slot--filled {{icon-class-color item.system.class}}"
-               data-slot="{{@index}}" data-item-id="{{item.id}}">
+               data-slot="{{../this}}" data-item-id="{{item.id}}">
             <span class="icon-ability-slot__name">{{item.name}}</span>
             {{#with (lookup @root.abilityCosts item.id) as |ad|}}
               <span class="icon-ability-slot__cost"{{#if ad.costTooltip}} data-tooltip="{{ad.costTooltip}}"{{/if}}>{{ad.cost}}</span>

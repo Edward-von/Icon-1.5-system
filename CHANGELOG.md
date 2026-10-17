@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Abilità trascinata su un riquadro pieno (versione 1.15.137)
+
+### Round di debug del 15 ottobre, voce emersa su R5
+
+- **Riquadro sbagliato**: un'abilità trascinata su un riquadro già occupato (es. il quinto) finiva nel primo → nei
+  riquadri pieni `{{@index}}` usciva vuoto (dentro il `#with` di `icon-combat.hbs`) e `#onDropAbilitySlot` lo leggeva
+  come 0 → ora i riquadri pieni scrivono il loro numero (`{{../this}}`) come quelli vuoti. Solo codice.
+
 ## 17 ottobre 2026 — Gli usi dei kit contano anche con clic rapidissimi (versione 1.15.136)
 
 ### Dal playtest della 1.15.1, usi dei kit

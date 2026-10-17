@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R5 — Abilità trascinata su un riquadro pieno (17 ottobre 2026, versione 1.15.137)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Con sei abilità equipaggiate, trascina un'altra abilità sul quinto riquadro: prende il posto della quinta e la
+      prima resta dov'è.
+- [ ] Trascinare su un riquadro vuoto funziona come prima.
+
 ## Emerso playtest 1.15.1 — Gli usi dei kit contano anche con clic rapidissimi (17 ottobre 2026, versione 1.15.136)
 
 Setup: solo codice (F5 basta).

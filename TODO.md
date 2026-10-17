@@ -1326,11 +1326,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Unerring va proposto in quel caso.
 (FATTO il 17 ottobre 2026, versione 1.15.135: il tiro non avvisa né blocca un bersaglio lontano, come vuole la regola;
       la finestra del danno spunta Unerring per Reap sul bersaglio marcato da Sow fuori portata, p.185. Solo codice.)
-- [ ] **Emerso lavorando su R5 — numero del riquadro vuoto sui riquadri pieni** (S, da verificare): in
+- [x] **Emerso lavorando su R5 — numero del riquadro vuoto sui riquadri pieni** (S, da verificare): in
       `icon-combat.hbs` i riquadri già occupati scrivono `data-slot="{{@index}}"`, ma l'helper `icon-range`
       (`handlebars.mjs`) non fornisce `@index`, quindi il numero esce vuoto e `#onDropAbilitySlot` lo legge come 0:
       un'abilità trascinata su un riquadro già pieno (es. il quinto) potrebbe finire nel primo. Usare `{{this}}` come
       i riquadri vuoti.
+(FATTO il 17 ottobre 2026, versione 1.15.137: confermato, i riquadri pieni scrivevano un numero vuoto letto come 0;
+      ora scrivono il loro numero. Solo codice.)
 - [x] **Emerso lavorando su R12 — elenchi "•" nelle regole dei summon in HTML** (S): le regole dei summon di Churn
       Baron (Blunderbuss / Arkentech Explosives), Deep Snow Aesi (Icicle), Keeper of the Eldflame (Everforge) e
       Violence Demon (Blade of Agony) sono salvate come `<p>… • … • …</p>` (`system.summons.N.rules`) e la resa a
@@ -1346,6 +1348,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       sulla mappa, `foe-summons.mjs` copia `sm.rules` in `system.summonEffect` dell'attore Summon e `SummonSheet` lo
       passa a `enrichHTML` così com'è, quindi lì l'elenco resta su una riga; usare `summonRulesHTML` anche per
       `enrichedSummonEffect`, o al momento della copia.
+- [ ] **Emerso lavorando su R5 — × e combo acceso sui riquadri pieni** (S): in `icon-combat.hbs`, dentro il
+      `{{#with}}` dei riquadri pieni, `../isEditable`, `../abilitiesLocked` e `../comboActive` puntano al numero del
+      riquadro e non alla scheda, quindi la × per togliere l'abilità dal riquadro non compare mai e il badge combo non
+      si accende; usare `@root.` (verificato con Handlebars 4.7.8).
 
 ---
 
