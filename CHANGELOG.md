@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Salire e scendere dagli oggetti camminando (versione 1.15.160)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **In piedi sugli oggetti**: un personaggio che camminava su un boulder restava a elevazione 0 (o restava in alto
+  scendendo) → l'elevazione cambiava solo quando era la pila a cambiare → ora una domanda "Climb onto the object? /
+  Step down?" propone la nuova elevazione e dice quanto costa salire (+1 movimento per livello, p.89); l'elevazione
+  cambia solo col clic, e chi vola più in alto, o un movimento che cambia già l'elevazione da sé, non viene toccato.
+  Il costo di movimento viene detto ma non contato. Solo codice.
+
 ## 17 ottobre 2026 — Pierce degli Aethershard bersaglio per bersaglio (versione 1.15.159)
 
 ### Round di debug del 15 ottobre, R33a5

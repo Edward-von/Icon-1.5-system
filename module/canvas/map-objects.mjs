@@ -911,7 +911,7 @@ export async function relocateObject(actor) {
  * Only the start and the end of the move are looked at.
  * @param {object|null} movement  Foundry's movement data of this update (options.movement[id]), for its actions
  */
-async function offerMoveTriggers(td, prev, to, movement = null) {
+async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved = false } = {}) {
   const scene = td.parent;
   if (!scene || scene.id !== canvas?.scene?.id || !td.actor) return;
   const before = cellsOf(td, prev);
@@ -921,6 +921,7 @@ async function offerMoveTriggers(td, prev, to, movement = null) {
   const hostile = isHostile(td);
   const esc = foundry.utils.escapeHTML;
   const ask = (title, html, yes) => foundry.applications.api.DialogV2.confirm({ window: { title }, content: html, yes: { label: yes }, no: { label: "Not now" }, rejectClose: false }).then(r => !!r);
+  if (!elevationMoved) await offerStepUpDown(td, before, after, ask);
   const portalsAsked = new Set();
   for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
     if (!scene.tokens.get(o.id)) continue;            // gone meanwhile
@@ -949,6 +950,31 @@ async function offerMoveTriggers(td, prev, to, movement = null) {
         await teleportVia(td, others, o);
     }
   }
+}
+
+/**
+ * R33a5: a character who stood on the ground or on top of a stack walked onto a space with a different height of
+ * objects: "Characters can stand on objects" (p.89). One question — climb up / step down to that height — and
+ * nothing changes without the click. One flying higher than where it stood, or a move that set its own elevation,
+ * is left alone. "It costs +1 movement per difference in height to move up elevation, to a max of +3. Spaces 4 or
+ * more spaces higher cannot be entered with normal movement" (p.89) is told, not counted.
+ * @param {TokenDocument} td
+ * @param {Array<{i:number,j:number}>} before  the cells it left
+ * @param {Array<{i:number,j:number}>} after   the cells it reached
+ */
+async function offerStepUpDown(td, before, after, ask) {
+  const scene = td.parent;
+  const groundOf = (cells) => Math.max(0, ...cells.map(c => groundAt(scene, scene.grid.getTopLeftPoint(c))));
+  const elev = Number(td.elevation) || 0;
+  const was = groundOf(before), now = groundOf(after);
+  if (elev !== was || now === was) return;
+  const up = now > was;
+  const esc = foundry.utils.escapeHTML;
+  const cost = up ? ` Climbing costs +${Math.min(3, now - was)} movement (+1 per height, p.89)${now - was >= 4 ? " — 4 or more higher can't be entered with normal movement" : ""}.` : "";
+  const html = `<p>${esc(td.name)} ${up ? `walked onto objects of height ${now}` : now ? `stepped down to objects of height ${now}` : "stepped down from the objects to the ground"}: set its elevation to <strong>${now}</strong>?${cost}</p>`;
+  if (!await ask(up ? "Climb onto the object?" : "Step down?", html, up ? `Stand on height ${now}` : `Elevation ${now}`)) return;
+  if (!scene.tokens.get(td.id)) return;
+  await scene.updateEmbeddedDocuments("Token", [{ _id: td.id, elevation: now }], { animate: false, iconObjectMove: true });
 }
 
 /**
@@ -1178,7 +1204,7 @@ export function registerMapObjectHooks() {
     if (!("x" in changed || "y" in changed) || mapObjectFlag(tokenDoc)) return;
     if (!tokenDoc.parent?.tokens?.some(t => mapObjectFlag(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
+    offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null, { elevationMoved: "elevation" in changed }).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
   });
 
   // R33a4: Aethershard Talent I, "When you take any action that spends Aether, you can first remove one of your

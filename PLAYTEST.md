@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Salire e scendere dagli oggetti camminando (17 ottobre 2026, versione 1.15.160)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Trascina un PG su un boulder di altezza 2: la domanda propone elevazione 2 e "+2 movement"; con "Stand on height
+      2" l'elevazione diventa 2, con "Not now" resta com'era.
+- [ ] Trascinalo giù a terra: la domanda propone elevazione 0.
+- [ ] Un PG con elevazione 5 (in volo) passa sopra il boulder: nessuna domanda.
+
 ## R33a5 — Pierce degli Aethershard bersaglio per bersaglio (17 ottobre 2026, versione 1.15.159)
 
 Setup: solo codice (F5 basta).
