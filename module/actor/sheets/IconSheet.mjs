@@ -2493,6 +2493,13 @@ export class IconSheet extends BaseActorSheet {
     const fromTarget = new Set([
       ab.hasTalent1 && s.talent1, ab.hasTalent2 && s.talent2, ab.hasMastery && s.mastery, ab.comboArmed && s.comboEffect,
     ].filter(t => t && areaDrawnFromTarget(t)).flatMap(t => areasInText(t).map(a => a.label)));
+    // A mastery whose area replaces every area of the ability (MJÖLLNIR, p.227: "Create an arc 5 area any time
+    // you would create an area with this ability instead") is the only one offered, not a choice beside the base.
+    const masteryPlain = String(s.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    if (ab.hasMastery && /\bany time you would create an area with this ability,? instead\b/i.test(masteryPlain)
+        && variants.some(v => v.source === "Mastery")) {
+      variants.splice(0, variants.length, ...variants.filter(v => v.source === "Mastery"));
+    }
     return variants.map(v => {
       const area = { ...v.area };
       if (fromTarget.has(v.label)) area.fromTarget = true;

@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — MJÖLLNIR sostituisce sempre l'area di Sturmreiten (versione 1.15.116)
+
+### Round di debug del 16 ottobre, voce emersa su R47b
+
+- **MJÖLLNIR "instead"**: con MJÖLLNIR sbloccata, Sturmreiten chiedeva ancora di scegliere tra Line 3 e Arc 5 → l'Arc
+  5 della mastery veniva aggiunto come alternativa accanto all'area base, invece di prenderne il posto ("Create an arc
+  5 area any time you would create an area with this ability instead", p.227) → una mastery che dice "any time you
+  would create an area with this ability instead" ora lascia solo la sua area, sia nel bottone area sia nel tiro
+  d'attacco (`_areaVariantsFor` in IconSheet). L'estensione del Talent II resta un Arc 5. Solo codice.
+
 ## 17 ottobre 2026 — Danno dei summon con la finestra condivisa (versione 1.15.115)
 
 ### Round di debug del 15 ottobre, voce emersa su R23

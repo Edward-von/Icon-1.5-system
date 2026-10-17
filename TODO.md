@@ -695,10 +695,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       piercing nella stessa frase e propone una sola chip.
 - [ ] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
       quando le chip vengono dai blocchi base, dal combo o dalle versioni Infuse.
-- [ ] **Emerso lavorando su R47b — MJÖLLNIR "instead" e la scelta dell'area** (S, da verificare): MJÖLLNIR crea l'Arc
+- [x] **Emerso lavorando su R47b — MJÖLLNIR "instead" e la scelta dell'area** (S, da verificare): MJÖLLNIR crea l'Arc
       5 *al posto* dell'area normale (p.227), ma il codice aggiunge l'Arc 5 come variante "Mastery" accanto alla Line
       3, quindi probabilmente chiede ancora di scegliere tra le due invece di usare sempre l'Arc 5 (`_areaVariantsFor`
       / `areaVariants`).
+(FATTO il 17 ottobre 2026, versione 1.15.116: confermato; l'Arc 5 della mastery era un'alternativa alla Line 3 e
+      veniva chiesto quale usare; ora con MJÖLLNIR sbloccata si offre solo l'Arc 5. Solo codice.)
 - [x] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
       se il giocatore marca un personaggio che non è suo, il mark lo crea il GM, quindi la finestra "Aura 2 / Aura 3"
       compare al GM e non al giocatore; portare la domanda al client di chi ha marcato prima di passare il mark al GM.
