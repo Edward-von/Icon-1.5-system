@@ -213,8 +213,9 @@ export function areaGrowth(texts) {
  *   leave  "Foes that start their turn inside the area that end their turn outside of it take 2 damage and are
  *          dazed" (Mist Strider's River Guardians p.169) → { leave: { amount, piercing, status } }
  *   grow   "When they grow, deal 1 piercing damage to all characters inside" (Bifröst Talent II p.226) → { grow: … }
+ *   endIn  "Foes that end their turn in the area are shattered" (Ätherwand p.226) → { endIn: { status } }
  * @param {Array<[string, string]>} texts
- * @returns {{turn?: object, leave?: object, grow?: object}|null}
+ * @returns {{turn?: object, leave?: object, grow?: object, endIn?: object}|null}
  */
 export function areaDamage(texts) {
   let out = null;
@@ -225,6 +226,10 @@ export function areaDamage(texts) {
     if (m) set("turn", { amount: Number(m[2]), piercing: !!m[3], start: /start/i.test(m[1]), end: /end/i.test(m[1]), source, rule: sentenceAt(t, m.index) });
     m = /\bfoes that start their turns? inside the area that end their turns? outside of it take (\d+) (piercing )?damage(?: and are (dazed|blinded|shattered|weakened|vulnerable|slashed|stunned|immobile))?/i.exec(t);
     if (m) set("leave", { amount: Number(m[1]), piercing: !!m[2], status: m[3] ? (m[3].toLowerCase() === "blinded" ? "blind" : m[3].toLowerCase()) : "", source, rule: sentenceAt(t, m.index) });
+    // R33c2: Ätherwand (p.226) "Foes that end their turn in the area are shattered": a status button at the end of
+    // the foe's turn, as River Guardians.
+    m = /\bfoes that end their turns? (?:in|inside) the area are (dazed|blinded|shattered|weakened|vulnerable|slashed|stunned|immobile)\b/i.exec(t);
+    if (m) set("endIn", { status: m[1].toLowerCase() === "blinded" ? "blind" : m[1].toLowerCase(), source, rule: sentenceAt(t, m.index) });
     m = /\bwhen (?:they|it) grows?, deal (\d+) (piercing )?damage to all characters inside\b/i.exec(t);
     if (m) set("grow", { amount: Number(m[1]), piercing: !!m[2], source, rule: sentenceAt(t, m.index) });
   }

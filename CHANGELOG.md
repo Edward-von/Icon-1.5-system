@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Ätherwand: shattered a fine turno dentro l'area (versione 1.15.193)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Ätherwand, "Foes that end their turn in the area are shattered"**: a fine turno non c'era nessun promemoria
+  (p.226) → la frase non era fra le regole di fine turno delle aree → ora un foe che finisce il turno dentro un'area
+  Ätherwand (di chiunque) trova nella card "End of … turn — areas" il bottone "Shattered to <nome>", come per River
+  Guardians. Niente viene dato senza clic, e se il foe è già shattered il bottone non c'è. Solo codice.
+
 ## 17 ottobre 2026 — Mist Strider Talent II: evasion per i foe dentro la nuvola (versione 1.15.192)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Ätherwand: shattered a fine turno dentro l'area (17 ottobre 2026, versione 1.15.193)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazzare Ätherwand e far finire il turno a un foe dentro la line: alla fine del suo turno esce la card con
+      "Shattered to <foe>"; cliccandolo il foe diventa shattered.
+- [ ] Un foe che finisce il turno fuori dall'area: nessuna riga.
+- [ ] Un PG che finisce il turno dentro: nessuna riga.
+- [ ] Un foe già shattered che finisce dentro: nessun bottone.
+
 ## Emerso R33 — Mist Strider Talent II: evasion per i foe dentro la nuvola (17 ottobre 2026, versione 1.15.192)
 
 Setup: solo codice (F5 basta).

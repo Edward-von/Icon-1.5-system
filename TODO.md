@@ -1494,8 +1494,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       evasion" non ha nessun promemoria.
 (FATTO il 17 ottobre 2026, versione 1.15.192: nota sulla card e "Defender has evasion" spuntato nel dialog d'attacco
       dei foe dentro la nuvola.)
-- [ ] **Emerso lavorando su R33c2 — Ätherwand "Foes that end their turn in the area are shattered"** (S): nessun
+- [x] **Emerso lavorando su R33c2 — Ätherwand "Foes that end their turn in the area are shattered"** (S): nessun
       promemoria a fine turno; si potrebbe fare come River Guardians.
+(FATTO il 17 ottobre 2026, versione 1.15.193: bottone Shattered a fine turno per i foe dentro l'area Ätherwand, come
+      River Guardians.)
 - [ ] **Emerso lavorando su R33c2 — Waterspout: risucchiare e risputare** (S/M, da decidere): "removed from the
       battlefield … placing them in any other free space in range 2" (p.235) e la spinta del Talent I restano a mano.
       Domanda per Edoardo: "removed from the battlefield" come lo rendiamo (token nascosto, token spostato fuori
@@ -1569,6 +1571,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33c2 — area che cresce sopra i personaggi** (S): quando un'area si allarga (Bifröst
       Talent II "Add 2 spaces", Ätherwand Talent I che estende, Blood Grove "Area +N") chi sta nelle caselle nuove non
       riceve l'offerta di status; si può usare lo stesso `offerInsideOnShift` dentro `extendAreaTemplate`.
+- nessuno
 - nessuno
 
 ---

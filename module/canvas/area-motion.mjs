@@ -469,6 +469,21 @@ export async function areaTurnEnd(combatant) {
         ${leave.status ? insideStatusButton(td, leave.status, { label: `${leave.status[0].toUpperCase()}${leave.status.slice(1)} to ${td.name}` }) : ""}</div>`);
     }
   }
+  // R33c2: Ätherwand (p.226) "Foes that end their turn in the area are shattered": any creator's area the foe ends in.
+  if (td && isFoeToken(td) && !td.flags?.[NS]?.mapObject) {
+    const mine = cellsOfToken(td).map(cellKey);
+    const { insideStatusButton } = await import("./terrain-spaces.mjs");
+    const { hasStatus } = await import("../combat/statuses.mjs");
+    for (const doc of scene.templates) {
+      const f = doc.flags?.[NS];
+      if (!f?.lasting || f.followTokenId || !(f.cells ?? []).some(c => mine.includes(cellKey(c)))) continue;
+      const e = rulesOf(doc)?.damage?.endIn;
+      if (!e || hasStatus(actor, e.status)) continue;
+      const label = `${e.status[0].toUpperCase()}${e.status.slice(1)}`;
+      lines.push(`<p><strong>${esc(td.name)}</strong> ends the turn inside <strong>${esc(nameOf(doc))}</strong>.</p><p><small>${esc(e.source ? `${e.source}: ` : "")}${esc(e.rule)}</small></p>
+        <div>${insideStatusButton(td, e.status, { label: `${label} to ${td.name}` })}</div>`);
+    }
+  }
   if (!lines.length) return;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
