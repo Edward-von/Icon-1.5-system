@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Chronotemper: tolta l'etichetta "Power Die" (versione 1.15.74)
+
+### Round di debug del 16 ottobre, punto R52
+
+- **Chronotemper** (Fool, p.152): sulla scheda c'era l'etichetta "Power Die" ma l'abilità non usa nessun dado → il libro
+  stampa davvero "1 action / Mark, Power die", ma è un errore: né il testo né i talenti né la mastery usano un power die
+  (Cheat Time fa un Gamble) → su richiesta di Maar il compendio Jobs ora ha solo il tag "Mark", così un giocatore non
+  cerca un dado che non c'è (qui ci discostiamo apposta dal libro).
+- La migrazione 30 toglie "Power Die" anche dalle copie già sulle schede e nella sidebar (gli altri tag restano).
+
 ## 17 ottobre 2026 — Sturmreiten: la seconda Line 3 del Talent II (versione 1.15.73)
 
 ### Round di debug del 16 ottobre, punto R47b

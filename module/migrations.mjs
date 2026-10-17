@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 29;
+export const CURRENT_SCHEMA_VERSION = 30;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1103,6 +1103,30 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 29: ${n} copy/copies of Open the Gates given the "Special:" in front of both versions`);
+  },
+
+  /* 30 — Chronotemper (Fool, p.152) prints "Mark, Power die" but uses no
+   * power die (Cheat Time gambles), so the "Power Die" label only confused
+   * players. Maar asked (17 Oct 2026) to drop it: the jobs pack now has tags
+   * ["mark"]; drop "power-die" from the copies on sheets and in the sidebar. */
+  30: async () => {
+    const stale = (item) => item.type === "ability" && (item.name ?? "").trim() === "Chronotemper"
+      && Array.isArray(item.system?.tags) && item.system.tags.includes("power-die");
+    const fix = (item) => ({ "system.tags": item.system.tags.filter(t => t !== "power-die") });
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.filter(stale).map(i => ({ _id: i.id, ...fix(i) }));
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      if (!stale(item)) continue;
+      await item.update(fix(item));
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 30: "power-die" tag removed from ${n} copy/copies of Chronotemper`);
   },
 };
 

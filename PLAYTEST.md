@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R52 — Chronotemper senza l'etichetta "Power Die" (17 ottobre 2026, versione 1.15.74)
+
+Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Fool di capitolo 3 che ha già Chronotemper sulla
+scheda da prima di questa versione.
+
+- [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 30: "power-die"
+      tag removed from … copy/copies of Chronotemper".
+- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Chronotemper: tra i tag c'è solo "Mark", niente "Power Die";
+      nessun contatore di dado comparso o sparito.
+- [ ] **Copia nuova dal compendio**: trascina Chronotemper dal compendio Jobs su un PG → solo il tag "Mark".
+- [ ] **Chat**: 💬 Show in Chat → la card mostra solo "Mark"; il mark e l'interrupt Cheat Time funzionano come prima.
+- [ ] **Altre abilità con power die invariate**: un'abilità che usa davvero un power die (es. una con contatore sulla
+      scheda) ha ancora il tag "Power Die" e il suo contatore.
+
 ## R47b — Sturmreiten Talent II, seconda Line 3 (17 ottobre 2026, versione 1.15.73)
 
 Setup: scena a griglia quadrata, un PG Spellblade con Sturmreiten (capitolo 2) e il Talent II scelto, qualche foe sparso
