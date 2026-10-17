@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R14 — Il danno che un foe infligge a se stesso non è più proposto (17 ottobre 2026, versione 1.15.143)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bale Troll importato di nuovo dal compendio: Incredible Bulk non ha più il pulsante Damage; le altre azioni
+      (Boulder Fist, Hurl Boulder) lo hanno ancora e propongono lo stesso danno di prima.
+- [ ] Provoke su un PG: il "1 piercing damage to you" resta escluso come prima.
+
 ## Emerso R49 — Harvest Moon: esplosioni sulle plant con un clic (17 ottobre 2026, versione 1.15.142)
 
 Setup: solo codice (F5 basta).

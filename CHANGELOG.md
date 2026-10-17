@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno che un foe infligge a se stesso non è più proposto (versione 1.15.143)
+
+### Round di debug del 15 ottobre, voce emersa su R14
+
+- **Incredible Bulk del Bale Troll**: la scheda mostrava il pulsante Damage e proponeva 10 piercing come danno
+  inflitto → il parser escludeva solo il danno "to you" (Provoke p.142), non "to itself" ("The troll deals 10 piercing
+  damage to itself", p.457) → anche "to itself" è escluso in `ability-damage.mjs`: l'azione non propone più quel danno
+  né il pulsante Damage. Su tutti i pack cambia solo lui (e la sua copia in foe-abilities). Solo codice.
+
 ## 17 ottobre 2026 — Harvest Moon: esplosioni sulle plant con un clic (versione 1.15.142)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

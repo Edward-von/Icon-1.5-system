@@ -22,17 +22,19 @@ function parseChunk(text) {
   const includesFray = /\bfray\b/.test(lower);
   // explicit flat damage: "3 damage", "2 piercing damage". Damage dealt to
   // the user ("each adjacent foe deals 1 piercing damage to you", Provoke
-  // p.142) is what they take, not what they deal: skip it. "2 additional
+  // p.142) is what they take, not what they deal: skip it. Same for a foe
+  // hurting itself (Bale Troll's Incredible Bulk p.457, "The troll deals 10
+  // piercing damage to itself"). "2 additional
   // divine damage" (Passage to the Afterlife p.190) counts too, and so does
   // "2 unerring damage" (Astral Chain's Mark p.156).
-  const flatMatch = lower.match(/(\d+)\s+(?:additional\s+)?(?:divine\s+|piercing\s+|true\s+|unerring\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
+  const flatMatch = lower.match(/(\d+)\s+(?:additional\s+)?(?:divine\s+|piercing\s+|true\s+|unerring\s+)?damage(?!\s+to\s+(?:you(?:rself)?|itself)\b)/);
   const flat = flatMatch ? Number(flatMatch[1]) : 0;
   // Damage type written next to the amount X
   // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
   // the damage dialog can start with Divine / Pierce ticked (p.104).
-  // Same "to you" exclusion as the flat amount. Also "divine fray damage",
+  // Same "to you" / "to itself" exclusion as the flat amount. Also "divine fray damage",
   // with the type first (Dread Mock p.141, Gigantas Crusher on legends).
-  const typeMatch = lower.match(/(?:(?:\d+|\[d\]|\bfray)\s+(?:additional\s+)?(divine|piercing)|\b(divine|piercing)\s+fray)\s+damage(?!\s+to\s+you(?:rself)?\b)/);
+  const typeMatch = lower.match(/(?:(?:\d+|\[d\]|\bfray)\s+(?:additional\s+)?(divine|piercing)|\b(divine|piercing)\s+fray)\s+damage(?!\s+to\s+(?:you(?:rself)?|itself)\b)/);
   const type = typeMatch ? (typeMatch[1] || typeMatch[2]) : "";
   // Repeated damage (p.92: "Some damage is listed as X, Y times […] roll
   // [D] once, then apply the total damage three separate times"): "1 divine

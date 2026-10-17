@@ -1303,9 +1303,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (`icon-combat.hbs`, `item.system.cost`), e non seguono la mastery di Catapult.
 (FATTO il 17 ottobre 2026, versione 1.15.123: i riquadri usano lo stesso costo del badge del pannello, con tooltip e
       talenti / mastery. Solo codice.)
-- [ ] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
+- [x] **Emerso lavorando su R14 — danno "to itself" dei foe** (S): Incredible Bulk del Bale Troll ("deals 10 piercing
       damage to itself") potrebbe proporre 10 come danno inflitto, come faceva Provoke con "to you"; da verificare
       sulla scheda del foe ed eventualmente saltare anche "to itself" in `ability-damage.mjs`.
+(FATTO il 17 ottobre 2026, versione 1.15.143: "to itself" escluso come "to you" in ability-damage.mjs; cambia solo
+      Incredible Bulk. Solo codice.)
 - [x] **Emerso lavorando su R16 — Fists of Heaven and Hell con i talenti** (S, dipende da R28): la combo alternativa
       della mastery di God Hand "gains all talent effects of this ability" (p.192), ma oggi non si può usare (R28).
       Quando R28 la renderà usabile, la sua card dell'attacco deve ricevere il talento come la base e Devil Hand
