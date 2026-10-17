@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 32;
+export const CURRENT_SCHEMA_VERSION = 33;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1210,6 +1210,41 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 32: ${n} copy/copies of Helix Heel given back "this way each time" (p.219)`);
+  },
+
+  /* 33 — Aethershard (Enochian, p.210-211), Summon Effect: the book says "the
+   * ability resonates with the shards, dealing 2 piercing damage as an area
+   * effect … Then destroy all Aethershards activated this way and gain 1
+   * Aether"; the pack had "the ability deals 2 piercing damage" and "destroy
+   * all activated Aethershards" (emerged on R33a3). Patch the copies that
+   * still carry the old phrases. */
+  33: async () => {
+    const FIXES = [
+      ["the ability deals 2 piercing damage as an area effect", "the ability resonates with the shards, dealing 2 piercing damage as an area effect"],
+      ["destroy all activated Aethershards", "destroy all Aethershards activated this way"],
+    ];
+    const patch = (item) => {
+      if (item.type !== "ability" || (item.name ?? "").trim() !== "Aethershard") return null;
+      const old = String(item.system?.description ?? "");
+      let next = old;
+      for (const [from, to] of FIXES) if (next.split(from).length === 2) next = next.replace(from, to);
+      return next !== old ? { "system.description": next } : null;
+    };
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = patch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = patch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 33: ${n} copy/copies of Aethershard given back the book's "resonates with the shards" text (p.210)`);
   },
 };
 

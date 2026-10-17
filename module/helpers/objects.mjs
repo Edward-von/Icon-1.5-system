@@ -167,9 +167,10 @@ export function objectRuleNotes(rules) {
 
 /**
  * The rest of what an object's rules set off (R33a3):
- *   areaTrigger  "When you include the Aethershard in the area effect of any ability, the ability deals 2 piercing
- *                damage as an area effect, once, to all characters in the area for every one of your Aethershards
- *                caught … Then destroy all activated Aethershards and gain 1 Aether" (p.210)
+ *   areaTrigger  "When you include the Aethershard in the area effect of any ability, the ability resonates with
+ *                the shards, dealing 2 piercing damage as an area effect, once, to all characters in the area for
+ *                every one of your Aethershards caught … Then destroy all Aethershards activated this way and gain
+ *                1 Aether" (p.210-211; the old pack wording "the ability deals 2 …" reads the same)
  *                → { amount: 2, type: "piercing", aether: 1 }
  *   blessing     "The object has a blessing token on it" (Fairy Ring, Spore Shroud p.187)
  *   countsAs     "… and counts as a plant" → "plant"

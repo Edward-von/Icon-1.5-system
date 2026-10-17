@@ -582,8 +582,8 @@ const charactersIn = (cells) => tokensInCells(cells).filter(t => !mapObjectFlag(
 
 /**
  * An area `actor` just placed caught some of their objects whose rules trigger on it: the Aethershard,
- * "When you include the Aethershard in the area effect of any ability, the ability deals 2 piercing damage as an
- * area effect, once, to all characters in the area for every one of your Aethershards caught in the same ability.
+ * "When you include the Aethershard in the area effect of any ability, the ability resonates with the shards, dealing
+ * 2 piercing damage as an area effect, once, to all characters in the area for every one of your Aethershards caught in the same ability.
  * Then destroy all Aethershards activated this way and gain 1 Aether" (p.210). Asked like the Seer's wild cards
  * (wild-cards.mjs): on yes, a damage card (2 × shards, piercing, area, once) for the characters in the area, the
  * shards removed, the Aether gained.

@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33a3 — Aethershard: torna il testo del libro (17 ottobre 2026, versione 1.15.89)
+
+Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 33 (parte da sola al caricamento del mondo, da GM).
+
+- [ ] **Compendio**: Jobs → Aethershard (Enochian) → il Summon Effect dice "…the ability resonates with the shards,
+      dealing 2 piercing damage as an area effect, once, to all characters in the area for every one of your
+      Aethershards caught in the same ability. Then destroy all Aethershards activated this way and gain 1 Aether."
+- [ ] **Copia già sulla scheda**: un PG Enochian che aveva Aethershard prima dell'aggiornamento → dopo il caricamento
+      del mondo (console: "Migration 33: N copy/copies of Aethershard…") la scheda mostra lo stesso testo.
+- [ ] **Shard presi da un'area**: piazzare un Aethershard, poi un'area di un'altra abilità che lo include → il dialog
+      "Aethershard caught" chiede ancora "Deal 2 piercing damage × 1 = 2 … and gain 1 Aether"; su Resonate lo shard
+      sparisce, l'Aether sale di 1 e parte la card del danno.
+
 ## Emerso R41 — Show in Chat delle azioni foe / legend divide le righe di un'area (17 ottobre 2026, versione 1.15.88)
 
 Setup: solo codice (F5 basta).

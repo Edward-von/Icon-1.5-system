@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aethershard: torna il testo del libro (versione 1.15.89)
+
+### Round di debug del 16 ottobre, voce emersa su R33a3
+
+- **Aethershard, Summon Effect**: nel compendio diceva "the ability deals 2 piercing damage as an area effect … Then
+  destroy all activated Aethershards and gain 1 Aether" → il testo del pack era una parafrasi, non quello del libro
+  (p.210-211: "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then destroy all
+  Aethershards activated this way and gain 1 Aether") → il pack dei job ora ha la frase del libro, e la migrazione 33
+  la mette anche nelle copie già sulle schede che hanno ancora quella vecchia. Il resto della frase era già uguale al
+  libro. Il dialog "Aethershard caught" di quando un'area prende gli shard funziona come prima con tutte e due le
+  forme (danno 2 piercing per shard, +1 Aether).
+
 ## 17 ottobre 2026 — Show in Chat delle azioni foe / legend divide le righe di un'area (versione 1.15.88)
 
 ### Round di debug del 16 ottobre, voce emersa su R41

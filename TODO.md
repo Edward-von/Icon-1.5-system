@@ -437,7 +437,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.79: nell'hook updateCombat il controllo delle riserve e i promemoria relic
       "round-end" partono solo se il round nuovo è maggiore di 1, stessa condizione già usata per la crescita delle
       aree; il promemoria R62 del round 1 resta.)
-- [ ] **Emerso lavorando su R33a3 — Aethershard: testo del compendio diverso dal libro** (S, dati): il pack dice "the
+- [x] **Emerso lavorando su R33a3 — Aethershard: testo del compendio diverso dal libro** (S, dati) (FATTO il 17 ottobre 2026, versione 1.15.89: pack jobs corretto con `r33a3-aethershard-text/fix-aethershard.mjs`, migrazione 33 sulle copie; il resto della frase era già uguale al libro): il pack dice "the
       ability deals 2 piercing damage as an area effect … Then destroy all activated Aethershards and gain 1 Aether",
       il libro (p.210-211) "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then
       destroy all Aethershards activated this way and gain 1 Aether". Il codice di R33a3 legge tutte e due le forme;
@@ -493,6 +493,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       lega il bersaglio ad attore + nome dell'azione, non all'area: se l'area viene ripiazzata a mano dopo un vecchio
       tiro, Show in Chat (PG, foe e legend) può usare il bersaglio scelto per l'area precedente, se quel token è
       ancora tra i bersagli. Si potrebbe azzerare la scelta quando si piazza una nuova area.
+- [ ] **Emerso lavorando su R33a3 — Aethershard: il danno dello shard letto come danno dell'abilità** (S, da
+      verificare): `parseAbilityDamage` sulla descrizione di Aethershard (vecchia e nuova forma) dà `dealsDamage: true`
+      con Hit 2 piercing, cioè i "2 piercing damage" del Summon Effect (che li infligge l'area che include lo shard, non
+      l'abilità che lo evoca). Controllare se la scheda mostra un bottone danno su Aethershard e, se sì, toglierlo.
 
 ---
 
