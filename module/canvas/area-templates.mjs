@@ -829,7 +829,7 @@ export const isPlacingArea = () => AreaPlacement.active;
  * @param {string}  [opts.stackRule=""] the sentence that allows it, shown in the question
  * @param {object|null} [opts.extension] R47b: a second line the user may add (lineExtensionInText, plus `source`)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -948,6 +948,21 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
         area.label = `${area.label} + ${more.label}`;
       }
     }
+  }
+
+  // DULCE PURGATORIO (p.178): "Pandaemonium's area effect … extend[s] to all pits on the battlefield": every pit
+  // space on the scene joins this area (IconSheet #areaOnAllPits), so whoever stands on a pit is in it, once.
+  if (allPits && !pitBlast && !isAura && !atSpace) {
+    const seen = new Set(cells.map(cellKey));
+    let added = 0;
+    for (const t of canvas.scene.templates) {
+      if (!t.flags?.[FLAG_NS]?.terrain?.pit) continue;
+      for (const c of t.flags[FLAG_NS].cells ?? []) {
+        const k = cellKey(c);
+        if (!seen.has(k)) { seen.add(k); cells.push({ i: c.i, j: c.j }); added++; }
+      }
+    }
+    if (added) area.label = `${area.label} + all pits`;
   }
 
   if (replace && removeIds) {
@@ -1417,7 +1432,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null, allPits = false }) {
   // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
   const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
@@ -1426,7 +1441,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null, allPits });
 }
 
 /**

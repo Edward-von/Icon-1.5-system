@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (17 ottobre 2026, versione 1.15.106)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Pandaemonium e DULCE PURGATORIO sbloccata, due o tre pit sulla scena lontani dal punto scelto, combo NON
+      armata. Bottone dell'area → Medium Blast: un solo template che copre il blast e tutti i pit, nome "Medium Blast
+      + all pits", tra i bersagli anche i token sui pit.
+- [ ] Come sopra ma dal tiro d'attacco, senza area già sulla mappa: stesso risultato; chi sta su un pit dentro il
+      blast compare una volta sola.
+- [ ] Charge (Large Blast): anche il blast grande prende tutti i pit.
+- [ ] Senza pit sulla scena: area normale, nome senza "+ all pits".
+- [ ] Mastery non sbloccata: l'area non prende i pit fuori dal blast.
+- [ ] Combo armata (Purgatorio): l'area dell'attacco NON prende i pit; "Medium Blast (on pits)" fa ancora esplodere
+      tutti i pit.
+- [ ] Altre abilità con Mastery sbloccata (es. Holy con MAGNASANCTI): nessun cambiamento.
+
 ## Emerso R48 — L'aura di Fulminate arriva da sola con il mark (17 ottobre 2026, versione 1.15.105)
 
 Setup: solo codice (F5 basta).

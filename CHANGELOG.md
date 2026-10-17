@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (versione 1.15.106)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Pandaemonium con DULCE PURGATORIO**: con la Mastery sbloccata l'area di Pandaemonium copriva solo il suo Medium
+  Blast, quindi chi stava su un pit fuori dall'area non veniva preso → la prima metà della Mastery ("Pandaemonium's
+  area effect … extend to all pits on the battlefield", p.178) non veniva letta; c'era solo l'esplosione dei pit di
+  Purgatorio (1.15.96) → lettura (a) scelta da Edoardo: con la Mastery sbloccata e la combo non armata, quando si
+  piazza l'area di Pandaemonium (dal bottone dell'area o dal tiro d'attacco) alle sue caselle si aggiungono quelle di
+  tutti i pit della scena, nello stesso template ("Medium Blast + all pits"), e chi sta su un pit è bersaglio una
+  volta sola. L'area di Purgatorio (combo armata) e "Medium Blast (on pits)" restano come prima. Rimettere i
+  personaggi in un'altra casella dell'area resta a mano. Solo codice.
+
 ## 17 ottobre 2026 — L'aura di Fulminate arriva da sola con il mark (versione 1.15.105)
 
 ### Round di debug del 16 ottobre, voce emersa su R48

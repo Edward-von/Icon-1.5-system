@@ -2354,10 +2354,23 @@ export class IconSheet extends BaseActorSheet {
     const lasting = this.#areaLasts(ab, area);
     // With MJÖLLNIR (p.227) the area is an Arc 5, and so is the Talent II extension.
     const extension = area?.kind === "line" || area?.kind === "arc" ? this.#lineExtension(ab, s) : null;
-    if (!lasting || area?.kind === "aura") return { lasting, extension };
+    const allPits = this.#areaOnAllPits(ab, s, area);
+    if (!lasting || area?.kind === "aura") return { lasting, extension, allPits };
     const terrain = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
     const stack = areaStackLimit(activeAreaTexts(s));
-    return { lasting, terrain, extension, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
+    return { lasting, terrain, extension, allPits, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
+  }
+
+  /**
+   * DULCE PURGATORIO (Pandaemonium's mastery, p.178): "Pandaemonium's area effect … extend[s] to all pits on the
+   * battlefield": with the mastery unlocked the ability's own area (not the armed combo's, Purgatorio, nor the
+   * pits' blasts) also takes every pit space on the scene (Edoardo's ruling, 17 October 2026).
+   */
+  #areaOnAllPits(ab, s, area) {
+    if (!ab.hasMastery || ab.comboArmed || !area || area.kind === "aura" || area.centeredOn === "pits") return false;
+    const text = String(s.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/’/g, "'").replace(/\s+/g, " ").toLowerCase();
+    const at = text.indexOf(`${String(ab.name ?? "").toLowerCase()}'s area effect`);
+    return at >= 0 && /^[^.]*\ball pits on the battlefield\b/.test(text.slice(at));
   }
 
   /**
@@ -2573,7 +2586,7 @@ export class IconSheet extends BaseActorSheet {
       }
     }
     const areaOpts = this.#areaPlacementOpts(ab, areaChoice ?? areaFromTags(ab.tags));
-    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, area: areaChoice });
+    const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, allPits: !!areaOpts.allPits, area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
 
     // Relic integration: "Invoke (Attack, N+)" checks on the raw d20 and the

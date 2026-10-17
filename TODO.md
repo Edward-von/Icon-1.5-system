@@ -610,7 +610,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
       è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
       controllare che il token sia dentro le caselle dell'area.
-- [ ] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, pronto: risposta del
+- [x] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, pronto: risposta del
       17 ottobre 2026): la prima metà della Mastery (p.178, "Pandaemonium's area effect … extend to all pits on the
       battlefield") non è letta; l'Area Effect è "Remove all characters in the area, then place them back in any other
       space in the area" (p.177). Domanda per Edoardo: (a) l'area diventa l'area dell'abilità più tutte le caselle con
@@ -619,6 +619,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Risposta di Edoardo (17 ottobre 2026): (a). Con DULCE PURGATORIO l'Area Effect di Pandaemonium ("Remove all
       characters in the area, then place them back in any other space in the area", p.177) prende anche le caselle di
       tutti i pit del campo (p.178): chi sta su un pit viene preso, e si può rimettere anche su un pit.
+(FATTO il 17 ottobre 2026, versione 1.15.106: con DULCE PURGATORIO sbloccata e la combo non armata, l'area di
+      Pandaemonium unisce alle sue caselle quelle di tutti i pit della scena in un solo template; chi sta su un pit è
+      bersaglio una volta sola; l'area di Purgatorio e l'esplosione dei pit non cambiano. Un'area già sulla mappa
+      riusata dal tiro non prende i pit creati dopo. Solo codice.)
 - [ ] **Emerso lavorando su R49 — chip dei pit di Pandaemonium legati tra loro** (S): i due chip finiscono nello
       stesso gruppo, quindi il clic destro su uno dei due toglie dalla scena sia il pit della combo sia quelli sotto i
       foe pacified.
