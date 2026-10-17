@@ -106,6 +106,7 @@ import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
 import { registerMapObjectHooks, objectPierceAgainst } from "./module/canvas/map-objects.mjs";
+import { registerWaterspout } from "./module/canvas/waterspout.mjs";
 import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
 import { registerAreaMotion } from "./module/canvas/area-motion.mjs";
 import { registerFollowMarks } from "./module/canvas/follow-marks.mjs";
@@ -264,6 +265,8 @@ Hooks.once("init", () => {
 
   // ---- Terrain-effect areas that move or grow: Tsunami, Waterspout, Bifröst Talent II, Shift + arrows (R33c) ----
   registerAreaMotion();
+  // ---- Waterspout: characters sucked in (hidden) and spat out at the end of the creator's turn (p.235) ----
+  registerWaterspout();
 
   // ---- Terrain marks put on a character, following them: Polaris Talent I, Amico, Waking Void (R33d) ----
   registerFollowMarks();

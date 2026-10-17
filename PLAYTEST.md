@@ -1656,6 +1656,31 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Waterspout: risucchia i personaggi e li risputa (17 ottobre 2026, versione 1.15.232)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Waterspout: piazza il waterspout dal chip vicino a un alleato e a un nemico. Dopo la card del piazzamento
+      ne arriva una "summoned" con "Suck in" sull'alleato e "Save, then suck in" sul nemico.
+- [ ] Clicca "Suck in" sull'alleato: il token sparisce per i giocatori (il GM lo vede semitrasparente) e il bottone
+      diventa grigio.
+- [ ] Clicca "Save, then suck in" sul nemico: esce la card del tiro salvezza. Se lo supera resta fuori, se lo fallisce
+      viene nascosto. Da giocatore (che non possiede il nemico), col GM connesso, il nemico viene nascosto lo stesso.
+- [ ] In combattimento, attiva il personaggio risucchiato: esce la card "X is inside the waterspout … they don't take
+      turns until they return (p.88)" e il tracker funziona ancora.
+- [ ] Fine del turno del creatore: arriva la card "the waterspout spits out" con un bottone "Place <nome>" per ogni
+      personaggio. Il click su uno spazio occupato, dentro lo spout o oltre range 2 dà un avviso. Su uno spazio valido
+      il token compare lì, visibile.
+- [ ] Inizio del turno del creatore: arriva di nuovo la card di risucchio con i personaggi entro range 2 (quelli già
+      dentro non ci sono).
+- [ ] Con il Talent I selezionato: sulla card di sputo, "Shove them 1 away" prima di piazzarli dà l'avviso "Place …
+      first". Dopo averli piazzati li spinge di 1 lontano dallo spout. Chi è bloccato riceve l'avviso "shove by hand".
+- [ ] Con un personaggio dentro, togli il waterspout (Remove sulla card, Canc sul layer Templates, oppure usa di nuovo
+      l'abilità e scegli Replace): arriva la card "… is gone — place the characters inside back" con i bottoni Place.
+- [ ] Il bottone "Spit them out now" sulla card di risucchio crea subito la card di sputo (utile fuori dal
+      combattimento).
+- [ ] Un giocatore che non è il creatore vede i bottoni grigi.
+
 ## Emerso status sulla card del danno — I bottoni Inflict anche sulla card del danno (17 ottobre 2026, versione 1.15.231)
 
 Setup: solo codice (F5 basta).

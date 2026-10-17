@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Waterspout: risucchia i personaggi e li risputa (versione 1.15.232)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Waterspout risucchia e risputa**: il waterspout (p.235) si piazzava e si spostava, ma il risucchio ("suck in any
+  characters of your choice in range 2 … removed from the battlefield") e lo sputo a fine turno ("placing them in any
+  other free space in range 2 outside of the spout") andavano fatti a mano, e lo stesso valeva per la spinta del
+  Talent I → nessun codice leggeva quelle frasi → un modulo nuovo (`module/canvas/waterspout.mjs`), con l'opzione (a)
+  scelta da Edoardo. Quando il waterspout viene evocato e all'inizio del turno del creatore esce una card con i
+  personaggi entro range 2: gli alleati hanno "Suck in", i nemici "Save, then suck in" (risucchiati solo se falliscono
+  il tiro). Il token risucchiato resta dov'è, diventa nascosto ai giocatori e prende un flag che punta allo spout.
+  All'inizio del suo turno esce un promemoria: "non fa turni finché non torna" (p.88). A fine turno del creatore esce
+  una card con un bottone "Place" per ogni personaggio: si clicca uno spazio libero entro range 2 e fuori dallo spout,
+  il token viene piazzato e torna visibile (piazzare non conta come muoversi, p.88). Con il Talent I c'è anche il
+  bottone "Shove them 1 away". Se lo spout viene tolto (o sostituito) con dentro qualcuno, esce una card per
+  rimetterli sul campo. I token che il giocatore non possiede passano dal GM. Solo codice.
+
 ## 17 ottobre 2026 — I bottoni Inflict anche sulla card del danno (versione 1.15.231)
 
 ### Round di debug del 15 ottobre, voce emersa (status sulla card del danno)

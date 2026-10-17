@@ -472,6 +472,11 @@ export async function placeTerrainFromChip(actor, itemId, index) {
         <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}${flashStepButton(scene, actor, item, sp)}</div>
       </div>`,
   });
+  // Waterspout (p.235) "When summoned, ... you may have the waterspout suck in any characters of your choice in range 2".
+  if (sp.kind === "mark") {
+    const { offerSuckIn } = await import("./waterspout.mjs");
+    for (const doc of docs) await offerSuckIn(doc, "summoned").catch(err => console.warn("[ICON | TerrainSpaces] waterspout offer failed", err));
+  }
 }
 
 /**

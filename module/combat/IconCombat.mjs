@@ -41,6 +41,7 @@ import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
 import { terrainTurnStart, terrainTurnEnd } from "../canvas/terrain-spaces.mjs";
 import { areaTurnStart, areaTurnEnd, areaRoundEnd } from "../canvas/area-motion.mjs";
+import { waterspoutTurnStart, waterspoutTurnEnd } from "../canvas/waterspout.mjs";
 import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
 import { wheelCombatStart, wheelTurnStart, wheelTurnEnd } from "./wheel-of-fate.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
@@ -894,6 +895,9 @@ export function registerCombatHooks() {
           // Areas that deal damage at the end of the turn: GUNGNIR (p.225), River Guardians (p.169; R33c2).
           try { await areaTurnEnd(prev); }
           catch (err) { console.warn("[ICON | IconCombat] area turn reminders (end) failed", err); }
+          // Waterspout (p.235): "At the end of your turn, the waterspout spits out all characters it sucked in".
+          try { await waterspoutTurnEnd(prev); }
+          catch (err) { console.warn("[ICON | IconCombat] waterspout (end) failed", err); }
           // Marks that work the terrain at the end of the turn: Deepwrath's drag under (p.235; R33b2).
           try { await terrainTurnEnd(prev); }
           catch (err) { console.warn("[ICON | IconCombat] terrain turn reminders (end) failed", err); }
@@ -954,6 +958,9 @@ export function registerCombatHooks() {
           // Tsunami, Waterspout, Ätherwand Talent II, Hurricane (R33c).
           try { await areaTurnStart(current); }
           catch (err) { console.warn("[ICON | IconCombat] area turn reminders (start) failed", err); }
+          // Waterspout (p.235): suck in at the start of the creator's turn; no turn while inside it (p.88).
+          try { await waterspoutTurnStart(current); }
+          catch (err) { console.warn("[ICON | IconCombat] waterspout (start) failed", err); }
           // Seer: Skein, draw a card at the start of the turn (p.199).
           try { await wheelTurnStart(current); }
           catch (err) { console.warn("[ICON | IconCombat] Wheel of Fate (start) failed", err); }

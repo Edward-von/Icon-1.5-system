@@ -1550,11 +1550,15 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       promemoria a fine turno; si potrebbe fare come River Guardians.
 (FATTO il 17 ottobre 2026, versione 1.15.193: bottone Shattered a fine turno per i foe dentro l'area Ätherwand, come
       River Guardians.)
-- [ ] **Emerso lavorando su R33c2 — Waterspout: risucchiare e risputare** (S/M, da decidere): "removed from the
+- [x] **Emerso lavorando su R33c2 — Waterspout: risucchiare e risputare** (S/M, da decidere): "removed from the
       battlefield … placing them in any other free space in range 2" (p.235) e la spinta del Talent I restano a mano.
       Domanda per Edoardo: "removed from the battlefield" come lo rendiamo (token nascosto, token spostato fuori
       mappa, o solo un promemoria con l'elenco)? E a fine turno la risputata si fa cliccando uno spazio per ciascuno,
       entro range 2?
+(FATTO il 17 ottobre 2026, versione 1.15.232: opzione (a) di Edoardo, token nascosto con flag, card di risucchio e di
+      sputo, Talent I al clic, card per rimetterli giù se lo spout sparisce, relay al GM. Restano fuori: Infuse 2
+      GREAT WATERSPOUT (risucchiare oggetti), il token nascosto che occupa ancora il suo spazio, e il turno che non
+      viene saltato da solo (c'è il promemoria).)
 - [x] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
       lands in the space of an object, creating a second line 3 area" (p.226) resta a mano. Domanda per Edoardo: in
       quale direzione rimbalza la seconda line (il libro non lo dice)?
@@ -1727,6 +1731,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - nessuno
 - nessuno
+- [ ] **Emerso lavorando su R33c2 — Waterspout, resto** (S): GREAT WATERSPOUT (Infuse 2, risucchiare oggetti) resta a
+      mano; il token nascosto dentro lo spout occupa ancora il suo spazio sulla mappa; il turno di chi è dentro non
+      viene saltato da solo (solo un promemoria).
 
 ---
 
