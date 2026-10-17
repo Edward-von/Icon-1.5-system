@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (17 ottobre 2026, versione 1.15.175)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Elden Rune piazzata, poi si chiude il combat: il GM riceve "End of the scene?" con Remove.
+- [ ] Gates of Hell con mastery: la card dell'afterimage ha "Flash Step"; cliccando un afterimage libero il token ci
+      va e l'afterimage sparisce. Uno occupato viene rifiutato e il bottone resta usabile.
+- [ ] Bio Talent I con l'area già piazzata: "To dangerous" chiede quante caselle (pit, difficult, oggetti propri) e le
+      rende dangerous; senza area compare un avviso.
+- [ ] Bio Talent II: "Boil" elenca chi è dentro o accanto al dangerous nell'area e dà 2 danni dopo la conferma.
+- [ ] Terraforming: "Clear terrain", poi si cliccano caselle difficult o dangerous nell'area: le caselle singole
+      spariscono, le aree più grandi perdono solo quelle caselle.
+
 ## R33b2 — Il pit conta come un livello più in basso (17 ottobre 2026, versione 1.15.174)
 
 Setup: solo codice (F5 basta).

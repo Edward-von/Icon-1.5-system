@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (versione 1.15.175)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Elden Rune / Flash Step / Bio / Terraforming**: rune che restavano, afterimage senza Flash Step e terreno da
+  convertire o togliere a mano → nessun codice per questi testi → quando il combat finisce il GM riceve una card con
+  "Remove all" per le caselle che "lasts until the end of the scene" (p.209); la card dell'afterimage ha "Flash Step"
+  (p.129: si clicca un afterimage libero, sparisce e il token va lì); Bio ha i chip "To dangerous" (Talent I) e "Boil"
+  (Talent II, 2 piercing a chi è dentro o accanto al dangerous, p.218); Terraforming ha "Clear terrain" (si cliccano
+  le caselle difficult o dangerous nell'area e vengono tolte, p.219). Tutto chiede conferma prima. Solo codice.
+
 ## 17 ottobre 2026 — Il pit conta come un livello più in basso (versione 1.15.174)
 
 ### Round di debug del 15 ottobre, R33b2

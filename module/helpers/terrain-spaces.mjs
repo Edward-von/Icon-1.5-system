@@ -104,6 +104,9 @@ function enterRules(t, from) {
 /** Label of a space spec: "Pit", "Dangerous pit", "Dangerous", "Difficult", "Mote", "Area +2". */
 export function terrainLabel(s) {
   if (s.kind === "extend") return "Area";
+  if (s.kind === "convert") return "To dangerous";
+  if (s.kind === "boil") return "Boil";
+  if (s.kind === "clear") return "Clear terrain";
   if (s.kind === "pit") return s.dangerous ? "Dangerous pit" : "Pit";
   if (s.kind === "dangerous") return s.foesOnly ? "Dangerous (foes)" : "Dangerous";
   if (s.kind === "difficult") return "Difficult";
@@ -212,6 +215,18 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
   for (const m of t.matchAll(/\bextend the area by (\d+|one|two|three) spaces?\b[^.;]*?\b(?:adding|added) to its total area\b/gi)) {
     add(m.index, { kind: "extend", count: countWord(m[1]) || 1, fixed: true });
   }
+
+  // R33b2: what an ability does to the terrain already in its area, on the map after a click:
+  //   Bio Talent I (p.218) "cause pits, objects you created, and difficult terrain caught in the area to become
+  //   dangerous terrain"; Bio Talent II "cause existing dangerous terrain spaces in the area to boil with poison …
+  //   Characters in or adjacent to one or more of those spaces take 2 piercing damage as an area effect";
+  //   Terraforming (p.219) "Remove any difficult or dangerous terrain of your choice in the area".
+  for (const m of t.matchAll(/\bcause pits, objects you created, and difficult terrain caught in the area to become dangerous terrain\b/gi))
+    add(m.index, { kind: "convert", count: 0, fixed: true });
+  for (const m of t.matchAll(/\bcause existing dangerous terrain spaces in the area to boil\b[^.]*\.[^.]*?\btake (\d+) piercing damage\b/gi))
+    add(m.index, { kind: "boil", count: 0, fixed: true, amount: Number(m[1]) || 2 });
+  for (const m of t.matchAll(/\bremove any difficult or dangerous terrain of your choice in the area\b/gi))
+    add(m.index, { kind: "clear", count: 0, fixed: true });
 
   found.sort((a, b) => a.at - b.at);
   // One spec per kind and name in a text (Symphony's "create a mote" in the mastery is the same mote).

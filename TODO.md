@@ -1462,6 +1462,8 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — shove verso il centro di Implode** (M): "shoving all characters … as close as
       possible towards it … in any order you like" (p.211): oggi solo testo sulla card; servirebbe uno shove guidato,
       personaggio per personaggio.
+- [ ] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
+      ridotto e Arkenrune small blast non cancellabile (p.209): solo testo.
 
 ---
 

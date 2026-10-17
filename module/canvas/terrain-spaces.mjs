@@ -37,6 +37,12 @@ const HL = "IconTerrainPick";
 /** Colours of a space on the map, per kind. */
 export const TERRAIN_COLORS = { pit: "#6b4f2a", dangerous: "#d9480f", difficult: "#8f9a2c", mark: "#7b5fc9" };
 const ICONS = { pit: "fa-circle-down", dangerous: "fa-fire", difficult: "fa-shoe-prints", mark: "fa-location-dot", extend: "fa-expand" };
+// R33b2: chips that work the terrain already inside the ability's area on the map (workArea).
+const AREA_WORK = {
+  convert: { icon: "fa-fire", what: "Click to make the pits, your objects and the difficult terrain inside this ability's area on the map dangerous terrain" },
+  boil: { icon: "fa-skull-crossbones", what: "Click to boil the dangerous terrain inside this ability's area: piercing damage to the characters in or adjacent to it" },
+  clear: { icon: "fa-eraser", what: "Click the difficult or dangerous terrain spaces inside this ability's area to remove" },
+};
 
 /** The terrain flag of a template document, or null. */
 export const terrainFlag = (doc) => doc?.flags?.[NS]?.[FLAG] ?? null;
@@ -72,6 +78,9 @@ export function terrainChips(item) {
     .map(({ sp, index }) => {
       const n = sp.count ? String(sp.count) : "any";
       const byStatus = underStatus(sp);
+      // R33b2: Bio's talents and Terraforming work the terrain already inside the ability's area.
+      if (AREA_WORK[sp.kind]) return { index, kind: sp.kind, label: sp.label, icon: AREA_WORK[sp.kind].icon,
+        title: `${sp.source ? `${sp.source}: ` : ""}${AREA_WORK[sp.kind].what} (asks first). — ${sp.rules}` };
       const label = sp.kind === "extend" ? `Area +${sp.count}` : byStatus ? `${sp.label}s under ${byStatus} foes` : `${sp.label} · ${n}`;
       const what = sp.kind === "extend"
         ? `Click to add ${sp.count} space${sp.count > 1 ? "s" : ""} adjacent to this ability's area already on the map`
@@ -259,6 +268,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   if (!sp) { ui.notifications.warn("That terrain space is no longer on the sheet."); return; }
   if (!actor.isOwner) { ui.notifications.warn(`Only the owner of ${actor.name} or the GM can mark its spaces.`); return; }
   if (sp.kind === "extend") return extendArea(actor, item, sp);
+  if (AREA_WORK[sp.kind]) return workArea(actor, item, sp);
   if (underStatus(sp)) return terrainUnderStatusFoes(actor, item, sp);
   // R33d: Polaris Talent I, Amico, WAKING VOID — on a space as before, or on the targeted character.
   if (sp.onCharacter) {
@@ -330,7 +340,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     content: `<div class="icon-chat-card icon-chat-card--terrain">
         <strong><i class="fa-solid ${ICONS[sp.kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: ${docs.length} × <strong>${esc(sp.label)}</strong>${replace ? " (replacing the earlier ones)" : ""}
         ${what ? `<br><small>${esc(what)}</small>` : ""}
-        <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div>
+        <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}${flashStepButton(scene, actor, item, sp)}</div>
       </div>`,
   });
 }
@@ -345,7 +355,7 @@ export async function removeTerrainOfChip(actor, itemId, index) {
   const scene = canvas?.scene;
   const item = actor?.items?.get(itemId);
   const sp = spacesOfItem(item)[Number(index)];
-  if (!scene || !sp || sp.kind === "extend") return;
+  if (!scene || !sp || sp.kind === "extend" || AREA_WORK[sp.kind]) return;
   const docs = scene.templates.filter(t => terrainFlag(t)?.group === groupOf(actor, item, sp));
   if (!docs.length) { ui.notifications.info(`No ${sp.label.toLowerCase()} spaces of ${item.name} on this scene.`); return; }
   const ok = await foundry.applications.api.DialogV2.confirm({
@@ -372,6 +382,90 @@ async function extendArea(actor, item, sp) {
   });
   if (!area) { ui.notifications.warn(`Place the area of ${item.name} first (its area button), then extend it.`); return; }
   await extendAreaTemplate(area, sp.count, { actor, name: item.name, source: sp.source });
+}
+
+/**
+ * R33b2: Bio's talents (p.218) and Terraforming (p.219) on the terrain inside the ability's own area on the map (the
+ * newest one of this actor and ability, as extendArea): "To dangerous" marks a dangerous space on every pit, difficult
+ * space and object of the user's inside it; "Boil" deals the piercing damage to the characters in or adjacent to the
+ * dangerous spaces inside it; "Clear terrain" lets the user click the difficult / dangerous spaces inside it to remove.
+ * Each asks before anything changes.
+ */
+async function workArea(actor, item, sp) {
+  const scene = canvas.scene;
+  const area = scene.templates.filter(t => {
+    const f = t.flags?.[NS];
+    return f?.cells?.length && f.actorId === actor.id && f.abilityKey === item.id && (!f[FLAG] || f[FLAG].kind === "area") && !f.followTokenId;
+  }).sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0))[0];
+  if (!area) { ui.notifications.warn(`Place the area of ${item.name} first (its area button), then click this.`); return; }
+  const inArea = new Set(area.flags[NS].cells.map(cellKey));
+  const others = terrainOn(scene).filter(x => x.doc.id !== area.id && !x.f.onCharacter);
+  const cellsWhere = (pred) => {
+    const out = new Map();
+    for (const x of others) if (pred(x.f)) for (const k of x.keys) if (inArea.has(k)) out.set(k, k);
+    return out;
+  };
+  const toCell = (k) => { const [i, j] = k.split(",").map(Number); return { i, j }; };
+  const head = `${item.name}${sp.source ? ` (${sp.source})` : ""}`;
+
+  if (sp.kind === "convert") {
+    const keys = cellsWhere(f => f.pit || f.difficult);
+    for (const td of scene.tokens) if (td.flags?.[NS]?.mapObject?.creatorId === actor.id) for (const c of cellsOf(td)) if (inArea.has(cellKey(c))) keys.set(cellKey(c), cellKey(c));
+    for (const k of cellsWhere(f => f.dangerous && !f.foesOnly).keys()) keys.delete(k);   // already dangerous
+    if (!keys.size) { ui.notifications.info(`${head}: no pit, difficult terrain or object of yours inside the area that isn't dangerous already.`); return; }
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${head} — dangerous terrain` },
+      content: `<p>Make <strong>${keys.size}</strong> space${keys.size > 1 ? "s" : ""} inside the area (pits, difficult terrain, your objects) dangerous terrain?</p><p><small>${esc(sp.rules)}</small></p>`,
+      yes: { label: "Make dangerous" }, no: { label: "Not now" }, rejectClose: false,
+    }) ?? false;
+    if (!ok) return;
+    const spec = { kind: "dangerous", name: "", rules: sp.rules };
+    const docs = await createTerrainSpaces(scene, [...keys.keys()].map(toCell), spec, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`,
+      group: groupOf(actor, item, spec), source: sp.source, itemId: item.id });
+    if (docs.length) await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-fire"></i> ${esc(head)}</strong>: ${docs.length} space${docs.length > 1 ? "s" : ""} become dangerous terrain.<div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div></div>`,
+    });
+    return;
+  }
+
+  if (sp.kind === "boil") {
+    const hot = [...cellsWhere(f => f.dangerous).keys()].map(toCell);
+    if (!hot.length) { ui.notifications.info(`${head}: no dangerous terrain inside the area.`); return; }
+    const hit = scene.tokens.filter(t => t.actor && !isMapObject(t) && cellsOf(t).some(c => hot.some(h => cheb(c, h) <= 1)));
+    if (!hit.length) { ui.notifications.info(`${head}: nobody in or adjacent to the dangerous terrain inside the area.`); return; }
+    const amount = Number(sp.amount) || 2;
+    const ok = await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${head} — boil` },
+      content: `<p>${hot.length} dangerous space${hot.length > 1 ? "s" : ""} boil: <strong>${amount} piercing damage</strong> to ${esc(hit.map(t => t.name).join(", "))}?</p><p><small>${esc(sp.rules)}</small></p>`,
+      yes: { label: `Deal ${amount} damage` }, no: { label: "Not now" }, rejectClose: false,
+    }) ?? false;
+    if (!ok) return;
+    const { applyDamageToActor } = await import("../combat/damage.mjs");
+    for (const t of hit) await applyDamageToActor(t.actor, amount, { chatConfirm: true });
+    return;
+  }
+
+  // clear
+  const removable = cellsWhere(f => f.dangerous || f.difficult);
+  if (!removable.size) { ui.notifications.info(`${head}: no difficult or dangerous terrain inside the area.`); return; }
+  const cells = await pickSpaces({ max: 0, color: TERRAIN_COLORS.difficult, hint: `${head}: the difficult or dangerous spaces to remove.`,
+    check: (c) => removable.has(cellKey(c)) ? "" : "Pick a difficult or dangerous space inside the area." });
+  if (!cells?.length) return;
+  const picked = new Set(cells.map(cellKey));
+  let removed = 0, refused = 0;
+  for (const x of others) {
+    if (!(x.f.dangerous || x.f.difficult) || ![...x.keys].some(k => picked.has(k))) continue;
+    if (!(x.doc.isOwner || game.user.isGM)) { refused++; continue; }
+    const left = x.doc.flags[NS].cells.filter(c => !picked.has(cellKey(c)));
+    try {
+      if (!left.length) await x.doc.delete();
+      else await x.doc.update({ [`flags.${NS}.cells`]: left });   // an area keeps its other spaces
+      removed++;
+    } catch (err) { console.warn("[ICON | TerrainSpaces] could not clear a space", err); refused++; }
+  }
+  ui.notifications.info(`${head}: terrain cleared from ${cells.length} space${cells.length > 1 ? "s" : ""}.${refused ? ` ${refused} belong to someone else: ask the GM.` : ""}`);
+  _log(`cleared ${removed} templates`);
 }
 
 /**
@@ -877,6 +971,35 @@ function detonateButton(scene, doc, f, td) {
   "Detonate", "fa-bomb", `${onThem ?`${m[1]} blast centred on ${td.name}` : `${m[1]} blast centred on the space`}${/\bgamble\b/i.test(f.onEnter) ? ", after the gamble" : ""}; the space is removed`);
 }
 
+// Gates of Hell's mastery (p.129): "Flash Step — Free Action: Remove an afterimage that has no characters occupying it,
+// then remove yourself and place yourself in its space."
+const FLASH_STEP = /\bremove an afterimage that has no characters occupying it, then remove yourself and place yourself in its space\b/i;
+
+/** " Flash Step" on the card of the afterimages just marked, when the ability's text in play has it; else "". */
+function flashStepButton(scene, actor, item, sp) {
+  const s = item.system ?? {};
+  const texts = [s.description, s.masteryUnlocked ? s.mastery : ""].map(plainOf).join(" ");
+  if (!/afterimage/i.test(sp.name ?? "") || !FLASH_STEP.test(texts)) return "";
+  return ` ${actButton("flashStep", { scene: scene.id, creator: actor.id, item: item.id }, "Flash Step", "fa-person-running", "Free action: click a free afterimage of yours; it is removed and you are placed there")}`;
+}
+
+// Elden Rune (p.209): "The rune lasts until the end of the scene."
+const UNTIL_SCENE_END = /\blasts until the end of the scene\b/i;
+
+/** Active GM, a combat deleted: a card offering to remove the spaces that last until the end of the scene. */
+async function spacesAtSceneEnd(combat) {
+  const scene = combat?.scene ?? game.scenes?.get(combat?._source?.scene) ?? canvas?.scene;
+  if (!scene) return;
+  const docs = terrainOn(scene).filter(x => !x.f.onCharacter && UNTIL_SCENE_END.test(itemOfSpace(x.doc)?.base ?? "")).map(x => x.doc);
+  if (!docs.length) return;
+  const names = [...new Set(docs.map(d => d.flags[NS].abilityName).filter(Boolean))];
+  await ChatMessage.create({
+    whisper: game.users.filter(u => u.isGM).map(u => u.id),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-flag-checkered"></i> End of the scene?</strong> ${docs.length} space${docs.length > 1 ? "s" : ""} of ${esc(names.join(", "))} last until the end of the scene.
+      <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div></div>`,
+  });
+}
+
 /** Remove a space after its effect went off, unless a mastery keeps it (`keep`). */
 async function endSpace(doc, keep) {
   if (keep || !doc?.parent?.templates?.get(doc.id)) return;
@@ -1031,6 +1154,30 @@ const TERRAIN_ACTS = {
       content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid ${ICONS[kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>: ${docs.length} × <strong>${esc(terrainLabel(spec))}</strong>.<div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div></div>`,
     });
     return true;
+  },
+  /** Flash Step: a free afterimage of the user's removed, the user's token placed in its space. */
+  async flashStep({ scene: sid, creator: cid, item: iid }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!scene || !item) { ui.notifications.warn("That ability is gone."); return false; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of the afterimages first."); return false; }
+    const tok = sourceTokenFor(creator);
+    if (!tok) { ui.notifications.warn(`${creator.name} has no token on this scene.`); return false; }
+    const free = terrainOn(scene).filter(x => x.f.creatorId === creator.id && x.f.itemId === item.id && /afterimage/i.test(x.f.name ?? "")
+      && !charactersOn(scene, x.doc.flags[NS].cells).length);
+    if (!free.length) { ui.notifications.info(`${item.name}: no afterimage of yours with nobody on it.`); return false; }
+    const cells = await pickSpaces({ max: 1, color: TERRAIN_COLORS.mark, hint: `${item.name} — Flash Step: a free afterimage.`,
+      check: (c) => free.some(x => x.keys.has(cellKey(c))) ? "" : "Pick one of your afterimages with nobody on it." });
+    if (!cells) return false;
+    const x = free.find(y => y.keys.has(cellKey(cells[0])));
+    await deleteSpaces(scene, [x.doc]);
+    if (!(await placeTokenAt(tok.document, cells[0]))) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-person-running"></i> ${esc(item.name)}</strong> — Flash Step: ${esc(creator.name)} takes the place of an afterimage (free action).</div>`,
+    });
+    return false;   // the button stays: Flash Step can be used again on another afterimage
   },
   /** A status for the listed characters (relayed to the GM when needed). */
   async statusTokens({ scene: sid, tokens, creator: cid, item: iid, status, label }) {
@@ -1208,6 +1355,11 @@ function bindTerrainActs(html) {
 
 export function registerTerrainSpaceHooks() {
   Hooks.on("renderChatMessageHTML", (_message, html) => bindTerrainActs(html));
+  // The end of the combat stands for the end of the scene: the Elden Rune's "lasts until the end of the scene".
+  Hooks.on("deleteCombat", (combat) => {
+    if (game.users.activeGM?.id !== game.user.id) return;
+    spacesAtSceneEnd(combat).catch(err => console.warn("[ICON | TerrainSpaces] end of scene reminder failed", err));
+  });
   // A character moved by this user: dangerous terrain and named marks (area-templates.mjs' preUpdateToken leaves
   // the old position in options.iconPrevPos). Objects (R33a) don't set anything off.
   Hooks.on("updateToken", (tokenDoc, changed, options, userId) => {
