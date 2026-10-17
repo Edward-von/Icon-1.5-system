@@ -947,6 +947,41 @@ async function offerMoveTriggers(td, prev, to) {
 }
 
 /**
+ * R33a5: is the character `token` maybe in cover thanks to an object? A hint for the defence chips, never applied:
+ *   Geyser Talent I (p.232)    an ally standing on a geyser "have cover from all directions"
+ *   Underway Talent II (p.168) "Allies adjacent to underways have cover"
+ *   any object (p.89, p.92)    "A character can take cover by moving adjacent to an object … that is 1 or more height
+ *                              higher than the elevation they are currently standing on" — only against characters
+ *                              past its row, never adjacent or higher ones, so it depends on the attacker.
+ * @param {Token|TokenDocument|null} token
+ * @returns {{label:string, title:string}|null}
+ */
+export function objectCoverHint(token) {
+  try {
+    const td = token?.document ?? token;
+    const scene = td?.parent;
+    if (!scene || mapObjectFlag(td) || !scene.tokens.some(t => mapObjectFlag(t))) return null;
+    const mine = cellsOf(td);
+    const elev = Number(td.elevation) || 0;
+    const ally = !isHostile(td);
+    let plain = null;
+    for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
+      const g = gapBetween(mine, cellsOf(o));
+      if (g > 1) continue;
+      const info = objectSheetInfo(o.actor);
+      if (!info) continue;
+      if (ally && g === 0 && info.moves.coverOn)
+        return { label: `Cover — on ${info.name.toLowerCase()}`, title: `${info.moves.coverOn.source} (p.232): allies standing on the ${info.name.toLowerCase()} have cover from all directions. Set the Cover status — nothing is halved automatically.` };
+      if (ally && g === 1 && info.moves.coverNear)
+        return { label: `Cover? ${info.name.toLowerCase()}`, title: `${info.moves.coverNear.source} (p.168): allies adjacent to the ${info.name.toLowerCase()} have cover. Set the Cover status if it applies — nothing is halved automatically.` };
+      if (!plain && g === 1 && (Number(o.elevation) || 0) + tokenHeight(o) > elev)
+        plain = { label: "Cover? object", title: `Next to the ${info.name} (total height ${(Number(o.elevation) || 0) + tokenHeight(o)}): cover against characters past its row of spaces, not adjacent nor on higher elevation (p.92). Set the Cover status if it applies — nothing is halved automatically.` };
+    }
+    return plain;
+  } catch (err) { console.warn("[ICON | MapObjects] cover hint failed", err); return null; }
+}
+
+/**
  * At the start or the end of `combatant`'s turn (active GM, from the combat hook), what the objects on the scene
  * say about it, in one chat card:
  *   Geyser (p.232)       "If any character either starts or ends their turn on a geyser, you can cause it to erupt"

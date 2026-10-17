@@ -244,7 +244,7 @@ function objectRuleNotesA4(t) {
  * @param {Array<{source:string, text:string}>} upgrades
  */
 export function objectUpgradeEffects(upgrades) {
-  const out = { relocate: null, adjacentGain: null, pullFoes: null, alliesPlace: 0 };
+  const out = { relocate: null, adjacentGain: null, pullFoes: null, alliesPlace: 0, coverNear: null, coverOn: null };
   for (const u of upgrades ?? []) {
     const t = plain(u.text);
     const rel = /\bremove one of your [\w' -]+?, then place it in any free space up to range (\d+) from its original location\b/i.exec(t);
@@ -254,6 +254,10 @@ export function objectUpgradeEffects(upgrades) {
     if (!out.pullFoes && /\bfoes that [^.]*?\bend their turn adjacent to an? [\w' -]+? can be teleported\b/i.test(t)) out.pullFoes = { source: u.source, text: t };
     const allies = /\ballies can be placed up to (\w+) spaces? away\b/i.exec(t);
     if (allies) out.alliesPlace = Math.max(out.alliesPlace, largestNumber(allies[1]));
+    // R33a5: Underway Talent II "Allies adjacent to underways have cover" (p.168), Geyser Talent I "Allies standing
+    // on a geyser have cover from all directions" (p.232).
+    if (!out.coverNear && /\ballies adjacent to (?:an? |your )?[\w' -]+? have cover\b/i.test(t)) out.coverNear = { source: u.source };
+    if (!out.coverOn && /\ballies standing on (?:an? |your )?[\w' -]+? have cover from all directions\b/i.test(t)) out.coverOn = { source: u.source };
   }
   return out;
 }

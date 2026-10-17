@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Copertura dagli oggetti sulla mappa (17 ottobre 2026, versione 1.15.157)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un PG accanto a un boulder di altezza 1 viene attaccato: sulla riga del bersaglio nella card del danno compare
+      "Cover? object". Con il PG in piedi sopra il boulder il chip non compare.
+- [ ] Underway con Talent II: un alleato accanto al portale mostra "Cover? underway"; un foe nella stessa posizione
+      no.
+- [ ] Geyser con Talent I: un alleato in piedi sul geyser mostra "Cover — on geyser".
+- [ ] Apply: il danno non viene dimezzato finché non si mette lo status Cover.
+
 ## R33d2 — Amico: una sola card Detonate in chat (17 ottobre 2026, versione 1.15.156)
 
 Setup: solo codice (F5 basta).

@@ -36,6 +36,7 @@
  *                          side, so it is never applied automatically).
  */
 import { unlockedRelics } from "./relic-reminders.mjs";
+import { objectCoverHint } from "../canvas/map-objects.mjs";
 
 const _log = (...a) => console.debug("[ICON | Defenses]", ...a);
 
@@ -272,7 +273,10 @@ export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, 
   const wall = attacker ? aetherwallAgainst(actor, attacker, { targetTokenId: tokenId }) : { active: false };
   if (wall.active && unerring) chips.push(_chip("resistance", "Aetherwall — ignored (Unerring)", "Unerring ignores Aetherwall (p.105): the damage is not halved for it."));
   else if (wall.active) chips.push(_chip("resistance", halvedOnRoll ? `Aetherwall (already ½)` : `Aetherwall ½`, `Aetherwall (Artillery, p.298): resistance against abilities from characters outside range 2 — the attacker is ${wall.distance} spaces away, so the damage is halved when it is applied.`, !halvedOnRoll));
-  if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
+  // R33a5: the objects on the map (p.89 "take cover behind them", Underway / Geyser talents) — a hint too.
+  const objHint = p.cover ? null : objectCoverHint(tokenOf(actor, tokenId));
+  if (objHint) chips.push(_chip("cover-hint", objHint.label, objHint.title));
+  else if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
   if (p.stealth && !compact)    chips.push(_chip("stealth", "Stealth", "Stealth: cannot be targeted directly except from an adjacent space (p.146)."));
   if (p.intangible && !compact) chips.push(_chip("intangible", "Intangible", "Intangible: see the character's text — usually immune to damage."));
   if (!compact) for (const n of p.traitNotes) chips.push(_chip("trait", `${n.name}`, `${n.name}: ${n.text} — set the ${n.key} status by hand when it applies.`));

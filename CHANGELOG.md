@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Copertura dagli oggetti sulla mappa (versione 1.15.157)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Copertura dagli oggetti**: un personaggio accanto a un oggetto, a un Underway con Talent II o in piedi su un
+  Geyser con Talent I non mostrava nessun segno di copertura → i suggerimenti di copertura guardavano solo i muri di
+  Foundry → ora le card di danno e i dialog mostrano un chip tratteggiato: "Cover? object" (oggetto adiacente più alto
+  di dove sta il personaggio, p.92), "Cover? underway" (p.168), "Cover — on geyser" ("from all directions", p.232). Il
+  chip è solo un suggerimento: il danno non viene dimezzato da solo (lo status Cover si mette a mano, come per il chip
+  dei muri). Solo codice.
+
 ## 17 ottobre 2026 — Amico: una sola card Detonate in chat (versione 1.15.156)
 
 ### Round di debug del 15 ottobre, R33d2

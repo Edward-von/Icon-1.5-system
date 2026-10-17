@@ -1427,6 +1427,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33d2 — range sul bottone Mark** (S): il bottone Mark delle schede (PG, foe, legend) non
       controlla il range dell'abilità per nessun mark, Polaris Talent I e Amico compresi (il controllo c'è solo sul
       chip "On a character").
+- [ ] **Emerso lavorando su R33a5 — copertura degli oggetti per direzione** (S, da decidere): "cover against all
+      characters past the row of spaces … that their cover is currently occupying" (p.92) si potrebbe calcolare
+      all'Apply conoscendo il token dell'attaccante, ma con un oggetto in diagonale non è chiaro se conti la riga o la
+      colonna; serve una scelta prima di dimezzare in automatico (anche per Geyser Talent I, che vale in ogni
+      direzione).
 
 ---
 
