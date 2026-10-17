@@ -795,14 +795,24 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [x] **Emerso lavorando su R49 — Mote of life non riconosciuta come plant** (S): la mote of life di Dark Sliver
       (RECYCLE, p.187) "is a plant", ma non è nel pack summons né è un oggetto, quindi HARVEST MOON non la vede.
 (FATTO il 17 ottobre 2026, versione 1.15.183: un token chiamato "Mote of life" conta come pianta per HARVEST MOON)
-- [ ] **Emerso lavorando su R40 — "up to N times" nei danni legati a un tiro salvezza** (S, da verificare): in
+- [x] **Emerso lavorando su R40 — "up to N times" nei danni legati a un tiro salvezza** (S, da verificare): in
       `ability-statuses.mjs` `_dmgChunk` legge "N times" anche dentro "up to a maximum of six times" (Assault Wave del
       Master: "must save or take 3 piercing damage per minion…"), quindi probabilmente mostra ×6 invece di un tetto;
       da verificare sulla card e allineare a `maxTimes`.
+      (CHIUSO il 17 ottobre 2026: non è un difetto. Provato `_dmgChunk` sul testo del Master: "six" non viene letto,
+      esce ×1, quindi niente ×6; nessun'altra frase con tiro salvezza nei compendi ha "up to N times".)
 - nessuno
 - [ ] **Emerso lavorando su R49 — Mote of life: terreno quando perde la blessing** (S): RECYCLE (p.187) dice che la
       mote "becomes a terrain effect when its blessing is removed. Inside, any ally gains regeneration while standing
       in its space"; quando la blessing viene presa non succede niente di automatico.
+- [ ] **Emerso lavorando su R40 — Assault Wave non conta i minion** (S/M): "3 piercing damage per minion in the area,
+      up to a maximum of six times, or just 1 piercing damage per minion on a successful save" (p.312) posta una sola
+      card da 3 (o da 1). Il numero di minion non viene chiesto e il tetto di 6 non viene usato; servirebbe un
+      `maxTimes` in `_dmgChunk` e una domanda "quante volte" in `postSaveDamage`.
+- [ ] **Emerso lavorando su R40 — il danno dei tiri salvezza perde piercing e divine** (S): `_dmgChunk` riconosce "3
+      piercing damage" ma non ne salva il tipo, e `postSaveDamage` (inflict-status.mjs) non passa `pierce` / `divine`
+      alla card. Assault Wave e simili tolgono quindi l'armatura e il weakened anche quando il testo dice piercing
+      (p.104).
 
 ---
 
