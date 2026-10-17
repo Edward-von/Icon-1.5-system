@@ -6263,3 +6263,9 @@ ol.chat-log .chat-message,
 .icon-great-wheel-row .controls { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
 .icon-great-wheel-card__targets { margin: 4px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--ic-text-dim); }
 .icon-great-wheel-card__target { display: inline-flex; gap: 4px; align-items: center; }
+
+/* Wheel of Fate / Skein reminders (wheel-of-fate.mjs, p.199): draw / discard buttons. */
+.icon-chat-card--wheel p { margin: 3px 0; }
+.icon-chat-card__buttons { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0 2px; }
+.icon-chat-card__buttons .icon-btn { flex: 1 1 auto; }
+.icon-btn.icon-btn--done { opacity: .55; cursor: default; }

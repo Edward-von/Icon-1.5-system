@@ -252,7 +252,7 @@ async function _placeCardArea(btn) {
  * The discard pile a card from this hand goes to: a pile the user can use named "Discard…" (or "Scarti…"),
  * else the only pile there is. Null when it can't be told: Foundry's Play dialog then asks.
  */
-function _discardPile() {
+export function discardPile() {
   const piles = game.cards?.filter(c => c.type === "pile" && c.testUserPermission(game.user, "LIMITED")) ?? [];
   const named = piles.filter(p => /\b(?:discard|scart)/i.test(p.name ?? ""));
   if (named.length === 1) return named[0];
@@ -262,7 +262,7 @@ function _discardPile() {
 
 /** "Foretell" from a hand: post the card, move it to the discard pile (the passCards hook posts it). */
 async function _foretell(hand, card) {
-  const pile = _discardPile();
+  const pile = discardPile();
   if (!pile) {
     ui.notifications.info("Pick the discard pile (no single pile named \"Discard\" was found).");
     return hand.playDialog(card);

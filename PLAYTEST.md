@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R36 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (17 ottobre 2026, versione 1.15.180)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Mondo con un PG Seer, un mazzo di 13 carte (una sola seme), una mano chiamata col nome del PG e una pila
+      "Discard"; il giocatore ha permesso Owner su tutte e tre. Mano con 2 carte, si avvia il combattimento: compare
+      "Wheel of Fate — start of combat" con *Draw up to 5*; il giocatore clicca e la mano arriva a 5. Il bottone si
+      spegne con la spunta e un secondo clic non pesca.
+- [ ] Mano già con 5 carte o più all'avvio: la card c'è ma senza bottone.
+- [ ] Inizio turno del Seer: card "Skein — start of turn", *Draw 1* pesca una carta. Il giocatore riceve la notifica
+      con il nome della carta, la chat dice solo quante sono.
+- [ ] Fine turno del Seer: card "Skein — end of turn" con *Didn't attack: draw 1*; con 7 carte o più c'è anche
+      *Discard down to 7*. Con 8 carte, il dialogo accetta solo 1 carta scelta; dopo, la mano ha 7 carte, la carta è
+      nella pila Discard e NON esce la card della Great Wheel.
+- [ ] Svuotare il mazzo (tutte le carte in mano o negli scarti), poi *Draw 1*: le carte degli scarti tornano nel mazzo
+      mescolato, si pesca, e la chat scrive "The deck ran out…".
+- [ ] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato.
+- [ ] Un PG che non è Seer: nessuna di queste card.
+- [ ] Il giocatore senza permesso Owner sul mazzo: messaggio d'errore chiaro, nessun blocco.
+
 ## Emerso R12 — Elenchi puntati nella scheda del Summon di un foe (17 ottobre 2026, versione 1.15.179)
 
 Setup: solo codice (F5 basta).

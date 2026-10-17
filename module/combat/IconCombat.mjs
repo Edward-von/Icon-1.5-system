@@ -42,6 +42,7 @@ import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-object
 import { terrainTurnStart, terrainTurnEnd } from "../canvas/terrain-spaces.mjs";
 import { areaTurnStart, areaTurnEnd, areaRoundEnd } from "../canvas/area-motion.mjs";
 import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
+import { wheelCombatStart, wheelTurnStart, wheelTurnEnd } from "./wheel-of-fate.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 
 /* ================================================== */
@@ -877,6 +878,9 @@ export function registerCombatHooks() {
           await applyEndOfTurnEffects(prev);
           // Relic effects "at the end of your turn" (Storm Lord I, Trollhide, Mistborn III…)
           await _postRelicTurnReminders(prev.actor, "end", "End of turn");
+          // Seer: Skein's extra card if they didn't attack, then discard down to 7 (p.199).
+          try { await wheelTurnEnd(prev); }
+          catch (err) { console.warn("[ICON | IconCombat] Wheel of Fate (end) failed", err); }
           // Objects around them at the end of the turn: on a geyser, a foe by an underway, AETHERSHIFT (R33a4).
           try { await objectTurnBoundary(prev, "end"); }
           catch (err) { console.warn("[ICON | IconCombat] object turn reminders (end) failed", err); }
@@ -946,6 +950,9 @@ export function registerCombatHooks() {
           // Tsunami, Waterspout, Ätherwand Talent II, Hurricane (R33c).
           try { await areaTurnStart(current); }
           catch (err) { console.warn("[ICON | IconCombat] area turn reminders (start) failed", err); }
+          // Seer: Skein, draw a card at the start of the turn (p.199).
+          try { await wheelTurnStart(current); }
+          catch (err) { console.warn("[ICON | IconCombat] Wheel of Fate (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their
@@ -1124,6 +1131,9 @@ export function registerCombatHooks() {
         if (c.actor?.type === "icon") await _postRelicTurnReminders(c.actor, "combat-start", "Start of combat");
       }
     } catch (err) { console.error("ICON 1.5 | combat-start relic reminders failed:", err); }
+    // Seer: "At the start of any combat, draw up to 5 cards if you have less" (p.199).
+    try { await wheelCombatStart(combat); }
+    catch (err) { console.error("ICON 1.5 | Wheel of Fate combat start failed:", err); }
   });
 
   /**

@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (versione 1.15.180)
+
+### Round di debug del 15 ottobre, voce emersa su R36
+
+- **Wheel of Fate e Skein**: a inizio combattimento, a ogni turno del Seer e quando il mazzo finiva, pescate e scarti
+  erano tutti a mano con i Cards di Foundry → il sistema non conosceva le regole del mazzo (p.199) → ora il GM attivo
+  pubblica in chat una card a inizio combattimento ("pesca fino a 5 se ne hai meno", bottone *Draw up to 5*, assente
+  se la mano ne ha già 5), una a inizio turno (Skein, bottone *Draw 1*) e una a fine turno (bottone *Didn't attack:
+  draw 1* e, se la mano ha 7 carte o più, *Discard down to 7*, che fa scegliere esattamente le carte in più e le manda
+  negli scarti). Quando il mazzo è vuoto, la pesca rimette prima nel mazzo le carte degli scarti venute da quel mazzo
+  e lo mescola, poi continua; la card in chat lo dice. Solo il proprietario del Seer può cliccare, e ogni bottone si
+  usa una volta sola. La mano è quella col nome del personaggio, oppure l'unica che il suo giocatore possiede, oppure
+  l'unica che esiste. Il mazzo è quello da cui vengono le carte della mano o degli scarti, oppure quello col nome del
+  personaggio, oppure l'unico mazzo. Gli scarti sono la pila col nome del personaggio, oppure quella chiamata
+  "Discard". Solo codice.
+
 ## 17 ottobre 2026 — Elenchi puntati nella scheda del Summon di un foe (versione 1.15.179)
 
 ### Round di debug del 15 ottobre, voce emersa su R12
