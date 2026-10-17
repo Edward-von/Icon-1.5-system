@@ -202,6 +202,9 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
       under: /\b(?:on|in) the space (?:underneath|under|beneath) you\b/i.test(rest) ? "self" : "",
       // Symphony's motes: "None can be placed adjacent to each other or overlap"
       apart: /\bnone can be placed adjacent to each other\b/i.test(t),
+      // Symphony: "Remove up to four blessings from characters anywhere to create pulsing motes" — one mote per
+      // blessing taken (canvas/terrain-spaces.mjs asks whose).
+      fromBlessings: /\bremove up to \w+ blessings? from characters anywhere\b/i.test(t.slice(s0, s1)),
       ...enterRules(t, s1),
     });
   }

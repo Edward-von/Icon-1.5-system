@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Symphony toglie davvero le blessing (17 ottobre 2026, versione 1.15.185)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Dare 2 blessing a un PG proprio e 2 a un PG di un altro giocatore. Da giocatore, cliccare il chip Mote di
+      Symphony: la finestra elenca i due PG con il numero di blessing.
+- [ ] Scegliere 2 + 1: si possono piazzare al massimo 3 mote. Dopo il piazzamento il proprio PG ha 0 blessing (lo
+      stato Blessed sparisce) e l'altro ne ha 1, tolta tramite il GM (serve un GM connesso). In chat compaiono le
+      righe "loses N blessings".
+- [ ] Scegliere 3 blessing ma piazzare solo 2 mote (Invio per finire prima): se ne tolgono solo 2.
+- [ ] Nessuno ha blessing: avviso, e non si piazza niente. Annulla: non si piazza e non si toglie niente.
+- [ ] Scrivere più di 4 in totale: se ne prendono 4, con un avviso.
+
 ## Emerso R33 — Mote attraversata: l'esplosione va sulla mote (17 ottobre 2026, versione 1.15.184)
 
 Setup: solo codice (F5 basta).

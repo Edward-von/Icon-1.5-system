@@ -406,7 +406,14 @@ async function _apply({ target, source, statusId, ongoing, label, abilityName, s
 }
 
 /** Apply on a client that owns the target (or the GM), with a chat note. */
-export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "", expiry = null }) {
+export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "", expiry = null, remove = 0 }) {
+  // Blessings taken away (Symphony "Remove up to four blessings from characters anywhere", p.178): one charge each.
+  if (statusId === "blessed" && remove > 0) {
+    const had = getStatusCharges(target, "blessed");
+    const next = await adjustStatusCharges(target, "blessed", -Math.min(remove, had));
+    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> loses <strong>${had - next}</strong> blessing${had - next === 1 ? "" : "s"} (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
+    return;
+  }
   // A blessing is a token: each one given is one more Blessed charge (p.172),
   // spent for +1 boon on a save.
   if (statusId === "blessed") {
@@ -445,6 +452,22 @@ export function grantStatus({ target, source = null, statusId, label = "", abili
   return _apply({ target, source, statusId, ongoing: false, label: label || statusId, abilityName, sourceTokenId: "", note: "", gain: true });
 }
 
+/**
+ * Take `count` blessings from a character (Symphony, p.178): here when this client owns it, otherwise relayed to the
+ * active GM like the Gain buttons. Resolves true when done or sent.
+ */
+export async function removeBlessings({ target, source = null, count = 1, abilityName = "" }) {
+  if (!target || !(count > 0)) return false;
+  if (target.isOwner || game.user.isGM) {
+    await applyStatusDirect({ target, statusId: "blessed", remove: count, abilityName, sourceName: source?.name ?? "" });
+    return true;
+  }
+  if (!game.users.activeGM) { ui.notifications.warn(`No GM is connected — can't take the blessings of ${target.name} right now.`); return false; }
+  game.socket.emit(SOCKET, { type: "inflictStatus", targetUuid: target.uuid, statusId: "blessed", remove: count, abilityName, sourceName: source?.name ?? "" });
+  ui.notifications.info(`Sent to the GM: ${target.name} loses ${count} blessing${count === 1 ? "" : "s"}.`);
+  return true;
+}
+
 /** GM side of the relay (called from the IconCombat socket handler). */
 export async function handleInflictSocket(data) {
   if (data?.type !== "inflictStatus") return;
@@ -453,7 +476,7 @@ export async function handleInflictSocket(data) {
   await applyStatusDirect({
     target, statusId: data.statusId, ongoing: !!data.ongoing, label: data.label ?? "",
     abilityName: data.abilityName ?? "", sourceName: data.sourceName ?? "", note: data.note ?? "",
-    expiry: data.expiry ?? null,
+    expiry: data.expiry ?? null, remove: Math.max(0, Math.min(99, Number(data.remove) || 0)),
   });
 }
 

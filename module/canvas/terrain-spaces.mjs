@@ -253,6 +253,50 @@ async function deleteSpaces(scene, docs) {
 }
 
 /**
+ * Symphony (p.178): "Remove up to four blessings from characters anywhere" — whose blessings, and how many each
+ * (at most the spec's count in all). The characters are every one with blessings: the world's actors and this
+ * scene's unlinked tokens. Resolves [{actor, count}] (count > 0) or null when cancelled / nobody has any.
+ */
+async function askBlessingsToTake(scene, item, sp) {
+  const { getStatusCharges } = await import("../combat/statuses.mjs");
+  const seen = new Set();
+  const list = [];
+  const consider = (a) => {
+    if (!a || seen.has(a.uuid)) return;
+    seen.add(a.uuid);
+    const has = getStatusCharges(a, "blessed");
+    if (has > 0) list.push({ actor: a, has });
+  };
+  for (const t of scene.tokens) if (!t.actorLink) consider(t.actor);
+  for (const a of game.actors ?? []) consider(a);
+  if (!list.length) { ui.notifications.warn(`${item.name}: no character has a blessing to remove, so no mote can be created.`); return null; }
+  const max = sp.count || 4;
+  const rows = list.map((x, k) => `<div class="form-group"><label>${esc(x.actor.name)} <small>(${x.has})</small></label><input type="number" name="b${k}" value="0" min="0" max="${x.has}" step="1"></div>`).join("");
+  let picked = null;
+  try {
+    picked = await foundry.applications.api.DialogV2.wait({
+      window: { title: `${item.name} — whose blessings?` },
+      content: `<p><small>${esc(sp.rules)}</small></p><p>Up to ${max} in all: one mote for each blessing removed. Characters you don't own lose theirs through the GM.</p>${rows}`,
+      buttons: [{ action: "ok", label: "Remove and place the motes", default: true, callback: (_ev, button) => {
+        const form = button.form;
+        return list.map((x, k) => ({ actor: x.actor, count: Math.max(0, Math.min(x.has, Math.floor(Number(form.elements[`b${k}`]?.value) || 0))) }));
+      } }, { action: "cancel", label: "Cancel" }],
+      rejectClose: false,
+    });
+  } catch { picked = null; }
+  if (!Array.isArray(picked)) return null;
+  let left = max;
+  const out = [];
+  for (const x of picked) {
+    const n = Math.min(x.count, left);
+    if (n > 0) { out.push({ actor: x.actor, count: n }); left -= n; }
+  }
+  if (!out.length) { ui.notifications.info(`${item.name}: no blessing chosen, no mote created.`); return null; }
+  if (picked.reduce((n, x) => n + x.count, 0) > max) ui.notifications.info(`${item.name}: only ${max} blessings in all — the extra ones were left.`);
+  return out;
+}
+
+/**
  * The chip click: pick the spaces (or the space under the user's token) and mark them; ask first when the text says
  * it lasts until used again and some are already on the scene.
  * @param {Actor} actor
@@ -293,6 +337,15 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     }
   }
 
+  // Symphony (p.178): "Remove up to four blessings from characters anywhere to create pulsing motes" — whose
+  // blessings go is asked first, and one mote is placed per blessing taken.
+  let taking = null;
+  if (sp.fromBlessings) {
+    taking = await askBlessingsToTake(scene, item, sp);
+    if (!taking?.length) return;
+  }
+  const maxSpaces = taking ? taking.reduce((n, x) => n + x.count, 0) : sp.count;
+
   const group = groupOf(actor, item, sp);
   const earlier = scene.templates.filter(t => terrainFlag(t)?.group === group);
   let replace = false;
@@ -323,13 +376,27 @@ export async function placeTerrainFromChip(actor, itemId, index) {
       if (sp.apart && [...picked, ...already].some(o => cheb(o, c) <= 1)) return `${sp.label}s can't be adjacent to each other or overlap.`;
       return "";
     };
-    cells = await pickSpaces({ max: sp.count, color: TERRAIN_COLORS[sp.kind], check,
+    cells = await pickSpaces({ max: maxSpaces, color: TERRAIN_COLORS[sp.kind], check,
       hint: `${item.name}${sp.source ? ` (${sp.source})` : ""}: ${sp.label.toLowerCase()} — ${sp.rules}` });
   }
   if (!cells?.length) return;
   if (replace) await deleteSpaces(scene, earlier);
   const docs = await createTerrainSpaces(scene, cells, sp, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`, group, source: sp.source, itemId: item.id });
   if (!docs.length) return;
+  // The blessings go once the motes are on the map: as many as motes placed (fewer when finished early).
+  let taken = "";
+  if (taking) {
+    const { removeBlessings } = await import("../combat/inflict-status.mjs");
+    let left = docs.length;
+    const parts = [];
+    for (const x of taking) {
+      const n = Math.min(x.count, left);
+      if (n <= 0) break;
+      left -= n;
+      if (await removeBlessings({ target: x.actor, source: actor, count: n, abilityName: item.name })) parts.push(`${x.actor.name} ${n}`);
+    }
+    taken = parts.join(", ");
+  }
   if (sp.infuse && infuseArmedFor(item, sp)) {
     try { await clearInfusion(actor); } catch (err) { console.warn("[ICON | TerrainSpaces] could not clear the infusion", err); }
   }
@@ -339,7 +406,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain">
         <strong><i class="fa-solid ${ICONS[sp.kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: ${docs.length} × <strong>${esc(sp.label)}</strong>${replace ? " (replacing the earlier ones)" : ""}
-        ${what ? `<br><small>${esc(what)}</small>` : ""}
+        ${what ? `<br><small>${esc(what)}</small>` : ""}${taken ? `<br><small>Blessings removed: ${esc(taken)}.</small>` : ""}
         <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}${flashStepButton(scene, actor, item, sp)}</div>
       </div>`,
   });

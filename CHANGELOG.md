@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Symphony toglie davvero le blessing (versione 1.15.185)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Symphony: mote senza togliere le blessing**: il chip Mote faceva piazzare fino a 4 mote senza togliere nessuna
+  blessing, mentre il libro dice "Remove up to four blessings from characters anywhere to create pulsing motes"
+  (p.178) → il testo veniva letto solo come "fino a quattro" → ora il chip chiede prima di chi togliere le blessing e
+  quante. L'elenco mostra tutti i personaggi che ne hanno: attori del mondo e token non collegati della scena, massimo
+  4 in tutto. Poi si piazza una mote per ogni blessing tolta. Le blessing vengono tolte dopo il piazzamento, tante
+  quante le mote messe. Per i personaggi che il giocatore non possiede passano dal GM, e ogni perdita ha la sua riga
+  in chat. Solo codice.
+
 ## 17 ottobre 2026 — Mote attraversata: l'esplosione va sulla mote (versione 1.15.184)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

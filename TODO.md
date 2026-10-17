@@ -1493,9 +1493,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
       advantage dei foe contro di loro, bonus damage e shattered+ "while inside pits" (p.235): solo testo, il codice
       non sa chi è in un pit al momento del tiro.
-- [ ] **Emerso lavorando su R33b2 — blessing tolte da Symphony** (S): "Remove up to four blessings from characters
+- [x] **Emerso lavorando su R33b2 — blessing tolte da Symphony** (S): "Remove up to four blessings from characters
       anywhere to create pulsing motes" (p.178): il chip lascia piazzare fino a 4 mote senza togliere le blessing;
       servirebbe una scelta di chi le perde (anche personaggi non propri, quindi con relay al GM).
+(FATTO il 17 ottobre 2026, versione 1.15.185: il chip Mote chiede di chi togliere le blessing, una mote per blessing,
+      relay al GM per i personaggi non propri)
 - [ ] **Emerso lavorando su R33b2 — shove verso il centro di Implode** (M): "shoving all characters … as close as
       possible towards it … in any order you like" (p.211): oggi solo testo sulla card; servirebbe uno shove guidato,
       personaggio per personaggio.
@@ -1531,6 +1533,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       scegliere uno qualunque dei risultati usciti, non un numero libero. Domanda per Edoardo: tolgo Bend Fate da
       quella scritta, adesso che ha il suo bottone?
 - nessuno
+- [ ] **Emerso lavorando su R33b2 — Charge di Symphony** (S, da decidere): "Charge: Create +2 more spaces" (p.178) non
+      viene letto. Ora che il numero di mote è uguale alle blessing tolte, con il Charge bisognerebbe poterne piazzare
+      2 in più. Domanda per Edoardo: le 2 caselle in più del Charge costano anche loro una blessing ciascuna, o sono
+      gratis?
 
 ---
 
