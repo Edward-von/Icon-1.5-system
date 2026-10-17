@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Niente interrupt dalla scheda se Stunned (17 ottobre 2026, versione 1.15.204)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG Stunned con un interrupt concesso dentro un'abilità (es. Cheat Time): il bottone chat del blocco dà l'avviso,
+      non posta niente e gli usi restano uguali.
+- [ ] Tolto lo Stunned, lo stesso bottone posta e spende un uso.
+- [ ] Foe e legend Stunned: anche il loro bottone chat dell'interrupt dà l'avviso e non spende.
+
 ## Emerso R35 — Usi degli interrupt sulle schede di foe e legend (17 ottobre 2026, versione 1.15.203)
 
 Setup: solo codice (F5 basta).

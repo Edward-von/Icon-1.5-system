@@ -2003,6 +2003,11 @@ export class IconSheet extends BaseActorSheet {
     // Posting the interrupt is using it: spend one use, as the damage card's
     // button does. Not in the list (a stance not taken, a mark not out): post only.
     const counted = interruptsOf(this.document).find(i => i.kind === "granted" && i.itemId === item.id && i.label === target.dataset.label);
+    // Stunned: "Can't take interrupts" (p.117), as the damage card's button.
+    if (hasStatus(this.document, "stunned")) {
+      ui.notifications.warn(`${this.document.name} is Stunned and can't take interrupts.`);
+      return;
+    }
     if (counted) {
       const { left, max } = interruptLeft(this.document, counted);
       if (left <= 0) {

@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Niente interrupt dalla scheda se Stunned (versione 1.15.204)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Interrupt da Stunned**: dalla scheda il bottone chat di un interrupt postava e spendeva un uso anche con il
+  personaggio Stunned → il controllo dello Stunned c'era solo sul bottone della card del danno → ora i bottoni chat
+  degli interrupt delle schede PG, foe e legend si rifiutano con l'avviso "is Stunned and can't take interrupts"
+  (Stunned: "Can't take interrupts", p.117). Solo codice.
+
 ## 17 ottobre 2026 — Usi degli interrupt sulle schede di foe e legend (versione 1.15.203)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

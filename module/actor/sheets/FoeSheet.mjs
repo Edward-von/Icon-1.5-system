@@ -392,6 +392,8 @@ export class FoeSheet extends BaseActorSheet {
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
     // Posting the interrupt is using it: one use spent, as the damage card's button does.
+    // Stunned: "Can't take interrupts" (p.117), as the damage card's button.
+    if (hasStatus(actor, "stunned")) { ui.notifications.warn(`${actor.name} is Stunned and can't take interrupts.`); return; }
     const it = interruptsOf(actor).find(c => c.index === idx);
     if (it) {
       const { left, max } = interruptLeft(actor, it);

@@ -1569,8 +1569,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       dell'abilità intera (costo "Interrupt N") e il bottone chat della maestria che concede un interrupt (Grace of
       the Spirits) no. Domanda per Edoardo: anche questi devono spendere un uso, oppure servono anche solo per far
       vedere il testo?
-- [ ] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
+- [x] **Emerso lavorando su R35 — bottone chat dell'interrupt con PG Stunned** (S): dalla scheda il bottone posta e
       spende anche se il PG è Stunned, mentre il bottone della card del danno lo blocca.
+(FATTO il 17 ottobre 2026, versione 1.15.204: i bottoni chat degli interrupt di PG, foe e legend si rifiutano se il
+      personaggio è Stunned, p.117)
 - nessuno
 - [x] **Emerso lavorando su R36 — Foretell con la mano vuota** (S): p.199 dice "If you have no cards in hand, draw the
       top card of your deck instead, apply its effects, then discard it". Il bottone Foretell sta sulle carte della
@@ -1637,6 +1639,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+- nessuno
 - nessuno
 - nessuno
 
