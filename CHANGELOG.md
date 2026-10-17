@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Dulce Purgatorio fa esplodere tutti i pit del campo (versione 1.15.96)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Dulce Purgatorio**: con la Mastery di Pandaemonium sbloccata, "Medium Blast (on pits)" faceva esplodere solo i pit
+  dentro l'area dell'abilità → il controllo "dentro l'area" in `pitBlastCells` non leggeva la Mastery ("Purgatorio's
+  pit explosion effect extend to all pits on the battlefield", p.178) → con la Mastery sbloccata esplodono tutti i pit
+  della scena, e non serve più piazzare prima l'area dell'abilità; senza Mastery resta tutto come prima. La prima metà
+  della Mastery (l'Area Effect di Pandaemonium su tutti i pit) resta da decidere. Solo codice.
+
 ## 17 ottobre 2026 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione (versione 1.15.95)
 
 ### Round di debug del 16 ottobre, voce emersa su R41

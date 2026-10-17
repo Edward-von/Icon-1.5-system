@@ -1088,14 +1088,20 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
  * @returns {{cells:Array<{i:number,j:number}>, origin:{i:number,j:number}, pits:number}|null}
  */
 function pitBlastCells({ actor, abilityKey, area }) {
-  const own = findAreaTemplates({ actorId: actor.id, abilityKey })
+  // DULCE PURGATORIO (Pandaemonium's mastery, p.178): "Purgatorio's pit explosion effect extend[s] to all pits
+  // on the battlefield": with that mastery unlocked every pit explodes, the ability's area is not needed.
+  const sys = actor.items?.get?.(abilityKey)?.system;
+  const everyPit = !!sys?.masteryUnlocked
+    && /\ball pits on the battlefield\b/i.test(String(sys.mastery ?? "").replace(/<[^>]+>/g, " "));
+  if (everyPit) _log(`pitBlastCells — mastery: every pit on the battlefield explodes`);
+  const own = everyPit ? [] : findAreaTemplates({ actorId: actor.id, abilityKey })
     .filter(t => { const f = t.flags[FLAG_NS]; return !f.pitBlast && !f.terrain?.pit && !f.followTokenId && f.area?.kind !== "space" && f.area?.kind !== "aura"; })
     .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0));
-  if (!own.length) {
+  if (!everyPit && !own.length) {
     ui.notifications.warn("All pits in the area explode: place this ability's area first (its attack), then the pits' blasts.");
     return null;
   }
-  const inArea = new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
+  const inArea = everyPit ? null : new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
   const pits = [];
   const seenPit = new Set();
   for (const t of canvas.scene.templates) {
@@ -1103,11 +1109,11 @@ function pitBlastCells({ actor, abilityKey, area }) {
     if (!f?.terrain?.pit) continue;
     for (const c of f.cells ?? []) {
       const k = cellKey(c);
-      if (inArea.has(k) && !seenPit.has(k)) { seenPit.add(k); pits.push({ i: c.i, j: c.j }); }
+      if ((!inArea || inArea.has(k)) && !seenPit.has(k)) { seenPit.add(k); pits.push({ i: c.i, j: c.j }); }
     }
   }
   if (!pits.length) {
-    ui.notifications.warn("No pit inside this ability's area: nothing explodes.");
+    ui.notifications.warn(everyPit ? "No pit on the battlefield: nothing explodes." : "No pit inside this ability's area: nothing explodes.");
     return null;
   }
   const blast = { kind: area.kind, size: area.size };

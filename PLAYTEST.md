@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Dulce Purgatorio fa esplodere tutti i pit del campo (17 ottobre 2026, versione 1.15.96)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Pandaemonium e Mastery DULCE PURGATORIO sbloccata, due o tre pit sulla scena, alcuni lontani dall'area:
+      "Medium Blast (on pits)" mette una Medium Blast su ognuno, e l'etichetta dice "× N" col numero giusto.
+- [ ] Stessa prova senza aver piazzato prima l'area di Pandaemonium: le esplosioni partono lo stesso, senza l'avviso
+      "place this ability's area first".
+- [ ] Nessun pit sulla scena, con la Mastery: avviso "No pit on the battlefield: nothing explodes."
+- [ ] Mastery non sbloccata: esplodono solo i pit dentro l'area, e senza area compare ancora l'avviso di piazzarla
+      prima.
+- [ ] Holy (Talent I): continua a far esplodere solo i pit dentro l'area.
+
 ## Emerso R41 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione (17 ottobre 2026, versione 1.15.95)
 
 Setup: solo codice (F5 basta).

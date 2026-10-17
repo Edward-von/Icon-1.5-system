@@ -540,10 +540,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
       danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
       Edoardo: serve?
-- [ ] **Emerso lavorando su R49 — Dulce Purgatorio su tutti i pit del campo** (S): la Mastery DULCE PURGATORIO (p.178,
+- [x] **Emerso lavorando su R49 — Dulce Purgatorio su tutti i pit del campo** (S): la Mastery DULCE PURGATORIO (p.178,
       "Pandaemonium's area effect and Purgatorio's pit explosion effect extend to all pits on the battlefield") non è
       letta: l'esplosione prende solo i pit dentro l'area. Basterebbe saltare il filtro "dentro l'area" in
       `pitBlastCells` con la Mastery scelta.
+(FATTO il 17 ottobre 2026, versione 1.15.96: con DULCE PURGATORIO sbloccata `pitBlastCells` prende tutti i pit della
+      scena e non serve l'area dell'abilità; la prima metà della Mastery, sull'Area Effect di Pandaemonium, è una voce
+      emersa a parte, da decidere.)
 - [ ] **Emerso lavorando su R49 — l'area di Holy forse resta come terrain effect** (S, da verificare): `#areaLasts`
       legge `baseAreaText`, che contiene anche il testo della combo; la riga "Terrain Effect: Create a pit under your
       target" di Hades rende probabilmente "lasting" la Medium Blast di Holy/Hades (flag `terrain`), che a fine turno
@@ -557,6 +560,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
       è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
       controllare che il token sia dentro le caselle dell'area.
+- [ ] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, in attesa di
+      risposta): la prima metà della Mastery (p.178, "Pandaemonium's area effect … extend to all pits on the
+      battlefield") non è letta; l'Area Effect è "Remove all characters in the area, then place them back in any other
+      space in the area" (p.177). Domanda per Edoardo: (a) l'area diventa l'area dell'abilità più tutte le caselle con
+      un pit (chi sta su un pit viene preso, e si può rimettere anche su un pit), oppure (b) ogni pit conta come
+      un'area di forma uguale a quella dell'abilità? Con la (a) basta poco codice.
 
 ---
 
