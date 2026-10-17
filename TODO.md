@@ -1718,8 +1718,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.220: letto p.194, "at round 4 or later" vale sia per il bonus damage sia per
       l'Exceed; il codice lo faceva già.)
 - nessuno
-- [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
+- [x] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
       dice ancora "they go off before the attack roll".
+      (FATTO il 17 ottobre 2026, versione 1.15.230: suggerimento della scritta valido per attacchi e non attacchi.)
 - nessuno
 - nessuno
 - nessuno

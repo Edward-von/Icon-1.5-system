@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Scritta dei bottoni "targeted" giusta anche senza attacco (versione 1.15.230)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Scritta sopra i bottoni "targeted"**: sotto la card di un'abilità che non attacca il suggerimento diceva "they go
+  off before the attack roll" → la scritta era pensata solo per la card d'attacco → ora dice "before the ability
+  resolves (for an attack, before the attack roll)". Solo codice.
+
 ## 17 ottobre 2026 — Il rampart di Comet ferma davvero i foe (versione 1.15.229)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

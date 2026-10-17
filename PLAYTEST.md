@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Scritta dei bottoni "targeted" giusta anche senza attacco (17 ottobre 2026, versione 1.15.230)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Show in Chat di un'abilità che non attacca, con un bersaglio che ha Aether Deflection: passando il mouse sulla
+      scritta "Interrupt · … targeted" il suggerimento dice "before the ability resolves".
+
 ## Emerso R33 — Il rampart di Comet ferma davvero i foe (17 ottobre 2026, versione 1.15.229)
 
 Setup: solo codice (F5 basta).

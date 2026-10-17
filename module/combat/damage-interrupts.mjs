@@ -653,7 +653,7 @@ export function decorateAttackInterrupts(message, html) {
     if (!list.length) continue;
     const box = document.createElement("div");
     box.className = "icon-chat-card__interrupts icon-chat-card__interrupts--attack";
-    box.innerHTML = `<span class="icon-chat-card__interrupts-label" title="Interrupts whose trigger is being targeted: they go off before the attack roll">Interrupt · ${escapeHTML(t.name ?? target.name)} targeted</span>`
+    box.innerHTML = `<span class="icon-chat-card__interrupts-label" title="Interrupts whose trigger is being targeted: they go off before the ability resolves (for an attack, before the attack roll)">Interrupt · ${escapeHTML(t.name ?? target.name)} targeted</span>`
       + list.map(e => buttonHtml(e, target.uuid)).join("");
     card.appendChild(box);
   }
