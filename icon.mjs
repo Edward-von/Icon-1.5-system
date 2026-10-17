@@ -800,8 +800,8 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       let   half   = btn.dataset.half === "true";
       const pierce = btn.dataset.pierce === "true";
       // Divine (p.104): can't be reduced, mitigated or negated in any way
-      // except immunity — so no armor and no Cover / Resistance halving, not
-      // even the ½ button.
+      // except immunity — so no armor, no Cover / Resistance halving (not
+      // even the ½ button) and it "bypasses vigor".
       const divine = btn.dataset.divine === "true";
       if (divine) half = false;
       let   halfReason = half ? "manual ½" : "";
@@ -849,6 +849,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
             applyArmor:  !pierce && !divine,
             half,
             halfReason,
+            ignoreVigor: divine,
             chatConfirm: instances === 1,
           });
           if (!result?.ok) break;

@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno divine salta il vigor anche dalle card (versione 1.15.109)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Divine e vigor**: il danno divine applicato col bottone Apply (o ½) di una card di danno veniva ancora assorbito
+  dal vigor del bersaglio → il gestore dei bottoni in `icon.mjs` toglieva al divine armor e dimezzamento ma non gli
+  diceva di ignorare il vigor, mentre p.104 dice che il divine "cannot be reduced, mitigated, or negated in any way
+  except immunity (ignores armor, weak, resistance, defiance, and bypasses vigor)" → ora i bottoni passano anche
+  "ignora il vigor" quando la card è divine; tutte le strade (Damage Utility, schede PG / foe / Legend, oggetti sulla
+  mappa, inoltro al GM) passano da lì. Piercing e gli altri tipi restano come prima. Solo codice.
+
 ## 17 ottobre 2026 — Danno rilanciato di un uso infuso: "Reroll (same use)" (versione 1.15.108)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b

@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Il danno divine salta il vigor anche dalle card (17 ottobre 2026, versione 1.15.109)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bersaglio con 3 vigor e armor 1. Damage Utility con "Divine" spuntato, 5 danni, Apply: il vigor resta 3, gli HP
+      scendono di 5; la nota "Damage Applied" non nomina né Armor né Vigor.
+- [ ] Stesso bersaglio, bottone ½ su una card divine: il danno non viene dimezzato e il vigor resta intatto.
+- [ ] Stesso bersaglio, card con "Piercing" (non divine): l'armor viene ignorata ma il vigor assorbe ancora, come
+      prima.
+- [ ] Stesso bersaglio, card normale: l'armor blocca e il vigor assorbe, come prima.
+- [ ] Card divine con più istanze ("x3"): nessuna istanza tocca il vigor.
+- [ ] Un giocatore che non possiede il bersaglio clicca Apply su una card divine: il danno va al GM e anche lì il
+      vigor non assorbe nulla.
+- [ ] Una card divine da un'abilità di un foe o di una Legend: anche queste saltano il vigor.
+
 ## Emerso R38b — Danno rilanciato di un uso infuso: "Reroll (same use)" (17 ottobre 2026, versione 1.15.108)
 
 Setup: solo codice (F5 basta).

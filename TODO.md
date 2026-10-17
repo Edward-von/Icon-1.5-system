@@ -696,10 +696,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
       se il giocatore marca un personaggio che non è suo, il mark lo crea il GM, quindi la finestra "Aura 2 / Aura 3"
       compare al GM e non al giocatore; portare la domanda al client di chi ha marcato prima di passare il mark al GM.
-- [ ] **Emerso lavorando su R37 — il divine non salta il vigor col bottone Apply delle card** (S): p.104 dice che il
+- [x] **Emerso lavorando su R37 — il divine non salta il vigor col bottone Apply delle card** (S): p.104 dice che il
       divine "bypasses vigor"; il nuovo "% Max HP" lo salta, ma il bottone Apply delle card di danno (`icon.mjs`,
       gestione di `data-divine`) non passa `ignoreVigor` per il divine, quindi lì il vigor assorbe ancora il danno
       divine.
+(FATTO il 17 ottobre 2026, versione 1.15.109: il bottone Apply / ½ delle card di danno passa ignoreVigor quando la
+      card è divine (p.104); tutte le strade passano da lì. Solo codice.)
 - [x] **Emerso lavorando su R37 — Atomos Crusher "+25%": in più o moltiplicato?** (S, da decidere): "deals 25% more
       max hp damage" è letto come 25 punti in più (50% → 75%); l'altra lettura è un quarto in più (50% → 62,5%).
       Domanda per Edoardo: quale?
@@ -715,6 +717,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 Scelte confermate da Edoardo il 17 ottobre 2026 (il libro non le dice): con MJÖLLNIR il secondo Arc 5 non prosegue nel
 verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta su un pit è preso anche lui dall'area
 (1.15.106).
+- [ ] **Emerso lavorando su R37 — `applyDamagePipeline` non conosce i tipi di danno** (S, da decidere): la funzione
+      esportata in `damage.mjs` (nell'API del sistema, senza chiamate interne) non accetta né `pierce` né `divine`,
+      quindi da macro non si può far ignorare armor o vigor; valutare se serve.
 
 ---
 
