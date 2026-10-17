@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — I due chip dei pit di Pandaemonium non si cancellano a vicenda (17 ottobre 2026, versione 1.15.118)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Pandaemonium con il Talent II: metti il pit della combo e quelli sotto i foe pacified. Clic destro sul chip
+      della combo: va via solo il suo pit.
+- [ ] Clic destro sul chip "Pits under pacified foes": vanno via solo i pit sotto i foe.
+- [ ] I pit sotto i foe messi con una versione precedente si tolgono dal chip della combo (gruppo vecchio), non da
+      quello del Talent II.
+
 ## Emerso R41 — Bersaglio d'attacco ricordato solo se è ancora nell'area (17 ottobre 2026, versione 1.15.117)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — I due chip dei pit di Pandaemonium non si cancellano a vicenda (versione 1.15.118)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Chip dei pit legati**: il clic destro su uno dei due chip pit di Pandaemonium toglieva dalla scena sia il pit
+  della combo sia quelli sotto i foe pacified → i due chip finivano nello stesso gruppo (`groupOf` in
+  `terrain-spaces.mjs`), che non teneva conto di "sotto i foe pacified" → i pit del Talent II hanno un gruppo loro: il
+  clic destro, e il "replace" quando l'abilità viene usata di nuovo, toccano solo i pit di quel chip. Gli altri spazi
+  e il Volcanic Geyser non cambiano gruppo. Solo codice.
+
 ## 17 ottobre 2026 — Bersaglio d'attacco ricordato solo se è ancora nell'area (versione 1.15.117)
 
 ### Round di debug del 16 ottobre, voce emersa su R41

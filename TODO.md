@@ -633,9 +633,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Pandaemonium unisce alle sue caselle quelle di tutti i pit della scena in un solo template; chi sta su un pit è
       bersaglio una volta sola; l'area di Purgatorio e l'esplosione dei pit non cambiano. Un'area già sulla mappa
       riusata dal tiro non prende i pit creati dopo. Solo codice.)
-- [ ] **Emerso lavorando su R49 — chip dei pit di Pandaemonium legati tra loro** (S): i due chip finiscono nello
+- [x] **Emerso lavorando su R49 — chip dei pit di Pandaemonium legati tra loro** (S): i due chip finiscono nello
       stesso gruppo, quindi il clic destro su uno dei due toglie dalla scena sia il pit della combo sia quelli sotto i
       foe pacified.
+(FATTO il 17 ottobre 2026, versione 1.15.118: i pit sotto i foe pacified hanno un gruppo diverso dal pit della combo,
+      quindi il clic destro su un chip toglie solo i pit di quel chip. Solo codice.)
 - [x] **Emerso lavorando su R49 — pit sotto foe grandi** (S, da decidere): sotto un foe 2x2 o più grande il pit va
       solo nella casella in alto a sinistra (lo stesso per il terreno sotto i foe del Volcanic Geyser). Domanda per
       Edoardo: un pit su tutte le caselle occupate, o su una sola scelta da chi gioca?

@@ -86,8 +86,11 @@ export function terrainChips(item) {
     });
 }
 
-/** Same space of the same item of the same character: what "used again" replaces and right-click removes. */
-export const groupOf = (actor, item, sp) => `${actor.id}#${item.id}#${sp.kind}#${sp.name}#${sp.dangerous ? 1 : 0}`;
+/**
+ * Same space of the same item of the same character: what "used again" replaces and right-click removes. The pits
+ * under the pacified foes (Pandaemonium's Talent II, p.178) are a group apart from the combo's own pit (p.177).
+ */
+export const groupOf = (actor, item, sp) => `${actor.id}#${item.id}#${sp.kind}#${sp.name}#${sp.dangerous ? 1 : 0}${underStatus(sp) ? `#${underStatus(sp)}` : ""}`;
 
 /** Cells a token document covers on its own scene, at its place or with its top-left at `at`. */
 export function cellsOf(td, at = null) {
@@ -417,7 +420,7 @@ export async function offerTerrainUnder(placed, spec, { actor = null, abilityNam
   if (!ok) return [];
   const cells = placed.map(p => p.cell ?? cellsOf(p.td)[0]);
   const docs = await createTerrainSpaces(scene, cells, spec, { actor, abilityName, abilityKey: itemId ? `${itemId}:terrain` : "", itemId,
-    group: actor && itemId ? `${actor.id}#${itemId}#${spec.kind}#${spec.name ?? ""}#${spec.dangerous ? 1 : 0}` : "" });
+    group: actor && itemId ? groupOf(actor, { id: itemId }, { ...spec, name: spec.name ?? "" }) : "" });
   if (docs.length) {
     await ChatMessage.create({
       speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
