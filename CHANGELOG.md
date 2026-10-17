@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Mist Strider Talent II: evasion per i foe dentro la nuvola (versione 1.15.192)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Mist Strider Talent II**: "Foes in the area count all characters as having evasion" (p.169) non aveva nessun
+  promemoria → la frase non era fra le regole "per chi sta dentro" lette dall'area → ora è riconosciuta: quando la
+  nuvola si piazza o un foe ci entra, la card lo scrive, e il dialog d'attacco di un foe che sta dentro la nuvola
+  spunta "Defender has evasion" su tutti i bersagli, con una chip "Inside Mist Strider: all characters count as having
+  evasion" (le caselle si possono ancora togliere a mano). Vale per le nuvole piazzate dopo l'aggiornamento. Solo
+  codice.
+
 ## 17 ottobre 2026 — Area spostata sopra i personaggi: offerta degli status (versione 1.15.191)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

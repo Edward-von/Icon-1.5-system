@@ -708,6 +708,25 @@ function insideConcerns(e, td, creatorId) {
   }
 }
 
+/**
+ * Mist Strider Talent II (p.169) "Foes in the area count all characters as having evasion": the areas the attacker
+ * of `td` stands in with that rule, by name (empty when none). The attack dialog ticks evasion on every target.
+ * @param {TokenDocument} td
+ * @returns {string[]}
+ */
+export function areaEvasionFor(td) {
+  const scene = td?.parent;
+  if (!scene || !td.actor || isMapObject(td)) return [];
+  const mine = cellsOf(td);
+  const out = [];
+  for (const { doc, f, keys } of terrainOn(scene)) {
+    if (!touches(mine, keys) || !(f.inside ?? []).some(e => e.evasion && insideConcerns(e, td, f.creatorId))) continue;
+    const name = doc.flags[NS].abilityName || f.label || "Area";
+    if (!out.includes(name)) out.push(name);
+  }
+  return out;
+}
+
 /** A chat button that gives or takes a status from one character, on a click (registerTerrainSpaceHooks binds it). */
 export function insideStatusButton(td, status, { op = "apply", ongoing = false, label = "" } = {}) {
   return `<button type="button" class="icon-btn icon-btn--sm" data-action="terrainInsideStatus" data-token-uuid="${esc(td.uuid)}" data-status="${esc(status)}" data-ongoing="${ongoing ? "true" : "false"}" data-op="${op}"><i class="fa-solid ${op === "apply" ? "fa-plus" : "fa-minus"}"></i> ${esc(label)}</button>`;
@@ -792,8 +811,8 @@ async function insideBlocks(td, moves, { placed = false, shifted = false } = {})
       if (!insideConcerns(e, td, f.creatorId)) continue;
       const src = e.source ? ` <small>(${esc(e.source)})</small>` : "";
       if (e.note) {
-        if (entered) lines.push(`<p>${esc(td.name)}: ${esc(e.note)} while inside.${src}</p>`);
-        else lines.push(`<p><small>${esc(td.name)} no longer has ${esc(e.note)}.</small></p>`);
+        if (entered) lines.push(`<p>${esc(td.name)}: ${esc(e.note)} while inside${e.evasion ? " (its attack dialog ticks \"Defender has evasion\")" : ""}.${src}</p>`);
+        else lines.push(`<p><small>${esc(td.name)} no longer ${e.evasion ? esc(e.note) : `has ${esc(e.note)}`}.</small></p>`);
         continue;
       }
       const name = `${nameOf(e.status)}${e.ongoing ? "+" : ""}`;

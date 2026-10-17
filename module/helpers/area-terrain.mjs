@@ -324,6 +324,11 @@ export function insideEffectsOf(texts) {
     for (const m of t.matchAll(/\b(foes|allies|characters) inside [\w-]+ (?:take|have|gain) ([+-]\d+ (?:curses?|boons?) on [^.;]+)/gi)) {
       add({ when: "inside", note: `${m[2]}`, who: whoOf(m[1]), source, rule: sentenceAt(t, m.index) });
     }
+    // "Foes in the area count all characters as having evasion" (Mist Strider Talent II, p.169): a note on the card,
+    // and the attack dialog of a foe standing inside ticks "Defender has evasion" (roll-dialogs.mjs).
+    for (const m of t.matchAll(/\b(foes|allies|characters) (?:inside|in the area)(?: the area)? count all characters as having evasion\b/gi)) {
+      add({ when: "inside", note: "counts all characters as having evasion", evasion: true, who: whoOf(m[1]), source, rule: sentenceAt(t, m.index) });
+    }
   }
   return out;
 }

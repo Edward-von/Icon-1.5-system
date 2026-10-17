@@ -304,6 +304,16 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
   const boons  = (auto.boons  ?? 0) + elev.boons  + fromTags.boons;
   const curses = (auto.curses ?? 0) + elev.curses + fromTags.curses;
   const notes  = [...fromTags.notes, ...(auto.notes ?? []), elev.note].filter(Boolean);
+  // Mist Strider Talent II (p.169) "Foes in the area count all characters as having evasion": an attacker standing
+  // in such an area gets every "Defender has evasion" box ticked (still untickable by hand).
+  try {
+    const { areaEvasionFor } = await import("../canvas/terrain-spaces.mjs");
+    const areas = areaEvasionFor(tokenOf(actor)?.document);
+    if (areas.length && targets.length) {
+      for (const t of targets) if (!t.defense_?.evasion) t.defense_ = { ...t.defense_, evasion: true, evasionThreshold: t.evThreshold ?? 4, sureEvasion: false };
+      notes.push(`Inside ${areas.join(", ")}: all characters count as having evasion`);
+    }
+  } catch (err) { console.warn("[ICON | roll-dialogs] area evasion check failed", err); }
 
   // The attack's own "true strike" / "unerring" tag counts as much as the status (p.117).
   const ignoredEvasion = ignoresEvasion(actor, ab.tags ?? []);

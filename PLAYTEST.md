@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Mist Strider Talent II: evasion per i foe dentro la nuvola (17 ottobre 2026, versione 1.15.192)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Mist Strider e Talent II: piazzare una nuvola sopra un foe. La card dice "counts all characters as having
+      evasion while inside".
+- [ ] Il GM attacca un PG con quel foe: nel dialog d'attacco "Defender has evasion" è già spuntato e c'è la chip con
+      il nome della nuvola; tirando esce il d6 di evasion.
+- [ ] Lo stesso foe fuori dalla nuvola: niente spunta automatica.
+- [ ] Un PG che attacca da dentro la nuvola: niente spunta (vale solo per i foe).
+- [ ] Senza Talent II (Talent I selezionato): nessuna nota e nessuna spunta.
+
 ## Emerso R33 — Area spostata sopra i personaggi: offerta degli status (17 ottobre 2026, versione 1.15.191)
 
 Setup: solo codice (F5 basta).
