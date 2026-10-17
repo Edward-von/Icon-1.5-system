@@ -599,7 +599,7 @@ async function offerTerrainOnMove(td, prev, to, movement = null) {
       speaker: ChatMessage.getSpeaker({ token: td }),
       content: `<div class="icon-chat-card icon-chat-card--terrain">${reminders.map(({ doc, f, entered, crossed }) => {
         const by = doc.flags[NS].abilityName;
-        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${crossed ? "passes through" : entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${entered ? detonateButton(scene, doc, f, td) : ""} ${removeSpacesButton(scene, [doc])}</div>`;
+        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${crossed ? "passes through" : entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${entered ? detonateButton(scene, doc, f, td, crossed) : ""} ${removeSpacesButton(scene, [doc])}</div>`;
       }).join("")}</div>`,
     });
   }
@@ -969,14 +969,18 @@ const SIZE_KEY = { small: "s", medium: "m", large: "l" };
 // Motes exploded this turn, per ability (Symphony Talent I "if at least one other mote was already exploded this turn").
 const _detonated = new Map();
 
-/** "Detonate" for a mark that explodes when `td` enters it or starts their turn there, or "". */
-function detonateButton(scene, doc, f, td) {
+/**
+ * "Detonate" for a mark that explodes when `td` enters it or starts their turn there, or "". `crossed`: the space was
+ * only passed through on the way — "centered on them" (Symphony p.178) is then where they were when they entered it,
+ * the mark's own space, not where the move ended.
+ */
+function detonateButton(scene, doc, f, td, crossed = false) {
   const m = DETONATES.exec(f.onEnter ?? "");
   if (!m || f.onCharacter) return "";
   const onThem = /\bcentered on them\b/i.test(m[0]);
   return actButton("detonateSpace", { scene: scene.id, template: doc.id, token: td.id, creator: f.creatorId, item: f.itemId,
-    size: SIZE_KEY[m[1].toLowerCase()], onThem, gamble: /\bgamble\b/i.test(f.onEnter) },
-  "Detonate", "fa-bomb", `${onThem ?`${m[1]} blast centred on ${td.name}` : `${m[1]} blast centred on the space`}${/\bgamble\b/i.test(f.onEnter) ? ", after the gamble" : ""}; the space is removed`);
+    size: SIZE_KEY[m[1].toLowerCase()], onThem, crossed: !!crossed, gamble: /\bgamble\b/i.test(f.onEnter) },
+  "Detonate", "fa-bomb", `${onThem ? `${m[1]} blast centred on ${td.name}${crossed ? " as they passed through it (on its space)" : ""}` : `${m[1]} blast centred on the space`}${/\bgamble\b/i.test(f.onEnter) ? ", after the gamble" : ""}; the space is removed`);
 }
 
 // Gates of Hell's mastery (p.129): "Flash Step — Free Action: Remove an afterimage that has no characters occupying it,
@@ -1201,7 +1205,7 @@ const TERRAIN_ACTS = {
    * A mote / mine set off (detonateButton): the gamble first when the text has one, the blast on the character or
    * on the space, the space removed, then a card with the buttons for what the explosion does.
    */
-  async detonateSpace({ scene: sid, template, token, creator: cid, item: iid, size = "m", onThem = false, gamble = false }) {
+  async detonateSpace({ scene: sid, template, token, creator: cid, item: iid, size = "m", onThem = false, crossed = false, gamble = false }) {
     const scene = game.scenes?.get(sid);
     const doc = scene?.templates?.get(template);
     const td = scene?.tokens?.get(token);
@@ -1217,8 +1221,10 @@ const TERRAIN_ACTS = {
       result = await rollGamble(creator, item);
       if (result == null) return false;   // the gamble dialog was closed
     }
-    const centre = onThem && td ? cellsOf(td)[0] : doc.flags[NS].cells[0];
-    const placed = await blastOn(creator, item, [centre], size, onThem && td ? `on ${td.name}` : `on the ${String(f.label).toLowerCase()}`, "detonate");
+    // Passed through on the way (detonateButton): "centered on them" is where they were then, the space itself.
+    const passed = !!(onThem && td && crossed);
+    const centre = onThem && td && !crossed ? cellsOf(td)[0] : doc.flags[NS].cells[0];
+    const placed = await blastOn(creator, item, [centre], size, passed ? `on ${td.name} as they passed the ${String(f.label).toLowerCase()}` : onThem && td ? `on ${td.name}` : `on the ${String(f.label).toLowerCase()}`, "detonate");
     if (!placed) return false;
     await deleteSpaces(scene, [doc]);
     // Symphony: what the explosion does (p.178).
@@ -1233,7 +1239,7 @@ const TERRAIN_ACTS = {
       buttons.push(actButton("damageTokens", { ...base, tokens: foes.map(t => t.id), amount: fray, armor: true }, `Fray (${fray}) to foes (${foes.length})`, "fa-burst"));
     if (/\ballies inside gain 2 vigor\b/i.test(text)) notes.push("Allies inside gain 2 vigor.");
     if (td && /\bif that character was a foe, they also have a pit created under them\b/i.test(text) && isFoeOf(td, creator))
-      buttons.push(actButton("pitAt", { ...base, cell: cellsOf(td)[0] }, `Pit under ${td.name}`, "fa-circle-down"));
+      buttons.push(actButton("pitAt", { ...base, cell: passed ? centre : cellsOf(td)[0] }, passed ? `Pit where ${td.name} passed` : `Pit under ${td.name}`, "fa-circle-down"));
     if (td && /\bif the character was yourself or an ally, they are blessed\b/i.test(text) && !isFoeOf(td, creator))
       buttons.push(actButton("statusTokens", { ...base, tokens: [td.id], status: "blessed", label: "Blessed" }, `Bless ${td.name}`, "fa-hands-praying"));
     if (/\bcan fly 1\b/i.test(text) && td && !isFoeOf(td, creator)) notes.push(`${td.name} can fly 1.`);
@@ -1244,6 +1250,7 @@ const TERRAIN_ACTS = {
     const src = itemOfSpace({ flags: { [NS]: { [FLAG]: { creatorId: creator.id, itemId: item.id } } } });
     if (src?.talentNo && /\bmotes? (?:explode|was already exploded)|\bsecond mote\b/i.test(src.talent))
       notes.push(`${n === 1 ? "First" : `Number ${n}`} of this ability's motes set off this turn. Talent ${src.talentNo === 1 ? "I" : "II"}: ${src.talent}`);
+    if (passed) notes.push(`Centred on its space: ${td.name} passed through it and moved on ("centered on them", p.178).`);
     if (!buttons.length && !notes.length) return true;
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: creator }),

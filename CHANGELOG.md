@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Mote attraversata: l'esplosione va sulla mote (versione 1.15.184)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Mote di Symphony attraversata**: se un personaggio passava sopra una mote senza fermarsi, la Small Blast "centered
+  on them" (p.178) veniva piazzata dove il token aveva finito il movimento → il pulsante Detonate usava sempre la
+  casella attuale del token → ora, se la mote è stata solo attraversata, la blast è centrata sulla casella della mote
+  (dove si trovava il personaggio quando ci è entrato). La card lo dice, e il pit sotto un foe va lì. Se il
+  personaggio si ferma sulla mote, o inizia lì il turno, tutto funziona come prima. Solo codice.
+
 ## 17 ottobre 2026 — HARVEST MOON riconosce la mote of life (versione 1.15.183)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

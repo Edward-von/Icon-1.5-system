@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Mote attraversata: l'esplosione va sulla mote (17 ottobre 2026, versione 1.15.184)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazzare una mote di Symphony, poi trascinare un token di un foe lungo un percorso che passa sopra la mote e
+      finisce più in là. Nella card "passes through", il tooltip di Detonate dice "as they passed through it (on its
+      space)".
+- [ ] Cliccare Detonate: la Small Blast è centrata sulla casella della mote, non su quella d'arrivo. La card
+      dell'esplosione dice "Centred on its space: … passed through it and moved on".
+- [ ] Sempre con il foe: il pulsante dice "Pit where <nome> passed" e il pit compare sulla casella della mote.
+- [ ] Un token che si ferma sopra la mote: la blast è centrata su di lui come prima.
+
 ## Emerso R49 — HARVEST MOON riconosce la mote of life (17 ottobre 2026, versione 1.15.183)
 
 Setup: solo codice (F5 basta).

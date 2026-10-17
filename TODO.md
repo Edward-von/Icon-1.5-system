@@ -1501,9 +1501,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       personaggio per personaggio.
 - [ ] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
       ridotto e Arkenrune small blast non cancellabile (p.209): solo testo.
-- [ ] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
+- [x] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
       "centered on them" (p.178), ma il token ha già finito il movimento: la Small Blast va dove si è fermato, non
       sulla mote attraversata.
+(FATTO il 17 ottobre 2026, versione 1.15.184: una mote solo attraversata esplode sulla propria casella, e la card lo
+      dice)
 - nessuno
 - [ ] **Emerso lavorando su R35 — la scheda dei foe non mostra gli usi degli interrupt** (S): `FoeSheet` ha l'azione
       `tickInterrupt` ma nessun template la usa, e `foe-main.hbs` / `legend-combat.hbs` mostrano solo il limite "/
@@ -1528,6 +1530,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       permettono di scegliere qualsiasi numero da 1 a 6. Ma p.199 dice di tirare un dado in più per ogni carta e di
       scegliere uno qualunque dei risultati usciti, non un numero libero. Domanda per Edoardo: tolgo Bend Fate da
       quella scritta, adesso che ha il suo bottone?
+- nessuno
 
 ---
 
