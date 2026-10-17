@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bale Portal: foe spinti e una volta per round (versione 1.15.162)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Bale Portal**: un foe spinto dentro un portale non aveva nessuna domanda, e si poteva teletrasportare lo stesso
+  foe più volte nello stesso round → il sistema non distingue una spinta da un movimento del foe e non contava i
+  teletrasporti → ora chi muove un foe accanto a un underway (solo con la mastery sbloccata) riceve la domanda "shoved
+  into the portal?", e il bottone "Save failed — teleport" lo fa piazzare (p.168); un secondo teletrasporto nello
+  stesso round viene rifiutato ai giocatori, il GM riceve una domanda per forzarlo (il conteggio si legge dalle card
+  in chat del round). Il tiro salvezza resta a mano. Solo codice.
+
 ## 17 ottobre 2026 — Gli oggetti guardano il percorso del movimento (versione 1.15.161)
 
 ### Round di debug del 15 ottobre, R33a5

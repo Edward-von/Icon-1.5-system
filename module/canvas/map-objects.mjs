@@ -833,6 +833,16 @@ async function teleportVia(traveller, destinations, portal) {
   const hostile = isHostile(traveller);
   const pull = info?.moves?.pullFoes;
   if (hostile && !pull && !game.user.isGM) { ui.notifications.warn(`${info?.name ?? "This portal"}: only you and allies can teleport through it (p.168).`); return false; }
+  // R33a5: Bale Portal, "can only be successfully teleported this way once a round" — read from the chat cards of
+  // this combat round (everyone sees them; nothing to write on a foe the user doesn't own).
+  const combat = game.combat?.started ? game.combat : null;
+  const stamp = hostile && pull && combat ? { tokenId: traveller.id, combatId: combat.id, round: combat.round } : null;
+  if (stamp && game.messages?.contents.some(m => { const b = m.flags?.[NS]?.balePortal; return b && b.tokenId === stamp.tokenId && b.combatId === stamp.combatId && b.round === stamp.round; })) {
+    const msg = `${traveller.name} was already teleported by ${pull.source} this round: a foe can only be teleported this way once a round (p.168).`;
+    if (!game.user.isGM) { ui.notifications.warn(msg); return false; }
+    const again = await foundry.applications.api.DialogV2.confirm({ window: { title: `${pull.source} — once a round` }, content: `<p>${foundry.utils.escapeHTML(msg)} Teleport anyway?</p>`, rejectClose: false }) ?? false;
+    if (!again) return false;
+  }
   const spots = [];
   const seen = new Set();
   for (const d of destinations) {
@@ -850,6 +860,7 @@ async function teleportVia(traveller, destinations, portal) {
     speaker: ChatMessage.getSpeaker({ token: traveller }),
     content: `<div class="icon-chat-card icon-chat-card--object"><strong><i class="fa-solid fa-dungeon"></i> ${foundry.utils.escapeHTML(traveller.name)}</strong>
       teleports through the <strong>${foundry.utils.escapeHTML(info?.name ?? "portal")}</strong>${hostile && pull ? ` (${foundry.utils.escapeHTML(pull.source)} — save, bloodied foes fail; once a round)` : " (free action, p.168)"}.</div>`,
+    ...(stamp ? { flags: { [NS]: { balePortal: stamp } } } : {}),
   });
   return true;
 }
@@ -951,6 +962,15 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
       const others = networkOf(o);
       if (!others.length) continue;
       if (await ask(`${info.name} — teleport?`, `<p>${esc(td.name)} is next to the <strong>${esc(info.name)}</strong>: teleport to a free space next to ${others.length > 1 ? "another" : "the other"} one (free action, p.168)?</p>`, "Teleport"))
+        await teleportVia(td, others, o);
+    }
+    // R33a5: Bale Portal, "Foes that are shoved into portals … can be teleported" (p.168): the system can't tell a
+    // shove from the foe's own move, so the user who moved it is asked, only where the mastery is unlocked.
+    if (info.portal && info.moves.pullFoes && hostile && isNear && !wasNear && !portalsAsked.has(net)) {
+      portalsAsked.add(net);
+      const others = networkOf(o);
+      if (!others.length) continue;
+      if (await ask(`${info.moves.pullFoes.source} — shoved into the portal?`, `<p>${esc(td.name)} ended next to the <strong>${esc(info.name)}</strong>. If it was <strong>shoved</strong> into the portal, ${esc(info.creatorName || "its creator")} can teleport it next to ${others.length > 1 ? "another" : "the other"} one: roll its save first (bloodied foes fail), once a round (p.168).</p>`, "Save failed — teleport"))
         await teleportVia(td, others, o);
     }
   }

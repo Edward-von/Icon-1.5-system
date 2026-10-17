@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Bale Portal: foe spinti e una volta per round (17 ottobre 2026, versione 1.15.162)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Mastery Bale Portal sbloccata: il GM trascina un foe accanto a un underway, arriva la domanda; "Save failed —
+      teleport" fa scegliere lo spazio accanto all'altro portale.
+- [ ] Nello stesso round, riprova sullo stesso foe: un giocatore riceve il rifiuto, il GM la domanda "Teleport
+      anyway?".
+- [ ] Al round dopo il foe si può teletrasportare di nuovo.
+
 ## R33a5 — Gli oggetti guardano il percorso del movimento (17 ottobre 2026, versione 1.15.161)
 
 Setup: solo codice (F5 basta).
