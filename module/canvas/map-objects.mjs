@@ -908,7 +908,7 @@ export async function relocateObject(actor) {
  *   Comet rampart (p.126) "Foes cannot enter or exit a space affected by a rampart effect by dashing, flying, or
  *                        teleporting" — a foe that entered or left a space next to the weapon gets a warning only
  *                        (the system can't tell a dash from a walk; nothing is undone).
- * Only the start and the end of the move are looked at.
+ * The spaces crossed count too (movePath: Foundry's waypoints of the move); the Underway question only where it ends.
  * @param {object|null} movement  Foundry's movement data of this update (options.movement[id]), for its actions
  */
 async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved = false } = {}) {
@@ -922,6 +922,8 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
   const esc = foundry.utils.escapeHTML;
   const ask = (title, html, yes) => foundry.applications.api.DialogV2.confirm({ window: { title }, content: html, yes: { label: yes }, no: { label: "Not now" }, rejectClose: false }).then(r => !!r);
   if (!elevationMoved) await offerStepUpDown(td, before, after, ask);
+  // R33a5: the spaces crossed on the way too (Foundry's waypoints of this move, each leg on its direct grid path).
+  const path = movePath(td, prev, movement, before, after);
   const portalsAsked = new Set();
   for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
     if (!scene.tokens.get(o.id)) continue;            // gone meanwhile
@@ -930,14 +932,16 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
     if (!info) continue;
     const oc = cellsOf(o);
     const wasNear = gapBetween(before, oc) === 1, isNear = gapBetween(after, oc) === 1;
-    if (info.rampart && hostile && (wasNear || isNear)) rampartWarning(td, info, isNear, movement);
-    if (info.pickUpNear && flag.creatorId === td.actor.id && (wasNear || isNear)) {
-      if (await ask(`${info.name} — pick up?`, `<p>${esc(td.name)} ${isNear ? "entered" : "left"} a space adjacent to the <strong>${esc(info.name)}</strong>: pick it up? It ends the effect and removes the object (p.128).</p>`, "Pick up"))
+    const passedNear = path.some(f => gapBetween(f, oc) === 1);
+    if (info.rampart && hostile && (wasNear || isNear || passedNear)) rampartWarning(td, info, isNear || (passedNear && !wasNear), movement);
+    if (info.pickUpNear && flag.creatorId === td.actor.id && (wasNear || isNear || passedNear)) {
+      const how = isNear ? "entered" : wasNear ? "left" : "passed through";
+      if (await ask(`${info.name} — pick up?`, `<p>${esc(td.name)} ${how} a space adjacent to the <strong>${esc(info.name)}</strong>: pick it up? It ends the effect and removes the object (p.128).</p>`, "Pick up"))
         await removeMapObject(o.actor);
       continue;
     }
-    if (info.blessing && !info.blessing.taken && !hostile && gapBetween(after, oc) === 0 && gapBetween(before, oc) > 0) {
-      if (await ask(`${info.name} — blessing`, `<p>${esc(td.name)} entered the space of the <strong>${esc(info.name)}</strong>: pick up its blessing token (+1 Blessed; the object stays)?</p>`, "Pick up blessing"))
+    if (info.blessing && !info.blessing.taken && !hostile && gapBetween(before, oc) > 0 && path.some(f => gapBetween(f, oc) === 0)) {
+      if (await ask(`${info.name} — blessing`, `<p>${esc(td.name)} ${gapBetween(after, oc) === 0 ? "entered" : "passed through"} the space of the <strong>${esc(info.name)}</strong>: pick up its blessing token (+1 Blessed; the object stays)?</p>`, "Pick up blessing"))
         await pickUpObjectBlessing(o.actor, { picker: td.actor });
       continue;
     }
@@ -949,6 +953,36 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
       if (await ask(`${info.name} — teleport?`, `<p>${esc(td.name)} is next to the <strong>${esc(info.name)}</strong>: teleport to a free space next to ${others.length > 1 ? "another" : "the other"} one (free action, p.168)?</p>`, "Teleport"))
         await teleportVia(td, others, o);
     }
+  }
+}
+
+/**
+ * R33a5: the footprints a token covered on its way from `prev`, start and end included: Foundry's movement
+ * data of the update gives the waypoints passed, each leg is followed on the grid's direct path — except a teleport
+ * (Foundry's "blink" / "displace" action), which crosses nothing. Without it (a move made by code), only the start
+ * and the end.
+ */
+function movePath(td, prev, movement, before, after) {
+  const grid = td.parent.grid;
+  const half = grid.size / 2;
+  const ok = (p) => Number.isFinite(p?.x) && Number.isFinite(p?.y);
+  const stops = (movement?.passed?.waypoints ?? []).filter(ok);
+  if (!stops.length) return [before, after];
+  const out = [before];
+  try {
+    let from = prev;
+    for (const w of stops) {
+      if (!["blink", "displace"].includes(w.action)) {
+        for (const o of grid.getDirectPath([{ x: from.x + half, y: from.y + half }, { x: w.x + half, y: w.y + half }]))
+          out.push(footprint({ i: o.i, j: o.j }, td));
+      }
+      from = w;
+    }
+    out.push(after);
+    return out;
+  } catch (err) {
+    console.warn("[ICON | MapObjects] path of the move unreadable", err);
+    return [before, after];
   }
 }
 

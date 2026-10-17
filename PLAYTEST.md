@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Gli oggetti guardano il percorso del movimento (17 ottobre 2026, versione 1.15.161)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Il creatore di Comet passa accanto all'arma e si ferma lontano: arriva la domanda "passed through … pick up?".
+- [ ] Un alleato attraversa lo spazio del Megamushroom senza fermarsi: domanda della benedizione.
+- [ ] Un movimento con tappe col righello (più waypoint): conta ogni tratto.
+
 ## R33a5 — Salire e scendere dagli oggetti camminando (17 ottobre 2026, versione 1.15.160)
 
 Setup: solo codice (F5 basta).

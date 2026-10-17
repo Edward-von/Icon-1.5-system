@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Gli oggetti guardano il percorso del movimento (versione 1.15.161)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Percorso**: passare accanto alla Thrown Weapon o sopra un Megamushroom senza fermarsi non faceva nessuna domanda →
+  si guardavano solo partenza e arrivo → ora si leggono le tappe del movimento di Foundry, seguendo ogni tratto sulla
+  griglia (i tratti in teleport sono saltati): la domanda "pick up" di Comet ("passed through"), l'avviso del rampart
+  e la benedizione del Megamushroom valgono anche per gli spazi attraversati. La domanda dell'Underway resta solo dove
+  ci si ferma. Solo codice.
+
 ## 17 ottobre 2026 — Salire e scendere dagli oggetti camminando (versione 1.15.160)
 
 ### Round di debug del 15 ottobre, R33a5
