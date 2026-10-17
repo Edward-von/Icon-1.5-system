@@ -968,6 +968,27 @@ function rampartWarning(td, info, entered, movement) {
 }
 
 /**
+ * R33a5: Aethershard Talent II, "Your abilities gain pierce against characters adjacent to Aethershards" (p.210):
+ * does `attacker`'s damage pierce the character of token `tokenId` (current scene) right now? "The space under a
+ * character is also considered adjacent to it" (p.92). Read when the damage is applied, as cover is.
+ * @returns {{source:string, name:string}|null}
+ */
+export function objectPierceAgainst(attacker, tokenId) {
+  try {
+    const scene = canvas?.scene;
+    const td = tokenId ? scene?.tokens.get(tokenId) : null;
+    if (!attacker || !td || mapObjectFlag(td)) return null;
+    const mine = cellsOf(td);
+    for (const o of scene.tokens.filter(t => mapObjectFlag(t)?.creatorId === attacker.id && t.actor)) {
+      if (gapBetween(mine, cellsOf(o)) > 1) continue;
+      const info = objectSheetInfo(o.actor);
+      if (info?.moves.pierceNear) return { source: info.moves.pierceNear.source, name: info.name };
+    }
+  } catch (err) { console.warn("[ICON | MapObjects] pierce check failed", err); }
+  return null;
+}
+
+/**
  * R33a5: is the character `token` maybe in cover thanks to an object? A hint for the defence chips, never applied:
  *   Geyser Talent I (p.232)    an ally standing on a geyser "have cover from all directions"
  *   Underway Talent II (p.168) "Allies adjacent to underways have cover"

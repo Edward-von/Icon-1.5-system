@@ -105,7 +105,7 @@ import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
 import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
-import { registerMapObjectHooks } from "./module/canvas/map-objects.mjs";
+import { registerMapObjectHooks, objectPierceAgainst } from "./module/canvas/map-objects.mjs";
 import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
 import { registerAreaMotion } from "./module/canvas/area-motion.mjs";
 import { registerFollowMarks } from "./module/canvas/follow-marks.mjs";
@@ -775,6 +775,15 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   let attackerActor = null;
   try { attackerActor = dmgFlags.sourceActorUuid ? fromUuidSync(dmgFlags.sourceActorUuid) : null; } catch { attackerActor = null; }
 
+  // R33a5: Aethershard Talent II (p.210), "Your abilities gain pierce against characters adjacent to
+  // Aethershards": per target, read on render and again on Apply (the card's own Pierce is for everyone).
+  const cardPierce = !!html.querySelector('[data-action="applyDamage"][data-pierce="true"]');
+  const shardPierce = (tokenId) => (!cardPierce && attackerActor && tokenId) ? objectPierceAgainst(attackerActor, tokenId) : null;
+  const shardPierceChip = (row) => {
+    const p = shardPierce(row.dataset.tokenId);
+    return p ? `<span class="icon-def-chip icon-def-chip--trait icon-def-chip--on" title="${foundry.utils.escapeHTML(`${p.source} (p.210): adjacent to the ${p.name}, this damage pierces — the target's Armor is ignored on Apply.`)}">Pierce (${foundry.utils.escapeHTML(p.name)})</span>` : "";
+  };
+
   // Defensive chips on each target row (Dodge / Cover ½ / Resistance ½ …),
   // read from the target's CURRENT statuses — cover is determined when the
   // damage is applied (p.92), so the row is re-evaluated at every render.
@@ -787,7 +796,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     const chips = defenseChipsHtml(actor, {
       outcome, halvedOnRoll, compact: true, trueStrike, unerring,
       tokenId: row.dataset.tokenId ?? null, attacker: attackerActor,
-    });
+    }) + shardPierceChip(row);
     if (!chips) return;
     const holder = document.createElement("span");
     holder.className = "icon-chat-card__target-defs";
@@ -814,7 +823,7 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       // applied as separate instances, so armor (p.92) and the ½ come off each.
       const instances = Math.min(10, Math.max(1, Math.floor(Number(btn.dataset.instances) || 1)));
       let   half   = btn.dataset.half === "true";
-      const pierce = btn.dataset.pierce === "true";
+      const pierce = btn.dataset.pierce === "true" || !!shardPierce(btn.dataset.tokenId);
       // Divine (p.104): can't be reduced, mitigated or negated in any way
       // except immunity — so no armor, no Cover / Resistance halving (not
       // even the ½ button) and it "bypasses vigor".

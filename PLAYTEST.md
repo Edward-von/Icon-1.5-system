@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Pierce degli Aethershard bersaglio per bersaglio (17 ottobre 2026, versione 1.15.159)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Talent II di Aethershard, due foe con armatura, uno accanto a uno shard: nella card del danno solo quello
+      ha il chip Pierce e all'Apply prende il danno pieno; all'altro l'armatura toglie danno.
+- [ ] Spostando lo shard via dal foe prima di premere Apply, l'armatura torna a contare.
+
 ## R33a5 — Avviso del rampart di Comet (17 ottobre 2026, versione 1.15.158)
 
 Setup: solo codice (F5 basta).

@@ -1435,6 +1435,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33a5 — bloccare davvero il rampart** (S, da decidere): il sistema non distingue un dash
       da un passo normale; se si vuole il blocco vero (rifiutare il movimento) basta deciderlo per fly / blink /
       flying, per il dash servirebbe una scelta di chi muove.
+- [ ] **Emerso lavorando su R33a5 — pierce degli shard e weakened** (S): il pierce ignora anche weakened (p.104), ma
+      weakened è già tolto dal totale della card quando viene creata; per il solo bersaglio vicino allo shard non
+      viene ridato.
 
 ---
 

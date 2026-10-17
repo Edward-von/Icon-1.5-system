@@ -244,7 +244,7 @@ function objectRuleNotesA4(t) {
  * @param {Array<{source:string, text:string}>} upgrades
  */
 export function objectUpgradeEffects(upgrades) {
-  const out = { relocate: null, adjacentGain: null, pullFoes: null, alliesPlace: 0, coverNear: null, coverOn: null };
+  const out = { relocate: null, adjacentGain: null, pullFoes: null, alliesPlace: 0, coverNear: null, coverOn: null, pierceNear: null };
   for (const u of upgrades ?? []) {
     const t = plain(u.text);
     const rel = /\bremove one of your [\w' -]+?, then place it in any free space up to range (\d+) from its original location\b/i.exec(t);
@@ -258,6 +258,8 @@ export function objectUpgradeEffects(upgrades) {
     // on a geyser have cover from all directions" (p.232).
     if (!out.coverNear && /\ballies adjacent to (?:an? |your )?[\w' -]+? have cover\b/i.test(t)) out.coverNear = { source: u.source };
     if (!out.coverOn && /\ballies standing on (?:an? |your )?[\w' -]+? have cover from all directions\b/i.test(t)) out.coverOn = { source: u.source };
+    // R33a5: Aethershard Talent II "Your abilities gain pierce against characters adjacent to Aethershards" (p.210).
+    if (!out.pierceNear && /\byour abilities gain pierce against characters adjacent to (?:an? |your )?[\w' -]+/i.test(t)) out.pierceNear = { source: u.source };
   }
   return out;
 }

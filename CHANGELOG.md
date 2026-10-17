@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Pierce degli Aethershard bersaglio per bersaglio (versione 1.15.159)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Aethershard Talent II**: "Your abilities gain pierce against characters adjacent to Aethershards" (p.210) era solo
+  una riga sulla scheda → il pierce della card del danno vale per tutta la card, non per un bersaglio → ora un
+  bersaglio adiacente (o sopra) a uno shard di chi attacca ha il chip "Pierce (Aethershard)" e all'Apply la sua
+  armatura viene ignorata; l'adiacenza si guarda quando si applica il danno, come la copertura. Solo codice.
+
 ## 17 ottobre 2026 — Avviso del rampart di Comet (versione 1.15.158)
 
 ### Round di debug del 15 ottobre, R33a5
