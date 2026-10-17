@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Slay or Infuse armato mostrato una volta sola, come versione infusa (versione 1.15.99)
+
+### Round di debug del 16 ottobre, voce emersa su R46
+
+- **Slay or Infuse armato sulla card Show in Chat**: con GRAM (Nothung) o GRAN BLITZ (Blitz) armati, la card mostrava
+  il blocco "Slay or Infuse 3" tra quelli base come testo normale, senza il riquadro "Infused" e senza il nome della
+  versione nel titolo, mentre la card di attacco la dava per infusa (e lì il blocco compariva già una volta sola) → da
+  R46 il blocco "Slay or Infuse" resta sempre tra i blocchi base, perché lo Slay può attivarlo anche senza Aether,
+  quindi non veniva mai trattato come la versione armata → ora, quando è armato, lascia i blocchi base e diventa il
+  blocco "Infused — Slay or Infuse 3: GRAM" in cima, con il titolo "Nothung — GRAM"; senza niente di armato resta tra
+  i blocchi base, visibile. Solo codice.
+
 ## 17 ottobre 2026 — L'area di Holy non resta più sulla mappa (versione 1.15.98)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

@@ -523,9 +523,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi
       nessun limit break del pack lo fa). Scegliere se togliere dalla ricerca i blocchi Infuse non armati, come fa la
       card delle abilità con `splitInfuseBlocks`.
-- [ ] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
+- [x] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
       GRAN BLITZ armati, la card di attacco mostra il blocco della versione ("Effect (GRAM)") e anche il blocco "Slay
       or Infuse 3" del testo base, che ora resta tra quelli base per non nasconderlo quando lo attiva lo Slay.
+(FATTO il 17 ottobre 2026, versione 1.15.99: sulla card di attacco il blocco compariva già una volta sola; il punto
+      storto era la card Show in Chat, dove con GRAM / GRAN BLITZ armati il blocco restava tra quelli base senza il
+      riquadro Infused. Ora, armato, diventa il blocco della versione infusa e la card prende il nome della versione;
+      non armato resta tra i blocchi base. Solo codice.)
 - [x] **Emerso lavorando su R46 — infusione persa con il token combo** (S): con il token combo tenuto, il Damage Roll
       usa il danno della versione combo e ignora l'infusione armata, compreso il danno in Other appena aggiunto.
       Riguarda solo abilità con sia combo sia Infuse: da verificare se ce ne sono.

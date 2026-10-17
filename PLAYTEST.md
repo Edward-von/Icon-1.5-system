@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R46 — Slay or Infuse armato mostrato una volta sola, come versione infusa (17 ottobre 2026, versione 1.15.99)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Wright con Nothung, niente armato: Show in Chat mostra "Slay or Infuse 3: GRAM — After the ability resolves…"
+      tra i blocchi base, una volta, senza riquadro "Infused".
+- [ ] Infuse 3 su GRAM, poi Show in Chat: titolo "Nothung — GRAM", riquadro "Infused — Slay or Infuse 3: GRAM" in
+      cima, e la riga "Slay or Infuse 3" non compare più tra i blocchi base. Hit, Miss or Area e i due Effect restano.
+- [ ] Stessa prova con Blitz e GRAN BLITZ ("Repeat the first effect").
+- [ ] Con GRAM armato, Attack Roll: un solo blocco "Slay or Infuse 3: GRAM" sopra Hit.
+- [ ] Annullare l'infusione (prima di usarla), poi Show in Chat: il blocco torna tra quelli base.
+- [ ] Un'abilità con Infuse normale (Bio con BIOTIC / MAGNABIO) si comporta come prima, armata e non.
+
 ## Emerso R49 — L'area di Holy non resta più sulla mappa (17 ottobre 2026, versione 1.15.98)
 
 Setup: solo codice (F5 basta).

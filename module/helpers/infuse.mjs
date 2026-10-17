@@ -188,15 +188,19 @@ export function infuseVersionParts(text) {
  * BURST — … you may shove the affected character … Collide: Foe must save or
  * be stunned." (Quaking Palm, p.221), INCANDIUS's "Collide: Characters are
  * vulnerable." (Soul Burn). Field blocks (Comeback, Exceed…) stay with the base.
+ * @param {object[]} blocks
+ * @param {{armed?: string}} opts  label of the armed version, if any
  * @returns {{base: object[], groups: Array<{label:string, block:object, extra:object[]}>}}
  */
-export function splitInfuseBlocks(blocks) {
+export function splitInfuseBlocks(blocks, { armed = "" } = {}) {
   const base = [], groups = [];
   let cur = null;
   for (const b of blocks ?? []) {
     // A "Slay or Infuse" block stays with the base: Slay can trigger it with
-    // nothing armed, so it isn't folded away as a version.
-    if (infuseCost(b.label) !== undefined && !/\bslay\b/i.test(b.label)) { cur = { label: b.label, block: b, extra: [] }; groups.push(cur); continue; }
+    // nothing armed, so it isn't folded away as a version. Armed, it is the
+    // version in play, shown once as such and not again among the base blocks.
+    const slay = /\bslay\b/i.test(b.label);
+    if (infuseCost(b.label) !== undefined && (!slay || (armed && b.label === armed))) { cur = { label: b.label, block: b, extra: [] }; groups.push(cur); continue; }
     if (cur && b.fromText && b.key === "section" && !b.combo) { cur.extra.push(b); continue; }
     cur = null;
     base.push(b);

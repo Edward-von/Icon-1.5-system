@@ -1786,14 +1786,15 @@ export class IconSheet extends BaseActorSheet {
    * @returns {object} fields to merge into the card's ability data ({} when it has no versions)
    */
   async _infuseCardParts(ab) {
-    const { base, groups } = splitInfuseBlocks(ab.blocks);
     const infusions = ab.infusions ?? [];
+    const armed = infusions.find(i => i.armed && !i.standalone);
+    // An armed "Slay or Infuse" block leaves the base for the armed version (GRAM, GRAN BLITZ).
+    const { base, groups } = splitInfuseBlocks(ab.blocks, { armed: armed?.label });
     const versions = groups.map(g => ({ label: g.label, text: infusions.find(i => i.label === g.label)?.text ?? "", extra: g.extra }));
     const fromMastery = infusions.filter(i => i.mastery);
     for (const i of fromMastery) versions.push({ label: i.label, text: i.text, extra: [] });
     if (!versions.length) return {};
     const enrich = t => this._enrichAbility(t);
-    const armed = infusions.find(i => i.armed && !i.standalone);
     const armedVersion = armed ? versions.find(v => v.label === armed.label) : null;
     const whole = !!armedVersion && infuseVersionParts(armedVersion.text).whole;
     const rows = [];
@@ -2678,7 +2679,7 @@ export class IconSheet extends BaseActorSheet {
         else card.effects.push({ label: `${b.label} (${parts.name || infused.costLabel})`, text: await enrich(b.text), infuse: true });
       }
       // Blocks the book writes after the version belong to it (PRIMAL BURST's Collide, p.221).
-      for (const b of splitInfuseBlocks(ab.blocks).groups.find(g => g.label === infused.label)?.extra ?? [])
+      for (const b of splitInfuseBlocks(ab.blocks, { armed: infused.label }).groups.find(g => g.label === infused.label)?.extra ?? [])
         card.effects.push({ label: `${b.label} (${parts.name || infused.costLabel})`, text: b.text, infuse: true });
       if (parts.tail) card.effects.push({ label: tag, text: escapeHTML(parts.tail), infuse: true });
     }
