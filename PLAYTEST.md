@@ -1656,6 +1656,12 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Commento corretto in pitBlastCells (17 ottobre 2026, versione 1.15.119)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Nessun test: cambia solo un commento nel codice.
+
 ## Emerso R49 — I due chip dei pit di Pandaemonium non si cancellano a vicenda (17 ottobre 2026, versione 1.15.118)
 
 Setup: solo codice (F5 basta).

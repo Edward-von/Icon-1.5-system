@@ -1130,7 +1130,9 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
  * effect, centered on them" (Holy Talent I, Pandaemonium's PURGATORIO, p.177).
  * "The area" is this ability's own area already on the map (the newest one of
  * this actor and ability that is not a pit, an aura or an earlier explosion;
- * Holy's area is kept as a terrain effect, so those count); every pit space (terrain-spaces.mjs, `terrain.pit`) inside it
+ * lasting or not: Holy's Medium Blast is not a terrain effect, so it counts
+ * while it is on the map, until it is cleared at the user's next turn); every
+ * pit space (terrain-spaces.mjs, `terrain.pit`) inside it
  * gets a blast of `area`'s size centred on it, and the blasts are joined into
  * one set of spaces: "characters in at least one area" are hit once each.
  * Warns and resolves null when there is no such area or no pit inside it.

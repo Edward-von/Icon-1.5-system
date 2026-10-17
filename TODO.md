@@ -658,9 +658,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.103: un "Terrain effect:" che crea solo un oggetto o sceglie uno spazio non
       fa più restare l'area dell'abilità, e l'elenco dei nomi dei blocchi non conta più; nel pack jobs cambiano solo
       Geo, The Tower e Dark Sliver. Solo codice.)
-- [ ] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
+- [x] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
       `module/canvas/area-templates.mjs` (~riga 1084) il commento dice "Holy's area is kept as a terrain effect, so
       those count": ora non è più così (il codice funziona lo stesso).
+      (FATTO il 17 ottobre 2026, versione 1.15.119: commento corretto, nessun cambio di comportamento.)
 - [x] **Emerso lavorando su R38b — un secondo Damage Roll per il "again" di MAGNARIME cancella l'infusione** (S, dalla
       revisione di R46 + R38b): `startInfusionStep` (`helpers/infuse.mjs` ~266) tratta ogni Damage Roll dopo il primo
       come un uso nuovo, ma MAGNARIME ("Deal 1 piercing damage to all characters in the area again after the ability

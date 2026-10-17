@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Commento corretto in pitBlastCells (versione 1.15.119)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Commento sbagliato**: il commento di `pitBlastCells` (`area-templates.mjs`) diceva che l'area di Holy resta come
+  terrain effect → non è più vero dalla 1.15.98 → ora dice che conta l'area dell'abilità, che resti o no, finché è
+  sulla mappa. Nessun cambio di comportamento.
+
 ## 17 ottobre 2026 — I due chip dei pit di Pandaemonium non si cancellano a vicenda (versione 1.15.118)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
