@@ -303,7 +303,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       si accende proprio in quel round: card pubblica per i PG (solo talento scelto, mastery sbloccata, tratti del
       capitolo, rank di relic sbloccati), card sussurrata al GM per foe e legend; letti "round N or later / N+ / from
       round N", "at the start of round N", liste e "every N rounds thereafter"; conteggio sui pack nel CHANGELOG.)
-- [ ] **R63. Soulfire: cambiare le soglie di crit / exceed nel tiro** (M, da decidere)
+- [ ] **R63. Soulfire: cambiare le soglie di crit / exceed nel tiro** (M, pronto: risposta di Maar del 17 ottobre 2026)
       "Some way to actively modify the crit/exceed values on the roller would be useful here, especially if automated.
       There's a relic that does something similar (-1 required number per round in game for crit/exceed)". Trovare la
       relic sul manuale.
@@ -313,7 +313,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Soulfire (Enochian, p.208): "Comeback: Your threshold to critical hit becomes 18+, and your threshold to exceed
       becomes 13+. If you're at 1 hp, these thresholds are reduced to 15+ and 10+." Da fare: soglie di crit / exceed
       variabili nel tiro d'attacco (oggi fisse), calcolate da Soulfire e da Arenheir III / Aspected.
-- [ ] **R64. Ridurre il costo in Aether delle abilità** (M/L, da decidere)
+- [ ] **R64. Ridurre il costo in Aether delle abilità** (M/L, pronto: risposta di Maar del 17 ottobre 2026)
       Conqueror's Edge "and the one from Enochian": "there is no way to reduce aether costs on abilities … how to
       implement, I have no idea." Domanda per Maar: quale abilità dell'Enochian?
       Risposta di Maar (17 ottobre 2026): "The trait's name is 'Inner furnace'." Inner Furnace (Enochian, p.208):
