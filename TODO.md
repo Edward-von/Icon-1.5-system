@@ -1594,9 +1594,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       viene letto. Ora che il numero di mote è uguale alle blessing tolte, con il Charge bisognerebbe poterne piazzare
       2 in più. Domanda per Edoardo: le 2 caselle in più del Charge costano anche loro una blessing ciascuna, o sono
       gratis?
-- [ ] **Emerso lavorando su R35 — "Gain vigor 4" non ha chip** (S): la regex dei promemoria vigor in
+- [x] **Emerso lavorando su R35 — "Gain vigor 4" non ha chip** (S): la regex dei promemoria vigor in
       `ability-statuses.mjs` (`NOTE_VIGOR_RE`) legge solo "gain 4 vigor", non "gain vigor 4". Il Heroic di Righteous
       Disdain quindi non ha la chip promemoria nemmeno dalla scheda.
+      (FATTO il 17 ottobre 2026, versione 1.15.205: la chip del vigor legge anche "gain vigor N")
 - [ ] **Emerso lavorando su R16 — "triggers all exceed effects" fuori dalle mastery** (S/M): nel libro molte altre
       frasi fanno scattare l'Exceed, per esempio "your next attack triggers all exceed effects" (p.~196),
       "automatically triggers all exceed effects", il tratto di Paleblood e lo Special di Open the Gates ("triggers
@@ -1639,6 +1640,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+- nessuno
 - nessuno
 - nessuno
 - nessuno

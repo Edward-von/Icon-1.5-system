@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Chip vigor anche per "gain vigor N" (17 ottobre 2026, versione 1.15.205)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Righteous Disdain postato dalla scheda: nell'Heroic c'è la chip "Gain vigor 4".
+- [ ] Un'abilità con "gain 2 vigor" ha ancora la sua chip, come prima.
+
 ## Emerso R35 — Niente interrupt dalla scheda se Stunned (17 ottobre 2026, versione 1.15.204)
 
 Setup: solo codice (F5 basta).

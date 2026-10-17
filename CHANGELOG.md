@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Chip vigor anche per "gain vigor N" (versione 1.15.205)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **"Gain vigor 4" senza chip**: l'Heroic di Righteous Disdain ("Gain vigor 4 after this ability resolves", p.128) non
+  aveva la chip promemoria del vigor → `NOTE_VIGOR_RE` leggeva solo "gain 4 vigor" → ora legge anche l'ordine "gain
+  vigor N", che è usato anche altrove nel manuale (es. "allies gain vigor 3"). Solo codice.
+
 ## 17 ottobre 2026 — Niente interrupt dalla scheda se Stunned (versione 1.15.204)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

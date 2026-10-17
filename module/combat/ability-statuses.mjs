@@ -121,7 +121,8 @@ const UNTIL_RE = /^\+?\s*(?:[a-z ,]*?)?\b(until\s+(?:the\s+)?(?:start|end|beginn
 const NOTE_SHOVE_RE  = /\b((?:shove[sd]?|push(?:ed|es)?|pull(?:ed|s)?)\s+(?:(?:the|that|all|each|every|any|your|a|an|adjacent|target|targets|it|them|foes?|characters?|allies|ally|yourself|you|other|others|in\s+the\s+area)\s+)*(\d+)(?:\s+spaces?)?(?:\s+(?:towards?|away\s+from|in\s+any\s+direction|closer|directly\s+away)[^.,;]*)?)/gi;
 const NOTE_UNABLE_RE = /\b((?:unable\s+to|cannot|can't|can\s+not|may\s+not)\s+(?!be\s+(?:targeted|moved|shoved|pushed))[^,.;]+?\s+until\s+[^,.;]+)/gi;
 const NOTE_MOD_RE    = /((?:\+|−|-)\s*\d\s*(?:boons?|curses?)\s+(?:on|to|for|against)\s+[^.,;]+)/gi;
-const NOTE_VIGOR_RE  = /\b((?:gains?|grants?|regains?)\s+(?:\d+|[a-z]+)\s+vigor\b|vigor\s+surge)/gi;
+// "gain 4 vigor", and the book's other order "Gain vigor 4" (Righteous Disdain's Heroic, p.128).
+const NOTE_VIGOR_RE  = /\b((?:gains?|grants?|regains?)\s+(?:(?:\d+|[a-z]+)\s+vigor\b|vigor\s+\d+\b)|vigor\s+surge)/gi;
 const NOTE_MOVE_RE   = /\b((?:dash|rush|teleport|fly|leap|jump)\s+(?:up\s+to\s+)?\d+\b(?:\s+spaces?)?)/gi;
 const NOTE_WOUND_RE  = /\b((?:takes?|suffers?|gains?)\s+(?:a\s+)?wound\b)/gi;
 const NOTE_SAVE_ONLY_RE = /^\s*(?:the|this|their|that|a|any|all|these)?\s*saves?\b/i;
