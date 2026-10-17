@@ -608,9 +608,18 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.98: confermato; la riga "Terrain Effect: Create a pit…" della combo Hades
       rendeva "lasting" la Medium Blast; il testo della combo ora è escluso dal testo base come talenti e mastery; nel
       pack jobs cambia solo Holy. Solo codice.)
-- [ ] **Emerso lavorando su R49 — "centered on them" dopo plants / nails / clouds** (S/M): stesso schema dei pit,
+- [x] **Emerso lavorando su R49 — "centered on them" dopo plants / nails / clouds** (S/M): stesso schema dei pit,
       ancora a mano; plant / nail / cloud non hanno un tipo `terrain` riconoscibile sulla mappa come `pit`, servirebbe
       prima quello.
+      (CHIUSO il 17 ottobre 2026: nessun testo dei pack dice "centered on them" dopo plants / nails / clouds, la riga in
+      `centreOf` è solo una protezione. I casi reali sono le due voci qui sotto.)
+- [ ] **Emerso lavorando su R49 — Rampant Nail Talent I centrato sullo spuntone** (S): "a small blast area centered on the
+      nail is dangerous terrain" (p.227): la Small Blast dangerous va centrata da sola sullo spuntone già sulla mappa
+      (l'area Aura 2 su una casella, con attore e abilità di chi l'ha creato).
+- [ ] **Emerso lavorando su R49 — Harvest Moon: esplosioni sulle plant** (M): "small blast area effect centered on each
+      plant" (Harvest, mastery, p.186): servirebbe prima un modo sicuro di riconoscere le plant sulla mappa (es. un flag
+      sul token quando viene evocata dal pack; il Megamushroom "conta come plant"), poi le esplosioni sulle plant
+      attraversate dall'abilità.
 - [x] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
       foe" (p.178) non crea i pit sotto i foe pacified: oggi si mettono a mano con il chip.
 (FATTO il 17 ottobre 2026, versione 1.15.97: il Talent II di Pandaemonium ha il suo chip "Pits under pacified foes",
