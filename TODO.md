@@ -1224,7 +1224,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (FATTO il 16 ottobre 2026, versione 1.15.72: nel compendio Jobs il blocco (p.194) ha l'etichetta "Special:" ed è in
       testa, ordine Special, Effect, Hit, Miss, Exceed; una combo completa tiene in cima lo Special della base, così
       Center the Temple lo mostra anche lei; migrazione 29 per le copie già sulle schede. Parole del libro invariate.)
-- [ ] **R35. Righteous Disdain usabile dalle card del danno** — diviso in R35a–R35c.
+- [x] **R35. Righteous Disdain usabile dalle card del danno** — diviso in R35a–R35c.
       Commento di Turz Ven: "If you don't have a clean way to implement this (and probably make it modular so other
       interrupts could do similar on damage cards as needed), then I wouldn't do it. Keep in mind there are weird
       interrupts like Dire Parry's mastery which lets it bank interrupt usages, or the ones from seer that wholly
