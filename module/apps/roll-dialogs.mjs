@@ -532,7 +532,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   const isComboExtra = (i) => i >= baseExtras.length;
   // ...and a base block the combo replaces ("Instead of the mark") is hidden then.
   const replaced = ab.parsedCombo?.replacesBlocks ?? [];
-  const isReplaced = (i) => !isComboExtra(i) && replaced.includes(String(extras[i].source ?? "").toLowerCase());
+  const isReplaced = (i) => !isComboExtra(i) && replaced.includes(String(extras[i].source ?? "").split(" — ")[0].toLowerCase());
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   // "Hit (no damage)" only where a hit can happen: an attack (its target may
   // take only the hit's statuses while the rest of the area takes damage), or
@@ -598,7 +598,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             ${extras.length ? `<div class="icon-roll-chips" data-other-chips>
               ${extras.map((x, i) => `
                 <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}"${isComboExtra(i) ? " data-combo-chip" : isReplaced(i) ? " data-combo-replaced" : ""}>
-                  <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.area ? " · area" : ""}</small></span>
+                  <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.unerring ? " unerring" : ""}${x.times > 1 ? ` ×${x.times}` : ""}${x.area ? " · area" : ""}</small></span>
                 </label>`).join("")}
             </div>` : ""}
             <div class="icon-roll-steppers">
@@ -697,6 +697,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
+      // "2 unerring damage" (Astral Chain's Mark p.156) ticks Unerring; the
+      // other outcomes go back to the tag / status default.
+      if (f.elements.unerring) f.elements.unerring.checked = !!ignores.unerring || (outcome === "other" && !!picked?.unerring);
       // Same for the number of instances written in the text ("three times").
       const chunk = outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;

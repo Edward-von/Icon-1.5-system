@@ -699,9 +699,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Savage Fang, Overpower, Mighty Smite e Heavy Arquebus scrivono danni extra nei loro "Effect:" che non vengono
       proposti; allargare la regola vuol dire circa 150 frasi da controllare (i blocchi Collide / Exceed / Charge
       finirebbero sotto "Effect").
-- [ ] **Emerso lavorando su R40 — chip senza Unerring né ×N** (S): la chip di Astral Chain non spunta Unerring; le
+- [x] **Emerso lavorando su R40 — chip senza Unerring né ×N** (S): la chip di Astral Chain non spunta Unerring; le
       chip non mostrano "×N" anche quando la card applica N istanze (Chastise ×3); Blitz scrive due istanze da 1
       piercing nella stessa frase e propone una sola chip.
+(FATTO il 17 ottobre 2026, versione 1.15.127: le chip mostrano "unerring" e "×N", una chip unerring spunta Unerring,
+      Blitz ha due chip "Effect — 1st / 2nd". Solo codice.)
 - [ ] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
       quando le chip vengono dai blocchi base, dal combo o dalle versioni Infuse.
 - [x] **Emerso lavorando su R47b — MJÖLLNIR "instead" e la scelta dell'area** (S, da verificare): MJÖLLNIR crea l'Arc
@@ -750,6 +752,9 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       `flags.icon-system.limitBreakSpend` non si cancella a fine combattimento: un "% Max HP" con un Legend che salva,
       senza aver riusato il Limit Break, rimborsa l'uso precedente, anche di un altro combattimento. Cancellarla nel
       reset di fine combattimento (IconCombat.mjs, ~riga 604).
+- [ ] **Emerso lavorando su R40 — "fino a N volte" nelle chip** (S): Circle the Oak, Quaking Palm e Nothung scrivono
+      "up to a maximum of four times" (il numero di volte dipende dalla situazione); la chip propone una sola istanza
+      e Instances va messo a mano.
 
 ---
 

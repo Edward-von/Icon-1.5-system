@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Chip di Other con Unerring, ×N e due danni di Blitz (versione 1.15.127)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Chip senza Unerring né ×N**: la chip di Astral Chain non spuntava Unerring, quella di Chastise non mostrava ×3 e
+  Blitz proponeva una chip sola → il parser non segnava "unerring damage", l'etichetta della chip non mostrava le
+  istanze e una frase dava sempre una sola chip → ora le chip mostrano "unerring" e "×N", e sceglierne una "unerring"
+  spunta Unerring (Astral Chain p.156; anche Trick Shot Talent II e Warding Bolts Talent I); cambiando esito Unerring
+  torna al valore del tag o dello status. Una frase con due danni separati da ", then" dà due chip: Blitz (p.225) ha
+  "Effect — 1st" e "Effect — 2nd", da 1 piercing ciascuna. Hit / Miss / Area invariati su tutto il pack jobs. Solo
+  codice.
+
 ## 17 ottobre 2026 — Il Mark di Incubus sparisce con Succubus (versione 1.15.126)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

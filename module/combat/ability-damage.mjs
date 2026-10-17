@@ -208,8 +208,19 @@ export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
       if (/\b(?:instead|increases?|becomes|bonus\s+damage)\b|\+\s*\d+\s+damage/i.test(sentence)) continue;
       const chunk = parseChunk(sentence);
       if (!anyDamage(chunk)) continue;
-      extras.push({ source: block.replace(/\b\w/g, ch => ch.toUpperCase()), text: sentence.trim(), ...chunk,
-                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
+      const source = block.replace(/\b\w/g, ch => ch.toUpperCase());
+      // Two separate damages in one sentence, one after the other: Blitz
+      // (p.225) "then deal 1 piercing damage to a foe in range 3, then
+      // teleport 1, then deal 1 piercing damage to a foe in range 3" — one
+      // line each ("Effect — 1st", "Effect — 2nd"), they can hit different foes.
+      const steps = sentence.split(/,\s*then\s+/i).filter(x => /\bdamage\b/i.test(x) && anyDamage(parseChunk(x)));
+      const parts = steps.length > 1 ? steps : [sentence];
+      parts.forEach((x, n) => extras.push({
+        source: parts.length > 1 ? `${source} — ${["1st", "2nd", "3rd"][n] ?? `${n + 1}th`}` : source,
+        text: x.trim(), ...(parts.length > 1 ? parseChunk(x) : chunk),
+        area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(x),
+        unerring: /\bunerring\s+damage\b/i.test(x),
+      }));
     }
   }
   for (const u of upgrades) {
@@ -219,7 +230,8 @@ export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
       const chunk = parseChunk(sentence);
       if (!anyDamage(chunk)) continue;
       extras.push({ source: u.source, text: sentence.trim(), ...chunk,
-                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
+                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence),
+                    unerring: /\bunerring\s+damage\b/i.test(sentence) });
     }
   }
 

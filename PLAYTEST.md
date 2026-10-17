@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Chip di Other con Unerring, ×N e due danni di Blitz (17 ottobre 2026, versione 1.15.127)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Astral Chain → Other → chip "Mark 2 unerring": cliccandola si spunta Unerring; passando a Hit si toglie.
+- [ ] Chastise → Other → la chip mostra "1 divine ×3" e Instances diventa 3.
+- [ ] Blitz → Other → due chip "Effect — 1st" ed "Effect — 2nd" (1 piercing).
+
 ## Emerso R40 — Il Mark di Incubus sparisce con Succubus (17 ottobre 2026, versione 1.15.126)
 
 Setup: solo codice (F5 basta).
