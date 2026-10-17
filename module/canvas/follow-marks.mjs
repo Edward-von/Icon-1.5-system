@@ -159,6 +159,7 @@ async function onMarkCreated(effect) {
     count > 1 || /polaris/i.test(item.name) ? `<small>${esc(sp.label)} spaces active: <strong>${count}</strong> (this one counts).</small>` : "",
     oc.detonate ? `<small>At the end of any turn after yours a card offers <em>Detonate</em> (gamble, medium blast centred on ${esc(td.name)}).</small>` : "",
     oc.onDefeat ? `<small>If ${esc(td.name)} is defeated, a card reminds you: ${esc(oc.onDefeat)}</small>` : "",
+    activatesAtTurnStart(item) ? `<small>At the start of ${esc(creator.name)}'s next turn a card offers the large blast centred on ${esc(td.name)}.</small>` : "",
     oc.mark ? `<small>The mark ends if ${esc(creator.name)} is defeated (p.95); a new mark from ${esc(creator.name)} on ${esc(td.name)} replaces it.</small>` : "",
   ].filter(Boolean);
   await ChatMessage.create({
@@ -220,17 +221,74 @@ async function detonate(tpl) {
   const { rollGamble } = await import("../combat/gamble.mjs");
   const result = await rollGamble(creator, item);
   if (result == null) return;   // the gamble dialog was closed
-  // The blast centred on the character: target their token, as for the other areas "centered on them".
-  const token = td.object;
-  if (token) {
-    for (const t of Array.from(game.user.targets)) if (t !== token) t.setTarget(false, { releaseOthers: false });
-    if (!token.isTargeted) token.setTarget(true, { releaseOthers: false });
-    const { placeAreaTemplate, areaLabel } = await import("./area-templates.mjs");
-    const area = { kind: "blast", size: "m", centeredOn: "target" };
-    area.label = areaLabel(area);
-    await placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:detonate` });
-  }
+  await blastOnHolder(creator, item, td, "m", "detonate");
   await endFollowMark(tpl);
+}
+
+/** A blast of `size` centred on the marked character: their token targeted, as for the other areas "centered on them". */
+async function blastOnHolder(creator, item, td, size, key) {
+  const token = td.object;
+  if (!token) return;
+  for (const t of Array.from(game.user.targets)) if (t !== token) t.setTarget(false, { releaseOthers: false });
+  if (!token.isTargeted) token.setTarget(true, { releaseOthers: false });
+  const { placeAreaTemplate, areaLabel } = await import("./area-templates.mjs");
+  const area = { kind: "blast", size, centeredOn: "target" };
+  area.label = areaLabel(area);
+  await placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:${key}` });
+}
+
+/**
+ * Implode on a character (WAKING VOID, p.211): its large blast centred on them, the shove "as close as possible
+ * towards it" left to the table, then the tracker and its space end. The creator's owner or the GM, on a click.
+ */
+async function implodeOnHolder(tpl) {
+  const f = terrainFlag(tpl);
+  const creator = game.actors.get(f.creatorId);
+  const item = creator?.items?.get(f.itemId);
+  const { td } = holderOf(tpl);
+  if (!creator?.isOwner || !item || !td) { ui.notifications.warn("Only the owner of the one who placed it can do that."); return; }
+  if (tpl.parent !== canvas?.scene) { ui.notifications.warn("Open the scene of that mark first."); return; }
+  await blastOnHolder(creator, item, td, "l", "implode");
+  await endFollowMark(tpl);
+}
+
+/** "Implode: Large Blast" for the Waking Void cards (bound in registerFollowMarks). */
+function implodeButton(tpl, holderName) {
+  return `<button type="button" class="icon-btn icon-btn--sm" data-action="implodeFollowMark" data-scene-id="${esc(tpl.parent.id)}" data-template-id="${esc(tpl.id)}" title="A large blast centred on ${esc(holderName)} (shove everyone inside towards them by hand); then it ends"><i class="fa-solid fa-burst"></i> Large Blast on ${esc(holderName)}</button>`;
+}
+
+/** Does the ability go off "at the start of that turn" (Implode p.211: "at the start of that turn, that space explodes")? */
+const activatesAtTurnStart = (item) => /\bat the start of that turn\b/i.test(plainText(item?.system?.description));
+
+/**
+ * Active GM, the start of a turn: a space on a character whose ability goes off at the start of its creator's next
+ * turn (Implode with WAKING VOID, p.211: "Your next turn must be slow, but at the start of that turn, that space
+ * explodes") — a card, once, with the large blast button. Nothing is placed until someone clicks.
+ * @param {Combatant} current  the combatant whose turn starts
+ */
+async function followMarkTurnStart(current) {
+  const actorId = current?.actor?.id;
+  const scene = current?.token?.parent ?? canvas?.scene;
+  if (!actorId || !scene) return;
+  for (const tpl of followMarks(scene)) {
+    const f = terrainFlag(tpl);
+    if (f.creatorId !== actorId || tpl.flags[NS].turnStartPosted) continue;
+    const creator = game.actors.get(f.creatorId);
+    const item = creator?.items?.get(f.itemId);
+    const { td } = holderOf(tpl);
+    if (!item || !td || !activatesAtTurnStart(item)) continue;
+    await tpl.update({ [`flags.${NS}.turnStartPosted`]: true });
+    const whisper = game.users.filter(u => u.isGM || creator.testUserPermission(u, "OWNER")).map(u => u.id);
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }), whisper,
+      content: `<div class="icon-chat-card icon-chat-card--terrain">
+          <p><strong><i class="fa-solid fa-burst"></i> ${esc(tpl.flags[NS].abilityName)}</strong> <small>(${esc(f.source)})</small>: start of ${esc(creator.name)}'s turn (it must be slow) — the space on <strong>${esc(td.name)}</strong> explodes.</p>
+          ${item ? `<p><small>${esc(plainText(item.system.description))}</small></p>` : ""}
+          <p><small>${esc(f.rules)}</small></p>
+          <div>${implodeButton(tpl, td.name)} ${endButton(tpl, "Done: end it")}</div>
+        </div>`,
+    });
+  }
 }
 
 /**
@@ -246,13 +304,15 @@ async function onDefeated(actor) {
     if (!holder || holder.uuid !== actor.uuid) continue;
     const creator = game.actors.get(f.creatorId);
     const item = creator?.items?.get(f.itemId);
+    // "Implode immediately activates": not again at the start of the creator's turn.
+    if (item && activatesAtTurnStart(item)) { try { await tpl.update({ [`flags.${NS}.turnStartPosted`]: true }); } catch { /* gone */ } }
     await ChatMessage.create({
       speaker: creator ? ChatMessage.getSpeaker({ actor: creator }) : ChatMessage.getSpeaker(),
       content: `<div class="icon-chat-card icon-chat-card--terrain">
           <p><strong><i class="fa-solid fa-burst"></i> ${esc(tpl.flags[NS].abilityName)}</strong> <small>(${esc(f.source)})</small>: <strong>${esc(actor.name)}</strong> is defeated. ${esc(f.onDefeat)}</p>
           ${item ? `<p><small>${esc(plainText(item.system.description))}</small></p>` : ""}
           <p><small>${esc(f.rules)}</small></p>
-          <div>${endButton(tpl, "Done: end it")}</div>
+          <div>${item && activatesAtTurnStart(item) ? `${implodeButton(tpl, actor.name)} ` : ""}${endButton(tpl, "Done: end it")}</div>
         </div>`,
     });
   }
@@ -403,8 +463,15 @@ export function registerFollowMarks() {
     onDefeated(actor).catch(err => console.warn("[ICON | FollowMarks] defeat reminder failed", err));
   });
 
+  // WAKING VOID: Implode on a character goes off at the start of its creator's next turn (p.211). Not on an undo.
+  Hooks.on("updateCombat", (combat, changes, options) => {
+    if (!isActiveGM() || !("turn" in changes) || options?._iconSkipEndOfTurn) return;
+    const current = combat.turn != null ? combat.combatant : null;
+    if (current?.actor) followMarkTurnStart(current).catch(err => console.warn("[ICON | FollowMarks] turn start reminder failed", err));
+  });
+
   Hooks.on("renderChatMessageHTML", (_message, html) => {
-    for (const btn of html.querySelectorAll('[data-action="endFollowMark"], [data-action="detonateFollowMark"]')) {
+    for (const btn of html.querySelectorAll('[data-action="endFollowMark"], [data-action="detonateFollowMark"], [data-action="implodeFollowMark"]')) {
       if (btn.dataset.iconBound) continue;
       btn.dataset.iconBound = "true";
       const tpl = () => game.scenes?.get(btn.dataset.sceneId)?.templates?.get(btn.dataset.templateId) ?? null;
@@ -419,6 +486,7 @@ export function registerFollowMarks() {
         if (!doc) { ui.notifications.info("Already ended."); off("Already ended"); return; }
         try {
           if (btn.dataset.action === "detonateFollowMark") await detonate(doc);
+          else if (btn.dataset.action === "implodeFollowMark") await implodeOnHolder(doc);
           else await endFollowMark(doc);
         } catch (err) { console.warn("[ICON | FollowMarks] button failed", err); return; }
         if (!tpl() || btn.dataset.action === "endFollowMark") off("Ended");

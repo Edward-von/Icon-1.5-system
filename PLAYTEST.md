@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33d2 — Implode su un personaggio: la large blast con un clic (17 ottobre 2026, versione 1.15.153)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Implode con WAKING VOID su un foe, fine turno: all'inizio del turno successivo del creatore arriva la card (solo
+      al creatore e al GM); sulla mappa non compare niente finché non si clicca.
+- [ ] "Large Blast on X": la blast è centrata sul token di X, poi tracker e spazio spariscono.
+- [ ] Foe a 0 hp prima di quel turno: la card della sconfitta ha il bottone, e a inizio turno non esce un'altra card.
+- [ ] Implode messo su uno spazio normale: nessuna di queste card.
+
 ## R33d2 — Segno sul personaggio: controllo del range (17 ottobre 2026, versione 1.15.152)
 
 Setup: solo codice (F5 basta).

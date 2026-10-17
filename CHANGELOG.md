@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Implode su un personaggio: la large blast con un clic (versione 1.15.153)
+
+### Round di debug del 15 ottobre, R33d2
+
+- **WAKING VOID**: con Implode su un personaggio, all'inizio del turno lento non usciva niente, e se il personaggio
+  veniva sconfitto c'era solo una card di testo → mancavano un promemoria a inizio turno e un bottone per l'esplosione
+  ("at the start of that turn, that space explodes … large blast", "If that character is defeated, Implode immediately
+  activates", p.211) → all'inizio del turno successivo del creatore esce una card sussurrata, una volta sola, con
+  "Large Blast on <personaggio>": piazza la large blast centrata sul suo token e poi chiude il tracker e lo spazio. La
+  card della sconfitta ha lo stesso bottone, e dopo la sconfitta a inizio turno non esce una seconda card. Lo shove
+  resta a mano. Solo codice.
+
 ## 17 ottobre 2026 — Segno sul personaggio: controllo del range (versione 1.15.152)
 
 ### Round di debug del 15 ottobre, R33d2
