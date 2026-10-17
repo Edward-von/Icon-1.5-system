@@ -1292,6 +1292,19 @@ function shoveTowardsCell(td, centre) {
 }
 
 /**
+ * Implode (p.211) "Characters are shoved in any order you like": one "Shove" button per character standing on `cells`
+ * (the large blast), except `exclude` (who is in the center space), each towards `centre`. Also for WAKING VOID's
+ * blast centred on a character (follow-marks.mjs).
+ * @returns {string} the buttons' HTML, or ""
+ */
+export function implodeShoveButtons(scene, creator, item, cells, centre, exclude = []) {
+  const skip = new Set(exclude.map(t => t.id));
+  const base = { scene: scene.id, creator: creator.id, item: item.id };
+  return charactersOn(scene, cells).filter(t => !skip.has(t.id)).map(t => actButton("implodeShove", { ...base, token: t.id, cell: { i: centre.i, j: centre.j } }, `Shove ${t.name}`, "fa-compress",
+    `${t.name} shoved in a straight line as close as possible towards the centre (another character, an object or a wall stops them)`)).join(" ");
+}
+
+/**
  * A blast of `size` ("s" / "m" / "l") centred on each of `centres`, joined (each character once), placed for `creator`
  * with the usual area code (it targets who is inside). Resolves placeAreaTemplate's { template, cells, targets } or null.
  */
@@ -1481,9 +1494,7 @@ const TERRAIN_ACTS = {
     const t1 = src?.talentNo === 1 && /\bcenter space is also shattered\b/i.test(src.talent);
     const t2 = src?.talentNo === 2 && /\bcenter space also becomes a pit\b/i.test(src.talent);
     // "Characters are shoved in any order you like": one button per character in the area, clicked in that order.
-    const shoved = charactersOn(scene, placed.cells).filter(t => !onCentre.includes(t));
-    const shoves = shoved.map(t => actButton("implodeShove", { ...base, token: t.id, cell: centre }, `Shove ${t.name}`, "fa-compress",
-      `${t.name} shoved in a straight line as close as possible towards the centre (another character, an object or a wall stops them)`)).join(" ");
+    const shoves = implodeShoveButtons(scene, creator, item, placed.cells, centre, onCentre);
     const buttons = [
       onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "stunned", label: "Stunned" }, `Failed save: stun ${onCentre.map(t => t.name).join(", ")}`, "fa-star") : "",
       t1 && onCentre.length ? actButton("statusTokens", { ...base, tokens: onCentre.map(t => t.id), status: "shattered", label: "Shattered" }, "Talent I: shatter the centre", "fa-heart-crack") : "",

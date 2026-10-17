@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Implode su un personaggio: bottoni Shove verso di lui (17 ottobre 2026, versione 1.15.208)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Implode con WAKING VOID su un nemico, con altri personaggi a 2-3 caselle da lui. All'inizio del turno lento
+      premi "Large Blast on …": arriva una card con un bottone Shove per ciascuno, ma non per il nemico al centro.
+- [ ] Premi i bottoni nell'ordine che vuoi: ogni personaggio si avvicina in linea retta e si ferma accanto al nemico
+      al centro.
+- [ ] Se nell'area c'è solo il personaggio al centro, non arriva nessuna card di shove.
+
 ## Emerso R33 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove (17 ottobre 2026, versione 1.15.207)
 
 Setup: solo codice (F5 basta).

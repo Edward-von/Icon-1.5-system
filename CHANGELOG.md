@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Implode su un personaggio: bottoni Shove verso di lui (versione 1.15.208)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Shove di WAKING VOID**: con Implode usato su un personaggio (WAKING VOID, p.211) veniva piazzata la Large Blast,
+  ma lo shove "as close as possible towards it" restava da fare a mano → `implodeOnHolder` piazzava solo l'area → ora,
+  dopo la blast, arriva una card con un bottone "Shove <nome>" per ogni personaggio nell'area, verso la casella del
+  personaggio. Il personaggio al centro non viene spinto. I bottoni sono gli stessi dell'Implode su una casella. Solo
+  codice.
+
 ## 17 ottobre 2026 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove (versione 1.15.207)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

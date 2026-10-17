@@ -1617,9 +1617,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       nuove, anche la tromba d'acqua che diventa blast)
 - nessuno
 - nessuno
-- [ ] **Emerso lavorando su R33b2 — shove di WAKING VOID** (S): Implode su un personaggio (WAKING VOID, p.211,
+- [x] **Emerso lavorando su R33b2 — shove di WAKING VOID** (S): Implode su un personaggio (WAKING VOID, p.211,
       `implodeOnHolder` in `module/canvas/follow-marks.mjs`) piazza la Large Blast ma lo shove verso il personaggio
       resta a mano; si può riusare lo stesso bottone "Shove" con la casella del personaggio come centro.
+      (FATTO il 17 ottobre 2026, versione 1.15.208: Implode su un personaggio ha i bottoni Shove verso la sua casella)
 - [ ] **Emerso lavorando su R33b2 — collisione nello shove di Implode** (S): quando lo shove si ferma contro un
       ostacolo, il libro può prevedere la collisione (p.107 e seguenti); oggi il token si ferma e basta, senza nessun
       promemoria di collisione.

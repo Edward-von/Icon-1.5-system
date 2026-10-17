@@ -22,7 +22,7 @@
  * "End mark" on a card) ends the mark. The Mark button the tags already give Polaris Talent I and Amico gets the
  * space too, since it goes through the same effect.
  */
-import { createTerrainSpaces, spacesOfItem, terrainFlag, cellsOf, groupOf } from "./terrain-spaces.mjs";
+import { createTerrainSpaces, spacesOfItem, terrainFlag, cellsOf, groupOf, implodeShoveButtons } from "./terrain-spaces.mjs";
 import { applyMark, removeMark, marksOn } from "../combat/marks.mjs";
 
 const _log = (...a) => console.debug("[ICON | FollowMarks]", ...a);
@@ -265,12 +265,13 @@ async function blastOnHolder(creator, item, td, size, key) {
   const { placeAreaTemplate, areaLabel } = await import("./area-templates.mjs");
   const area = { kind: "blast", size, centeredOn: "target" };
   area.label = areaLabel(area);
-  await placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:${key}` });
+  return placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:${key}` });
 }
 
 /**
- * Implode on a character (WAKING VOID, p.211): its large blast centred on them, the shove "as close as possible
- * towards it" left to the table, then the tracker and its space end. The creator's owner or the GM, on a click.
+ * Implode on a character (WAKING VOID, p.211): its large blast centred on them, a card with one "Shove" button for
+ * each character inside ("as close as possible towards it", in any order), then the tracker and its space end.
+ * The creator's owner or the GM, on a click.
  */
 async function implodeOnHolder(tpl) {
   const f = terrainFlag(tpl);
@@ -279,13 +280,23 @@ async function implodeOnHolder(tpl) {
   const { td } = holderOf(tpl);
   if (!creator?.isOwner || !item || !td) { ui.notifications.warn("Only the owner of the one who placed it can do that."); return; }
   if (tpl.parent !== canvas?.scene) { ui.notifications.warn("Open the scene of that mark first."); return; }
-  await blastOnHolder(creator, item, td, "l", "implode");
+  const placed = await blastOnHolder(creator, item, td, "l", "implode");
   await endFollowMark(tpl);
+  if (!placed?.cells?.length) return;
+  // The holder's space is the centre; the holder isn't shoved (nor stunned: "it doesn't stun the center").
+  const centre = cellsOf(td)[0];
+  const shoves = centre ? implodeShoveButtons(td.parent, creator, item, placed.cells, centre, [td]) : "";
+  if (!shoves) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: creator }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-dot"></i> ${esc(item.name)}</strong> activates on <strong>${esc(td.name)}</strong>: shove every character in the area as close as possible towards them, in any order you like (one button each, in the order you choose).
+        <div>${shoves}</div></div>`,
+  });
 }
 
 /** "Implode: Large Blast" for the Waking Void cards (bound in registerFollowMarks). */
 function implodeButton(tpl, holderName) {
-  return `<button type="button" class="icon-btn icon-btn--sm" data-action="implodeFollowMark" data-scene-id="${esc(tpl.parent.id)}" data-template-id="${esc(tpl.id)}" title="A large blast centred on ${esc(holderName)} (shove everyone inside towards them by hand); then it ends"><i class="fa-solid fa-burst"></i> Large Blast on ${esc(holderName)}</button>`;
+  return `<button type="button" class="icon-btn icon-btn--sm" data-action="implodeFollowMark" data-scene-id="${esc(tpl.parent.id)}" data-template-id="${esc(tpl.id)}" title="A large blast centred on ${esc(holderName)}, then a Shove button for everyone inside; then it ends"><i class="fa-solid fa-burst"></i> Large Blast on ${esc(holderName)}</button>`;
 }
 
 /** Does the ability go off "at the start of that turn" (Implode p.211: "at the start of that turn, that space explodes")? */
