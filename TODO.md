@@ -775,9 +775,11 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       reset di fine combattimento (IconCombat.mjs, ~riga 604).
 (FATTO il 17 ottobre 2026, versione 1.15.134: l'annotazione si cancella nel reset di fine combattimento; ogni nuovo
       uso la sovrascrive già, e il rimborso controlla che sia lo stesso Limit Break. Solo codice.)
-- [ ] **Emerso lavorando su R40 — "fino a N volte" nelle chip** (S): Circle the Oak, Quaking Palm e Nothung scrivono
+- [x] **Emerso lavorando su R40 — "fino a N volte" nelle chip** (S): Circle the Oak, Quaking Palm e Nothung scrivono
       "up to a maximum of four times" (il numero di volte dipende dalla situazione); la chip propone una sola istanza
       e Instances va messo a mano.
+(FATTO il 17 ottobre 2026, versione 1.15.144: "up to a maximum of N times" letto come tetto, "up to ×N" sulla chip e
+      Instances da 1 a N nel dialog del danno. Solo codice.)
 - [ ] **Emerso lavorando su R49 — la blast del Rampant Nail non segue lo spuntone spostato** (S): se lo spuntone si
       sposta con Shift + frecce, la Small Blast del Talent I resta dove era e va ripiazzata a mano (il libro non
       prevede di spostare lo spuntone).
@@ -787,6 +789,10 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       sé o a un alleato in range 3 resta a mano.
 - [ ] **Emerso lavorando su R49 — Mote of life non riconosciuta come plant** (S): la mote of life di Dark Sliver
       (RECYCLE, p.187) "is a plant", ma non è nel pack summons né è un oggetto, quindi HARVEST MOON non la vede.
+- [ ] **Emerso lavorando su R40 — "up to N times" nei danni legati a un tiro salvezza** (S, da verificare): in
+      `ability-statuses.mjs` `_dmgChunk` legge "N times" anche dentro "up to a maximum of six times" (Assault Wave del
+      Master: "must save or take 3 piercing damage per minion…"), quindi probabilmente mostra ×6 invece di un tetto;
+      da verificare sulla card e allineare a `maxTimes`.
 
 ---
 

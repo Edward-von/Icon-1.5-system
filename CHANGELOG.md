@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N (versione 1.15.144)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Circle the Oak, Quaking Palm, Nothung (e foe come Shotgun Trooper)**: la chip proponeva una sola istanza e il
+  numero di volte andava messo a mano senza sapere il massimo → il parser leggeva "three times" ma non "up to a
+  maximum of four times" → ora "up to (a maximum of) N times" / "to a maximum of N times", nella stessa frase del
+  danno, è un tetto: la chip mostra "· up to ×N" e nel dialog del danno Instances parte da 1 e arriva al massimo a N
+  (anche scritto a mano); vale anche per Hit / Area dei foe con la stessa frase (Strongarm, Realignment, Provoke,
+  Shotgun Trooper, Commander…). Il "gains 2 vigor … up to three times" di Blood Feed non viene letto. Solo codice.
+
 ## 17 ottobre 2026 — Il danno che un foe infligge a se stesso non è più proposto (versione 1.15.143)
 
 ### Round di debug del 15 ottobre, voce emersa su R14

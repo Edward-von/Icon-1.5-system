@@ -47,7 +47,16 @@ function parseChunk(text) {
   const times = !timesMatch ? 1
     : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
     : (Number(timesMatch[2]) || WORDS[timesMatch[2]] || 1);
-  return { mult, fray: includesFray, flat, type, times };
+  // Damage repeated a number of times the situation decides, with a ceiling:
+  // "deal fray damage to your foe, up to a maximum of four times" (Circle the
+  // Oak), "1 piercing damage once for every object adjacent to them, up to a
+  // maximum of 4 times" (Quaking Palm), "to a maximum of four times"
+  // (Nothung). `maxTimes` is that ceiling: the dialog starts Instances at 1
+  // and lets it go up to it. Only in the same sentence as the damage, so a
+  // later "gains 2 vigor …, up to three times" is not read.
+  const maxMatch = lower.match(/\bdamage\b[^.]*?\b(?:up\s+to|to|for)\s+(?:a\s+)?(?:maximum\s+of\s+)?(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+times\b/);
+  const maxTimes = maxMatch ? (Number(maxMatch[1]) || WORDS[maxMatch[1]] || 0) : 0;
+  return { mult, fray: includesFray, flat, type, times, ...(maxTimes > 1 ? { maxTimes } : {}) };
 }
 
 /**

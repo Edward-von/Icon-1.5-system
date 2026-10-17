@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N (17 ottobre 2026, versione 1.15.144)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Circle the Oak, Damage → Other: la chip Effect mostra "fray · up to ×4"; sceglierla mette Instances a 1, il + si
+      ferma a 4.
+- [ ] Quaking Palm (p.221) e Nothung (p.225): chip "1 piercing · up to ×4", stesso comportamento.
+- [ ] Shotgun Trooper, Double Barrel, esito Area: Instances parte da 1 e si ferma a 3; tornando a un esito senza
+      tetto, Instances torna fino a 10.
+- [ ] Scrivere a mano 9 in Instances con il tetto 4: la card applica 4 istanze.
+- [ ] Chastise (×3) e Blitz: invariati.
+
 ## Emerso R14 — Il danno che un foe infligge a se stesso non è più proposto (17 ottobre 2026, versione 1.15.143)
 
 Setup: solo codice (F5 basta).

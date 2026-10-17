@@ -627,7 +627,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             ${extras.length ? `<div class="icon-roll-chips" data-other-chips>
               ${extras.map((x, i) => `
                 <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}"${isComboExtra(i) ? " data-combo-chip" : isReplaced(i) ? " data-combo-replaced" : ""}>
-                  <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.unerring ? " unerring" : ""}${x.times > 1 ? ` ×${x.times}` : ""}${x.area ? " · area" : ""}</small></span>
+                  <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.unerring ? " unerring" : ""}${x.times > 1 ? ` ×${x.times}` : ""}${x.maxTimes > 1 ? ` · up to ×${x.maxTimes}` : ""}${x.area ? " · area" : ""}</small></span>
                 </label>`).join("")}
             </div>` : ""}
             <div class="icon-roll-steppers">
@@ -739,7 +739,12 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       // Same for the number of instances written in the text ("three times").
       const chunk = outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
-      if (f.elements.instances) f.elements.instances.value = Math.max(1, chunk?.times ?? 1);
+      // "Up to a maximum of four times" (Circle the Oak, Nothung): the count
+      // depends on the situation, so Instances starts at 1 and stops at the ceiling.
+      if (f.elements.instances) {
+        f.elements.instances.max = chunk?.maxTimes > 1 ? chunk.maxTimes : 10;
+        f.elements.instances.value = Math.max(1, chunk?.times ?? 1);
+      }
     };
     // A mastery / talent line under "Other" fills the panel with its amount,
     // type and area; the fields stay editable afterwards.
@@ -844,7 +849,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             hatred:     !!f.elements.hatred?.checked,
             useCombo:   !!f.elements.useCombo?.checked,
             flatBonus:  Math.max(0, Number(f.elements.flatBonus?.value) || 0),
-            instances:  Math.min(10, Math.max(1, Math.floor(Number(f.elements.instances?.value) || 1))),
+            instances:  Math.min(Number(f.elements.instances?.max) || 10, 10, Math.max(1, Math.floor(Number(f.elements.instances?.value) || 1))),
             pierce:     !!f.elements.pierce?.checked,
             divine:     !!f.elements.divine?.checked,
             trueStrike: !!f.elements.trueStrike?.checked,
