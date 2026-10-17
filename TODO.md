@@ -1291,10 +1291,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Quando R28 la renderà usabile, la sua card dell'attacco deve ricevere il talento come la base e Devil Hand
       (`talentAttackBlocks` in `ability-blocks.mjs`, usato in `IconSheet.mjs` prima di `combatRoll`).
       (FATTO con R28, versione 1.15.32: la card dell'attacco aggiunge già il talento a ogni versione, Fists compresa.)
-- [ ] **Emerso lavorando su R16 — talenti e mastery nella card auto-hit e mastery nella card dell'attacco** (S/M, non
+- [x] **Emerso lavorando su R16 — talenti e mastery nella card auto-hit e mastery nella card dell'attacco** (S/M, non
       verificato): la card degli attacchi auto-hit (True Strike ecc.) non mostra né Exceed né il talento; la mastery
       sbloccata non entra in nessuna card dell'attacco (solo nello Show in Chat). Da controllare se ci sono mastery
       che aggiungono Hit / Exceed / Slay all'attacco e, se sì, trattarle come i talenti.
+(FATTO il 17 ottobre 2026, versione 1.15.138: la card auto-hit mostra il talento sbloccato, senza Exceed / Crit / Miss
+      che richiedono il tiro (p.95); nessuna mastery aggiunge Hit / Exceed / Slay all'attacco, quindi lì non cambia
+      nulla. Solo codice.)
 - [x] **Emerso lavorando su R17 — testo del mark per Polaris / Party Favor** (S): il bottone Mark di un'abilità senza
       blocco "Mark:" mette nel mark tutto il testo dell'abilità (Terrain Effect + Gamble di Polaris); andrebbe usato
       il testo del talento / della mastery che crea il mark. Da verificare nel playtest R17.
@@ -1352,6 +1355,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       `{{#with}}` dei riquadri pieni, `../isEditable`, `../abilitiesLocked` e `../comboActive` puntano al numero del
       riquadro e non alla scheda, quindi la × per togliere l'abilità dal riquadro non compare mai e il badge combo non
       si accende; usare `@root.` (verificato con Handlebars 4.7.8).
+- [ ] **Emerso lavorando su R16 — mastery che fanno scattare l'Exceed** (S/M): BLOOD FESTIVAL di Matsuri ("triggers
+      all exceed effects" al primo uso nel combattimento) e BURIAL FIST di Open the Gates ("always triggers exceed
+      effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
+- [ ] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
+      Collide ("Instead of the normal collide effect"), ma la card dell'attacco non lo dice.
 
 ---
 

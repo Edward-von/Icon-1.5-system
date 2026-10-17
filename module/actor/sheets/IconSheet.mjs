@@ -2656,6 +2656,15 @@ export class IconSheet extends BaseActorSheet {
     const comboArmed = ab.comboArmed;
     const statusEntries = abilityStatusEntries(this._comboSystem(this.document.items.get(itemId)), { comboMode: comboArmed, sourceName: this.document.name });
 
+    // The unlocked talent's lines, for the auto-hit card and the attack card alike.
+    const talentName = ab.hasTalent1 ? "Talent I" : ab.hasTalent2 ? "Talent II" : "";
+    const talentBlocks = [];
+    {
+      const sys = this.document.items.get(itemId)?.system ?? {};
+      for (const tb of talentName ? talentAttackBlocks(ab.hasTalent1 ? sys.talent1 : sys.talent2) : [])
+        talentBlocks.push({ ...tb, text: await this._enrichAbility(tb.text) });
+    }
+
     if (ab.isAutoHit) {
       // Auto-hit: no d20 roll, just announce and (optionally) chain into damage.
       // With an attack invoke, p.245 says to roll 1d20 anyway just to check it.
@@ -2681,6 +2690,13 @@ export class IconSheet extends BaseActorSheet {
         rolls.push(d20r);
         invokeHtml = relicInvokeHtml(relicInvokes, d20r.total, { autoHit: true });
       }
+      // The talent applies here too (Death's Slay, Sow's Comeback). Without an attack
+      // roll there is no Exceed (total 15+, p.95), no crit and no miss: those lines are left out.
+      const talentHtml = talentBlocks.filter(tb => !["exceed", "crit", "miss"].includes(tb.key)).map(tb => `
+                    <div class="icon-chat-card__effect-block">
+                      <span class="icon-chat-card__effect-label">${escapeHTML(tb.label ? `${tb.label} (${talentName})` : talentName)}</span>
+                      <span class="icon-chat-card__effect-text">${tb.text}</span>
+                    </div>`).join("");
       await ChatMessage.create({
         speaker: ChatMessage.getSpeaker({ actor: this.document }),
         content: `<div class="icon-chat-card icon-chat-card--autohit">
@@ -2690,6 +2706,7 @@ export class IconSheet extends BaseActorSheet {
                     </div>
                     ${autoAreaHtml}
                     <p>This attack ignores the attack roll and goes directly to damage.</p>
+                    ${talentHtml}
                     ${invokeHtml}
                     ${relicNotesHtml(relicNotes)}
                     ${statusBlockHtml(statusEntries, { source: this.document, abilityName: ab.name, outcome: { isHit: true, isCrit: false, isExceed: false }, targets: inCard, attackTargetId })}
@@ -2760,17 +2777,12 @@ export class IconSheet extends BaseActorSheet {
     // joins that box (shown or dimmed with the outcome), anything else
     // ("Increase teleports to 2", "Slay: …") gets a block of its own.
     const talentEffects = [];
-    {
-      const sys = this.document.items.get(itemId)?.system ?? {};
-      const which = ab.hasTalent1 ? ["Talent I", sys.talent1] : ab.hasTalent2 ? ["Talent II", sys.talent2] : null;
-      for (const tb of which ? talentAttackBlocks(which[1]) : []) {
-        const text = await this._enrichAbility(tb.text);
-        if (["hit", "miss", "exceed", "crit"].includes(tb.key)) {
-          const line = `<strong>${which[0]}:</strong> ${text}`;
-          card[tb.key] = card[tb.key] ? `${card[tb.key]}<br>${line}` : line;
-        } else {
-          talentEffects.push({ label: tb.label ? `${tb.label} (${which[0]})` : which[0], text });
-        }
+    for (const tb of talentBlocks) {
+      if (["hit", "miss", "exceed", "crit"].includes(tb.key)) {
+        const line = `<strong>${talentName}:</strong> ${tb.text}`;
+        card[tb.key] = card[tb.key] ? `${card[tb.key]}<br>${line}` : line;
+      } else {
+        talentEffects.push({ label: tb.label ? `${tb.label} (${talentName})` : talentName, text: tb.text });
       }
     }
 

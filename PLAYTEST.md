@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Talento nella card auto-hit (17 ottobre 2026, versione 1.15.138)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Death con Talent II: Auto-Hit → la card mostra "Slay (Talent II): create a pit…".
+- [ ] Sow con Talent II: Auto-Hit → la card mostra "Comeback (Talent II)".
+- [ ] Un attacco normale con talento mostra ancora il talento come prima.
+
 ## Emerso R5 — Abilità trascinata su un riquadro pieno (17 ottobre 2026, versione 1.15.137)
 
 Setup: solo codice (F5 basta).

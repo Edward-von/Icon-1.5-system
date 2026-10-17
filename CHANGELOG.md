@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Talento nella card auto-hit (versione 1.15.138)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Talento assente nell'auto-hit**: la card degli attacchi auto-hit non mostrava il talento sbloccato (lo Slay del
+  Talent II di Death, il Comeback del Talent II di Sow) → il talento veniva aggiunto solo alla card con il tiro → ora
+  anche la card auto-hit mostra le righe del talento. Exceed, Critico e Miss restano fuori perché senza tiro non
+  possono scattare (Exceed è un tiro totale di 15+, p.95). Nessuna mastery del compendio aggiunge blocchi Hit / Exceed
+  / Slay all'attacco, quindi per le mastery non cambia nulla. Solo codice.
+
 ## 17 ottobre 2026 — Abilità trascinata su un riquadro pieno (versione 1.15.137)
 
 ### Round di debug del 15 ottobre, voce emersa su R5
