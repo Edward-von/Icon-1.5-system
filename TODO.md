@@ -461,7 +461,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       un token potrebbe aprirsi anche l'HUD del token. Il picker nuovo di `terrain-spaces.mjs` lo ferma (`stopPropagation`).
 (FATTO il 17 ottobre 2026, versione 1.15.78: in pickSpace di map-objects.mjs il clic destro chiama stopPropagation
       prima di chiudere la scelta, come pickSpaces di terrain-spaces.mjs.)
-- [ ] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, regola): MJÖLLNIR (p.227) "Create
+- [ ] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, pronto: risposta del 17 ottobre 2026): MJÖLLNIR (p.227) "Create
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
       mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
@@ -601,8 +601,8 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
       è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
       controllare che il token sia dentro le caselle dell'area.
-- [ ] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, in attesa di
-      risposta): la prima metà della Mastery (p.178, "Pandaemonium's area effect … extend to all pits on the
+- [ ] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, pronto: risposta del
+      17 ottobre 2026): la prima metà della Mastery (p.178, "Pandaemonium's area effect … extend to all pits on the
       battlefield") non è letta; l'Area Effect è "Remove all characters in the area, then place them back in any other
       space in the area" (p.177). Domanda per Edoardo: (a) l'area diventa l'area dell'abilità più tutte le caselle con
       un pit (chi sta su un pit viene preso, e si può rimettere anche su un pit), oppure (b) ogni pit conta come
