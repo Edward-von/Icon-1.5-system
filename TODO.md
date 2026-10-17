@@ -819,10 +819,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       (p.104).
 (FATTO il 17 ottobre 2026, versione 1.15.201: il danno dei tiri salvezza legge piercing/divine dal testo e la card lo
       applica)
-- [ ] **Emerso lavorando su R40 — il danno dei tiri salvezza ignora il weakened di chi attacca** (S): `postSaveDamage`
+- [x] **Emerso lavorando su R40 — il danno dei tiri salvezza ignora il weakened di chi attacca** (S): `postSaveDamage`
       non passa `weakened` a `postAbilityDamageCard`, quindi un attaccante Weakened ("All damage dealt reduced by 2",
       p.104) fa danno pieno con i danni legati al tiro salvezza (non piercing). Le sheet invece lo passano con
       `mods.weakened`.
+(FATTO il 17 ottobre 2026, versione 1.15.215: il danno legato al tiro salvezza toglie 2 quando chi agisce è Weakened,
+      tranne piercing/divine)
 - [ ] **Emerso lavorando su R40 — "X damage, twice" sul tiro salvezza tira i dadi più volte** (S): per `times > 1`
       `postSaveDamage` posta N card separate e ognuna tira il proprio [D]. Il manuale (p.92) dice "roll [D] once, then
       apply the total damage … separate times"; `postAbilityDamageCard` ha già `instances` per farlo con un tiro solo.

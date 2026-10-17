@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Il danno dopo un tiro salvezza tiene conto di Weakened (17 ottobre 2026, versione 1.15.215)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Metti Weakened su un foe con un'abilità che fa danno con tiro salvezza (non piercing), fai fallire il tiro al
+      PG: la card del danno mostra il passaggio "−2 weakened" e il totale è 2 in meno.
+- [ ] Stessa prova senza Weakened: nessun −2.
+- [ ] Con Weakened e un danno da tiro salvezza "piercing" (es. "3 piercing damage"): nessun −2.
+- [ ] Un summon Weakened il cui effetto fa danno con tiro salvezza: il −2 si applica.
+
 ## Emerso R16 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop (17 ottobre 2026, versione 1.15.214)
 
 Setup: solo codice (F5 basta).

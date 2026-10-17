@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno dopo un tiro salvezza tiene conto di Weakened (versione 1.15.215)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Danno del tiro salvezza con attaccante Weakened**: chi è Weakened faceva danno pieno con i danni legati al tiro
+  salvezza (p.104: "All damage dealt reduced by 2") → `postSaveDamage` non passava `weakened` alla card del danno,
+  mentre le sheet lo passano → ora si legge lo status Weakened di chi agisce e si toglie 2. Il danno piercing e divine
+  continua a ignorarlo (p.104). Solo codice.
+
 ## 17 ottobre 2026 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop (versione 1.15.214)
 
 ### Round di debug del 15 ottobre, voce emersa su R16
