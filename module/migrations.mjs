@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 34;
+export const CURRENT_SCHEMA_VERSION = 35;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -108,7 +108,7 @@ const BLOCK_ORDER_BY_NAME = {
  * jobs pack; see icon-compendium-audit/combo-tags/apply-combo-tags.mjs.
  */
 const COMBO_TAGS_BY_NAME = {
-  "Sow": "attack, range-4, mark, pierce, combo",
+  "Sow": "attack, melee, combo",
   "Low Blow": "attack, range-2, true-strike, combo",
   "Incubus": "attack, +1-boon, combo",
   "Death Blossom": "attack, arc-4, unerring, combo",
@@ -1291,6 +1291,33 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 34: ${n} limit break(s) given back the book's wording (Split Heaven and Hell p.127, Lycanthropy p.168)`);
+  },
+
+  /* 35 — Sow's combo REAP (Harvester, p.185) is a complete ability, a melee
+   * attack ("Special: You can make this melee attack…"), printed without a tag
+   * line; its comboTags had been copied from Sow ("attack, range-4, mark,
+   * pierce, combo"), so Reap showed range 4 and Pierce (emerged on R1). Only
+   * copies still carrying that exact old value are changed. */
+  35: async () => {
+    const FROM = "attack, range-4, mark, pierce, combo";
+    const TO   = COMBO_TAGS_BY_NAME["Sow"];
+    const patch = (item) => item.type === "ability" && (item.name ?? "").trim() === "Sow"
+      && String(item.system?.comboTags ?? "").trim() === FROM ? { "system.comboTags": TO } : null;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = patch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = patch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 35: ${n} copy/copies of Sow given REAP's own tags (melee, p.185)`);
   },
 };
 

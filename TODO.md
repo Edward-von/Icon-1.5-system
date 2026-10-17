@@ -1223,9 +1223,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       senza etichetta, quindi finisce nel testo di colore. Decidere come mostrarla (es. "Effect:").
 - [x] **Emerso lavorando su R1 — Incubus / Succubus** (S) (SPOSTATO in R40 del round del 16 ottobre): "Instead of the mark, gain Effect: …" non toglie il Mark
       della base (stesso problema di Sweet Torment, scritto in un altro modo). Va controllato sul manuale.
-- [ ] **Emerso lavorando su R1 — tag di Reap** (S, dati): i tag della combo di Sow ("attack, range-4, mark, pierce")
+- [x] **Emerso lavorando su R1 — tag di Reap** (S, dati): i tag della combo di Sow ("attack, range-4, mark, pierce")
       sono copiati dalla base; il Mark ora lo toglie il codice, ma Reap è un attacco melee (Special) e range 4 resta.
       Correzione dati nel pack + `COMBO_TAGS_BY_NAME` in `migrations.mjs` per i mondi già esistenti.
+(FATTO il 17 ottobre 2026, versione 1.15.120: REAP (p.185) è un attacco melee completo senza riga di tag; i tag della
+      combo sono "attack, melee, combo" (via Range 4, Mark e Pierce), Melee conta come range, `COMBO_TAGS_BY_NAME`
+      aggiornato, migrazione 35 sulle copie con i tag originali. Compendio Jobs + migrazione.)
 - [ ] **Emerso lavorando su R1 — barrato parziale** (S/M): con Sweet Torment / Indignation sulla scheda si potrebbe
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
 - [ ] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
@@ -1275,6 +1278,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.115: la scheda summon usa la finestra del danno condivisa di
       roll-dialogs.mjs, come foe e legend, con Other, Pierce / Divine / True Strike / Unerring, Hatred e bersagli; la
       vecchia finestra è stata tolta. Solo codice.)
+- [ ] **Emerso lavorando su R1 — Reap "regardless of distance"** (S): Reap si può fare contro il bersaglio marcato da
+      Sow a qualunque distanza e senza linea di vista, e in quel caso guadagna Unerring (p.185); con il tag Melee il
+      sistema considera la portata 1. Controllare se il tiro avvisa o blocca un bersaglio marcato lontano, e se
+      Unerring va proposto in quel caso.
 
 ---
 

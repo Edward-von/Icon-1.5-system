@@ -292,7 +292,9 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   // its own: Flying Sleeves "Area becomes Arc 4" is still placed in range 2
   // (p.97: an AoE with a listed range goes anywhere in that range). Without
   // it the arc had to touch the user and the placement refused every spot.
-  const isRange = (t) => /^(?:range-\d+\+?|no-max-range)$/i.test(String(t).replace(/\s+/g, "-"));
+  // "melee" is a range too: Sow's REAP is a melee attack (p.185) and must not
+  // get Sow's range 4 back.
+  const isRange = (t) => /^(?:range-\d+\+?|no-max-range|melee)$/i.test(String(t).replace(/\s+/g, "-"));
   const selfArea = (t) => /^(?:burst-\d+-self|aura(?:-\d+)?)$/i.test(String(t).replace(/\s+/g, "-"));
   if (current !== base && !current.some(isRange) && !current.some(selfArea)) {
     current = [...current, ...base.filter(isRange)];

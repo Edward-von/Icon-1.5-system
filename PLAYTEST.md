@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R1 — Reap, la combo di Sow, ha i suoi tag (17 ottobre 2026, versione 1.15.120)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Sow sulla scheda (copia aggiunta prima di questa versione): senza combo token i tag sono Attack, Range 4, Mark,
+      Pierce, Combo; con il combo token armato (REAP) i tag sono Attack, Melee, Combo, senza Range 4, Mark e Pierce.
+- [ ] Console al caricamento del mondo: "Migration 35: … copy/copies of Sow given REAP's own tags".
+- [ ] Sow trascinato di nuovo dal compendio Jobs: con il combo token stessi tag (Attack, Melee, Combo).
+- [ ] Sow con Spectral Scythe sbloccata e combo armata: il bottone area propone ancora l'Arc 4 dal bersaglio.
+- [ ] Damage Roll di Reap: niente Pierce, quindi l'armatura del bersaglio conta.
+
 ## Emerso R49 — Commento corretto in pitBlastCells (17 ottobre 2026, versione 1.15.119)
 
 Setup: solo codice (F5 basta).

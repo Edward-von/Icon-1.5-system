@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Reap, la combo di Sow, ha i suoi tag (versione 1.15.120)
+
+### Round di debug del 15 ottobre, voce emersa su R1
+
+- **Reap mostrava Range 4 e Pierce**: con il combo token armato Sow (Harvester) mostrava ancora Range 4 e Pierce → i
+  tag della combo erano stati copiati dalla base ("attack, range-4, mark, pierce, combo"), ma il libro (p.185) stampa
+  REAP come abilità completa, un attacco melee ("You can make this melee attack against the target marked by sow
+  regardless of distance or line of sight"), senza riga di tag sua; inoltre, se i tag della combo non avevano un
+  range, il sistema rimetteva quello della base → ora i tag della combo sono "attack, melee, combo" (via Range 4, Mark
+  e Pierce) e Melee vale come range in `rule-tooltips.mjs`, così il Range 4 della base non torna; `COMBO_TAGS_BY_NAME`
+  aggiornato; la migrazione 35 lo fa sulle copie già sulle schede che hanno ancora i tag originali. Compendio Jobs +
+  migrazione.
+
 ## 17 ottobre 2026 — Commento corretto in pitBlastCells (versione 1.15.119)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
