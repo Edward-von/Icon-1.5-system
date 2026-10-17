@@ -177,6 +177,10 @@ export function areaMotion(texts) {
     // of your choice" — a reminder at the start of their turn, once the waterspout has grown.
     m = /\bcharacters that start their turns? adjacent to the area are shoved (\d+)\b/i.exec(t);
     if (m) set("startShove", { steps: Number(m[1]), source, rule: sentenceAt(t, m.index) });
+    // R33c2: Mist Strider (p.169) "At the start of your turn, you can consume a cloud as a free action to condense it
+    // into a fey creature, summoning a beast in any of its spaces" — a reminder with a button that removes the cloud.
+    m = /\bat the start of your turns?,? you (?:can|may) consume (?:a|an|one) ([\w-]+)\b[^.;]*?\bsummoning\b[^.;]*/i.exec(t);
+    if (m) set("consume", { noun: m[1].toLowerCase(), source, rule: sentenceAt(t, m.index) });
     // Tsunami Talent I: "Tsunami creates a pit in its center space after completing its movement" — a reminder.
     m = /\bafter completing its movement\b/i.exec(t);
     if (m) set("afterMove", { source, rule: t.slice(sentenceBounds(t, m.index)[0]).split(/(?<=[.;])\s+/).slice(0, 2).join(" ") });

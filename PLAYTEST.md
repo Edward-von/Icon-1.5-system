@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Mist Strider: consumare una nuvola (17 ottobre 2026, versione 1.15.169)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Mist Strider con due nuvole: a inizio turno card con due bottoni Consume; il clic toglie quella nuvola e
+      ingrigisce l'altro.
+- [ ] Il giocatore che non possiede la nuvola riceve l'avviso.
+
 ## R33c2 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (17 ottobre 2026, versione 1.15.168)
 
 Setup: solo codice (F5 basta).

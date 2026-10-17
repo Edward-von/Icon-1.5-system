@@ -356,6 +356,8 @@ export async function areaTurnStart(combatant) {
       parts.push(`<p>${esc(g.source)}: ${esc(g.rule)}</p><div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaGrowTo" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" title="It becomes a ${esc(areaLabel({ kind: "blast", size: g.size }))} around its space"><i class="fa-solid fa-expand"></i> Grow to ${esc(areaLabel({ kind: "blast", size: g.size }))}</button></div>`);
     }
     // R33c2: GUNGNIR (p.225) "At the start and end of your turn, you may deal 1 piercing damage to all characters in the area".
+    // R33c2: Mist Strider (p.169) "consume a cloud … summoning a beast in any of its spaces": the beast by hand.
+    if (m?.consume) parts.push(`<p>${esc(m.consume.source ? `${m.consume.source}: ` : "")}${esc(m.consume.rule)}</p><div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaConsume" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-group="consume-${esc(actor.id)}" title="Removes this ${esc(m.consume.noun)} from the map; summon the beast in one of its spaces yourself"><i class="fa-solid fa-paw"></i> Consume this ${esc(m.consume.noun)}</button></div>`);
     const dt = rules.damage?.turn;
     if (dt?.start) parts.push(`<p>${esc(dt.source)}: ${esc(dt.rule)}</p>${areaDamageButton(doc, dt)}`);
     if (parts.length) lines.push(`<p><strong>${esc(name)}</strong></p>${parts.join("")}`);
@@ -565,6 +567,17 @@ export function registerAreaMotion() {
             if (n) { btn.disabled = true; btn.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaGrowTo") {
             if (await growToBlast(doc)) { btn.disabled = true; btn.style.opacity = "0.5"; }
+          } else if (ds.action === "iconAreaConsume") {
+            if (!(doc.isOwner || game.user.isGM)) { ui.notifications.warn("Only the one who placed it or the GM can consume it."); return; }
+            const { actor } = sourceOf(doc);
+            const name = nameOf(doc);
+            await scene.deleteEmbeddedDocuments("MeasuredTemplate", [doc.id]);
+            await ChatMessage.create({
+              speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
+              content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-paw"></i> ${esc(name)}</strong>: a cloud is consumed. Summon a beast in one of the spaces it covered.</div>`,
+            });
+            // "a cloud": one a turn — the other clouds' buttons on this card go grey.
+            for (const b of html.querySelectorAll(`[data-group="${ds.group}"]`)) { b.disabled = true; b.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaVacate") {
             if (await leaveTerrainOnVacated(doc, ds.kind, String(ds.cells ?? ""))) { btn.disabled = true; btn.style.opacity = "0.5"; }
           } else if (ds.action === "iconAreaDamage" || ds.action === "iconAreaLeaveDamage") {

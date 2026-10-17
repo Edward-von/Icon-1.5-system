@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Mist Strider: consumare una nuvola (versione 1.15.169)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **Mist Strider**: "consume a cloud … summoning a beast in any of its spaces" (p.169) non aveva promemoria → la card
+  di inizio turno ora ha, per ogni nuvola, il bottone "Consume this cloud": toglie la nuvola, ingrigisce gli altri
+  (una a turno) e ricorda di evocare la bestia in uno dei suoi spazi, che si evoca a mano. Nocturne Talent I e Trap
+  Door Spider Technique restano a mano. Solo codice.
+
 ## 17 ottobre 2026 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (versione 1.15.168)
 
 ### Round di debug del 15 ottobre, R33c2
