@@ -432,7 +432,7 @@ export class IconSheet extends BaseActorSheet {
       const desc = parseAbilitySections(s.description);
       const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], actor, a.id);
       // The armed Infuse version's damage (Magnabio's Hit 2[D]+fray, Cryotic's fray damage).
-      const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, actor));
+      const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, actor), { infusions, system: s });
       const parsedCombo = parseComboAbilityDamage(s);
       const trigger = (s.interruptTrigger ?? "").trim() || desc.trigger;
       // While the combo token is held, a combo ability shows the combo's own
@@ -1684,7 +1684,7 @@ export class IconSheet extends BaseActorSheet {
     const desc = parseAbilitySections(s.description);
     const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id);
     // The armed Infuse version's damage replaces the base where it writes its own (p.117).
-    const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, this.document));
+    const parsed = infusedAbilityDamage(_parseAbilityDamage(s), _armedVersion(infusions, this.document), { infusions, system: s });
     const parsedCombo = parseComboAbilityDamage(s);
     // Combo version in play: its tags replace the ability's (Hades gains True
     // Strike and Medium Blast) and its own text says how the attack lands

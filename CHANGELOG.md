@@ -1,5 +1,27 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other (versione 1.15.91)
+
+### Round di debug del 16 ottobre, voce emersa su R46
+
+- **Danno delle versioni Infuse armate**: MAGNARIME (Rime p.233, "Deal 1 piercing damage to all characters in the area
+  again … for every two aether infused"), BOULDER KICK (Dragon Dive p.218, "they take 2 piercing damage twice
+  instead"), INCANDIUS (Soul Burn p.210, "dealing 1 piercing") e GRAM (Nothung p.225) non comparivano tra le scelte di
+  Other nel tiro del danno → il programma leggeva solo le righe Hit / Miss / Area della versione armata e le frasi che
+  cambiano il danno, e il danno che la versione aggiunge si perdeva; MAGNARIME, essendo una Mastery, veniva proposto
+  sempre come "Mastery", anche senza Aether spesa, e una volta sola → ora ogni frase con danno aggiunto della versione
+  armata diventa una scelta in Other con il nome della versione ("Infuse 3 — BOULDER KICK"). MAGNARIME compare solo da
+  armato e conta un'istanza ogni 2 Aether spese ("Infuse X — MAGNARIME (4 Aether)", Instances 2); INCANDIUS, che nel
+  libro non ha la parola "damage", conta come 1 piercing. Ora compaiono anche le esplosioni di MAGNAPYRE e GREAT
+  SPIRIT LANCE.
+- **Slay or Infuse**: i blocchi "Slay or Infuse 3" / "Infuse 3 or Slay" non avevano il bottone Infuse, perché come
+  costo si riconosceva solo "Infuse N" → ora il costo si legge anche lì: GRAM, GRAN BLITZ, RUINÖS, HEIMDALL e PHANTOM
+  BLADE hanno il bottone. Il loro danno è sempre proposto in Other, anche senza Aether, perché lo attiva anche lo
+  Slay; sulla card in chat il blocco resta al suo posto.
+- **Excalibur su GRAM**: con la Mastery EXCALIBUR ("All 1 piercing damage listed by this ability becomes divine",
+  p.225) il danno di GRAM restava piercing → la regola che cambia il tipo di danno vale anche per il danno delle
+  versioni Infuse: GRAM diventa 1 divine, due volte. Solo codice.
+
 ## 17 ottobre 2026 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato (versione 1.15.90)
 
 ### Round di debug del 16 ottobre, voce emersa su R37

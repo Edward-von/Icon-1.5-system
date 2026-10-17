@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R46 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other (17 ottobre 2026, versione 1.15.91)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Rime con la Mastery sbloccata: Damage Roll senza infusione → in Other non c'è MAGNARIME. Arma Infuse X con 4
+      Aether, poi Damage Roll → in Other c'è "Infuse X — MAGNARIME (4 Aether)" con 1 piercing e Instances 2. Con 1
+      Aether la scelta non compare.
+- [ ] Dragon Dive: arma BOULDER KICK, poi Damage Roll → in Other c'è "Infuse 3 — BOULDER KICK", 2 piercing, Instances
+      2. Area resta 2 piercing.
+- [ ] Soul Burn: arma INCANDIUS, poi Damage Roll → in Other c'è "Infuse 4 — INCANDIUS", 1 piercing.
+- [ ] Nothung: nel pannello c'è il bottone "Slay or Infuse 3": spende 3 Aether, si arma e un secondo clic restituisce
+      l'Aether. Anche senza nulla armato, in Other c'è "Slay or Infuse 3 — GRAM", 1 piercing, Instances 2.
+- [ ] Nothung con EXCALIBUR sbloccata: la scelta GRAM in Other parte con Divine spuntato al posto di Pierce.
+- [ ] Pyre con MAGNAPYRE armato e Lance con GREAT SPIRIT LANCE armato: in Other ci sono le esplosioni da 2 piercing
+      (per Lance anche "twice instead", Instances 2).
+- [ ] Blitz, Rampant Nail, Bifröst e Drifting Leaf hanno il bottone Infuse sul loro blocco "Slay or Infuse" / "Infuse
+      3 or Slay". Show in Chat senza nulla armato mostra quel blocco aperto come prima.
+- [ ] Non regressione R40: Succubus con la combo di Incubus ha ancora [D]+fray su Hit e il chip "Combo — Succubus" in
+      Other.
+
 ## Emerso R37 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato (17 ottobre 2026, versione 1.15.90)
 
 Setup: solo codice (F5 basta).

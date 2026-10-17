@@ -7,7 +7,7 @@
  */
 
 import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
-import { limitBreakInfusions } from "../helpers/infuse.mjs";
+import { limitBreakInfusions, masteryInfusion } from "../helpers/infuse.mjs";
 
 // Parse a single text blob for dice formula + fray + flat damage.
 function parseChunk(text) {
@@ -45,6 +45,22 @@ function parseChunk(text) {
     : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
     : (Number(timesMatch[2]) || WORDS[timesMatch[2]] || 1);
   return { mult, fray: includesFray, flat, type, times };
+}
+
+/**
+ * The unlocked mastery that changes the type of some of the ability's
+ * damage — "All 1 piercing damage listed by this ability becomes divine"
+ * (Nothung's Excalibur, p.225) — as a function retyping a damage chunk, or
+ * null when there is none.
+ */
+function _masteryRetype(s) {
+  const m = s?.masteryUnlocked && /\ball\s+(?:(\d+)\s+)?(?:(piercing|divine)\s+)?damage\s+(?:listed|dealt)\s+by\s+this\s+ability\s+becomes\s+(divine|piercing)\b/i
+    .exec(String(s.mastery ?? "").replace(/<[^>]+>/g, " "));
+  if (!m) return null;
+  const [, amount, from, to] = m;
+  const fits = (c) => !!(c && (c.mult > 0 || c.flat > 0 || c.fray)) && (!from || c.type === from.toLowerCase())
+    && (!amount || (c.flat === Number(amount) && !c.mult && !c.fray));
+  return (c) => (fits(c) ? { ...c, type: to.toLowerCase() } : c);
 }
 
 /**
@@ -122,7 +138,9 @@ export function parseAbilityDamage(itemSystem) {
   const talentNo = Number(s.talentSelected ?? 0);
   const upgrades = [
     { source: talentNo === 1 ? "Talent I" : "Talent II", text: { 1: s.talent1, 2: s.talent2 }[talentNo] },
-    { source: "Mastery", text: s.masteryUnlocked ? s.mastery : "" },
+    // A mastery that is an Infuse version (MAGNARIME: Infuse X, Rime p.233)
+    // only deals its damage while armed: infusedAbilityDamage reads it then.
+    { source: "Mastery", text: s.masteryUnlocked && !masteryInfusion(s).length ? s.mastery : "" },
   ].filter(u => u.text && typeof u.text === "string" && !/\b(?:combo|attack|hit)\s*:/i.test(u.text))
    .map(u => ({ ...u, sentences: u.text.replace(/<[^>]+>/g, " ").split(/(?<=\.)\s+/) }));
   let areaSentence = "";
@@ -161,13 +179,8 @@ export function parseAbilityDamage(itemSystem) {
   // piercing damage listed by this ability becomes divine" (Nothung's
   // Excalibur, p.225). The chunks with that amount and type take the new one,
   // so the dialog ticks Divine instead of Pierce.
-  const retype = s.masteryUnlocked && /\ball\s+(?:(\d+)\s+)?(?:(piercing|divine)\s+)?damage\s+(?:listed|dealt)\s+by\s+this\s+ability\s+becomes\s+(divine|piercing)\b/i
-    .exec(String(s.mastery ?? "").replace(/<[^>]+>/g, " "));
-  if (retype) {
-    const [, amount, from, to] = retype;
-    const fits = (c) => anyDamage(c) && (!from || c.type === from.toLowerCase())
-      && (!amount || (c.flat === Number(amount) && !c.mult && !c.fray));
-    const re = (c) => (fits(c) ? { ...c, type: to.toLowerCase() } : c);
+  const re = _masteryRetype(s);
+  if (re) {
     hit = re(hit); miss = re(miss); area = re(area);
     for (let i = 0; i < extras.length; i++) extras[i] = re(extras[i]);
   }
@@ -260,11 +273,79 @@ export function parseComboAbilityDamage(itemSystem) {
  * "Bonus damage for every two aether spent" (MAGNACRYO, an Infuse X) is one
  * more [D] per instance of bonus damage (glossary p.102), counted from the
  * Aether spent on arming it: `bonusDice` is the dialog's starting value.
+ * Damage a version deals besides the ability's own outcomes goes under the
+ * damage dialog's "Other", like a Limit Break's (parseLimitBreakDamage):
+ * see infusionExtras. With `infusions` (all of the ability's versions) a
+ * "Slay or Infuse N" one is offered even when not armed, since Slay also
+ * triggers it (Nothung's GRAM, p.225).
  * @param {object} parsed     parseAbilityDamage(...) of the ability
  * @param {{label?:string, name?:string, text?:string, spent?:number}|null} infusion  the armed one
+ * @param {{infusions?: object[], system?: object}} opts  every version (infusionsOf);
+ *   the ability's system data, for a mastery retyping its damage (Excalibur)
  * @returns {object} parsed, with `version` ({label, name}) and `bonusDice` when infused
  */
-export function infusedAbilityDamage(parsed, infusion) {
+export function infusedAbilityDamage(parsed, infusion, { infusions = [], system = null } = {}) {
+  if (!parsed) return parsed;
+  const re = _masteryRetype(system);
+  const added = [];
+  for (const inf of [infusion, ...(infusions ?? []).filter(i => i?.slay && i.label !== infusion?.label)]) {
+    if (!inf?.text) continue;
+    for (const x of infusionExtras(inf, { spent: inf === infusion ? Number(infusion.spent) || 0 : 0 })) added.push(re ? re(x) : x);
+  }
+  const out = _infusedOutcomes(parsed, infusion);
+  if (!added.length) return out;
+  return { ...out, extras: [...(out.extras ?? []), ...added], dealsDamage: true };
+}
+
+/**
+ * The damage sentences of an Infuse version that add to the ability rather
+ * than change it, as "Other" entries of the damage dialog:
+ *   MAGNARIME (Rime p.233) "Deal 1 piercing damage to all characters in the
+ *     area again after the ability resolves for every two aether infused":
+ *     one instance per two Aether spent (none below two);
+ *   BOULDER KICK (Dragon Dive p.218) "If only one character is caught in the
+ *     area, they take 2 piercing damage twice instead": a case of the area,
+ *     the table picks it;
+ *   INCANDIUS (Soul Burn p.210) "spark a soul ember at them, dealing 1
+ *     piercing" — the book drops the word "damage";
+ *   GRAM (Nothung p.225) "dealing 1 piercing damage, twice, to all foes".
+ * Not read here: the version's own Hit / Miss / Area lines and a sentence
+ * that changes the damage ("increase damage to fray damage", "bonus damage
+ * for every two aether", "instead of", "becomes") — _infusedOutcomes has those.
+ * @param {{label:string, name?:string, text:string, slay?:boolean}} inf
+ * @param {{spent?: number}} opts  Aether spent on it (Infuse X)
+ */
+export function infusionExtras(inf, { spent = 0 } = {}) {
+  const text = String(inf?.text ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim()
+    .replace(/^[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\s]{2,}(?:\s*\([^)]*\))?\s*[—–-]\s*/, "");
+  const label = String(inf?.label ?? "").replace(/\s*\(mastery\)\s*$/i, "");
+  const source = `${label}${inf?.name ? ` — ${inf.name}` : ""}`;
+  const deals = (c) => c.mult > 0 || c.flat > 0 || c.fray;
+  const WORDS = { one: 1, two: 2, three: 3, four: 4 };
+  const out = [];
+  for (const raw of text.split(/(?<=\.)\s+/)) {
+    if (/^(?:attack\s*:\s*)?(?:on\s+hit|auto[-\s]?hit|hit|miss|area(?:\s+effect)?)\s*:/i.test(raw)) continue;
+    if (/\b(?:instead\s+of|increases?|becomes|bonus\s+damage)\b|\bdamage\s+to\s+(?:\[d\]|fray|\d)/i.test(raw)) continue;
+    // "dealing 1 piercing." (Incandius): the amount and type without "damage".
+    const sentence = raw.replace(/\b(\d+)\s+(piercing|divine)\b(?!\s+(?:fray\s+)?damage)/gi, "$1 $2 damage");
+    if (!/\bdamage\b|\[d\]|\bfray\b/i.test(sentence)) continue;
+    const chunk = parseChunk(sentence);
+    if (!deals(chunk)) continue;
+    const every = /\bfor\s+every\s+(\d+|one|two|three|four)\s+aether\b/i.exec(sentence);
+    let times = chunk.times;
+    if (every) {
+      const n = Number(every[1]) || WORDS[every[1].toLowerCase()] || 1;
+      times = Math.floor(spent / n);
+      if (times < 1) continue;
+    }
+    out.push({ source: every ? `${source} (${spent} Aether)` : source, text: raw.trim(), ...chunk, times,
+               area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
+  }
+  return out;
+}
+
+/** infusedAbilityDamage's Hit / Miss / Area of the armed version (see there). */
+function _infusedOutcomes(parsed, infusion) {
   if (!parsed || !infusion?.text) return parsed;
   const text = String(infusion.text).replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
   const deals = (c) => !!(c && (c.mult > 0 || c.flat > 0 || c.fray));

@@ -388,13 +388,18 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       all'alleato tiene l'alleato come destinatario, e la durata dopo ", then …" vale solo per quella frase; Wish con
       la mastery dà Defiance (senza durata) e Unstoppable (fino alla fine del suo turno successivo) all'alleato; fra i
       pack cambia solo Wish. Solo codice.)
-- [ ] **Emerso lavorando su R46 — danno aggiunto dalle versioni Infuse delle abilità non proposto in Other** (S/M):
+- [x] **Emerso lavorando su R46 — danno aggiunto dalle versioni Infuse delle abilità non proposto in Other** (S/M):
       come per i Limit Break (R38b), le versioni infuse che aggiungono danno invece di cambiarlo non compaiono in Other:
       MAGNARIME ("Deal 1 piercing damage to all characters in the area again … for every two aether infused"), BOULDER
       KICK di Dragon Dive ("2 piercing damage twice instead" se c'è un solo personaggio), INCANDIUS di Soul Burn ("dealing
       1 piercing"), GRAM di Nothung ("Slay or Infuse 3": in più il blocco "Slay or Infuse" non ha il bottone Infuse,
       `infuseCost` accetta solo "Infuse N"). Con EXCALIBUR il danno di GRAM e dell'Effect di Nothung andrebbe divine,
       ma oggi non è proposto (vedi anche "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
+(FATTO il 17 ottobre 2026, versione 1.15.91: il danno aggiunto dalla versione Infuse armata viene proposto in Other
+      con il nome della versione (MAGNARIME solo da armato e un'istanza ogni 2 Aether, BOULDER KICK, INCANDIUS, anche
+      MAGNAPYRE e GREAT SPIRIT LANCE); "Slay or Infuse N" / "Infuse N or Slay" hanno il bottone Infuse e il loro danno
+      è sempre in Other; con EXCALIBUR il danno di GRAM è divine. Il danno nell'Effect di base di Nothung resta alla
+      voce di R24.)
 - [x] **Emerso lavorando su R48 — l'aura di Fulminate non segue il mark** (S): "The character gains aura 2 while
       marked" (p.226): l'aura piazzata sul personaggio marcato non sparisce quando il mark viene tolto o passa a un altro
       bersaglio (nessuna scadenza "while marked"); si toglie a mano. Si potrebbe legarla al mark di Fulminate.
@@ -505,6 +510,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi
       nessun limit break del pack lo fa). Scegliere se togliere dalla ricerca i blocchi Infuse non armati, come fa la
       card delle abilità con `splitInfuseBlocks`.
+- [ ] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
+      GRAN BLITZ armati, la card di attacco mostra il blocco della versione ("Effect (GRAM)") e anche il blocco "Slay
+      or Infuse 3" del testo base, che ora resta tra quelli base per non nasconderlo quando lo attiva lo Slay.
+- [ ] **Emerso lavorando su R46 — infusione persa con il token combo** (S): con il token combo tenuto, il Damage Roll
+      usa il danno della versione combo e ignora l'infusione armata, compreso il danno in Other appena aggiunto.
+      Riguarda solo abilità con sia combo sia Infuse: da verificare se ce ne sono.
+- [ ] **Emerso lavorando su R46 — Excalibur sull'Effect di base di Nothung** (S): "Effect: Teleport 1, then deal 1
+      piercing damage again to your target for every foe or ally adjacent to them, to a maximum of four times" (p.225)
+      non è proposto in Other, quindi con EXCALIBUR non diventa divine; fa parte della voce "Emerso lavorando su R24 —
+      danno scritto negli Effect del testo base".
 
 ---
 

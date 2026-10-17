@@ -20,9 +20,13 @@ import { gridDistance } from "../combat/defenses.mjs";
 const _log = (...a) => console.debug("[ICON | Infuse]", ...a);
 const NS = "icon-system";
 
-/** "Infuse 3" → 3, "Infuse X" → null (the player picks how much). */
+/**
+ * "Infuse 3" → 3, "Infuse X" → null (the player picks how much). Also the
+ * blocks Slay triggers too: "Slay or Infuse 3" (Nothung's GRAM p.225, Blitz's
+ * GRAN BLITZ), "Infuse 3 or Slay" (Drifting Leaf's PHANTOM BLADE p.227).
+ */
 export function infuseCost(label) {
-  const m = /^infuse\s+(\d+|x)(?:\s*\(mastery\))?$/i.exec(String(label ?? "").trim());
+  const m = /^(?:slay\s+or\s+)?infuse\s+(\d+|x)(?:\s+or\s+slay)?(?:\s*\(mastery\))?$/i.exec(String(label ?? "").trim());
   if (!m) return undefined;
   return /^x$/i.test(m[1]) ? null : Number(m[1]);
 }
@@ -182,7 +186,9 @@ export function splitInfuseBlocks(blocks) {
   const base = [], groups = [];
   let cur = null;
   for (const b of blocks ?? []) {
-    if (infuseCost(b.label) !== undefined) { cur = { label: b.label, block: b, extra: [] }; groups.push(cur); continue; }
+    // A "Slay or Infuse" block stays with the base: Slay can trigger it with
+    // nothing armed, so it isn't folded away as a version.
+    if (infuseCost(b.label) !== undefined && !/\bslay\b/i.test(b.label)) { cur = { label: b.label, block: b, extra: [] }; groups.push(cur); continue; }
     if (cur && b.fromText && b.key === "section" && !b.combo) { cur.extra.push(b); continue; }
     cur = null;
     base.push(b);
@@ -246,7 +252,7 @@ export function infusionsOf(sections, actor, itemId) {
       aether:  actor?.system?.combat?.classResources?.aether?.value ?? 0,
       // Limit Break blocks (limitBreakInfusions) carry these too.
       source:  sec.source ?? "",
-      slay:    !!sec.slay,
+      slay:    !!sec.slay || /\bslay\b/i.test(sec.label),
       resolveCost: sec.resolveCost ?? null,
     });
   }
