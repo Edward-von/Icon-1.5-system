@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco (17 ottobre 2026, versione 1.15.212)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Open the Gates, primo attacco del combattimento: nella finestra c'è la casella "Open the Gates" già spuntata
+      ("first use this combat"); al secondo attacco è vuota ("already used this combat").
+- [ ] Open the Gates con Burial Fist sbloccata al round 4: compaiono due caselle (Open the Gates e BURIAL FIST); con
+      tutte e due spuntate e un totale sotto 15 la card dice "Exceed (Open the Gates / BURIAL FIST)".
+- [ ] PG Freelancer con Aether Shot: al round 3 e al round 6 la casella "Aether Shot" è spuntata, negli altri round è
+      vuota.
+- [ ] PG Colossus con Pulverize, token a 2 livelli sopra il bersaglio: casella "Pulverize" spuntata con "(height Δ2)";
+      a 1 livello resta vuota.
+- [ ] Arenheir al rango II, bersaglio al 25% degli HP o meno: casella "Arenheir II" spuntata; con un bersaglio più
+      sano resta vuota.
+- [ ] Blessing of War, Paleblood I, Soul Shot: la casella c'è ma è vuota, e accanto si legge la frase del libro.
+- [ ] Matsuri con Blood Festival: si comporta come prima (spuntata al primo uso, facoltativa).
+
 ## Emerso R49 — Mote of life senza blessing: diventa un terrain effect (17 ottobre 2026, versione 1.15.211)
 
 Setup: solo codice (F5 basta).

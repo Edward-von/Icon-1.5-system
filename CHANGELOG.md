@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco (versione 1.15.212)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Exceed fuori dalle mastery**: oltre a Blood Festival e Burial Fist, nessun'altra frase "triggers all exceed
+  effects" arrivava alla finestra dell'attacco. L'unica via era la casella "Exceed on" messa a mano → la ricerca
+  leggeva solo il testo della mastery → ora legge anche il testo dell'abilità e il suo talento scelto (Special di Open
+  the Gates "the first time it is used in combat", p.194; area di Soul Shot "two or more allies", p.158), i tratti del
+  personaggio (Pulverize p.135, Aether Shot p.155, Blessing of War p.191) e i ranghi sbloccati delle reliquie
+  (Arenheir II e Paleblood I, p.252). Ogni fonte ha una casella col suo nome. È già spuntata quando la condizione si
+  può leggere: primo uso nel combattimento, round N o successivi, round 3 e 6, 2+ livelli più in alto del bersaglio,
+  bersaglio al 25% degli HP o meno. Altrimenti resta vuota e mostra la frase come promemoria. Le frasi "your next
+  attack…" (stance, abilità di fine turno) restano fuori. Con la combo armata si legge il testo della combo al posto
+  della base. Solo codice.
+
 ## 17 ottobre 2026 — Mote of life senza blessing: diventa un terrain effect (versione 1.15.211)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

@@ -103,41 +103,115 @@ export async function noteCriticalHit(actor) {
 }
 
 /* -------------------------------------------------- */
-/*  Masteries that trigger the Exceed without a 15+    */
+/*  Effects that trigger the Exceed without a 15+      */
 /* -------------------------------------------------- */
 
 const FIRST_USE_FLAG = "exceedFirstUse";
 
+// "triggers all exceed effects", "triggers any exceed effects", "always triggers exceed effects",
+// "activates all exceed effects", Paleblood's "trigger all of the following triggered effects: … exceed".
+const EXCEED_TRIGGER_RE = /\b(?:triggers?|activates?)\s+(?:all\s+|any\s+)?(?:of\s+(?:its|the)\s+)?exceed effects\b|\btrigger all of the following triggered effects:[^.]*\bexceed\b/;
+const ORDINALS = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
+const NUMBERS  = { one: 1, two: 2, three: 3, four: 4 };
+
+function _plainText(html) {
+  return String(html ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/’/g, "'").replace(/\s+/g, " ").trim();
+}
+
+/** The sentences of a text that make the ability trigger its exceed effects (not "your next attack …"). */
+function _exceedSentences(html) {
+  return _plainText(html).split(/(?<=[.!?])\s+/)
+    .filter(s => EXCEED_TRIGGER_RE.test(s.toLowerCase()) && !/\bnext attack\b/i.test(s));
+}
+
 /**
- * An unlocked mastery that makes the ability trigger its exceed effects
- * whatever the total, or null:
- *   • BLOOD FESTIVAL (Matsuri, p.192): "The first time you use Matsuri in a
- *     combat, you may … and it triggers all exceed effects." Optional ("may"),
- *     so the attack dialog ticks it on the first use and the player decides.
- *   • BURIAL FIST (Open the Gates, p.194): "Any version of this ability …
- *     always triggers exceed effects at round 4 or later."
- * Read from the mastery's text, so every version (the armed combo too) gets it.
- * @param {Actor} actor  the attacker
- * @param {Item}  item   the ability
- * @returns {{ source:string, on:boolean, why:string, firstUse:boolean }|null}
+ * What a sentence's condition says about this attack:
+ *   on        ticked when the dialog opens
+ *   why       shown next to the box
+ *   firstUse  the ability's first use in the combat is noted after the dialog
+ *   when      resolved by the attack dialog from its targets: { elevation:n } | { targetQuarter:true }
  */
-export function masteryExceed(actor, item) {
-  const s = item?.system;
-  if (!s?.masteryUnlocked || !s.mastery) return null;
-  const plain = String(s.mastery).replace(/<[^>]+>/g, " ").replace(/’/g, "'").replace(/\s+/g, " ").trim();
-  const text = plain.toLowerCase();
-  const name = /^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(plain)?.[1] ?? "Mastery";
+function _readCondition(sentence, actor, item) {
+  const t = sentence.toLowerCase();
   const round = currentRound(actor);
-  const fromRound = /always triggers? (?:all |any )?exceed effects at round (\d+) or later/.exec(text);
-  if (fromRound) {
-    const n = Number(fromRound[1]);
-    return { source: name, on: !!round && round >= n, why: `round ${n} or later${round ? ` (now round ${round})` : ""}`, firstUse: false };
+  const now = round ? ` (now round ${round})` : "";
+  let m = /\bat round (\d+) or later\b/.exec(t);
+  if (m) {
+    const n = Number(m[1]);
+    return { on: !!round && round >= n, why: `round ${n} or later${now}` };
   }
-  if (/first time you use .+? in (?:a|each) combat\b.*?triggers? (?:all |any )?exceed effects/.test(text)) {
-    const used = round ? item.getFlag?.("icon-system", FIRST_USE_FLAG) === game.combat.id : false;
-    return { source: name, on: !!round && !used, why: round ? (used ? "already used this combat" : "first use this combat") : "first use in a combat", firstUse: true };
+  m = /\bon the (\w+)(?: and (\w+))? rounds? of combat\b/.exec(t);
+  if (m && ORDINALS[m[1]]) {
+    const rounds = [ORDINALS[m[1]], ORDINALS[m[2]]].filter(Boolean);
+    return { on: !!round && rounds.includes(round), why: `round ${rounds.join(" and ")}${now}` };
   }
-  return null;
+  if (/\bfirst time\b.*?\bin (?:a |each )?combat\b/.test(t)) {
+    const used = round ? item?.getFlag?.("icon-system", FIRST_USE_FLAG) === game.combat.id : false;
+    return { on: !!round && !used, why: round ? (used ? "already used this combat" : "first use this combat") : "first use in a combat", firstUse: true };
+  }
+  m = /\b(\d+|one|two|three|four) or more levels higher\b/.exec(t);
+  if (m) {
+    const n = NUMBERS[m[1]] ?? Number(m[1]);
+    return { on: false, why: `${n}+ levels higher than the target`, when: { elevation: n } };
+  }
+  if (/\b(?:target|foe) is at 25% hp or lower\b/.test(t)) {
+    return { on: false, why: "target at 25% hp or lower", when: { targetQuarter: true } };
+  }
+  // Anything else (passing through two allies, 3 blessings, the Paleblood die at 4…): the player decides.
+  return { on: false, why: sentence.length > 110 ? `${sentence.slice(0, 107)}…` : sentence };
+}
+
+/**
+ * Everything that makes this attack trigger its exceed effects whatever the
+ * total — one box each in the attack dialog:
+ *   • the unlocked mastery: BLOOD FESTIVAL (Matsuri, p.192, first use in a
+ *     combat, optional "may"), BURIAL FIST (Open the Gates, p.194, round 4+);
+ *   • the ability's own text — Open the Gates' Effect (p.194: "triggers any
+ *     exceed effects the first time it is used in combat"), Soul Shot's area
+ *     (p.158: "If it passes through two or more allies, automatically
+ *     triggers all exceed effects") — and its unlocked talent; with the combo armed, the combo text
+ *     instead of the base one;
+ *   • the character's traits: Pulverize (p.135, two or more levels higher),
+ *     Aether Shot (p.155, third and sixth round), Blessing of War (p.191,
+ *     3 blessings);
+ *   • the unlocked relic ranks: Arenheir II (p.252, target at 25% hp or
+ *     lower), Paleblood I (p.252, expending the die at 4).
+ * A condition the system can read (round, first use, height, target HP) ticks
+ * the box; any other leaves it unticked with the sentence as a reminder.
+ * "Your next attack triggers …" (stances, end-turn abilities) is left out:
+ * that sentence is about a later use.
+ * @param {Actor}  actor  the attacker
+ * @param {Item}   item   the ability
+ * @param {object} [opts]
+ * @param {boolean} [opts.comboArmed]
+ * @returns {{ source:string, on:boolean, why:string, firstUse?:boolean, when?:object }[]}
+ */
+export function exceedTriggers(actor, item, { comboArmed = false } = {}) {
+  const out = [];
+  const s = item?.system;
+  if (!s) return out;
+  const add = (source, html) => {
+    for (const sentence of _exceedSentences(html)) out.push({ source, ..._readCondition(sentence, actor, item) });
+  };
+  const name = item.name ?? "Ability";
+  if (comboArmed) add(`${name} (combo)`, s.comboEffect);
+  else for (const f of ["description", "hitEffect", "missEffect", "areaEffect", "chargeEffect", "heroicEffect",
+                        "collideEffect", "slayEffect", "critEffect", "finishingBlowEffect", "comebackEffect"]) add(name, s[f]);
+  const sel = Number(s.talentSelected ?? 0);
+  if (sel === 1) add(`${name} Talent I`, s.talent1);
+  if (sel === 2) add(`${name} Talent II`, s.talent2);
+  if (s.masteryUnlocked && s.mastery) {
+    add(/^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(_plainText(s.mastery))?.[1] ?? "Mastery", s.mastery);
+  }
+  for (const tr of actor?.items ?? []) if (tr.type === "trait") add(tr.name, tr.system?.description);
+  for (const r of unlockedRelics(actor)) {
+    const sys = r.item.system ?? {};
+    [["I", sys.rank1], ["II", sys.rank2], ["III", sys.rank3], ["Aspect", sys.aspect]]
+      .slice(0, r.rank).forEach(([label, rank]) => add(`${r.name} ${label}`, rank?.description));
+  }
+  // One box per source.
+  const seen = new Set();
+  return out.filter(e => !seen.has(e.source) && seen.add(e.source));
 }
 
 /** Note the first use of the ability in this combat (BLOOD FESTIVAL). No-op outside a combat. */

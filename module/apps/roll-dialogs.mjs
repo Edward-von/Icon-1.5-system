@@ -296,8 +296,8 @@ const DIALOG_OPTS = { classes: ["icon-roll-window"], position: { width: 460 } };
  * the elevation difference; Defense from the lowest targeted token.
  * @returns {Promise<{boons:number, curses:number, defense:number|null}|null>}
  */
-export async function promptAttackMods(ab, actor, { modsActor = null, area = null, forceExceed = null } = {}) {
-  // `forceExceed`: crit-thresholds.mjs#masteryExceed — a box to trigger the exceed whatever the total.
+export async function promptAttackMods(ab, actor, { modsActor = null, area = null, exceedTriggers = [] } = {}) {
+  // `exceedTriggers`: crit-thresholds.mjs#exceedTriggers — one box each to trigger the exceed whatever the total.
   // `modsActor`: whose statuses give the automatic boons / curses (a summon uses its summoner's).
   // `area`: the area placed for this attack — with one on the table the extra
   // tokens are in the area, not attack targets, so the dialog asks which one
@@ -343,6 +343,14 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
   // Crit / exceed thresholds (crit-thresholds.mjs): 20+ / 15+ unless Soulfire
   // or Arenheir move them; the player can still change them by hand.
   const thr = attackThresholds(actor);
+  // Exceed triggers whose condition depends on the targets: height (Pulverize, p.135) and
+  // the attack target's HP (Arenheir II, p.252). Read once, from the targets when the dialog opens.
+  const atkTargets = pick ? targets.slice(0, 1) : targets;
+  const forced = (exceedTriggers ?? []).map(e => {
+    if (e.when?.elevation) return { ...e, on: elev.boons >= e.when.elevation, why: `${e.why}${targets.length ? ` (height Δ${elev.boons})` : ""}` };
+    if (e.when?.targetQuarter) return { ...e, on: atkTargets.length > 0 && atkTargets.every(t => t.hp != null && Number(t.hpMax) > 0 && Number(t.hp) <= Number(t.hpMax) / 4) };
+    return e;
+  });
   const evasionChip = `<span class="icon-roll-auto__chip" data-role="evasion" title="Applied automatically from the ability, the statuses and the elevation"${evaders.length ? "" : " hidden"}>${esc(evasionNote(evaders))}</span>`;
 
   const content = `
@@ -369,10 +377,10 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             ${_stepper({ name: "exceedAt", label: "Exceed on", hint: "total needed to exceed (normally 15+)",           value: thr.exceed, min: 1, max: 30 })}
           </div>
           ${thr.sources.length ? `<p class="icon-roll-card__hint" data-role="thresholds">${thr.sources.map(esc).join(" · ")}</p>` : ""}
-          ${forceExceed ? `
-            <label class="icon-roll-chip" title="${esc(forceExceed.source)} (mastery): this use triggers all exceed effects, whatever the total — ${esc(forceExceed.why)}.">
-              <input type="checkbox" name="forceExceed" ${forceExceed.on ? "checked" : ""}><span><i class="fa-solid fa-star"></i> ${esc(forceExceed.source)} <small>triggers all exceed effects · ${esc(forceExceed.why)}</small></span>
-            </label>` : ""}
+          ${forced.map((e, i) => `
+            <label class="icon-roll-chip" title="${esc(e.source)}: this use triggers all exceed effects, whatever the total — ${esc(e.why)}.">
+              <input type="checkbox" name="forceExceed${i}" ${e.on ? "checked" : ""}><span><i class="fa-solid fa-star"></i> ${esc(e.source)} <small>triggers all exceed effects · ${esc(e.why)}</small></span>
+            </label>`).join("")}
           <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note"></span></div>
         </section>
       </div>
@@ -454,8 +462,9 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             defense: defenseVal !== "" && defenseVal != null ? Number(defenseVal) : null,
             critAt:   Math.max(1, Number(f.elements.critAt?.value)   || thr.crit),
             exceedAt: Math.max(1, Number(f.elements.exceedAt?.value) || thr.exceed),
-            // A mastery's "triggers all exceed effects" (BLOOD FESTIVAL, BURIAL FIST): its name, or "".
-            forceExceed: forceExceed && f.elements.forceExceed?.checked ? forceExceed.source : "",
+            // "Triggers all exceed effects" (BLOOD FESTIVAL, Open the Gates, Pulverize, Arenheir II…):
+            // the names of the ticked sources, or "".
+            forceExceed: forced.filter((_e, i) => f.elements[`forceExceed${i}`]?.checked).map(e => e.source).join(" / "),
             attackTargetId,
             targetIds: rows.map(r => r.dataset.tokenId),
             // "Defender has evasion" per target token: rollEvasion uses it in

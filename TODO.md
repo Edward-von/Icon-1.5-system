@@ -1600,11 +1600,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       `ability-statuses.mjs` (`NOTE_VIGOR_RE`) legge solo "gain 4 vigor", non "gain vigor 4". Il Heroic di Righteous
       Disdain quindi non ha la chip promemoria nemmeno dalla scheda.
       (FATTO il 17 ottobre 2026, versione 1.15.205: la chip del vigor legge anche "gain vigor N")
-- [ ] **Emerso lavorando su R16 — "triggers all exceed effects" fuori dalle mastery** (S/M): nel libro molte altre
+- [x] **Emerso lavorando su R16 — "triggers all exceed effects" fuori dalle mastery** (S/M): nel libro molte altre
       frasi fanno scattare l'Exceed, per esempio "your next attack triggers all exceed effects" (p.~196),
       "automatically triggers all exceed effects", il tratto di Paleblood e lo Special di Open the Gates ("triggers
       any exceed effects the first time it is used in combat", p.194). Per ora l'unica via è la casella "Exceed on"
       messa a mano.
+(FATTO il 17 ottobre 2026, versione 1.15.212: caselle Exceed anche da testo dell'abilità, talento, tratti e reliquie;
+      spuntate quando la condizione si legge, vuote con la frase quando no.)
 - [ ] **Emerso lavorando su R16 — resto di Blood Festival** (S): "increase all its teleports by +2, it deals bonus
       damage" (p.192) non arriva né alla finestra del danno né alla card. Lo stesso vale per il bonus damage di Burial
       Fist.
@@ -1663,6 +1665,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       vuol dire tirare un dado in più e tenere il più alto (p.95), ma per i danni fissi senza dado (terreno
       pericoloso, bottoni "2 damage" delle card) non dice cosa succede. Domanda per Edoardo: li lasciamo senza bonus,
       come oggi, o vuoi una regola tua (per esempio +1 danno, o solo un promemoria nella card)?
+- nessuno
 
 ---
 
