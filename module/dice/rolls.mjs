@@ -395,6 +395,16 @@ export async function saveRoll({ statusLabel, ongoing = false, boons = 0, curses
   const d20r  = await new Roll("1d20").evaluate();
   const d20   = d20r.total;
   const rolls = [d20r];
+  // Deepwrath Talent I (p.235): "Marked allies gain +1 boon on saves in pits".
+  if (!ongoing && actor) {
+    const { pitMarkEffects } = await import("../canvas/terrain-spaces.mjs");
+    const td = actor.token ?? actor.getActiveTokens?.(false, true)?.[0] ?? null;
+    const pit = pitMarkEffects(td);
+    if (pit.saveBoons) {
+      boons += pit.saveBoons;
+      boonNote = [boonNote || (boons - pit.saveBoons ? `${boons - pit.saveBoons} boon${boons - pit.saveBoons > 1 ? "s" : ""}` : ""), `${pit.saveSource}: in a pit`].filter(Boolean).join(", ");
+    }
+  }
   const net   = boons - curses;
   let modifier = 0;
   let boonCurseLabel = "";

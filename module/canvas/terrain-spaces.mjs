@@ -230,6 +230,14 @@ export async function createTerrainSpaces(scene, cells, spec, { actor = null, ab
   try {
     const docs = await scene.createEmbeddedDocuments("MeasuredTemplate", data);
     _log(`${docs.length} × ${label} for "${abilityName}"`);
+    // Deepwrath Talent II (p.235): a pit made under a marked foe makes them shattered+ while inside it.
+    if (kind === "pit") {
+      const made = new Set(cells.map(cellKey));
+      for (const td of scene.tokens) {
+        if (!td.actor || isMapObject(td) || !touches(cellsOf(td), made)) continue;
+        await offerPitShatter(td, false, tokenInPit(td)).catch(err => console.warn("[ICON | TerrainSpaces] pit shatter offer failed", err));
+      }
+    }
     return docs;
   } catch (err) {
     console.warn("[ICON | TerrainSpaces] could not create the spaces (permissions?)", err);
@@ -670,6 +678,10 @@ async function offerTerrainOnMove(td, prev, to, movement = null) {
       }).join("")}</div>`,
     });
   }
+  // Deepwrath Talent II (p.235): shattered+ while inside pits.
+  const pits = pitKeysOn(scene);
+  const ground = !((Number(td.elevation) || 0) > 0);
+  await offerPitShatter(td, ground && touches(before, pits), ground && touches(after, pits));
   // R33b2: DARKTIDE (Deepwrath's mastery, p.235) — the marked character's first vacated space this turn.
   const dark = terrainMarksOn(td.actor).filter(x => x.mastery);
   await offerDarktideLeave(td, before, after, dark);
@@ -885,8 +897,67 @@ function terrainMarksOn(actor) {
     const item = creator?.items?.get(mark.abilityKey);
     if (!item) return null;
     const s = item.system ?? {};
-    return { mark, creator, item, base: plainOf(s.description), mastery: s.masteryUnlocked ? plainOf(s.mastery) : "" };
+    const t = Number(s.talentSelected) || 0;
+    return { mark, creator, item, base: plainOf(s.description), mastery: s.masteryUnlocked ? plainOf(s.mastery) : "",
+      talent: t === 1 ? plainOf(s.talent1) : t === 2 ? plainOf(s.talent2) : "" };
   }).filter(Boolean);
+}
+
+// Deepwrath's talents (p.235): what the mark does while the marked character is inside a pit.
+const DEEP_SAVE = /\bmarked allies gain \+?(\d+) boons? on saves in pits\b/i;
+const DEEP_NO_HEIGHT = /\bfoes don't gain any height advantage against them while (?:they are )?inside pits\b/i;
+const DEEP_BONUS = /\bmarked foes take bonus damage from all sources\b[^.]*?\bwhile inside pits\b/i;
+const DEEP_SHATTER = /\bmarked foes\b[^.]*?\bare shat+er+ed\+ while inside pits\b/i;
+
+/** Is the character of `td` on the ground in a pit space (p.89)? Same reading as the roll dialog's height. */
+export function tokenInPit(td) {
+  const scene = td?.parent;
+  if (!scene || !td.actor || isMapObject(td) || (Number(td.elevation) || 0) > 0) return false;
+  const pits = pitKeysOn(scene);
+  return pits.size > 0 && cellsOf(td).some(c => pits.has(cellKey(c)));
+}
+
+/**
+ * Deepwrath's talents (p.235) for the character of `td` while inside a pit (`inPit`, else read from the map):
+ * Talent I "Marked allies gain +1 boon on saves in pits, and foes don't gain any height advantage against them while
+ * inside pits"; Talent II "Marked foes take bonus damage from all sources and are shattered+ while inside pits".
+ * Each field holds the name of the ability that grants it ("" = none).
+ * @returns {{saveBoons: number, saveSource: string, noHeight: string, bonusDamage: string, shattered: string}}
+ */
+export function pitMarkEffects(td, { inPit = null } = {}) {
+  const out = { saveBoons: 0, saveSource: "", noHeight: "", bonusDamage: "", shattered: "" };
+  if (!td?.actor || !(inPit ?? tokenInPit(td))) return out;
+  for (const { creator, item, talent } of terrainMarksOn(td.actor)) {
+    if (!talent) continue;
+    if (!isFoeOf(td, creator)) {
+      const m = DEEP_SAVE.exec(talent);
+      if (m && (Number(m[1]) || 1) > out.saveBoons) { out.saveBoons = Number(m[1]) || 1; out.saveSource = item.name; }
+      if (DEEP_NO_HEIGHT.test(talent)) out.noHeight ||= item.name;
+    } else {
+      if (DEEP_BONUS.test(talent)) out.bonusDamage ||= item.name;
+      if (DEEP_SHATTER.test(talent)) out.shattered ||= item.name;
+    }
+  }
+  return out;
+}
+
+/**
+ * Deepwrath Talent II (p.235) "are shattered+ while inside pits": the marked foe got into a pit (moved, or a pit made
+ * under them) or out of it — a card with the button to give or take Shattered+; nothing changes without a click.
+ */
+async function offerPitShatter(td, was, now) {
+  if (was === now || !td?.actor) return;
+  const name = pitMarkEffects(td, { inPit: true }).shattered;
+  if (!name) return;
+  const { hasStatus } = await import("../combat/statuses.mjs");
+  const has = hasStatus(td.actor, "shattered");
+  if (now === has) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: td }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><p><strong><i class="fa-solid fa-circle-down"></i> ${esc(td.name)}</strong> ${now ? "is now inside a pit" : "is no longer inside a pit"}, marked by <strong>${esc(name)}</strong>.</p>
+      <p><small>Talent II: marked foes take bonus damage from all sources and are shattered+ while inside pits (p.235).</small></p>
+      <div>${now ? insideStatusButton(td, "shattered", { ongoing: true, label: `Shattered+ to ${td.name}` }) : insideStatusButton(td, "shattered", { op: "remove", label: "Remove Shattered" })}</div></div>`,
+  });
 }
 
 /** Is `td` a foe of `creator`? The other side of the creator's token, else a hostile one. */

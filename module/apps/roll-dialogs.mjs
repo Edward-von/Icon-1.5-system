@@ -26,6 +26,7 @@ import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
 import { attackThresholds } from "../combat/crit-thresholds.mjs";
+import { pitMarkEffects } from "../canvas/terrain-spaces.mjs";
 
 const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
 
@@ -105,11 +106,21 @@ function _elevationMods(actor, targets) {
   const sourceToken = canvas?.tokens?.controlled?.find(t => t.actor?.id === actor?.id) ?? actor?.getActiveTokens?.(false, false)?.[0] ?? null;
   if (!targets.length) return { boons: 0, curses: 0, note: "" };
   const srcEl = readEl(actor, sourceToken);
-  const diffs = targets.map(t => srcEl - readEl(canvas.tokens.get(t.id)?.actor, canvas.tokens.get(t.id)));
+  // Deepwrath Talent I (p.235): "foes don't gain any height advantage against them while inside pits".
+  const hostile = (td) => td?.disposition === CONST.TOKEN_DISPOSITIONS.HOSTILE || ["foe", "legend"].includes(td?.actor?.type);
+  const shielded = [];
+  const diffs = targets.map(t => {
+    const tok = canvas.tokens.get(t.id);
+    const d = srcEl - readEl(tok?.actor, tok);
+    const by = d > 0 && sourceToken && hostile(sourceToken.document) !== hostile(tok?.document) ? pitMarkEffects(tok?.document).noHeight : "";
+    if (by) shielded.push(`${t.name} (${by})`);
+    return by ? 0 : d;
+  });
   const worst = Math.min(...diffs), best = Math.max(...diffs);
+  const noAdv = shielded.length ? `No height advantage vs ${shielded.join(", ")}: marked, inside a pit` : "";
   if (worst < 0) return { boons: 0, curses: -worst, note: `Height disadvantage Δ${-worst}: +${-worst} curse${-worst > 1 ? "s" : ""}` };
-  if (best > 0)  return { boons: best, curses: 0, note: `Height advantage Δ${best}: +${best} boon${best > 1 ? "s" : ""}` };
-  return { boons: 0, curses: 0, note: "" };
+  if (best > 0)  return { boons: best, curses: 0, note: `Height advantage Δ${best}: +${best} boon${best > 1 ? "s" : ""}${noAdv ? ` · ${noAdv}` : ""}` };
+  return { boons: 0, curses: 0, note: noAdv };
 }
 
 /**
@@ -566,6 +577,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // every two aether spent", see infusedAbilityDamage): one die per instance.
   const infBonus = Math.max(0, Number(p.bonusDice) || 0);
   const infNote  = infBonus ? `${p.version?.name || "Infuse"}: +${infBonus} bonus ${infBonus > 1 ? "dice" : "die"} from the Aether spent` : "";
+  // Deepwrath Talent II (p.235): "Marked foes take bonus damage from all sources … while inside pits".
+  const pitFoes  = targets.map(t => ({ t, by: pitMarkEffects(canvas.tokens.get(t.id)?.document).bonusDamage })).filter(x => x.by);
+  const pitBonus = pitFoes.length ? 1 : 0;
+  const pitNote  = pitFoes.length ? `${pitFoes.map(x => `${x.t.name} (${x.by})`).join(", ")}: marked, inside a pit — +1 bonus die` : "";
 
   const chunkFormula = (c) => {
     const parts = [];
@@ -672,7 +687,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
           <div class="icon-roll-steppers">
-            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus + infBonus, max: 5 })}
+            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus + infBonus + pitBonus, max: 5 })}
             ${_stepper({ name: "flatBonus", label: "Flat damage", hint: "a fixed amount added after the dice (Harden, blessings, one-off effects)", value: 0, max: 30 })}
             ${_stepper({ name: "instances", label: "Instances ×N", hint: "the same damage dealt N separate times (\"3 damage, three times\", p.92): armor, vulnerable and weakened count on each", value: Math.max(1, p.hit?.times ?? 1), min: 1, max: 10 })}
           </div>
@@ -686,7 +701,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply neither the target's Cover nor its Aetherwall halves the damage."><input type="checkbox" name="unerring" ${ignores.unerring ? "checked" : ""}><span>Unerring <small>${ignores.unerring ? esc(whyTick(ignores.unerring, "Unerring")) : "ignores Cover / Aetherwall"}</small></span></label>
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
-          ${hatred.active || autoHalf.length || dodgers.length || fbNote || infNote ? `<div class="icon-roll-auto">
+          ${hatred.active || autoHalf.length || dodgers.length || fbNote || infNote || pitNote ? `<div class="icon-roll-auto">
+            ${pitNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] and keep the highest (p.92).">${esc(pitNote)}</span>` : ""}
             ${infNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] for each instance and keep the highest (p.102).">${esc(infNote)}</span>` : ""}
             ${fbNote ? `<span class="icon-roll-auto__chip" title="Finishing Blow (Vagabond): triggers when the attack targets a Bloodied foe — at or under 50% HP (p.104).">${esc(fbNote)}</span>` : ""}
             ${hatred.active ? `<span class="icon-roll-auto__chip"><i class='fa-solid fa-triangle-exclamation'></i> ${esc(hatred.note)}</span>` : ""}
@@ -826,7 +842,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         if (f.elements[n]) f.elements[n].checked = !!prev[n];
       }
       f.elements.flatBonus.value = prev.flatBonus ?? 0;
-      f.elements.bonusDice.value = Math.max(0, (prev.bonusDice ?? 0) - (prev.autoBonus ?? 0) + fbBonus + infBonus);
+      f.elements.bonusDice.value = Math.max(0, (prev.bonusDice ?? 0) - (prev.autoBonus ?? 0) + fbBonus + infBonus + pitBonus);
       const pick = extras.findIndex(x => `${x.source}|${x.text}` === prev.otherPickKey);
       const radio = pick >= 0 && f.querySelector(`input[name="otherPick"][value="${pick}"]`);
       if (radio) radio.checked = true;
@@ -887,7 +903,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             rerollSwitch: f.dataset.rerollSwitch === "1",
             // For a dialog reopened on the other version (opts.prev).
             otherPickKey: picked ? `${picked.source}|${picked.text}` : "",
-            autoBonus:    fbBonus + infBonus,
+            autoBonus:    fbBonus + infBonus + pitBonus,
           };
         },
       },

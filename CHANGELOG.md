@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — I talenti di Deepwrath funzionano dentro i pit (versione 1.15.196)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Deepwrath Talent I / II nei pit**: il +1 boon ai tiri salvezza, il niente vantaggio di altezza, il bonus damage e
+  lo shattered+ "while inside pits" (p.235) erano solo testo → il codice non sapeva chi è marcato e sta in un pit →
+  ora c'è un controllo unico (stessa lettura del pit della finestra di tiro: a terra, su una casella pit). Un alleato
+  marcato in un pit prende +1 boon su ogni tiro salvezza (finestra Save, salvezze di fine turno, salvezze contro gli
+  status). Un nemico che lo attacca dall'alto non prende boon di altezza, e una nota lo dice. Contro un nemico marcato
+  in un pit la finestra del danno parte con +1 dado bonus (p.92) e una nota. Quando quel nemico entra in un pit (si
+  muove, o un pit viene creato sotto di lui) arriva una card col bottone Shattered+; quando esce, una card col bottone
+  per toglierlo. Solo codice.
+
 ## 17 ottobre 2026 — Interrupt "when targeted" sulla card dell'attacco (versione 1.15.195)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

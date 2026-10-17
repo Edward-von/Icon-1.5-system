@@ -1509,9 +1509,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
       lands in the space of an object, creating a second line 3 area" (p.226) resta a mano. Domanda per Edoardo: in
       quale direzione rimbalza la seconda line (il libro non lo dice)?
-- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
+- [x] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
       advantage dei foe contro di loro, bonus damage e shattered+ "while inside pits" (p.235): solo testo, il codice
       non sa chi è in un pit al momento del tiro.
+(FATTO il 17 ottobre 2026, versione 1.15.196: boon ai salvezza, niente height advantage, +1 dado bonus nella finestra
+      danno, card Shattered+ entrando/uscendo dai pit)
 - [x] **Emerso lavorando su R33b2 — blessing tolte da Symphony** (S): "Remove up to four blessings from characters
       anywhere to create pulsing motes" (p.178): il chip lascia piazzare fino a 4 mote senza togliere le blessing;
       servirebbe una scelta di chi le perde (anche personaggi non propri, quindi con relay al GM).
@@ -1594,6 +1596,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
       "Interrupt N: Trigger: … Effect: …" vengono letti, un tratto con un trigger di danno comparirebbe anche sulla
       card del danno. Non è stato controllato quali tratti dei PG lo fanno.
+- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent II, danni fuori dalla finestra** (S): il "bonus damage from all
+      sources" si aggiunge solo nella finestra del danno. I danni fissi (terreno pericoloso, bottoni delle card con
+      danno fisso) non lo ricevono, e se un pit viene cancellato mentre il foe ci sta sopra non arriva la card per
+      togliere Shattered+.
 
 ---
 

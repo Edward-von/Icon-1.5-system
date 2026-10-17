@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — I talenti di Deepwrath funzionano dentro i pit (17 ottobre 2026, versione 1.15.196)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Deepwrath Talent I: marca un alleato, mettilo su un pit (a terra) e fagli tirare un salvezza dalla
+      scheda: nel risultato si legge "+N (…, Deepwrath: in a pit)" e il boon è contato. Fuori dal pit niente boon.
+- [ ] Stesso alleato nel pit: un foe più in alto lo attacca. La finestra di attacco non dà boon di altezza e mostra
+      "No height advantage vs … (Deepwrath)". Un alleato più in alto invece li prende ancora.
+- [ ] Deepwrath Talent II: marca un foe, mettilo su un pit, aprigli contro la finestra del danno: "Bonus dice" parte a
+      1 e c'è la nota "marked, inside a pit — +1 bonus die". Con "Reroll (same use)" il dado non raddoppia.
+- [ ] Foe marcato (Talent II) che entra trascinandosi in un pit: card con "Shattered+ to …". Il click dà Shattered+.
+      Quando esce dal pit, card con "Remove Shattered".
+- [ ] Bottone "Create pit" a inizio turno del foe marcato (Talent II): dopo il pit arriva anche la card Shattered+.
+- [ ] Senza talento selezionato, o con il Talent I su un foe: nessuno di questi effetti.
+
 ## Emerso R35 — Interrupt "when targeted" sulla card dell'attacco (17 ottobre 2026, versione 1.15.195)
 
 Setup: solo codice (F5 basta).
