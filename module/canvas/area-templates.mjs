@@ -192,6 +192,7 @@ export function areasInText(text) {
   const plain = orig.toLowerCase();
   const out = [];
   const seen = new Set();
+  let prevCentre = "";
   // "blasts": Draken Cross Talent II, "all areas may be increased to medium blasts".
   // No word boundary after "(target)": "burst 1 (target)." was read as a plain Burst 1.
   const re = /\b(?:(small|medium|large) blasts?\b|line (\d+)\b|arc (\d+)\b|burst (\d+)(?: \((self|target)\)|\b))/g;
@@ -205,7 +206,12 @@ export function areasInText(text) {
     // "explodes in a large blast area effect centered on them" (Death's Slay /
     // Finishing Blow, p.155): the area's centre is the character the trigger
     // names, not a space picked in range; "centered on you" is the user.
-    const centre = centreOf(plain.slice(0, m.index).split(/[.;:]/).pop(), plain.slice(m.index + m[0].length).split(/[.;:]/)[0]);
+    const before = plain.slice(0, m.index).split(/[.;:]/).pop();
+    let centre = centreOf(before, plain.slice(m.index + m[0].length).split(/[.;:]/)[0]);
+    // The same area grown later in the text keeps its centre: Aria (p.178) "a small blast area effect
+    // centered on you … the area becomes a medium blast. If you are damaged again, it becomes a large blast".
+    if (!centre && prevCentre && /\b(?:the area|it)\s+(?:becomes|grows to|increases to|is increased to)\s+(?:an?\s+)?$/.test(before)) centre = prevCentre;
+    prevCentre = centre;
     if (centre) {
       area.centeredOn = centre;
       if (area.kind === "burst" && !area.self && !area.target && centre !== "object") area[centre] = true;

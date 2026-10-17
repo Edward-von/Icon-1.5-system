@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aria: la blast cresciuta resta centrata su di te (versione 1.15.84)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Aria, Medium Blast e Large Blast da piazzare a mano**: il bottone area di Aria (Chanter, p.178) metteva la Small
+  Blast sul token del personaggio da sola, ma la Medium Blast e la Large Blast della Special ("the area becomes a
+  medium blast. If you are damaged again, it becomes a large blast") si piazzavano a mano come un'area qualsiasi → il
+  "centered on you" sta solo nella prima frase, e il sistema leggeva il centro di ogni area solo nella frase in cui
+  compare → un'area che lo stesso testo fa crescere più avanti ("the area becomes …", "it becomes …") tiene il centro
+  dell'area prima: ora la scelta offre "Medium Blast (self)" e "Large Blast (self)", che vanno sul token del
+  personaggio senza clic. Nei compendi cambia solo Aria; le aree centrate su oggetti (Helix Heel, Volcanic Geyser)
+  erano già a posto da R33a2. Solo codice.
+
 ## 17 ottobre 2026 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (versione 1.15.83)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

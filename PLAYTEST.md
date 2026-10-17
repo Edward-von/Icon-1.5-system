@@ -1766,6 +1766,20 @@ Setup: solo codice (F5 basta).
 - [ ] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
       Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima.
 
+## voce emersa su R49 — Aria: la blast cresciuta resta centrata su di te (17 ottobre 2026, versione 1.15.84)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un PG Chanter con Aria, il suo token in scena, due o tre token intorno. Bottone area di Aria: il dialogo offre
+      Small Blast (self), Medium Blast (self) e Large Blast (self).
+- [ ] Scegli Medium Blast (self): l'area compare subito centrata sul token del Chanter (niente clic sulla mappa); la
+      notifica elenca chi è dentro.
+- [ ] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
+      viene sostituita.
+- [ ] Small Blast (self) funziona ancora come prima.
+- [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
+      si piazza ancora a mano nella sua portata.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

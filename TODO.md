@@ -397,11 +397,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       R33a: l'Aura 2 dello Shrine si piazza attorno al suo token e lo segue): Spirit Shrine ("Shrine — Height 1 object. Object
       Effect: Aura 2", p.192) non ha bottone area: l'aura va attorno al santuario, che è un oggetto da piazzare (R33). Il
       piazzamento "aura attorno a uno spazio" fatto per Rampant Nail potrebbe servire anche qui.
-- [ ] **Emerso lavorando su R49 — Aria: la blast cresciuta non resta centrata su di te** (S): "affecting a small blast
+- [x] **Emerso lavorando su R49 — Aria: la blast cresciuta non resta centrata su di te** (S): "affecting a small blast
       area effect centered on you … the area becomes a medium blast. If you are damaged again, it becomes a large blast"
       (p.178): la Small Blast va su di te da sola, ma "Medium Blast" e "Large Blast" si piazzano a mano (il "centered on
       you" è solo nella prima frase). Lo stesso per le aree centrate su pit / oggetti (Holy Talent I, Pandaemonium
       combo, Helix Heel), che restano a mano finché pit e oggetti non sono sulla mappa (R33).
+(FATTO il 17 ottobre 2026, versione 1.15.84: un'area che lo stesso testo fa crescere più avanti tiene il centro
+      dell'area prima, quindi Medium e Large Blast (self) di Aria vanno sul token come la Small; nei compendi cambia
+      solo Aria. Le aree centrate su oggetti erano già a posto con R33a2; quelle che esplodono dai pit restano a mano,
+      voce emersa a parte.)
 - [x] **Emerso lavorando su R53 — la migrazione 25 non riconosce i testi con più spazi** (S) (FATTO il 16 ottobre 2026, versione 1.15.64: regex corrette; la 25 non era mai stata eseguita in nessun mondo, quindi corretta lì senza una migrazione nuova): in `migrations.mjs` la
       funzione `flat` della migrazione 25 usa `replace(/s+/g, " ")` (manca la barra: toglie le lettere "s" invece di
       unire gli spazi), quindi confronta un testo storpiato con quello vecchio e non aggiorna nessuna copia dei sei Limit
@@ -464,6 +468,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       target and any adjacent foes take 2 damage and are dazed") non compaiono nel Damage Roll, nemmeno sotto Other
       (lì finisce solo il danno di talenti e mastery). Probabilmente lo stesso per i danni dentro altri blocchi Mark /
       Effect della base (vedi "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
+- [ ] **Emerso lavorando su R49 — aree che esplodono da tutti i pit dell'area** (M): Holy Talent I ("all pits in the
+      area explode for a medium blast area effect, centered on them") e la combo Purgatorio di Pandaemonium (p.178) si
+      piazzano ancora a mano, una Medium Blast alla volta. Con i pit sulla mappa (template con flag `terrain`)
+      servirebbe: trovare i pit dentro l'area appena piazzata, una Medium Blast centrata su ognuno e bersagliare chi
+      sta in almeno una delle aree. Oggi `centreOf` in `area-templates.mjs` lascia apposta a mano le aree "centered on
+      them" dopo pits/plants/nails/clouds.
 
 ---
 
