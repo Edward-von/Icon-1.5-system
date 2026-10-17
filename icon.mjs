@@ -1101,6 +1101,7 @@ Hooks.once("setup", async () => {
     "systems/icon-system/templates/chat/damage-card.hbs",
     "systems/icon-system/templates/chat/ability-card.hbs",
     "systems/icon-system/templates/chat/trait-card.hbs",
+    "systems/icon-system/templates/chat/great-wheel-card.hbs",
     "systems/icon-system/templates/chat/relic-card.hbs",
     "systems/icon-system/templates/chat/bond-power-card.hbs",
     "systems/icon-system/templates/chat/bond-card.hbs",

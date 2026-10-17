@@ -6243,3 +6243,13 @@ ol.chat-log .chat-message,
 }
 .icon-great-wheel--sheet p { margin: 2px 0; }
 .icon-great-wheel__title { font-weight: 600; color: var(--ic-gold); }
+
+/* Great Wheel card played in chat (great-wheel-card.hbs, R36b) and its button on the hand. */
+.icon-great-wheel-card__body { display: flex; gap: 8px; align-items: flex-start; }
+.icon-great-wheel-card__img { flex: 0 0 48px; border: none; border-radius: 3px; }
+.icon-great-wheel-card__body .icon-chat-card__desc { flex: 1; }
+.icon-great-wheel-card__played { margin: 0 0 2px; color: var(--ic-text-dim); }
+.icon-great-wheel-card__foretell summary { cursor: pointer; color: var(--ic-text-dim); }
+.icon-great-wheel-card__hint { margin: 4px 0; color: var(--ic-text-dim); }
+.icon-great-wheel__play { color: var(--ic-gold); margin-right: 4px; }
+.icon-great-wheel-row .controls { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }

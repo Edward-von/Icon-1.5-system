@@ -1247,9 +1247,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.146: tabella The Great Wheel p.199 in great-wheel.mjs, mostrata sotto ogni
       carta dei Cards di Foundry e sul foglio della carta; carta letta dal valore o dal nome. Solo codice, nessun
       pack.)
-- [ ] **R36b. Carta giocata in chat** (M)
+- [x] **R36b. Carta giocata in chat** (M)
       Giocare una carta dalla mano posta una card in chat con il suo effetto (keyword, Inflict / Gain come le
       abilità) e la sposta negli scarti.
+(FATTO il 17 ottobre 2026, versione 1.15.147: bottone Foretell sulle carte della mano → card in chat con effetto,
+      keyword, Gain e promemoria, carta spostata negli scarti; anche il Play di Foundry verso una pila posta la card.
+      Solo codice.)
 - [ ] **R36c. Bersagli delle carte** (M)
       Le carte con bersaglio o area usano i bersagli correnti e i bottoni area già esistenti.
 

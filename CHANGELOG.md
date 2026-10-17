@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Carte del Seer giocate in chat (versione 1.15.147)
+
+### Round di debug del 15 ottobre, R36b
+
+- **Carta giocata senza traccia in chat**: giocando una carta dalla mano la chat non diceva quale carta era né cosa
+  faceva → il Play di Foundry scrive solo "ha giocato 1 carta" → ora nella mano ogni carta ha un bottone Foretell
+  (ruota) che posta una card in chat (`great-wheel-card.hbs`) con l'effetto, il testo di Foretell richiudibile, i
+  bottoni Gain per gli alleati bersagliati (Unstoppable, Evasion, Defiance, Counter, Sturdy, Blessed…) e i promemoria,
+  poi sposta la carta negli scarti; anche il Play di Foundry verso una pila posta la stessa card. Nessuno status viene
+  applicato senza un clic. Letture scelte, da far confermare a Maar: con The Sun anche Counter e Sturdy scadono "until
+  the start of their next turn"; The Chariot e The Star restano promemoria ("during the ability", un boon). Solo
+  codice.
+
 ## 17 ottobre 2026 — Carte del Seer: l'effetto su ogni carta (versione 1.15.146)
 
 ### Round di debug del 15 ottobre, R36a

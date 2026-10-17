@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R36b — Carte del Seer giocate in chat (17 ottobre 2026, versione 1.15.147)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Con il token del Seer selezionato e un alleato bersagliato, cliccare la ruota su una Q nella mano: in chat
+      compare "Q — The Moon" con il bottone Gain "Evasion" e la carta finisce nella pila "Discard".
+- [ ] Cliccare Evasion: l'alleato bersagliato la riceve e scade all'inizio del suo turno successivo.
+- [ ] Con due pile senza "Discard" nel nome, la ruota apre la finestra di Foundry per scegliere la pila.
+- [ ] Il Play normale di Foundry verso una pila posta la stessa card.
+- [ ] Senza token selezionato né personaggio assegnato, la card dice di selezionare il token del Seer.
+- [ ] Controllare i promemoria di 2, 3, 5, 8, 9, 10, J e K.
+
 ## R36a — Carte del Seer: l'effetto su ogni carta (17 ottobre 2026, versione 1.15.146)
 
 Setup: solo codice (F5 basta).

@@ -1,0 +1,23 @@
+{{!-- templates/chat/great-wheel-card.hbs — a Seer's card played from the hand (great-wheel.mjs, R36b, p.199) --}}
+<div class="icon-chat-card icon-chat-card--great-wheel icon-class--mendicant">
+  <div class="icon-chat-card__header">
+    <strong class="icon-chat-card__action">{{rank}} — {{arcana}}</strong>
+    <span class="icon-badge">Great Wheel</span>
+    <span class="icon-badge">p.{{page}}</span>
+  </div>
+  <div class="icon-great-wheel-card__body">
+    {{#if img}}<img class="icon-great-wheel-card__img" src="{{img}}" alt="{{cardName}}" width="48">{{/if}}
+    <div class="icon-chat-card__desc">
+      <p class="icon-great-wheel-card__played"><small>{{cardName}}{{#if from}} · from {{from}}{{/if}}{{#if to}} → {{to}}{{/if}}</small></p>
+      <p>{{{effect}}}</p>
+    </div>
+  </div>
+  <details class="icon-great-wheel-card__foretell">
+    <summary><small>Foretell (p.{{page}})</small></summary>
+    <p><small>{{{foretell}}}</small></p>
+  </details>
+  {{#if noActor}}
+    <p class="icon-great-wheel-card__hint"><small><i class="fa-solid fa-circle-info"></i> Select the Seer's token (or set your character) before playing a card to get its Gain buttons.</small></p>
+  {{/if}}
+  {{#if statusHtml}}{{{statusHtml}}}{{/if}}
+</div>
