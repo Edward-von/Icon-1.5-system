@@ -211,6 +211,8 @@ export function attackFlags({ actor = null, abilityName = "", targets = [] } = {
  * @param {string}   [opts.critEffect]    Enriched HTML
  * @param {Array}    [opts.effects]       {label, text} blocks of a combo version, shown above Hit
  * @param {Array}    [opts.talentEffects] {label, text} blocks of the unlocked talent, shown below Miss
+ * @param {Array}    [opts.leadEffects]   {label, text} the ability's own lines written before the attack (Effect, Special), above Hit
+ * @param {Array}    [opts.abilityEffects] {label, text} the ability's other lines (Collide, Charge, Heroic, Area…), below Miss
  * @param {string}   [opts.costLabel]     "1 Action" etc.
  * @param {string[]} [opts.tags]
  * @param {string}   [opts.areaHtml]      Safe HTML line describing the placed area + targets (area-templates.mjs)
@@ -227,6 +229,7 @@ export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
   critAt = BASE_CRIT, exceedAt = BASE_EXCEED, forceExceed = "",
   hitEffect, missEffect, exceedEffect, critEffect, effects = [], talentEffects = [],
+  leadEffects = [], abilityEffects = [],
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
   statusEntries = [],
@@ -308,6 +311,9 @@ export async function combatRoll({
     effects:       effects ?? [],
     // The unlocked talent's own lines ("Slay (Talent II): …"), below Miss.
     talentEffects: talentEffects ?? [],
+    // The ability's own other lines: before the attack (above Hit) and after it (below Miss).
+    leadEffects:    leadEffects ?? [],
+    abilityEffects: abilityEffects ?? [],
     // Relic integration (p.245): attack invokes check the RAW d20; notes are
     // the relic reminders that apply to this attack. No attack roll happened
     // when every target evaded, so the invokes are not shown.

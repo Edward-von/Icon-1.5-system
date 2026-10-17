@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop (versione 1.15.214)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Blocchi sulla card dell'attacco**: la card mostrava solo Hit / Miss / Exceed / Crit e le righe del talento, quindi
+  mancavano Effect, Special, Collide, Charge, Heroic e Area (Gigaton Whip: "They take fray damage", p.137) → la card
+  usava solo quei quattro campi → ora riporta anche le altre righe dell'abilità, nell'ordine di lettura. Quelle
+  scritte prima dell'attacco vanno sopra Hit, le altre sotto Miss. Una riga condivisa con l'Exceed ("Exceed or
+  Heroic") tiene solo l'altra etichetta. Le righe della combo e della versione Infuse non vengono ripetute, le
+  versioni Infuse non armate restano fuori, e con Izuna Drop sbloccata il Collide normale lascia il posto alla
+  mastery. Nella finestra del danno, sotto "Other", c'è ora il danno del Collide ("Collide · fray"); con Izuna Drop
+  c'è solo "Collide — Izuna Drop · fray ×2". La card "Show in Chat" è un messaggio separato e non si tocca. Solo
+  codice.
+
 ## 17 ottobre 2026 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno (versione 1.15.213)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

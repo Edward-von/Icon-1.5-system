@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel, enrichLimitBreakText } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, comboReplacedBlocks, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
+import { ABILITY_BLOCK_FIELDS, buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, comboReplacedBlocks, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -2825,9 +2825,11 @@ export class IconSheet extends BaseActorSheet {
     // its Effect blocks) are listed above them instead of being poured, whole,
     // into the Hit box.
     let card = { hit: ab.hitEffect, miss: ab.missEffect, exceed: ab.exceedEffect, crit: ab.critEffect, effects: [] };
+    // The ability's blocks in reading order, for its other lines below (the combo's when it is armed).
+    let ownBlocks = ab.blocks ?? [];
     if (comboArmed) {
       const sys = this._comboSystem(this.document.items.get(itemId));
-      const blocks = await buildAbilityBlocks(sys, {
+      const blocks = ownBlocks = await buildAbilityBlocks(sys, {
         sections: parseAbilitySections(sys.description).sections, enrich: t => this._enrichAbility(t), comboText: sys.comboEffect ?? "" });
       const keysOf = (b) => String(b.key ?? "").split("+");
       const field = (k) => blocks.find(b => keysOf(b).includes(k))?.text ?? "";
@@ -2842,10 +2844,12 @@ export class IconSheet extends BaseActorSheet {
     // other lines are listed above them. A complete version drops the base
     // Exceed / Crit too; the talents still apply ("Benefits from Bio talents").
     const infused = !comboArmed ? (ab.infusions ?? []).find(i => i.armed && !i.standalone) : null;
+    // The Infuse versions are not base lines: an armed one is read just below, the others stay off the card.
+    ownBlocks = splitInfuseBlocks(ownBlocks, { armed: infused?.label ?? "" }).base;
     if (infused) {
       const parts = infuseVersionParts(infused.text);
       const enrich = t => this._enrichAbility(t);
-      if (parts.whole) { card.exceed = ""; card.crit = ""; }
+      if (parts.whole) { card.exceed = ""; card.crit = ""; ownBlocks = []; }
       const tag = `${infused.costLabel}${parts.name ? `: ${parts.name}` : ""}`;
       if (parts.lead) card.effects.push({ label: tag, text: await enrich(parts.lead), infuse: true });
       for (const b of parts.blocks) {
@@ -2874,10 +2878,12 @@ export class IconSheet extends BaseActorSheet {
     }
     // A mastery that takes the place of the Collide (IZUNA DROP, Gigaton Whip p.137: "Instead of the
     // normal collide effect, on collide you can do the legendary Izuna drop") goes on the card, saying so.
+    let collideReplaced = false;
     {
       const sys = abilityItem?.system ?? {};
       const plain = String(sys.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
       if (sys.masteryUnlocked && /\binstead of the normal collide effect\b/i.test(plain)) {
+        collideReplaced = true;
         const name = /^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(plain)?.[1] ?? "Mastery";
         talentEffects.push({ label: `Collide — ${name} (Mastery, replaces the normal collide)`, text: await this._enrichAbility(sys.mastery, { leadName: true }) });
       }
@@ -2886,6 +2892,26 @@ export class IconSheet extends BaseActorSheet {
     // bonus damage", BLOOD FESTIVAL p.192): its sentence goes on the card.
     for (const b of exceedExtraBlocks(mods.exceedTaken))
       talentEffects.push({ label: `${b.label} (this use)`, text: await this._enrichAbility(b.text) });
+
+    // The ability's other lines (Effect, Special, Collide, Charge, Heroic, Area…): the card showed only
+    // Hit / Miss / Exceed / Crit (Gigaton Whip's Collide "They take fray damage", p.137, was missing).
+    // Those written before the attack in the reading order go above Hit, the rest below Miss. Hit / Miss /
+    // Exceed / Crit already have their boxes; a line shared with one of them ("Exceed or Heroic") keeps
+    // only the other label; the combo's own lines are already listed; the Collide gives way to IZUNA DROP.
+    const OUTCOME = ["hit", "miss", "exceed", "crit"];
+    const OUTCOME_LABEL = /^(?:attack|on hit|hit|miss|exceed|crit(?:ical)?(?: hit)?)$/i;
+    const blocksBefore = [], blocksAfter = [];
+    let pastAttack = false;
+    for (const b of ownBlocks) {
+      const keys = String(b.key ?? "").split("+");
+      const outcomeSection = b.key === "section" && OUTCOME_LABEL.test(String(b.label ?? "").trim());
+      if (outcomeSection || keys.some(k => OUTCOME.includes(k))) pastAttack = true;
+      if (b.combo || outcomeSection) continue;
+      const rest = keys.filter(k => !OUTCOME.includes(k) && !(collideReplaced && k === "collide"));
+      if (!rest.length) continue;
+      const label = rest.length < keys.length ? rest.map(k => ABILITY_BLOCK_FIELDS[k]?.label ?? k).join(" or ") : b.label;
+      (pastAttack ? blocksAfter : blocksBefore).push({ label, text: b.text });
+    }
 
     await combatRoll({
       abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect)
@@ -2904,6 +2930,8 @@ export class IconSheet extends BaseActorSheet {
       exceedEffect: card.exceed,
       critEffect:   card.crit,
       effects:      card.effects,
+      leadEffects:  blocksBefore,
+      abilityEffects: blocksAfter,
       talentEffects,
       areaHtml:     areaLine,
       relicInvokes,

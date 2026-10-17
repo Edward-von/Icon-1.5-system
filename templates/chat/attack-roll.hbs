@@ -50,6 +50,13 @@
   {{!-- Relic invokes (raw d20 vs threshold, p.245) --}}
   {{#if relicInvokeHtml}}{{{relicInvokeHtml}}}{{/if}}
 
+  {{!-- The ability's own lines written before the attack (Effect, Special…) --}}
+  {{#each leadEffects as |e|}}
+    <div class="icon-chat-card__effect-block">
+      <span class="icon-chat-card__effect-label">{{e.label}}</span>
+      <span class="icon-chat-card__effect-text">{{{e.text}}}</span>
+    </div>
+  {{/each}}
   {{!-- Ability effects (shown inline for quick reference) --}}
   {{#each effects as |e|}}
     <div class="icon-chat-card__effect-block {{#if e.infuse}}icon-chat-card__effect-block--infuse{{else}}icon-chat-card__effect-block--combo{{/if}}">
@@ -69,6 +76,13 @@
       <span class="icon-chat-card__effect-text">{{{missEffect}}}</span>
     </div>
   {{/if}}
+  {{!-- The ability's other lines (Collide, Charge, Heroic, Area…) --}}
+  {{#each abilityEffects as |e|}}
+    <div class="icon-chat-card__effect-block">
+      <span class="icon-chat-card__effect-label">{{e.label}}</span>
+      <span class="icon-chat-card__effect-text">{{{e.text}}}</span>
+    </div>
+  {{/each}}
   {{!-- Unlocked talent: its lines that are not a Hit / Miss / Exceed / Crit add-on --}}
   {{#each talentEffects as |e|}}
     <div class="icon-chat-card__effect-block">

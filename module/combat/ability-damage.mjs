@@ -248,13 +248,29 @@ export function parseAbilityDamage(itemSystem, { baseBlocks = false, foe = false
       }));
     }
   }
+  // The Collide block's own damage (Gigaton Whip p.137: "They take fray damage"), offered by "Other" as
+  // "Collide" — unless the unlocked mastery takes its place (IZUNA DROP: "Instead of the normal collide
+  // effect, … takes fray damage twice"): then only the mastery's damage, named "Collide — Izuna Drop".
+  const masteryPlain = String(s.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const collideBy = s.masteryUnlocked && /\binstead of the normal collide effect\b/i.test(masteryPlain)
+    ? (/^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(masteryPlain)?.[1] ?? "Mastery") : "";
+  if (baseBlocks && !collideBy && typeof s.collideEffect === "string") {
+    for (const sentence of s.collideEffect.replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").split(/(?<=\.)\s+/)) {
+      if (!/\bdamage\b/i.test(sentence) || /\b(?:instead|increases?|becomes|bonus\s+damage)\b|\+\s*\d+\s+damage/i.test(sentence)) continue;
+      const chunk = parseChunk(sentence);
+      if (!anyDamage(chunk)) continue;
+      extras.push({ source: "Collide", text: sentence.trim(), ...chunk,
+                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence),
+                    unerring: /\bunerring\s+damage\b/i.test(sentence) });
+    }
+  }
   for (const u of upgrades) {
     for (const sentence of u.sentences) {
       if (sentence === areaSentence || !/\bdamage\b/i.test(sentence)) continue;
       if (/\b(?:instead\s+of|increases?\s+by|becomes)\b/i.test(sentence)) continue;
       const chunk = parseChunk(sentence);
       if (!anyDamage(chunk)) continue;
-      extras.push({ source: u.source, text: sentence.trim(), ...chunk,
+      extras.push({ source: u.source === "Mastery" && collideBy ? `Collide — ${collideBy}` : u.source, text: sentence.trim(), ...chunk,
                     area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence),
                     unerring: /\bunerring\s+damage\b/i.test(sentence) });
     }

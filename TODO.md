@@ -1612,10 +1612,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Fist.
 (FATTO il 17 ottobre 2026, versione 1.15.213: blocco sulla card e dado bonus nella finestra del danno per Blood
       Festival, Burial Fist e Aether Shot quando la casella Exceed è spuntata.)
-- [ ] **Emerso lavorando su R16 — Collide e altri blocchi sulla card dell'attacco** (S): la card dell'attacco mostra
+- [x] **Emerso lavorando su R16 — Collide e altri blocchi sulla card dell'attacco** (S): la card dell'attacco mostra
       solo Hit / Miss / Exceed / Crit e le righe del talento. Il Collide normale, Effect, Heroic, Charge ecc. non ci
       sono (Gigaton Whip: "They take fray damage"). Il danno doppio di Izuna Drop ("fray damage twice") non è proposto
       dalla finestra del danno.
+(FATTO il 17 ottobre 2026, versione 1.15.214: righe Effect / Collide / Charge / Heroic / Area sulla card dell'attacco;
+      Collide e Collide — Izuna Drop ×2 sotto Other nella finestra del danno.)
 - [x] **Emerso lavorando su R33c2 — area che cresce sopra i personaggi** (S): quando un'area si allarga (Bifröst
       Talent II "Add 2 spaces", Ätherwand Talent I che estende, Blood Grove "Area +N") chi sta nelle caselle nuove non
       riceve l'offerta di status; si può usare lo stesso `offerInsideOnShift` dentro `extendAreaTemplate`.
@@ -1672,6 +1674,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       ability deals bonus damage and always triggers exceed effects at round 4 or later" (p.194). Oggi il dado bonus
       arriva solo dal round 4, insieme all'Exceed (si può cambiare a mano nella finestra del danno). Domanda per
       Edoardo: il danno bonus vale sempre, o anche lui solo dal round 4?
+- nessuno
 
 ---
 

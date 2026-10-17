@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop (17 ottobre 2026, versione 1.15.214)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Gigaton Whip senza mastery: la card dell'attacco mostra Hit, Miss, Effect (Shove 2), Collide ("They take fray
+      damage") e Heroic; l'Exceed compare solo con 15+ e non è ripetuto.
+- [ ] Gigaton Whip con Izuna Drop: niente blocco Collide normale, c'è il blocco "Collide — Izuna Drop (Mastery,
+      replaces the normal collide)".
+- [ ] Damage di Gigaton Whip → Other: senza mastery c'è "Collide · fray"; con Izuna Drop c'è solo "Collide — Izuna
+      Drop · fray ×2" e porta Instances a 2.
+- [ ] Un'abilità combo con la combo armata (es. God Hand / Devil Hand): le righe della combo non compaiono due volte.
+- [ ] Un'abilità Infuse (es. Bio) con una versione armata: le righe della versione non sono ripetute tra quelle della
+      base; con una versione completa (MAGNABIO) non compaiono righe della base.
+- [ ] Un'abilità con "Effect" scritto prima dell'attacco nell'ordine dei blocchi: il blocco Effect è sopra Hit.
+
 ## Emerso R16 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno (17 ottobre 2026, versione 1.15.213)
 
 Setup: solo codice (F5 basta).
