@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Eclipse esplode da una card (17 ottobre 2026, versione 1.15.171)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazzare il brand di Eclipse e passare il turno: a inizio del turno del creatore esce la card. Con un
+      personaggio sopra, il bottone dà 2 danni e Sealed e il brand sparisce.
+- [ ] Senza nessuno sopra: "Explode" disegna la Large Blast sul brand e bersaglia chi è dentro; la card che segue ha
+      "2 divine damage to all" e "Dangerous under foes"; il brand sparisce.
+- [ ] Con Talent I: "Talent I: fiery pit" crea un pit dangerous al centro e sigilla chi è adiacente.
+- [ ] Con THE HELM sbloccata: dopo il clic il brand resta; "End the effect" lo toglie.
+
 ## R33b2 — Deepwrath crea e usa i pit dalle card (17 ottobre 2026, versione 1.15.170)
 
 Setup: solo codice (F5 basta).

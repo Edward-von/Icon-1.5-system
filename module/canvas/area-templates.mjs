@@ -1004,6 +1004,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     area.label = `${area.label} × ${blown.pits}`;
     // The exploding plants are what sets the blasts off, not characters they hit.
     if (blown.plantIds) notTargets = notTargets.concat(blown.plantIds);
+  } else if (area.centeredOn === "cells" && area.centres?.length) {
+    // R33b2: blasts centred on given spaces (Eclipse's brand, a mine, the Polaris spaces), joined: each character once.
+    const seen = new Set();
+    cells = [];
+    for (const p of area.centres) for (const c of shapeCells({ kind: area.kind, size: area.size }, p)) {
+      const k = cellKey(c);
+      if (!seen.has(k)) { seen.add(k); cells.push({ i: c.i, j: c.j }); }
+    }
+    originCell = area.centres[0];
   } else if (spike) {
     originCell = canvas.grid.getOffset({ x: spike.x, y: spike.y });
     cells = shapeCells(area, originCell);

@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Eclipse esplode da una card (versione 1.15.171)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Eclipse**: a inizio del turno lento il brand restava lì senza fare niente (p.203) → nessun codice guardava il
+  brand a inizio turno del creatore → la card dice chi c'è sopra: se c'è qualcuno, bottone "2 divine damage + sealed";
+  se non c'è nessuno, "Explode" piazza la Large Blast centrata sul brand e bersaglia chi è dentro, poi i bottoni per i
+  2 divine a tutti, il dangerous sotto i foe e il fiery pit del Talent I (pit dangerous, sigilla chi è adiacente). Il
+  brand sparisce, tranne con THE HELM. Le aree ora si possono centrare su caselle date (`placeAreaTemplate`,
+  `centeredOn: "cells"`). Il Talent II (bolidi) resta testo sulla card. Solo codice.
+
 ## 17 ottobre 2026 — Deepwrath crea e usa i pit dalle card (versione 1.15.170)
 
 ### Round di debug del 15 ottobre, R33b2

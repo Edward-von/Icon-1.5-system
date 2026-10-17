@@ -635,6 +635,8 @@ export async function terrainTurnStart(combatant) {
     lines.push(`<p><strong>${esc(td.name)}</strong> is marked by <strong>${esc(item.name)}</strong> (${esc(creator.name)}).</p><p><small>${esc(m[0])}.</small></p>
       <div>${actButton("pitUnder", { scene: scene.id, token: td.id, creator: creator.id, item: item.id, label: titleCaseWord(m[1]) }, `Create ${m[1].toLowerCase()}`, "fa-circle-down", `Mark a ${m[1].toLowerCase()} under ${td.name}`)}</div>`);
   }
+  // R33b2: the creator's own delayed spaces that go off at the start of their (slow) turn: Eclipse's brand (p.203).
+  lines.push(...delayedSpacesAtStart(td, scene));
   if (!lines.length) return;
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ token: td }),
@@ -747,8 +749,169 @@ export async function terrainTurnEnd(prev) {
   });
 }
 
+// Eclipse (p.203): the brand checked at the start of the creator's slow turn; THE HELM keeps it after it goes off.
+const ECLIPSE_CHECK = /\bat the start of that turn, check if there is a character standing in that space\b/i;
+const ECLIPSE_KEEP = /\beffect does not expire after activating\b/i;
+
+/** The tokens (not objects) standing on any of `cells`. */
+function charactersOn(scene, cells) {
+  const keys = new Set(cells.map(cellKey));
+  return scene.tokens.filter(t => t.actor && !isMapObject(t) && cellsOf(t).some(c => keys.has(cellKey(c))));
+}
+
+/** The creator's item of a space, and its texts in play. */
+function itemOfSpace(doc) {
+  const f = terrainFlag(doc);
+  const creator = game.actors?.get(f?.creatorId);
+  const item = creator?.items?.get(f?.itemId);
+  if (!item) return null;
+  const s = item.system ?? {};
+  const talent = Number(s.talentSelected) || 0;
+  return { creator, item, base: plainOf(s.description), talent: talent === 1 ? plainOf(s.talent1) : talent === 2 ? plainOf(s.talent2) : "", talentNo: talent, mastery: s.masteryUnlocked ? plainOf(s.mastery) : "" };
+}
+
+/**
+ * Start of the creator's turn: the spaces of theirs that go off then, as card lines with their buttons.
+ *   Eclipse (p.203): "At the start of that turn, check if there is a character standing in that space: If there is,
+ *   that character takes 2 divine damage and is sealed. If there isn't, it explodes for a large blast area effect
+ *   centered on that space … All characters in the area take 2 divine damage, and create a space of dangerous
+ *   terrain under every foe in the area. Then, end the effect."
+ */
+function delayedSpacesAtStart(td, scene) {
+  const lines = [];
+  for (const { doc, f } of terrainOn(scene)) {
+    // Only the named space (the brand), not the pits / dangerous spaces the same ability makes.
+    if (f.creatorId !== td.actor.id || f.onCharacter || f.kind !== "mark") continue;
+    const src = itemOfSpace(doc);
+    if (!src || !ECLIPSE_CHECK.test(src.base)) continue;
+    const { creator, item } = src;
+    const cells = doc.flags[NS].cells;
+    const on = charactersOn(scene, cells);
+    const keep = ECLIPSE_KEEP.test(src.mastery) ? " THE HELM: the effect may stay instead (Remove when it ends)." : "";
+    const args = { scene: scene.id, template: doc.id, creator: creator.id, item: item.id };
+    lines.push(on.length
+      ? `<p><strong>${esc(item.name)}</strong>: <strong>${esc(on.map(t => t.name).join(", "))}</strong> stands on the ${esc(f.label.toLowerCase())}: 2 divine damage and sealed.${esc(keep)}</p>
+        <div>${actButton("eclipseHit", { ...args, tokens: on.map(t => t.id) }, "2 divine damage + sealed", "fa-sun")} ${removeSpacesButton(scene, [doc], "End the effect")}</div>`
+      : `<p><strong>${esc(item.name)}</strong>: nobody stands on the ${esc(f.label.toLowerCase())}: it explodes, a large blast centred on it.${esc(keep)}</p>
+        <div>${actButton("eclipseBlast", args, "Explode", "fa-burst", "Place the Large Blast centred on the brand and target who is inside")} ${removeSpacesButton(scene, [doc], "End the effect")}</div>`);
+  }
+  return lines;
+}
+
+/**
+ * A blast of `size` ("s" / "m" / "l") centred on each of `centres`, joined (each character once), placed for `creator`
+ * with the usual area code (it targets who is inside). Resolves placeAreaTemplate's { template, cells, targets } or null.
+ */
+async function blastOn(creator, item, centres, size, where, suffix) {
+  const { placeAreaTemplate, areaLabel } = await import("./area-templates.mjs");
+  const area = { kind: "blast", size, centeredOn: "cells", centres: centres.map(c => ({ i: c.i, j: c.j })) };
+  area.label = `${areaLabel({ kind: "blast", size })}${centres.length > 1 ? ` × ${centres.length}` : ""} (${where})`;
+  return placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:${suffix}` });
+}
+
+/** Remove a space after its effect went off, unless a mastery keeps it (`keep`). */
+async function endSpace(doc, keep) {
+  if (keep || !doc?.parent?.templates?.get(doc.id)) return;
+  try { await deleteSpaces(doc.parent, [doc]); } catch (err) { console.warn("[ICON | TerrainSpaces] could not remove the space", err); }
+}
+
 /** The card buttons' work. Each returns true when done (the button is then greyed out). */
 const TERRAIN_ACTS = {
+  /** Eclipse: whoever stands on the brand takes 2 divine damage and is sealed; then the effect ends. */
+  async eclipseHit({ scene: sid, template, tokens, creator: cid, item: iid }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    const tds = (tokens ?? []).map(id => scene?.tokens?.get(id)).filter(t => t?.actor);
+    if (!tds.length || !item) { ui.notifications.warn("That character or ability is gone."); return true; }
+    const { applyDamageToActor } = await import("../combat/damage.mjs");
+    const { grantStatus } = await import("../combat/inflict-status.mjs");
+    for (const t of tds) {
+      await applyDamageToActor(t.actor, 2, { chatConfirm: true });
+      await grantStatus({ target: t.actor, source: creator, statusId: "sealed", label: "Sealed", abilityName: item.name });
+    }
+    const doc = scene.templates.get(template);
+    await endSpace(doc, ECLIPSE_KEEP.test(itemOfSpace(doc ?? {})?.mastery ?? ""));
+    return true;
+  },
+  /** Eclipse: nobody on the brand — the Large Blast on it, then a card with what the explosion does. */
+  async eclipseBlast({ scene: sid, template }) {
+    const scene = game.scenes?.get(sid);
+    const doc = scene?.templates?.get(template);
+    const src = doc ? itemOfSpace(doc) : null;
+    if (!src) { ui.notifications.warn("The brand is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of the brand first."); return false; }
+    const { creator, item } = src;
+    if (!creator.isOwner) { ui.notifications.warn(`Only the owner of ${creator.name} can place the blast.`); return false; }
+    const centre = doc.flags[NS].cells[0];
+    const placed = await blastOn(creator, item, [centre], "l", "on the brand", "explode");
+    if (!placed) return false;
+    const inArea = charactersOn(scene, placed.cells);
+    const foes = inArea.filter(t => isFoeOf(t, creator));
+    const ids = (list) => list.map(t => t.id);
+    const base = { scene: scene.id, creator: creator.id, item: item.id };
+    const buttons = [
+      inArea.length ? actButton("damageTokens", { ...base, tokens: ids(inArea), amount: 2 }, `2 divine damage to all (${inArea.length})`, "fa-sun") : "",
+      foes.length ? actButton("terrainUnderTokens", { ...base, tokens: ids(foes), kind: "dangerous" }, `Dangerous under foes (${foes.length})`, "fa-fire") : "",
+      src.talentNo === 1 && /\bcreate a fiery pit in its center space\b/i.test(src.talent)
+        ? actButton("pitAt", { ...base, cell: centre, dangerous: true, sealAdjacent: /\badjacent to the pit are sealed\b/i.test(src.talent), label: "Fiery pit" }, "Talent I: fiery pit", "fa-circle-down") : "",
+    ].filter(Boolean).join(" ");
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-burst"></i> ${esc(item.name)}</strong> explodes: ${inArea.length ? esc(inArea.map(t => t.name).join(", ")) : "no one"} in the area.
+        <p><small>All characters in the area take 2 divine damage, and create a space of dangerous terrain under every foe in the area.${src.talentNo === 2 ? ` Talent II: ${esc(src.talent)}` : ""}</small></p>
+        ${buttons ? `<div>${buttons}</div>` : ""}</div>`,
+    });
+    await endSpace(doc, ECLIPSE_KEEP.test(src.mastery));
+    return true;
+  },
+  /** Damage to the listed characters, each one once (armor not applied: divine / piercing). */
+  async damageTokens({ scene: sid, tokens, amount }) {
+    const scene = game.scenes?.get(sid);
+    const tds = (tokens ?? []).map(id => scene?.tokens?.get(id)).filter(t => t?.actor);
+    if (!tds.length) { ui.notifications.warn("Those characters are gone."); return true; }
+    const { applyDamageToActor } = await import("../combat/damage.mjs");
+    for (const t of tds) await applyDamageToActor(t.actor, Number(amount) || 0, { chatConfirm: true });
+    return true;
+  },
+  /** A space of terrain under each listed character (one space each, where they stand now). */
+  async terrainUnderTokens({ scene: sid, tokens, creator: cid, item: iid, kind = "dangerous" }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    const tds = (tokens ?? []).map(id => scene?.tokens?.get(id)).filter(Boolean);
+    if (!tds.length || !item) { ui.notifications.warn("Those characters or the ability are gone."); return true; }
+    const spec = { kind, name: "" };
+    const docs = await createTerrainSpaces(scene, tds.map(t => cellsOf(t)[0]), spec, { actor: creator, abilityName: item.name,
+      abilityKey: `${item.id}:terrain`, group: groupOf(creator, item, spec), itemId: item.id });
+    if (!docs.length) return false;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid ${ICONS[kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>: ${docs.length} × <strong>${esc(terrainLabel(spec))}</strong> under ${esc(tds.map(t => t.name).join(", "))}.<div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}</div></div>`,
+    });
+    return true;
+  },
+  /** A pit on a given space (Eclipse Talent I: dangerous, characters adjacent sealed). */
+  async pitAt({ scene: sid, cell, creator: cid, item: iid, dangerous = false, sealAdjacent = false, label = "" }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!scene || !item || !cell) { ui.notifications.warn("That ability is gone."); return true; }
+    const spec = { kind: "pit", name: "", dangerous: !!dangerous, label: label || (dangerous ? "Dangerous pit" : "Pit") };
+    const docs = await createTerrainSpaces(scene, [cell], spec, { actor: creator, abilityName: item.name, abilityKey: `${item.id}:terrain`,
+      group: groupOf(creator, item, spec), itemId: item.id });
+    if (!docs.length) return false;
+    const near = sealAdjacent ? scene.tokens.filter(t => t.actor && !isMapObject(t) && cellsOf(t).some(c => cheb(c, cell) === 1)) : [];
+    if (near.length) {
+      const { grantStatus } = await import("../combat/inflict-status.mjs");
+      for (const t of near) await grantStatus({ target: t.actor, source: creator, statusId: "sealed", label: "Sealed", abilityName: item.name });
+    }
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-circle-down"></i> ${esc(item.name)}</strong>: a <strong>${esc(spec.label.toLowerCase())}</strong>${dangerous ? " (also dangerous terrain)" : ""}${near.length ? `; sealed: ${esc(near.map(t => t.name).join(", "))}` : ""}.<div>${removeSpacesButton(scene, docs)}</div></div>`,
+    });
+    return true;
+  },
   /** Deepwrath: a pit under the marked character, where they stand now. */
   async pitUnder({ scene: sid, token, creator: cid, item: iid, label }) {
     const scene = game.scenes?.get(sid);
