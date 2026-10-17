@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa (versione 1.15.197)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Elden Rune Talent I / II e ARKENRUNE**: il teletrasporto di 3, l'infuse ridotto e l'Arkenrune (p.209) erano solo
+  testo → nessuna parte del codice li leggeva → ora: con il Talent I la scheda ha il chip "Teleport to Elden Rune". Si
+  clicca una delle proprie rune libere entro 3 caselle e il token ci viene messo, con una card. Con il Talent II,
+  mentre si sta in una propria rune (o nell'Arkenrune di un alleato), il costo di un Infuse con numero scende di 1,
+  mai sotto 1, e la card dell'infuse lo scrive. Con la mastery sbloccata, quando si piazza la rune si sceglie fra
+  Elden Rune e Arkenrune. L'Arkenrune copre uno small blast attorno alla casella sotto di sé, ne esiste una sola (la
+  precedente viene tolta) e non manda il promemoria "scrub out" quando un foe ci entra. Solo codice.
+
 ## 17 ottobre 2026 — I talenti di Deepwrath funzionano dentro i pit (versione 1.15.196)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -391,6 +391,16 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
   const notes = [];
   let sacrifice = 0;
   if (infusion.cost !== null && paid > 0) {
+    // Elden Rune Talent II (Enochian, p.209): "While standing in an Elden Rune, the infuse costs of your spells are
+    // reduced by 1, to a minimum of 1" — its own minimum, before the reductions that may go to 0.
+    try {
+      const { runeInfuseReduction } = await import("../canvas/terrain-spaces.mjs");
+      const rune = runeInfuseReduction(actor);
+      if (rune && paid > rune.min) {
+        paid = Math.max(rune.min, paid - rune.by);
+        notes.push(`${rune.label}: −${rune.by}, to a minimum of ${rune.min}`);
+      }
+    } catch (err) { console.warn("[ICON | Infuse] Elden Rune check failed", err); }
     // Conqueror's Edge: "The Infuse cost of your abilities is reduced by 1 if
     // there's a foe in range 2."
     if (hasTrait(actor, "conqueror's edge") && foeInRange(actor, 2)) {

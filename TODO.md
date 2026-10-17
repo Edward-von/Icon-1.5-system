@@ -1524,8 +1524,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       personaggio per personaggio.
 (FATTO il 17 ottobre 2026, versione 1.15.194: un bottone Shove per personaggio sulla card di Implode, in linea retta
       verso il centro, nell'ordine dei clic.)
-- [ ] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
+- [x] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
       ridotto e Arkenrune small blast non cancellabile (p.209): solo testo.
+(FATTO il 17 ottobre 2026, versione 1.15.197: chip Teleport del Talent I, sconto infuse del Talent II, scelta
+      Arkenrune alla posa della rune)
 - [x] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
       "centered on them" (p.178), ma il token ha già finito il movimento: la Small Blast va dove si è fermato, non
       sulla mote attraversata.
@@ -1600,6 +1602,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       sources" si aggiunge solo nella finestra del danno. I danni fissi (terreno pericoloso, bottoni delle card con
       danno fisso) non lo ricevono, e se un pit viene cancellato mentre il foe ci sta sopra non arriva la card per
       togliere Shattered+.
+- [ ] **Emerso lavorando su R33b2 — Elden Rune, il +3 al range e GREAT RUNE** (S, da decidere): il "+3 range" mentre
+      si sta sulla rune (e per gli alleati sull'Arkenrune) e lo shatter di GREAT RUNE restano solo testo. Domanda per
+      Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
+      Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
+      ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
 
 ---
 

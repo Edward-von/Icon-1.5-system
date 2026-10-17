@@ -42,6 +42,8 @@ const AREA_WORK = {
   convert: { icon: "fa-fire", what: "Click to make the pits, your objects and the difficult terrain inside this ability's area on the map dangerous terrain" },
   boil: { icon: "fa-skull-crossbones", what: "Click to boil the dangerous terrain inside this ability's area: piercing damage to the characters in or adjacent to it" },
   clear: { icon: "fa-eraser", what: "Click the difficult or dangerous terrain spaces inside this ability's area to remove" },
+  // Elden Rune Talent I (p.209): not the area's terrain, but a chip that works the ability's spaces all the same.
+  teleport: { icon: "fa-person-running", what: "Free action: click one of this ability's free spaces within range of your token; you are placed there" },
 };
 
 /** The terrain flag of a template document, or null. */
@@ -80,7 +82,7 @@ export function terrainChips(item) {
       const byStatus = underStatus(sp);
       // R33b2: Bio's talents and Terraforming work the terrain already inside the ability's area.
       if (AREA_WORK[sp.kind]) return { index, kind: sp.kind, label: sp.label, icon: AREA_WORK[sp.kind].icon,
-        title: `${sp.source ? `${sp.source}: ` : ""}${AREA_WORK[sp.kind].what} (asks first). — ${sp.rules}` };
+        title: `${sp.source ? `${sp.source}: ` : ""}${AREA_WORK[sp.kind].what}${sp.kind === "teleport" ? ` (up to ${sp.count})` : " (asks first)"}. — ${sp.rules}` };
       const label = sp.kind === "extend" ? `Area +${sp.count}` : byStatus ? `${sp.label}s under ${byStatus} foes` : `${sp.label} · ${n}`;
       const what = sp.kind === "extend"
         ? `Click to add ${sp.count} space${sp.count > 1 ? "s" : ""} adjacent to this ability's area already on the map`
@@ -320,6 +322,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   if (!sp) { ui.notifications.warn("That terrain space is no longer on the sheet."); return; }
   if (!actor.isOwner) { ui.notifications.warn(`Only the owner of ${actor.name} or the GM can mark its spaces.`); return; }
   if (sp.kind === "extend") return extendArea(actor, item, sp);
+  if (sp.kind === "teleport") return teleportIntoSpace(actor, item, sp);
   if (AREA_WORK[sp.kind]) return workArea(actor, item, sp);
   if (underStatus(sp)) return terrainUnderStatusFoes(actor, item, sp);
   // R33d: Polaris Talent I, Amico, WAKING VOID — on a space as before, or on the targeted character.
@@ -353,6 +356,21 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     if (!taking?.length) return;
   }
   const maxSpaces = taking ? taking.reduce((n, x) => n + x.count, 0) : sp.count;
+  // ARKENRUNE (Elden Rune's mastery, p.209): "You can put an Arkenrune down instead of a regular Elden Rune".
+  const ark = sp.kind === "mark" && sp.under === "self" && !sp.infuse ? arkenruneOf(item, sp) : null;
+  if (ark) {
+    let which = null;
+    try {
+      which = await foundry.applications.api.DialogV2.wait({
+        window: { title: `${item.name} — which rune?` },
+        content: `<p><small>Mastery: ${esc(ark.rule)}</small></p>`,
+        buttons: [{ action: "regular", label: sp.label, default: true }, { action: "ark", label: ark.name }],
+        rejectClose: false,
+      });
+    } catch { which = null; }
+    if (!which) return;
+    if (which === "ark") return placeArkenrune(actor, item, sp, ark);
+  }
 
   const group = groupOf(actor, item, sp);
   const earlier = scene.templates.filter(t => terrainFlag(t)?.group === group);
@@ -441,6 +459,108 @@ export async function removeTerrainOfChip(actor, itemId, index) {
   if (!ok) return;
   const n = await deleteSpaces(scene, docs);
   ui.notifications.info(`${n} space${n === 1 ? "" : "s"} removed.`);
+}
+
+/* -------------------------------------------------- */
+/*  Elden Rune (p.209): Talent I, Talent II, ARKENRUNE */
+/* -------------------------------------------------- */
+
+// "You can put an Arkenrune down instead of a regular Elden Rune, but only one at a time, replacing the last Arkenrune
+// placed. Arkenrunes can't be scrubbed out, extend to a small blast area, and their benefits also extend to allies."
+const ARKEN = /\byou can put an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*) down instead of a regular ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*)\b/;
+// Talent II: "While standing in an Elden Rune, the infuse costs of your spells are reduced by 1, to a minimum of 1."
+const RUNE_INFUSE = /\bwhile standing in an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*), the infuse costs of your spells are reduced by (\d+), to a minimum of (\d+)\b/;
+
+/** The unlocked mastery's other rune for the regular one `sp` names, or null. */
+function arkenruneOf(item, sp) {
+  const s = item?.system ?? {};
+  if (!s.masteryUnlocked) return null;
+  const rule = plainOf(s.mastery).replace(/^[A-Z' ]+:\s*/, "");
+  const m = ARKEN.exec(rule);
+  if (!m || m[2].toLowerCase() !== String(sp.name ?? "").toLowerCase()) return null;
+  return {
+    name: m[1], rule,
+    size: /\bextend to an? (small|medium|large) blast area\b/i.exec(rule)?.[1]?.[0]?.toLowerCase() ?? "",
+    noScrub: /\bcan't be scrubbed out\b/i.test(rule),
+    allies: /\bbenefits also extend to allies\b/i.test(rule),
+  };
+}
+
+/** ARKENRUNE: one at a time (the last one is replaced), on a blast around the space under the user, no scrub reminder. */
+async function placeArkenrune(actor, item, sp, ark) {
+  const scene = canvas.scene;
+  const tok = sourceTokenFor(actor);
+  if (!tok) { ui.notifications.warn(`${actor.name} has no token on this scene.`); return; }
+  const own = tokenCells(tok.document);
+  const picked = own.length === 1 ? own : await pickSpaces({ max: 1, color: TERRAIN_COLORS.mark, hint: `${item.name}: the ${ark.name}'s centre, one of the spaces under you.`,
+    check: (c) => own.some(o => cellKey(o) === cellKey(c)) ? "" : "Pick a space under your token." });
+  if (!picked?.length) return;
+  const { shapeCells } = await import("./area-templates.mjs");
+  const cells = ark.size ? shapeCells({ kind: "blast", size: ark.size }, picked[0]) : picked;
+  const spec = { ...sp, name: ark.name, label: ark.name, rules: `${sp.rules} ${ark.rule}`.trim(),
+    ...(ark.noScrub ? { onEnter: "", enterFoes: false, enterExit: false } : {}) };
+  const group = groupOf(actor, item, spec);
+  const earlier = scene.templates.filter(t => terrainFlag(t)?.group === group);
+  if (earlier.length) await deleteSpaces(scene, earlier);
+  const docs = await createTerrainSpaces(scene, cells, spec, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`, group, source: "Mastery",
+    itemId: item.id, asOne: true, extra: { alliesToo: ark.allies } });
+  if (!docs.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid ${ICONS.mark}"></i> ${esc(item.name)}</strong> <small>(Mastery)</small>: an <strong>${esc(ark.name)}</strong>${ark.size ? ` over a ${ark.size === "s" ? "small" : ark.size === "m" ? "medium" : "large"} blast area` : ""}${earlier.length ? " (replacing the last one)" : ""}.
+      <br><small>${esc([ark.noScrub ? "can't be scrubbed out" : "", ark.allies ? "its benefits also extend to allies" : ""].filter(Boolean).join("; "))}</small>
+      <div>${removeSpacesButton(scene, docs)}</div></div>`,
+  });
+}
+
+/** Elden Rune Talent I: the user's token onto one of the ability's free spaces within `sp.count` of it. */
+async function teleportIntoSpace(actor, item, sp) {
+  const scene = canvas.scene;
+  const tok = sourceTokenFor(actor);
+  if (!tok) { ui.notifications.warn(`${actor.name} has no token on this scene.`); return; }
+  const td = tok.document;
+  const keys = new Set(scene.templates.filter(t => { const f = terrainFlag(t); return f?.creatorId === actor.id && f.itemId === item.id && f.kind === "mark" && !f.onCharacter; })
+    .flatMap(t => t.flags[NS].cells ?? []).map(cellKey));
+  if (!keys.size) { ui.notifications.info(`No ${sp.name || "space"} of ${item.name} on this scene.`); return; }
+  const r = Number(sp.count) || 3;
+  const from = cellsOf(td);
+  const taken = new Set();
+  for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.add(cellKey(c));
+  const check = (c) => {
+    if (!keys.has(cellKey(c))) return `Pick a ${sp.name || "space"} of ${item.name}.`;
+    if (taken.has(cellKey(c))) return "That space isn't free.";
+    return from.some(o => cheb(o, c) <= r) ? "" : `That space is beyond ${r} spaces of you.`;
+  };
+  const cells = await pickSpaces({ max: 1, color: TERRAIN_COLORS.mark, check, hint: `${item.name}${sp.source ? ` (${sp.source})` : ""}: teleport up to ${r} spaces into a ${sp.name || "space"}.` });
+  if (!cells?.length || !(await placeTokenAt(td, cells[0]))) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: td }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-person-running"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: ${esc(td.name)} teleports into a ${esc(sp.name || "space")} (free action).</div>`,
+  });
+}
+
+/**
+ * Elden Rune Talent II (p.209) for `actor`'s next infusion: standing in a rune of their own ability with that talent,
+ * or in an ARKENRUNE of an ally's ("their benefits also extend to allies"). Null when none.
+ * @returns {{by: number, min: number, label: string}|null}
+ */
+export function runeInfuseReduction(actor) {
+  const td = sourceTokenFor(actor)?.document;
+  if (!td?.parent) return null;
+  const mine = cellsOf(td);
+  for (const { f, keys } of terrainOn(td.parent)) {
+    if (f.kind !== "mark" || f.onCharacter || !touches(mine, keys)) continue;
+    const creator = game.actors?.get(f.creatorId);
+    const item = creator?.items?.get(f.itemId);
+    const s = item?.system ?? {};
+    const t = Number(s.talentSelected) || 0;
+    const m = RUNE_INFUSE.exec(plainOf(t === 1 ? s.talent1 : t === 2 ? s.talent2 : ""));
+    if (!m) continue;
+    const own = creator.id === actor.id;
+    if (!own && !(f.alliesToo && !isFoeOf(td, creator))) continue;
+    return { by: Number(m[2]) || 1, min: Number(m[3]) || 1, label: `${item.name} Talent ${t === 1 ? "I" : "II"}: standing in ${own ? "your" : `${creator.name}'s`} ${f.name || f.label}` };
+  }
+  return null;
 }
 
 /**

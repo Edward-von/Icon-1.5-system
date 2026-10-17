@@ -107,6 +107,7 @@ export function terrainLabel(s) {
   if (s.kind === "convert") return "To dangerous";
   if (s.kind === "boil") return "Boil";
   if (s.kind === "clear") return "Clear terrain";
+  if (s.kind === "teleport") return `Teleport to ${s.name || "space"}`;
   if (s.kind === "pit") return s.dangerous ? "Dangerous pit" : "Pit";
   if (s.kind === "dangerous") return s.foesOnly ? "Dangerous (foes)" : "Dangerous";
   if (s.kind === "difficult") return "Difficult";
@@ -230,6 +231,10 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
     add(m.index, { kind: "boil", count: 0, fixed: true, amount: Number(m[1]) || 2 });
   for (const m of t.matchAll(/\bremove any difficult or dangerous terrain of your choice in the area\b/gi))
     add(m.index, { kind: "clear", count: 0, fixed: true });
+  // Elden Rune Talent I (p.209): "You can teleport up to 3 spaces into an Elden Rune space as a free action" — a
+  // chip that moves the user's token onto one of that ability's spaces in range.
+  for (const m of t.matchAll(/\bteleport up to (\d+|one|two|three|four|five|six) spaces? into an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*) space\b/g))
+    add(m.index, { kind: "teleport", count: countWord(m[1]) || 1, fixed: true, name: m[2] });
 
   found.sort((a, b) => a.at - b.at);
   // One spec per kind and name in a text (Symphony's "create a mote" in the mastery is the same mote).

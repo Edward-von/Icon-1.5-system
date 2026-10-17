@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa (17 ottobre 2026, versione 1.15.197)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Enochian con Elden Rune e Talent I: piazza una rune, allontanati di 2-3 caselle e clicca "Teleport to Elden
+      Rune": puoi scegliere solo la tua rune libera entro 3, il token ci va sopra e arriva la card. Oltre 3, o su una
+      rune occupata, c'è un avviso.
+- [ ] Talent II: in piedi sulla tua rune, fai l'Infuse 3 di un'altra abilità: si pagano 2 Aether e la card dice "−1,
+      to a minimum of 1". Un Infuse 1 resta 1. Fuori dalla rune si paga il prezzo pieno.
+- [ ] Mastery sbloccata: clicca il chip della rune e scegli "Arkenrune": compare un'area small blast. Piazzane
+      un'altra: la prima sparisce. Un foe che ci entra non fa comparire il promemoria "scrub out". La Elden Rune
+      normale invece lo fa ancora.
+- [ ] Un alleato Wright in piedi nell'Arkenrune di un Enochian con il Talent II: il suo Infuse costa 1 in meno.
+- [ ] Fine del combattimento: la card "End of the scene?" elenca anche l'Arkenrune.
+
 ## Emerso R33 — I talenti di Deepwrath funzionano dentro i pit (17 ottobre 2026, versione 1.15.196)
 
 Setup: solo codice (F5 basta).
