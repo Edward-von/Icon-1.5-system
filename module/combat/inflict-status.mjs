@@ -141,6 +141,8 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
       parsed:      { hit: { mult: chunk.mult, fray: chunk.fray, flat: chunk.flat }, miss: { mult: 0, fray: false, flat: 0 }, area: { mult: 0, fray: false, flat: 0 } },
       outcome:     success ? "save-success" : "save-fail",
       damagedie, fray,
+      // Damage type written in the save text ("3 piercing damage", p.104).
+      pierce: chunk.type === "piercing", divine: chunk.type === "divine",
       abilityName: `${abilityName || "Effect"}${times > 1 ? ` (${i + 1}/${times})` : ""}`,
       targetName:  target.name,
       targetsOverride: targets,

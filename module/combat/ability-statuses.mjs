@@ -138,7 +138,12 @@ function _dmgChunk(text) {
   const flat = flatMatch ? Number(flatMatch[1]) : 0;
   const tm = DMG_TIMES_RE.exec(lower);
   const times = tm ? (tm[1] ? ({ three: 3, four: 4, five: 5 }[tm[1]] ?? Number(tm[1])) : 2) : 1;
-  return { mult, fray, flat, times, deals: mult > 0 || flat > 0 || fray };
+  // Damage type next to the amount ("3 piercing damage", "[D]+fray divine
+  // damage", "divine fray damage"): the card applies it (p.104, piercing
+  // ignores armor and weakened; divine is not reduced at all).
+  const typeMatch = lower.match(/(?:(?:\d+|\[d\]|\bfray)\s+(?:additional\s+)?(divine|piercing)|\b(divine|piercing)\s+fray)\s+damage/);
+  const type = typeMatch ? (typeMatch[1] || typeMatch[2]) : "";
+  return { mult, fray, flat, times, type, deals: mult > 0 || flat > 0 || fray };
 }
 function _dmgLabel(c) {
   if (!c?.deals) return "no damage";
@@ -146,7 +151,7 @@ function _dmgLabel(c) {
   if (c.mult) parts.push(`${c.mult}[D]`);
   if (c.fray) parts.push("fray");
   if (c.flat) parts.push(`${c.flat}`);
-  return parts.join("+") + (c.times > 1 ? ` ×${c.times}` : "");
+  return parts.join("+") + (c.type ? ` ${c.type}` : "") + (c.times > 1 ? ` ×${c.times}` : "");
 }
 
 /*
@@ -550,6 +555,9 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         // "…or be shoved 3, or just 1 on a successful save": a bare number only means
         // damage when the failed-save branch deals damage too.
         if (!fail.deals && !/\[d\]|\bfray\b|\bdamage\b/i.test(successText)) success = { deals: false };
+        // "take 2 piercing damage, or 1 on a successful save": the shortened
+        // success branch is the same damage, so it keeps the type (p.104).
+        else if (success.deals && !success.type && fail.type && !/\bdamage\b/i.test(successText)) success = { ...success, type: fail.type };
         if (fail.deals || success.deals) {
           const saveDamage = { fail, success: success.deals ? success : null, label: `${_dmgLabel(fail)}${success.deals ? ` / ${_dmgLabel(success)} on a successful save` : ""}` };
           const gated = blockEntries.filter(e => e._sentenceIndex === si && !e.kind && e.when !== "always");

@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno dei tiri salvezza tiene il tipo piercing / divine (versione 1.15.201)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Danno dei tiri salvezza piercing/divine**: Assault Wave e le altre abilità con "must save or take 3 piercing
+  damage" postavano una card di danno normale, così l'Apply toglieva l'armatura anche se il testo dice piercing
+  (p.104) → `_dmgChunk` leggeva la quantità ma non il tipo, e `postSaveDamage` non passava `pierce` / `divine` alla
+  card → ora `_dmgChunk` legge il tipo ("3 piercing damage", "[D]+fray piercing damage", "divine fray damage") e
+  `postSaveDamage` lo passa alla card. Se il ramo del tiro riuscito è scritto corto ("2 piercing damage, or 1 on a
+  successful save"), prende lo stesso tipo. L'etichetta del bottone mostra il tipo. Solo codice.
+
 ## 17 ottobre 2026 — Foretell dal mazzo con la mano vuota (versione 1.15.200)
 
 ### Round di debug del 15 ottobre, voce emersa su R36

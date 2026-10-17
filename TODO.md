@@ -809,10 +809,19 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       up to a maximum of six times, or just 1 piercing damage per minion on a successful save" (p.312) posta una sola
       card da 3 (o da 1). Il numero di minion non viene chiesto e il tetto di 6 non viene usato; servirebbe un
       `maxTimes` in `_dmgChunk` e una domanda "quante volte" in `postSaveDamage`.
-- [ ] **Emerso lavorando su R40 — il danno dei tiri salvezza perde piercing e divine** (S): `_dmgChunk` riconosce "3
+- [x] **Emerso lavorando su R40 — il danno dei tiri salvezza perde piercing e divine** (S): `_dmgChunk` riconosce "3
       piercing damage" ma non ne salva il tipo, e `postSaveDamage` (inflict-status.mjs) non passa `pierce` / `divine`
       alla card. Assault Wave e simili tolgono quindi l'armatura e il weakened anche quando il testo dice piercing
       (p.104).
+(FATTO il 17 ottobre 2026, versione 1.15.201: il danno dei tiri salvezza legge piercing/divine dal testo e la card lo
+      applica)
+- [ ] **Emerso lavorando su R40 — il danno dei tiri salvezza ignora il weakened di chi attacca** (S): `postSaveDamage`
+      non passa `weakened` a `postAbilityDamageCard`, quindi un attaccante Weakened ("All damage dealt reduced by 2",
+      p.104) fa danno pieno con i danni legati al tiro salvezza (non piercing). Le sheet invece lo passano con
+      `mods.weakened`.
+- [ ] **Emerso lavorando su R40 — "X damage, twice" sul tiro salvezza tira i dadi più volte** (S): per `times > 1`
+      `postSaveDamage` posta N card separate e ognuna tira il proprio [D]. Il manuale (p.92) dice "roll [D] once, then
+      apply the total damage … separate times"; `postAbilityDamageCard` ha già `instances` per farlo con un tiro solo.
 
 ---
 

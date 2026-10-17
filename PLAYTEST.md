@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Il danno dei tiri salvezza tiene il tipo piercing / divine (17 ottobre 2026, versione 1.15.201)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Assault Wave (Master, p.312) su un PG con armatura: tiro fallito → la card di danno ha Pierce attivo e con Apply
+      l'armatura non toglie niente.
+- [ ] Stesso test con tiro riuscito ("just 1 piercing damage per minion"): anche qui Pierce attivo.
+- [ ] Un'abilità con "[D]+fray piercing damage" su tiro fallito: card con Pierce attivo.
+- [ ] Un'abilità con danno divine legato al tiro salvezza: card con Divine attivo, niente armatura e niente vigor
+      tolti.
+- [ ] Un'abilità con danno normale legato al tiro salvezza ("must save or take [D]+fray, or fray on a successful
+      save"): card normale, l'armatura conta ancora.
+- [ ] Il bottone sulla card dell'abilità mostra "3 piercing per minion …" nell'etichetta del danno.
+
 ## Emerso R36 — Foretell dal mazzo con la mano vuota (17 ottobre 2026, versione 1.15.200)
 
 Setup: solo codice (F5 basta).
