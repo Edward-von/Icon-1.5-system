@@ -1457,9 +1457,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       solo come testo sulla card postata; non c'è un bottone che dia il vigor.
 (FATTO il 17 ottobre 2026, versione 1.15.186: bottone "gain N vigor" sulla card dell'interrupt postata dalla card del
       danno, una volta per card, solo per chi possiede il personaggio.)
-- [ ] **Emerso lavorando su R35 — Great Soul Bond (Blazing Bond)** (S): la mastery "the other can reduce themselves to
+- [x] **Emerso lavorando su R35 — Great Soul Bond (Blazing Bond)** (S): la mastery "the other can reduce themselves to
       1 hp to grant that ally immunity…" non è un interrupt con trigger, quindi non ha bottone; servirebbe una regola
       a parte (stesso flag `immune` di damage-card-mods).
+(FATTO il 17 ottobre 2026, versione 1.15.187: Great Soul Bond offerto sulla card del danno al partner non colpito, che
+      scende a 1 HP; il colpito diventa immune e il mark di Blazing Bond finisce.)
 - [ ] **Emerso lavorando su R35 — interrupt "when targeted" sulla card d'attacco** (M): Aether Deflection, Endless
       Battlement e i foe "is targeted by an attack" scattano prima del tiro; il posto giusto è la card d'attacco, non
       quella del danno (solo Dire Parry è stato aggiunto al danno come eccezione).

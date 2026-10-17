@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Great Soul Bond usabile dalla card del danno (17 ottobre 2026, versione 1.15.187)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Enochian con Blazing Bond, mastery sbloccata, mark su un alleato. Un foe danneggia l'alleato: sotto la sua riga
+      c'è "Great Soul Bond · <Enochian>". Lo vede chi gioca l'Enochian.
+- [ ] Premerlo: l'Enochian scende a 1 HP, la riga dell'alleato mostra la chip "Immune (Great Soul Bond)", Apply non
+      toglie niente, il mark di Blazing Bond sparisce (con il suo messaggio) e c'è la card in chat.
+- [ ] Al contrario: il foe danneggia l'Enochian, e il bottone appare sotto la riga dell'Enochian per chi gioca
+      l'alleato marcato. Premuto, è l'alleato a scendere a 1 HP.
+- [ ] Senza mastery sbloccata, o senza mark sulla scena, il bottone non c'è. Premuto una seconda volta sulla stessa
+      card: avviso "already changed this damage".
+
 ## Emerso R35 — Righteous Disdain: bottone per il vigor del Heroic (17 ottobre 2026, versione 1.15.186)
 
 Setup: solo codice (F5 basta).

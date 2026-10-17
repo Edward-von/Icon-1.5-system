@@ -30,7 +30,7 @@ import { plainText, parseInflictedStatuses, statusBlockHtml } from "./ability-st
 import { hasStatus } from "./statuses.mjs";
 import { tagKey } from "./defenses.mjs";
 import { addCardMods, cardModsFor } from "./damage-card-mods.mjs";
-import { marksBy } from "./marks.mjs";
+import { marksBy, removeMark } from "./marks.mjs";
 
 const _log = (...a) => console.debug("[ICON | DamageInterrupts]", ...a);
 const FLAG_NS = "icon-system";
@@ -194,6 +194,17 @@ function _readInterrupts(actor) {
     const byMark = desc.sections.some(sec => sec.label === "Mark");
     const partners = byMark ? marksBy(actor.id, item.id).map(m => m.targetActor?.uuid).filter(Boolean) : null;
     if (partners && !partners.length) continue;
+    // Blazing Bond's mastery GREAT SOUL BOND (p.210): "If one of the partners
+    // would take damage from an ability that would reduce them below 1 hp, the
+    // other can reduce themselves to 1 hp to grant that ally immunity to all
+    // damage from the triggering ability. The bond then snaps, ending this
+    // mark." Not an interrupt (no uses): offered on the damage card while the
+    // mark is on, to whichever partner is not the one hit.
+    if (partners && /reduce themselves to 1 hp to grant that ally immunity/i.test(mastery)) {
+      out.push({ key: `${item.id}-sb`, itemId: item.id, kind: "soulbond",
+                 name: /^([A-Z][A-Z' ]+):/.exec(mastery)?.[1].toLowerCase().replace(/(^|\s)\p{L}/gu, c => c.toUpperCase()) ?? "Soul Bond",
+                 limit: 1, cost: "Mastery", trigger: mastery, partners });
+    }
     const granted = [];
     desc.sections.forEach((sec, n) => {
       const head = interruptBlockName(sec.label);
@@ -241,7 +252,7 @@ function bankOf(actor, key) {
 
 /** Uses left and the most there can be: {left, max}. A refresh is always available. */
 export function interruptLeft(actor, it) {
-  if (it.kind === "refresh") return { left: 1, max: 1 };
+  if (it.kind === "refresh" || it.kind === "soulbond") return { left: 1, max: 1 };
   if (it.bankMax) return { left: bankOf(actor, it.key), max: it.bankMax };
   return { left: Math.max(0, it.limit - interruptUsesOf(actor, it.key)), max: it.limit };
 }
@@ -341,9 +352,20 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
     owners.push({ ...c, self: false });
   }
   const out = [];
+  // Great Soul Bond: the bond's holder and its marked partner; the one not hit presses.
+  for (const o of owners) {
+    for (const it of interruptsOf(o.actor)) {
+      if (it.kind !== "soulbond") continue;
+      let presser = null;
+      if (o.self) presser = it.partners.map(u => { try { return fromUuidSync(u); } catch { return null; } }).find(a => userPlays(a)) ?? null;
+      else if (it.partners.includes(target.uuid) && userPlays(o.actor)) presser = o.actor;
+      if (presser) out.push({ owner: o.actor, it, presser, left: 1, max: 1 });
+    }
+  }
   for (const o of owners) {
     if (!userPlays(o.actor)) continue;
     for (const it of interruptsOf(o.actor)) {
+      if (it.kind === "soulbond") continue;
       const spec = interruptSpec(it.name);
       const scope = spec.scope ?? damageTriggerScope(it.trigger);
       if (!scope) continue;
@@ -362,7 +384,16 @@ export function damageInterruptsFor(target, { tokenId = null, attacker = null } 
 /*  Card decoration                                     */
 /* -------------------------------------------------- */
 
-function buttonHtml({ owner, it, left, max }, targetUuid) {
+function buttonHtml({ owner, it, left, max, presser }, targetUuid) {
+  if (it.kind === "soulbond") {
+    const title = `${it.name} (${owner.name}'s Blazing Bond mastery) — ${presser.name}. ${plainText(it.trigger)}`
+      + `\n${presser.name} drops to 1 HP, this character becomes immune to all damage from this ability, and the mark ends.`
+      + ` Use it when the damage would reduce them below 1 HP: that is up to you.`;
+    return `<button type="button" class="icon-chat-btn icon-chat-btn--interrupt" data-action="damageInterrupt"
+              data-owner-uuid="${escapeHTML(owner.uuid)}" data-key="${escapeHTML(it.key)}" data-target-uuid="${escapeHTML(targetUuid)}"
+              data-presser-uuid="${escapeHTML(presser.uuid)}" title="${escapeHTML(title)}">
+              <i class="fa-solid fa-link-slash"></i> ${escapeHTML(it.name)}<small> · ${escapeHTML(presser.name)}</small></button>`;
+  }
   if (it.kind === "refresh") {
     const title = `${it.name} — ${owner.name}. Refresh: ${plainText(it.trigger)}\nGives the stance's interrupt back`
       + ` (a banked one stores one more). Spends nothing.`;
@@ -427,6 +458,7 @@ function _refreshButton(btn) {
   const it = owner ? interruptsOf(owner).find(i => i.key === btn.dataset.key) : null;
   if (!it) { btn.disabled = true; return; }
   if (it.kind === "refresh") { btn.disabled = false; return; }
+  if (it.kind === "soulbond") { btn.disabled = true; return; }   // the bond snapped
   const { left, max } = interruptLeft(owner, it);
   const small = btn.querySelector("small");
   if (small) small.textContent = ` · ${owner.name} ${left}/${max}${it.bankMax ? " banked" : ""}`;
@@ -473,12 +505,13 @@ export function bindInterruptVigorButtons(message, html) {
  * @param {{ownerUuid:string, key:string, targetUuid:string}} data
  * @returns {Promise<boolean>} false when nothing was done
  */
-export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid } = {}) {
+export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid, presserUuid } = {}) {
   const owner = await fromUuid(ownerUuid ?? "");
   if (!owner) return false;
   const it = interruptsOf(owner).find(i => i.key === key);
   if (!it) { ui.notifications.warn(`${owner.name} no longer has that interrupt.`); return false; }
   const target = targetUuid ? await fromUuid(targetUuid) : null;
+  if (it.kind === "soulbond") return useSoulBond(message, owner, it, target, presserUuid ? await fromUuid(presserUuid) : null);
   if (it.kind === "refresh") {
     _log(`refresh — "${owner.name}" | ${it.name} | gives back: ${it.refreshes.join(", ")} | card: ${message?.id}`);
     await refreshUses(owner, it.refreshes);
@@ -506,6 +539,36 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid }
     try { await spec.onUse({ owner, it, item: it.itemId ? owner.items.get(it.itemId) : null, target, message }); }
     catch (err) { console.error(`ICON 1.5 | ${it.name}: changing the damage card failed`, err); }
   }
+  return true;
+}
+
+/**
+ * Great Soul Bond (Blazing Bond's mastery, p.210): the partner not hit drops
+ * to 1 HP, the one hit becomes immune to this damage (the card's `immune`
+ * change), and the bond's mark ends.
+ */
+async function useSoulBond(message, owner, it, target, presser) {
+  if (!target || !presser) return false;
+  if (cardModsFor(message, target.uuid).sources.includes(it.name)) {
+    ui.notifications.warn(`${it.name} has already changed this damage for ${target.name}.`);
+    return false;
+  }
+  const hpPath = presser.type === "icon" ? "system.combat.hp.value" : "system.hp.value";
+  const hp = Number(foundry.utils.getProperty(presser, hpPath) ?? 0) || 0;
+  _log(`soulBond — holder "${owner.name}" | "${presser.name}" hp ${hp} → ${Math.min(hp, 1)} | immune: "${target.name}" | card: ${message?.id}`);
+  if (hp > 1) await presser.update({ [hpPath]: 1 });
+  // The mark first: the card re-renders when its change is written, and should no longer offer the bond.
+  for (const m of marksBy(owner.id, it.itemId)) await removeMark(m.uuid);
+  _cache.delete(owner.uuid);
+  await addCardMods(message, [{ actorUuid: target.uuid, source: it.name, immune: true }]);
+  const src = message?.flags?.[FLAG_NS]?.damage ?? {};
+  const what = [src.sourceName, src.abilityName].filter(Boolean).join("'s ");
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor: presser }),
+    content: `<div class="icon-chat-card"><strong>${escapeHTML(it.name)}</strong> (Blazing Bond mastery): <strong>${escapeHTML(presser.name)}</strong>`
+           + ` reduces themselves to 1 HP (${hp} → ${Math.min(hp, 1)}); <strong>${escapeHTML(target.name)}</strong> is immune to all damage`
+           + `${what ? ` from ${escapeHTML(what)}` : " from the triggering ability"}. The bond snaps.</div>`,
+  });
   return true;
 }
 

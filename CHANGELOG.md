@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Great Soul Bond usabile dalla card del danno (versione 1.15.187)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Great Soul Bond**: la mastery di Blazing Bond ("the other can reduce themselves to 1 hp to grant that ally
+  immunity to all damage from the triggering ability. The bond then snaps, ending this mark", p.210) non aveva bottone
+  → non è un interrupt con trigger, quindi la lettura degli interrupt non la trovava → ora, con la mastery sbloccata e
+  il mark attivo, la card del danno mostra il bottone "Great Soul Bond" sotto la riga del partner colpito. Lo vede chi
+  gioca l'altro partner. Premuto: l'altro partner scende a 1 HP, il colpito diventa immune a quel danno (stesso flag
+  `immune` di Grace of the Spirits), il mark finisce e in chat compare una card. Se il danno lo porterebbe davvero
+  sotto 1 HP lo decide il tavolo. Solo codice.
+
 ## 17 ottobre 2026 — Righteous Disdain: bottone per il vigor del Heroic (versione 1.15.186)
 
 ### Round di debug del 15 ottobre, voce emersa su R35
