@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Carte del Seer: bersagli e area (versione 1.15.148)
+
+### Round di debug del 15 ottobre, R36c
+
+- **Carte senza bersaglio**: dalla card in chat non si capiva su chi era stata usata la carta e The Ewer non piazzava
+  la sua area → la card non leggeva i bersagli → ora la card scrive "Foretold on: <alleato>" con i bersagli del
+  momento in cui è stata giocata, oppure dice di bersagliare l'alleato; The Ewer ha il bottone "Place Small Blast
+  (target)" che centra il blast sull'alleato con gli strumenti area già esistenti (wild card comprese), poi lascia
+  bersagliati solo gli alleati, così il bottone Blessed li benedice tutti. Solo codice.
+
 ## 17 ottobre 2026 — Carte del Seer giocate in chat (versione 1.15.147)
 
 ### Round di debug del 15 ottobre, R36b

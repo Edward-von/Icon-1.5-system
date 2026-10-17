@@ -16,6 +16,24 @@
     <summary><small>Foretell (p.{{page}})</small></summary>
     <p><small>{{{foretell}}}</small></p>
   </details>
+  {{!-- R36c: the ally it was foretold on (the targets when played), and the area of the card --}}
+  <p class="icon-great-wheel-card__targets">
+    {{#if targets.length}}
+      <small><i class="fa-solid fa-crosshairs"></i> Foretold on:</small>
+      {{#each targets}}<span class="icon-great-wheel-card__target">{{#if this.img}}<img class="icon-chat-card__target-img" src="{{this.img}}" alt="" width="20" height="20">{{/if}}<strong>{{this.name}}</strong></span>{{/each}}
+    {{else}}
+      <small><i class="fa-solid fa-crosshairs"></i> No ally was targeted: target the ally, then use the buttons.</small>
+    {{/if}}
+  </p>
+  {{#if area}}
+    <div class="icon-chat-card__area">
+      <button type="button" class="icon-btn icon-btn--sm icon-btn--area" data-action="greatWheelArea" data-value="{{area.value}}"
+              data-actor-uuid="{{area.actorUuid}}" data-token-id="{{area.tokenId}}"
+              title="Place the {{area.label}} on the ally{{#unless area.tokenId}} (target them first){{/unless}}; the allies in it become the targets, for the Blessed button">
+        <i class="fa-solid fa-bullseye"></i> Place {{area.label}}
+      </button>
+    </div>
+  {{/if}}
   {{#if noActor}}
     <p class="icon-great-wheel-card__hint"><small><i class="fa-solid fa-circle-info"></i> Select the Seer's token (or set your character) before playing a card to get its Gain buttons.</small></p>
   {{/if}}

@@ -19,10 +19,17 @@
  * Gain buttons, reminders) — from the "Foretell" button this module adds to the
  * hand, which moves the card straight to the discard pile, or from Foundry's own
  * Play to a pile. Nothing is applied until a button of the card is clicked.
+ *
+ * R36c: the card names the ally it was foretold on (the user's targets when it
+ * was played: Foretell works "no matter the distance or if you can see them",
+ * p.199), and The Ewer's small blast "centered on your ally" is placed with the
+ * area tools (placeAreaTemplate) from a button of the card; the allies in it
+ * become the targets, for the Blessed button.
  */
 
 import { enrichRuleKeywords } from "../helpers/keywords.mjs";
-import { statusBlockHtml } from "./ability-statuses.mjs";
+import { statusBlockHtml, captureTargets } from "./ability-statuses.mjs";
+import { placeAreaTemplate } from "../canvas/area-templates.mjs";
 
 const _log = (...a) => console.debug("[ICON | GreatWheel]", ...a);
 
@@ -41,7 +48,8 @@ export const GREAT_WHEEL = [
   { value: 3,  rank: "3",  arcana: "The Scepter", text: "Teleport your ally to an adjacent space to you after the action resolves.",
     notes: ["Teleport the ally adjacent to you, after the action"] },
   { value: 4,  rank: "4",  arcana: "The Ewer",    text: "Bless all allies in a small blast area centered on your ally.",
-    gains: [{ id: "blessed", label: "Blessed" }], notes: ["All allies in a small blast centered on the ally"] },
+    gains: [{ id: "blessed", label: "Blessed" }], notes: ["All allies in a small blast centered on the ally"],
+    area: { kind: "blast", size: "s", centeredOn: "target", range: 0, label: "Small Blast (target)" } },
   { value: 5,  rank: "5",  arcana: "The Devil",   text: "If the ability forces saves, foes get +2 curses to save against them.",
     notes: ["+2 curses on the foes' saves against the ability"] },
   { value: 6,  rank: "6",  arcana: "The Sword",   text: "Ability gains pierce.",
@@ -182,6 +190,14 @@ export async function postGreatWheelCard(cardData, { from = null, to = null } = 
   if (!entry) return null;
   const actor = _playerActor();
   const statusHtml = actor ? statusBlockHtml(greatWheelStatusEntries(entry), { source: actor, abilityName: `${entry.arcana} (Great Wheel)` }) : "";
+  // R36c: who it was foretold on — the user's targets when the card was played.
+  const targets = captureTargets();
+  const area = entry.area && actor ? {
+    label: entry.area.label,
+    value: entry.value,
+    actorUuid: actor.uuid,
+    tokenId: targets.length === 1 ? targets[0].tokenId : "",
+  } : null;
   let foretell = esc(FORETELL_TEXT);
   try { foretell = enrichRuleKeywords(foretell); } catch { /* plain text */ }
   const content = await foundry.applications.handlebars.renderTemplate("systems/icon-system/templates/chat/great-wheel-card.hbs", {
@@ -195,7 +211,9 @@ export async function postGreatWheelCard(cardData, { from = null, to = null } = 
     from: from?.name ?? "",
     to: to?.name ?? "",
     statusHtml,
-    noActor: !actor && !!(entry.gains?.length),
+    noActor: !actor && !!(entry.gains?.length || entry.area),
+    targets,
+    area,
   });
   _log(`played ${cardData.name} (${entry.rank} — ${entry.arcana})${to ? ` to ${to.name}` : ""}`);
   return ChatMessage.create({
@@ -203,6 +221,31 @@ export async function postGreatWheelCard(cardData, { from = null, to = null } = 
     content,
     flags: { "icon-system": { greatWheel: { value: entry.value, card: cardData.name ?? "", from: from?.id ?? "", to: to?.id ?? "" } } },
   });
+}
+
+/**
+ * R36c: The Ewer's "small blast area centered on your ally" from the chat card. The ally the card was
+ * foretold on is targeted again (when it was one token), the area goes on it (placeAreaTemplate, which
+ * also offers the wild cards it touches), then only the characters on the ally's side stay targeted:
+ * "Bless all allies" — the Blessed button applies to them.
+ */
+async function _placeCardArea(btn) {
+  let actor = null;
+  try { actor = fromUuidSync(btn.dataset.actorUuid); } catch { actor = null; }
+  if (!actor?.isOwner) { ui.notifications.warn("Only the Seer's owner can place this area."); return; }
+  const entry = GREAT_WHEEL.find(e => e.value === Number(btn.dataset.value));
+  if (!entry?.area) return;
+  const ally = btn.dataset.tokenId ? canvas?.tokens?.get(btn.dataset.tokenId) : null;
+  if (ally) ally.setTarget(true, { releaseOthers: true });
+  const centre = ally ?? (game.user.targets.size === 1 ? [...game.user.targets][0] : null);
+  const placed = await placeAreaTemplate({ actor, area: { ...entry.area }, abilityName: entry.arcana, abilityKey: `great-wheel:${entry.value}` });
+  if (!placed) return;
+  if (!centre) return;
+  const side = centre.document?.disposition;
+  const others = (placed.targets ?? []).filter(t => t.document?.disposition !== side);
+  for (const t of others) t.setTarget(false, { releaseOthers: false });
+  const kept = Array.from(game.user.targets).map(t => t.name);
+  if (others.length) ui.notifications.info(`${entry.arcana}: allies only — ${kept.length ? kept.join(", ") : "no one"} targeted (${others.length} other character${others.length > 1 ? "s" : ""} left out).`);
 }
 
 /**
@@ -254,6 +297,17 @@ export function registerGreatWheel() {
   Hooks.on("renderCardsConfig", (app, element) => {
     try { _decorateStack(app, element); } catch (err) { console.error("ICON 1.5 | Great Wheel on a Cards sheet failed", err); }
     try { _addForetellButtons(app, element); } catch (err) { console.error("ICON 1.5 | Foretell buttons failed", err); }
+  });
+  // R36c: the area button of a played card (The Ewer).
+  Hooks.on("renderChatMessageHTML", (_message, html) => {
+    html.querySelectorAll('[data-action="greatWheelArea"]').forEach(btn => {
+      if (btn.dataset.iconBound) return;
+      btn.dataset.iconBound = "true";
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        _placeCardArea(btn).catch(err => console.error("ICON 1.5 | Great Wheel area failed", err));
+      });
+    });
   });
   // A card played from a hand to a pile (the Foretell button, or Foundry's own Play): its chat card.
   // Only on the client that plays it (the hook runs where Cards#pass is called).

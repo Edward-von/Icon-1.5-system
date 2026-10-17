@@ -1253,8 +1253,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.147: bottone Foretell sulle carte della mano → card in chat con effetto,
       keyword, Gain e promemoria, carta spostata negli scarti; anche il Play di Foundry verso una pila posta la card.
       Solo codice.)
-- [ ] **R36c. Bersagli delle carte** (M)
+- [x] **R36c. Bersagli delle carte** (M)
       Le carte con bersaglio o area usano i bersagli correnti e i bottoni area già esistenti.
+(FATTO il 17 ottobre 2026, versione 1.15.148: la card della carta mostra l'alleato bersagliato al momento del gioco;
+      The Ewer piazza il suo small blast sull'alleato con placeAreaTemplate e lascia bersagliati solo gli alleati per
+      il Blessed. Solo codice.)
 
 ### Emersi lavorando
 
@@ -1397,6 +1400,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
 - [ ] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
       Collide ("Instead of the normal collide effect"), ma la card dell'attacco non lo dice.
+- [ ] **Emerso lavorando su R36 — resto della Wheel of Fate** (S/M): il sistema non aiuta con la pesca a inizio
+      combattimento fino a 5, Skein (1 carta a inizio turno, +1 a fine turno se non ha attaccato), il limite di 7
+      carte a fine turno, il rimescolare gli scarti nel mazzo e Bend Fate (scartare carte dopo un gamble per un dado
+      in più, p.199): oggi si fa a mano con i Cards di Foundry.
 
 ---
 

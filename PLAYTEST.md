@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R36c — Carte del Seer: bersagli e area (17 ottobre 2026, versione 1.15.148)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bersagliare un alleato e giocare un 4: la card mostra "Foretold on: <nome>" e il bottone dell'area.
+- [ ] Cliccare il bottone: il small blast si centra sull'alleato anche se è lontano; restano bersagliati solo gli
+      alleati nell'area (un avviso dice quanti foe sono stati esclusi); Blessed li benedice.
+- [ ] Giocare la carta senza bersagli: la card dice di bersagliare l'alleato; bersagliarlo, poi cliccare il bottone:
+      funziona.
+- [ ] Con una wild card toccata dal blast, viene offerta l'esplosione.
+
 ## R36b — Carte del Seer giocate in chat (17 ottobre 2026, versione 1.15.147)
 
 Setup: solo codice (F5 basta).

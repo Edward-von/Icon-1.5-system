@@ -6253,3 +6253,5 @@ ol.chat-log .chat-message,
 .icon-great-wheel-card__hint { margin: 4px 0; color: var(--ic-text-dim); }
 .icon-great-wheel__play { color: var(--ic-gold); margin-right: 4px; }
 .icon-great-wheel-row .controls { flex: 0 0 auto; display: flex; gap: 4px; align-items: center; }
+.icon-great-wheel-card__targets { margin: 4px 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; color: var(--ic-text-dim); }
+.icon-great-wheel-card__target { display: inline-flex; gap: 4px; align-items: center; }
