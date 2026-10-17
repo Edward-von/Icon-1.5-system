@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove (versione 1.15.207)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Area che cresce sopra i personaggi**: quando un'area si allargava ("Add 2 spaces" di Bifröst Talent II,
+  l'estensione di Ätherwand Talent I, "Area +N" di Blood Grove), chi stava nelle caselle nuove non riceveva l'offerta
+  degli status "mentre sei dentro" → `extendAreaTemplate` aggiornava solo le caselle, senza controllare chi c'era
+  sopra → ora, dopo l'allargamento, parte lo stesso controllo usato quando l'area si sposta (`offerInsideOnShift`).
+  Vale anche per la tromba d'acqua che diventa una blast con HURRICANE (p.235). Solo codice.
+
 ## 17 ottobre 2026 — Aether Deflection dà la resistenza sulla card del danno (versione 1.15.206)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

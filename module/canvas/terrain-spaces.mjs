@@ -674,7 +674,7 @@ async function workArea(actor, item, sp) {
 export async function extendAreaTemplate(area, count, { actor = null, name = "", source = "", note = "" } = {}) {
   if (!area?.parent || area.parent !== canvas?.scene) { ui.notifications.warn("Open the scene of that area first."); return 0; }
   if (!(area.isOwner || game.user.isGM)) { ui.notifications.warn("Only the one who placed the area or the GM can extend it."); return 0; }
-  const own = area.flags[NS].cells;
+  const own = area.flags[NS].cells.map(c => ({ i: c.i, j: c.j }));
   const keys = new Set(own.map(cellKey));
   const check = (c, picked) => {
     if (keys.has(cellKey(c))) return "That space is already in the area.";
@@ -688,6 +688,10 @@ export async function extendAreaTemplate(area, count, { actor = null, name = "",
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-expand"></i> ${esc(name)}</strong>${source ? ` <small>(${esc(source)})</small>` : ""}: the area grows by ${cells.length} space${cells.length > 1 ? "s" : ""} (${own.length + cells.length} in all).${note ? `<br><small>${esc(note)}</small>` : ""}</div>`,
   });
+  // The statuses of an area for who is inside (R33c2): the characters standing in the new spaces are now inside.
+  if (terrainFlag(area)?.inside?.length) {
+    try { await offerInsideOnShift(area, own); } catch (err) { console.warn("[ICON | TerrainSpaces] inside-area check failed", err); }
+  }
   return cells.length;
 }
 

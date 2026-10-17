@@ -1610,9 +1610,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       solo Hit / Miss / Exceed / Crit e le righe del talento. Il Collide normale, Effect, Heroic, Charge ecc. non ci
       sono (Gigaton Whip: "They take fray damage"). Il danno doppio di Izuna Drop ("fray damage twice") non è proposto
       dalla finestra del danno.
-- [ ] **Emerso lavorando su R33c2 — area che cresce sopra i personaggi** (S): quando un'area si allarga (Bifröst
+- [x] **Emerso lavorando su R33c2 — area che cresce sopra i personaggi** (S): quando un'area si allarga (Bifröst
       Talent II "Add 2 spaces", Ätherwand Talent I che estende, Blood Grove "Area +N") chi sta nelle caselle nuove non
       riceve l'offerta di status; si può usare lo stesso `offerInsideOnShift` dentro `extendAreaTemplate`.
+(FATTO il 17 ottobre 2026, versione 1.15.207: un'area che si allarga offre gli status interni a chi sta nelle caselle
+      nuove, anche la tromba d'acqua che diventa blast)
 - nessuno
 - nessuno
 - [ ] **Emerso lavorando su R33b2 — shove di WAKING VOID** (S): Implode su un personaggio (WAKING VOID, p.211,

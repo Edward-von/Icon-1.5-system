@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove (17 ottobre 2026, versione 1.15.207)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazza un'area con uno status interno (per esempio i nemici dentro sono blinded+) e metti un nemico in una
+      casella accanto. Allargala con "Area +N" o "Add 2 spaces" includendo la sua casella: arriva una card con il
+      bottone dello status per quel nemico.
+- [ ] Allargala solo in caselle vuote: non arriva nessuna card in più, solo il messaggio "the area grows by N spaces".
+- [ ] Chi era già dentro prima dell'allargamento non riceve una seconda offerta.
+
 ## Emerso R35 — Aether Deflection dà la resistenza sulla card del danno (17 ottobre 2026, versione 1.15.206)
 
 Setup: solo codice (F5 basta).

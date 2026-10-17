@@ -531,11 +531,16 @@ async function growToBlast(doc) {
   terrain.label = areaTerrainLabel({ ...terrain, name: tf.name || "" });
   const area = { ...f.area, kind: "blast", size: g.size };
   area.label = `${areaLabel(area)}${tf.name ? ` · ${tf.name}` : ""}`;
+  const oldCells = f.cells.map(c => ({ i: c.i, j: c.j }));
   await doc.update({ [`flags.${NS}.cells`]: cells, [`flags.${NS}.area`]: area, [`flags.${NS}.terrain`]: terrain });
   await ChatMessage.create({
     speaker: rules.actor ? ChatMessage.getSpeaker({ actor: rules.actor }) : ChatMessage.getSpeaker(),
     content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-expand"></i> ${esc(nameOf(doc))}</strong> grows to a ${esc(areaLabel({ kind: "blast", size: g.size }))}${g.dangerous ? " and becomes dangerous terrain" : ""} (${esc(g.source)}).</div>`,
   });
+  // The statuses of an area for who is inside (R33c2): the characters in the spaces it grew over are now inside.
+  if (terrain.inside?.length) {
+    try { await offerInsideOnShift(doc, oldCells); } catch (err) { console.warn("[ICON | AreaMotion] inside-area check failed", err); }
+  }
   return true;
 }
 
