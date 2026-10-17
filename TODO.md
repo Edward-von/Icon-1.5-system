@@ -825,9 +825,11 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       `mods.weakened`.
 (FATTO il 17 ottobre 2026, versione 1.15.215: il danno legato al tiro salvezza toglie 2 quando chi agisce è Weakened,
       tranne piercing/divine)
-- [ ] **Emerso lavorando su R40 — "X damage, twice" sul tiro salvezza tira i dadi più volte** (S): per `times > 1`
+- [x] **Emerso lavorando su R40 — "X damage, twice" sul tiro salvezza tira i dadi più volte** (S): per `times > 1`
       `postSaveDamage` posta N card separate e ognuna tira il proprio [D]. Il manuale (p.92) dice "roll [D] once, then
       apply the total damage … separate times"; `postAbilityDamageCard` ha già `instances` per farlo con un tiro solo.
+(FATTO il 17 ottobre 2026, versione 1.15.216: "X damage, twice" dopo un tiro salvezza tira [D] una volta sola e lo
+      applica N volte su una card)
 - nessuno
 
 ---

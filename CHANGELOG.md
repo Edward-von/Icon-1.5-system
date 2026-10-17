@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — "X damage, twice" sul tiro salvezza: un solo tiro (versione 1.15.216)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Danno ripetuto dopo un tiro salvezza**: con "X damage, twice" uscivano due card, ognuna con il suo tiro di [D] →
+  `postSaveDamage` postava una card per ogni ripetizione → ora esce una sola card che tira [D] una volta e applica il
+  totale più volte separate (p.92: "roll [D] once, then apply the total damage … separate times"), tramite
+  `instances`. Il conteggio "per minion, up to N times" resta e si moltiplica per le ripetizioni (al massimo 10). Solo
+  codice.
+
 ## 17 ottobre 2026 — Il danno dopo un tiro salvezza tiene conto di Weakened (versione 1.15.215)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

@@ -160,22 +160,22 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
     }
   }
   const targets = [{ tokenId: targetTokenId || target.getActiveTokens?.()?.[0]?.id || "", actorUuid: target.uuid, actor: target }];
-  for (let i = 0; i < times; i++) {
-    await postAbilityDamageCard(source, {
-      parsed:      { hit: { mult: chunk.mult, fray: chunk.fray, flat: chunk.flat }, miss: { mult: 0, fray: false, flat: 0 }, area: { mult: 0, fray: false, flat: 0 } },
-      outcome:     success ? "save-success" : "save-fail",
-      damagedie, fray,
-      // Damage type written in the save text ("3 piercing damage", p.104).
-      pierce: chunk.type === "piercing", divine: chunk.type === "divine",
-      // Weakened (p.104): "All damage dealt reduced by 2" - the acting
-      // character's, as the sheets pass it (pierce / divine skip it).
-      weakened: hasStatus(source, "weakened"),
-      instances,
-      abilityName: `${abilityName || "Effect"}${times > 1 ? ` (${i + 1}/${times})` : ""}`,
-      targetName:  target.name,
-      targetsOverride: targets,
-    });
-  }
+  // "X damage, twice" (p.92): "roll [D] once, then apply the total damage
+  // three separate times" - one card, one roll, the repeats as instances.
+  await postAbilityDamageCard(source, {
+    parsed:      { hit: { mult: chunk.mult, fray: chunk.fray, flat: chunk.flat }, miss: { mult: 0, fray: false, flat: 0 }, area: { mult: 0, fray: false, flat: 0 } },
+    outcome:     success ? "save-success" : "save-fail",
+    damagedie, fray,
+    // Damage type written in the save text ("3 piercing damage", p.104).
+    pierce: chunk.type === "piercing", divine: chunk.type === "divine",
+    // Weakened (p.104): "All damage dealt reduced by 2" - the acting
+    // character's, as the sheets pass it (pierce / divine skip it).
+    weakened: hasStatus(source, "weakened"),
+    instances: instances * times,
+    abilityName: abilityName || "Effect",
+    targetName:  target.name,
+    targetsOverride: targets,
+  });
 }
 
 /* -------------------------------------------------- */

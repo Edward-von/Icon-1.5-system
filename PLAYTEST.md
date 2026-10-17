@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — "X damage, twice" sul tiro salvezza: un solo tiro (17 ottobre 2026, versione 1.15.216)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Abilità con tiro salvezza fallito che fa "[D] damage, twice": esce una sola card, un solo tiro, con la riga "× 2
+      instances (each applied separately)".
+- [ ] Premi Apply su quella card contro un bersaglio con armatura: l'armatura si toglie da ognuna delle due istanze.
+- [ ] Assault Wave (p.312, "per minion, up to six times"): la richiesta "How many…" compare ancora e la card mostra il
+      numero di istanze scelto.
+- [ ] Un danno da tiro salvezza senza ripetizioni: card normale, il nome dell'abilità non ha più il suffisso "(1/1)".
+
 ## Emerso R40 — Il danno dopo un tiro salvezza tiene conto di Weakened (17 ottobre 2026, versione 1.15.215)
 
 Setup: solo codice (F5 basta).
