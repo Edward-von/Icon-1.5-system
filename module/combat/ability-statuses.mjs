@@ -136,22 +136,33 @@ function _dmgChunk(text) {
   const fray = /\bfray\b/.test(lower);
   const flatMatch = lower.match(/(\d+)\s+(?:divine\s+|piercing\s+|true\s+|unerring\s+)?damage/) ?? (!mult && !fray ? lower.match(/^\s*(?:just\s+|only\s+|takes?\s+)?(\d+)\s*(?:instead)?\s*$/) : null);
   const flat = flatMatch ? Number(flatMatch[1]) : 0;
-  const tm = DMG_TIMES_RE.exec(lower);
+  // Damage counted by the situation, with a ceiling: "3 piercing damage per
+  // minion in the area, up to a maximum of six times" (Assault Wave p.312).
+  // `per` is what is counted, `maxTimes` the ceiling: the count is asked when
+  // the damage is rolled. The ceiling is not a fixed repeat count.
+  const perMatch = lower.match(/\bdamage\b[^.,;]*?\b(?:per|(?:once\s+)?for\s+(?:each|every))\s+([a-z]+)/);
+  const per = perMatch ? perMatch[1] : "";
+  const maxMatch = lower.match(/\b(?:up\s+to|to)\s+(?:a\s+)?(?:maximum\s+of\s+)?(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+times\b/);
+  const maxTimes = maxMatch ? (Number(maxMatch[1]) || MAX_WORDS[maxMatch[1]] || 0) : 0;
+  const tm = maxTimes ? null : DMG_TIMES_RE.exec(lower);
   const times = tm ? (tm[1] ? ({ three: 3, four: 4, five: 5 }[tm[1]] ?? Number(tm[1])) : 2) : 1;
   // Damage type next to the amount ("3 piercing damage", "[D]+fray divine
   // damage", "divine fray damage"): the card applies it (p.104, piercing
   // ignores armor and weakened; divine is not reduced at all).
   const typeMatch = lower.match(/(?:(?:\d+|\[d\]|\bfray)\s+(?:additional\s+)?(divine|piercing)|\b(divine|piercing)\s+fray)\s+damage/);
   const type = typeMatch ? (typeMatch[1] || typeMatch[2]) : "";
-  return { mult, fray, flat, times, type, deals: mult > 0 || flat > 0 || fray };
+  return { mult, fray, flat, times, type, ...(per ? { per } : {}), ...(maxTimes > 1 ? { maxTimes } : {}), deals: mult > 0 || flat > 0 || fray };
 }
+const MAX_WORDS = { two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
 function _dmgLabel(c) {
   if (!c?.deals) return "no damage";
   const parts = [];
   if (c.mult) parts.push(`${c.mult}[D]`);
   if (c.fray) parts.push("fray");
   if (c.flat) parts.push(`${c.flat}`);
-  return parts.join("+") + (c.type ? ` ${c.type}` : "") + (c.times > 1 ? ` ×${c.times}` : "");
+  return parts.join("+") + (c.type ? ` ${c.type}` : "")
+    + (c.per ? ` per ${c.per}` : "") + (c.maxTimes ? ` (max ×${c.maxTimes})` : "")
+    + (c.times > 1 ? ` ×${c.times}` : "");
 }
 
 /*

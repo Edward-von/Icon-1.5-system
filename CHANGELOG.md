@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Assault Wave chiede quanti minion contano (versione 1.15.202)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Assault Wave conta i minion**: "3 piercing damage per minion in the area, up to a maximum of six times, or just 1
+  piercing damage per minion on a successful save" (p.312) postava una sola card da 3 (o da 1) → `_dmgChunk` non
+  leggeva né il "per minion" né il tetto "up to a maximum of six times" (e un "up to a maximum of four times" sarebbe
+  stato preso come "quattro volte fisse") → ora `_dmgChunk` salva cosa si conta (`per`) e il tetto (`maxTimes`), e
+  `postSaveDamage` chiede "quante volte" prima di tirare (al massimo il tetto) e posta una card con quel numero di
+  istanze, ognuna applicata per conto suo (p.92). Con 0 non c'è danno. Sul tiro riuscito il tetto non c'è, perché il
+  manuale lo scrive solo per il tiro fallito. Solo codice.
+
 ## 17 ottobre 2026 — Il danno dei tiri salvezza tiene il tipo piercing / divine (versione 1.15.201)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

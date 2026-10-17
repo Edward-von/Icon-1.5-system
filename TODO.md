@@ -805,10 +805,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R49 — Mote of life: terreno quando perde la blessing** (S): RECYCLE (p.187) dice che la
       mote "becomes a terrain effect when its blessing is removed. Inside, any ally gains regeneration while standing
       in its space"; quando la blessing viene presa non succede niente di automatico.
-- [ ] **Emerso lavorando su R40 — Assault Wave non conta i minion** (S/M): "3 piercing damage per minion in the area,
+- [x] **Emerso lavorando su R40 — Assault Wave non conta i minion** (S/M): "3 piercing damage per minion in the area,
       up to a maximum of six times, or just 1 piercing damage per minion on a successful save" (p.312) posta una sola
       card da 3 (o da 1). Il numero di minion non viene chiesto e il tetto di 6 non viene usato; servirebbe un
       `maxTimes` in `_dmgChunk` e una domanda "quante volte" in `postSaveDamage`.
+(FATTO il 17 ottobre 2026, versione 1.15.202: il danno "per minion, up to a maximum of N times" chiede quante volte e
+      lo ferma al tetto; sul tiro riuscito niente tetto, come scritto a p.312)
 - [x] **Emerso lavorando su R40 — il danno dei tiri salvezza perde piercing e divine** (S): `_dmgChunk` riconosce "3
       piercing damage" ma non ne salva il tipo, e `postSaveDamage` (inflict-status.mjs) non passa `pierce` / `divine`
       alla card. Assault Wave e simili tolgono quindi l'armatura e il weakened anche quando il testo dice piercing
@@ -822,6 +824,7 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R40 — "X damage, twice" sul tiro salvezza tira i dadi più volte** (S): per `times > 1`
       `postSaveDamage` posta N card separate e ognuna tira il proprio [D]. Il manuale (p.92) dice "roll [D] once, then
       apply the total damage … separate times"; `postAbilityDamageCard` ha già `instances` per farlo con un tiro solo.
+- nessuno
 
 ---
 

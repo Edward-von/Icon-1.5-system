@@ -135,6 +135,30 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
   }
   const { damagedie, fray } = _damageStats(source);
   const times = Math.max(1, Number(chunk.times) || 1);
+  // "3 piercing damage per minion in the area, up to a maximum of six times"
+  // (Assault Wave p.312): how many times is the table's count, asked here and
+  // capped at the ceiling. Each instance is applied on its own (p.92).
+  let instances = 1;
+  if (chunk.per || chunk.maxTimes) {
+    const cap = Math.min(10, Number(chunk.maxTimes) || 10);
+    let n = null;
+    try {
+      n = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `How many times? — ${abilityName || "Effect"}` },
+        content: `<label style="display:block">${chunk.per ? `How many ${escapeHTML(chunk.per.replace(/y$/, "ie"))}s count for <strong>${escapeHTML(target.name)}</strong>?` : `How many times does <strong>${escapeHTML(target.name)}</strong> take the damage?`}
+          ${chunk.maxTimes ? `<small>(up to a maximum of ${chunk.maxTimes} times)</small>` : ""}
+          <input type="number" name="n" value="1" min="0" max="${cap}" style="width:100%" autofocus></label>`,
+        ok: { label: "Roll damage", callback: (_e, button) => Number(button.form?.elements?.n?.value) },
+        rejectClose: false,
+      });
+    } catch { n = null; }
+    if (n === null || n === undefined || Number.isNaN(n)) return;
+    instances = Math.min(cap, Math.max(0, Math.floor(n)));
+    if (!instances) {
+      await _chat(target, `<strong>${escapeHTML(target.name)}</strong> takes no damage <small>— ${escapeHTML(abilityName || "effect")}, count 0</small>`);
+      return;
+    }
+  }
   const targets = [{ tokenId: targetTokenId || target.getActiveTokens?.()?.[0]?.id || "", actorUuid: target.uuid, actor: target }];
   for (let i = 0; i < times; i++) {
     await postAbilityDamageCard(source, {
@@ -143,6 +167,7 @@ export async function postSaveDamage({ source, target, targetTokenId = "", abili
       damagedie, fray,
       // Damage type written in the save text ("3 piercing damage", p.104).
       pierce: chunk.type === "piercing", divine: chunk.type === "divine",
+      instances,
       abilityName: `${abilityName || "Effect"}${times > 1 ? ` (${i + 1}/${times})` : ""}`,
       targetName:  target.name,
       targetsOverride: targets,
