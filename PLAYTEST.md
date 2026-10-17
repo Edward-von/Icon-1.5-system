@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R36a — Carte del Seer: l'effetto su ogni carta (17 ottobre 2026, versione 1.15.146)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Creare un mazzo dal preset "Poker Deck", una mano e una pila "Discard"; pescare qualche carta: sotto il nome di
+      ognuna, nella mano, negli scarti e nel mazzo, c'è il suo effetto della p.199 (A The World … K The Sun), con i
+      tooltip sulle keyword.
+- [ ] Aprire il foglio di una singola carta: sotto l'intestazione c'è il riquadro "The Great Wheel (Seer)".
+- [ ] Rinominare una carta in "The Moon" e togliere il valore: mostra ancora l'effetto della Q.
+- [ ] Una carta passata coperta non mostra l'effetto.
+
 ## Emerso R40 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other (17 ottobre 2026, versione 1.15.145)
 
 Setup: solo codice (F5 basta).

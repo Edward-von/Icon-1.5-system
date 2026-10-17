@@ -109,6 +109,7 @@ import { registerMapObjectHooks } from "./module/canvas/map-objects.mjs";
 import { registerTerrainSpaceHooks } from "./module/canvas/terrain-spaces.mjs";
 import { registerAreaMotion } from "./module/canvas/area-motion.mjs";
 import { registerFollowMarks } from "./module/canvas/follow-marks.mjs";
+import { registerGreatWheel } from "./module/combat/great-wheel.mjs";
 import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, statusBlockHtml } from "./module/combat/ability-statuses.mjs";
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble } from "./module/combat/gamble.mjs";
@@ -263,6 +264,9 @@ Hooks.once("init", () => {
 
   // ---- Terrain marks put on a character, following them: Polaris Talent I, Amico, Waking Void (R33d) ----
   registerFollowMarks();
+
+  // ---- Seer's cards: the Great Wheel effect of each card on Foundry's Cards sheets (R36, p.199) ----
+  registerGreatWheel();
 
   // ---- Combat hooks (turn automation, tracker UI) ----
   registerCombatHooks();

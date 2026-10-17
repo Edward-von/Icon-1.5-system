@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Carte del Seer: l'effetto su ogni carta (versione 1.15.146)
+
+### Round di debug del 15 ottobre, R36a
+
+- **Carte del Seer senza effetto**: nei mazzi del Seer (deck, mano, scarti) le carte avevano solo il nome → il sistema
+  non conosceva la tabella The Great Wheel, e i mazzi sono i Cards di Foundry creati nel mondo, senza testo → la
+  tabella del libro (p.199) ora sta nel codice (`module/combat/great-wheel.mjs`): sotto il nome di ogni carta, nei
+  fogli di Foundry e nel foglio della singola carta, compare l'effetto ("Q — The Moon: Ally gains Evasion…") con le
+  keyword evidenziate. La carta si riconosce dal valore (Asso = 1 … Re = 13) o dal nome ("Queen of Hearts", "The
+  Moon"); le carte coperte non mostrano l'effetto. Niente legato alla scheda (come chiedeva Maar), carte del mondo mai
+  modificate, nessun pack. Solo codice.
+
 ## 17 ottobre 2026 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other (versione 1.15.145)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

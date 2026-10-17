@@ -6226,3 +6226,20 @@ ol.chat-log .chat-message,
 .icon-combo-chip:hover:not(:disabled) { border-color: var(--ic-gold); color: var(--ic-text-normal); }
 .icon-foe-action--combo-wait { opacity: .55; }
 .icon-foe-action--combo-wait:hover { opacity: .85; }
+
+/* Seer's Great Wheel (great-wheel.mjs, R36, p.199): the effect of each card on
+   Foundry's Cards sheets (deck / hand / pile) and on a single card's sheet. */
+.icon-great-wheel-row { align-items: flex-start; }
+.icon-great-wheel__name { display: flex; flex-direction: column; gap: 2px; }
+.icon-great-wheel {
+  font-weight: normal; font-size: .82em; line-height: 1.3; white-space: normal;
+  color: var(--color-text-secondary, var(--ic-text-dim));
+}
+.icon-great-wheel strong { color: var(--ic-gold); font-weight: 600; }
+.icon-great-wheel__page { opacity: .7; }
+.icon-great-wheel--sheet {
+  margin: 6px 0; padding: 4px 8px; font-size: .9em;
+  border-left: 3px solid var(--ic-gold); border-radius: 3px; background: rgba(200,150,28,.08);
+}
+.icon-great-wheel--sheet p { margin: 2px 0; }
+.icon-great-wheel__title { font-weight: 600; color: var(--ic-gold); }

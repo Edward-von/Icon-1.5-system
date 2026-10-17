@@ -1242,8 +1242,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       I tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e giocarle non scrive niente in chat.
       Maar non consiglia di legarle alla scheda; con il sistema di carte di Foundry servirebbero gli effetti sulle
       carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms of workload."
-- [ ] **R36a. Il testo di ogni carta** (M)
+- [x] **R36a. Il testo di ogni carta** (M)
       Ogni carta dei mazzi del Seer con il suo effetto preso dal libro (pagina citata).
+(FATTO il 17 ottobre 2026, versione 1.15.146: tabella The Great Wheel p.199 in great-wheel.mjs, mostrata sotto ogni
+      carta dei Cards di Foundry e sul foglio della carta; carta letta dal valore o dal nome. Solo codice, nessun
+      pack.)
 - [ ] **R36b. Carta giocata in chat** (M)
       Giocare una carta dalla mano posta una card in chat con il suo effetto (keyword, Inflict / Gain come le
       abilità) e la sposta negli scarti.
