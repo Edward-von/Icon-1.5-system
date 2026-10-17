@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione (versione 1.15.95)
+
+### Round di debug del 16 ottobre, voce emersa su R41
+
+- **Bersaglio d'attacco di un'area vecchia**: ripiazzando a mano l'area di un'abilità dopo un tiro, Show in Chat (PG,
+  foe e legend) e la finestra del danno potevano partire dal bersaglio scelto per l'area precedente, se quel token era
+  ancora tra i bersagli → il bersaglio scelto era legato solo ad attore + nome dell'azione, non all'area → quando
+  sulla mappa compare una nuova area di quell'abilità (hook `createMeasuredTemplate` in `roll-dialogs.mjs`, sul client
+  che la crea) la scelta precedente viene dimenticata. Il tiro d'attacco che piazza l'area sceglie il bersaglio dopo
+  averla piazzata, quindi la sua scelta resta; un'area già sulla mappa riusata dall'attacco e l'esplosione dei pit non
+  la azzerano. Solo codice.
+
 ## 17 ottobre 2026 — Split Heaven and Hell e Lycanthropy con le parole del libro (versione 1.15.94)
 
 ### Round di debug del 16 ottobre, voce emersa su R39

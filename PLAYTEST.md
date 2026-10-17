@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R41 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione (17 ottobre 2026, versione 1.15.95)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG, abilità d'attacco con area Line o Arc e 2+ token dentro: Roll Attack, scegli il bersaglio B nella finestra.
+      Show in Chat: B ha i bottoni della parte d'attacco, gli altri quelli dell'area.
+- [ ] Stessa abilità: ripiazza l'area a mano col bottone dell'area (B resta tra i bersagli), poi Show in Chat: nessun
+      token è indicato come bersaglio d'attacco, tutti hanno tutti i bottoni.
+- [ ] Stessa prova con un foe e con una legend (azione d'attacco ad area): stesso risultato.
+- [ ] Tiro d'attacco che piazza lui l'area (nessuna area prima) con 2+ token, scegli B: finestra del danno e Show in
+      Chat partono da B.
+- [ ] Auto-hit ad area Line con 2+ token: la finestra chiede il bersaglio, scegli B, e il danno parte da B.
+- [ ] Tiro d'attacco con l'area già sulla mappa (riusata): il bersaglio scelto prima viene ancora proposto.
+- [ ] Holy Talent I o PURGATORIO: dopo l'attacco, piazza "Medium Blast (on pits)": Show in Chat tiene il bersaglio
+      d'attacco scelto prima.
+
 ## Emerso R39 — Split Heaven and Hell e Lycanthropy con le parole del libro (17 ottobre 2026, versione 1.15.94)
 
 Setup: pack jobs cambiato (copia con Foundry chiuso), poi apri il mondo: la migrazione 34 parte da sola.

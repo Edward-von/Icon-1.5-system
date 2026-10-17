@@ -35,6 +35,17 @@ const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
 const _lastAttackTarget = new Map();
 const _attackKey = (actor, ab) => `${actor?.uuid ?? ""}|${String(ab?.name ?? "").replace(/ \(Combo\)$/, "")}`;
 
+// A new area of the ability on the map (placed by hand, or by the attack that
+// is about to pick its target: the pick comes after the placement) forgets the
+// target picked for the earlier area, so Show in Chat / the damage dialog do
+// not start on a token chosen for a different area. The pits' explosion is
+// not the ability's own area (its attack target stays).
+Hooks.on("createMeasuredTemplate", (doc, _options, userId) => {
+  const f = doc.flags?.["icon-system"];
+  if (userId !== game.userId || !f?.cells || f.pitBlast || !f.actorUuid) return;
+  _lastAttackTarget.delete(_attackKey({ uuid: f.actorUuid }, { name: f.abilityName }));
+});
+
 /* -------------------------------------------------- */
 /*  Shared pieces                                      */
 /* -------------------------------------------------- */

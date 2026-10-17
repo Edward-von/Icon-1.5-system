@@ -507,10 +507,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.88: Show in Chat delle azioni d'attacco foe / legend usa come bersaglio
       d'attacco il token al centro dell'area Blast / Burst ancora sulla mappa, altrimenti quello scelto nel dialog
       d'attacco, e divide le righe Inflict come sulla scheda PG. Solo codice.)
-- [ ] **Emerso lavorando su R41 — bersaglio d'attacco ricordato per nome dell'azione** (S): `rememberedAttackTarget`
+- [x] **Emerso lavorando su R41 — bersaglio d'attacco ricordato per nome dell'azione** (S): `rememberedAttackTarget`
       lega il bersaglio ad attore + nome dell'azione, non all'area: se l'area viene ripiazzata a mano dopo un vecchio
       tiro, Show in Chat (PG, foe e legend) può usare il bersaglio scelto per l'area precedente, se quel token è
       ancora tra i bersagli. Si potrebbe azzerare la scelta quando si piazza una nuova area.
+(FATTO il 17 ottobre 2026, versione 1.15.95: una nuova area dell'abilità sulla mappa fa dimenticare il bersaglio
+      scelto per l'area precedente; il tiro che piazza l'area sceglie dopo, quindi la sua scelta resta; l'esplosione
+      dei pit non la azzera. Solo codice.)
 - [ ] **Emerso lavorando su R33a3 — Aethershard: il danno dello shard letto come danno dell'abilità** (S, da
       verificare): `parseAbilityDamage` sulla descrizione di Aethershard (vecchia e nuova forma) dà `dealsDamage: true`
       con Hit 2 piercing, cioè i "2 piercing damage" del Summon Effect (che li infligge l'area che include lo shard, non
@@ -547,6 +550,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       prima quello.
 - [ ] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
       foe" (p.178) non crea i pit sotto i foe pacified: oggi si mettono a mano con il chip.
+- [ ] **Emerso lavorando su R41 — area trascinata** (S): se l'area di una Line o di un Arc viene spostata
+      trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
+      è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
+      controllare che il token sia dentro le caselle dell'area.
 
 ---
 
