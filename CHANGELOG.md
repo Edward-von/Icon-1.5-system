@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Testo del mark di Polaris e Party Favor (versione 1.15.131)
+
+### Round di debug del 15 ottobre, voce emersa su R17
+
+- **Testo del mark di Polaris / Party Favor**: il bottone Mark metteva nel mark tutto il testo dell'abilità (Terrain
+  Effect + Gamble) → senza blocco "Mark:" il bottone (`#onAbilityMark`) prendeva tutte le sezioni della descrizione →
+  ora prende la frase del talento / della mastery che crea il mark ("Talent I: You can cause one of your Polaris to
+  follow a character as a mark…", "Mastery: Amico: …"), come già faceva il chip "On a character". Nel pack riguarda
+  solo Polaris e Party Favor. Solo codice.
+
 ## 17 ottobre 2026 — "Gains True Strike" non è più uno status (versione 1.15.130)
 
 ### Round di debug del 15 ottobre, voce emersa su R1

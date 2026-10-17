@@ -1284,9 +1284,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       verificato): la card degli attacchi auto-hit (True Strike ecc.) non mostra né Exceed né il talento; la mastery
       sbloccata non entra in nessuna card dell'attacco (solo nello Show in Chat). Da controllare se ci sono mastery
       che aggiungono Hit / Exceed / Slay all'attacco e, se sì, trattarle come i talenti.
-- [ ] **Emerso lavorando su R17 — testo del mark per Polaris / Party Favor** (S): il bottone Mark di un'abilità senza
+- [x] **Emerso lavorando su R17 — testo del mark per Polaris / Party Favor** (S): il bottone Mark di un'abilità senza
       blocco "Mark:" mette nel mark tutto il testo dell'abilità (Terrain Effect + Gamble di Polaris); andrebbe usato
       il testo del talento / della mastery che crea il mark. Da verificare nel playtest R17.
+(FATTO il 17 ottobre 2026, versione 1.15.131: senza blocco "Mark:", il bottone Mark usa la frase del talento / della
+      mastery che crea il mark (Polaris Talent I, Amico di Party Favor), come il chip "On a character". Solo codice.)
 - [ ] **Emerso lavorando su R19 — Painkiller: l'aura di Sweet Torment dovrebbe durare per sempre** (S): con la mastery
       di Bleak Mercy sbloccata ("Sweet Torment's aura lasts indefinitely", p.144) la durata dell'aura viene ancora
       letta dal testo della combo ("until the end of your next turn") e l'aura scade. Da verificare in gioco.

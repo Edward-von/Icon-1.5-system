@@ -26,6 +26,7 @@ import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
 import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
+import { characterSpecOf } from "../../canvas/follow-marks.mjs";
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
 import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
@@ -2315,7 +2316,11 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
     const sections = parseAbilitySections(item.system.description).sections;
+    // No "Mark:" block, but a talent / mastery makes the space a mark (Polaris Talent I, Party Favor's Amico):
+    // its own sentence, as the "On a character" chip writes it (follow-marks.mjs), not the whole ability text.
+    const oc = characterSpecOf(item)?.onCharacter;
     const text = sections.find(sec => /\bMark$/i.test(sec.label))?.text
+      ?? (oc?.mark ? `${oc.source ? `${oc.source}: ` : ""}${oc.rule}` : null)
       ?? sections.map(sec => `${sec.label}: ${sec.text}`).join(" ");
     _log(`abilityMark — "${item.name}" on ${targets[0].name}`);
     const multi = markFromTags(resolveAbilityTags(item.system, { comboMode: this._comboArmed(item) })).multi;

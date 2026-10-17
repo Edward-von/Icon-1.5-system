@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R17 — Testo del mark di Polaris e Party Favor (17 ottobre 2026, versione 1.15.131)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Polaris con Talent I, un token bersagliato, Mark: il mark e la sua card in chat mostrano solo la frase del
+      Talent I, e lo spazio Polaris segue il personaggio.
+- [ ] Party Favor con Amico sbloccata: stessa cosa, con il testo di Amico, e la card Detonate alla fine dei turni dopo
+      il tuo.
+- [ ] Un'abilità con un vero blocco "Mark:" (es. Sisyphus) mostra ancora il suo testo.
+
 ## Emerso R1 — "Gains True Strike" non è più uno status (17 ottobre 2026, versione 1.15.130)
 
 Setup: solo codice (F5 basta).
