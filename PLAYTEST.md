@@ -1703,6 +1703,22 @@ Setup: solo codice (F5 basta).
       end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
 - [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
 
+## voce emersa su R48 — L'aura di Fulminate finisce con il mark (17 ottobre 2026, versione 1.15.80)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Fulminate, due foe sulla scena. Bersaglia il foe A → Mark: compare "Marked — Fulminate" su A. Con A
+      ancora bersagliato, bottone area di Fulminate → Aura 2: l'aura va attorno ad A e lo segue quando si muove.
+- [ ] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark.
+- [ ] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
+      sparisce (quella di B si piazza a mano con il bottone area).
+- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce.
+- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark.
+- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento.
+- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso.
+- [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
+      data a un alleato restano dove sono quando si toglie un mark qualsiasi.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

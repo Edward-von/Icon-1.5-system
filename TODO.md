@@ -377,9 +377,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       1 piercing"), GRAM di Nothung ("Slay or Infuse 3": in più il blocco "Slay or Infuse" non ha il bottone Infuse,
       `infuseCost` accetta solo "Infuse N"). Con EXCALIBUR il danno di GRAM e dell'Effect di Nothung andrebbe divine,
       ma oggi non è proposto (vedi anche "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
-- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non segue il mark** (S): "The character gains aura 2 while
+- [x] **Emerso lavorando su R48 — l'aura di Fulminate non segue il mark** (S): "The character gains aura 2 while
       marked" (p.226): l'aura piazzata sul personaggio marcato non sparisce quando il mark viene tolto o passa a un altro
       bersaglio (nessuna scadenza "while marked"); si toglie a mano. Si potrebbe legarla al mark di Fulminate.
+(FATTO il 17 ottobre 2026, versione 1.15.80: l'aura piazzata su un altro personaggio da un testo con "while marked" si
+      toglie da sola quando finisce il mark di quell'abilità su quel personaggio, in qualunque modo finisca; le aure
+      piazzate prima della versione si tolgono ancora a mano.)
 - [x] **Emerso lavorando su R48 — aure degli oggetti** (S/M, con R33) (FATTO il 16 ottobre 2026, versione 1.15.65, con
       R33a: l'Aura 2 dello Shrine si piazza attorno al suo token e lo segue): Spirit Shrine ("Shrine — Height 1 object. Object
       Effect: Aura 2", p.192) non ha bottone area: l'aura va attorno al santuario, che è un oggetto da piazzare (R33). Il
@@ -430,6 +433,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (p.127) dice "depending on their distance from you" (libro: "their distance on the line from you") e "(maximum 3
       width)" (libro: ", to a maximum of 3 width,"); Lycanthropy (p.168) ha perso "(including this one!)" dopo "abilities,
       summons, or actions" nel secondo "•". Pack + migrazione sulle copie.
+- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, da decidere): quando
+      il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
+      con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
 
 ---
 

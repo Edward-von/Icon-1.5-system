@@ -869,6 +869,12 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // (Fulminate p.226) goes around that token — the one the user targeted —
   // and follows it instead of the user.
   const holder = isAura ? auraHolderToken(text, token) : token;
+  // "The character gains aura 2 while marked" (Fulminate p.226): the aura on the
+  // marked token lasts as long as this ability's mark on it (see the
+  // deleteActiveEffect hook in registerAreaTemplates).
+  const whileMarked = isAura && holder !== token && holder.actor
+    && /\bwhile marked\b/i.test(String(text ?? "").replace(/<[^>]+>/g, " "))
+    ? { sourceActorId: actor.id, abilityKey: abilityKey ?? "", targetActorUuid: holder.actor.uuid } : null;
   const sourceCells = tokenCells(holder.document);
   let cells, originCell;
   // An area centred on a character (Death's Slay / Finishing Blow, p.155:
@@ -940,6 +946,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       followTokenId: isAura ? holder.id : null,
       // "until the end of your next turn": counted down by tickAuraExpiry
       expiry,
+      // Removed with the mark it depends on ("while marked")
+      ...(whileMarked ? { whileMarked } : {}),
       // R33c: a terrain effect's spaces (dangerous, difficult, what entering sets off), read at movement by
       // terrain-spaces.mjs as for its single spaces
       ...(terrain && !isAura ? { terrain: { group: "", source: "", ...terrain, kind: "area", creatorId: actor.id, itemId: abilityKey ?? "" } } : {}),
@@ -1540,6 +1548,25 @@ export function registerAreaTemplates() {
     const inArea = new Set(tokensInCells(cells).map(t => t.id));
     for (const t of Array.from(game.user.targets)) {
       if (inArea.has(t.id)) t.setTarget(false, { releaseOthers: false });
+    }
+  });
+  // An aura held "while marked" (Fulminate p.226) ends with its mark: removed
+  // by hand, moved to another character by marking again, the marker defeated,
+  // end of combat. Active GM only (it can delete anyone's template).
+  Hooks.on("deleteActiveEffect", async (effect) => {
+    const mark = effect?.getFlag?.(FLAG_NS, "mark");
+    if (!mark?.sourceActorId || game.users.activeGM?.id !== game.user.id) return;
+    const targetUuid = effect.parent?.uuid;
+    for (const scene of game.scenes ?? []) {
+      const ids = scene.templates.filter(t => {
+        const w = t.flags?.[FLAG_NS]?.whileMarked;
+        return w && w.sourceActorId === mark.sourceActorId && w.abilityKey === mark.abilityKey && w.targetActorUuid === targetUuid;
+      }).map(t => t.id);
+      if (!ids.length) continue;
+      try {
+        await scene.deleteEmbeddedDocuments("MeasuredTemplate", ids);
+        _log(`mark ${mark.abilityName} on ${effect.parent?.name} ended: removed ${ids.length} aura(s) held while marked`);
+      } catch (err) { console.warn("[ICON | AreaTemplates] could not remove a while-marked aura", err); }
     }
   });
   // + / − with the mouse over an aura on the map: change its size (resizeAura).

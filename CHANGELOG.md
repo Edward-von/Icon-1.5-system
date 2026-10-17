@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'aura di Fulminate finisce con il mark (versione 1.15.80)
+
+### Round di debug del 16 ottobre, voce emersa su R48
+
+- **Aura di Fulminate sul personaggio marcato**: l'Aura 2 (o 3 / 1 con i talenti) piazzata attorno al personaggio
+  marcato restava sulla mappa quando il mark finiva o passava a un altro bersaglio, e andava tolta a mano ("The
+  character gains aura 2 while marked", p.226) → l'aura non sapeva di dipendere dal mark → ora un'aura data a un altro
+  personaggio da un testo che dice "while marked" si ricorda di quale mark dipende (chi ha marcato, quale abilità, su
+  chi), e quando quel mark finisce il GM attivo la toglie dalla mappa da solo: tolto dalla ✕, marcato un altro
+  bersaglio, chi ha marcato sconfitto, fine del combattimento. Le aure piazzate prima di questa versione si tolgono
+  ancora a mano.
+
 ## 17 ottobre 2026 — Avvio del combat senza promemoria "End of round 0" (versione 1.15.79)
 
 ### Round di debug del 16 ottobre, voce emersa su R62
