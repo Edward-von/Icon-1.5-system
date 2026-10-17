@@ -1876,6 +1876,18 @@ details[open] > .icon-basic-actions__summary::before {
 .icon-limit-break__effect p:last-child { margin-bottom: 0; }
 .icon-limit-break__tags { font-weight: bold; font-variant: small-caps; letter-spacing: .03em; opacity: .85; }
 .icon-limit-break__flavor { font-size: 0.85em; font-style: italic; opacity: .8; margin-bottom: 4px; }
+/* The Ultimate (p.113), under the effect; dimmed until chapter 3 */
+.icon-limit-break__ultimate {
+  font-size: 0.85em;
+  color: var(--ic-text-normal);
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px dashed var(--class-color, var(--ic-border-vis));
+}
+.icon-limit-break__ultimate p { margin: 0 0 4px; }
+.icon-limit-break__ultimate p:last-child { margin-bottom: 0; }
+.icon-limit-break__ultimate small { margin-left: 6px; opacity: .8; }
+.icon-limit-break__ultimate--locked { opacity: .55; }
 
 /* ============================================================
    25. Relics

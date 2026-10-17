@@ -1736,6 +1736,24 @@ Setup: solo codice (F5 basta).
       rimborsa ancora Aether e hp (R64).
 - [ ] "End Encounter" → "No": l'infusione resta armata.
 
+## voce emersa su R37 — L'Ultimate dei Limit Break compare su scheda e card (17 ottobre 2026, versione 1.15.82)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG al capitolo 1 con un Limit Break dal compendio (es. Helion del Bastion): nel riquadro Limit Break della tab
+      Combat, sotto l'Effect, c'è un blocco "Ultimate" con il testo di Perfect Helion, sbiadito e con il lucchetto
+      "Chapter 3".
+- [ ] Stesso PG, "Use Limit Break": la card in chat mostra solo l'Effect, senza Ultimate.
+- [ ] Porta il PG al capitolo 3: il blocco Ultimate sulla scheda non è più sbiadito e il lucchetto sparisce.
+- [ ] Al capitolo 3, "Use Limit Break": la card mostra l'Effect e sotto il blocco "Ultimate" con il testo. Se
+      l'Ultimate nomina degli status (es. Dread Mock del Mock), compaiono i bottoni nel gruppo "Ultimate", oltre a
+      quelli dell'Effect.
+- [ ] Al capitolo 3, Wright con Infuse armato (es. Meteor): la card mostra Effect, Ultimate, poi la riga dell'Infuse;
+      la Resolve scalata è quella dell'Infuse.
+- [ ] Un Limit Break con il campo Ultimate vuoto (item fatto a mano): sulla scheda non compare nessun blocco Ultimate
+      vuoto, e la card resta come prima.
+- [ ] Il Damage Roll non cambia: al capitolo 3 propone ancora il danno dell'Ultimate sotto Other, al capitolo 1 no.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'Ultimate dei Limit Break compare su scheda e card (versione 1.15.82)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Ultimate del Limit Break invisibile**: il riquadro Limit Break della scheda e la card di "Use Limit Break"
+  mostravano solo l'Effect; l'Ultimate (p.113, sbloccato entrando nel capitolo 3) non compariva da nessuna parte,
+  nemmeno al capitolo 3, anche se il Damage Roll e le aree ne leggevano già il testo → il template della scheda e il
+  messaggio in chat leggevano solo il campo `effect` e ignoravano `ultimate` → ora la scheda mostra sotto l'Effect un
+  blocco "Ultimate", impaginato come l'Effect, sbiadito e con il lucchetto "Chapter 3" finché il personaggio non è al
+  capitolo 3. Dal capitolo 3 (la stessa soglia del Damage Roll) la card di "Use Limit Break" aggiunge il testo
+  dell'Ultimate dopo l'Effect, con i bottoni degli status che infligge o concede (gruppo "Ultimate").
+
 ## 17 ottobre 2026 — L'infusione armata non sopravvive al combattimento (versione 1.15.81)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b

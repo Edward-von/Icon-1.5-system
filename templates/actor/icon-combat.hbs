@@ -865,6 +865,13 @@
         </div>
         {{#if limitBreakFlavor}}<div class="icon-limit-break__flavor">{{{limitBreakFlavor}}}</div>{{/if}}
         <div class="icon-limit-break__effect">{{{limitBreakEffect}}}</div>
+        {{#if limitBreakUltimate}}
+          <div class="icon-limit-break__ultimate {{#unless limitBreakUltimateUnlocked}}icon-limit-break__ultimate--locked{{/unless}}">
+            <p class="icon-limit-break__ultimate-label"><strong>Ultimate</strong>
+              {{#unless limitBreakUltimateUnlocked}}<small title="p.113: unlocked on entering chapter 3"><i class="fa-solid fa-lock"></i> Chapter 3</small>{{/unless}}</p>
+            {{{limitBreakUltimate}}}
+          </div>
+        {{/if}}
         {{#if isEditable}}
           <button type="button" class="icon-btn icon-btn--use" data-action="useLimitBreak">
             Use Limit Break

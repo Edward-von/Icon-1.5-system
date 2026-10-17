@@ -340,9 +340,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 
 ### Emersi lavorando
 
-- [ ] **Emerso lavorando su R37 — l'Ultimate dei Limit Break non si vede** (S/M): il riquadro Limit Break della
+- [x] **Emerso lavorando su R37 — l'Ultimate dei Limit Break non si vede** (S/M): il riquadro Limit Break della
       scheda e la card di "Use Limit Break" mostrano solo `effect`; il campo `ultimate` (p.113, sbloccato al
       capitolo 3) non compare da nessuna parte, nemmeno al capitolo 3. Il Damage Roll di R37 ne legge già il danno.
+(FATTO il 17 ottobre 2026, versione 1.15.82: la scheda mostra l'Ultimate sotto l'Effect, sbiadito con lucchetto finché
+      system.combat.chapter è sotto 3; dal capitolo 3, stessa soglia di #limitBreakTexts e del Damage Roll di R37, la
+      card "Use Limit Break" ne aggiunge testo e bottoni degli status. File: templates/actor/icon-combat.hbs,
+      module/actor/sheets/IconSheet.mjs, css/icon.css.)
 - [ ] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, da decidere): Gigantas Crusher
       (Colossus, "50% of their max hp as divine damage") e Split Heaven and Hell (Demon Slayer, "100% / 50% / 25% of
       max hp") non hanno un danno tirabile; Gigantas Crusher propone solo il "divine fray damage" dei Legend. Valutare
@@ -446,6 +450,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       combattimento la seconda volta l'abilità esce di nuovo infusa gratis. Va scelto quando consumarla (alla card o
       dopo danno e area, che leggono ancora `armedInfusion`); anche il commento in testa a `helpers/infuse.mjs` ("It
       clears when the ability is rolled") oggi non è vero.
+- [ ] **Emerso lavorando su R37 — bottoni di status dell'Infuse forse doppi sulla card del Limit Break** (S, da
+      verificare): in `#onUseLimitBreak` gli status si cercano su `effect` + testo dell'Infuse armato; se il testo
+      dell'Infuse è già dentro `effect` (come sembra dai blocchi "Infuse" di `enrichLimitBreakText`), i suoi status
+      potrebbero comparire due volte. Lo stesso con l'Ultimate quando il suo Infuse (Meteor) è armato.
 
 ---
 

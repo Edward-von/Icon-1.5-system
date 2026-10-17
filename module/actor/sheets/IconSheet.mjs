@@ -342,6 +342,12 @@ export class IconSheet extends BaseActorSheet {
     // Its text in the book's layout (R39): tag line, flavour, one labelled block per line.
     context.limitBreakEffect = context.limitBreakItem
       ? await enrichLimitBreakText(context.limitBreakItem.system.effect, { enrich: t => this._enrichAbility(t) }) : "";
+    // The Ultimate (p.113: "Upon entering chapter 3, you unlock the Ultimate
+    // limit break for your job, which improves it"): always shown, dimmed and
+    // locked before chapter 3 — the same threshold as #limitBreakTexts.
+    context.limitBreakUltimate = context.limitBreakItem?.system?.ultimate
+      ? await enrichLimitBreakText(context.limitBreakItem.system.ultimate, { enrich: t => this._enrichAbility(t) }) : "";
+    context.limitBreakUltimateUnlocked = (actor.system.combat?.chapter ?? 1) >= 3;
     context.limitBreakFlavor = context.limitBreakItem?.system?.description
       ? await this._enrichAbility(context.limitBreakItem.system.description, { keywords: false }) : "";
     // "1action" / "free" are storage keys — the panel prints "1 Action" / "Free Action".
@@ -3375,13 +3381,20 @@ export class IconSheet extends BaseActorSheet {
     const spent = [personalSpend ? `${personalSpend} personal` : "", partySpend ? `${partySpend} party` : ""].filter(Boolean).join(" + ");
     // The statuses the limit break inflicts or grants get their buttons, like an
     // ability card (Mock: slashed+, weakened+, hatred+ "until the end of their next turn").
-    const statusHtml = statusBlockHtml(parseInflictedStatuses(`${lb.system.effect ?? ""} ${infusion?.text ?? ""}`, { sourceName: this.document.name, label: "Effect" }), { source: this.document, abilityName: lb.name });
+    // From chapter 3 the Ultimate improves it (p.113): its text and statuses join the card.
+    const { ultimate } = IconSheet.#limitBreakTexts(this.document, lb);
+    const entries = parseInflictedStatuses(`${lb.system.effect ?? ""} ${infusion?.text ?? ""}`, { sourceName: this.document.name, label: "Effect" });
+    if (ultimate) entries.push(...parseInflictedStatuses(ultimate, { sourceName: this.document.name, label: "Ultimate" }));
+    const statusHtml = statusBlockHtml(entries, { source: this.document, abilityName: lb.name });
+    const ultimateHtml = ultimate
+      ? `<div class="icon-limit-break__ultimate"><p class="icon-limit-break__ultimate-label"><strong>Ultimate</strong></p>${await enrichLimitBreakText(ultimate, { enrich: t => this._enrichAbility(t) })}</div>`
+      : "";
     const infuseHtml = infusion
       ? `<div class="icon-chat-card__desc"><strong><i class="fa-solid fa-wand-sparkles"></i> ${escapeHTML(infusion.label)}${infusion.name ? ` — ${escapeHTML(infusion.name)}` : ""}</strong> (${escapeHTML(infusion.source)}): ${escapeHTML(infusion.name ? infusion.text.replace(/^[^—]*—\s*/, "") : infusion.text)}</div>`
       : "";
     const title = infusion?.name ? `${lb.name} — ${infusion.name}` : lb.name;
     const effectHtml = await enrichLimitBreakText(lb.system.effect, { enrich: t => this._enrichAbility(t) });
-    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<div class="icon-limit-break__effect">${effectHtml}</div>${infuseHtml}${statusHtml}` });
+    await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<div class="icon-limit-break__effect">${effectHtml}</div>${ultimateHtml}${infuseHtml}${statusHtml}` });
   }
 
   static async #onAddJob(event, target) {
