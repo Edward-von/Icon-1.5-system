@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Le caselle di terreno guardano anche gli spazi attraversati (17 ottobre 2026, versione 1.15.176)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Trascinare un token con il ruler attraverso una casella Dangerous e fermarlo oltre: compare la domanda "passed
+      through … Take 2 damage", una volta sola nel turno.
+- [ ] Attraversare una mote di Symphony senza fermarsi: la card dice "passes through" e ha Detonate.
+- [ ] Attraversare un Difficult: avviso "crosses difficult terrain … +1".
+- [ ] Teletrasporto (blink) sopra le stesse caselle: nessuna domanda e nessuna card.
+- [ ] Attraversare un'area con status "inside" senza fermarsi: nessun bottone status.
+
 ## R33b2 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (17 ottobre 2026, versione 1.15.175)
 
 Setup: solo codice (F5 basta).

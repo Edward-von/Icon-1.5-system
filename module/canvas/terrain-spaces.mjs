@@ -563,35 +563,43 @@ function turnKey() {
 
 /**
  * After a token moved (by this user): dangerous terrain entered or left, named marks entered (or left, when the text
- * says "entering or exiting"). Only the start and the end of the move are looked at.
+ * says "entering or exiting"). The spaces crossed on the way count too (R33b2: map-objects.mjs movePath, Foundry's
+ * waypoints of the move): a space only passed through is entered and exited.
+ * @param {object|null} movement  Foundry's movement data of this update (options.movement[id])
  */
-async function offerTerrainOnMove(td, prev, to) {
+async function offerTerrainOnMove(td, prev, to, movement = null) {
   const scene = td.parent;
   if (!scene || !td.actor) return;
   const before = cellsOf(td, prev);
   const after = cellsOf(td, to);
   if (before[0].i === after[0].i && before[0].j === after[0].j) return;
   const hostile = isHostile(td);
+  // The footprints in between (start and end left out); none for a move made by code or a teleport.
+  const { movePath } = await import("./map-objects.mjs");
+  const mid = movePath(td, prev, movement, before, after).slice(1, -1);
   let danger = null;
   const reminders = [];
   const inside = [];
   for (const { doc, f, keys } of terrainOn(scene)) {
     const was = touches(before, keys), now = touches(after, keys);
-    if (was === now) continue;
+    const crossed = !was && !now && mid.some(fp => touches(fp, keys));
+    if (was === now && !crossed) continue;
+    const entered = now || crossed;
     // R33b2: "Difficult Terrain - Costs +1 space of movement to exit" (p.89): a reminder, the movement isn't counted.
-    if (f.difficult && was && !now && !(f.foesOnly && !hostile))
-      ui.notifications.info(`${td.name} leaves difficult terrain (${f.label}): exiting costs +1 space of movement (p.89).`);
-    if (f.dangerous && (!f.foesOnly || hostile) && !danger) danger = { f, entered: now, doc };
-    if (f.onEnter && (now || f.enterExit) && (!f.enterFoes || hostile) && !(f.enterAllies && hostile)) reminders.push({ doc, f, entered: now });
-    if (f.inside?.length) inside.push({ doc, f, entered: now });
+    if (f.difficult && ((was && !now) || crossed))
+      ui.notifications.info(`${td.name} ${crossed ? "crosses" : "leaves"} difficult terrain (${f.label}): exiting costs +1 space of movement (p.89).`);
+    if (f.dangerous && (!f.foesOnly || hostile) && !danger) danger = { f, entered, crossed, doc };
+    if (f.onEnter && (entered || f.enterExit) && (!f.enterFoes || hostile) && !(f.enterAllies && hostile)) reminders.push({ doc, f, entered, crossed });
+    // R33c2's statuses for who is inside: only a real enter / leave, not a space passed through.
+    if (f.inside?.length && was !== now) inside.push({ doc, f, entered: now });
   }
   if (inside.length) await offerInsideEffects(td, inside);
   if (reminders.length) {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ token: td }),
-      content: `<div class="icon-chat-card icon-chat-card--terrain">${reminders.map(({ doc, f, entered }) => {
+      content: `<div class="icon-chat-card icon-chat-card--terrain">${reminders.map(({ doc, f, entered, crossed }) => {
         const by = doc.flags[NS].abilityName;
-        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${entered ? detonateButton(scene, doc, f, td) : ""} ${removeSpacesButton(scene, [doc])}</div>`;
+        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${crossed ? "passes through" : entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${entered ? detonateButton(scene, doc, f, td) : ""} ${removeSpacesButton(scene, [doc])}</div>`;
       }).join("")}</div>`,
     });
   }
@@ -611,7 +619,7 @@ async function offerTerrainOnMove(td, prev, to) {
   const by = danger.doc.flags[NS].abilityName;
   const ok = await foundry.applications.api.DialogV2.confirm({
     window: { title: "Dangerous terrain" },
-    content: `<p><strong>${esc(td.name)}</strong> ${danger.entered ? "entered" : "left"} a dangerous terrain space (${esc(danger.f.label)}${by ? `, ${esc(by)}` : ""}).</p>
+    content: `<p><strong>${esc(td.name)}</strong> ${danger.crossed ? "passed through" : danger.entered ? "entered" : "left"} a dangerous terrain space (${esc(danger.f.label)}${by ? `, ${esc(by)}` : ""}).</p>
       <p>Take <strong>${amount} piercing damage</strong>${extra ? ` (2, +${extra} from DARKTIDE: marked foes take more damage from dangerous terrain)` : ""}, ignoring armor and vigor? Only once a turn, even entering more dangerous spaces (p.89).</p>`,
     yes: { label: `Take ${amount} damage` }, no: { label: "Not this time" }, rejectClose: false,
   }) ?? false;
@@ -1368,7 +1376,7 @@ export function registerTerrainSpaceHooks() {
     // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet.
     if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
+    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });
 
   // R33c2: the status buttons of a terrain-effect area entered or left (offerInsideEffects).

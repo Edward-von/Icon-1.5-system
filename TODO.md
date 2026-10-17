@@ -1464,6 +1464,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       personaggio per personaggio.
 - [ ] **Emerso lavorando su R33b2 — Elden Rune Talent I / II e ARKENRUNE** (S): teletrasporto di 3 nella rune, infuse
       ridotto e Arkenrune small blast non cancellabile (p.209): solo testo.
+- [ ] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
+      "centered on them" (p.178), ma il token ha già finito il movimento: la Small Blast va dove si è fermato, non
+      sulla mote attraversata.
 
 ---
 

@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Le caselle di terreno guardano anche gli spazi attraversati (versione 1.15.176)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Movimento attraversato**: passare sopra un dangerous, una mote / mine o un difficult senza fermarsi non faceva
+  nulla → `offerTerrainOnMove` guardava solo la casella di partenza e quella di arrivo → ora legge il percorso con il
+  lettore dei waypoint degli oggetti (`movePath` di `map-objects.mjs`, ora esportato, nessuna seconda versione): una
+  casella solo attraversata conta come entrata e uscita (domanda dei 2 danni, sempre una volta a turno; promemoria
+  "passes through" con Detonate; avviso del difficult). I teletrasporti (blink / displace) e gli spostamenti fatti dal
+  codice non attraversano nulla. Gli status "inside" delle aree restano legati solo a entrata e uscita vere. Solo
+  codice.
+
 ## 17 ottobre 2026 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (versione 1.15.175)
 
 ### Round di debug del 15 ottobre, R33b2

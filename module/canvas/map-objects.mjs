@@ -982,7 +982,7 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
  * (Foundry's "blink" / "displace" action), which crosses nothing. Without it (a move made by code), only the start
  * and the end.
  */
-function movePath(td, prev, movement, before, after) {
+export function movePath(td, prev, movement, before, after) {
   const grid = td.parent.grid;
   const half = grid.size / 2;
   const ok = (p) => Number.isFinite(p?.x) && Number.isFinite(p?.y);
