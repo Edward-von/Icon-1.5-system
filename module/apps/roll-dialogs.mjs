@@ -325,6 +325,16 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
       notes.push(`Inside ${areas.join(", ")}: all characters count as having evasion`);
     }
   } catch (err) { console.warn("[ICON | roll-dialogs] area evasion check failed", err); }
+  // Elden Rune (p.209): standing on the rune, the attack's listed range is +3; GREAT RUNE's shatter on the main target.
+  try {
+    const { rangeWithRune, runeAttackShatter } = await import("../canvas/terrain-spaces.mjs");
+    const { rangeFromTags } = await import("../canvas/area-templates.mjs");
+    // The tags' range: a placed area's range already has the bonus (placeAreaTemplate).
+    const rune = rangeWithRune(actor, rangeFromTags(ab.tags ?? []));
+    if (rune.note) notes.push(rune.note);
+    const great = runeAttackShatter(actor);
+    if (great) notes.push(`${great.label}: ${great.rule} (button on the card)`);
+  } catch (err) { console.warn("[ICON | roll-dialogs] Elden Rune check failed", err); }
 
   // The attack's own "true strike" / "unerring" tag counts as much as the status (p.117).
   const ignoredEvasion = ignoresEvasion(actor, ab.tags ?? []);

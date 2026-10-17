@@ -963,6 +963,15 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   }
 
   area = { ...area };
+  // Elden Rune (p.209): "While standing on an Elden Rune space, the range of all abilities with a listed range is
+  // increased by +3" (an ally in an ARKENRUNE too). Not an area drawn from the target, which has no range of its own.
+  if (!area.fromTarget && !area.mapEdge) {
+    try {
+      const { rangeWithRune } = await import("./terrain-spaces.mjs");
+      const r = rangeWithRune(actor, area.range);
+      if (r.note) { area.range = r.range; ui.notifications.info(`${abilityName || "Area"} — ${r.note}.`); }
+    } catch (err) { console.warn("[ICON | AreaTemplates] Elden Rune range check failed", err); }
+  }
   if ((area.kind === "line" || area.kind === "arc" || area.kind === "aura") && !area.size) {
     const size = await promptAreaSize(area);
     if (!size) return null;

@@ -2749,6 +2749,13 @@ export class IconSheet extends BaseActorSheet {
     // ab.tags / ab.isAutoHit already come from the combo version (_getAbilityDetail).
     const comboArmed = ab.comboArmed;
     const statusEntries = abilityStatusEntries(this._comboSystem(this.document.items.get(itemId)), { comboMode: comboArmed, sourceName: this.document.name });
+    // GREAT RUNE (Elden Rune's Infuse 3, p.209): "your attacks also shatter their main target while standing in this
+    // rune" — a Shattered button for the attack target, on top of the ability's own.
+    try {
+      const { runeAttackShatter } = await import("../../canvas/terrain-spaces.mjs");
+      const great = runeAttackShatter(this.document);
+      if (great) statusEntries.push(...parseInflictedStatuses("Attack target is shattered.", { label: great.label, sourceName: this.document.name, splitBlocks: false }));
+    } catch (err) { console.warn("[ICON | IconSheet] GREAT RUNE check failed", err); }
 
     // The unlocked talent's lines, for the auto-hit card and the attack card alike.
     const talentName = ab.hasTalent1 ? "Talent I" : ab.hasTalent2 ? "Talent II" : "";

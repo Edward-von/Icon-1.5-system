@@ -112,13 +112,17 @@ export async function markRangeConfirmed(actor, { name, tags = [], text = "", it
 async function rangeConfirmed(actor, name, range, target) {
   const own = actor.getActiveTokens?.(false, false)?.find(t => t.document?.parent === target.document?.parent);
   if (!range || !Number.isFinite(range) || !own) return true;
+  // Elden Rune (p.209): standing on the rune, a listed range is increased by +3.
+  const { rangeWithRune } = await import("./terrain-spaces.mjs");
+  const rune = rangeWithRune(actor, range);
+  range = rune.range;
   const { gridDistance } = await import("../combat/defenses.mjs");
   const dist = gridDistance(own, target);
   if (dist <= range) return true;
   try {
     return !!(await foundry.applications.api.DialogV2.confirm({
       window: { title: `${name} — out of range` },
-      content: `<p><strong>${esc(target.name)}</strong> is ${dist} spaces away, beyond ${esc(name)}'s range ${range}.</p><p>Put it on ${esc(target.name)} anyway?</p>`,
+      content: `<p><strong>${esc(target.name)}</strong> is ${dist} spaces away, beyond ${esc(name)}'s range ${range}.</p>${rune.note ? `<p><small>${esc(rune.note)}</small></p>` : ""}<p>Put it on ${esc(target.name)} anyway?</p>`,
       yes: { label: "Anyway" }, no: { label: "Cancel", default: true },
       rejectClose: false,
     }));

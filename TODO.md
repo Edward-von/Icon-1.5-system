@@ -1673,11 +1673,15 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       togliere Shattered+.
 (FATTO il 17 ottobre 2026, versione 1.15.210: la parte del pit cancellato; il bonus damage sui danni fissi è una voce
       a parte da decidere)
-- [ ] **Emerso lavorando su R33b2 — Elden Rune, il +3 al range e GREAT RUNE** (S, da decidere): il "+3 range" mentre
+- [x] **Emerso lavorando su R33b2 — Elden Rune, il +3 al range e GREAT RUNE** (S, da decidere): il "+3 range" mentre
       si sta sulla rune (e per gli alleati sull'Arkenrune) e lo shatter di GREAT RUNE restano solo testo. Domanda per
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+(FATTO il 17 ottobre 2026, versione 1.15.223: +3 al range sulla runa (aree, Mark, nota nel dialogo d'attacco); GREAT
+      RUNE dà un bottone Shattered sul bersaglio principale degli attacchi fatti stando lì; corretto anche lo sconto
+      del Talent II e la scelta Arkenrune, che prima non si vedevano per via della maiuscola. Lo shatter si offre su
+      hit e su miss, perché p.209 dice solo "your attacks also shatter".)
 - nessuno
 - nessuno
 - nessuno
@@ -1699,6 +1703,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
       dice ancora "they go off before the attack roll".
+- nessuno
 - nessuno
 - nessuno
 - nessuno

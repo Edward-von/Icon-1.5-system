@@ -407,8 +407,14 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   }
   if (!cells?.length) return;
   if (replace) await deleteSpaces(scene, earlier);
-  const docs = await createTerrainSpaces(scene, cells, sp, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`, group, source: sp.source, itemId: item.id });
+  // GREAT RUNE (p.209), when armed: "Grant the following effect to your rune" — this rune carries it.
+  const great = sp.kind === "mark" && !sp.infuse ? greatRuneArmed(item) : null;
+  const docs = await createTerrainSpaces(scene, cells, sp, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`, group, source: sp.source, itemId: item.id,
+    extra: great ? { great } : {} });
   if (!docs.length) return;
+  if (great) {
+    try { await clearInfusion(actor); } catch (err) { console.warn("[ICON | TerrainSpaces] could not clear the infusion", err); }
+  }
   // The blessings go once the motes are on the map: as many as motes placed (fewer when finished early).
   let taken = "";
   if (taking) {
@@ -432,7 +438,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain">
         <strong><i class="fa-solid ${ICONS[sp.kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: ${docs.length} × <strong>${esc(sp.label)}</strong>${replace ? " (replacing the earlier ones)" : ""}
-        ${what ? `<br><small>${esc(what)}</small>` : ""}${taken ? `<br><small>Blessings removed: ${esc(taken)}.</small>` : ""}
+        ${what ? `<br><small>${esc(what)}</small>` : ""}${taken ? `<br><small>Blessings removed: ${esc(taken)}.</small>` : ""}${great ? `<br><small><strong>${esc(great.name)}</strong>: ${esc(great.rule)}</small>` : ""}
         <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}${flashStepButton(scene, actor, item, sp)}</div>
       </div>`,
   });
@@ -467,9 +473,9 @@ export async function removeTerrainOfChip(actor, itemId, index) {
 
 // "You can put an Arkenrune down instead of a regular Elden Rune, but only one at a time, replacing the last Arkenrune
 // placed. Arkenrunes can't be scrubbed out, extend to a small blast area, and their benefits also extend to allies."
-const ARKEN = /\byou can put an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*) down instead of a regular ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*)\b/;
+const ARKEN = /\b[Yy]ou can put an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*) down instead of a regular ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*)\b/;
 // Talent II: "While standing in an Elden Rune, the infuse costs of your spells are reduced by 1, to a minimum of 1."
-const RUNE_INFUSE = /\bwhile standing in an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*), the infuse costs of your spells are reduced by (\d+), to a minimum of (\d+)\b/;
+const RUNE_INFUSE = /\b[Ww]hile standing in an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*), the infuse costs of your spells are reduced by (\d+), to a minimum of (\d+)\b/;
 
 /** The unlocked mastery's other rune for the regular one `sp` names, or null. */
 function arkenruneOf(item, sp) {
@@ -502,13 +508,17 @@ async function placeArkenrune(actor, item, sp, ark) {
   const group = groupOf(actor, item, spec);
   const earlier = scene.templates.filter(t => terrainFlag(t)?.group === group);
   if (earlier.length) await deleteSpaces(scene, earlier);
+  const great = greatRuneArmed(item);
   const docs = await createTerrainSpaces(scene, cells, spec, { actor, abilityName: item.name, abilityKey: `${item.id}:terrain`, group, source: "Mastery",
-    itemId: item.id, asOne: true, extra: { alliesToo: ark.allies } });
+    itemId: item.id, asOne: true, extra: { alliesToo: ark.allies, ...(great ? { great } : {}) } });
   if (!docs.length) return;
+  if (great) {
+    try { await clearInfusion(actor); } catch (err) { console.warn("[ICON | TerrainSpaces] could not clear the infusion", err); }
+  }
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid ${ICONS.mark}"></i> ${esc(item.name)}</strong> <small>(Mastery)</small>: an <strong>${esc(ark.name)}</strong>${ark.size ? ` over a ${ark.size === "s" ? "small" : ark.size === "m" ? "medium" : "large"} blast area` : ""}${earlier.length ? " (replacing the last one)" : ""}.
-      <br><small>${esc([ark.noScrub ? "can't be scrubbed out" : "", ark.allies ? "its benefits also extend to allies" : ""].filter(Boolean).join("; "))}</small>
+      <br><small>${esc([ark.noScrub ? "can't be scrubbed out" : "", ark.allies ? "its benefits also extend to allies" : ""].filter(Boolean).join("; "))}</small>${great ? `<br><small><strong>${esc(great.name)}</strong>: ${esc(great.rule)}</small>` : ""}
       <div>${removeSpacesButton(scene, docs)}</div></div>`,
   });
 }
@@ -545,22 +555,87 @@ async function teleportIntoSpace(actor, item, sp) {
  * @returns {{by: number, min: number, label: string}|null}
  */
 export function runeInfuseReduction(actor) {
+  for (const { f, creator, item, own } of runesStoodIn(actor)) {
+    const s = item.system ?? {};
+    const t = Number(s.talentSelected) || 0;
+    const m = RUNE_INFUSE.exec(plainOf(t === 1 ? s.talent1 : t === 2 ? s.talent2 : ""));
+    if (!m) continue;
+    return { by: Number(m[2]) || 1, min: Number(m[3]) || 1, label: `${item.name} Talent ${t === 1 ? "I" : "II"}: standing in ${own ? "your" : `${creator.name}'s`} ${f.name || f.label}` };
+  }
+  return null;
+}
+
+/**
+ * The marks of an ability `actor`'s token stands in that work for them: their own, or an ally's whose benefits
+ * "also extend to allies" (ARKENRUNE, p.209). Each with its flag, creator and item.
+ * @returns {Array<{f: object, creator: Actor, item: Item, own: boolean}>}
+ */
+function runesStoodIn(actor) {
   const td = sourceTokenFor(actor)?.document;
-  if (!td?.parent) return null;
+  if (!td?.parent) return [];
   const mine = cellsOf(td);
+  const out = [];
   for (const { f, keys } of terrainOn(td.parent)) {
     if (f.kind !== "mark" || f.onCharacter || !touches(mine, keys)) continue;
     const creator = game.actors?.get(f.creatorId);
     const item = creator?.items?.get(f.itemId);
-    const s = item?.system ?? {};
-    const t = Number(s.talentSelected) || 0;
-    const m = RUNE_INFUSE.exec(plainOf(t === 1 ? s.talent1 : t === 2 ? s.talent2 : ""));
-    if (!m) continue;
+    if (!item) continue;
     const own = creator.id === actor.id;
     if (!own && !(f.alliesToo && !isFoeOf(td, creator))) continue;
-    return { by: Number(m[2]) || 1, min: Number(m[3]) || 1, label: `${item.name} Talent ${t === 1 ? "I" : "II"}: standing in ${own ? "your" : `${creator.name}'s`} ${f.name || f.label}` };
+    out.push({ f, creator, item, own });
+  }
+  return out;
+}
+
+// Elden Rune (p.209): "While standing on an Elden Rune space, the range of all abilities with a listed range is
+// increased by +3."
+const RUNE_RANGE = /\b[Ww]hile standing (?:on|in) an? ([A-Z][\w'-]*(?: [A-Z][\w'-]*)*?)(?: space)?, the range of all abilities with a listed range is increased by \+?(\d+)\b/;
+// GREAT RUNE (Elden Rune's Infuse 3, p.209): "Grant the following effect to your rune: your attacks also shatter their
+// main target while standing in this rune."
+const GREAT_RUNE = /\bInfuse (?:\d+|X)\s*:\s*([A-Z][A-Z' ]+?)\s*[—–-]\s*Grant the following effect to your rune:\s*([^.]*\.)/i;
+
+/**
+ * Elden Rune (p.209): the range bonus `actor` has standing in a rune of their own, or in an ally's ARKENRUNE.
+ * A listed range only: 0 (adjacent) and no maximum range stay as they are.
+ * @returns {{by: number, label: string}|null}
+ */
+export function runeRangeBonus(actor) {
+  for (const { f, creator, item, own } of runesStoodIn(actor)) {
+    const m = RUNE_RANGE.exec(plainOf(item.system?.description));
+    if (!m) continue;
+    return { by: Number(m[2]) || 3, label: `${item.name}: standing in ${own ? "your" : `${creator.name}'s`} ${f.name || f.label}` };
   }
   return null;
+}
+
+/** `range` with the rune's bonus when it is a listed one (finite, above 0); `note` says why, or "". */
+export function rangeWithRune(actor, range) {
+  const r = Number(range) || 0;
+  if (!(r > 0) || !Number.isFinite(r)) return { range: r || range, note: "" };
+  const bonus = runeRangeBonus(actor);
+  return bonus ? { range: r + bonus.by, note: `${bonus.label}: range +${bonus.by} (${r} → ${r + bonus.by}), p.209` } : { range: r, note: "" };
+}
+
+/**
+ * GREAT RUNE (p.209) for `actor`'s attacks: standing in a rune of theirs granted it (or an ally's ARKENRUNE that has
+ * it), "your attacks also shatter their main target". Null when none.
+ * @returns {{label: string, rule: string}|null}
+ */
+export function runeAttackShatter(actor) {
+  for (const { f, creator, own } of runesStoodIn(actor)) {
+    if (!f.great) continue;
+    return { label: `${f.great.name}: standing in ${own ? "your" : `${creator.name}'s`} ${f.name || f.label}`, rule: f.great.rule };
+  }
+  return null;
+}
+
+/** GREAT RUNE armed on `item` (its Infuse version that grants an effect to the rune), or null. */
+function greatRuneArmed(item) {
+  const armed = armedInfusion(item?.parent);
+  if (!armed || armed.itemId !== item.id) return null;
+  const m = GREAT_RUNE.exec(plainOf(item.system?.description));
+  if (!m || String(armed.name ?? "").trim().toLowerCase() !== m[1].trim().toLowerCase()) return null;
+  return { name: titleCaseWord(m[1].trim().toLowerCase()), rule: m[2].trim() };
 }
 
 /**

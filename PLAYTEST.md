@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (17 ottobre 2026, versione 1.15.223)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG Enochian con Elden Rune: piazza la runa sotto di sé, poi usa un'abilità d'area con Range 6. Il piazzamento
+      deve accettare il centro fino a 9 caselle e mostrare l'avviso "range +3 (6 → 9)".
+- [ ] Sempre sulla runa, apri il dialogo d'attacco di un'abilità con range: tra i chip automatici c'è "Elden Rune:
+      standing in your Elden Rune: range +3 (…), p.209". Se esci dalla runa il chip sparisce.
+- [ ] Mark su un personaggio (es. Polaris range 5, o il bottone Mark) con il bersaglio a 7 caselle: stando sulla runa
+      non chiede nulla. Con il bersaglio a 9 caselle chiede "out of range", indica range 8 e la nota della runa.
+- [ ] Talent II selezionato, sulla runa: infondi un'abilità con Infuse 3. La card mostra "−1, to a minimum of 1" e si
+      spendono 2 Aether.
+- [ ] Mastery sbloccata: il chip della runa chiede "which rune?". Scegli Arkenrune: copre una small blast. Un alleato
+      che sta nell'Arkenrune ha +3 al range nel dialogo d'attacco; un nemico no.
+- [ ] Infondi GREAT RUNE (Infuse 3) su Elden Rune, poi clicca il chip della runa: la card del piazzamento mostra
+      "Great Rune: your attacks also shatter…" e l'infusione armata sparisce.
+- [ ] Stando in quella runa fai un attacco: nel dialogo c'è il chip Great Rune. Sulla card, nella riga del bersaglio
+      principale, c'è il bottone Shattered (con un'area, solo sulla riga dell'attack target). Fuori dalla runa, o in
+      una runa normale senza GREAT RUNE, il bottone non c'è.
+- [ ] Alleato in un'Arkenrune piazzata con GREAT RUNE: anche i suoi attacchi ricevono il bottone Shattered.
+
 ## Emerso R37 — applyDamagePipeline accetta danno pierce e divine (17 ottobre 2026, versione 1.15.222)
 
 Setup: solo codice (F5 basta).

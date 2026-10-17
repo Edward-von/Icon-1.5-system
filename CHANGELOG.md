@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (versione 1.15.223)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Elden Rune, range e GREAT RUNE**: il "+3 al range mentre stai sulla runa" e lo shatter di GREAT RUNE erano solo
+  testo; in più lo sconto del Talent II e la scelta Arkenrune non comparivano mai → le regex del commit precedente
+  cercavano "while"/"you" in minuscolo, ma il testo dell'abilità inizia con la maiuscola ("While standing…", "You can
+  put…") → ora, stando sulla propria Elden Rune (o su un'Arkenrune di un alleato), un range elencato prende +3. Vale
+  quando si piazza un'area (avviso a schermo), nel controllo di distanza del Mark e come nota nel dialogo d'attacco.
+  Il range 0 (adiacente) e "nessun range massimo" non cambiano. Se GREAT RUNE (Infuse 3) è infusa quando si piazza la
+  runa, normale o Arkenrune, la runa la conserva e l'infusione si consuma. Gli attacchi fatti stando in quella runa
+  ricevono sulla card un bottone Shattered per il bersaglio principale, e il dialogo d'attacco lo segnala (p.209). Le
+  tre scelte di Talent II / Arkenrune / teletrasporto sono confermate da Edoardo. Solo codice.
+
 ## 17 ottobre 2026 — applyDamagePipeline accetta danno pierce e divine (versione 1.15.222)
 
 ### Round di debug del 16 ottobre, voce emersa su R37
