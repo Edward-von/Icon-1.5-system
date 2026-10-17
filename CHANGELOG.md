@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Tsunami si piazza contro un bordo della mappa (versione 1.15.166)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **Tsunami**: per metterla lontano dal PG serviva Alt → il piazzamento usava il range dell'abilità invece di
+  "anywhere as long as its edge is adjacent to an edge of the map" (p.233) → ora non c'è più limite di range: tutta
+  l'area deve stare sulla mappa, con almeno uno spazio sull'ultima riga o colonna (`mapEdgeCheck`). Collisioni dei
+  trascinati e "also affects flying foes" restano a giudizio del tavolo. Solo codice.
+
 ## 17 ottobre 2026 — Aree terrain effect: danni su clic (versione 1.15.165)
 
 ### Round di debug del 15 ottobre, R33c2

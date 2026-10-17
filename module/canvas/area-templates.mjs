@@ -229,6 +229,9 @@ export function areasInText(text) {
       if (t.dangerous || t.difficult) terrain = t;
     }
     if (terrain) area.terrain = terrain;
+    // R33c2: Tsunami (p.233) "that you may place anywhere as long as its edge is adjacent to an edge of the map":
+    // no range from the user, a space of the area on the map's border instead.
+    if (/^[^.;]*\banywhere as long as its edge is adjacent to an edge of the map\b/.test(plain.slice(m.index))) area.mapEdge = true;
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
     seen.add(area.label);
@@ -848,6 +851,26 @@ class AreaPlacement {
   }
 }
 
+/**
+ * R33c2: the placement rule of an area "you may place anywhere as long as its edge is adjacent to an edge of the
+ * map" (Tsunami p.233): every space on the map (not its padding), and at least one on its outer row or column.
+ * @param {Scene} scene
+ * @returns {(cells: Array<{i:number,j:number}>) => string}  the warning, or ""
+ */
+function mapEdgeCheck(scene) {
+  const d = scene?.dimensions;
+  if (!d) return () => "";
+  const size = scene.grid.size;
+  const first = scene.grid.getOffset({ x: d.sceneX + size / 2, y: d.sceneY + size / 2 });
+  const last = scene.grid.getOffset({ x: d.sceneX + d.sceneWidth - size / 2, y: d.sceneY + d.sceneHeight - size / 2 });
+  const onMap = (c) => c.i >= first.i && c.i <= last.i && c.j >= first.j && c.j <= last.j;
+  const onBorder = (c) => c.i === first.i || c.i === last.i || c.j === first.j || c.j === last.j;
+  return (cells) => {
+    if (!cells.every(onMap)) return "The whole area must be on the map.";
+    return cells.some(onBorder) ? "" : "Its edge must be adjacent to an edge of the map (p.233): place it against an edge.";
+  };
+}
+
 /** Is an area being placed right now? (R33c: the Shift + arrow moves stay out of its way.) */
 export const isPlacingArea = () => AreaPlacement.active;
 
@@ -992,9 +1015,10 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     const anchor = area.fromTarget ? targetAnchorToken(token) : null;
     const originCells = anchor ? tokenCells(anchor.document) : sourceCells;
     const range = anchor ? 1 : area.range;
-    const rangeCells = Number.isFinite(range) ? cellsInRange(originCells, Math.max(1, range)) : null;
+    const rangeCells = area.mapEdge ? null : Number.isFinite(range) ? cellsInRange(originCells, Math.max(1, range)) : null;
     const blocked = anchor ? [...originCells, ...sourceCells] : sourceCells;
-    const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells, originInRange: atSpace }).run();
+    const check = area.mapEdge ? mapEdgeCheck(canvas.scene) : null;
+    const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells, originInRange: atSpace, check }).run();
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
     // R47b: a second line from the first or last space of this one (Sturmreiten Talent II, p.227).

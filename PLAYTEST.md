@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Tsunami si piazza contro un bordo della mappa (17 ottobre 2026, versione 1.15.166)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Tsunami si piazza contro qualsiasi bordo anche lontano dal PG, senza Alt.
+- [ ] Al centro della mappa compare l'avviso "Its edge must be adjacent to an edge of the map".
+- [ ] Dopo il piazzamento la domanda sul bordo di arrivo e "Move 4" funzionano come prima.
+
 ## R33c2 — Aree terrain effect: danni su clic (17 ottobre 2026, versione 1.15.165)
 
 Setup: solo codice (F5 basta).
