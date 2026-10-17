@@ -302,6 +302,8 @@ export class FoeSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
+      critAt:     mods.critAt,
+      exceedAt:     mods.exceedAt,
       areaHtml:    placement ? areaSummaryHtml(placement, { attackTargetId: mods.attackTargetId }) : "",
       // Area attacks hit one target, the rest only take the area effect (p.117).
       targets:     rollTargets?.length ? rollTargets : null,

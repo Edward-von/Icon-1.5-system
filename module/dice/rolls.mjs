@@ -15,6 +15,7 @@ import { ICON } from "../config.mjs";
 import { formatTag } from "../helpers/rule-tooltips.mjs";
 import { statusBlockHtml } from "../combat/ability-statuses.mjs";
 import { rollEvasion, evasionBlockHtml, currentTargets } from "../combat/defenses.mjs";
+import { BASE_CRIT, BASE_EXCEED, noteCriticalHit } from "../combat/crit-thresholds.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
@@ -201,11 +202,14 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {Array}    [opts.statusEntries] Statuses the ability inflicts (ability-statuses.mjs) → "Inflict" buttons per target
  * @param {Array}    [opts.targets]       Targets of the attack (defenses.mjs#currentTargets; default: the user's targets now)
  * @param {object}   [opts.evasionOverride] { tokenId: boolean } — the attack dialog's "Defender has evasion" boxes
+ * @param {number}   [opts.critAt=20]     Total needed for a crit (attack dialog: Soulfire, Arenheir, by hand)
+ * @param {number}   [opts.exceedAt=15]   Total needed to exceed
  * @param {Actor}    [opts.actor]
  * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion}>}
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
+  critAt = BASE_CRIT, exceedAt = BASE_EXCEED,
   hitEffect, missEffect, exceedEffect, critEffect, effects = [], talentEffects = [],
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
@@ -240,9 +244,13 @@ export async function combatRoll({
   }
 
   const total     = d20 + modifier;
-  const isCrit    = !evaded && total >= 20;
+  const critT     = Number(critAt)   || BASE_CRIT;
+  const exceedT   = Number(exceedAt) || BASE_EXCEED;
+  const isCrit    = !evaded && total >= critT;
   const isHit     = evaded ? false : (defense != null ? total >= defense : null);
-  const isExceed  = !evaded && total >= 15;
+  const isExceed  = !evaded && total >= exceedT;
+  // Thresholds moved from 20+ / 15+: the card says so next to the total.
+  const thresholdNote = (critT !== BASE_CRIT || exceedT !== BASE_EXCEED) ? `crit ${critT}+ · exceed ${exceedT}+` : "";
 
   const content = await renderTemplate(`${TPLPATH}/attack-roll.hbs`, {
     abilityName:   abilityName ?? "Attack",
@@ -267,6 +275,9 @@ export async function combatRoll({
     isCrit,
     isHit,
     isExceed,
+    critAt:        critT,
+    exceedAt:      exceedT,
+    thresholdNote,
     evaded,
     evasionHtml:   evasionBlockHtml(evasion),
     hitEffect:     hitEffect   ?? "",
@@ -300,6 +311,9 @@ export async function combatRoll({
     content,
     rolls,
   });
+
+  // Arenheir Aspect: each crit lowers the crit threshold of the next attacks.
+  if (isCrit && actor) await noteCriticalHit(actor);
 
   return { d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion };
 }

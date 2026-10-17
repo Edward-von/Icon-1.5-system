@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R63 — Soglie di crit / exceed variabili: Soulfire, Arenheir, a mano (17 ottobre 2026, versione 1.15.75)
+
+Setup: solo codice (F5 basta). Un PG Enochian con il tratto Soulfire, un PG con la relic Arenheir (rank III, poi
+Aspect), un foe bersaglio, un combat avviato.
+
+- [ ] **Default**: un PG qualsiasi attacca → nel dialog l'intestazione dice "crit 20+ · exceed 15+", i due nuovi
+      stepper "Crit on" 20 e "Exceed on" 15, nessuna riga di fonti sotto; la card in chat è come prima ("Exceed (15+)").
+- [ ] **Soulfire bloodied**: PG Enochian sopra il 50% HP → 20 / 15. Portalo a metà HP o meno → il dialog propone 18 /
+      13 e sotto gli stepper "Soulfire (bloodied): crit 18+, exceed 13+". Un totale di 13 attiva l'Exceed (riquadro
+      "Exceed (13+)"), un 18 è CRITICAL HIT; accanto al totale "crit 18+ · exceed 13+".
+- [ ] **Soulfire a 1 HP**: HP a 1 → 15 / 10 con la riga "Soulfire (1 hp)".
+- [ ] **Arenheir III**: rank III sbloccato, round 1 → 19 / 14 con "Arenheir III (round 1): −1"; round 3 → 18 / 13;
+      round 5 → 17 / 12. Fuori combat → 19 / 14.
+- [ ] **Soulfire + Arenheir**: Enochian bloodied con Arenheir III al round 3 → 16 / 11 (18 / 13 di Soulfire, −2).
+- [ ] **Arenheir Aspect**: Aspect sbloccato, round 1 → 19 / 14. Fai un critico (alza a mano "Crit on" o tira finché
+      esce): all'attacco dopo il dialog propone crit 18 (exceed resta 14) con la riga "Arenheir Aspect (1 crit this
+      combat)". Più critici abbassano ancora, mai sotto 15. Un nuovo combat riparte da zero.
+- [ ] **A mano**: cambia "Crit on" / "Exceed on" nel dialog → l'intestazione si aggiorna, la card usa i valori scelti.
+- [ ] **Foe / Legend / Summon**: il loro dialog d'attacco ha gli stessi stepper (20 / 15) e si possono cambiare.
+
 ## R52 — Chronotemper senza l'etichetta "Power Die" (17 ottobre 2026, versione 1.15.74)
 
 Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Fool di capitolo 3 che ha già Chronotemper sulla

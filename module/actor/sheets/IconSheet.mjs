@@ -2671,6 +2671,8 @@ export class IconSheet extends BaseActorSheet {
       boons:        mods.boons,
       curses:       mods.curses,
       defense:      mods.defense,
+      critAt:      mods.critAt,
+      exceedAt:      mods.exceedAt,
       hitEffect:    card.hit,
       missEffect:   card.miss,
       exceedEffect: card.exceed,
@@ -2811,6 +2813,8 @@ export class IconSheet extends BaseActorSheet {
       boons:       mods.boons,
       curses:      mods.curses,
       defense:     mods.defense,
+      critAt:     mods.critAt,
+      exceedAt:     mods.exceedAt,
       // "[D] + fray" read with the character's die ("d10 + fray"), like ability cards
       hitEffect:   await this._enrichAbility(ab.hitEffect),
       missEffect:  ab.missEffect,

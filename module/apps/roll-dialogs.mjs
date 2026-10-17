@@ -9,8 +9,8 @@
  *
  * Shared by PCs, foes and legends. Return shapes are unchanged from the old
  * prompts so the roll code (combatRoll / postAbilityDamageCard) is untouched:
- *   promptAttackMods → { boons, curses, defense, attackTargetId, targetIds,
- *                        evasion: { tokenId: boolean } }            | null
+ *   promptAttackMods → { boons, curses, defense, critAt, exceedAt, attackTargetId,
+ *                        targetIds, evasion: { tokenId: boolean } } | null
  *   promptDamageMods → { outcome, targetName, targetIds, attackTargetId,
  *                        bonusDice, vulnerable, resistance, weakened, hatred,
  *                        useCombo, other, instances } | null
@@ -25,6 +25,7 @@ import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasio
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
+import { attackThresholds } from "../combat/crit-thresholds.mjs";
 
 const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
 
@@ -279,11 +280,14 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
     : `Evasion: ${list.map(t => t.sure
         ? `${t.name} evades automatically (Rigoletto Aspect, this turn)`
         : `${t.name} rolls 1d6 (${t.threshold}+ = miss)`).join(", ")} before the attack`);
+  // Crit / exceed thresholds (crit-thresholds.mjs): 20+ / 15+ unless Soulfire
+  // or Arenheir move them; the player can still change them by hand.
+  const thr = attackThresholds(actor);
   const evasionChip = `<span class="icon-roll-auto__chip" data-role="evasion" title="Applied automatically from the ability, the statuses and the elevation"${evaders.length ? "" : " hidden"}>${esc(evasionNote(evaders))}</span>`;
 
   const content = `
     <div class="icon-roll-dialog icon-roll-dialog--attack">
-      ${_hero({ actor, kicker: "Attack roll · d20 + boons − curses", title: ab.name ?? "Attack", cost: ab.cost, tags: ab.tags, dieLabel: "d20", dieSub: "crit 20+ · exceed 15+" })}
+      ${_hero({ actor, kicker: "Attack roll · d20 + boons − curses", title: ab.name ?? "Attack", cost: ab.cost, tags: ab.tags, dieLabel: "d20", dieSub: `crit ${thr.crit}+ · exceed ${thr.exceed}+` })}
       <div class="icon-roll-body">
         ${_targetCard(targets, { pickAttackTarget: pick, areaLabel: area?.label ?? "", evasionToggle: true })}
         <section class="icon-roll-card">
@@ -301,7 +305,10 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
                 <button type="button" class="icon-roll-stepper__btn" data-step="1" data-for="defense" aria-label="+1">+</button>
               </div>
             </div>
+            ${_stepper({ name: "critAt",   label: "Crit on",   hint: "total needed for a critical hit (normally 20+)", value: thr.crit,   min: 1, max: 30 })}
+            ${_stepper({ name: "exceedAt", label: "Exceed on", hint: "total needed to exceed (normally 15+)",           value: thr.exceed, min: 1, max: 30 })}
           </div>
+          ${thr.sources.length ? `<p class="icon-roll-card__hint" data-role="thresholds">${thr.sources.map(esc).join(" · ")}</p>` : ""}
           <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note"></span></div>
         </section>
       </div>
@@ -324,6 +331,11 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
         : "No Defense: the card shows the total, compare it by hand.";
     };
     [b, c, d].forEach(el => el.addEventListener("input", update));
+    // The hero's "crit N+ · exceed N+" follows the threshold steppers.
+    const ct = f.querySelector('input[name="critAt"]'), et = f.querySelector('input[name="exceedAt"]');
+    const dieSub = root.querySelector(".icon-roll-hero__die-label");
+    const updateThr = () => { if (dieSub) dieSub.textContent = `crit ${Number(ct.value) || thr.crit}+ · exceed ${Number(et.value) || thr.exceed}+`; };
+    [ct, et].forEach(el => el?.addEventListener("input", updateThr));
 
     // Dropping a target with ✕ or picking another attack target rewrites the
     // Defense to beat and the Evasion note: only the attack target rolls it.
@@ -376,6 +388,8 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             boons:   Math.max(0, Number(f.elements.boons?.value)  || 0),
             curses:  Math.max(0, Number(f.elements.curses?.value) || 0),
             defense: defenseVal !== "" && defenseVal != null ? Number(defenseVal) : null,
+            critAt:   Math.max(1, Number(f.elements.critAt?.value)   || thr.crit),
+            exceedAt: Math.max(1, Number(f.elements.exceedAt?.value) || thr.exceed),
             attackTargetId,
             targetIds: rows.map(r => r.dataset.tokenId),
             // "Defender has evasion" per target token: rollEvasion uses it in

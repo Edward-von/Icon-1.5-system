@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Soglie di crit / exceed variabili: Soulfire, Arenheir e a mano (versione 1.15.75)
+
+### Round di debug del 16 ottobre, punto R63
+
+- **Soglie fisse nel tiro d'attacco**: con Soulfire o Arenheir il tiro contava comunque crit 20+ ed exceed 15+ →
+  le soglie erano scritte fisse nel codice → ora il dialog d'attacco le calcola e le mostra in due nuovi stepper
+  "Crit on" / "Exceed on", che si possono cambiare a mano (come chiedeva Maar, "actively modify"); la card in chat usa
+  quei valori ("Exceed (13+)", e accanto al totale "crit 18+ · exceed 13+" quando non sono 20 / 15).
+- **Soulfire** (Enochian, p.208): da bloodied crit 18+ / exceed 13+, a 1 HP 15+ / 10+.
+- **Arenheir III** (p.252): −1 a entrambe, −2 dal round 3, −3 dal round 5 (fuori combat −1).
+- **Arenheir Aspect**: ogni critico nel combat abbassa il crit di 1 per gli attacchi dopo, mai sotto 15+; il conto è
+  sulla relic e riparte a ogni combat.
+- **Come si combinano** (il libro non lo dice, lettura più semplice): Soulfire fissa il valore di partenza, Arenheir III
+  lo abbassa, poi l'Aspect abbassa il crit fino a 15+ al massimo (se è già 15 o meno, l'Aspect non aggiunge niente).
+  Esempio: Enochian bloodied con Arenheir III al round 3 → crit 16+, exceed 11+.
+- Foe, legend e summon hanno gli stessi stepper (partono da 20 / 15). Solo codice, nessun dato cambiato.
+
 ## 17 ottobre 2026 — Chronotemper: tolta l'etichetta "Power Die" (versione 1.15.74)
 
 ### Round di debug del 16 ottobre, punto R52

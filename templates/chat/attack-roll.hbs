@@ -25,6 +25,7 @@
     {{#if defense}}
       <span class="icon-chat-card__vs">vs DEF {{defense}}</span>
     {{/if}}
+    {{#if thresholdNote}}<span class="icon-chat-card__vs" title="Crit / exceed thresholds of this roll (Soulfire, Arenheir or set in the attack dialog)">{{thresholdNote}}</span>{{/if}}
   </div>
 
   {{!-- Evasion (d6 per target with Evasion, before the attack roll — defenses.mjs) --}}
@@ -78,7 +79,7 @@
   {{#if exceedEffect}}
     {{#if isExceed}}
       <div class="icon-chat-card__effect-block icon-chat-card__effect-block--exceed">
-        <span class="icon-chat-card__effect-label">Exceed (15+)</span>
+        <span class="icon-chat-card__effect-label">Exceed ({{exceedAt}}+)</span>
         <span class="icon-chat-card__effect-text">{{{exceedEffect}}}</span>
       </div>
     {{/if}}
@@ -86,7 +87,7 @@
   {{#if critEffect}}
     {{#if isCrit}}
       <div class="icon-chat-card__effect-block icon-chat-card__effect-block--crit">
-        <span class="icon-chat-card__effect-label">Crit</span>
+        <span class="icon-chat-card__effect-label">Crit{{#if thresholdNote}} ({{critAt}}+){{/if}}</span>
         <span class="icon-chat-card__effect-text">{{{critEffect}}}</span>
       </div>
     {{/if}}
