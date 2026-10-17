@@ -4821,7 +4821,8 @@ ol.chat-log .chat-message,
 
 /* Ability preview — when combo is active, strike through normal content */
 .icon-ability-preview--combo-active .icon-ability-preview__desc,
-.icon-ability-preview--combo-active .icon-ability-preview__effect {
+.icon-ability-preview--combo-active .icon-ability-preview__effect,
+.icon-ability-preview__block--combo-replaced .icon-ability-preview__effect {
   text-decoration: line-through;
   opacity: 0.45;
 }

@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel, enrichLimitBreakText } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
+import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, comboReplacedBlocks, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -504,7 +504,9 @@ export class IconSheet extends BaseActorSheet {
         // order, merged where the book prints one line — see helpers/ability-blocks.mjs
         // A granted interrupt's block ("Cheat Time — Interrupt 1") gets a chat
         // button posting that interrupt alone (#onAbilityInterruptToChat).
-        blocks:      (await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }))
+        // comboReplaced: the base block a combo written as a change takes the place of
+        // (Sweet Torment's Effect, Succubus's Mark), struck through while the token is held.
+        blocks:      comboReplacedBlocks(s, await buildAbilityBlocks(s, { sections: desc.sections, enrich: t => this._enrichAbility(t) }))
           .map(b => ({ ...b, interruptChat: b.key === "section" && !b.combo && !!interruptBlockName(b.label) })),
         // Parsed combat data — drives which buttons show and pre-fills dialogs.
         // dealsDamage includes the combo version so combo-only damage still

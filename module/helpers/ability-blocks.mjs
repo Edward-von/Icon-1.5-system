@@ -454,6 +454,42 @@ export async function buildAbilityBlocks(system, { sections = [], enrich, comboT
 }
 
 /**
+ * Flag the base blocks a combo written as a change takes the place of, for
+ * the sheet to strike them through while the combo token is held: Sweet
+ * Torment / Indignation ("replace the base effect with: …") → the Effect,
+ * Succubus ("Instead of the mark", p.164) → the Mark, Penumbra ("instead of
+ * teleporting yourself") → the teleport block. Same matching as the merge in
+ * buildAbilityBlocks. A complete combo (struck whole) or a mastery giving both
+ * versions flags nothing.
+ *
+ * @param {object} system  the ability's system data
+ * @param {Array} blocks   buildAbilityBlocks output for the base version
+ * @returns {Array} copies of the blocks, with `comboReplaced: true` where replaced
+ */
+export function comboReplacedBlocks(system, blocks) {
+  const s = system ?? {};
+  const out = (blocks ?? []).map(b => ({ ...b }));
+  const combo = s.isCombo ? parseComboText(s.comboEffect) : null;
+  if (!combo || combo.whole || masteryGainsBothEffects(s)) return out;
+  const keysOf = (b) => String(b.key ?? "").split("+");
+  for (const b of out) {
+    const label = String(b.label ?? "").toLowerCase();
+    if (combo.drops.some(d => d === label || keysOf(b).includes(d))) b.comboReplaced = true;
+  }
+  if (combo.insteadOf) {
+    const re = new RegExp(`\\b${combo.insteadOf}`, "i");
+    const at = out.findIndex(b => !b.comboReplaced && re.test(_plain(b.text)));
+    if (at >= 0) out[at].comboReplaced = true;
+  }
+  for (const cb of combo.blocks) {
+    const at = out.findIndex(b => !b.comboReplaced && ((cb.key && keysOf(b).includes(cb.key))
+      || (!cb.key && String(b.label).toLowerCase() === String(cb.label).toLowerCase())));
+    if (at >= 0) out[at].comboReplaced = true;
+  }
+  return out;
+}
+
+/**
  * The rule behind a block's label, for the tooltip on the heading.
  *
  * The keywords INSIDE a block's text are explained by keywords.mjs, but the

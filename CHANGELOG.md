@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Barrato solo il blocco sostituito dalla combo (versione 1.15.139)
+
+### Round di debug del 15 ottobre, voce emersa su R1
+
+- **Barrato parziale**: con Sweet Torment, Indignation, Succubus o Penumbra pronte, la scheda non barrava niente della
+  base anche se la combo ne sostituisce un blocco → si barravano solo le combo complete → ora, con il segnalino combo,
+  viene barrato solo il blocco della base che la combo sostituisce ("replace the base effect", "Instead of the mark"
+  p.164, "instead of teleporting"), con la nuova `comboReplacedBlocks` in `ability-blocks.mjs` (stessa logica con cui
+  la card fonde la combo). The Hook e Flying Sleeves non barrano niente; le combo complete restano barrate per intero;
+  con la mastery che dà entrambe le versioni (Dervish) non si barra niente. Solo codice.
+
 ## 17 ottobre 2026 — Talento nella card auto-hit (versione 1.15.138)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

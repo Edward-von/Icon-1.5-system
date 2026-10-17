@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R1 — Barrato solo il blocco sostituito dalla combo (17 ottobre 2026, versione 1.15.139)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bleak Mercy con il segnalino combo: è barrato solo l'Effect, Hit / Miss / Slay no; senza segnalino non è barrato
+      niente.
+- [ ] Revenge (Indignation): come sopra.
+- [ ] Incubus (Succubus): è barrato solo il Mark.
+- [ ] Umbra (Penumbra): è barrato solo l'Effect del teleport, non l'altro Effect.
+- [ ] Low Blow (The Hook): non è barrato niente.
+- [ ] God Hand (Devil Hand, combo completa): tutto barrato come prima.
+
 ## Emerso R16 — Talento nella card auto-hit (17 ottobre 2026, versione 1.15.138)
 
 Setup: solo codice (F5 basta).

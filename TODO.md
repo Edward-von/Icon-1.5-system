@@ -1256,8 +1256,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.120: REAP (p.185) è un attacco melee completo senza riga di tag; i tag della
       combo sono "attack, melee, combo" (via Range 4, Mark e Pierce), Melee conta come range, `COMBO_TAGS_BY_NAME`
       aggiornato, migrazione 35 sulle copie con i tag originali. Compendio Jobs + migrazione.)
-- [ ] **Emerso lavorando su R1 — barrato parziale** (S/M): con Sweet Torment / Indignation sulla scheda si potrebbe
+- [x] **Emerso lavorando su R1 — barrato parziale** (S/M): con Sweet Torment / Indignation sulla scheda si potrebbe
       barrare solo l'Effect della base che viene sostituito (oggi non si barra niente).
+(FATTO il 17 ottobre 2026, versione 1.15.139: con il segnalino combo la scheda barra solo il blocco della base che la
+      combo sostituisce (Effect di Sweet Torment / Indignation, Mark di Succubus, teleport di Penumbra); le combo
+      complete restano barrate per intero. Solo codice.)
 - [x] **Emerso lavorando su R1 — "Gains True Strike" letto come status** (S): l'Inflict di Indignation propone
       True Strike come se fosse uno status (c'era anche prima).
 (FATTO il 17 ottobre 2026, versione 1.15.130: una frase "Gains true strike / unerring / pierce" senza soggetto è il
