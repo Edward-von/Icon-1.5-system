@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'infusione armata non sopravvive al combattimento (versione 1.15.81)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **Infusione armata a fine combattimento**: un'infusione armata e non usata (abilità o Limit Break) restava "armed"
+  anche nel combattimento successivo, già pagata e pronta → "End Encounter" azzerava l'Aether ("All Aether disperses
+  at the end of combat", p.204) ma non toglieva il segno `flags.icon-system.infused` che dice quale versione è armata
+  → a fine combattimento quel segno ora viene cancellato insieme all'Aether. È una semplice cancellazione, non un
+  annullamento: l'Aether non torna e, con Inner Furnace, non tornano nemmeno gli hp sacrificati (il rimborso di R64
+  resta solo per il tasto che annulla l'infusione).
+
 ## 17 ottobre 2026 — L'aura di Fulminate finisce con il mark (versione 1.15.80)
 
 ### Round di debug del 16 ottobre, voce emersa su R48

@@ -610,6 +610,10 @@ export class IconCombat extends Combat {
           "system.combat.classResources.stackedDice.value":    0,
           "flags.icon-system.-=comboSpentOnItem":              null,
           "flags.icon-system.-=comboChoice":                   null,
+          // An armed Infuse version goes with the Aether that paid for it
+          // ("Aether is consumed at the start of the action", p.204): dropped,
+          // not refunded — cancelInfusion is the undo, this is not.
+          "flags.icon-system.-=infused":                       null,
         });
         // Power dice tracked on ability / trait items end with the combat too
         // (stances and marks that grant them don't outlive the encounter).

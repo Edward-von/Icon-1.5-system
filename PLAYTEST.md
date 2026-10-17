@@ -1719,6 +1719,23 @@ Setup: solo codice (F5 basta).
 - [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
       data a un alleato restano dove sono quando si toglie un mark qualsiasi.
 
+## voce emersa su R38b — L'infusione armata non sopravvive al combattimento (17 ottobre 2026, versione 1.15.81)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Wright in combattimento con almeno 3 Aether: premi un tasto Infuse di un'abilità (es. "Infuse 3") senza tirarla
+      → il tasto appare armato e l'Aether scende.
+- [ ] "End Encounter" → conferma "Sì" → Aether a 0; sulla scheda nessuna infusione resta armata e la card
+      dell'abilità, se la usi, è quella base.
+- [ ] Nuovo combattimento, usa la stessa abilità: nella card non compare la versione infusa.
+- [ ] Ripeti con un'infusione del Limit Break (es. TETRAFLARE): dopo "End Encounter" il pannello del Limit Break non
+      la mostra più armata.
+- [ ] Con Inner Furnace: arma un'infusione sacrificando gli hp, poi "End Encounter": gli hp sacrificati NON tornano e
+      nessun messaggio dice "Aether returned".
+- [ ] Controprova: arma un'infusione e premi di nuovo il tasto prima di finire il combattimento: l'annullamento
+      rimborsa ancora Aether e hp (R64).
+- [ ] "End Encounter" → "No": l'infusione resta armata.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

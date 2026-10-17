@@ -350,10 +350,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R38b — Meteor costa più Aether del massimo** (S, da decidere): "Infuse 8: METEOR" (p.208)
       chiede 8 Aether, ma il sistema tiene l'Aether al massimo a 6 (d6, p.204): con l'Aether normale Meteor non si arma
       mai, resta solo il Special effect (pagare con la vita). Verificare sul manuale se qualcosa porta l'Aether oltre 6.
-- [ ] **Emerso lavorando su R38b — l'infusione armata non si toglie a fine combattimento** (S): il commento di
+- [x] **Emerso lavorando su R38b — l'infusione armata non si toglie a fine combattimento** (S): il commento di
       `helpers/infuse.mjs` dice che l'infusione armata si azzera a fine combattimento con l'Aether, ma `IconCombat`
       azzera solo l'Aether, non `flags.icon-system.infused` (e nemmeno dopo il tiro: `clearInfusion` non è chiamata da
       nessuno). Un'infusione armata resta "armed" anche nel combattimento dopo, per abilità e Limit Break.
+(FATTO il 17 ottobre 2026, versione 1.15.81: "End Encounter" ora cancella flags.icon-system.infused insieme all'Aether
+      (p.204), senza rimborso, in IconCombat.#cleanupAfterCombat. clearInfusion in realtà la chiamano già il
+      piazzamento di oggetti e terreni; manca il consumo dopo l'uso, voce emersa a parte.)
 - [x] **Emerso lavorando su R39 — piccole differenze di testo dei Limit Break dal libro** (S, dati) (FATTO il 17 ottobre 2026, versione 1.15.77): Split Heaven and
       Hell ha le tre distanze (1 space / 2-4 / 5+) come sotto-elenco nel libro (p.127), nel compendio sono in riga;
       Paradiso ha perso la prima frase del blocco Aura ("You gain an aura of supernatural accuracy…", p.155);
@@ -436,6 +439,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, da decidere): quando
       il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
       con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
+- [ ] **Emerso lavorando su R38b — l'infusione armata non si consuma quando si usa l'abilità o il Limit Break** (S/M):
+      l'Aether si spende "all'inizio dell'azione" e si sceglie una sola infusione per volta (p.204), quindi la
+      versione infusa vale per un uso; ma la card dell'abilità (`IconSheet`, ~riga 2628) e il Limit Break (~riga 3318)
+      leggono l'infusione armata senza chiamare `clearInfusion` (lo fanno solo oggetti e terreni): nello stesso
+      combattimento la seconda volta l'abilità esce di nuovo infusa gratis. Va scelto quando consumarla (alla card o
+      dopo danno e area, che leggono ancora `armedInfusion`); anche il commento in testa a `helpers/infuse.mjs` ("It
+      clears when the ability is rolled") oggi non è vero.
 
 ---
 
