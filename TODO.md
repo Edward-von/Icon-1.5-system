@@ -465,10 +465,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       combattimento la seconda volta l'abilità esce di nuovo infusa gratis. Va scelto quando consumarla (alla card o
       dopo danno e area, che leggono ancora `armedInfusion`); anche il commento in testa a `helpers/infuse.mjs` ("It
       clears when the ability is rolled") oggi non è vero.
-- [ ] **Emerso lavorando su R37 — bottoni di status dell'Infuse forse doppi sulla card del Limit Break** (S, da
+- [x] **Emerso lavorando su R37 — bottoni di status dell'Infuse forse doppi sulla card del Limit Break** (S, da
       verificare): in `#onUseLimitBreak` gli status si cercano su `effect` + testo dell'Infuse armato; se il testo
       dell'Infuse è già dentro `effect` (come sembra dai blocchi "Infuse" di `enrichLimitBreakText`), i suoi status
       potrebbero comparire due volte. Lo stesso con l'Ultimate quando il suo Infuse (Meteor) è armato.
+(FATTO il 17 ottobre 2026, versione 1.15.90: confermato nel codice, il testo dell'Infuse armato veniva letto due volte
+      (da dentro effetto / Ultimate e di nuovo a parte); ora gli status si cercano solo su effetto e Ultimate. Nel
+      pack jobs nessun Infuse di limit break nomina status, quindi nel gioco reale non si vedeva.)
 - [ ] **Emerso lavorando su R40 — il chip "Combo — Succubus" si vede anche senza combo** (S): il chip sotto Other
       appare anche quando il combo token non è pieno (come la casella "Combo version"); decidere se mostrarlo solo con
       la combo armata. La voce del pulsante Other dice ancora "mastery / talent / free" e non nomina la combo.
@@ -497,6 +500,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       verificare): `parseAbilityDamage` sulla descrizione di Aethershard (vecchia e nuova forma) dà `dealsDamage: true`
       con Hit 2 piercing, cioè i "2 piercing damage" del Summon Effect (che li infligge l'area che include lo shard, non
       l'abilità che lo evoca). Controllare se la scheda mostra un bottone danno su Aethershard e, se sì, toglierlo.
+- [ ] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, da decidere): la
+      card di "Use Limit Break" legge gli status da tutto il testo dell'effetto e dell'Ultimate, comprese le versioni
+      Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi
+      nessun limit break del pack lo fa). Scegliere se togliere dalla ricerca i blocchi Infuse non armati, come fa la
+      card delle abilità con `splitInfuseBlocks`.
 
 ---
 

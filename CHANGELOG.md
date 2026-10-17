@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato (versione 1.15.90)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Bottoni di status dell'Infuse doppi sulla card del Limit Break**: con una versione Infuse armata, gli status
+  scritti nel suo testo potevano avere due serie di bottoni sulla card di "Use Limit Break" (succede con l'Infuse
+  dell'Ultimate, al posto di METEOR; nei limit break del compendio nessun Infuse nomina status, quindi si vedeva solo
+  su limit break fatti a mano) → gli status si cercavano sul testo dell'effetto più quello dell'Infuse armato, ma il
+  testo dell'Infuse viene preso proprio da dentro l'effetto o l'Ultimate, quindi lo stesso testo veniva letto due
+  volte (e la seconda copia finiva sotto l'etichetta sbagliata) → gli status si cercano solo su effetto e Ultimate,
+  che contengono già l'Infuse. Solo codice.
+
 ## 17 ottobre 2026 — Aethershard: torna il testo del libro (versione 1.15.89)
 
 ### Round di debug del 16 ottobre, voce emersa su R33a3

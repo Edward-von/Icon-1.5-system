@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato (17 ottobre 2026, versione 1.15.90)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Gigaflare, capitolo 1 o 2, TETRAFLARE armato: "Use Limit Break" crea la card con il blocco TETRAFLARE e scala il
+      resolve come prima; nessun bottone di status.
+- [ ] Gigaflare, capitolo 3, METEOR armato: la card mostra "Gigaflare — METEOR", scala 6 resolve, l'Ultimate e il
+      blocco METEOR ci sono; nessun bottone di status.
+- [ ] Gran Levincross, capitolo 3, prima RAGNARÖK e poi GÖTTERDÄMMERUNG armati: la card esce senza errori in console e
+      il resolve scala come prima.
+- [ ] Limit break fatto a mano, capitolo 3. Effetto: `Effect: Deal [D]+fray damage to a foe in range 5.` e a capo
+      `Infuse 3: FOO — The foe is dazed.`. Ultimate: `BAR — Infuse 6: 4 resolve. The foe is weakened.`. Con BAR
+      armato, "weakened" ha una sola serie di bottoni e "dazed" una sola.
+- [ ] Un limit break con status nell'effetto e nessun Infuse armato (es. Mock): i bottoni di status ci sono come
+      prima.
+
 ## Emerso R33a3 — Aethershard: torna il testo del libro (17 ottobre 2026, versione 1.15.89)
 
 Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 33 (parte da sola al caricamento del mondo, da GM).

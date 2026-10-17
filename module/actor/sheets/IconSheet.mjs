@@ -3409,8 +3409,11 @@ export class IconSheet extends BaseActorSheet {
     // The statuses the limit break inflicts or grants get their buttons, like an
     // ability card (Mock: slashed+, weakened+, hatred+ "until the end of their next turn").
     // From chapter 3 the Ultimate improves it (p.113): its text and statuses join the card.
+    // The armed Infuse version is not added again: limitBreakInfusions reads it
+    // out of the effect / ultimate text, so its statuses are already parsed there
+    // (adding it twice gave the Ultimate's version a second set of buttons).
     const { ultimate } = IconSheet.#limitBreakTexts(this.document, lb);
-    const entries = parseInflictedStatuses(`${lb.system.effect ?? ""} ${infusion?.text ?? ""}`, { sourceName: this.document.name, label: "Effect" });
+    const entries = parseInflictedStatuses(lb.system.effect ?? "", { sourceName: this.document.name, label: "Effect" });
     if (ultimate) entries.push(...parseInflictedStatuses(ultimate, { sourceName: this.document.name, label: "Ultimate" }));
     const statusHtml = statusBlockHtml(entries, { source: this.document, abilityName: lb.name });
     const ultimateHtml = ultimate
