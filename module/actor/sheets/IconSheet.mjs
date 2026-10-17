@@ -2633,7 +2633,7 @@ export class IconSheet extends BaseActorSheet {
     const allVariants = this._areaVariantsFor(ab);
     // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character,
     // and the pits' blasts inside the attack's area (R49: Holy Talent I, PURGATORIO, p.177).
-    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object" || a?.centeredOn === "pits";
+    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object" || a?.centeredOn === "pits" || a?.centeredOn === "spike";
     const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !notTheAttack(v.area));
     const noAttackArea = !attackVariants.length && allVariants.some(v => notTheAttack(v.area));
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {

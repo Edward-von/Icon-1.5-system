@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Rampant Nail: la Small Blast del Talent I sullo spuntone (17 ottobre 2026, versione 1.15.140)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Rampant Nail e Talent I: senza spuntone sulla mappa, il bottone area con "Talent I: Small Blast (on
+      nail)" avvisa "place the nail first" e non piazza nulla.
+- [ ] Piazzare lo spuntone (Aura 2), poi "Small Blast (on nail)": la croce di 5 caselle compare centrata sullo
+      spuntone senza clic sulla mappa, e lo spuntone resta.
+- [ ] Un foe che entra nella blast riceve il messaggio del terreno dangerous.
+- [ ] Ripiazzare la blast: la vecchia sparisce, lo spuntone resta.
+- [ ] Togliere lo spuntone (Remove area o Canc), e in un'altra prova piazzarne uno nuovo: in tutti e due i casi la
+      blast sparisce (serve un GM connesso).
+- [ ] A inizio turno del PG la blast non viene cancellata.
+
 ## Emerso R1 — Barrato solo il blocco sostituito dalla combo (17 ottobre 2026, versione 1.15.139)
 
 Setup: solo codice (F5 basta).

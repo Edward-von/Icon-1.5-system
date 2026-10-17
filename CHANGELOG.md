@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Rampant Nail: la Small Blast del Talent I sullo spuntone (versione 1.15.140)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Rampant Nail Talent I**: la Small Blast "centered on the nail is dangerous terrain" (p.227) si piazzava a mano
+  come un'area qualsiasi, non era dangerous e, se si piazzava, toglieva lo spuntone → "centered on the nail" non
+  veniva riconosciuto e la frase non dice "terrain effect" → ora la variante "Talent I: Small Blast (on nail)" va da
+  sola sullo spuntone già sulla mappa (l'Aura 2 dello stesso attore e della stessa abilità), è dangerous e resta; lo
+  spuntone resta al suo posto e viene sostituita solo una blast messa prima. Quando lo spuntone viene tolto
+  (esplosione, Remove, nuovo spuntone) la blast se ne va con lui. Senza spuntone sulla mappa compare un avviso e non
+  succede nulla. Solo codice.
+
 ## 17 ottobre 2026 — Barrato solo il blocco sostituito dalla combo (versione 1.15.139)
 
 ### Round di debug del 15 ottobre, voce emersa su R1

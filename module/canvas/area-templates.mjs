@@ -41,7 +41,7 @@
  * bounds the text writes ("to a maximum of 3 or a minimum of 1", Gentleness'
  * Gentle Prayer p.179), else 1 to 5 (resizeAura).
  */
-import { areaTerrainAt } from "../helpers/area-terrain.mjs";
+import { areaTerrainAt, terrainOfBlock } from "../helpers/area-terrain.mjs";
 
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
 // Local escape: importing enrich.mjs here would close an import loop
@@ -170,7 +170,7 @@ export function rangeFromTags(tags) {
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
-    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : "");
+    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : area.centeredOn === "spike" ? " (on nail)" : "");
     case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
@@ -214,12 +214,19 @@ export function areasInText(text) {
     prevCentre = centre;
     if (centre) {
       area.centeredOn = centre;
-      if (area.kind === "burst" && !area.self && !area.target && centre !== "object" && centre !== "pits") area[centre] = true;
+      if (area.kind === "burst" && !area.self && !area.target && centre !== "object" && centre !== "pits" && centre !== "spike") area[centre] = true;
     }
     // R33c: an area whose sentence is a terrain effect lasts on the map and carries what its spaces are
     // (Morrigan's Dark Wing p.171, "a small blast terrain effect in range 3. The area is dangerous terrain for
     // foes"); the same text's other areas (Magnabio's Large Blast attack, p.218) don't.
-    const terrain = areaTerrainAt(orig, m.index);
+    let terrain = areaTerrainAt(orig, m.index);
+    // Rampant Nail Talent I (p.227): "a small blast area centered on the nail is dangerous terrain" says no
+    // "terrain effect", but its spaces are dangerous while the nail is there: read the sentence as its terrain.
+    if (!terrain && centre === "spike") {
+      const end = m.index + m[0].length + plain.slice(m.index + m[0].length).split(/[.;:]/)[0].length;
+      const t = terrainOfBlock(orig.slice(m.index - before.length, end).trim());
+      if (t.dangerous || t.difficult) terrain = t;
+    }
     if (terrain) area.terrain = terrain;
     area.label = areaLabel(area);
     if (seen.has(area.label)) continue;
@@ -234,7 +241,8 @@ export function areasInText(text) {
  * them / the character / your foe / your ally / the attack target", "self" for
  * "centered on you", "pits" for "them" after pits ("all pits in the area
  * explode … centered on them", Holy's Talent I, R49), "object" for "them" after
- * objects (Helix Heel) and "it" (Geyser's geyser), else "" (the area is placed
+ * objects (Helix Heel) and "it" (Geyser's geyser), "spike" for "the nail"
+ * (Rampant Nail Talent I, p.227), else "" (the area is placed
  * in range as usual; plants / nails / clouds are still left to placing by hand).
  * @param {string} before  the sentence before the shape, lower case
  * @param {string} rest    the sentence after the shape, lower case
@@ -246,6 +254,9 @@ function centreOf(before, rest) {
   // object's token now that objects are on the map ("object": the targeted object, else placed by hand).
   // R33c: "create a small blast terrain effect of smoke on you" (Showdown's Quench, p.157) is on the user too.
   if (/^\s*(?:area effect|terrain effect|area)?\s*(?:of [a-z' -]{1,30}?\s)?on (?:you|yourself)\b/.test(rest)) return "self";
+  // Rampant Nail Talent I (p.227): "a small blast area centered on the nail is dangerous terrain" goes on the
+  // spike already on the map ("spike": the ability's Aura 2 around a space, placed by placeAreaTemplate).
+  if (/\bcent(?:er|r)ed on (?:the|your) (?:nail|spike)\b/.test(rest)) return "spike";
   const m = /\bcent(?:er|r)ed on (you|yourself|them|it|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
   if (!m) return "";
   if (m[1] === "it") return "object";
@@ -853,6 +864,16 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     lasting = false; terrain = null; stack = 1;
     removeIds = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => t.flags[FLAG_NS].pitBlast).map(t => t.id);
   }
+  // Rampant Nail Talent I (p.227): the dangerous Small Blast goes on the spike already on the map and stays
+  // while it does; the spike stays too, only an earlier blast on it is replaced.
+  const onSpike = area?.centeredOn === "spike";
+  let spike = null;
+  if (onSpike) {
+    spike = spikeTemplate({ actorId: actor.id, abilityKey });
+    if (!spike) { ui.notifications.warn("Centered on the nail: place the nail first (its Aura 2 terrain effect), then this area."); return null; }
+    lasting = true; stack = 1;
+    removeIds = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => t.flags[FLAG_NS].onSpike).map(t => t.id);
+  }
   if (replace && stack > 1) {
     const earlier = findAreaTemplates({ actorId: actor.id, abilityKey })
       .filter(t => !t.flags[FLAG_NS].followTokenId)
@@ -915,6 +936,9 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     if (!blown) return null;
     ({ cells, origin: originCell } = blown);
     area.label = `${area.label} × ${blown.pits}`;
+  } else if (spike) {
+    originCell = canvas.grid.getOffset({ x: spike.x, y: spike.y });
+    cells = shapeCells(area, originCell);
   } else if (centre) {
     const centreCells = tokenCells(centre.document);
     if (area.kind === "burst") {
@@ -999,6 +1023,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       ...(whileMarked ? { whileMarked } : {}),
       // R49: the pits' explosion, not the ability's own area (pitBlastCells looks past it)
       ...(pitBlast ? { pitBlast: true } : {}),
+      // The nail's dangerous blast (Rampant Nail Talent I): removed with the spike it is on
+      ...(spike ? { onSpike: spike.id } : {}),
       // R33c: a terrain effect's spaces (dangerous, difficult, what entering sets off), read at movement by
       // terrain-spaces.mjs as for its single spaces
       ...(terrain && !isAura ? { terrain: { group: "", source: "", ...terrain, kind: "area", creatorId: actor.id, itemId: abilityKey ?? "" } } : {}),
@@ -1175,6 +1201,16 @@ function pitBlastCells({ actor, abilityKey, area }) {
     if (!seen.has(k)) { seen.add(k); cells.push(c); }
   }
   return { cells, origin: pits[0], pits: pits.length };
+}
+
+/**
+ * The spike an area "centered on the nail" goes on (Rampant Nail Talent I, p.227): the newest of this actor's
+ * and ability's areas that is an aura around a space ("Terrain effect: The spike has aura 2"), or null.
+ */
+function spikeTemplate({ actorId, abilityKey }) {
+  return findAreaTemplates({ actorId, abilityKey })
+    .filter(t => { const f = t.flags[FLAG_NS]; return f.area?.kind === "aura" && !f.followTokenId && !f.onSpike; })
+    .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0))[0] ?? null;
 }
 
 /**
@@ -1696,6 +1732,16 @@ export function registerAreaTemplates() {
     for (const t of Array.from(game.user.targets)) {
       if (inArea.has(t.id)) t.setTarget(false, { releaseOthers: false });
     }
+  });
+  // Rampant Nail Talent I (p.227): "While the nail is active" — the dangerous blast on the spike goes with it
+  // (exploded, removed by hand, a new spike). Active GM only (it can delete anyone's template).
+  Hooks.on("deleteMeasuredTemplate", async (doc) => {
+    if (game.users.activeGM?.id !== game.user.id || !doc.flags?.[FLAG_NS]?.cells) return;
+    const scene = doc.parent;
+    const ids = scene?.templates.filter(t => t.flags?.[FLAG_NS]?.onSpike === doc.id).map(t => t.id) ?? [];
+    if (!ids.length) return;
+    try { await scene.deleteEmbeddedDocuments("MeasuredTemplate", ids); }
+    catch (err) { console.warn("[ICON | AreaTemplates] could not remove the blast on a removed nail", err); }
   });
   // An aura held "while marked" (Fulminate p.226) ends with its mark: removed
   // by hand, moved to another character by marking again, the marker defeated,

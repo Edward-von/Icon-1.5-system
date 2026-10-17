@@ -613,9 +613,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       prima quello.
       (CHIUSO il 17 ottobre 2026: nessun testo dei pack dice "centered on them" dopo plants / nails / clouds, la riga in
       `centreOf` è solo una protezione. I casi reali sono le due voci qui sotto.)
-- [ ] **Emerso lavorando su R49 — Rampant Nail Talent I centrato sullo spuntone** (S): "a small blast area centered on the
+- [x] **Emerso lavorando su R49 — Rampant Nail Talent I centrato sullo spuntone** (S): "a small blast area centered on the
       nail is dangerous terrain" (p.227): la Small Blast dangerous va centrata da sola sullo spuntone già sulla mappa
       (l'area Aura 2 su una casella, con attore e abilità di chi l'ha creato).
+(FATTO il 17 ottobre 2026, versione 1.15.140: "centered on the nail" mette la Small Blast del Talent I sullo spuntone
+      già sulla mappa, dangerous e che resta; se ne va quando lo spuntone viene tolto o sostituito. Solo codice.)
 - [ ] **Emerso lavorando su R49 — Harvest Moon: esplosioni sulle plant** (M): "small blast area effect centered on each
       plant" (Harvest, mastery, p.186): servirebbe prima un modo sicuro di riconoscere le plant sulla mappa (es. un flag
       sul token quando viene evocata dal pack; il Megamushroom "conta come plant"), poi le esplosioni sulle plant
@@ -770,6 +772,9 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R40 — "fino a N volte" nelle chip** (S): Circle the Oak, Quaking Palm e Nothung scrivono
       "up to a maximum of four times" (il numero di volte dipende dalla situazione); la chip propone una sola istanza
       e Instances va messo a mano.
+- [ ] **Emerso lavorando su R49 — la blast del Rampant Nail non segue lo spuntone spostato** (S): se lo spuntone si
+      sposta con Shift + frecce, la Small Blast del Talent I resta dove era e va ripiazzata a mano (il libro non
+      prevede di spostare lo spuntone).
 
 ---
 
