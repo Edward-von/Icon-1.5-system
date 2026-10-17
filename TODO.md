@@ -761,10 +761,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R37 — Split Heaven and Hell: distanza misurata sulla linea** (S/M): la fascia "1 space /
       2-4 / 5+" (p.127) si sceglie a mano nel dialog del "% Max HP"; per misurarla servirebbe sapere dove parte la
       linea piazzata e leggere la posizione di ogni bersaglio.
-- [ ] **Emerso lavorando su R37 — l'annotazione della spesa di resolve resta vecchia** (S):
+- [x] **Emerso lavorando su R37 — l'annotazione della spesa di resolve resta vecchia** (S):
       `flags.icon-system.limitBreakSpend` non si cancella a fine combattimento: un "% Max HP" con un Legend che salva,
       senza aver riusato il Limit Break, rimborsa l'uso precedente, anche di un altro combattimento. Cancellarla nel
       reset di fine combattimento (IconCombat.mjs, ~riga 604).
+(FATTO il 17 ottobre 2026, versione 1.15.134: l'annotazione si cancella nel reset di fine combattimento; ogni nuovo
+      uso la sovrascrive già, e il rimborso controlla che sia lo stesso Limit Break. Solo codice.)
 - [ ] **Emerso lavorando su R40 — "fino a N volte" nelle chip** (S): Circle the Oak, Quaking Palm e Nothung scrivono
       "up to a maximum of four times" (il numero di volte dipende dalla situazione); la chip propone una sola istanza
       e Instances va messo a mano.

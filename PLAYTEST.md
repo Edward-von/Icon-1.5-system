@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — La spesa di resolve del Limit Break finisce col combattimento (17 ottobre 2026, versione 1.15.134)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Gigantas Crusher: usarlo (paga resolve), chiudere l'incontro con "End Encounter", aprirne un altro,
+      lanciare il "% Max HP" con un Legend che salva → nessun rimborso automatico, compare l'avviso "No recorded
+      resolve spend".
+- [ ] Stesso PG, nello stesso combattimento: usare il Limit Break e poi il "% Max HP" con un Legend che salva → il
+      rimborso funziona ancora, con le stesse quote party / personal.
+
 ## Emerso R12 — Elenchi "•" a righe nelle regole dei summon di foe e legend (17 ottobre 2026, versione 1.15.133)
 
 Setup: solo codice (F5 basta).

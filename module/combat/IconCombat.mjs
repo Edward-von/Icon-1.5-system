@@ -614,6 +614,10 @@ export class IconCombat extends Combat {
           // ("Aether is consumed at the start of the action", p.204): dropped,
           // not refunded — cancelInfusion is the undo, this is not.
           "flags.icon-system.-=infused":                       null,
+          // The record of the last limit break's resolve spend (for the
+          // Gigantas Crusher refund, p.135) ends with the encounter: a later
+          // "% Max HP" save must not refund a use from this combat.
+          "flags.icon-system.-=limitBreakSpend":               null,
         });
         // Power dice tracked on ability / trait items end with the combat too
         // (stances and marks that grant them don't outlive the encounter).

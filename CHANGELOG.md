@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — La spesa di resolve del Limit Break finisce col combattimento (versione 1.15.134)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Rimborso del Limit Break da un combattimento passato**: un "% Max HP" con un Legend che salva rimborsava l'ultimo
+  uso del Limit Break anche se era di un combattimento precedente → l'annotazione della spesa (`limitBreakSpend`) non
+  veniva mai cancellata a fine combattimento → ora si cancella con il resto delle risorse a fine incontro
+  (`IconCombat.mjs`), quindi senza un uso nel combattimento in corso compare l'avviso "rimborsalo a mano". Ogni nuovo
+  uso la sovrascrive già e il rimborso controlla che sia lo stesso Limit Break. Solo codice.
+
 ## 17 ottobre 2026 — Elenchi "•" a righe nelle regole dei summon di foe e legend (versione 1.15.133)
 
 ### Round di debug del 15 ottobre, voce emersa su R12
