@@ -882,6 +882,12 @@
               <i class="fa-solid fa-burst"></i> Damage Roll
             </button>
           {{/if}}
+          {{#if limitBreakPercent}}
+            <button type="button" class="icon-btn icon-btn--sm" data-action="limitBreakPercentDamage"
+                    title="Target the characters, then deal the limit break's share of their max base hp (p.106), choosing save / distance per target; Legends follow the text's own rule">
+              <i class="fa-solid fa-percent"></i> % Max HP
+            </button>
+          {{/if}}
           {{#if limitBreakArea}}
             <button type="button" class="icon-btn icon-btn--sm icon-btn--area" data-action="limitBreakPlaceArea"
                     title="Place the limit break's aura or area on the map (an aura goes around your token and follows it; clicking again replaces it)">

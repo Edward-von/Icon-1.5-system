@@ -509,6 +509,59 @@ export function parseLimitBreakDamage(lbSystem, { ultimate = false, infused = nu
 }
 
 /**
+ * Damage of a limit break given as a share of the target's max hp, which no
+ * die rolls (Gigantas Crusher p.135: "Your foe takes 50% of their max hp as
+ * divine damage, or 25% as divine damage on a successful save"; Split Heaven
+ * and Hell p.127: "1 space: 100% of max hp / 2-4 spaces: 50% / 5+ spaces: 25%").
+ * The share is of the max BASE hp (p.106, "% Health"). Returns null when the
+ * text has none.
+ * @returns {null|{divine:boolean, options:Array<{label,pct}>,
+ *   legend:Array<{label,pct?,fray?,note?}>|null, bonus:{pct,nonLegend,lowHp,name}|null}}
+ */
+export function parseLimitBreakPercent(lbSystem, { ultimate = false } = {}) {
+  const s = lbSystem ?? {};
+  const plain = (t) => String(t ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const text = plain(s.effect);
+  const options = [];
+  // Distance bands of a line (Split Heaven and Hell): "1 space: 100% of max hp".
+  for (const m of text.matchAll(/(\d+\s*(?:[-–]\s*\d+|\+)?\s*spaces?)\s*:\s*(\d+)%\s+of\s+(?:their\s+)?max\s+hp/gi)) {
+    options.push({ label: m[1].replace(/\s+/g, " "), pct: Number(m[2]) });
+  }
+  if (!options.length) {
+    // A foe's share, with a smaller one on a successful save (Gigantas Crusher).
+    const m = /(\d+)%\s+of\s+their\s+max\s+hp([^.]*)/i.exec(text);
+    if (m) {
+      const saved = /\bor\s+(\d+)%[^.]*\bsuccessful\s+save\b/i.exec(m[2]);
+      if (saved) options.push({ label: "Failed save", pct: Number(m[1]) }, { label: "Successful save", pct: Number(saved[1]) });
+      else options.push({ label: "Damage", pct: Number(m[1]) });
+    }
+  }
+  if (!options.length) return null;
+  // Legends: a fixed share ("Legend characters always take 25% of max hp"), or
+  // a save they may always make (Gigantas Crusher: "divine fray damage and
+  // refunding this ability's resolve cost on a successful save, and only 25%
+  // hp as divine damage on a failed save").
+  let legend = null;
+  const ls = text.split(/(?<=\.)\s+/).find(t => /\blegends?\b/i.test(t) && /\d+%/.test(t));
+  if (ls) {
+    const pct = Number(/(\d+)%/.exec(ls)[1]);
+    legend = /\bmay always save\b/i.test(ls)
+      ? [{ label: "Failed save", pct },
+         { label: "Successful save", fray: /\bfray\b/i.test(ls), note: /\brefund/i.test(ls) ? "refunds the resolve cost" : "" }]
+      : [{ label: "Legend", pct }];
+  }
+  // The Ultimate's extra share (Atomos Crusher: "If you're at 1 hp or lower,
+  // this ability deals 25% more max hp damage to non-legend characters").
+  let bonus = null;
+  const u = ultimate ? plain(s.ultimate) : "";
+  const b = /(\d+)%\s+more\s+max\s+hp\s+damage/i.exec(u);
+  if (b) bonus = { pct: Number(b[1]), nonLegend: /\bnon-legend\b/i.test(u), lowHp: /\b1 hp or lower\b/i.test(u),
+                   name: (/^([^:]{1,40}):/.exec(u)?.[1] ?? "Ultimate").trim() };
+  const tags = (s.tags ?? []).map(t => String(t).trim().toLowerCase());
+  return { divine: tags.includes("divine") || /\bdivine\b/i.test(text), options, legend, bonus };
+}
+
+/**
  * Foe/legend actions have no `isAttack` field: an action is an attack if it carries an
  * attack tag (book header "attack" / "melee attack" / "ranged attack") or spells out an
  * "On hit:" line. Non-attack abilities (marks, terrain, Diaga, traits-as-actions…) must

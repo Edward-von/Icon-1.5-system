@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Limit Break con danno in percentuale degli hp (17 ottobre 2026, versione 1.15.107)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG Colossus con Gigantas Crusher: nel riquadro Limit Break c'è il bottone "% Max HP"; con un PG senza questi
+      Limit Break il bottone non c'è.
+- [ ] Senza bersagli: "% Max HP" mostra l'avviso "Target the characters first".
+- [ ] Gigantas Crusher su un foe da 40 hp massimi: "Failed save" toglie 20, "Successful save" 10. Armatura e vigor non
+      tolgono niente; card di riepilogo e "Damage Applied" corrette.
+- [ ] Gigantas Crusher su un Legend: le scelte sono "Failed save" (25%) e "Successful save" (divine fray del PG, con
+      la nota "refunds the resolve cost").
+- [ ] Split Heaven and Hell (Demon Slayer) su tre foe: scelte 1 casella / 2-4 caselle / 5+ caselle (100% / 50% / 25%);
+      su un Legend solo "Legend" al 25%.
+- [ ] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti.
+- [ ] Capitolo 3, Gigantas Crusher, PG a 1 hp: la casella Atomos Crusher è già spuntata e il foe prende 75% / 50%; sui
+      Legend la casella non cambia nulla.
+- [ ] Un giocatore senza i permessi sul foe: il danno passa al GM e viene applicato senza toccare il vigor.
+
 ## Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (17 ottobre 2026, versione 1.15.106)
 
 Setup: solo codice (F5 basta).

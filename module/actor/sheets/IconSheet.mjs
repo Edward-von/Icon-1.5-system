@@ -2,7 +2,7 @@
  * IconSheet — ApplicationV2 sheet for Player Characters (type: "icon").
  */
 import { narrativeRoll, combatRoll, damageRoll, relicInvokeHtml, relicNotesHtml } from "../../dice/rolls.mjs";
-import { postAbilityDamageCard, recoverAction } from "../../combat/damage.mjs";
+import { postAbilityDamageCard, recoverAction, applyDamageToActor } from "../../combat/damage.mjs";
 import { LevelUpDialog } from "../../apps/LevelUpDialog.mjs";
 import { CharacterCreationDialog } from "../../apps/CharacterCreationDialog.mjs";
 import { showWelcomeGuide } from "../../apps/welcome.mjs";
@@ -133,7 +133,7 @@ function _abilityMarks(actorId, itemId, comboMark, altMark = null) {
 
 // Damage parsing lives in combat/ability-damage.mjs. The re-export keeps
 // world macros that import { _parseAbilityDamage } from this file working.
-import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage, infusedAbilityDamage } from "../../combat/ability-damage.mjs";
+import { parseAbilityDamage as _parseAbilityDamage, parseComboAbilityDamage, parseLimitBreakDamage, parseLimitBreakPercent, infusedAbilityDamage } from "../../combat/ability-damage.mjs";
 import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
@@ -223,6 +223,7 @@ export class IconSheet extends BaseActorSheet {
       bondShowInChat:      IconSheet.#onBondShowInChat,
       useLimitBreak: IconSheet.#onUseLimitBreak,
       limitBreakDamageRoll: IconSheet.#onLimitBreakDamageRoll,
+      limitBreakPercentDamage: IconSheet.#onLimitBreakPercentDamage,
       limitBreakPlaceArea:  IconSheet.#onLimitBreakPlaceArea,
       limitBreakInfuse:     IconSheet.#onLimitBreakInfuse,
       addJob:        IconSheet.#onAddJob,
@@ -357,6 +358,8 @@ export class IconSheet extends BaseActorSheet {
     context.limitBreakCost = abilityCostLabel(context.limitBreakItem?.system?.cost ?? "");
     // Limit breaks that deal damage get a Damage Roll button, like abilities.
     context.limitBreakDeals = !!context.limitBreakItem && IconSheet.#limitBreakDamage(actor, context.limitBreakItem).dealsDamage;
+    // A share of the target's max hp, which no die rolls (Gigantas Crusher p.135, Split Heaven and Hell p.127).
+    context.limitBreakPercent = !!context.limitBreakItem && !!parseLimitBreakPercent(context.limitBreakItem.system);
     // ... and the ones with an aura or an area get the area button (Paradiso p.155: "You gain Aura 2").
     const lbAreas = context.limitBreakItem ? IconSheet.#limitBreakAreas(actor, context.limitBreakItem) : [];
     context.limitBreakArea = lbAreas.length === 1 ? lbAreas[0].label : lbAreas.length ? "Area" : "";
@@ -3309,6 +3312,88 @@ export class IconSheet extends BaseActorSheet {
       other:       mods.other,
       instances:   mods.instances,
     });
+  }
+
+  /**
+   * "% Max HP" of the limit break: the share of each targeted character's max
+   * BASE hp (p.106: "always considers maximum base hp, and not max hp based on
+   * wounds"), picked per target (failed / successful save, distance on the
+   * line), with the Legend rule of the text (Gigantas Crusher p.135: they may
+   * always save, divine fray on a success, 25% on a failure; Split Heaven and
+   * Hell p.127: always 25%). Dealt through applyDamageToActor; divine (p.104)
+   * ignores armor, halving and vigor. Shares round up (p.86).
+   */
+  static async #onLimitBreakPercentDamage(event, target) {
+    event?.stopPropagation?.();
+    const lb = this.document.items.find(i => i.type === "limit-break");
+    if (!lb) return ui.notifications.warn("No Limit Break equipped.");
+    const combat = this.document.system.combat;
+    const pct = parseLimitBreakPercent(lb.system, { ultimate: (combat?.chapter ?? 1) >= 3 });
+    if (!pct) return ui.notifications.warn(`"${lb.name}" deals no share of max hp.`);
+    const tokens = Array.from(game.user?.targets ?? []).filter(t => t.actor);
+    if (!tokens.length) return ui.notifications.warn("Target the characters first (T), then press % Max HP.");
+    const esc = escapeHTML;
+    const baseMax = (a) => a.type === "icon"
+      ? Number(a.system.combat?.hp?.baseMax ?? a.system.combat?.hp?.max ?? 0)
+      : Number(a.system.hp?.max ?? 0);
+    const choicesOf = (a) => (a.type === "legend" && pct.legend) ? pct.legend : pct.options;
+    const fray = Number(combat?.fray ?? 0) || 0;
+    const optLabel = (o, max) => o.fray
+      ? `${o.label}: divine fray (${fray})${o.note ? `, ${o.note}` : ""}`
+      : `${o.label}: ${o.pct}% → ${Math.ceil(max * o.pct / 100)}`;
+    const rows = tokens.map((t, i) => {
+      const a = t.actor, max = baseMax(a);
+      const opts = choicesOf(a).map((o, j) => `<option value="${j}">${esc(optLabel(o, max))}</option>`).join("");
+      return `<div style="display:flex; gap:6px; align-items:center">
+          <span style="flex:1"><strong>${esc(t.name ?? a.name)}</strong>${a.type === "legend" ? " (Legend)" : ""} <small>max base hp ${max}</small></span>
+          <select name="t${i}">${opts}</select></div>`;
+    }).join("");
+    // Atomos Crusher (Ultimate): +25% to non-legends while the user is at 1 hp or lower.
+    const bonus = pct.bonus;
+    const lowHp = Number(combat?.hp?.value ?? 99) <= 1;
+    const bonusHtml = bonus
+      ? `<label><input type="checkbox" name="bonus" ${!bonus.lowHp || lowHp ? "checked" : ""}>
+           ${esc(bonus.name)}: +${bonus.pct}% of max hp${bonus.nonLegend ? " to non-legends" : ""}${bonus.lowHp ? " (you're at 1 hp or lower)" : ""}</label>`
+      : "";
+    const content = `<div class="icon-lb-percent" style="display:flex; flex-direction:column; gap:6px; padding:4px 0">
+        ${rows}${bonusHtml}
+        <p style="margin:0; opacity:.75"><small>Of the max <em>base</em> hp, not reduced by wounds (p.106); rounded up.${pct.divine ? " Divine: no armor, halving or vigor (p.104)." : ""}</small></p>
+      </div>`;
+    let picked;
+    try {
+      picked = await foundry.applications.api.DialogV2.prompt({
+        window: { title: `${lb.name} — % Max HP` },
+        content,
+        ok: {
+          label: "Apply",
+          callback: (_e, button) => ({
+            rows: tokens.map((_t, i) => Number(button.form.elements[`t${i}`]?.value) || 0),
+            bonus: !!button.form.elements.bonus?.checked,
+          }),
+        },
+        rejectClose: false,
+      });
+    } catch { picked = null; }
+    if (!picked) return;
+    const lines = [], hits = [];
+    for (const [i, t] of tokens.entries()) {
+      const a = t.actor, max = baseMax(a);
+      const o = choicesOf(a)[picked.rows[i]] ?? choicesOf(a)[0];
+      const extra = (o.fray || !picked.bonus || !bonus || (bonus.nonLegend && a.type === "legend")) ? 0 : bonus.pct;
+      const share = o.fray ? 0 : o.pct + extra;
+      const amount = o.fray ? fray : Math.ceil(max * share / 100);
+      _log(`limitBreakPercentDamage — "${lb.name}" → "${a.name}" | ${o.label} | ${o.fray ? "fray" : `${share}% of ${max}`} = ${amount}`);
+      lines.push(`<li><strong>${esc(t.name ?? a.name)}</strong> — ${esc(o.label)}: <strong>${amount}</strong>${pct.divine ? " divine" : ""} damage
+        <small>(${o.fray ? "fray" : `${share}% of ${max} max base hp`}${o.note ? `; ${esc(o.note)}` : ""})</small></li>`);
+      hits.push([a, amount]);
+    }
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.document }),
+      content: `<div class="icon-chat-card"><strong>${esc(lb.name)}</strong> — % of max hp<ul style="margin:4px 0 0">${lines.join("")}</ul></div>`,
+    });
+    for (const [a, amount] of hits) {
+      await applyDamageToActor(a, amount, { applyArmor: !pct.divine, ignoreVigor: pct.divine, chatConfirm: true });
+    }
   }
 
   /** The limit break's rules texts: the effect, and the ultimate from chapter 3 (p.113). */

@@ -347,7 +347,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       system.combat.chapter è sotto 3; dal capitolo 3, stessa soglia di #limitBreakTexts e del Damage Roll di R37, la
       card "Use Limit Break" ne aggiunge testo e bottoni degli status. File: templates/actor/icon-combat.hbs,
       module/actor/sheets/IconSheet.mjs, css/icon.css.)
-- [ ] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, pronto: risposta del 17 ottobre 2026): Gigantas Crusher
+- [x] **Emerso lavorando su R37 — danno in percentuale degli hp non tirabile** (S/M, pronto: risposta del 17 ottobre 2026): Gigantas Crusher
       (Colossus, "50% of their max hp as divine damage") e Split Heaven and Hell (Demon Slayer, "100% / 50% / 25% of
       max hp") non hanno un danno tirabile; Gigantas Crusher propone solo il "divine fray damage" dei Legend. Valutare
       un Apply che toglie la percentuale degli hp massimi del bersaglio.
@@ -357,6 +357,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       or 25% as divine damage on a successful save", i Legend "may always save" (p.135); Split Heaven and Hell, Legend
       "always take 25% of max hp" (p.127). Un Apply che toglie la percentuale degli hp massimi base del bersaglio come
       danno divine.
+(FATTO il 17 ottobre 2026, versione 1.15.107: bottone "% Max HP" nel riquadro Limit Break; per ogni bersaglio si
+      sceglie save o distanza, i Legend seguono la regola del testo; percentuale sugli hp massimi base (p.106),
+      arrotondata per eccesso, applicata come divine senza armatura né vigor; casella Atomos Crusher dal capitolo 3.
+      Solo codice.)
 - [x] **Emerso lavorando su R38b — Meteor costa più Aether del massimo** (S, da decidere): "Infuse 8: METEOR" (p.208)
       chiede 8 Aether, ma il sistema tiene l'Aether al massimo a 6 (d6, p.204): con l'Aether normale Meteor non si arma
       mai, resta solo il Special effect (pagare con la vita). Verificare sul manuale se qualcosa porta l'Aether oltre 6.
@@ -685,6 +689,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
       se il giocatore marca un personaggio che non è suo, il mark lo crea il GM, quindi la finestra "Aura 2 / Aura 3"
       compare al GM e non al giocatore; portare la domanda al client di chi ha marcato prima di passare il mark al GM.
+- [ ] **Emerso lavorando su R37 — il divine non salta il vigor col bottone Apply delle card** (S): p.104 dice che il
+      divine "bypasses vigor"; il nuovo "% Max HP" lo salta, ma il bottone Apply delle card di danno (`icon.mjs`,
+      gestione di `data-divine`) non passa `ignoreVigor` per il divine, quindi lì il vigor assorbe ancora il danno
+      divine.
+- [ ] **Emerso lavorando su R37 — Atomos Crusher "+25%": in più o moltiplicato?** (S, da decidere): "deals 25% more
+      max hp damage" è letto come 25 punti in più (50% → 75%); l'altra lettura è un quarto in più (50% → 62,5%).
+      Domanda per Edoardo: quale?
+- [ ] **Emerso lavorando su R37 — Gigantas Crusher, Legend che salva: rimborso della resolve** (S): "refunding this
+      ability's resolve cost on a successful save" (p.135) è solo una nota nella card, la resolve non torna da sola;
+      la distanza sulla linea di Split Heaven and Hell si sceglie a mano, non viene misurata sulla mappa.
 
 ---
 

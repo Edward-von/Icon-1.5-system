@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Limit Break con danno in percentuale degli hp (versione 1.15.107)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Gigantas Crusher e Split Heaven and Hell**: questi Limit Break fanno danno come percentuale degli hp massimi del
+  bersaglio e non si poteva applicare (il Damage Roll di Gigantas Crusher proponeva solo il "divine fray" dei Legend)
+  → il Damage Roll sa leggere solo dadi, fray e numeri fissi, non le percentuali → nuovo bottone "% Max HP" nel
+  riquadro Limit Break: si bersagliano i personaggi e per ognuno si sceglie tiro salvezza fallito o riuscito (Gigantas
+  Crusher: 50% / 25%, p.135) oppure distanza sulla linea (Split Heaven and Hell: 1 casella 100%, 2-4 caselle 50%, 5+
+  caselle 25%, p.127). I Legend seguono il testo: Gigantas Crusher 25% su save fallito oppure divine fray su save
+  riuscito; Split Heaven and Hell sempre 25%. La percentuale si calcola sugli hp massimi base, non ridotti dalle wound
+  (p.106), arrotondata per eccesso; il danno è divine (ignora armatura, dimezzamenti e vigor, p.104) e passa dalla
+  stessa funzione degli altri danni. Dal capitolo 3 una casella per Atomos Crusher (+25% ai non-Legend, già spuntata a
+  1 hp o meno). In chat una card di riepilogo più "Damage Applied" per ogni bersaglio. Solo codice.
+
 ## 17 ottobre 2026 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (versione 1.15.106)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
