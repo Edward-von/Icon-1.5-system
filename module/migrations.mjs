@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 35;
+export const CURRENT_SCHEMA_VERSION = 36;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1318,6 +1318,36 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 35: ${n} copy/copies of Sow given REAP's own tags (melee, p.185)`);
+  },
+
+  /* 36 — Boiling Blood (Colossus, p.138): the book prints the interrupt's name
+   * "Defy Death" as a heading over its Trigger / Effect; the pack had it as
+   * "… before expiring. Defy Death — Trigger: …", so "Defy Death —" dangled at
+   * the end of the flavour text (emerged on R8). The name now opens the
+   * Effect. Patch the copies that still carry the old phrase. */
+  36: async () => {
+    const FROM = "before expiring. Defy Death — Trigger: You are defeated. Effect: You fight on,";
+    const TO   = "before expiring. Trigger: You are defeated. Effect: Defy Death — You fight on,";
+    const patch = (item) => {
+      if (item.type !== "ability" || (item.name ?? "").trim() !== "Boiling Blood") return null;
+      const old = String(item.system?.description ?? "");
+      return old.split(FROM).length === 2 ? { "system.description": old.replace(FROM, TO) } : null;
+    };
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = patch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = patch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 36: ${n} copy/copies of Boiling Blood with "Defy Death" moved from the flavour text to the Effect (p.138)`);
   },
 };
 

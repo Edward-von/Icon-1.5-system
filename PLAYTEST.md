@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R8 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (17 ottobre 2026, versione 1.15.121)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Boiling Blood sulla scheda (copia aggiunta prima di questa versione): il testo di colore finisce con "…before
+      expiring." senza "Defy Death —"; il Trigger è "You are defeated."; l'Effect comincia con "Defy Death — You fight
+      on, …".
+- [ ] Console al caricamento del mondo: "Migration 36: … copy/copies of Boiling Blood …".
+- [ ] Card in chat di Boiling Blood: testo di colore pulito, Trigger, Effect con il nome, Heroic.
+- [ ] Boiling Blood trascinato di nuovo dal compendio Jobs: stesso testo.
+
 ## Emerso R1 — Reap, la combo di Sow, ha i suoi tag (17 ottobre 2026, versione 1.15.120)
 
 Setup: solo codice (F5 basta).

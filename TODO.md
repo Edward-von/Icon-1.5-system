@@ -1216,8 +1216,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [x] **Emerso lavorando su R8 — Helix Heel: regole nel testo di colore** (S, dati) (SPOSTATO in R55 del round del 16 ottobre): stesso difetto di Massive Overhead.
       Nel libro (p.219, "Effect: Release a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.")
       la prima riga è un Effect, nel compendio è senza etichetta e diventa testo di colore. Pack + migrazione per nome.
-- [ ] **Emerso lavorando su R8 — Boiling Blood: "Defy Death —" appeso al testo di colore** (S, dati): il testo di colore
+- [x] **Emerso lavorando su R8 — Boiling Blood: "Defy Death —" appeso al testo di colore** (S, dati): il testo di colore
       finisce con "Defy Death —" (nome dell'interrupt, libro p.138). Da controllare come viene mostrato e sistemare.
+(FATTO il 17 ottobre 2026, versione 1.15.121: nel libro (p.138) "Defy Death" è il titolo sopra Trigger ed Effect; nel
+      compendio il nome ora apre l'Effect e non resta più in fondo al testo di colore; migrazione 36 sulle copie con
+      il testo originale. Compendio Jobs + migrazione.)
 - [x] **Emerso lavorando su R8 — Eye of the Storm: riga di regole senza etichetta** (S, dati) (SPOSTATO in R54 del round del 16 ottobre): "This attack has no
       attack space. Instead, the attack space is clear and exempt from this area." è una regola ma il libro la stampa
       senza etichetta, quindi finisce nel testo di colore. Decidere come mostrarla (es. "Effect:").

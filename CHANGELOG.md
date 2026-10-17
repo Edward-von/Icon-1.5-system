@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (versione 1.15.121)
+
+### Round di debug del 15 ottobre, voce emersa su R8
+
+- **Boiling Blood**: il testo di colore finiva con "Defy Death —" → nel libro (p.138) "Defy Death" è il nome
+  dell'interrupt, stampato come titolo sopra Trigger ed Effect, ma nel compendio stava prima di "Trigger:" e il
+  sistema lo lasciava nel testo di colore → ora il nome apre l'Effect ("Effect: Defy Death — You fight on, …"), così i
+  talenti e la mastery che lo nominano ("While Defy Death is active") hanno un riferimento chiaro; la migrazione 36 lo
+  fa sulle copie già sulle schede che hanno ancora il testo originale. Compendio Jobs + migrazione.
+
 ## 17 ottobre 2026 — Reap, la combo di Sow, ha i suoi tag (versione 1.15.120)
 
 ### Round di debug del 15 ottobre, voce emersa su R1
