@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R36 — Foretell scarta nella pila del proprio Seer (17 ottobre 2026, versione 1.15.199)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Due Seer (es. "Ann" e "Bo"), ognuno con mano e pila col proprio nome ("Ann hand", "Ann discard", "Bo hand", "Bo
+      discard"): Foretell da una carta della mano di Ann → la carta va in "Ann discard", non in quella di Bo né in una
+      "Discard" generica; la card in chat esce come sempre.
+- [ ] Stessa cosa dalla mano di Bo → la carta va in "Bo discard".
+- [ ] Un solo Seer e una sola pila "Discard" (nessuna pila col nome del personaggio): Foretell manda la carta in
+      "Discard" come prima.
+- [ ] Una mano che non è di nessun Seer riconoscibile e due pile senza "Discard" nel nome: Foretell apre la finestra
+      Play di Foundry per scegliere la pila (come prima).
+
 ## Emerso R33 — Il bottone Mark controlla il range (17 ottobre 2026, versione 1.15.198)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Foretell scarta nella pila del proprio Seer (versione 1.15.199)
+
+### Round di debug del 15 ottobre, voce emersa su R36
+
+- **Foretell scarta nella pila giusta**: con due Seer al tavolo, la carta giocata col bottone Foretell finiva sempre
+  nella pila "Discard" comune e gli scarti dei due Seer si mescolavano → il bottone cercava solo la pila chiamata
+  "Discard" e non guardava di chi fosse la mano → ora capisce di quale Seer è la mano e usa la sua pila (quella col
+  nome del personaggio, altrimenti "Discard"), la stessa che usano le pescate di Skein e Bend Fate (p.199). Solo
+  codice.
+
 ## 17 ottobre 2026 — Il bottone Mark controlla il range (versione 1.15.198)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -30,6 +30,7 @@
 import { enrichRuleKeywords } from "../helpers/keywords.mjs";
 import { statusBlockHtml, captureTargets } from "./ability-statuses.mjs";
 import { placeAreaTemplate } from "../canvas/area-templates.mjs";
+import { seerOfHand, seerPile } from "./wheel-of-fate.mjs";
 
 const _log = (...a) => console.debug("[ICON | GreatWheel]", ...a);
 
@@ -260,9 +261,13 @@ export function discardPile() {
   return null;
 }
 
-/** "Foretell" from a hand: post the card, move it to the discard pile (the passCards hook posts it). */
+/**
+ * "Foretell" from a hand: post the card, move it to the discard pile (the passCards hook posts it).
+ * The pile is the hand's Seer's (named after them, else "Discard": seerPile), as for Skein's draws.
+ */
 async function _foretell(hand, card) {
-  const pile = discardPile();
+  const seer = seerOfHand(hand);
+  const pile = seer ? seerPile(seer) : discardPile();
   if (!pile) {
     ui.notifications.info("Pick the discard pile (no single pile named \"Discard\" was found).");
     return hand.playDialog(card);

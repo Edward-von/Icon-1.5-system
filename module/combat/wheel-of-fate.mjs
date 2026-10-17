@@ -65,6 +65,13 @@ export function seerHand(actor) {
   return null;
 }
 
+/** The Seer whose hand this is (the reverse of seerHand), or null when it can't be told. */
+export function seerOfHand(hand) {
+  if (hand?.type !== "hand") return null;
+  const seers = game.actors?.filter(a => isSeer(a) && seerHand(a) === hand) ?? [];
+  return seers.length === 1 ? seers[0] : null;
+}
+
 /** The Seer's discard pile: the pile named after them, else the "Discard" pile (great-wheel.mjs). */
 export function seerPile(actor) {
   const piles = game.cards?.filter(c => c.type === "pile") ?? [];

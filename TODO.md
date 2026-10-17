@@ -1561,9 +1561,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R36 — Foretell con la mano vuota** (S): p.199 dice "If you have no cards in hand, draw the
       top card of your deck instead, apply its effects, then discard it". Il bottone Foretell sta sulle carte della
       mano, quindi con la mano vuota non c'è modo di farlo; servirebbe un bottone "Foretell dal mazzo".
-- [ ] **Emerso lavorando su R36 — Foretell usa sempre la pila "Discard"** (S): il bottone Foretell di great-wheel.mjs
+- [x] **Emerso lavorando su R36 — Foretell usa sempre la pila "Discard"** (S): il bottone Foretell di great-wheel.mjs
       manda la carta nella pila "Discard" generica, non in quella col nome del Seer che usano le nuove pescate. Con
       due Seer al tavolo gli scarti si mescolano.
+(FATTO il 17 ottobre 2026, versione 1.15.199: Foretell trova il Seer della mano e scarta nella sua pila, come Skein e
+      Bend Fate)
 - [ ] **Emerso lavorando su R36 — "Bend Fate" nell'opzione "numero scelto" del gamble** (S, da decidere): in
       roll-dialogs.mjs (riga ~923) l'opzione "Set number" del dialogo del gamble mette Bend Fate tra gli effetti che
       permettono di scegliere qualsiasi numero da 1 a 6. Ma p.199 dice di tirare un dado in più per ogni carta e di
