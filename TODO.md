@@ -1456,6 +1456,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — Deepwrath Talent I / II nei pit** (S): "+1 boon on saves in pits", niente height
       advantage dei foe contro di loro, bonus damage e shattered+ "while inside pits" (p.235): solo testo, il codice
       non sa chi è in un pit al momento del tiro.
+- [ ] **Emerso lavorando su R33b2 — blessing tolte da Symphony** (S): "Remove up to four blessings from characters
+      anywhere to create pulsing motes" (p.178): il chip lascia piazzare fino a 4 mote senza togliere le blessing;
+      servirebbe una scelta di chi le perde (anche personaggi non propri, quindi con relay al GM).
 
 ---
 

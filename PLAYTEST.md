@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33b2 — Mote e mine esplodono con un clic (17 ottobre 2026, versione 1.15.172)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un foe entra in una mote: "Detonate" fa la Small Blast su di lui e toglie la mote; la card dopo ha "Fray (N) to
+      foes" e "Pit under <foe>".
+- [ ] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1".
+- [ ] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card.
+- [ ] Un personaggio entra nella mine di Party Favor: Detonate apre il gamble, poi la Medium Blast sulla casella, poi
+      la mine sparisce. Chiudendo il gamble non succede niente.
+
 ## R33b2 — Eclipse esplode da una card (17 ottobre 2026, versione 1.15.171)
 
 Setup: solo codice (F5 basta).

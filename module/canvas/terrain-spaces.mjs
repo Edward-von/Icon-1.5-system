@@ -494,7 +494,7 @@ async function offerTerrainOnMove(td, prev, to) {
       speaker: ChatMessage.getSpeaker({ token: td }),
       content: `<div class="icon-chat-card icon-chat-card--terrain">${reminders.map(({ doc, f, entered }) => {
         const by = doc.flags[NS].abilityName;
-        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${removeSpacesButton(scene, [doc])}</div>`;
+        return `<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${entered ? "enters" : "leaves"} the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${entered ? detonateButton(scene, doc, f, td) : ""} ${removeSpacesButton(scene, [doc])}</div>`;
       }).join("")}</div>`,
     });
   }
@@ -626,7 +626,7 @@ export async function terrainTurnStart(combatant) {
   for (const { doc, f, keys } of terrainOn(scene)) {
     if (!f.onStart || !touches(mine, keys) || (f.enterFoes && !isHostile(td))) continue;
     const by = doc.flags[NS].abilityName;
-    lines.push(`<p><strong>${esc(td.name)}</strong> starts their turn on the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${removeSpacesButton(scene, [doc])}</div>`);
+    lines.push(`<p><strong>${esc(td.name)}</strong> starts their turn on the <strong>${esc(f.label)}</strong>${by ? ` (${esc(by)})` : ""}.</p><p><small>${esc(f.onEnter)}</small></p><div>${detonateButton(scene, doc, f, td)} ${removeSpacesButton(scene, [doc])}</div>`);
   }
   // R33b2: Deepwrath (p.235) "While marked, create a watery pit under them at the start of their turn" — a button.
   for (const { creator, item, base } of terrainMarksOn(td.actor)) {
@@ -809,6 +809,24 @@ async function blastOn(creator, item, centres, size, where, suffix) {
   return placeAreaTemplate({ actor: creator, area, abilityName: item.name, abilityKey: `${item.id}:${suffix}` });
 }
 
+// A mark that explodes when entered: Symphony's mote "detonates the mote, removing it and creating a small blast
+// explosion as an area effect, centered on them" (p.178), Party Favor's "the mine explodes with a medium blast area
+// effect [centered on it]. Gamble for effects … Then the mine is destroyed" (p.151).
+const DETONATES = /\b(?:detonates the [\w-]+|the [\w-]+ explodes)\b[^.]*?\b(small|medium|large) blast\b[^.]*\./i;
+const SIZE_KEY = { small: "s", medium: "m", large: "l" };
+// Motes exploded this turn, per ability (Symphony Talent I "if at least one other mote was already exploded this turn").
+const _detonated = new Map();
+
+/** "Detonate" for a mark that explodes when `td` enters it or starts their turn there, or "". */
+function detonateButton(scene, doc, f, td) {
+  const m = DETONATES.exec(f.onEnter ?? "");
+  if (!m || f.onCharacter) return "";
+  const onThem = /\bcentered on them\b/i.test(m[0]);
+  return actButton("detonateSpace", { scene: scene.id, template: doc.id, token: td.id, creator: f.creatorId, item: f.itemId,
+    size: SIZE_KEY[m[1].toLowerCase()], onThem, gamble: /\bgamble\b/i.test(f.onEnter) },
+  "Detonate", "fa-bomb", `${onThem ?`${m[1]} blast centred on ${td.name}` : `${m[1]} blast centred on the space`}${/\bgamble\b/i.test(f.onEnter) ? ", after the gamble" : ""}; the space is removed`);
+}
+
 /** Remove a space after its effect went off, unless a mastery keeps it (`keep`). */
 async function endSpace(doc, keep) {
   if (keep || !doc?.parent?.templates?.get(doc.id)) return;
@@ -865,13 +883,78 @@ const TERRAIN_ACTS = {
     await endSpace(doc, ECLIPSE_KEEP.test(src.mastery));
     return true;
   },
-  /** Damage to the listed characters, each one once (armor not applied: divine / piercing). */
-  async damageTokens({ scene: sid, tokens, amount }) {
+  /** Damage to the listed characters, each one once (armor only with `armor`: not for divine / piercing). */
+  async damageTokens({ scene: sid, tokens, amount, armor = false }) {
     const scene = game.scenes?.get(sid);
     const tds = (tokens ?? []).map(id => scene?.tokens?.get(id)).filter(t => t?.actor);
     if (!tds.length) { ui.notifications.warn("Those characters are gone."); return true; }
     const { applyDamageToActor } = await import("../combat/damage.mjs");
-    for (const t of tds) await applyDamageToActor(t.actor, Number(amount) || 0, { chatConfirm: true });
+    for (const t of tds) await applyDamageToActor(t.actor, Number(amount) || 0, { chatConfirm: true, applyArmor: !!armor });
+    return true;
+  },
+  /** A status for the listed characters (relayed to the GM when needed). */
+  async statusTokens({ scene: sid, tokens, creator: cid, item: iid, status, label }) {
+    const scene = game.scenes?.get(sid);
+    const creator = game.actors?.get(cid);
+    const tds = (tokens ?? []).map(id => scene?.tokens?.get(id)).filter(t => t?.actor);
+    if (!tds.length) { ui.notifications.warn("Those characters are gone."); return true; }
+    const { grantStatus } = await import("../combat/inflict-status.mjs");
+    for (const t of tds) await grantStatus({ target: t.actor, source: creator, statusId: status, label: label || status, abilityName: creator?.items?.get(iid)?.name ?? "" });
+    return true;
+  },
+  /**
+   * A mote / mine set off (detonateButton): the gamble first when the text has one, the blast on the character or
+   * on the space, the space removed, then a card with the buttons for what the explosion does.
+   */
+  async detonateSpace({ scene: sid, template, token, creator: cid, item: iid, size = "m", onThem = false, gamble = false }) {
+    const scene = game.scenes?.get(sid);
+    const doc = scene?.templates?.get(template);
+    const td = scene?.tokens?.get(token);
+    const creator = game.actors?.get(cid);
+    const item = creator?.items?.get(iid);
+    if (!doc || !item) { ui.notifications.warn("Already set off, or the ability is gone."); return true; }
+    if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of that space first."); return false; }
+    if (!creator.isOwner) { ui.notifications.warn(`Only the owner of ${creator.name} can place the blast.`); return false; }
+    const f = terrainFlag(doc);
+    let result = null;
+    if (gamble) {
+      const { rollGamble } = await import("../combat/gamble.mjs");
+      result = await rollGamble(creator, item);
+      if (result == null) return false;   // the gamble dialog was closed
+    }
+    const centre = onThem && td ? cellsOf(td)[0] : doc.flags[NS].cells[0];
+    const placed = await blastOn(creator, item, [centre], size, onThem && td ? `on ${td.name}` : `on the ${String(f.label).toLowerCase()}`, "detonate");
+    if (!placed) return false;
+    await deleteSpaces(scene, [doc]);
+    // Symphony: what the explosion does (p.178).
+    const text = f.onEnter ?? "";
+    const inArea = charactersOn(scene, placed.cells);
+    const foes = inArea.filter(t => isFoeOf(t, creator));
+    const base = { scene: scene.id, creator: creator.id, item: item.id };
+    const fray = Number(creator.system?.combat?.fray) || 0;
+    const buttons = [];
+    const notes = [];
+    if (/\bfoes inside take fray damage\b/i.test(text) && foes.length)
+      buttons.push(actButton("damageTokens", { ...base, tokens: foes.map(t => t.id), amount: fray, armor: true }, `Fray (${fray}) to foes (${foes.length})`, "fa-burst"));
+    if (/\ballies inside gain 2 vigor\b/i.test(text)) notes.push("Allies inside gain 2 vigor.");
+    if (td && /\bif that character was a foe, they also have a pit created under them\b/i.test(text) && isFoeOf(td, creator))
+      buttons.push(actButton("pitAt", { ...base, cell: cellsOf(td)[0] }, `Pit under ${td.name}`, "fa-circle-down"));
+    if (td && /\bif the character was yourself or an ally, they are blessed\b/i.test(text) && !isFoeOf(td, creator))
+      buttons.push(actButton("statusTokens", { ...base, tokens: [td.id], status: "blessed", label: "Blessed" }, `Bless ${td.name}`, "fa-hands-praying"));
+    if (/\bcan fly 1\b/i.test(text) && td && !isFoeOf(td, creator)) notes.push(`${td.name} can fly 1.`);
+    // Talent I / II: count the motes of this ability set off this turn (on this client).
+    const k = `${turnKey()}#${item.id}`;
+    const n = (_detonated.get(k) ?? 0) + 1;
+    _detonated.set(k, n);
+    const src = itemOfSpace({ flags: { [NS]: { [FLAG]: { creatorId: creator.id, itemId: item.id } } } });
+    if (src?.talentNo && /\bmotes? (?:explode|was already exploded)|\bsecond mote\b/i.test(src.talent))
+      notes.push(`${n === 1 ? "First" : `Number ${n}`} of this ability's motes set off this turn. Talent ${src.talentNo === 1 ? "I" : "II"}: ${src.talent}`);
+    if (!buttons.length && !notes.length) return true;
+    await ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: creator }),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-bomb"></i> ${esc(item.name)}</strong>: the ${esc(String(f.label).toLowerCase())} explodes${result != null ? ` (gamble ${result})` : ""} — ${inArea.length ? esc(inArea.map(t => t.name).join(", ")) : "no one"} in the area.
+        ${notes.map(x => `<p><small>${esc(x)}</small></p>`).join("")}${buttons.length ? `<div>${buttons.join(" ")}</div>` : ""}</div>`,
+    });
     return true;
   },
   /** A space of terrain under each listed character (one space each, where they stand now). */

@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Mote e mine esplodono con un clic (versione 1.15.172)
+
+### Round di debug del 15 ottobre, R33b2
+
+- **Symphony / Party Favor**: entrare in una mote o in una mine dava solo un promemoria → la card non aveva un bottone
+  per l'esplosione → c'è "Detonate": per la mine (p.151) prima il gamble, poi la Medium Blast sulla casella; per la
+  mote (p.178) la Small Blast centrata sul personaggio; la casella sparisce e una card dà i bottoni per il fray ai
+  foe, il pit sotto il foe o la blessing all'alleato, e conta le mote esplose nel turno per i talenti. Il conteggio
+  delle blessing tolte per creare le mote resta a mano. Solo codice.
+
 ## 17 ottobre 2026 — Eclipse esplode da una card (versione 1.15.171)
 
 ### Round di debug del 15 ottobre, R33b2
