@@ -29,6 +29,7 @@ import { resolveAbilityTags, resolveAbilityCost } from "../helpers/rule-tooltips
 import { plainText, parseInflictedStatuses, statusBlockHtml } from "./ability-statuses.mjs";
 import { hasStatus } from "./statuses.mjs";
 import { tagKey } from "./defenses.mjs";
+import { addCardMods, cardModsFor } from "./damage-card-mods.mjs";
 
 const _log = (...a) => console.debug("[ICON | DamageInterrupts]", ...a);
 const FLAG_NS = "icon-system";
@@ -38,11 +39,32 @@ const FLAG_NS = "icon-system";
 /* -------------------------------------------------- */
 
 /**
- * Interrupts whose trigger text alone does not say enough, by lower-case name.
+ * Interrupts that do more than post themselves, by lower-case name.
  *   scope   "self" | "ally" | "either" — overrides damageTriggerScope()
- * Further keys (what the interrupt changes on the card) come with R35b / R35c.
+ *   onUse   async ({ owner, it, item, target, message }) after the use is spent
+ *           and the card posted: what the interrupt changes on the damage card
+ *           (addCardMods, damage-card-mods.mjs). Nothing here runs on its own:
+ *           only from the interrupt's button.
  */
-export const INTERRUPT_SPECS = {};
+export const INTERRUPT_SPECS = {
+  /* Righteous Disdain (Demon Slayer, p.128): "Apply the damage to both you and
+   * your ally, but both of you gain resistance to it, and are sturdy against
+   * its effects." Mastery SHIRAHADORI (p.129): "The damage from Righteous
+   * Disdain cannot reduce you past 1 hp." */
+  "righteous disdain": {
+    scope: "ally",
+    async onUse({ owner, item, target, message }) {
+      if (!target || target.uuid === owner.uuid) return;
+      const onCard = (message?.flags?.[FLAG_NS]?.damage?.targets ?? []).includes(owner.uuid);
+      const tokenId = owner.token?.id ?? owner.getActiveTokens?.()[0]?.id ?? "";
+      const self = { actorUuid: owner.uuid, source: "Righteous Disdain", half: true, sturdy: true };
+      if (!onCard) self.row = { name: owner.name, img: owner.img ?? "", tokenId };
+      const mods = [{ actorUuid: target.uuid, source: "Righteous Disdain", half: true, sturdy: true }, self];
+      if (item?.system?.masteryUnlocked) mods.push({ actorUuid: owner.uuid, source: "Shirahadori", minHp: 1 });
+      await addCardMods(message, mods);
+    },
+  },
+};
 
 /** "Damage" wording of a trigger: being damaged, taking damage, damage about to land. */
 const DAMAGE_RE = /\b(?:is|are|gets?|being|was) damaged\b|\btakes? damage\b|\btook damage\b|\bdamages? (?:you|your|an?|the|one|any)\b|\bdamage to (?:you|your|an?|the)\b|\bdeals damage\b[^.]*\bto (?:you|your|an?|the)\b/;
@@ -274,9 +296,18 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid }
   const uses = interruptUsesOf(owner, it.key);
   if (uses >= it.limit) { ui.notifications.warn(`${it.name}: no uses left this round (${it.limit}/${it.limit}).`); return false; }
   const target = targetUuid ? await fromUuid(targetUuid) : null;
+  const spec = interruptSpec(it.name);
+  if (spec.onUse && target && cardModsFor(message, target.uuid).sources.includes(it.name)) {
+    ui.notifications.warn(`${it.name} has already changed this damage for ${target.name}.`);
+    return false;
+  }
   _log(`use — "${owner.name}" | ${it.name} (${it.kind}) | uses ${uses} → ${uses + 1} / ${it.limit} | target: "${target?.name ?? "?"}" | card: ${message?.id}`);
   await owner.setFlag(FLAG_NS, `interruptUses.${it.key}`, uses + 1);
   await postInterruptCard(owner, it, { target, message, usesLeft: it.limit - uses - 1 });
+  if (spec.onUse) {
+    try { await spec.onUse({ owner, it, item: it.itemId ? owner.items.get(it.itemId) : null, target, message }); }
+    catch (err) { console.error(`ICON 1.5 | ${it.name}: changing the damage card failed`, err); }
+  }
   return true;
 }
 

@@ -115,6 +115,7 @@ import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-statu
 import { rollGamble } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 import { decorateDamageInterrupts } from "./module/combat/damage-interrupts.mjs";
+import { injectCardMods, cardModsFor } from "./module/combat/damage-card-mods.mjs";
 
 /* ================================================== */
 /*  init                                              */
@@ -753,6 +754,11 @@ async function iconToggleCombatForHUD(hud) {
  * button inside the card.
  */
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
+  // What interrupts changed on this card (R35b): extra rows for characters who
+  // now take the damage too, chips for resistance / HP floors. First, so the
+  // added rows' buttons are bound below like the others.
+  try { injectCardMods(message, html); }
+  catch (err) { console.warn("ICON 1.5 | damage-card changes failed:", err); }
   const buttons = html.querySelectorAll('[data-action="applyDamage"]');
   if (!buttons.length) return;
 
@@ -848,6 +854,12 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
         if (mit.half) { half = true; halfReason = mit.halfReason; }
       }
 
+      // What an interrupt changed for this character on the card (R35b,
+      // damage-card-mods.mjs): resistance halves once, together with Cover /
+      // Resistance, never divine damage (p.104) or a roll already halved.
+      const mods = cardModsFor(message, uuid);
+      if (mods.half && !half && !halvedOnRoll && !divine) { half = true; halfReason = mods.halfReason; }
+
       // All deduction rules (armor before ½, mob hits, vigor before HP, wound
       // on a PC reaching 0) live in applyDamageToActor — the same code path
       // used by applyDamagePipeline and the GM socket relay.
@@ -861,6 +873,8 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
             halfReason,
             ignoreVigor: divine,
             chatConfirm: instances === 1,
+            minHp:       mods.minHp,
+            minHpReason: mods.minHpReason,
           });
           if (!result?.ok) break;
           results.push(result);

@@ -1236,8 +1236,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.149: bottoni interrupt sotto ogni riga bersaglio della card del danno,
       lettura dei trigger in damage-interrupts.mjs, uso speso e card postata, usi dei PG azzerati a inizio turno. Solo
       codice.)
-- [ ] **R35b. Righteous Disdain** (M)
+- [x] **R35b. Righteous Disdain** (M)
       Il suo effetto applicato dalla card del danno, sopra R35a.
+(FATTO il 17 ottobre 2026, versione 1.15.150: Righteous Disdain aggiunge il Demon Slayer alla card con resistenza per
+      entrambi, Shirahadori = non sotto 1 HP; modifiche alla card in damage-card-mods.mjs, scritte dal GM via socket.
+      Solo codice.)
 - [ ] **R35c. Interrupt strani sul danno** (M/L)
       Dire Parry mastery (usi messi da parte), interrupt del Seer che annullano il danno: il bottone di R35a toglie
       o riduce il danno già calcolato sulla card.
@@ -1410,6 +1413,8 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — usi degli interrupt dei PG sulla scheda** (S): ora gli usi dei PG si contano (flag
       `interruptUses`), ma la scheda PG non li mostra né permette di spuntarli come la scheda dei foe; anche il
       bottone "posta in chat" di R61 non spende un uso.
+- [ ] **Emerso lavorando su R35 — Heroic di Righteous Disdain** (S): "Gain vigor 4 after this ability resolves" resta
+      solo come testo sulla card postata; non c'è un bottone che dia il vigor.
 
 ---
 

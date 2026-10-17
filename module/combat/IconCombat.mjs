@@ -33,6 +33,7 @@ import { deleteAreaTemplates, clearExpiredAreaTemplates, tickAuraExpiry } from "
 import { handleMarkSocket, clearCombatEffects } from "./marks.mjs";
 import { handleInflictSocket } from "./inflict-status.mjs";
 import { handlePromptSocket } from "./remote-prompt.mjs";
+import { handleCardModSocket } from "./damage-card-mods.mjs";
 import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
@@ -807,9 +808,10 @@ export function registerCombatHooks() {
          * the active GM applies it through the same shared code path. */
         const actor = await fromUuid(data.actorUuid ?? "");
         if (!actor) return;
-        const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false } = data.options ?? {};
+        const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false, minHp = 0, minHpReason = "" } = data.options ?? {};
         await applyDamageToActor(actor, data.amount, {
           applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60), ignoreVigor: !!ignoreVigor,
+          minHp: Math.min(99, Number(minHp) || 0), minHpReason: String(minHpReason ?? "").slice(0, 60),
           chatConfirm: true,
           allowRelay:  false,
         });
@@ -821,6 +823,10 @@ export function registerCombatHooks() {
         /* A player pressed a status button on a card for an actor they don't
          * own (an "Inflict" block, inflict-status.mjs) — the active GM applies it. */
         await handleInflictSocket(data);
+      } else if (data?.type === "damageCardMod") {
+        /* A player used an interrupt that changes a damage card they didn't
+         * post (Righteous Disdain, R35b) — the active GM writes the change. */
+        await handleCardModSocket(data);
       }
     } catch (err) {
       console.error("ICON 1.5 | combat socket handler failed:", err);

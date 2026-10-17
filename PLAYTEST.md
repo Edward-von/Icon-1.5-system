@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R35b — Righteous Disdain dalla card del danno (17 ottobre 2026, versione 1.15.150)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Foe colpisce un alleato del Demon Slayer: il clic su "Righteous Disdain" aggiunge la riga del Demon Slayer sotto
+      quella dell'alleato, ed entrambe hanno il chip "Resistance ½ (Righteous Disdain)".
+- [ ] Apply sulle due righe: il danno è dimezzato dopo l'armatura e la nota dice "halved (Righteous Disdain)".
+- [ ] Bersaglio già in Cover: dimezza una volta sola.
+- [ ] Danno divine: nessun dimezzamento.
+- [ ] Con la mastery sbloccata e HP bassi: il Demon Slayer si ferma a 1 HP e la nota dice "stopped at 1 HP
+      (Shirahadori)".
+- [ ] Card postata dal GM e bottone premuto da un giocatore: la card si aggiorna (scrive il GM); senza GM collegato
+      esce un avviso.
+- [ ] Secondo clic sulla stessa card: avviso "already changed".
+- [ ] Dopo F5 le modifiche alla card restano.
+
 ## R35a — Interrupt dalle card del danno (17 ottobre 2026, versione 1.15.149)
 
 Setup: solo codice (F5 basta).

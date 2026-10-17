@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Righteous Disdain dalla card del danno (versione 1.15.150)
+
+### Round di debug del 15 ottobre, R35b
+
+- **Righteous Disdain**: l'effetto "Apply the damage to both you and your ally, but both of you gain resistance"
+  (p.128) andava fatto a mano → la card del danno non poteva cambiare chi prende il danno → il bottone dell'interrupt
+  aggiunge il Demon Slayer alla card come secondo bersaglio con lo stesso danno; tutti e due hanno resistenza (dimezza
+  una volta sola all'Apply, insieme a Cover / Resistance, mai sul divine) e un chip "Sturdy vs. its effects". Con la
+  mastery Shirahadori (p.129) il Demon Slayer si ferma a 1 HP. Le modifiche stanno su un flag della card
+  (`module/combat/damage-card-mods.mjs`); se le chiede un giocatore le scrive il GM via socket. Solo codice.
+
 ## 17 ottobre 2026 — Interrupt dalle card del danno (versione 1.15.149)
 
 ### Round di debug del 15 ottobre, R35a
