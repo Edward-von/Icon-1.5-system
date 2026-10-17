@@ -1656,6 +1656,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — L'esito Other dice da dove vengono le chip (17 ottobre 2026, versione 1.15.128)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Incubus senza combo: Other dice "Mark / free"; spuntando Combo version diventa "Combo / free".
+- [ ] Un'abilità senza danni extra: Other dice "free amount".
+
 ## Emerso R40 — Chip di Other con Unerring, ×N e due danni di Blitz (17 ottobre 2026, versione 1.15.127)
 
 Setup: solo codice (F5 basta).

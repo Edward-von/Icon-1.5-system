@@ -704,8 +704,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       piercing nella stessa frase e propone una sola chip.
 (FATTO il 17 ottobre 2026, versione 1.15.127: le chip mostrano "unerring" e "×N", una chip unerring spunta Unerring,
       Blitz ha due chip "Effect — 1st / 2nd". Solo codice.)
-- [ ] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
+- [x] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
       quando le chip vengono dai blocchi base, dal combo o dalle versioni Infuse.
+(FATTO il 17 ottobre 2026, versione 1.15.128: l'esito Other nomina le fonti delle chip visibili e segue la casella
+      Combo version. Solo codice.)
 - [x] **Emerso lavorando su R47b — MJÖLLNIR "instead" e la scelta dell'area** (S, da verificare): MJÖLLNIR crea l'Arc
       5 *al posto* dell'area normale (p.227), ma il codice aggiunge l'Arc 5 come variante "Mastery" accanto alla Line
       3, quindi probabilmente chiede ancora di scegliere tra le due invece di usare sempre l'Arc 5 (`_areaVariantsFor`

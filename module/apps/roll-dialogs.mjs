@@ -533,6 +533,13 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // ...and a base block the combo replaces ("Instead of the mark") is hidden then.
   const replaced = ab.parsedCombo?.replacesBlocks ?? [];
   const isReplaced = (i) => !isComboExtra(i) && replaced.includes(String(extras[i].source ?? "").split(" — ")[0].toLowerCase());
+  // The "Other" outcome names where its lines come from (Mark, Talent II,
+  // Combo, an Infuse version…), for the chips shown with the combo on or off.
+  const otherFormula = (comboOn) => {
+    const names = [...new Set(extras.filter((x, i) => isComboExtra(i) ? comboOn : !(comboOn && isReplaced(i)))
+      .map(x => String(x.source ?? "").split(" — ")[0]).filter(Boolean))];
+    return !names.length ? "free amount" : `${names.length > 3 ? `${names.slice(0, 3).join(" / ")}…` : names.join(" / ")} / free`;
+  };
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   // "Hit (no damage)" only where a hit can happen: an attack (its target may
   // take only the hit's statuses while the rest of the area takes damage), or
@@ -549,7 +556,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     // Damage the outcomes above don't cover — a mastery's or talent's own
     // damage (Harvest Moon p.186, Dark Wind Devil Blade p.128) or anything
     // else the table needs: dice / fray / fixed amount typed in the panel below.
-    { value: "other", label: "Other", formula: extras.length ? "mastery / talent / free" : "free amount", show: true },
+    { value: "other", label: "Other", formula: otherFormula(comboDefault), show: true },
   ].filter(o => o.show && (!free || o.value === "other"));
 
   // Area attack (p.117): only the token in the attack space takes the hit /
@@ -727,6 +734,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         const r = l.querySelector('input[name="otherPick"]');
         if (!show && r?.checked) r.checked = false;
       });
+      const otherSmall = f.querySelector('input[name="outcome"][value="other"]')?.closest("label")?.querySelector("small");
+      if (otherSmall) otherSmall.textContent = otherFormula(on);
       const box = root.querySelector("[data-other-chips]");
       if (box) box.style.display = Array.from(box.children).some(l => l.style.display !== "none") ? "" : "none";
     };

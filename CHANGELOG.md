@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'esito Other dice da dove vengono le chip (versione 1.15.128)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Etichetta di Other**: diceva sempre "mastery / talent / free" → il testo era fisso → ora nomina le fonti delle
+  chip visibili (es. "Mark / free", "Combo / free", "Effect / Talent II / free"; oltre tre fonti si accorcia con "…")
+  e cambia insieme alla casella Combo version. Senza chip resta "free amount". Solo codice.
+
 ## 17 ottobre 2026 — Chip di Other con Unerring, ×N e due danni di Blitz (versione 1.15.127)
 
 ### Round di debug del 16 ottobre, voce emersa su R40
