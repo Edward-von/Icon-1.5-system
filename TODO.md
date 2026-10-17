@@ -802,9 +802,11 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       (CHIUSO il 17 ottobre 2026: non è un difetto. Provato `_dmgChunk` sul testo del Master: "six" non viene letto,
       esce ×1, quindi niente ×6; nessun'altra frase con tiro salvezza nei compendi ha "up to N times".)
 - nessuno
-- [ ] **Emerso lavorando su R49 — Mote of life: terreno quando perde la blessing** (S): RECYCLE (p.187) dice che la
+- [x] **Emerso lavorando su R49 — Mote of life: terreno quando perde la blessing** (S): RECYCLE (p.187) dice che la
       mote "becomes a terrain effect when its blessing is removed. Inside, any ally gains regeneration while standing
       in its space"; quando la blessing viene presa non succede niente di automatico.
+(FATTO il 17 ottobre 2026, versione 1.15.211: la mote di RECYCLE che perde la blessing, con un clic, diventa un
+      terrain effect dove gli alleati ricevono regeneration; il token viene rimosso)
 - [x] **Emerso lavorando su R40 — Assault Wave non conta i minion** (S/M): "3 piercing damage per minion in the area,
       up to a maximum of six times, or just 1 piercing damage per minion on a successful save" (p.312) posta una sola
       card da 3 (o da 1). Il numero di minion non viene chiesto e il tetto di 6 non viene usato; servirebbe un

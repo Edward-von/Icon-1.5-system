@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Mote of life senza blessing: diventa un terrain effect (versione 1.15.211)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Mote of life senza blessing**: quando la mote perdeva la blessing non succedeva niente → nessun codice guardava la
+  rimozione del suo status Blessed → ora, quando lo status Blessed viene tolto a un token che si chiama "Mote of
+  life", il GM attivo manda una card con il bottone "Becomes a terrain effect". Il clic crea un terrain effect sulla
+  casella della mote, dove gli alleati che ci stanno dentro ricevono l'offerta di regeneration (con il bottone per
+  toglierla quando escono), e rimuove il token della mote (RECYCLE, p.187). Solo codice.
+
 ## 17 ottobre 2026 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (versione 1.15.210)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

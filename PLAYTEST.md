@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Mote of life senza blessing: diventa un terrain effect (17 ottobre 2026, versione 1.15.211)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Piazza un token chiamato "Mote of life" con Blessed e togli lo status (o consuma l'ultima carica): arriva la
+      card "lost its blessing" con il bottone.
+- [ ] Premi il bottone: compare il terrain effect "Mote of life" sulla sua casella e il token della mote sparisce. La
+      card ha il bottone Remove.
+- [ ] Muovi un alleato dentro la casella: arriva l'offerta di Regeneration. Quando esce arriva l'offerta di toglierla.
+      Un nemico che entra non riceve niente.
+- [ ] Togli Blessed a un token che non si chiama "Mote of life": nessuna card.
+
 ## Emerso R33 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (17 ottobre 2026, versione 1.15.210)
 
 Setup: solo codice (F5 basta).

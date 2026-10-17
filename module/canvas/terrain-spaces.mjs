@@ -1679,6 +1679,25 @@ const TERRAIN_ACTS = {
     });
     return true;
   },
+  /** RECYCLE (Dark Sliver's mastery, p.187): the mote of life without its blessing becomes a terrain effect. */
+  async moteTerrain({ scene: sid, token }) {
+    const scene = game.scenes?.get(sid);
+    const td = scene?.tokens?.get(token);
+    if (!td) { ui.notifications.warn("That mote of life is gone."); return true; }
+    if (!(td.isOwner || game.user.isGM)) { ui.notifications.warn("Only the owner of the mote or the GM can do that."); return false; }
+    const summoner = game.actors?.get(td.actor?.system?.summonerActorId ?? "") ?? null;
+    const rule = "A mote of life is a plant, but becomes a terrain effect when its blessing is removed. Inside, any ally gains regeneration while standing in its space.";
+    const spec = { kind: "mark", name: "Mote of life", label: "Mote of life", rules: rule };
+    const docs = await createTerrainSpaces(scene, cellsOf(td), spec, { actor: summoner, abilityName: "Mote of life", asOne: true,
+      extra: { inside: [{ when: "inside", status: "regeneration", ongoing: false, who: "allies", source: "RECYCLE", rule }] } });
+    if (!docs.length) return false;
+    try { await td.delete(); } catch (err) { console.warn("[ICON | TerrainSpaces] could not remove the mote token", err); }
+    await ChatMessage.create({
+      speaker: summoner ? ChatMessage.getSpeaker({ actor: summoner }) : ChatMessage.getSpeaker(),
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-seedling"></i> Mote of life</strong> becomes a terrain effect: allies standing in its space gain regeneration (RECYCLE, p.187).<div>${removeSpacesButton(scene, docs)}</div></div>`,
+    });
+    return true;
+  },
   /** Deepwrath: a pit under the marked character, where they stand now. */
   async pitUnder({ scene: sid, token, creator: cid, item: iid, label }) {
     const scene = game.scenes?.get(sid);
@@ -1766,6 +1785,23 @@ export function registerTerrainSpaceHooks() {
     if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
+  });
+  // RECYCLE (Dark Sliver's mastery, p.187): "A mote of life is a plant, but becomes a terrain effect when its blessing
+  // is removed": its Blessed status gone, a card with the button that turns its space into that terrain effect.
+  Hooks.on("deleteActiveEffect", (effect) => {
+    if (game.users.activeGM?.id !== game.user.id || !effect?.statuses?.has?.("blessed")) return;
+    const actor = effect.parent;
+    if (!(actor instanceof Actor)) return;
+    const tds = (actor.isToken ? [actor.token] : actor.getActiveTokens(false, true)).filter(Boolean);
+    for (const td of tds) {
+      if (![td.name, actor.name].some(n => /^mote of life$/i.test(String(n ?? "").trim())) || !td.parent) continue;
+      ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({ token: td }),
+        content: `<div class="icon-chat-card icon-chat-card--terrain"><p><strong><i class="fa-solid fa-seedling"></i> ${esc(td.name)}</strong> lost its blessing.</p>
+          <p><small>RECYCLE (p.187): a mote of life becomes a terrain effect when its blessing is removed. Inside, any ally gains regeneration while standing in its space.</small></p>
+          <div>${actButton("moteTerrain", { scene: td.parent.id, token: td.id, creator: actor.id }, "Becomes a terrain effect", "fa-seedling", "The mote's space becomes a terrain effect (allies inside gain regeneration); the mote token is removed")}</div></div>`,
+      }).catch(err => console.warn("[ICON | TerrainSpaces] mote of life card failed", err));
+    }
   });
   // Deepwrath Talent II (p.235) "shattered+ while inside pits": a pit removed under a marked foe (Remove, Delete on
   // the map) takes them out of it — the card to remove Shattered. Active GM only, so the card comes once.
