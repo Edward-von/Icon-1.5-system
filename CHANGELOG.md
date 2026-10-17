@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Burial Fist: il round 4 vale anche per il bonus damage (versione 1.15.220)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Burial Fist e bonus damage**: non era chiaro se il bonus damage di BURIAL FIST valesse sempre o solo dal round 4 →
+  la frase di p.194 ("deals bonus damage and always triggers exceed effects at round 4 or later") mette la condizione
+  in fondo a tutta la frase, e il manuale scrive allo stesso modo "At round 3+, deals bonus damage and …", dove il
+  round vale per tutte e due le cose → il comportamento attuale è quello giusto (dado bonus ed Exceed insieme dal
+  round 4) e la lettura è ora scritta nei commenti; prima del round 4 la casella resta spuntabile a mano. Solo un
+  commento nel codice, nessun cambio di comportamento.
+
 ## 17 ottobre 2026 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble (versione 1.15.219)
 
 ### Round di debug del 15 ottobre, voce emersa su R36

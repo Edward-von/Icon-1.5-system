@@ -165,7 +165,11 @@ function _readCondition(sentence, actor, item) {
  * Everything that makes this attack trigger its exceed effects whatever the
  * total — one box each in the attack dialog:
  *   • the unlocked mastery: BLOOD FESTIVAL (Matsuri, p.192, first use in a
- *     combat, optional "may"), BURIAL FIST (Open the Gates, p.194, round 4+);
+ *     combat, optional "may"), BURIAL FIST (Open the Gates, p.194, round 4+:
+ *     "deals bonus damage and always triggers exceed effects at round 4 or
+ *     later" — the round covers both, like "At round 3+, deals bonus damage
+ *     and …" elsewhere in the book, so its bonus die rides on this box too;
+ *     the box stays tickable by hand before round 4);
  *   • the ability's own text — Open the Gates' Effect (p.194: "triggers any
  *     exceed effects the first time it is used in combat"), Soul Shot's area
  *     (p.158: "If it passes through two or more allies, automatically

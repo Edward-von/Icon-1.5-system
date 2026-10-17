@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Burial Fist: il round 4 vale anche per il bonus damage (17 ottobre 2026, versione 1.15.220)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Open the Gates con la mastery BURIAL FIST al round 3: la casella "triggers exceed" è vuota e il dialogo del
+      danno non aggiunge il dado bonus; spuntandola a mano il dado bonus arriva.
+- [ ] Stessa abilità al round 4: la casella è già spuntata e il danno ha il dado bonus.
+
 ## Emerso R36 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble (17 ottobre 2026, versione 1.15.219)
 
 Setup: solo codice (F5 basta).

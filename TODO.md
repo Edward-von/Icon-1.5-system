@@ -1685,13 +1685,16 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       come oggi, o vuoi una regola tua (per esempio +1 danno, o solo un promemoria nella card)?
       (CHIUSO il 17 ottobre 2026, risposta di Edoardo: si lascia come oggi, i danni fissi senza dado non ricevono il bonus.)
 - nessuno
-- [ ] **Emerso lavorando su R16 — Burial Fist: il bonus damage vale sempre?** (S, da decidere): "Any version of this
+- [x] **Emerso lavorando su R16 — Burial Fist: il bonus damage vale sempre?** (S, da decidere): "Any version of this
       ability deals bonus damage and always triggers exceed effects at round 4 or later" (p.194). Oggi il dado bonus
       arriva solo dal round 4, insieme all'Exceed (si può cambiare a mano nella finestra del danno). Domanda per
       Edoardo: il danno bonus vale sempre, o anche lui solo dal round 4?
+(FATTO il 17 ottobre 2026, versione 1.15.220: letto p.194, "at round 4 or later" vale sia per il bonus damage sia per
+      l'Exceed; il codice lo faceva già.)
 - nessuno
 - [ ] **Emerso lavorando su R35 — scritta sopra i bottoni "targeted"** (S): sotto una card che non attacca la scritta
       dice ancora "they go off before the attack roll".
+- nessuno
 - nessuno
 
 ---
