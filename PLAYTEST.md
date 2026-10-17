@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Chip della combo di Succubus solo con la combo (17 ottobre 2026, versione 1.15.125)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Incubus senza combo token: Damage Roll → Other → nessuna chip "Combo — Succubus".
+- [ ] Incubus con combo token pieno: Combo version già spuntata → sotto Other c'è "Combo — Succubus" (3).
+- [ ] Con la chip scelta, togliere la spunta a Combo version → la chip sparisce e non resta selezionata.
+
 ## Emerso R12 — Elenchi a righe anche nei foe (17 ottobre 2026, versione 1.15.124)
 
 Setup: solo codice (F5 basta).

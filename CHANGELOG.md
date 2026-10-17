@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Chip della combo di Succubus solo con la combo (versione 1.15.125)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Chip "Combo — Succubus"**: compariva sotto Other anche senza combo → il dialog elencava sempre le righe della
+  combo insieme a quelle della base → ora la chip si vede solo con la casella "Combo version" spuntata, che parte
+  spuntata quando la combo è armata (combo token pieno, o combo già spesa su questa abilità); togliendo la spunta la
+  chip sparisce e, se era scelta, viene deselezionata. Solo codice.
+
 ## 17 ottobre 2026 — Elenchi a righe anche nei foe (versione 1.15.124)
 
 ### Round di debug del 15 ottobre, voce emersa su R12

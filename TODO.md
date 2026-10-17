@@ -508,9 +508,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.90: confermato nel codice, il testo dell'Infuse armato veniva letto due volte
       (da dentro effetto / Ultimate e di nuovo a parte); ora gli status si cercano solo su effetto e Ultimate. Nel
       pack jobs nessun Infuse di limit break nomina status, quindi nel gioco reale non si vedeva.)
-- [ ] **Emerso lavorando su R40 — il chip "Combo — Succubus" si vede anche senza combo** (S): il chip sotto Other
+- [x] **Emerso lavorando su R40 — il chip "Combo — Succubus" si vede anche senza combo** (S): il chip sotto Other
       appare anche quando il combo token non è pieno (come la casella "Combo version"); decidere se mostrarlo solo con
       la combo armata. La voce del pulsante Other dice ancora "mastery / talent / free" e non nomina la combo.
+(FATTO il 17 ottobre 2026, versione 1.15.125: la chip "Combo — Succubus" si vede solo con la casella Combo version
+      spuntata, che parte spuntata quando la combo è armata. Solo codice.)
 - [x] **Emerso lavorando su R40 — danno del Mark di Incubus** (S): i "2 damage" del Mark della base (p.164: "both the
       target and any adjacent foes take 2 damage and are dazed") non compaiono nel Damage Roll, nemmeno sotto Other
       (lì finisce solo il danno di talenti e mastery). Probabilmente lo stesso per i danni dentro altri blocchi Mark /

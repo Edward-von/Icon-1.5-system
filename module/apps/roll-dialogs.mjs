@@ -526,7 +526,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // Damage lines read from the selected talent / unlocked mastery (ability-damage.mjs).
   // Plus the combo version's own extra damage (Succubus's 3 damage to the
   // marked characters, p.164), listed as "Combo — <name>".
-  const extras = [...(Array.isArray(p.extras) ? p.extras : []), ...(ab.parsedCombo?.comboExtras ?? [])];
+  // The combo's lines are shown only while the combo version is rolled.
+  const baseExtras = Array.isArray(p.extras) ? p.extras : [];
+  const extras = [...baseExtras, ...(ab.parsedCombo?.comboExtras ?? [])];
+  const isComboExtra = (i) => i >= baseExtras.length;
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   // "Hit (no damage)" only where a hit can happen: an attack (its target may
   // take only the hit's statuses while the rest of the area takes damage), or
@@ -589,9 +592,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             ${free ? `<label class="icon-roll-other__label">Source <small>optional, shown on the card</small>
               <input type="text" name="otherLabel" placeholder="Counter, hazard, mastery…" maxlength="60">
             </label>` : ""}
-            ${extras.length ? `<div class="icon-roll-chips">
+            ${extras.length ? `<div class="icon-roll-chips" data-other-chips>
               ${extras.map((x, i) => `
-                <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}">
+                <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}"${isComboExtra(i) ? " data-combo-chip" : ""}>
                   <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.area ? " · area" : ""}</small></span>
                 </label>`).join("")}
             </div>` : ""}
@@ -706,6 +709,20 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       f.elements.otherFray.checked = !!x.fray;
       f.elements.otherArea.checked = !!x.area;
     };
+    // The combo's own lines ("Combo — Succubus") only while the combo version
+    // is rolled: the "Combo version" box, or the combo state when there is no box.
+    const syncComboChips = () => {
+      const on = f.elements.useCombo ? !!f.elements.useCombo.checked : comboDefault;
+      // style.display, not `hidden`: the chip's CSS display would override it.
+      root.querySelectorAll("[data-combo-chip]").forEach(l => {
+        l.style.display = on ? "" : "none";
+        const r = l.querySelector('input[name="otherPick"]');
+        if (!on && r?.checked) r.checked = false;
+      });
+      const box = root.querySelector("[data-other-chips]");
+      if (box) box.style.display = Array.from(box.children).some(l => l.style.display !== "none") ? "" : "none";
+    };
+    f.elements.useCombo?.addEventListener("change", syncComboChips);
     f.querySelectorAll('input[name="otherPick"]').forEach(el => el.addEventListener("change", fillOther));
     f.querySelectorAll('input[name="outcome"], input[name="useCombo"], input[name="otherPick"]').forEach(el => el.addEventListener("change", syncType));
     f.querySelectorAll('input').forEach(el => el.addEventListener("input", update));
@@ -718,6 +735,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       f.dataset.rerollSwitch = "1";
       f.querySelector('button[data-action="ok"]')?.click();
     });
+    syncComboChips();
     syncType();
     update();
   });
