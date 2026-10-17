@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno (versione 1.15.213)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Resto di Blood Festival**: "increase all its teleports by +2, it deals bonus damage" (p.192) e il bonus damage di
+  Burial Fist (p.194) non arrivavano né alla card né alla finestra del danno → la casella Exceed portava con sé solo
+  l'Exceed → ora, se la casella è spuntata, la card dell'attacco ha un blocco "<nome> (this use)" con tutta la frase
+  (teletrasporti +2 compresi). La finestra del danno dello stesso uso (stesso turno di combattimento) si apre con 1
+  dado bonus per ogni fonte e un'etichetta che le nomina. Vale anche per Aether Shot ("deals bonus damage and triggers
+  all exceed effects", p.155). Solo codice.
+
 ## 17 ottobre 2026 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco (versione 1.15.212)
 
 ### Round di debug del 15 ottobre, voce emersa su R16

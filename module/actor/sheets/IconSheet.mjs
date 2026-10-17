@@ -21,7 +21,7 @@ import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvoke
 import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses, captureTargets } from "../../combat/ability-statuses.mjs";
 import { promptAttackTarget, rememberAttackTarget, rememberedAttackTarget } from "../../apps/roll-dialogs.mjs";
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
-import { exceedTriggers, noteFirstUseThisCombat } from "../../combat/crit-thresholds.mjs";
+import { exceedTriggers, noteFirstUseThisCombat, exceedExtraBlocks, noteExceedBoost, exceedBoostFor } from "../../combat/crit-thresholds.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
@@ -2808,6 +2808,8 @@ export class IconSheet extends BaseActorSheet {
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
     // "The first time you use Matsuri in a combat": any use counts, taken or not.
     if (forced.some(e => e.firstUse)) await noteFirstUseThisCombat(this.document, abilityItem);
+    // Their bonus damage (BLOOD FESTIVAL, BURIAL FIST, Aether Shot) waits for this use's damage dialog.
+    await noteExceedBoost(abilityItem, mods.exceedTaken);
 
     // With an area on the table the extra tokens only take the area effect:
     // the d20 (and the Evasion roll) is for the attack target picked in the dialog.
@@ -2880,6 +2882,10 @@ export class IconSheet extends BaseActorSheet {
         talentEffects.push({ label: `Collide — ${name} (Mastery, replaces the normal collide)`, text: await this._enrichAbility(sys.mastery, { leadName: true }) });
       }
     }
+    // A ticked exceed trigger that gives more for this use ("increase all its teleports by +2, it deals
+    // bonus damage", BLOOD FESTIVAL p.192): its sentence goes on the card.
+    for (const b of exceedExtraBlocks(mods.exceedTaken))
+      talentEffects.push({ label: `${b.label} (this use)`, text: await this._enrichAbility(b.text) });
 
     await combatRoll({
       abilityName:  comboArmed ? comboTitle(ab.name, this._comboSystem(this.document.items.get(itemId)).comboEffect)
@@ -2946,7 +2952,9 @@ export class IconSheet extends BaseActorSheet {
 
     let mods;
     for (;;) {
-      mods = await promptDamageMods(repeat ? { ...ab, reroll: { sameUse } } : ab, combat, { comboDefault, actor: this.document, prev: mods });
+      mods = await promptDamageMods(repeat ? { ...ab, reroll: { sameUse } } : ab, combat, { comboDefault, actor: this.document, prev: mods,
+        // Bonus damage the attack dialog's exceed triggers gave this use (BLOOD FESTIVAL p.192, BURIAL FIST p.194).
+        boost: exceedBoostFor(this.document.items.get(itemId)) });
       if (!mods) return;
       if (!repeat || !mods.rerollSwitch) break;
       // The chip was flipped: the dialog opens again on the other version.

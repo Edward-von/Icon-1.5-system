@@ -191,7 +191,7 @@ export function exceedTriggers(actor, item, { comboArmed = false } = {}) {
   const s = item?.system;
   if (!s) return out;
   const add = (source, html) => {
-    for (const sentence of _exceedSentences(html)) out.push({ source, ..._readCondition(sentence, actor, item) });
+    for (const sentence of _exceedSentences(html)) out.push({ source, sentence, ..._readCondition(sentence, actor, item) });
   };
   const name = item.name ?? "Ability";
   if (comboArmed) add(`${name} (combo)`, s.comboEffect);
@@ -212,6 +212,56 @@ export function exceedTriggers(actor, item, { comboArmed = false } = {}) {
   // One box per source.
   const seen = new Set();
   return out.filter(e => !seen.has(e.source) && seen.add(e.source));
+}
+
+/* -------------------------------------------------- */
+/*  What else the same sentence gives (bonus damage…)  */
+/* -------------------------------------------------- */
+
+const BOOST_FLAG = "exceedBoost";
+const BONUS_RE = /\bdeals?\s+bonus damage\b/i;
+// The sentence gives more than the exceed: bonus damage, "increase all its teleports by +2".
+const EXTRA_RE = /\bbonus damage\b|\bincrease\b/i;
+
+/**
+ * The exceed triggers ticked in the attack dialog whose sentence also grants
+ * something else for this use — BLOOD FESTIVAL (p.192) "increase all its
+ * teleports by +2, it deals bonus damage", BURIAL FIST (p.194) "deals bonus
+ * damage", Aether Shot (p.155) "deals bonus damage": a block for the attack
+ * card, with the sentence (plain text: the sheet enriches it).
+ * @param {object[]} taken  promptAttackMods().exceedTaken
+ * @returns {{label:string, text:string}[]}
+ */
+export function exceedExtraBlocks(taken) {
+  return (taken ?? []).filter(e => EXTRA_RE.test(e.sentence ?? ""))
+    .map(e => ({ label: e.source, text: e.sentence }));
+}
+
+function _turnKey() {
+  const c = game.combat;
+  return c?.started ? `${c.id}|${c.round}|${c.turn}` : "";
+}
+
+/**
+ * Remember, on the ability, which ticked triggers give it bonus damage, so
+ * the damage dialog of the same use (same combat turn) adds the dice.
+ * Cleared when nothing gives bonus damage this time.
+ */
+export async function noteExceedBoost(item, taken) {
+  if (!item) return;
+  const bonus = (taken ?? []).filter(e => BONUS_RE.test(e.sentence ?? "")).map(e => e.source);
+  const key = _turnKey();
+  try {
+    if (bonus.length && key) await item.setFlag("icon-system", BOOST_FLAG, { key, bonus });
+    else if (item.getFlag?.("icon-system", BOOST_FLAG)) await item.unsetFlag("icon-system", BOOST_FLAG);
+  } catch (err) { console.warn("[ICON | crit-thresholds] could not note the bonus damage", err); }
+}
+
+/** Names of what gives this ability bonus damage on the use attacked this turn (noteExceedBoost), or []. */
+export function exceedBoostFor(item) {
+  const f = item?.getFlag?.("icon-system", BOOST_FLAG);
+  const key = _turnKey();
+  return f && key && f.key === key ? [...(f.bonus ?? [])] : [];
 }
 
 /** Note the first use of the ability in this combat (BLOOD FESTIVAL). No-op outside a combat. */

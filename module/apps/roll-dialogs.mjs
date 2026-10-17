@@ -465,6 +465,8 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             // "Triggers all exceed effects" (BLOOD FESTIVAL, Open the Gates, Pulverize, Arenheir II…):
             // the names of the ticked sources, or "".
             forceExceed: forced.filter((_e, i) => f.elements[`forceExceed${i}`]?.checked).map(e => e.source).join(" / "),
+            // The ticked entries themselves: what else their sentence gives this use (bonus damage, +2 teleports).
+            exceedTaken: forced.filter((_e, i) => f.elements[`forceExceed${i}`]?.checked),
             attackTargetId,
             targetIds: rows.map(r => r.dataset.tokenId),
             // "Defender has evasion" per target token: rollEvasion uses it in
@@ -548,7 +550,9 @@ export async function promptAttackTarget(ab, actor, { areaLabel = "" } = {}) {
  * (outcome, attack target, modifiers, Other panel) the reopened one keeps.
  * @returns {Promise<object|null>}  see file header
  */
-export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null, free = false, prev = null } = {}) {
+export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null, free = false, prev = null, boost = [] } = {}) {
+  // `boost`: names of what made this use deal bonus damage in the attack dialog (BLOOD FESTIVAL p.192,
+  // BURIAL FIST p.194, Aether Shot p.155 — crit-thresholds.mjs#exceedBoostFor), one die each.
   const p   = ab.parsed ?? { hit: {}, miss: {}, area: {} };
   const die = combat?.damagedie ?? "d6";
   const fray = Number(combat?.fray ?? 0);
@@ -590,6 +594,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   const pitFoes  = targets.map(t => ({ t, by: pitMarkEffects(canvas.tokens.get(t.id)?.document).bonusDamage })).filter(x => x.by);
   const pitBonus = pitFoes.length ? 1 : 0;
   const pitNote  = pitFoes.length ? `${pitFoes.map(x => `${x.t.name} (${x.by})`).join(", ")}: marked, inside a pit — +1 bonus die` : "";
+  const boostBonus = free ? 0 : (boost ?? []).length;
+  const boostNote  = boostBonus ? `${boost.join(", ")}: +${boostBonus} bonus ${boostBonus > 1 ? "dice" : "die"} (this use, from the attack)` : "";
+  const autoBonus  = fbBonus + infBonus + pitBonus + boostBonus;
 
   const chunkFormula = (c) => {
     const parts = [];
@@ -696,7 +703,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         <section class="icon-roll-card">
           <h4 class="icon-roll-card__title">Modifiers</h4>
           <div class="icon-roll-steppers">
-            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: fbBonus + infBonus + pitBonus, max: 5 })}
+            ${_stepper({ name: "bonusDice", label: "Bonus dice", hint: "extra [D] added to the pool, keep the highest N", value: autoBonus, max: 5 })}
             ${_stepper({ name: "flatBonus", label: "Flat damage", hint: "a fixed amount added after the dice (Harden, blessings, one-off effects)", value: 0, max: 30 })}
             ${_stepper({ name: "instances", label: "Instances ×N", hint: "the same damage dealt N separate times (\"3 damage, three times\", p.92): armor, vulnerable and weakened count on each", value: Math.max(1, p.hit?.times ?? 1), min: 1, max: 10 })}
           </div>
@@ -710,9 +717,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply neither the target's Cover nor its Aetherwall halves the damage."><input type="checkbox" name="unerring" ${ignores.unerring ? "checked" : ""}><span>Unerring <small>${ignores.unerring ? esc(whyTick(ignores.unerring, "Unerring")) : "ignores Cover / Aetherwall"}</small></span></label>
             ${hatred.active ? `<label class="icon-roll-chip icon-roll-chip--hatred" title="${esc(hatred.note)}"><input type="checkbox" name="hatred" ${hatred.halve ? "checked" : ""}><span>Hatred of ${esc(hatred.name)} <small>½ vs others</small></span></label>` : ""}
           </div>
-          ${hatred.active || autoHalf.length || dodgers.length || fbNote || infNote || pitNote ? `<div class="icon-roll-auto">
+          ${hatred.active || autoHalf.length || dodgers.length || fbNote || infNote || pitNote || boostNote ? `<div class="icon-roll-auto">
             ${pitNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] and keep the highest (p.92).">${esc(pitNote)}</span>` : ""}
             ${infNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] for each instance and keep the highest (p.102).">${esc(infNote)}</span>` : ""}
+            ${boostNote ? `<span class="icon-roll-auto__chip" title="Bonus damage: roll one more [D] for each instance and keep the highest (p.102).">${esc(boostNote)}</span>` : ""}
             ${fbNote ? `<span class="icon-roll-auto__chip" title="Finishing Blow (Vagabond): triggers when the attack targets a Bloodied foe — at or under 50% HP (p.104).">${esc(fbNote)}</span>` : ""}
             ${hatred.active ? `<span class="icon-roll-auto__chip"><i class='fa-solid fa-triangle-exclamation'></i> ${esc(hatred.note)}</span>` : ""}
             ${autoHalf.length ? `<span class="icon-roll-auto__chip" title="Cover / Resistance: half damage, applied when the damage is applied (p.92)">½ on Apply: ${esc(autoHalf.join(", "))} (Cover / Resistance)</span>` : ""}
@@ -851,7 +859,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
         if (f.elements[n]) f.elements[n].checked = !!prev[n];
       }
       f.elements.flatBonus.value = prev.flatBonus ?? 0;
-      f.elements.bonusDice.value = Math.max(0, (prev.bonusDice ?? 0) - (prev.autoBonus ?? 0) + fbBonus + infBonus + pitBonus);
+      f.elements.bonusDice.value = Math.max(0, (prev.bonusDice ?? 0) - (prev.autoBonus ?? 0) + autoBonus);
       const pick = extras.findIndex(x => `${x.source}|${x.text}` === prev.otherPickKey);
       const radio = pick >= 0 && f.querySelector(`input[name="otherPick"][value="${pick}"]`);
       if (radio) radio.checked = true;
@@ -912,7 +920,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             rerollSwitch: f.dataset.rerollSwitch === "1",
             // For a dialog reopened on the other version (opts.prev).
             otherPickKey: picked ? `${picked.source}|${picked.text}` : "",
-            autoBonus:    fbBonus + infBonus + pitBonus,
+            autoBonus,
           };
         },
       },

@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno (17 ottobre 2026, versione 1.15.213)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Matsuri con Blood Festival, primo uso, casella spuntata: sulla card c'è il blocco "BLOOD FESTIVAL (this use)"
+      con la frase dei teletrasporti +2 e del danno bonus; poi Damage: "Bonus dice" parte da 1 e c'è l'etichetta
+      "BLOOD FESTIVAL: +1 bonus die (this use, from the attack)".
+- [ ] Stessa cosa con la casella tolta: nessun blocco sulla card e "Bonus dice" a 0.
+- [ ] Open the Gates al round 4 con Burial Fist: blocco sulla card e +1 dado nella finestra del danno.
+- [ ] Damage tirato al turno dopo (senza nuovo attacco): nessun dado bonus automatico.
+- [ ] Aether Shot al round 3: +1 dado bonus nella finestra del danno.
+
 ## Emerso R16 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco (17 ottobre 2026, versione 1.15.212)
 
 Setup: solo codice (F5 basta).

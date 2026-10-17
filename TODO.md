@@ -1607,9 +1607,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       messa a mano.
 (FATTO il 17 ottobre 2026, versione 1.15.212: caselle Exceed anche da testo dell'abilità, talento, tratti e reliquie;
       spuntate quando la condizione si legge, vuote con la frase quando no.)
-- [ ] **Emerso lavorando su R16 — resto di Blood Festival** (S): "increase all its teleports by +2, it deals bonus
+- [x] **Emerso lavorando su R16 — resto di Blood Festival** (S): "increase all its teleports by +2, it deals bonus
       damage" (p.192) non arriva né alla finestra del danno né alla card. Lo stesso vale per il bonus damage di Burial
       Fist.
+(FATTO il 17 ottobre 2026, versione 1.15.213: blocco sulla card e dado bonus nella finestra del danno per Blood
+      Festival, Burial Fist e Aether Shot quando la casella Exceed è spuntata.)
 - [ ] **Emerso lavorando su R16 — Collide e altri blocchi sulla card dell'attacco** (S): la card dell'attacco mostra
       solo Hit / Miss / Exceed / Crit e le righe del talento. Il Collide normale, Effect, Heroic, Charge ecc. non ci
       sono (Gigaton Whip: "They take fray damage"). Il danno doppio di Izuna Drop ("fray damage twice") non è proposto
@@ -1666,6 +1668,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       pericoloso, bottoni "2 damage" delle card) non dice cosa succede. Domanda per Edoardo: li lasciamo senza bonus,
       come oggi, o vuoi una regola tua (per esempio +1 danno, o solo un promemoria nella card)?
 - nessuno
+- [ ] **Emerso lavorando su R16 — Burial Fist: il bonus damage vale sempre?** (S, da decidere): "Any version of this
+      ability deals bonus damage and always triggers exceed effects at round 4 or later" (p.194). Oggi il dado bonus
+      arriva solo dal round 4, insieme all'Exceed (si può cambiare a mano nella finestra del danno). Domanda per
+      Edoardo: il danno bonus vale sempre, o anche lui solo dal round 4?
 
 ---
 
