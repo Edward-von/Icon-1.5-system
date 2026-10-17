@@ -365,10 +365,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Hell ha le tre distanze (1 space / 2-4 / 5+) come sotto-elenco nel libro (p.127), nel compendio sono in riga;
       Paradiso ha perso la prima frase del blocco Aura ("You gain an aura of supernatural accuracy…", p.155);
       la descrizione di Lycanthropy è tagliata ("…granting you massively increased speed and power", p.168).
-- [ ] **Emerso lavorando su R40 — danno di Succubus** (S): con la combo di Incubus armata, `parseComboAbilityDamage`
+- [x] **Emerso lavorando su R40 — danno di Succubus** (S): con la combo di Incubus armata, `parseComboAbilityDamage`
       (`combat/ability-damage.mjs`) legge "deal 3 damage to all characters marked by Incubus" come danno Hit e
       sostituisce il [D]+fray della base: il Damage Roll propone 3 su Hit invece di [D]+fray (p.164: Succubus cambia
       solo il Mark). I 3 danni andrebbero sotto Other.
+(FATTO il 17 ottobre 2026, versione 1.15.83: il danno scritto in un "Effect:" aggiunto da una combo senza etichette
+      Hit/Miss/Area non sostituisce più l'Hit della base; per Succubus i 3 danni sono il chip "Combo — Succubus" sotto
+      Other, Hit resta [D]+fray, p.164; controllate tutte le 17 combo del pack Jobs, cambia solo Incubus.)
 - [ ] **Emerso lavorando su R41 — Show in Chat e card Auto-hit non sanno chi è il bersaglio d'attacco** (S): senza il
       dialog dell'attacco, con più token bersagliati (area piazzata) i bottoni Inflict restano su tutti, con il gruppo
       etichettato "attack target only". La card Auto-hit potrebbe chiedere il bersaglio d'attacco (o prendere
@@ -454,6 +457,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       verificare): in `#onUseLimitBreak` gli status si cercano su `effect` + testo dell'Infuse armato; se il testo
       dell'Infuse è già dentro `effect` (come sembra dai blocchi "Infuse" di `enrichLimitBreakText`), i suoi status
       potrebbero comparire due volte. Lo stesso con l'Ultimate quando il suo Infuse (Meteor) è armato.
+- [ ] **Emerso lavorando su R40 — il chip "Combo — Succubus" si vede anche senza combo** (S): il chip sotto Other
+      appare anche quando il combo token non è pieno (come la casella "Combo version"); decidere se mostrarlo solo con
+      la combo armata. La voce del pulsante Other dice ancora "mastery / talent / free" e non nomina la combo.
+- [ ] **Emerso lavorando su R40 — danno del Mark di Incubus** (S): i "2 damage" del Mark della base (p.164: "both the
+      target and any adjacent foes take 2 damage and are dazed") non compaiono nel Damage Roll, nemmeno sotto Other
+      (lì finisce solo il danno di talenti e mastery). Probabilmente lo stesso per i danni dentro altri blocchi Mark /
+      Effect della base (vedi "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
 
 ---
 

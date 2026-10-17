@@ -458,7 +458,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     return parts.join(" + ");
   };
   // Damage lines read from the selected talent / unlocked mastery (ability-damage.mjs).
-  const extras = Array.isArray(p.extras) ? p.extras : [];
+  // Plus the combo version's own extra damage (Succubus's 3 damage to the
+  // marked characters, p.164), listed as "Combo — <name>".
+  const extras = [...(Array.isArray(p.extras) ? p.extras : []), ...(ab.parsedCombo?.comboExtras ?? [])];
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   // "Hit (no damage)" only where a hit can happen: an attack (its target may
   // take only the hit's statuses while the rest of the area takes damage), or

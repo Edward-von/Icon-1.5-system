@@ -1754,6 +1754,18 @@ Setup: solo codice (F5 basta).
       vuoto, e la card resta come prima.
 - [ ] Il Damage Roll non cambia: al capitolo 3 propone ancora il danno dell'Ultimate sotto Other, al capitolo 1 no.
 
+## voce emersa su R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (17 ottobre 2026, versione 1.15.83)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Incubus (Shade). Combo token pieno (combo armata), un foe bersagliato, Damage Roll su Incubus: "Combo
+      version" spuntato, la riga sotto dice [D] + fray (non "3 flat"); Hit = [D]+fray, Miss = fray.
+- [ ] Nello stesso dialogo scegliere **Other**: c'è il chip "Combo — Succubus" con "3 flat". Cliccarlo: Fixed damage =
+      3, Dice 0, niente Fray, niente Area. Roll Damage: la card dice 3 danni con l'etichetta della combo.
+- [ ] Senza combo token: Damage Roll su Incubus dà [D]+fray su Hit come prima.
+- [ ] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
+      Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

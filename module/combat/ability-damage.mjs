@@ -218,7 +218,22 @@ export function parseComboAbilityDamage(itemSystem) {
   // No labelled chunk at all but damage-shaped prose: parseAbilityDamage put it in `hit`.
   const anyLabel = rewrites.hit || rewrites.miss || rewrites.area;
   const deals = (c) => c.mult > 0 || c.flat > 0 || c.fray;
-  if (!anyLabel && deals(combo.hit)) rewrites.hit = true;
+  // Damage written in an Effect the combo adds is dealt besides the attack,
+  // not in place of its Hit: Succubus (Incubus, p.164) "Instead of the mark,
+  // gain Effect: deal 3 damage to all characters marked by Incubus" keeps
+  // [D]+fray on hit and only swaps the Mark. Those sentences go to the damage
+  // dialog's "Other" outcome; other unlabelled damage prose still rewrites Hit.
+  const comboExtras = [];
+  if (!anyLabel && deals(combo.hit) && /\beffect\s*:/i.test(text)) {
+    const name = /^\s*([^:—–.]{1,40}?)\s*[:—–]/.exec(text)?.[1]?.trim() ?? "";
+    for (const sentence of text.split(/(?<=\.)\s+/)) {
+      if (!/\bdamage\b|\[d\]|\bfray\b/i.test(sentence)) continue;
+      const chunk = parseChunk(sentence);
+      if (!deals(chunk)) continue;
+      comboExtras.push({ source: name ? `Combo — ${name}` : "Combo", text: sentence.trim(), ...chunk,
+                         area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
+    }
+  } else if (!anyLabel && deals(combo.hit)) rewrites.hit = true;
   const hit  = rewrites.hit  ? combo.hit  : base.hit;
   const miss = rewrites.miss ? combo.miss : base.miss;
   const area = rewrites.area ? combo.area : base.area;
@@ -227,6 +242,8 @@ export function parseComboAbilityDamage(itemSystem) {
     isAutoHit:   combo.isAutoHit || (!rewrites.hit && base.isAutoHit),
     dealsDamage: deals(hit) || deals(area) || miss.fray,
     hit, miss, area,
+    extras:      [...(base.extras ?? []), ...comboExtras],
+    comboExtras, // the combo's own "Other" damage, listed by the damage dialog
   };
 }
 

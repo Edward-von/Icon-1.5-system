@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (versione 1.15.83)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Succubus metteva 3 danni al posto di [D]+fray**: con la combo di Incubus armata, il Damage Roll proponeva 3 su Hit
+  invece di [D]+fray → `parseComboAbilityDamage` trattava ogni testo combo senza etichette Hit / Miss / Area come un
+  nuovo Hit. Nel libro (p.164) Succubus dice "Instead of the mark, gain Effect: deal 3 damage to all characters marked
+  by Incubus, and teleport them 2": cambia solo il Mark, l'attacco resta "On hit: [D]+fray. Miss: fray damage" → ora
+  il danno scritto in un Effect che la combo aggiunge non sostituisce più l'Hit. Compare sotto **Other** come voce
+  "Combo — Succubus" (3 danni, un clic riempie il pannello). Hit e Miss restano quelli della base. Le altre combo del
+  compendio Jobs danno lo stesso danno di prima (controllate tutte e 17). Solo codice.
+
 ## 17 ottobre 2026 — L'Ultimate dei Limit Break compare su scheda e card (versione 1.15.82)
 
 ### Round di debug del 16 ottobre, voce emersa su R37
