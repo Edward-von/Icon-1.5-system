@@ -544,7 +544,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.101: confermato; sulla scheda PG il danno dentro "Summon Effect:" / "Object
       Effect:" non è più danno dell'abilità, quindi Aethershard non ha più il bottone danno; foe e legend invariati;
       nel pack jobs cambia solo Aethershard. Solo codice.)
-- [ ] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, pronto: risposta del 17 ottobre 2026): la
+- [x] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, pronto: risposta del 17 ottobre 2026): la
       card di "Use Limit Break" legge gli status da tutto il testo dell'effetto e dell'Ultimate, comprese le versioni
       Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi
       nessun limit break del pack lo fa). Scegliere se togliere dalla ricerca i blocchi Infuse non armati, come fa la
@@ -552,6 +552,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): sì, toglierli. "Only one infusion can be chosen
       at once, and only one infuse effect can trigger at a time" (p.204): una versione non armata non scatta; come la
       card delle abilità con `splitInfuseBlocks`.
+(FATTO il 17 ottobre 2026, versione 1.15.104: in `#onUseLimitBreak` gli status si leggono dall'effetto e dall'Ultimate
+      dopo aver tolto le versioni Infuse non armate con `withoutUnarmedInfusions` (p.204); restano la versione armata
+      e le "Slay or Infuse", come in `splitInfuseBlocks`. Solo codice.)
 - [x] **Emerso lavorando su R46 — blocco Slay or Infuse doppio sulla card di attacco quando è armato** (S): con GRAM o
       GRAN BLITZ armati, la card di attacco mostra il blocco della versione ("Effect (GRAM)") e anche il blocco "Slay
       or Infuse 3" del testo base, che ora resta tra quelli base per non nasconderlo quando lo attiva lo Slay.

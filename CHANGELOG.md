@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Card del Limit Break: niente status dalle versioni Infuse non armate (versione 1.15.104)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Status degli Infuse non armati**: la card di "Use Limit Break" mostrava i bottoni degli status nominati in una
+  versione Infuse anche quando quella versione non era infusa → gli status venivano cercati in tutto il testo
+  dell'effetto e dell'Ultimate, versioni Infuse comprese → ora prima della ricerca si tolgono dal testo le versioni
+  Infuse non armate (nuova `withoutUnarmedInfusions` in `helpers/infuse.mjs`), perché "only one infuse effect can
+  trigger at a time" (p.204). Restano la versione armata (solo nel testo da cui viene, effetto o Ultimate) e le "Slay
+  or Infuse", che lo Slay può far scattare senza infondere, come fa la card delle abilità con `splitInfuseBlocks`. Un
+  limit break senza versioni Infuse viene letto come prima; nel pack nessun Infuse di limit break nomina status,
+  quindi oggi la differenza si vede solo su limit break fatti a mano. Solo codice.
+
 ## 17 ottobre 2026 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa (versione 1.15.103)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

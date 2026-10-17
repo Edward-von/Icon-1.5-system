@@ -121,6 +121,32 @@ export function limitBreakInfusions(system, { ultimate = false } = {}) {
   return out;
 }
 
+/**
+ * A Limit Break text (effect or ultimate) without the Infuse versions that
+ * can't trigger now, for reading its statuses: only one infusion is chosen and
+ * "only one infuse effect can trigger at a time" (p.204), so a version that
+ * isn't armed doesn't happen. A "Slay or Infuse" version stays (Slay can
+ * trigger it with nothing armed), as in splitInfuseBlocks. Same markers as
+ * limitBreakInfusions; the text comes back unchanged when nothing is removed.
+ * @param {string} raw  the effect / ultimate text
+ * @param {{armed?: string}} opts  label of the armed version ("Infuse 6"), if any
+ */
+export function withoutUnarmedInfusions(raw, { armed = "" } = {}) {
+  const text = String(raw ?? "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const CAPS = "[A-ZÄÖÜÀ-Þ][A-ZÄÖÜÀ-Þ'\\s]{2,}?";
+  const marker = new RegExp(`(?:\\b(${CAPS})\\s*[—–-]\\s*)?\\b([Ss]lay or )?[Ii]nfuse (\\d+|X)\\s*:\\s*`, "g");
+  const hits = [...text.matchAll(marker)];
+  let out = "", from = 0, cut = false;
+  hits.forEach((m, i) => {
+    const label = `Infuse ${/^x$/i.test(m[3]) ? "X" : m[3]}`;
+    if (m[2] || (armed && label === armed)) return;
+    out += text.slice(from, m.index);
+    from = i + 1 < hits.length ? hits[i + 1].index : text.length;
+    cut = true;
+  });
+  return cut ? `${out}${text.slice(from)}`.trim() : String(raw ?? "");
+}
+
 /* -------------------------------------------------- */
 /*  The Infuse versions on a chat card                 */
 /* -------------------------------------------------- */

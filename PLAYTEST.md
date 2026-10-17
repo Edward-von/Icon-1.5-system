@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate (17 ottobre 2026, versione 1.15.104)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Su un limit break di prova (copia di Gigaflare) aggiungere "Foe is dazed." alla fine del testo "Infuse 6:
+      TETRAFLARE — …". Usarlo senza infondere: niente bottone "dazed"; gli status del testo base restano.
+- [ ] Stesso limit break con Infuse 6 armato, poi "Use Limit Break": il bottone "dazed" compare una volta sola.
+- [ ] Una versione "Slay or Infuse N" che nomina uno status (copia di Gran Levincross con uno status in RAGNARÖK): il
+      bottone compare anche senza infondere.
+- [ ] Capitolo 3, Ultimate con versione Infuse (Meteor con uno status aggiunto per prova): senza infondere nessun
+      bottone di quella versione; con Infuse 8 armato i bottoni compaiono una volta.
+- [ ] Un limit break senza Infuse (Mock): bottoni slashed+, weakened+, hatred+ come prima.
+
 ## Emerso R49 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa (17 ottobre 2026, versione 1.15.103)
 
 Setup: solo codice (F5 basta).

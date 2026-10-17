@@ -29,7 +29,8 @@ import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../c
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
 import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
-         startInfusionStep, noteInfusionStep, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
+         startInfusionStep, noteInfusionStep, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml,
+         withoutUnarmedInfusions } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
@@ -3430,9 +3431,11 @@ export class IconSheet extends BaseActorSheet {
     // The armed Infuse version is not added again: limitBreakInfusions reads it
     // out of the effect / ultimate text, so its statuses are already parsed there
     // (adding it twice gave the Ultimate's version a second set of buttons).
+    // The versions not armed are left out: they don't trigger (p.204).
     const { ultimate } = IconSheet.#limitBreakTexts(this.document, lb);
-    const entries = parseInflictedStatuses(lb.system.effect ?? "", { sourceName: this.document.name, label: "Effect" });
-    if (ultimate) entries.push(...parseInflictedStatuses(ultimate, { sourceName: this.document.name, label: "Ultimate" }));
+    const armedIn = (source) => ({ armed: infusion?.source === source ? infusion.label : "" });
+    const entries = parseInflictedStatuses(withoutUnarmedInfusions(lb.system.effect, armedIn("Limit Break")), { sourceName: this.document.name, label: "Effect" });
+    if (ultimate) entries.push(...parseInflictedStatuses(withoutUnarmedInfusions(ultimate, armedIn("Ultimate")), { sourceName: this.document.name, label: "Ultimate" }));
     const statusHtml = statusBlockHtml(entries, { source: this.document, abilityName: lb.name });
     const ultimateHtml = ultimate
       ? `<div class="icon-limit-break__ultimate"><p class="icon-limit-break__ultimate-label"><strong>Ultimate</strong></p>${await enrichLimitBreakText(ultimate, { enrich: t => this._enrichAbility(t) })}</div>`
