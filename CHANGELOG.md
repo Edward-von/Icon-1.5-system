@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bersaglio d'attacco ricordato solo se è ancora nell'area (versione 1.15.117)
+
+### Round di debug del 16 ottobre, voce emersa su R41
+
+- **Area spostata**: spostata un'area Line / Arc senza ripiazzarla, Show in Chat usava ancora il bersaglio d'attacco
+  scelto prima, anche se quel token non era più dentro → il bersaglio ricordato si controllava solo tra i bersagli
+  selezionati, non tra i token dentro le caselle dell'area → ora vale solo se il token sta ancora in una casella
+  dell'area attuale, comunque sia stata spostata (trascinata, Shift + frecce, movimenti delle aree); altrimenti tutti
+  i bottoni Inflict, come quando il bersaglio non si sa. Vale per schede PG, foe e legend. Solo codice.
+
 ## 17 ottobre 2026 — MJÖLLNIR sostituisce sempre l'area di Sturmreiten (versione 1.15.116)
 
 ### Round di debug del 16 ottobre, voce emersa su R47b

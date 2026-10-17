@@ -330,8 +330,10 @@ export class FoeSheet extends BaseActorSheet {
     let attackTargetId = "";
     if (isFoeActionAttack(action) && targets.length > 1) {
       const tpl = findAreaTemplates({ actorId: this.document.id, abilityKey: `action:${action.name}` })[0];
-      if (tpl) attackTargetId = attackSpaceTokenId(await retargetFromTemplate(tpl, { retarget: false }))
-                             || rememberedAttackTarget(this.document, action);
+      // The remembered pick only while that token is still inside the area (moved with Shift + arrows or dragged).
+      const placed = tpl ? await retargetFromTemplate(tpl, { retarget: false }) : null;
+      const remembered = rememberedAttackTarget(this.document, action);
+      if (placed) attackTargetId = attackSpaceTokenId(placed) || (placed.targets.some(t => t.id === remembered) ? remembered : "");
       if (!targets.some(t => t.tokenId === attackTargetId)) attackTargetId = "";
     }
     return this.#statusHtmlFor(action, action.name, { targets, attackTargetId });

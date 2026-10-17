@@ -1858,8 +1858,10 @@ export class IconSheet extends BaseActorSheet {
     let attackTargetId = "";
     if (ab.isAttack && cardTargets.length > 1) {
       const tpl = findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id })[0];
-      if (tpl) attackTargetId = attackSpaceTokenId(await retargetFromTemplate(tpl, { retarget: false }))
-                             || rememberedAttackTarget(this.document, ab);
+      // The remembered pick only while that token is still inside the area (moved with Shift + arrows or dragged).
+      const placed = tpl ? await retargetFromTemplate(tpl, { retarget: false }) : null;
+      const remembered = rememberedAttackTarget(this.document, ab);
+      if (placed) attackTargetId = attackSpaceTokenId(placed) || (placed.targets.some(t => t.id === remembered) ? remembered : "");
       if (!cardTargets.some(t => t.tokenId === attackTargetId)) attackTargetId = "";
     }
     const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name, targets: cardTargets, attackTargetId });

@@ -614,10 +614,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.97: il Talent II di Pandaemonium ha il suo chip "Pits under pacified foes",
       che dopo una domanda mette un pit sotto ogni foe ostile pacified della scena che non ne ha già uno. Solo
       codice.)
-- [ ] **Emerso lavorando su R41 — area trascinata** (S): se l'area di una Line o di un Arc viene spostata
+- [x] **Emerso lavorando su R41 — area trascinata** (S): se l'area di una Line o di un Arc viene spostata
       trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
       è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
       controllare che il token sia dentro le caselle dell'area.
+(FATTO il 17 ottobre 2026, versione 1.15.117: Show in Chat di PG, foe e legend usa il bersaglio d'attacco ricordato
+      solo se quel token è ancora dentro le caselle dell'area sulla mappa, comunque sia stata spostata. Solo codice.)
 - [x] **Emerso lavorando su R49 — Dulce Purgatorio: l'Area Effect di Pandaemonium su tutti i pit** (S, pronto: risposta del
       17 ottobre 2026): la prima metà della Mastery (p.178, "Pandaemonium's area effect … extend to all pits on the
       battlefield") non è letta; l'Area Effect è "Remove all characters in the area, then place them back in any other
