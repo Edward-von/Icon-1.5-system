@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — L'area di Holy non resta più sulla mappa (17 ottobre 2026, versione 1.15.98)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Chanter con Holy, combo armata (Hades): si piazza la Medium Blast e si crea il pit sotto il bersaglio.
+      All'inizio del turno successivo del PG la Medium Blast sparisce e il pit resta.
+- [ ] Holy con Talent I: nello stesso turno, dopo Hades, "Medium Blast (on pits)" trova ancora l'area e i pit al suo
+      interno.
+- [ ] Holy con MAGNASANCTI sbloccata: la Small Blast terrain effect resta sulla mappa dopo il turno, come prima.
+- [ ] Holy senza combo: nessuna area resta.
+
 ## Emerso R49 — Pit sotto i foe pacified (Pandaemonium Talent II) (17 ottobre 2026, versione 1.15.97)
 
 Setup: solo codice (F5 basta).

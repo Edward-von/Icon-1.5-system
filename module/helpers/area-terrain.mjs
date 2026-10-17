@@ -231,8 +231,12 @@ export function activeAreaTexts(system) {
   ].filter(e => e && typeof e[1] === "string" && e[1].trim());
 }
 
-/** The ability's base text, without its talents and mastery: whether its own area is a terrain effect. */
+/**
+ * The ability's base text, without its talents, mastery and combo: whether its own area is a terrain effect.
+ * The combo is left out like a talent: Hades' "Terrain Effect: Create a pit under your target" (Holy, p.177)
+ * makes a pit, not its Medium Blast a terrain effect that stays.
+ */
 export function baseAreaText(system) {
   const s = system ?? {};
-  return Object.entries(s).filter(([k, v]) => typeof v === "string" && !["talent1", "talent2", "mastery"].includes(k)).map(([, v]) => v).join(" ");
+  return Object.entries(s).filter(([k, v]) => typeof v === "string" && !["talent1", "talent2", "mastery", "comboEffect", "comboTags"].includes(k)).map(([, v]) => v).join(" ");
 }

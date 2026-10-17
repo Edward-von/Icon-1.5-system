@@ -547,10 +547,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.96: con DULCE PURGATORIO sbloccata `pitBlastCells` prende tutti i pit della
       scena e non serve l'area dell'abilità; la prima metà della Mastery, sull'Area Effect di Pandaemonium, è una voce
       emersa a parte, da decidere.)
-- [ ] **Emerso lavorando su R49 — l'area di Holy forse resta come terrain effect** (S, da verificare): `#areaLasts`
+- [x] **Emerso lavorando su R49 — l'area di Holy forse resta come terrain effect** (S, da verificare): `#areaLasts`
       legge `baseAreaText`, che contiene anche il testo della combo; la riga "Terrain Effect: Create a pit under your
       target" di Hades rende probabilmente "lasting" la Medium Blast di Holy/Hades (flag `terrain`), che a fine turno
       non viene tolta.
+(FATTO il 17 ottobre 2026, versione 1.15.98: confermato; la riga "Terrain Effect: Create a pit…" della combo Hades
+      rendeva "lasting" la Medium Blast; il testo della combo ora è escluso dal testo base come talenti e mastery; nel
+      pack jobs cambia solo Holy. Solo codice.)
 - [ ] **Emerso lavorando su R49 — "centered on them" dopo plants / nails / clouds** (S/M): stesso schema dei pit,
       ancora a mano; plant / nail / cloud non hanno un tipo `terrain` riconoscibile sulla mappa come `pit`, servirebbe
       prima quello.
@@ -575,6 +578,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R49 — pit sotto foe grandi** (S, da decidere): sotto un foe 2x2 o più grande il pit va
       solo nella casella in alto a sinistra (lo stesso per il terreno sotto i foe del Volcanic Geyser). Domanda per
       Edoardo: un pit su tutte le caselle occupate, o su una sola scelta da chi gioca?
+- [ ] **Emerso lavorando su R49 — oggetti di un "Terrain effect:" che rendono l'area "lasting"** (S, da decidere): Geo
+      ("Terrain effect: Create a height 1 boulder object in free space anywhere in the area", p.218), The Tower
+      ("Terrain effect: Then, create a height 1 meteor object in the area", p.203) e Dark Sliver ("Terrain effect: Cut
+      away a part of the target's soul…", p.187) restano "lasting" solo per il testo base, quindi la loro area
+      d'attacco resta sulla mappa; è lo stesso caso di Hades (il terrain effect è l'oggetto, non l'area), ma la regola
+      di R33c lo accettava. Domanda per Edoardo: queste aree devono sparire al turno dopo come quella di Holy?
+- [ ] **Emerso lavorando su R49 — commento non più vero in `pitBlastCells`** (S): in
+      `module/canvas/area-templates.mjs` (~riga 1084) il commento dice "Holy's area is kept as a terrain effect, so
+      those count": ora non è più così (il codice funziona lo stesso).
 
 ---
 

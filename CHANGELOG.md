@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'area di Holy non resta più sulla mappa (versione 1.15.98)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Medium Blast di Holy/Hades come terrain effect**: l'area dell'attacco di Hades restava sulla mappa e non spariva
+  al turno dopo → la riga della combo "Terrain Effect: Create a pit under your target" (Holy p.177) finiva nel testo
+  base dell'abilità (`baseAreaText` in `area-terrain.mjs`), quello che decide se la sua area resta → ora la combo è
+  esclusa da quel testo, come i talenti e la mastery: il pit è un terrain effect, la Medium Blast no. Simulato su
+  tutto il pack jobs (copia): le aree che restano passano da 25 a 24 e cambia solo Holy. L'area della mastery
+  MAGNASANCTI resta come prima; l'esplosione dei pit di Talent I nello stesso turno trova ancora l'area. Solo codice.
+
 ## 17 ottobre 2026 — Pit sotto i foe pacified (Pandaemonium Talent II) (versione 1.15.97)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
