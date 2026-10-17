@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Il rampart di Comet ferma davvero i foe (17 ottobre 2026, versione 1.15.229)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Comet a terra: trascinare un foe con l'azione Fly (o con lo status flying) dentro uno spazio accanto all'arma:
+      movimento rifiutato con avviso.
+- [ ] Stessa prova con l'azione Teleport (blink) di Foundry, verso uno spazio accanto o da uno spazio accanto verso
+      fuori: rifiutato.
+- [ ] Trascinare un foe a piedi attraverso uno spazio accanto all'arma: compare la domanda. "Dash — stay" lo lascia
+      dov'era, "Normal move or rush — go on" lo sposta.
+- [ ] Dopo "go on", muovere di nuovo lo stesso foe nello stesso turno: nessuna nuova domanda. Al turno dopo, la
+      domanda torna.
+- [ ] Muovere con la tastiera, passo per passo, accanto all'arma: una sola domanda per turno.
+- [ ] Foe con lo status unstoppable, o con il tratto "Hovering: Immune to rampart": nessun controllo.
+- [ ] Muovere un PG alleato accanto all'arma: nessun controllo. Il "Pick up" di Comet funziona come prima.
+
 ## Emerso R33 — Copertura degli oggetti calcolata per direzione (17 ottobre 2026, versione 1.15.228)
 
 Setup: solo codice (F5 basta).

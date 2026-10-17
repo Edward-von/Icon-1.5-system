@@ -1003,9 +1003,7 @@ export async function relocateObject(actor) {
  *                        entered or left a space adjacent to the Thrown Weapon.
  *   Megamushroom / plant "can be picked up if yourself or an ally enters its space" (p.184, p.187) — not a foe.
  *   Underway (p.168)     a character (not a foe) came next to a portal: teleport to another one?
- *   Comet rampart (p.126) "Foes cannot enter or exit a space affected by a rampart effect by dashing, flying, or
- *                        teleporting" — a foe that entered or left a space next to the weapon gets a warning only
- *                        (the system can't tell a dash from a walk; nothing is undone).
+ * (Comet's rampart is checked before the move instead: rampartCheck.)
  * The spaces crossed count too (movePath: Foundry's waypoints of the move); the Underway question only where it ends.
  * @param {object|null} movement  Foundry's movement data of this update (options.movement[id]), for its actions
  */
@@ -1031,7 +1029,6 @@ async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved
     const oc = cellsOf(o);
     const wasNear = gapBetween(before, oc) === 1, isNear = gapBetween(after, oc) === 1;
     const passedNear = path.some(f => gapBetween(f, oc) === 1);
-    if (info.rampart && hostile && (wasNear || isNear || passedNear)) rampartWarning(td, info, isNear || (passedNear && !wasNear), movement);
     if (info.pickUpNear && flag.creatorId === td.actor.id && (wasNear || isNear || passedNear)) {
       const how = isNear ? "entered" : wasNear ? "left" : "passed through";
       if (await ask(`${info.name} — pick up?`, `<p>${esc(td.name)} ${how} a space adjacent to the <strong>${esc(info.name)}</strong>: pick it up? It ends the effect and removes the object (p.128).</p>`, "Pick up"))
@@ -1118,20 +1115,84 @@ async function offerStepUpDown(td, before, after, ask) {
   await scene.updateEmbeddedDocuments("Token", [{ _id: td.id, elevation: now }], { animate: false, iconObjectMove: true });
 }
 
+/* Rampart (R33a5) ----------------------------------- */
+
+/** Foes whose move the user said was a normal one (not a dash), so the steps that follow aren't asked again. */
+const rampartCleared = new Map();
+const turnKey = () => game.combat?.started ? `${game.combat.id}:${game.combat.round}:${game.combat.turn}` : "";
+function rampartAlreadyCleared(td) {
+  const c = rampartCleared.get(td.id);
+  if (!c) return false;
+  return c.turn ? c.turn === turnKey() : Date.now() - c.at < 60000;
+}
+
 /**
- * R33a5: a foe entered or left a rampart space (Comet, p.128 "Spaces adjacent to it have rampart"): "Foes cannot
- * enter or exit any space affected by a character's Rampart by dashing, flying, or teleporting" (p.117). A warning
- * to the user who moved it, firmer when Foundry's movement says fly / teleport (blink) or the foe has flying; the
- * move itself is left as it is.
+ * Does this foe ignore rampart? "Unstoppable … movement ignores engagement and rampart" (p.104), and foe traits such
+ * as "Hovering: Immune to rampart" or "Slip: Movement ignores rampart".
  */
-function rampartWarning(td, info, entered, movement) {
-  const actions = (movement?.passed?.waypoints ?? []).map(w => w?.action);
-  const flying = !!td.actor?.statuses?.has?.("flying");
-  const how = actions.includes("blink") ? "teleporting" : (actions.includes("fly") || flying) ? "flying" : "";
-  const where = `${entered ? "entered" : "left"} a rampart space next to the ${info.name}`;
-  const rule = "foes cannot enter or exit a rampart space by dashing, flying or teleporting (p.117, p.126) — only by normal movement.";
-  if (how) ui.notifications.warn(`${td.name} ${where} by ${how}: ${rule} Undo the move (Ctrl+Z) if the table agrees.`);
-  else ui.notifications.info(`${td.name} ${where}: if that was a dash, ${rule}`);
+function ignoresRampart(actor) {
+  if (!actor) return false;
+  if (actor.statuses?.has?.("unstoppable")) return true;
+  const re = /\b(?:immune to|ignores?)\b[^.]{0,40}\brampart\b/i;
+  const traits = Array.isArray(actor.system?.traits) ? actor.system.traits : [];
+  if (traits.some(t => re.test(`${t?.name ?? ""}: ${String(t?.description ?? "").replace(/<[^>]+>/g, " ")}`))) return true;
+  return (actor.items ?? []).some(i => i.type === "trait" && re.test(`${i.name}: ${String(i.system?.description ?? "").replace(/<[^>]+>/g, " ")}`));
+}
+
+/**
+ * Comet's "Spaces adjacent to it have rampart" (p.128): "Foes cannot enter or exit any space affected by a
+ * character's Rampart by dashing, flying, or teleporting" (p.117; p.126 glossary). Checked before a foe's move made
+ * by dragging or with the keyboard (Foundry's preMoveToken, on the client that moves it), when its path starts, ends
+ * or passes in a rampart space:
+ *   - Foundry's teleport (blink), fly or jump action ("Fly: You fly, jump, or leap", p.88), or a foe with the flying
+ *     status → the move is refused, with a notice;
+ *   - any other action: the system can't tell a dash from a walk, so the move is held and the user who moved it is
+ *     asked; "normal move or rush" (rush makes it unstoppable, p.88, p.104) lets it go on, "dash" leaves it where it
+ *     was. The answer stands for that foe until the turn changes (a minute out of combat).
+ * Unstoppable foes, and traits that ignore or are immune to rampart, aren't checked.
+ * @returns {boolean|void}  false to refuse the move
+ */
+function rampartCheck(td, movement, options) {
+  try {
+    if (options?.iconRampartOk || options?.iconObjectMove) return;
+    if (!["dragging", "keyboard"].includes(movement?.method)) return;
+    const scene = td?.parent;
+    if (!scene || mapObjectFlag(td) || !td.actor || !isHostile(td)) return;
+    const ramparts = scene.tokens.filter(t => mapObjectFlag(t) && t.actor && objectSheetInfo(t.actor)?.rampart);
+    if (!ramparts.length) return;
+    const ways = [...(movement.passed?.waypoints ?? []), ...(movement.pending?.waypoints ?? [])].filter(w => Number.isFinite(w?.x) && Number.isFinite(w?.y));
+    if (!ways.length || ways.every(w => w.action === "displace")) return;
+    const origin = movement.origin ?? { x: td.x, y: td.y };
+    const last = ways.at(-1);
+    const before = cellsOf(td, origin), after = cellsOf(td, last);
+    if (before[0].i === after[0].i && before[0].j === after[0].j) return;
+    const path = movePath(td, origin, { passed: { waypoints: ways } }, before, after);
+    const near = ramparts.find(o => { const oc = cellsOf(o); return path.some(f => gapBetween(f, oc) === 1); });
+    if (!near || ignoresRampart(td.actor)) return;
+    const name = objectSheetInfo(near.actor)?.name ?? near.name;
+    const rule = "foes cannot enter or exit a rampart space by dashing, flying or teleporting (p.117)";
+    const actions = ways.map(w => w.action);
+    const how = actions.includes("blink") ? "teleporting" : (actions.includes("fly") || actions.includes("jump") || td.actor.statuses?.has?.("flying")) ? "flying" : "";
+    if (how) {
+      ui.notifications.warn(`${td.name} can't move there by ${how}: the spaces next to the ${name} have rampart — ${rule}.`);
+      return false;
+    }
+    if (rampartAlreadyCleared(td)) return;
+    // Held: ask, then move again the same way when it was a normal move.
+    const esc = foundry.utils.escapeHTML;
+    const waypoints = ways.map(w => ({ x: w.x, y: w.y, elevation: w.elevation, action: w.action, snapped: w.snapped, explicit: w.explicit, checkpoint: w.checkpoint }));
+    foundry.applications.api.DialogV2.confirm({
+      window: { title: `Rampart — ${name}` },
+      content: `<p><strong>${esc(td.name)}</strong> would enter or leave a space next to the <strong>${esc(name)}</strong>, which has rampart: ${esc(rule)} — only by normal movement (or a rush: unstoppable ignores rampart, p.104).</p><p>Is this a dash?</p>`,
+      yes: { label: "Normal move or rush — go on" }, no: { label: "Dash — stay" }, rejectClose: false,
+    }).then(async (go) => {
+      if (!go) { ui.notifications.info(`${td.name} stays: it can't dash into or out of a rampart space (p.117).`); return; }
+      if (!scene.tokens.get(td.id)) return;
+      rampartCleared.set(td.id, { turn: turnKey(), at: Date.now() });
+      await td.move(waypoints, { method: "api", iconRampartOk: true });
+    }).catch(err => console.warn("[ICON | MapObjects] rampart question failed", err));
+    return false;
+  } catch (err) { console.warn("[ICON | MapObjects] rampart check failed", err); }
 }
 
 /**
@@ -1412,6 +1473,8 @@ export function registerMapObjectHooks() {
   Hooks.on("preUpdateToken", (tokenDoc, changed, options) => {
     if (("x" in changed || "y" in changed) && mapObjectFlag(tokenDoc)) options.iconPrevElevation = tokenDoc.elevation ?? 0;
   });
+  // R33a5: Comet's rampart refuses a foe's fly / teleport and asks about a dash, before the move (rampartCheck).
+  Hooks.on("preMoveToken", (tokenDoc, movement, options) => rampartCheck(tokenDoc, movement, options));
   // R33a5: walls of objects deleted while no GM was there to take them away.
   Hooks.on("canvasReady", (cv) => {
     if (game.users.activeGM?.id !== game.user.id) return;

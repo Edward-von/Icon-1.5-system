@@ -1525,9 +1525,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.228: copertura dagli oggetti calcolata all'Apply col token dell'attaccante,
       p.92; in diagonale vale solo se l'attaccante è oltre sia la riga sia la colonna, se è oltre una sola resta un
       suggerimento. Underway Talent II resta un suggerimento perché non dice la direzione.)
-- [ ] **Emerso lavorando su R33a5 — bloccare davvero il rampart** (S, da decidere): il sistema non distingue un dash
+- [x] **Emerso lavorando su R33a5 — bloccare davvero il rampart** (S, da decidere): il sistema non distingue un dash
       da un passo normale; se si vuole il blocco vero (rifiutare il movimento) basta deciderlo per fly / blink /
       flying, per il dash servirebbe una scelta di chi muove.
+(FATTO il 17 ottobre 2026, versione 1.15.229: il rampart di Comet rifiuta fly / jump / teleport dei foe e per gli
+      altri movimenti chiede se è un dash, prima che il movimento avvenga, p.117. Vale solo per i movimenti trascinati
+      o da tastiera; il rampart di Stalwart / Guard non è toccato.)
 - [x] **Emerso lavorando su R33a5 — pierce degli shard e weakened** (S): il pierce ignora anche weakened (p.104), ma
       weakened è già tolto dal totale della card quando viene creata; per il solo bersaglio vicino allo shard non
       viene ridato.

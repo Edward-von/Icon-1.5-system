@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il rampart di Comet ferma davvero i foe (versione 1.15.229)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Rampart di Comet**: un foe poteva volare, teletrasportarsi o fare un dash dentro o fuori gli spazi accanto
+  all'arma, e arrivava solo un avviso dopo il movimento → il sistema non distingue un dash da un passo normale → ora
+  il controllo avviene prima del movimento ("Foes cannot enter or exit any space affected by a character's Rampart by
+  dashing, flying, or teleporting", p.117, p.128). Vale per i movimenti trascinati o fatti da tastiera che partono,
+  finiscono o passano accanto all'arma. Se l'azione di Foundry è teleport, fly o jump ("fly, jump, or leap", p.88), o
+  se il foe ha lo status flying, il movimento viene rifiutato con un avviso. Altrimenti il movimento resta in sospeso
+  e si chiede a chi muove se è un dash. "Normal move or rush" lo fa proseguire (il rush rende unstoppable, p.88,
+  p.104) e la risposta vale per quel foe fino al cambio di turno. "Dash" lo lascia dov'era. Non si controllano i foe
+  unstoppable né quelli con tratti che ignorano il rampart ("Hovering: Immune to rampart", "Slip"). Solo codice.
+
 ## 17 ottobre 2026 — Copertura degli oggetti calcolata per direzione (versione 1.15.228)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -110,7 +110,7 @@
           <p class="icon-object-effect__note"><i class="fa-solid fa-gem"></i> Caught in an area you place: the area card asks to deal {{mapObject.areaTrigger.amount}} {{mapObject.areaTrigger.type}} damage per shard and destroy them{{#if mapObject.areaTrigger.aether}} (+{{mapObject.areaTrigger.aether}} Aether){{/if}}.</p>
         {{/if}}
         {{#if mapObject.rampart}}
-          <p class="icon-object-effect__note"><i class="fa-solid fa-shield-halved"></i> Spaces adjacent to it have rampart (the Aura 1 around it): foes cannot enter or exit them by dashing, flying or teleporting (p.104).</p>
+          <p class="icon-object-effect__note"><i class="fa-solid fa-shield-halved"></i> Spaces adjacent to it have rampart (the Aura 1 around it): foes cannot enter or exit them by dashing, flying or teleporting (p.104, p.117). A foe's fly / teleport through them is refused; any other move asks whether it is a dash.</p>
         {{/if}}
         {{#if mapObject.pickUpNear}}
           <p class="icon-object-effect__note"><i class="fa-solid fa-hand"></i> Moving {{#if mapObject.creatorName}}{{mapObject.creatorName}}{{else}}its creator{{/if}} into or out of a space adjacent to it asks to pick it up; starting the turn there is reminded in chat.</p>
