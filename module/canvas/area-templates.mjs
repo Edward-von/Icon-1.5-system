@@ -1493,6 +1493,9 @@ export async function auraExpiry(text, actor) {
   // whose imports lead back to this module.
   const { expiryFromUntil } = await import("../combat/status-expiry.mjs");
   const plain = String(text ?? "").replace(/<[^>]+>/g, " ");
+  // "Once gained, Sweet Torment's aura lasts indefinitely" (Bleak Mercy's PAINKILLER, p.144): an unlocked upgrade
+  // that takes the end away wins over the combo's "until the end of your next turn".
+  if (/\baura\b[^.;]*\blasts?\s+indefinitely\b/i.test(plain)) return null;
   for (const sentence of plain.split(/[.;\n]/)) {
     if (!/\baura\s*\d/i.test(sentence)) continue;
     const exp = expiryFromUntil(sentence.replace(/\s+/g, " "), { target: actor, source: actor });

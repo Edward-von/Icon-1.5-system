@@ -1289,9 +1289,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       il testo del talento / della mastery che crea il mark. Da verificare nel playtest R17.
 (FATTO il 17 ottobre 2026, versione 1.15.131: senza blocco "Mark:", il bottone Mark usa la frase del talento / della
       mastery che crea il mark (Polaris Talent I, Amico di Party Favor), come il chip "On a character". Solo codice.)
-- [ ] **Emerso lavorando su R19 — Painkiller: l'aura di Sweet Torment dovrebbe durare per sempre** (S): con la mastery
+- [x] **Emerso lavorando su R19 — Painkiller: l'aura di Sweet Torment dovrebbe durare per sempre** (S): con la mastery
       di Bleak Mercy sbloccata ("Sweet Torment's aura lasts indefinitely", p.144) la durata dell'aura viene ancora
       letta dal testo della combo ("until the end of your next turn") e l'aura scade. Da verificare in gioco.
+(FATTO il 17 ottobre 2026, versione 1.15.132: con Painkiller sbloccata ("Sweet Torment's aura lasts indefinitely",
+      p.144) l'aura non ha più scadenza. Solo codice.)
 - [x] **Emerso lavorando su R19 — aure alternative nel testo non proposte** (S) (SPOSTATO in R48 del round del 16 ottobre): la mastery Phantom Bolts di Warding
       Bolts ("hover around you as an Aura 2 instead") e l'Heroic di Rook ("increase aura to Aura 2") non compaiono
       tra le scelte del bottone area (`areasInText` non legge "aura N"). Non verificato in gioco.

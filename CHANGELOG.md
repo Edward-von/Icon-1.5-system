@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Painkiller: l'aura di Sweet Torment resta (versione 1.15.132)
+
+### Round di debug del 15 ottobre, voce emersa su R19
+
+- **Aura di Sweet Torment con Painkiller**: con la mastery di Bleak Mercy sbloccata l'aura scadeva comunque alla fine
+  del turno successivo → la durata (`auraExpiry` in `area-templates.mjs`) veniva letta solo dal testo della combo
+  ("until the end of your next turn, gain aura 1") → se il testo sbloccato dice che l'aura "lasts indefinitely"
+  (p.144) l'aura non ha più scadenza. Nel pack jobs lo dice solo la mastery di Bleak Mercy. Solo codice.
+
 ## 17 ottobre 2026 — Testo del mark di Polaris e Party Favor (versione 1.15.131)
 
 ### Round di debug del 15 ottobre, voce emersa su R17

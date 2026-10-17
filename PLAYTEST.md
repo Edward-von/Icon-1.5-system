@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R19 — Painkiller: l'aura di Sweet Torment resta (17 ottobre 2026, versione 1.15.132)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bleak Mercy con Painkiller sbloccata, combo token tenuto, piazza l'Aura 1 di Sweet Torment: dopo la fine del tuo
+      turno successivo non arriva nessuna card "ends" e l'aura resta.
+- [ ] Stessa prova senza la mastery: l'aura finisce alla fine del tuo turno successivo, come prima.
+
 ## Emerso R17 — Testo del mark di Polaris e Party Favor (17 ottobre 2026, versione 1.15.131)
 
 Setup: solo codice (F5 basta).
