@@ -554,8 +554,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R49 — "centered on them" dopo plants / nails / clouds** (S/M): stesso schema dei pit,
       ancora a mano; plant / nail / cloud non hanno un tipo `terrain` riconoscibile sulla mappa come `pit`, servirebbe
       prima quello.
-- [ ] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
+- [x] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
       foe" (p.178) non crea i pit sotto i foe pacified: oggi si mettono a mano con il chip.
+(FATTO il 17 ottobre 2026, versione 1.15.97: il Talent II di Pandaemonium ha il suo chip "Pits under pacified foes",
+      che dopo una domanda mette un pit sotto ogni foe ostile pacified della scena che non ne ha già uno. Solo
+      codice.)
 - [ ] **Emerso lavorando su R41 — area trascinata** (S): se l'area di una Line o di un Arc viene spostata
       trascinandola invece di ripiazzarla, il bersaglio scelto prima resta ricordato e Show in Chat lo usa se il token
       è ancora tra i bersagli, anche se non è più dentro l'area. Si potrebbe azzerarlo anche allo spostamento, o
@@ -566,6 +569,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       space in the area" (p.177). Domanda per Edoardo: (a) l'area diventa l'area dell'abilità più tutte le caselle con
       un pit (chi sta su un pit viene preso, e si può rimettere anche su un pit), oppure (b) ogni pit conta come
       un'area di forma uguale a quella dell'abilità? Con la (a) basta poco codice.
+- [ ] **Emerso lavorando su R49 — chip dei pit di Pandaemonium legati tra loro** (S): i due chip finiscono nello
+      stesso gruppo, quindi il clic destro su uno dei due toglie dalla scena sia il pit della combo sia quelli sotto i
+      foe pacified.
+- [ ] **Emerso lavorando su R49 — pit sotto foe grandi** (S, da decidere): sotto un foe 2x2 o più grande il pit va
+      solo nella casella in alto a sinistra (lo stesso per il terreno sotto i foe del Volcanic Geyser). Domanda per
+      Edoardo: un pit su tutte le caselle occupate, o su una sola scelta da chi gioca?
 
 ---
 

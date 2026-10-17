@@ -151,6 +151,10 @@ export function terrainSpacesInText(text, { itemName = "" } = {}) {
     add(m.index, { kind: "pit", count: countWord(m[1]), fixed: countWord(m[1]) > 1,
       dangerous: /^\s*the pit is (?:also |additionally )?dangerous terrain\b/i.test(next) });
   }
+  // Pandaemonium's Talent II (p.178): "its effect causes pits to appear under every pacified foe" — no verb that
+  // makes it and no count: one pit under each foe with that status, found on the scene when the chip is clicked.
+  for (const m of t.matchAll(/\bpits? (?:to )?appear under (?:every|each|all) (pacified) foes?\b/gi))
+    add(m.index, { kind: "pit", count: 0, fixed: true, under: m[1].toLowerCase() });
   // MAGNAGEO's crater: "boulders in each side space of a small blast centered on target, pit in the center".
   for (const m of t.matchAll(/[,—–]\s*pit in the cent(?:er|re)\b/gi)) {
     const [s0] = sentenceBounds(t, m.index);
@@ -269,7 +273,8 @@ export function terrainSpacesForItem(system, { trait = false, itemName = "" } = 
       if (oc) onCharacter = { ...oc, source };
     }
     for (const sp of terrainSpacesInText(s[field], { itemName })) {
-      const key = `${sp.kind}|${sp.name}|${sp.dangerous}|${sp.infuse}`.toLowerCase();
+      // The pits under the pacified foes (a status in `under`) aren't the combo's own pit (Pandaemonium p.177-178).
+      const key = `${sp.kind}|${sp.name}|${sp.dangerous}|${sp.infuse}${sp.under && sp.under !== "self" ? `|${sp.under}` : ""}`.toLowerCase();
       if (seen.has(key)) continue;
       seen.add(key);
       out.push({ ...sp, source: sp.infuse || source, field });

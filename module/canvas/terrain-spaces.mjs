@@ -52,6 +52,9 @@ export function spacesOfItem(item) {
   return terrainSpacesForItem(item.system, { trait: item.type === "trait", itemName: item.name });
 }
 
+/** The status whose foes get the space under them ("pits to appear under every pacified foe"), or "". */
+const underStatus = (sp) => (sp?.under && sp.under !== "self" ? sp.under : "");
+
 /** Is `sp`'s Infuse version (Rime's DAGON, Pyre's PYROTIC) the one armed on `item`? */
 function infuseArmedFor(item, sp) {
   const armed = armedInfusion(item?.parent);
@@ -67,9 +70,11 @@ export function terrainChips(item) {
     .filter(({ sp }) => !sp.infuse || infuseArmedFor(item, sp))
     .map(({ sp, index }) => {
       const n = sp.count ? String(sp.count) : "any";
-      const label = sp.kind === "extend" ? `Area +${sp.count}` : `${sp.label} · ${n}`;
+      const byStatus = underStatus(sp);
+      const label = sp.kind === "extend" ? `Area +${sp.count}` : byStatus ? `${sp.label}s under ${byStatus} foes` : `${sp.label} · ${n}`;
       const what = sp.kind === "extend"
         ? `Click to add ${sp.count} space${sp.count > 1 ? "s" : ""} adjacent to this ability's area already on the map`
+        : byStatus ? `Click to mark a ${sp.label.toLowerCase()} under every ${byStatus} foe on this scene (asks first)`
         : sp.under === "self" ? `Click to mark the ${sp.label} on the space under your token`
           : `Click to mark ${sp.count ? sp.count : "as many as needed"} ${sp.label.toLowerCase()} space${sp.count === 1 ? "" : "s"} on the map (Enter or right-click finishes early, Esc cancels)`;
       // R33d: the talent / mastery in play lets it go on a character instead (follow-marks.mjs).
@@ -250,6 +255,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   if (!sp) { ui.notifications.warn("That terrain space is no longer on the sheet."); return; }
   if (!actor.isOwner) { ui.notifications.warn(`Only the owner of ${actor.name} or the GM can mark its spaces.`); return; }
   if (sp.kind === "extend") return extendArea(actor, item, sp);
+  if (underStatus(sp)) return terrainUnderStatusFoes(actor, item, sp);
   // R33d: Polaris Talent I, Amico, WAKING VOID — on a space as before, or on the targeted character.
   if (sp.onCharacter) {
     const own = new Set(actor.getActiveTokens?.(false, true)?.map(t => t.id) ?? []);
@@ -420,6 +426,24 @@ export async function offerTerrainUnder(placed, spec, { actor = null, abilityNam
     });
   }
   return docs;
+}
+
+/**
+ * The chip of "its effect causes pits to appear under every pacified foe" (Pandaemonium's Talent II, p.178): the foes
+ * on the scene with that status (statuses.mjs) and no such space under them yet, then the question of offerTerrainUnder.
+ */
+async function terrainUnderStatusFoes(actor, item, sp) {
+  const scene = canvas.scene;
+  const status = underStatus(sp);
+  const { hasStatus } = await import("../combat/statuses.mjs");
+  const already = new Set(scene.templates.filter(t => terrainFlag(t)?.kind === sp.kind).flatMap(t => t.flags[NS].cells ?? []).map(cellKey));
+  const foes = scene.tokens.filter(td => td.actor && !isMapObject(td) && isHostile(td) && hasStatus(td.actor, status));
+  const placed = foes.filter(td => !already.has(cellKey(cellsOf(td)[0]))).map(td => ({ td }));
+  if (!placed.length) {
+    ui.notifications.info(foes.length ? `Every ${status} foe already has a ${sp.label.toLowerCase()} under them.` : `No ${status} foe on this scene.`);
+    return [];
+  }
+  return offerTerrainUnder(placed, sp, { actor, abilityName: item.name, itemId: item.id, title: `${item.name} — ${sp.label.toLowerCase()}s under ${status} foes` });
 }
 
 /* -------------------------------------------------- */

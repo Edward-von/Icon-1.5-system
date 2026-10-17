@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Pit sotto i foe pacified (Pandaemonium Talent II) (17 ottobre 2026, versione 1.15.97)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Pandaemonium con il Talent II scelto: nella scheda ci sono due chip, "Pit · 1" (combo) e "Pits under pacified
+      foes". Con il Talent I o nessun talento c'è solo "Pit · 1".
+- [ ] Due foe pacified e uno no sulla scena: clic su "Pits under pacified foes" → la domanda nomina solo i due
+      pacified → "Mark" mette un pit sotto ciascuno e in chat arriva la card con "Remove all", che li toglie.
+- [ ] Rifare il clic con i pit già presenti: avviso "Every pacified foe already has a pit under them", nessun pit
+      doppio.
+- [ ] Nessun foe pacified: avviso "No pacified foe on this scene".
+- [ ] "Not now" nella domanda: nessun pit.
+- [ ] Un alleato (non ostile) pacified non riceve il pit.
+- [ ] Il "Medium Blast (on pits)" di Purgatorio fa esplodere anche questi pit, se sono dentro l'area.
+- [ ] Da giocatore (non GM): il chip funziona se ha il permesso di creare template.
+
 ## Emerso R49 — Dulce Purgatorio fa esplodere tutti i pit del campo (17 ottobre 2026, versione 1.15.96)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Pit sotto i foe pacified (Pandaemonium Talent II) (versione 1.15.97)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Pandaemonium, Talent II**: "its effect causes pits to appear under every pacified foe" (p.178) non metteva nessun
+  pit: andavano messi a mano, uno per uno, con il chip "Pit · 1" della combo → la frase non ha un verbo come "create"
+  né un numero, quindi il riconoscimento dei pit non la vedeva, e anche riconosciuta sarebbe stata scartata come
+  doppione del pit della combo ("Create a pit under the attack target", p.177) → ora con il Talent II scelto la scheda
+  mostra un secondo chip "Pits under pacified foes": il clic trova sulla scena i token ostili con lo status pacified
+  che non hanno ancora un pit sotto, chiede una volta "Mark a pit space under …?" (lo schema del Volcanic Geyser) e
+  mette un pit sotto ognuno, con una card in chat con Remove all. Senza foe pacified avvisa e non fa niente. Nulla
+  parte senza il clic. Solo codice.
+
 ## 17 ottobre 2026 — Dulce Purgatorio fa esplodere tutti i pit del campo (versione 1.15.96)
 
 ### Round di debug del 16 ottobre, voce emersa su R49
