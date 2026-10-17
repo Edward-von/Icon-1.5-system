@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Lo shove di Implode bloccato segnala la collisione (17 ottobre 2026, versione 1.15.209)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Implode con un personaggio nella casella centrale e un altro a 3 caselle: premi Shove sul secondo. Arriva
+      accanto al centro e la card dice "collides with <nome> and stops (p.117)".
+- [ ] Shove contro un oggetto (Map Object) o un muro: la card dice "an object" o "a wall".
+- [ ] Shove di un personaggio che arriva vicino al centro senza ostacoli (centro vuoto): nessuna riga di collisione.
+- [ ] Personaggio già adiacente al centro occupato: la card dice "shoved 0 spaces" con la collisione, non solo un
+      avviso.
+
 ## Emerso R33 — Implode su un personaggio: bottoni Shove verso di lui (17 ottobre 2026, versione 1.15.208)
 
 Setup: solo codice (F5 basta).

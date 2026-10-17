@@ -1621,9 +1621,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       `implodeOnHolder` in `module/canvas/follow-marks.mjs`) piazza la Large Blast ma lo shove verso il personaggio
       resta a mano; si può riusare lo stesso bottone "Shove" con la casella del personaggio come centro.
       (FATTO il 17 ottobre 2026, versione 1.15.208: Implode su un personaggio ha i bottoni Shove verso la sua casella)
-- [ ] **Emerso lavorando su R33b2 — collisione nello shove di Implode** (S): quando lo shove si ferma contro un
+- [x] **Emerso lavorando su R33b2 — collisione nello shove di Implode** (S): quando lo shove si ferma contro un
       ostacolo, il libro può prevedere la collisione (p.107 e seguenti); oggi il token si ferma e basta, senza nessun
       promemoria di collisione.
+(FATTO il 17 ottobre 2026, versione 1.15.209: lo shove di Implode fermato da un personaggio, un oggetto o un muro
+      scrive la collisione (p.117) e l'eventuale effetto Collide; il salire di quota non viene controllato)
 - [ ] **Emerso lavorando su R35 — "targeted by an ability" senza attacco** (S/M, da decidere): molti trigger dicono
       "targeted by an ability", ma le abilità che non sono attacchi (Show in Chat) non salvano i bersagli, quindi lì
       non c'è nessun bottone. Inoltre negli attacchi ad area i bottoni vanno solo al bersaglio dell'attacco e non agli

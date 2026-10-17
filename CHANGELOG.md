@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Lo shove di Implode bloccato segnala la collisione (versione 1.15.209)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Collisione nello shove di Implode**: quando lo shove si fermava contro un ostacolo, il token si fermava e basta →
+  `shoveTowardsCell` non diceva cosa l'aveva fermato → ora restituisce l'ostacolo (un personaggio, un oggetto o un
+  muro) e la card dice "X collides with Y and stops (p.117)". Se l'abilità ha un effetto Collide, la card ne mostra il
+  testo (Collide p.95 e p.102: scatta una volta sola per abilità). Anche uno shove di 0 caselle contro un ostacolo ora
+  ha la sua card, invece del solo avviso. Solo codice.
+
 ## 17 ottobre 2026 — Implode su un personaggio: bottoni Shove verso di lui (versione 1.15.208)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

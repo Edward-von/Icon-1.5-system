@@ -1263,7 +1263,9 @@ function delayedSpacesAtStart(td, scene) {
  * Implode (p.211) "shoving all characters in a large blast area effect around it as close as possible towards it":
  * where `td` ends up shoved in a straight line towards `centre` (p.107 "Characters must be shoved in straight
  * lines"), one space at a time while each space brings them closer and is free: another character, an object or a
- * wall stops them. Returns the new top-left cell and the spaces moved.
+ * wall stops them. Returns the new top-left cell, the spaces moved and what stopped them ("" when nothing did): p.117
+ * "If they would move into another character's space, an object, or into a higher elevation space, they Collide and
+ * stop moving".
  */
 function shoveTowardsCell(td, centre) {
   const scene = td.parent;
@@ -1271,24 +1273,27 @@ function shoveTowardsCell(td, centre) {
   const start = cellsOf(td);
   const near = start.reduce((a, c) => cheb(c, centre) < cheb(a, centre) ? c : a, start[0]);
   const di = Math.sign(centre.i - near.i), dj = Math.sign(centre.j - near.j);
-  const taken = new Set();
-  for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.add(cellKey(c));
+  const taken = new Map();
+  for (const t of scene.tokens) if (t.id !== td.id) for (const c of cellsOf(t)) taken.set(cellKey(c), t);
   const w = Math.max(1, Math.round(td.width ?? 1)), h = Math.max(1, Math.round(td.height ?? 1));
   const foot = (tl) => { const out = []; for (let a = 0; a < h; a++) for (let b = 0; b < w; b++) out.push({ i: tl.i + a, j: tl.j + b }); return out; };
   const centreOf = (tl) => { const p = scene.grid.getTopLeftPoint(tl); return { x: p.x + w * scene.grid.size / 2, y: p.y + h * scene.grid.size / 2 }; };
   let tl = { i: start[0].i, j: start[0].j };
   let steps = 0;
+  let blockedBy = "";
   while (di || dj) {
     const next = { i: tl.i + di, j: tl.j + dj };
     const cells = foot(next);
-    if (dist(cells) >= dist(foot(tl)) || cells.some(c => taken.has(cellKey(c)))) break;
+    if (dist(cells) >= dist(foot(tl))) break;
+    const hit = cells.map(c => taken.get(cellKey(c))).find(Boolean);
+    if (hit) { blockedBy = hit.actor && !isMapObject(hit) ? hit.name : "an object"; break; }
     let wall = false;
     try { wall = !!td.object?.checkCollision?.(centreOf(next), { origin: centreOf(tl), type: "move", mode: "any" }); } catch { wall = false; }
-    if (wall) break;
+    if (wall) { blockedBy = "a wall"; break; }
     tl = next;
     steps++;
   }
-  return { cell: tl, steps };
+  return { cell: tl, steps, blockedBy };
 }
 
 /**
@@ -1513,13 +1518,18 @@ const TERRAIN_ACTS = {
     const td = scene?.tokens?.get(token);
     if (!td || !cell) { ui.notifications.warn("That character is gone."); return true; }
     if (scene !== canvas?.scene) { ui.notifications.warn("Open the scene of that character first."); return false; }
-    const { cell: to, steps } = shoveTowardsCell(td, cell);
-    const name = game.actors?.get(cid)?.items?.get(iid)?.name ?? "Implode";
-    if (!steps) { ui.notifications.info(`${td.name} can't get any closer to the centre of ${name}.`); return true; }
-    if (!(await placeTokenAt(td, to))) return false;
+    const { cell: to, steps, blockedBy } = shoveTowardsCell(td, cell);
+    const item = game.actors?.get(cid)?.items?.get(iid);
+    const name = item?.name ?? "Implode";
+    if (!steps && !blockedBy) { ui.notifications.info(`${td.name} can't get any closer to the centre of ${name}.`); return true; }
+    if (steps && !(await placeTokenAt(td, to))) return false;
+    // p.117: shoved into another character, an object (or higher ground) "they Collide and stop moving"; the
+    // ability's own Collide effect, if any, triggers on them once (p.94).
+    const collide = plainOf(item?.system?.collideEffect);
+    const collision = blockedBy ? `<p><small><strong>${esc(td.name)}</strong> collides with ${esc(blockedBy)} and stops (p.117).${collide ? ` Collide: ${esc(collide)}` : ""}</small></p>` : "";
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ token: td }),
-      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-compress"></i> ${esc(name)}</strong>: ${esc(td.name)} is shoved ${steps} space${steps > 1 ? "s" : ""} towards the centre.</div>`,
+      content: `<div class="icon-chat-card icon-chat-card--terrain"><strong><i class="fa-solid fa-compress"></i> ${esc(name)}</strong>: ${esc(td.name)} is shoved ${steps} space${steps === 1 ? "" : "s"} towards the centre.${collision}</div>`,
     });
     return true;
   },
