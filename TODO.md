@@ -700,15 +700,21 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       divine "bypasses vigor"; il nuovo "% Max HP" lo salta, ma il bottone Apply delle card di danno (`icon.mjs`,
       gestione di `data-divine`) non passa `ignoreVigor` per il divine, quindi lì il vigor assorbe ancora il danno
       divine.
-- [ ] **Emerso lavorando su R37 — Atomos Crusher "+25%": in più o moltiplicato?** (S, da decidere): "deals 25% more
+- [x] **Emerso lavorando su R37 — Atomos Crusher "+25%": in più o moltiplicato?** (S, da decidere): "deals 25% more
       max hp damage" è letto come 25 punti in più (50% → 75%); l'altra lettura è un quarto in più (50% → 62,5%).
       Domanda per Edoardo: quale?
+      (CHIUSO il 17 ottobre 2026: Edoardo conferma la lettura già fatta in 1.15.107, 25 punti in più, quindi 50% → 75%
+      e 25% → 50%. Nessuna modifica.)
 - [ ] **Emerso lavorando su R37 — Gigantas Crusher, Legend che salva: rimborso della resolve** (S): "refunding this
       ability's resolve cost on a successful save" (p.135) è solo una nota nella card, la resolve non torna da sola;
       la distanza sulla linea di Split Heaven and Hell si sceglie a mano, non viene misurata sulla mappa.
 - [ ] **Emerso lavorando su R38b — il dialog del danno riaperto riparte da capo** (S): cambiando "Reroll (same use)"
       il dialog si riapre sull'altra versione, ma esito, bersaglio d'attacco e modificatori tornano ai valori
       iniziali; si potrebbero passare al dialog riaperto quelli già scelti.
+
+Scelte confermate da Edoardo il 17 ottobre 2026 (il libro non le dice): con MJÖLLNIR il secondo Arc 5 non prosegue nel
+verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta su un pit è preso anche lui dall'area
+(1.15.106).
 
 ---
 
