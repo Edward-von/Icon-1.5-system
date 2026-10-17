@@ -3412,9 +3412,11 @@ export class IconSheet extends BaseActorSheet {
     } catch { picked = null; }
     if (!picked) return;
     const lines = [], hits = [];
+    let refund = false;
     for (const [i, t] of tokens.entries()) {
       const a = t.actor, max = baseMax(a);
       const o = choicesOf(a)[picked.rows[i]] ?? choicesOf(a)[0];
+      if (o.note && /refund/i.test(o.note)) refund = true;
       const extra = (o.fray || !picked.bonus || !bonus || (bonus.nonLegend && a.type === "legend")) ? 0 : bonus.pct;
       const share = o.fray ? 0 : o.pct + extra;
       const amount = o.fray ? fray : Math.ceil(max * share / 100);
@@ -3423,9 +3425,29 @@ export class IconSheet extends BaseActorSheet {
         <small>(${o.fray ? "fray" : `${share}% of ${max} max base hp`}${o.note ? `; ${esc(o.note)}` : ""})</small></li>`);
       hits.push([a, amount]);
     }
+    // A Legend's successful save refunds the resolve cost (Gigantas Crusher
+    // p.135): once per use, to the pools it was paid from (the party share
+    // syncs to the other PCs through the updateActor hook of IconCombat).
+    let refundHtml = "";
+    if (refund) {
+      const spend = this.document.getFlag("icon-system", "limitBreakSpend");
+      if (spend?.lbId === lb.id && (spend.party || spend.personal)) {
+        const res = this.document.system.combat.resolve;
+        await this.document.update({
+          "system.combat.resolve.party":    res.party    + (spend.party ?? 0),
+          "system.combat.resolve.personal": res.personal + (spend.personal ?? 0),
+          "flags.icon-system.-=limitBreakSpend": null,
+        });
+        const back = [spend.personal ? `${spend.personal} personal` : "", spend.party ? `${spend.party} party` : ""].filter(Boolean).join(" + ");
+        _log(`limitBreakPercentDamage — refund: ${back}`);
+        refundHtml = `<p style="margin:4px 0 0"><i class="fa-solid fa-rotate-left"></i> Resolve cost refunded: ${esc(back)} (a Legend saved).</p>`;
+      } else {
+        ui.notifications.warn(`No recorded resolve spend for "${lb.name}" (already refunded, or used before this version): refund it by hand.`);
+      }
+    }
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
-      content: `<div class="icon-chat-card"><strong>${esc(lb.name)}</strong> — % of max hp<ul style="margin:4px 0 0">${lines.join("")}</ul></div>`,
+      content: `<div class="icon-chat-card"><strong>${esc(lb.name)}</strong> — % of max hp<ul style="margin:4px 0 0">${lines.join("")}</ul>${refundHtml}</div>`,
     });
     for (const [a, amount] of hits) {
       await applyDamageToActor(a, amount, { applyArmor: !pct.divine, ignoreVigor: pct.divine, chatConfirm: true });
@@ -3556,6 +3578,9 @@ export class IconSheet extends BaseActorSheet {
     await this.document.update({
       "system.combat.resolve.party":    resolve.party    - partySpend,
       "system.combat.resolve.personal": resolve.personal - personalSpend,
+      // What this use paid and from which pool, so a refund (Gigantas Crusher
+      // p.135, a Legend's successful save) gives back the same amounts.
+      "flags.icon-system.limitBreakSpend": { lbId: lb.id, party: partySpend, personal: personalSpend },
     });
     const speaker = ChatMessage.getSpeaker({ actor: this.document });
     const spent = [personalSpend ? `${personalSpend} personal` : "", partySpend ? `${partySpend} party` : ""].filter(Boolean).join(" + ");

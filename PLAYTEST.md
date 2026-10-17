@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — Gigantas Crusher restituisce la resolve quando un Legend salva (17 ottobre 2026, versione 1.15.111)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Gigantas Crusher, 2 di resolve personale e un po' di party resolve: "Use Limit Break" pagando 1 personale
+      e 1 party. Bersaglio un Legend, "% Max HP" con "Successful save": la card scrive "Resolve cost refunded: 1
+      personal + 1 party", la personale torna come prima e il party resolve risale anche sulle schede degli altri PG e
+      nel tracker.
+- [ ] Ripremere "% Max HP" con "Successful save" sullo stesso uso: niente secondo rimborso, compare l'avviso "refund
+      it by hand".
+- [ ] "% Max HP" con "Failed save" sul Legend, oppure su un foe normale: nessun rimborso.
+- [ ] Due Legend bersagliati che salvano tutti e due: il rimborso avviene una volta sola.
+
 ## Emerso R48 — La misura dell'aura di Fulminate la sceglie chi marca (17 ottobre 2026, versione 1.15.110)
 
 Setup: solo codice (F5 basta).

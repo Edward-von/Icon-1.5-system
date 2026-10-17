@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Gigantas Crusher restituisce la resolve quando un Legend salva (versione 1.15.111)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **Rimborso della resolve di Gigantas Crusher**: se un Legend superava il tiro salvezza, la card del "% Max HP"
+  scriveva solo "refunds the resolve cost" e la resolve non tornava ("refunding this ability's resolve cost on a
+  successful save", p.135) → "Use Limit Break" non si ricordava quanta resolve aveva preso dalla riserva personale e
+  quanta dal party → ora l'uso del Limit Break si annota la spesa divisa tra personale e party; quando nel "% Max HP"
+  un Legend ha "Successful save", la stessa quantità torna alle stesse riserve, una volta sola, e la card lo scrive.
+  La distanza sulla linea di Split Heaven and Hell resta da scegliere a mano. Solo codice.
+
 ## 17 ottobre 2026 — La misura dell'aura di Fulminate la sceglie chi marca (versione 1.15.110)
 
 ### Round di debug del 16 ottobre, voce emersa su R48

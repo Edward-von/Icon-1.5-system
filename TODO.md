@@ -710,9 +710,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Domanda per Edoardo: quale?
       (CHIUSO il 17 ottobre 2026: Edoardo conferma la lettura già fatta in 1.15.107, 25 punti in più, quindi 50% → 75%
       e 25% → 50%. Nessuna modifica.)
-- [ ] **Emerso lavorando su R37 — Gigantas Crusher, Legend che salva: rimborso della resolve** (S): "refunding this
+- [x] **Emerso lavorando su R37 — Gigantas Crusher, Legend che salva: rimborso della resolve** (S): "refunding this
       ability's resolve cost on a successful save" (p.135) è solo una nota nella card, la resolve non torna da sola;
       la distanza sulla linea di Split Heaven and Hell si sceglie a mano, non viene misurata sulla mappa.
+(FATTO il 17 ottobre 2026, versione 1.15.111: un Legend che salva contro Gigantas Crusher fa tornare il costo in
+      resolve nelle stesse riserve personale / party da cui era stato pagato, una volta per uso; la distanza su Split
+      Heaven and Hell resta a mano, voce emersa a parte. Solo codice.)
 - [ ] **Emerso lavorando su R38b — il dialog del danno riaperto riparte da capo** (S): cambiando "Reroll (same use)"
       il dialog si riapre sull'altra versione, ma esito, bersaglio d'attacco e modificatori tornano ai valori
       iniziali; si potrebbero passare al dialog riaperto quelli già scelti.
@@ -723,6 +726,13 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R37 — `applyDamagePipeline` non conosce i tipi di danno** (S, da decidere): la funzione
       esportata in `damage.mjs` (nell'API del sistema, senza chiamate interne) non accetta né `pierce` né `divine`,
       quindi da macro non si può far ignorare armor o vigor; valutare se serve.
+- [ ] **Emerso lavorando su R37 — Split Heaven and Hell: distanza misurata sulla linea** (S/M): la fascia "1 space /
+      2-4 / 5+" (p.127) si sceglie a mano nel dialog del "% Max HP"; per misurarla servirebbe sapere dove parte la
+      linea piazzata e leggere la posizione di ogni bersaglio.
+- [ ] **Emerso lavorando su R37 — l'annotazione della spesa di resolve resta vecchia** (S):
+      `flags.icon-system.limitBreakSpend` non si cancella a fine combattimento: un "% Max HP" con un Legend che salva,
+      senza aver riusato il Limit Break, rimborsa l'uso precedente, anche di un altro combattimento. Cancellarla nel
+      reset di fine combattimento (IconCombat.mjs, ~riga 604).
 
 ---
 
