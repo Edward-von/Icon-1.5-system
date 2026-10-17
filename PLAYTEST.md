@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33a5 — Avviso del rampart di Comet (17 ottobre 2026, versione 1.15.158)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Il GM trascina un foe dentro uno spazio accanto alla Thrown Weapon: compare il promemoria "if that was a dash…".
+- [ ] Lo stesso foe con lo status flying, oppure mosso in modalità teleport di Foundry: compare l'avviso più deciso, e
+      il foe resta dove l'hai messo.
+- [ ] Un alleato mosso lì: nessun avviso.
+
 ## R33a5 — Copertura dagli oggetti sulla mappa (17 ottobre 2026, versione 1.15.157)
 
 Setup: solo codice (F5 basta).

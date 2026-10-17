@@ -1432,6 +1432,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       all'Apply conoscendo il token dell'attaccante, ma con un oggetto in diagonale non è chiaro se conti la riga o la
       colonna; serve una scelta prima di dimezzare in automatico (anche per Geyser Talent I, che vale in ogni
       direzione).
+- [ ] **Emerso lavorando su R33a5 — bloccare davvero il rampart** (S, da decidere): il sistema non distingue un dash
+      da un passo normale; se si vuole il blocco vero (rifiutare il movimento) basta deciderlo per fly / blink /
+      flying, per il dash servirebbe una scelta di chi muove.
 
 ---
 

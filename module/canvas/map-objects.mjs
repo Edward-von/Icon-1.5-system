@@ -905,9 +905,13 @@ export async function relocateObject(actor) {
  *                        entered or left a space adjacent to the Thrown Weapon.
  *   Megamushroom / plant "can be picked up if yourself or an ally enters its space" (p.184, p.187) — not a foe.
  *   Underway (p.168)     a character (not a foe) came next to a portal: teleport to another one?
+ *   Comet rampart (p.126) "Foes cannot enter or exit a space affected by a rampart effect by dashing, flying, or
+ *                        teleporting" — a foe that entered or left a space next to the weapon gets a warning only
+ *                        (the system can't tell a dash from a walk; nothing is undone).
  * Only the start and the end of the move are looked at.
+ * @param {object|null} movement  Foundry's movement data of this update (options.movement[id]), for its actions
  */
-async function offerMoveTriggers(td, prev, to) {
+async function offerMoveTriggers(td, prev, to, movement = null) {
   const scene = td.parent;
   if (!scene || scene.id !== canvas?.scene?.id || !td.actor) return;
   const before = cellsOf(td, prev);
@@ -925,6 +929,7 @@ async function offerMoveTriggers(td, prev, to) {
     if (!info) continue;
     const oc = cellsOf(o);
     const wasNear = gapBetween(before, oc) === 1, isNear = gapBetween(after, oc) === 1;
+    if (info.rampart && hostile && (wasNear || isNear)) rampartWarning(td, info, isNear, movement);
     if (info.pickUpNear && flag.creatorId === td.actor.id && (wasNear || isNear)) {
       if (await ask(`${info.name} — pick up?`, `<p>${esc(td.name)} ${isNear ? "entered" : "left"} a space adjacent to the <strong>${esc(info.name)}</strong>: pick it up? It ends the effect and removes the object (p.128).</p>`, "Pick up"))
         await removeMapObject(o.actor);
@@ -944,6 +949,22 @@ async function offerMoveTriggers(td, prev, to) {
         await teleportVia(td, others, o);
     }
   }
+}
+
+/**
+ * R33a5: a foe entered or left a rampart space (Comet, p.128 "Spaces adjacent to it have rampart"): "Foes cannot
+ * enter or exit any space affected by a character's Rampart by dashing, flying, or teleporting" (p.117). A warning
+ * to the user who moved it, firmer when Foundry's movement says fly / teleport (blink) or the foe has flying; the
+ * move itself is left as it is.
+ */
+function rampartWarning(td, info, entered, movement) {
+  const actions = (movement?.passed?.waypoints ?? []).map(w => w?.action);
+  const flying = !!td.actor?.statuses?.has?.("flying");
+  const how = actions.includes("blink") ? "teleporting" : (actions.includes("fly") || flying) ? "flying" : "";
+  const where = `${entered ? "entered" : "left"} a rampart space next to the ${info.name}`;
+  const rule = "foes cannot enter or exit a rampart space by dashing, flying or teleporting (p.117, p.126) — only by normal movement.";
+  if (how) ui.notifications.warn(`${td.name} ${where} by ${how}: ${rule} Undo the move (Ctrl+Z) if the table agrees.`);
+  else ui.notifications.info(`${td.name} ${where}: if that was a dash, ${rule}`);
 }
 
 /**
@@ -1136,7 +1157,7 @@ export function registerMapObjectHooks() {
     if (!("x" in changed || "y" in changed) || mapObjectFlag(tokenDoc)) return;
     if (!tokenDoc.parent?.tokens?.some(t => mapObjectFlag(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerMoveTriggers(tokenDoc, options.iconPrevPos, to).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
+    offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
   });
 
   // R33a4: Aethershard Talent I, "When you take any action that spends Aether, you can first remove one of your

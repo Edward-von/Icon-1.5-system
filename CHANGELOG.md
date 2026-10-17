@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Avviso del rampart di Comet (versione 1.15.158)
+
+### Round di debug del 15 ottobre, R33a5
+
+- **Rampart di Comet**: un foe entrava o usciva dagli spazi accanto all'arma lanciata senza nessun avviso → il rampart
+  era solo un'aura da guardare → ora chi muove il foe riceve un avviso: più deciso se il movimento di Foundry è "fly"
+  o "blink" (teleport) o se il foe ha flying, altrimenti un promemoria "se era un dash…" (rampart, p.117 e p.126). Il
+  sistema non annulla niente: si usa Ctrl+Z se il tavolo è d'accordo. Solo codice.
+
 ## 17 ottobre 2026 — Copertura dagli oggetti sulla mappa (versione 1.15.157)
 
 ### Round di debug del 15 ottobre, R33a5
