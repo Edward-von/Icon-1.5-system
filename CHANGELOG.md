@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Split Heaven and Hell e Lycanthropy con le parole del libro (versione 1.15.94)
+
+### Round di debug del 16 ottobre, voce emersa su R39
+
+- **Parole dei Limit Break diverse dal libro**: Split Heaven and Hell diceva "depending on their distance from you" e
+  "(maximum 3 width)", Lycanthropy non aveva "(including this one!)" nel secondo punto → testo del pack trascritto a
+  parole proprie (la migrazione 31 aveva sistemato solo l'elenco delle distanze e la descrizione) → ora il pack jobs
+  dice come il libro: "their distance on the line from you", "by 1 space, to a maximum of 3 width, and its length"
+  (p.127) e "abilities, summons, or actions (including this one!) may be increased by +1" (p.168), sia sull'oggetto
+  Limit Break sia nel template del job (Demon Slayer, Warden). La migrazione 34 corregge le copie già nel mondo che
+  hanno ancora le frasi vecchie. Pack + migrazione.
+
 ## 17 ottobre 2026 — I pit esplodono dall'area: Holy Talent I e Purgatorio (versione 1.15.93)
 
 ### Round di debug del 16 ottobre, voce emersa su R49

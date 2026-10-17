@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 33;
+export const CURRENT_SCHEMA_VERSION = 34;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1245,6 +1245,52 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 33: ${n} copy/copies of Aethershard given back the book's "resonates with the shards" text (p.210)`);
+  },
+
+  /* 34 — More limit-break wording that differed from the book (emerged on
+   * R39, after migration 31): Split Heaven and Hell (p.127) "depending on their
+   * distance on the line from you" and "by 1 space, to a maximum of 3 width,";
+   * Lycanthropy (p.168) "abilities, summons, or actions (including this one!)".
+   * Patch the copies that still carry the old phrases (limit-break items'
+   * effect and the job templates' limitBreak.effect). */
+  34: async () => {
+    const FIXES = {
+      "Split Heaven and Hell": [
+        ["depending on their distance from you", "depending on their distance on the line from you"],
+        [" by 1 space (maximum 3 width), and its length", " by 1 space, to a maximum of 3 width, and its length"],
+      ],
+      "Lycanthropy": [
+        ["abilities, summons, or actions may be increased by +1", "abilities, summons, or actions (including this one!) may be increased by +1"],
+      ],
+    };
+    /** Update data for one holder (system or system.limitBreak), or null. */
+    const patch = (holder, prefix) => {
+      const fixes = FIXES[(holder?.name ?? "").trim()];
+      if (!fixes || !("effect" in holder)) return null;
+      const old = String(holder.effect ?? "");
+      let next = old;
+      for (const [from, to] of fixes) if (next.split(from).length === 2) next = next.replace(from, to);
+      return next !== old ? { [`${prefix}.effect`]: next } : null;
+    };
+    const lbPatch = (item) => item.type === "limit-break"
+      ? patch({ ...item.system, name: item.name }, "system") : null;
+    const tplPatch = (item) => item.type === "job-template"
+      ? patch(item.system?.limitBreak, "system.limitBreak") : null;
+
+    let n = 0;
+    for (const actor of game.actors) {
+      const updates = actor.items.map(i => { const u = lbPatch(i); return u && { _id: i.id, ...u }; }).filter(Boolean);
+      if (!updates.length) continue;
+      await actor.updateEmbeddedDocuments("Item", updates);
+      n += updates.length;
+    }
+    for (const item of game.items) {
+      const u = lbPatch(item) ?? tplPatch(item);
+      if (!u) continue;
+      await item.update(u);
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 34: ${n} limit break(s) given back the book's wording (Split Heaven and Hell p.127, Lycanthropy p.168)`);
   },
 };
 

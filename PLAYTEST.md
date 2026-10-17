@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R39 — Split Heaven and Hell e Lycanthropy con le parole del libro (17 ottobre 2026, versione 1.15.94)
+
+Setup: pack jobs cambiato (copia con Foundry chiuso), poi apri il mondo: la migrazione 34 parte da sola.
+
+- [ ] Compendio Jobs → Split Heaven and Hell: "depending on their distance on the line from you:" e, in Divine Delay,
+      "increase the width of the line by 1 space, to a maximum of 3 width, and its length by 3 spaces" (p.127).
+- [ ] Compendio Jobs → Lycanthropy: secondo punto "abilities, summons, or actions (including this one!) may be
+      increased by +1, and grant phasing while moving" (p.168).
+- [ ] Template Demon Slayer e Warden: il Limit Break mostra lo stesso testo corretto.
+- [ ] Mondo con un PG Knight/Demon Slayer o Warden creato prima: dopo l'aggiornamento il suo Limit Break dice le frasi
+      nuove; in console "Migration 34: N limit break(s) …". Un Limit Break modificato a mano senza le frasi vecchie
+      resta com'è.
+
 ## Emerso R49 — I pit esplodono dall'area: Holy Talent I e Purgatorio (17 ottobre 2026, versione 1.15.93)
 
 Setup: solo codice (F5 basta).

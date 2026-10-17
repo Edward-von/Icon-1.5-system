@@ -456,10 +456,12 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
       mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
-- [ ] **Emerso lavorando su R39 — altre parole dei Limit Break diverse dal libro** (S, dati): Split Heaven and Hell
+- [x] **Emerso lavorando su R39 — altre parole dei Limit Break diverse dal libro** (S, dati): Split Heaven and Hell
       (p.127) dice "depending on their distance from you" (libro: "their distance on the line from you") e "(maximum 3
       width)" (libro: ", to a maximum of 3 width,"); Lycanthropy (p.168) ha perso "(including this one!)" dopo "abilities,
-      summons, or actions" nel secondo "•". Pack + migrazione sulle copie.
+      summons, or actions" nel secondo "•". Pack + migrazione sulle copie. (FATTO il 17 ottobre 2026, versione 1.15.94:
+      pack jobs corretto su Limit Break e template Demon Slayer/Warden, script
+      `../icon-compendium-audit/r39-lb-wording/fix-lb-wording.mjs`; migrazione 34 sulle copie col testo vecchio.)
 - [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, da decidere): quando
       il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
       con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
