@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Symphony: il Charge dà 2 mote gratis (17 ottobre 2026, versione 1.15.225)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Symphony, turno normale, 2 blessing tolte e casella Charge non spuntata → si piazzano al massimo 2 mote e si
+      perdono 2 blessing.
+- [ ] Turno slow nel tracker (bottone Slow attivo): la casella Charge è già spuntata; 2 blessing tolte → si piazzano
+      fino a 4 mote, si perdono solo 2 blessing; la card dice "Charge: +2 more spaces, no blessing for them".
+- [ ] Nessun personaggio con blessing: la finestra si apre comunque e dice che nessuno ne ha; con Charge spuntato si
+      piazzano 2 mote, senza Charge non viene creato nessun mote.
+- [ ] Charge spuntato a mano in un turno normale (per Songweave): funziona come nel turno slow.
+- [ ] Le regole "non adiacenti e non sovrapposti" e "casella libera" valgono anche per i 2 mote in più.
+
 ## Emerso R33 — Il rimbalzo di Bifröst (PATH TO ERENHELION) (17 ottobre 2026, versione 1.15.224)
 
 Setup: solo codice (F5 basta).

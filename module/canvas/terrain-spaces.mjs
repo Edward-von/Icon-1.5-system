@@ -263,11 +263,31 @@ async function deleteSpaces(scene, docs) {
 }
 
 /**
+ * Symphony's "Charge: Create +2 more spaces" (p.178): the extra motes its charge effect adds, or null. The charge
+ * text names no blessing, so the extra spaces cost none (charge, p.94: "when you use this ability on a slow turn").
+ * @param {Item} item
+ * @returns {{extra:number, rule:string}|null}
+ */
+function chargeExtraSpaces(item) {
+  const t = String(item?.system?.chargeEffect ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const m = /\bcreate \+?(\d+) more spaces?\b/i.exec(t);
+  return m && Number(m[1]) > 0 ? { extra: Number(m[1]), rule: t } : null;
+}
+
+/** Is it the actor's slow turn in the current combat (the tracker's Slow toggle)? Charge triggers then (p.94). */
+function onSlowTurn(actor) {
+  const c = game.combat?.combatant;
+  return !!c && c.actor?.id === actor?.id && !!c.getFlag?.(NS, "slowTurn");
+}
+
+/**
  * Symphony (p.178): "Remove up to four blessings from characters anywhere" — whose blessings, and how many each
  * (at most the spec's count in all). The characters are every one with blessings: the world's actors and this
- * scene's unlinked tokens. Resolves [{actor, count}] (count > 0) or null when cancelled / nobody has any.
+ * scene's unlinked tokens. With the charge effect ("Create +2 more spaces"), a box adds that many motes that take
+ * no blessing: ticked by itself on the user's slow turn, by hand for Songweave / Blessing of Faith (p.176).
+ * Resolves { taking: [{actor, count}] (count > 0), extra } or null when cancelled / nothing to place.
  */
-async function askBlessingsToTake(scene, item, sp) {
+async function askBlessingsToTake(scene, item, sp, actor) {
   const { getStatusCharges } = await import("../combat/statuses.mjs");
   const seen = new Set();
   const list = [];
@@ -279,31 +299,38 @@ async function askBlessingsToTake(scene, item, sp) {
   };
   for (const t of scene.tokens) if (!t.actorLink) consider(t.actor);
   for (const a of game.actors ?? []) consider(a);
-  if (!list.length) { ui.notifications.warn(`${item.name}: no character has a blessing to remove, so no mote can be created.`); return null; }
+  const charge = chargeExtraSpaces(item);
+  if (!list.length && !charge) { ui.notifications.warn(`${item.name}: no character has a blessing to remove, so no mote can be created.`); return null; }
   const max = sp.count || 4;
   const rows = list.map((x, k) => `<div class="form-group"><label>${esc(x.actor.name)} <small>(${x.has})</small></label><input type="number" name="b${k}" value="0" min="0" max="${x.has}" step="1"></div>`).join("");
+  const chargeRow = charge
+    ? `<div class="form-group"><label><input type="checkbox" name="charge"${onSlowTurn(actor) ? " checked" : ""}> Charge: +${charge.extra} more mote${charge.extra === 1 ? "" : "s"}, no blessing for ${charge.extra === 1 ? "it" : "them"}</label></div><p><small>Charge: ${esc(charge.rule)} Ticked on your slow turn; tick it by hand when Songweave or Blessing of Faith triggers the charge effects.</small></p>`
+    : "";
   let picked = null;
   try {
     picked = await foundry.applications.api.DialogV2.wait({
       window: { title: `${item.name} — whose blessings?` },
-      content: `<p><small>${esc(sp.rules)}</small></p><p>Up to ${max} in all: one mote for each blessing removed. Characters you don't own lose theirs through the GM.</p>${rows}`,
+      content: `<p><small>${esc(sp.rules)}</small></p><p>Up to ${max} in all: one mote for each blessing removed. Characters you don't own lose theirs through the GM.</p>${rows}${list.length ? "" : "<p>No character has a blessing to remove.</p>"}${chargeRow}`,
       buttons: [{ action: "ok", label: "Remove and place the motes", default: true, callback: (_ev, button) => {
         const form = button.form;
-        return list.map((x, k) => ({ actor: x.actor, count: Math.max(0, Math.min(x.has, Math.floor(Number(form.elements[`b${k}`]?.value) || 0))) }));
+        return {
+          list: list.map((x, k) => ({ actor: x.actor, count: Math.max(0, Math.min(x.has, Math.floor(Number(form.elements[`b${k}`]?.value) || 0))) })),
+          extra: charge && form.elements.charge?.checked ? charge.extra : 0,
+        };
       } }, { action: "cancel", label: "Cancel" }],
       rejectClose: false,
     });
   } catch { picked = null; }
-  if (!Array.isArray(picked)) return null;
+  if (!picked || !Array.isArray(picked.list)) return null;
   let left = max;
   const out = [];
-  for (const x of picked) {
+  for (const x of picked.list) {
     const n = Math.min(x.count, left);
     if (n > 0) { out.push({ actor: x.actor, count: n }); left -= n; }
   }
-  if (!out.length) { ui.notifications.info(`${item.name}: no blessing chosen, no mote created.`); return null; }
-  if (picked.reduce((n, x) => n + x.count, 0) > max) ui.notifications.info(`${item.name}: only ${max} blessings in all — the extra ones were left.`);
-  return out;
+  if (!out.length && !picked.extra) { ui.notifications.info(`${item.name}: no blessing chosen, no mote created.`); return null; }
+  if (picked.list.reduce((n, x) => n + x.count, 0) > max) ui.notifications.info(`${item.name}: only ${max} blessings in all — the extra ones were left.`);
+  return { taking: out, extra: picked.extra };
 }
 
 /**
@@ -349,13 +376,16 @@ export async function placeTerrainFromChip(actor, itemId, index) {
   }
 
   // Symphony (p.178): "Remove up to four blessings from characters anywhere to create pulsing motes" — whose
-  // blessings go is asked first, and one mote is placed per blessing taken.
+  // blessings go is asked first, and one mote is placed per blessing taken, plus the charge's free ones.
   let taking = null;
+  let chargeExtra = 0;
   if (sp.fromBlessings) {
-    taking = await askBlessingsToTake(scene, item, sp);
-    if (!taking?.length) return;
+    const asked = await askBlessingsToTake(scene, item, sp, actor);
+    if (!asked) return;
+    taking = asked.taking;
+    chargeExtra = asked.extra;
   }
-  const maxSpaces = taking ? taking.reduce((n, x) => n + x.count, 0) : sp.count;
+  const maxSpaces = taking ? taking.reduce((n, x) => n + x.count, 0) + chargeExtra : sp.count;
   // ARKENRUNE (Elden Rune's mastery, p.209): "You can put an Arkenrune down instead of a regular Elden Rune".
   const ark = sp.kind === "mark" && sp.under === "self" && !sp.infuse ? arkenruneOf(item, sp) : null;
   if (ark) {
@@ -438,7 +468,7 @@ export async function placeTerrainFromChip(actor, itemId, index) {
     speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card icon-chat-card--terrain">
         <strong><i class="fa-solid ${ICONS[sp.kind] ?? ICONS.mark}"></i> ${esc(item.name)}</strong>${sp.source ? ` <small>(${esc(sp.source)})</small>` : ""}: ${docs.length} × <strong>${esc(sp.label)}</strong>${replace ? " (replacing the earlier ones)" : ""}
-        ${what ? `<br><small>${esc(what)}</small>` : ""}${taken ? `<br><small>Blessings removed: ${esc(taken)}.</small>` : ""}${great ? `<br><small><strong>${esc(great.name)}</strong>: ${esc(great.rule)}</small>` : ""}
+        ${what ? `<br><small>${esc(what)}</small>` : ""}${taken ? `<br><small>Blessings removed: ${esc(taken)}.</small>` : ""}${great ? `<br><small><strong>${esc(great.name)}</strong>: ${esc(great.rule)}</small>` : ""}${chargeExtra ? `<br><small>Charge: +${chargeExtra} more space${chargeExtra === 1 ? "" : "s"}, no blessing for ${chargeExtra === 1 ? "it" : "them"}.</small>` : ""}
         <div>${removeSpacesButton(scene, docs, docs.length > 1 ? "Remove all" : "Remove")}${flashStepButton(scene, actor, item, sp)}</div>
       </div>`,
   });

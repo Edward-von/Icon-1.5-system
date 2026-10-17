@@ -1611,10 +1611,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.219, risposta di Edoardo: Bend Fate tolto dall'opzione "Set the number";
       resta solo il suo pulsante sulla card.)
 - nessuno
-- [ ] **Emerso lavorando su R33b2 — Charge di Symphony** (S, da decidere): "Charge: Create +2 more spaces" (p.178) non
+- [x] **Emerso lavorando su R33b2 — Charge di Symphony** (S, da decidere): "Charge: Create +2 more spaces" (p.178) non
       viene letto. Ora che il numero di mote è uguale alle blessing tolte, con il Charge bisognerebbe poterne piazzare
       2 in più. Domanda per Edoardo: le 2 caselle in più del Charge costano anche loro una blessing ciascuna, o sono
       gratis?
+(FATTO il 17 ottobre 2026, versione 1.15.225: dal manuale, il Charge "Create +2 more spaces" (p.178) non nomina
+      blessing, quindi le 2 caselle in più sono gratis.)
 - [x] **Emerso lavorando su R35 — "Gain vigor 4" non ha chip** (S): la regex dei promemoria vigor in
       `ability-statuses.mjs` (`NOTE_VIGOR_RE`) legge solo "gain 4 vigor", non "gain vigor 4". Il Heroic di Righteous
       Disdain quindi non ha la chip promemoria nemmeno dalla scheda.

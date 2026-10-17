@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Symphony: il Charge dà 2 mote gratis (versione 1.15.225)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Charge di Symphony**: "Charge: Create +2 more spaces" (p.178) era ignorato, quindi si potevano piazzare solo tanti
+  mote quante blessing tolte → il campo Charge dell'abilità non veniva letto → ora la finestra "whose blessings?" ha
+  una casella "Charge: +2 more motes". La casella è già spuntata se è il turno slow del personaggio (il charge scatta
+  nel turno slow, p.94); si spunta a mano quando il charge viene da Songweave o da Blessing of Faith (p.176). Le 2
+  caselle in più non costano blessing, perché il testo del Charge non ne nomina nessuna. Con il Charge funziona anche
+  se nessuno ha blessing (0 tolte + 2 mote). La card in chat lo scrive. Solo codice.
+
 ## 17 ottobre 2026 — Il rimbalzo di Bifröst (PATH TO ERENHELION) (versione 1.15.224)
 
 ### Round di debug del 15 ottobre, voce emersa su R33
