@@ -763,9 +763,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 Scelte confermate da Edoardo il 17 ottobre 2026 (il libro non le dice): con MJÖLLNIR il secondo Arc 5 non prosegue nel
 verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta su un pit è preso anche lui dall'area
 (1.15.106).
-- [ ] **Emerso lavorando su R37 — `applyDamagePipeline` non conosce i tipi di danno** (S, da decidere): la funzione
+- [x] **Emerso lavorando su R37 — `applyDamagePipeline` non conosce i tipi di danno** (S, da decidere): la funzione
       esportata in `damage.mjs` (nell'API del sistema, senza chiamate interne) non accetta né `pierce` né `divine`,
       quindi da macro non si può far ignorare armor o vigor; valutare se serve.
+(FATTO il 17 ottobre 2026, versione 1.15.222: applyDamagePipeline ha le opzioni pierce/divine con le regole dell'Apply
+      della card, p.104.)
 - [x] **Emerso lavorando su R37 — Split Heaven and Hell: distanza misurata sulla linea** (S/M): la fascia "1 space /
       2-4 / 5+" (p.127) si sceglie a mano nel dialog del "% Max HP"; per misurarla servirebbe sapere dove parte la
       linea piazzata e leggere la posizione di ogni bersaglio.
@@ -830,6 +832,7 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       apply the total damage … separate times"; `postAbilityDamageCard` ha già `instances` per farlo con un tiro solo.
 (FATTO il 17 ottobre 2026, versione 1.15.216: "X damage, twice" dopo un tiro salvezza tira [D] una volta sola e lo
       applica N volte su una card)
+- nessuno
 - nessuno
 
 ---

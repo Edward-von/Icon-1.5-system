@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R37 — applyDamagePipeline accetta danno pierce e divine (17 ottobre 2026, versione 1.15.222)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Da console: `applyDamagePipeline(attaccante, bersaglioConArmor, { pierce: true })` (lo stesso oggetto API di
+      sempre): la card non ha il passo Armor e il titolo dice "Piercing Damage".
+- [ ] Stessa chiamata con `{ divine: true }` su un bersaglio con vigor e Resistance: niente armor, niente
+      dimezzamento, il vigor resta intatto e il danno va tutto sugli HP.
+- [ ] Chiamata senza opzioni: armor, Resistance e vigor funzionano come prima.
+
 ## Emerso R1 — Blessing of Faith: True Strike solo su quell'abilità, niente status (17 ottobre 2026, versione 1.15.221)
 
 Setup: solo codice (F5 basta).

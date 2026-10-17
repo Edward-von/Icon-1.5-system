@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — applyDamagePipeline accetta danno pierce e divine (versione 1.15.222)
+
+### Round di debug del 16 ottobre, voce emersa su R37
+
+- **applyDamagePipeline e tipi di danno**: da macro non si poteva far ignorare armor o vigor → la funzione dell'API in
+  `damage.mjs` non aveva le opzioni `pierce` / `divine` → aggiunte, con le stesse regole dell'Apply della card del
+  danno (p.104): pierce salta l'armor del bersaglio e il Weakened di chi attacca; divine salta anche il dimezzamento
+  da Cover / Resistance e il vigor non assorbe niente; il titolo della card dice "Piercing Damage" / "Divine Damage";
+  senza le opzioni il comportamento è quello di prima. Solo codice.
+
 ## 17 ottobre 2026 — Blessing of Faith: True Strike solo su quell'abilità, niente status (versione 1.15.221)
 
 ### Round di debug del 15 ottobre, voce emersa su R1

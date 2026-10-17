@@ -85,6 +85,13 @@ export function hasCover(target) {
  * @param {number}  [opts.bonusDice=0]    Extra [D] dice
  * @param {number}  [opts.flatBonus=0]
  * @param {string}  [opts.abilityName]
+ * @param {boolean} [opts.pierce=false]   Piercing damage (p.104): "cannot be reduced by armor or
+ *                                        weakened" — the target's armor and the attacker's Weakened
+ *                                        are skipped, as on the damage card's Apply.
+ * @param {boolean} [opts.divine=false]   Divine damage (p.104): "cannot be reduced, mitigated, or
+ *                                        negated in any way except immunity (ignores armor, weak,
+ *                                        resistance, defiance, and bypasses vigor)" — no armor, no
+ *                                        Weakened, no Cover / Resistance halving, vigor absorbs nothing.
  * @returns {Promise<{net, woundApplied, fallen}>}
  */
 export async function applyDamagePipeline(attacker, target, {
@@ -93,6 +100,8 @@ export async function applyDamagePipeline(attacker, target, {
   bonusDice = 0,
   flatBonus = 0,
   abilityName = "Attack",
+  pierce    = false,
+  divine    = false,
 } = {}) {
   if (!target?.system?.combat && !target?.system?.hp) return null;
 
@@ -111,8 +120,8 @@ export async function applyDamagePipeline(attacker, target, {
   const vulnerable  = hasActiveStatus(target,   "vulnerable");
   const resistance  = hasActiveStatus(target,   "resistance");
   const cover       = hasCover(target);
-  const weakened    = attacker ? hasActiveStatus(attacker, "weakened") : false;
-  const halve       = resistance || cover;
+  const weakened    = attacker && !pierce && !divine ? hasActiveStatus(attacker, "weakened") : false;
+  const halve       = !divine && (resistance || cover);
 
   /* --- Roll damage --- */
   const result = await damageRoll({
@@ -122,7 +131,7 @@ export async function applyDamagePipeline(attacker, target, {
     isCrit,
     isMiss:    !isHit,
     vulnerable,
-    armor:     tc.armor ?? 0,
+    armor:     pierce || divine ? 0 : (tc.armor ?? 0),
     resistance: halve,
     weakened,
     flatBonus,
@@ -132,7 +141,7 @@ export async function applyDamagePipeline(attacker, target, {
 
   /* --- Apply damage to target (armor already subtracted in the roll) --- */
   const { woundApplied, fallen, vigorAbsorbed, hpLost } =
-    await applyDamageToActor(target, net, { allowRelay: false }) ?? {};
+    await applyDamageToActor(target, net, { allowRelay: false, ignoreVigor: !!divine }) ?? {};
 
   /* --- Chat card --- */
   const content = await renderTemplate(`${TPLPATH}/damage-card.hbs`, {
@@ -151,7 +160,7 @@ export async function applyDamagePipeline(attacker, target, {
 
   await ChatMessage.create({
     speaker,
-    flavor:  `${abilityName} — Damage`,
+    flavor:  `${abilityName} — ${divine ? "Divine " : pierce ? "Piercing " : ""}Damage`,
     content,
     rolls,
   });
