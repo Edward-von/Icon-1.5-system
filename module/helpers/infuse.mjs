@@ -9,9 +9,17 @@
  *
  * Arming an infusion spends the Aether and records it on the actor
  * (`flags.icon-system.infused`), the same way a spent combo token is recorded,
- * so the next roll of that ability knows which version is in play. It clears
- * when the ability is rolled, when the infusion is cancelled, and at the end
- * of combat with the rest of the Wright's Aether.
+ * so the next roll of that ability knows which version is in play.
+ *
+ * "Aether is consumed at the start of the action" (p.204): the infused
+ * version is good for one use. One use is several clicks (card, attack roll,
+ * damage roll, area), so each step marks how far the use has gone
+ * (noteInfusionStep); a step that comes again, or goes back (a second card,
+ * a second attack after the damage), is the next use and finds the infusion
+ * gone (startInfusionStep). A used infusion also lapses when the turn it was
+ * used in ends (armedInfusion). Placing its object or terrain spends it at
+ * once (map-objects, terrain-spaces); cancelling refunds it only before use;
+ * the end of combat drops it with the rest of the Wright's Aether.
  */
 
 import { SECTION_LABELS, escapeHTML } from "./enrich.mjs";
@@ -221,10 +229,55 @@ export async function infuseVersionHtml(version, { enrich = escapeHTML, armed = 
   return `<details class="icon-infuse-version"><summary>${icon} ${escapeHTML(title)}</summary>${body.join("")}</details>`;
 }
 
-/** What the actor currently has infused, or null. */
+/**
+ * What the actor currently has infused, or null. An infusion already used
+ * (noteInfusionStep) only counts within the combat turn it was used in: its
+ * damage and area are rolled and placed then, and the next turn it is spent.
+ */
 export function armedInfusion(actor) {
   const f = actor?.getFlag?.(NS, "infused");
-  return f && f.itemId ? f : null;
+  if (!f || !f.itemId) return null;
+  if (f.used && !_sameTurn(f.used, _turnKey())) return null;
+  return f;
+}
+
+/** The steps of one use, in order: the area button is not one (it can come at any point). */
+export const INFUSE_STEP = { card: 1, attack: 2, damage: 3 };
+
+/** The combat turn now, or null outside a started combat. */
+function _turnKey() {
+  const c = globalThis.game?.combat;
+  return c?.started ? { combatId: c.id, round: Number(c.round) || 0, turn: Number(c.turn) || 0 } : null;
+}
+
+function _sameTurn(used, now) {
+  const a = used?.combatId ? used : null;
+  if (!a || !now) return !a && !now;
+  return a.combatId === now.combatId && Number(a.round) === now.round && Number(a.turn) === now.turn;
+}
+
+/**
+ * Before a step of using `itemId` (INFUSE_STEP) reads the armed version: when
+ * that use already went this far — a second card, a second attack, a damage
+ * roll after the damage — this is the next use of the ability, and the
+ * infusion paid for the previous one is cleared (the Aether stays spent).
+ * @returns {Promise<boolean>} true when it was cleared
+ */
+export async function startInfusionStep(actor, itemId, step) {
+  const armed = armedInfusion(actor);
+  if (!armed || armed.itemId !== itemId || !armed.used) return false;
+  if (step > (Number(armed.used.step) || 0)) return false;
+  _log(`"${armed.label}" was used already (step ${armed.used.step}, now ${step}): cleared for the next use`);
+  await clearInfusion(actor);
+  return true;
+}
+
+/** After a step of using `itemId` went ahead with the infused version: remember how far the use got. */
+export async function noteInfusionStep(actor, itemId, step) {
+  const armed = armedInfusion(actor);
+  if (!armed || armed.itemId !== itemId) return;
+  if (armed.used && step <= (Number(armed.used.step) || 0)) return;
+  await actor.update({ [`flags.${NS}.infused.used`]: { step, ...(_turnKey() ?? { combatId: null }) } });
 }
 
 /**
@@ -320,7 +373,7 @@ export async function armInfusion(actor, item, infusion, { arm = true } = {}) {
     const combat = game.combat;
     update[`flags.${NS}.innerFurnace`] = combat?.started ? { combatId: combat.id, round: Number(combat.round) } : null;
   }
-  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice };
+  if (arm) update[`flags.${NS}.infused`] = { itemId: item.id, label: infusion.label, name: infusion.name, spent: paid, hpLost, furnace: !!sacrifice, used: null };
   await actor.update(update);
   _log(`${arm ? "armed" : "used"} "${infusion.label}" on "${item.name}" — ${paid} Aether (${pool} → ${pool - paid})${notes.length ? ` [${notes.join("; ")}]` : ""}`);
 
@@ -390,10 +443,20 @@ async function _versionBodyHtml(infusion) {
   return html.replace(/<p class="icon-infuse-version__title">.*?<\/p>/, "");
 }
 
-/** Give the Aether back and disarm (the ability wasn't used after all). */
+/**
+ * Give the Aether back and disarm (the ability wasn't used after all). Once
+ * the infused version has been used (noteInfusionStep) there is nothing to
+ * undo: it is only disarmed and the result is "used".
+ * @returns {Promise<boolean|"used">}
+ */
 export async function cancelInfusion(actor) {
   const armed = armedInfusion(actor);
   if (!armed) return false;
+  if (armed.used) {
+    await clearInfusion(actor);
+    _log(`disarmed "${armed.label}" — already used, the Aether stays spent`);
+    return "used";
+  }
   const pool = actor.system?.combat?.classResources?.aether?.value ?? 0;
   const max  = actor.system?.combat?.classResources?.aether?.max ?? 6;
   const update = {
@@ -413,7 +476,8 @@ export async function cancelInfusion(actor) {
 
 /** Forget the armed infusion (it has been used). The Aether stays spent. */
 export async function clearInfusion(actor) {
-  if (!armedInfusion(actor)) return false;
+  // The raw flag: a used one from an earlier turn is hidden by armedInfusion but still stored.
+  if (!actor?.getFlag?.(NS, "infused")) return false;
   await actor.update({ [`flags.${NS}.infused`]: null });
   return true;
 }

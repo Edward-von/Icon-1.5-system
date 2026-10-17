@@ -29,7 +29,7 @@ import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../c
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
 import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
-         splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
+         startInfusionStep, noteInfusionStep, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
          STARTING_ACTION_DOTS } from "../../helpers/advancement.mjs";
@@ -1818,6 +1818,8 @@ export class IconSheet extends BaseActorSheet {
     const itemId = target.dataset.itemId;
     const item = this.document.items.get(itemId);
     if (!(await this._pickCombo(item))) return;
+    // A second card for an infusion already used is the next use: base version (p.204).
+    await startInfusionStep(this.document, itemId, INFUSE_STEP.card);
     // A mastery that gives both versions at once (Dervish's BEACON OF HOPE,
     // p.178: "gain both effects at once … you don't actually need to spend"
     // a combo token) prints the base and the combo together, token or not.
@@ -1871,6 +1873,7 @@ export class IconSheet extends BaseActorSheet {
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content,
     });
+    await noteInfusionStep(this.document, itemId, INFUSE_STEP.card);
 
     // Both versions printed without an armed token: there is no token to spend.
     if (comboMode && this._comboArmed(item)) {
@@ -2521,6 +2524,7 @@ export class IconSheet extends BaseActorSheet {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
     if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
+    await startInfusionStep(this.document, itemId, INFUSE_STEP.attack);
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
     _log(`abilityAttackRoll — "${ab.name}" | isAttack: ${ab.isAttack} | autoHit: ${ab.isAutoHit}`);
@@ -2596,6 +2600,7 @@ export class IconSheet extends BaseActorSheet {
         rememberAttackTarget(this.document, ab, attackTargetId);
       }
       const autoAreaHtml = placement ? areaSummaryHtml(placement, { attackTargetId }) : "";
+      await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
       let invokeHtml = "";
       const rolls = [];
       if (relicInvokes.length) {
@@ -2627,6 +2632,7 @@ export class IconSheet extends BaseActorSheet {
 
     const mods = await promptAttackMods(ab, this.document, { area: placement?.area ?? null });
     if (!mods) return;
+    await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
 
     // With an area on the table the extra tokens only take the area effect:
     // the d20 (and the Evasion roll) is for the attack target picked in the dialog.
@@ -2735,6 +2741,8 @@ export class IconSheet extends BaseActorSheet {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
     if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
+    // A damage roll after the damage of an infused use is the next use (p.204).
+    await startInfusionStep(this.document, itemId, INFUSE_STEP.damage);
     const ab = await this._getAbilityDetail(itemId);
     if (!ab) return;
     const combat = this.document.system.combat;
@@ -2753,6 +2761,8 @@ export class IconSheet extends BaseActorSheet {
 
     const mods = await promptDamageMods(ab, combat, { comboDefault, actor: this.document });
     if (!mods) return;
+    // The area button still reads the version afterwards, until the next use or the end of the turn.
+    await noteInfusionStep(this.document, itemId, INFUSE_STEP.damage);
 
     const useCombo = !!(mods.useCombo && ab.parsedCombo);
     // Read before the flags go: the card title names the combo chosen for this use.
@@ -3222,8 +3232,8 @@ export class IconSheet extends BaseActorSheet {
     const label = target.dataset.label ?? "";
     const armed = armedInfusion(this.document);
     if (armed && armed.itemId === lb.id && armed.label === label) {
-      await cancelInfusion(this.document);
-      ui.notifications.info(`${lb.name}: infusion cancelled, Aether returned.`);
+      const undone = await cancelInfusion(this.document);
+      ui.notifications.info(undone === "used" ? `${lb.name}: infusion already used, the Aether stays spent.` : `${lb.name}: infusion cancelled, Aether returned.`);
       return;
     }
     const infusion = IconSheet.#limitBreakInfusionList(this.document, lb).find(i => i.label === label);
@@ -3244,6 +3254,7 @@ export class IconSheet extends BaseActorSheet {
     event?.stopPropagation?.();
     const lb = this.document.items.find(i => i.type === "limit-break");
     if (!lb) return ui.notifications.warn("No Limit Break equipped.");
+    await startInfusionStep(this.document, lb.id, INFUSE_STEP.damage);
     const parsed = IconSheet.#limitBreakDamage(this.document, lb);
     _log(`limitBreakDamageRoll — "${lb.name}" | parsed:`, parsed);
     if (!parsed.dealsDamage) return ui.notifications.warn(`"${lb.name}" does not deal damage.`);
@@ -3257,6 +3268,7 @@ export class IconSheet extends BaseActorSheet {
     };
     const mods = await promptDamageMods(ab, combat, { actor: this.document });
     if (!mods) return;
+    await noteInfusionStep(this.document, lb.id, INFUSE_STEP.damage);
     await postAbilityDamageCard(this.document, {
       parsed,
       outcome:     mods.outcome,
@@ -3345,6 +3357,8 @@ export class IconSheet extends BaseActorSheet {
   static async #onUseLimitBreak(event, target) {
     const lb = this.document.items.find(i => i.type === "limit-break");
     if (!lb) { _log(`useLimitBreak — BLOCKED: no limit-break item`); return ui.notifications.warn("No Limit Break equipped."); }
+    // Using it again after an infused use is the base version: the Aether paid for one use (p.204).
+    await startInfusionStep(this.document, lb.id, INFUSE_STEP.card);
     // The armed Infuse version of it (Tetraflare, Meteor) is the one used: its
     // text goes on the card, and its own resolve cost replaces the base one
     // (Meteor: "Infuse 8: 6 resolve").
@@ -3425,6 +3439,7 @@ export class IconSheet extends BaseActorSheet {
     const title = infusion?.name ? `${lb.name} — ${infusion.name}` : lb.name;
     const effectHtml = await enrichLimitBreakText(lb.system.effect, { enrich: t => this._enrichAbility(t) });
     await ChatMessage.create({ speaker, content: `<strong>${escapeHTML(this.document.name)}</strong> uses <em>${escapeHTML(title)}</em>!${spent ? ` <small>(Resolve: ${spent})</small>` : ""}<div class="icon-limit-break__effect">${effectHtml}</div>${ultimateHtml}${infuseHtml}${statusHtml}` });
+    await noteInfusionStep(this.document, lb.id, INFUSE_STEP.card);
   }
 
   static async #onAddJob(event, target) {
@@ -3541,8 +3556,8 @@ export class IconSheet extends BaseActorSheet {
     const label = target.dataset.label ?? "";
     const armed = armedInfusion(this.document);
     if (armed && armed.itemId === item.id && armed.label === label) {
-      await cancelInfusion(this.document);
-      ui.notifications.info(`${item.name}: infusion cancelled, Aether returned.`);
+      const undone = await cancelInfusion(this.document);
+      ui.notifications.info(undone === "used" ? `${item.name}: infusion already used, the Aether stays spent.` : `${item.name}: infusion cancelled, Aether returned.`);
       return;
     }
     const sections = parseAbilitySections(item.system?.description ?? "").sections;

@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'infusione si consuma con l'uso dell'abilità (versione 1.15.92)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **Infusione riusata gratis**: nello stesso combattimento la seconda volta l'abilità (o il Limit Break) usciva di
+  nuovo infusa senza pagare Aether → la card, il tiro d'attacco, il Damage Roll e "Use Limit Break" leggevano
+  l'infusione armata senza mai consumarla (lo facevano solo oggetti e terreni), mentre per il manuale l'Aether si
+  spende all'inizio dell'azione e vale per un uso (p.204) → ogni passo (card, attacco, danno) segna fin dove è
+  arrivato l'uso: un passo che si ripete o torna indietro è l'uso successivo ed esce base, con l'Aether già speso.
+  Un'infusione usata scade a fine turno e annullarla dopo l'uso non rimborsa più l'Aether. Il pulsante dell'area non
+  conta come passo, quindi danno e area dopo la card leggono ancora la versione infusa. Limite noto: rilanciare il
+  danno dello stesso uso conta come uso nuovo ed esce base. Solo codice.
+
 ## 17 ottobre 2026 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other (versione 1.15.91)
 
 ### Round di debug del 16 ottobre, voce emersa su R46

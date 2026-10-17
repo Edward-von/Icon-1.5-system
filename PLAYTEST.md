@@ -1656,6 +1656,27 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R38b — L'infusione si consuma con l'uso dell'abilità (17 ottobre 2026, versione 1.15.92)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Wright in combattimento: Infuse su un'abilità d'attacco (es. Pyro, Infuse 3), poi Attack Roll, Damage Roll e
+      area: card, danno e area mostrano tutti la versione infusa; l'Aether scende una volta sola.
+- [ ] Nello stesso turno, di nuovo Attack Roll sulla stessa abilità: esce la versione base e il pannello non mostra
+      più l'infusione armata.
+- [ ] Show in Chat e poi Attack Roll sulla stessa abilità infusa: entrambi infusi (sono lo stesso uso); un secondo
+      Show in Chat esce base.
+- [ ] Abilità auto-hit infusa: il danno concatenato all'auto-hit è infuso.
+- [ ] Infusione usata, poi fine turno: al turno dopo l'abilità esce base e il pannello non la mostra armata.
+- [ ] Infusione armata ma non ancora usata: premere di nuovo il pulsante rimborsa l'Aether (come prima). Dopo il tiro
+      d'attacco, premerlo dà "infusion already used, the Aether stays spent" e l'Aether non torna.
+- [ ] Inner Furnace: annullare dopo l'uso non restituisce gli hp sacrificati.
+- [ ] Limit Break infuso (Gigaflare, TETRAFLARE): Use Limit Break e Damage Roll infusi; un secondo Use Limit Break
+      esce base e costa il resolve base.
+- [ ] Annullare il dialog del danno, poi rifare Damage Roll: resta infuso (il dialog annullato non conta).
+- [ ] Infusione con oggetto o terreno (Volcanic Geyser, Pyrospire): piazzare l'oggetto la consuma ancora come prima.
+- [ ] Fine combattimento con infusione armata: sparisce senza rimborso (come prima).
+
 ## Emerso R46 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other (17 ottobre 2026, versione 1.15.91)
 
 Setup: solo codice (F5 basta).

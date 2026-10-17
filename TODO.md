@@ -463,13 +463,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, da decidere): quando
       il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
       con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
-- [ ] **Emerso lavorando su R38b — l'infusione armata non si consuma quando si usa l'abilità o il Limit Break** (S/M):
+- [x] **Emerso lavorando su R38b — l'infusione armata non si consuma quando si usa l'abilità o il Limit Break** (S/M):
       l'Aether si spende "all'inizio dell'azione" e si sceglie una sola infusione per volta (p.204), quindi la
       versione infusa vale per un uso; ma la card dell'abilità (`IconSheet`, ~riga 2628) e il Limit Break (~riga 3318)
       leggono l'infusione armata senza chiamare `clearInfusion` (lo fanno solo oggetti e terreni): nello stesso
       combattimento la seconda volta l'abilità esce di nuovo infusa gratis. Va scelto quando consumarla (alla card o
       dopo danno e area, che leggono ancora `armedInfusion`); anche il commento in testa a `helpers/infuse.mjs` ("It
       clears when the ability is rolled") oggi non è vero.
+(FATTO il 17 ottobre 2026, versione 1.15.92: ogni passo dell'uso (card, attacco, danno) segna fin dove è arrivato; un
+      passo che si ripete o torna indietro è l'uso successivo ed esce base; l'infusione usata scade a fine turno e
+      annullarla dopo l'uso non rimborsa; il pulsante area non conta come passo; commento in testa a
+      `helpers/infuse.mjs` corretto.)
 - [x] **Emerso lavorando su R37 — bottoni di status dell'Infuse forse doppi sulla card del Limit Break** (S, da
       verificare): in `#onUseLimitBreak` gli status si cercano su `effect` + testo dell'Infuse armato; se il testo
       dell'Infuse è già dentro `effect` (come sembra dai blocchi "Infuse" di `enrichLimitBreakText`), i suoi status
@@ -520,6 +524,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       piercing damage again to your target for every foe or ally adjacent to them, to a maximum of four times" (p.225)
       non è proposto in Other, quindi con EXCALIBUR non diventa divine; fa parte della voce "Emerso lavorando su R24 —
       danno scritto negli Effect del testo base".
+- [ ] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, da decidere): un secondo
+      Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
+      danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
+      Edoardo: serve?
 
 ---
 
