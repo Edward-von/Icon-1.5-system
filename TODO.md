@@ -618,10 +618,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       (l'area Aura 2 su una casella, con attore e abilità di chi l'ha creato).
 (FATTO il 17 ottobre 2026, versione 1.15.140: "centered on the nail" mette la Small Blast del Talent I sullo spuntone
       già sulla mappa, dangerous e che resta; se ne va quando lo spuntone viene tolto o sostituito. Solo codice.)
-- [ ] **Emerso lavorando su R49 — Harvest Moon: esplosioni sulle plant** (M): "small blast area effect centered on each
+- [x] **Emerso lavorando su R49 — Harvest Moon: esplosioni sulle plant** (M): "small blast area effect centered on each
       plant" (Harvest, mastery, p.186): servirebbe prima un modo sicuro di riconoscere le plant sulla mappa (es. un flag
       sul token quando viene evocata dal pack; il Megamushroom "conta come plant"), poi le esplosioni sulle plant
       attraversate dall'abilità.
+(FATTO il 17 ottobre 2026, versione 1.15.142: le plant sono riconosciute in modo sicuro (Plant dal compendio summons,
+      `_stats.compendiumSource`, o Megamushroom); "Small Blast (on plants)" mette con un clic una blast su ogni plant
+      dentro l'area di Harvest, unite in un'unica area. Solo codice.)
 - [x] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
       foe" (p.178) non crea i pit sotto i foe pacified: oggi si mettono a mano con il chip.
 (FATTO il 17 ottobre 2026, versione 1.15.97: il Talent II di Pandaemonium ha il suo chip "Pits under pacified foes",
@@ -778,6 +781,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
 - [ ] **Emerso lavorando su R49 — la blast del Rampant Nail non segue lo spuntone spostato** (S): se lo spuntone si
       sposta con Shift + frecce, la Small Blast del Talent I resta dove era e va ripiazzata a mano (il libro non
       prevede di spostare lo spuntone).
+- [ ] **Emerso lavorando su R49 — Harvest Moon: "you can" e la plant che esplode** (S, da decidere): oggi esplodono
+      tutte le plant attraversate, ma il libro dice "you can", quindi forse serve una casella per ogni plant; dopo
+      l'esplosione la plant (che dà la sua blessing) resta sulla mappa e va tolta a mano, e anche la blessing data a
+      sé o a un alleato in range 3 resta a mano.
+- [ ] **Emerso lavorando su R49 — Mote of life non riconosciuta come plant** (S): la mote of life di Dark Sliver
+      (RECYCLE, p.187) "is a plant", ma non è nel pack summons né è un oggetto, quindi HARVEST MOON non la vede.
 
 ---
 

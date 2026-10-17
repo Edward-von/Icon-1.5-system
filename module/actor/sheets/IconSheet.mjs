@@ -2417,7 +2417,7 @@ export class IconSheet extends BaseActorSheet {
    * pits' blasts) also takes every pit space on the scene (Edoardo's ruling, 17 October 2026).
    */
   #areaOnAllPits(ab, s, area) {
-    if (!ab.hasMastery || ab.comboArmed || !area || area.kind === "aura" || area.centeredOn === "pits") return false;
+    if (!ab.hasMastery || ab.comboArmed || !area || area.kind === "aura" || area.centeredOn === "pits" || area.centeredOn === "plants") return false;
     const text = String(s.mastery ?? "").replace(/<[^>]+>/g, " ").replace(/’/g, "'").replace(/\s+/g, " ").toLowerCase();
     const at = text.indexOf(`${String(ab.name ?? "").toLowerCase()}'s area effect`);
     return at >= 0 && /^[^.]*\ball pits on the battlefield\b/.test(text.slice(at));
@@ -2557,7 +2557,7 @@ export class IconSheet extends BaseActorSheet {
     const placed = await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, text: this.#auraText(ab), ...opts });
     // R33c: Tsunami's edge, the moves and growth it has (area-motion.mjs).
     // (Not the pits' blasts, R49: an area effect that is gone once resolved.)
-    if (placed?.template && opts.lasting && area.centeredOn !== "pits") await afterAreaPlaced(placed.template, this.document, this.document.items.get(ab.id));
+    if (placed?.template && opts.lasting && area.centeredOn !== "pits" && area.centeredOn !== "plants") await afterAreaPlaced(placed.template, this.document, this.document.items.get(ab.id));
   }
 
   /**
@@ -2633,7 +2633,7 @@ export class IconSheet extends BaseActorSheet {
     const allVariants = this._areaVariantsFor(ab);
     // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character,
     // and the pits' blasts inside the attack's area (R49: Holy Talent I, PURGATORIO, p.177).
-    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object" || a?.centeredOn === "pits" || a?.centeredOn === "spike";
+    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object" || a?.centeredOn === "pits" || a?.centeredOn === "plants" || a?.centeredOn === "spike";
     const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !notTheAttack(v.area));
     const noAttackArea = !attackVariants.length && allVariants.some(v => notTheAttack(v.area));
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {

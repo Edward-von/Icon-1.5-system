@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Harvest Moon: esplosioni sulle plant con un clic (17 ottobre 2026, versione 1.15.142)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG Harvester con la mastery di Harvest: trascinare due Plant dal chip (o dal compendio summons) e un token Plant
+      fatto a mano; piazzare l'Arc 6 di Harvest passando sulle tre.
+- [ ] Bottone area, "Mastery: Small Blast (on plants)": compaiono le croci solo sulle due Plant del pack, l'etichetta
+      dice "× 2", l'Arc resta, le Plant non sono tra i bersagli.
+- [ ] Un foe vicino a tutte e due le plant appare una volta sola tra i bersagli.
+- [ ] Senza l'Arc sulla mappa compare l'avviso "place this ability's area first"; con l'Arc ma senza plant dentro,
+      l'avviso "No plant inside this ability's area".
+- [ ] Un Megamushroom dentro l'Arc esplode come una plant.
+- [ ] Il tiro d'attacco di Harvest non propone la Small Blast (on plants) come area dell'attacco.
+
 ## Emerso R37 — Split Heaven and Hell: fascia di distanza misurata sulla linea (17 ottobre 2026, versione 1.15.141)
 
 Setup: solo codice (F5 basta).

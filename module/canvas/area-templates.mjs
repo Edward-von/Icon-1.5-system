@@ -42,6 +42,7 @@
  * Gentle Prayer p.179), else 1 to 5 (resizeAura).
  */
 import { areaTerrainAt, terrainOfBlock } from "../helpers/area-terrain.mjs";
+import { loadSummonIndex } from "../helpers/summons.mjs";
 
 const _log = (...a) => console.debug("[ICON | AreaTemplates]", ...a);
 // Local escape: importing enrich.mjs here would close an import loop
@@ -170,7 +171,7 @@ export function rangeFromTags(tags) {
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
-    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : area.centeredOn === "spike" ? " (on nail)" : "");
+    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : area.centeredOn === "plants" ? " (on plants)" : area.centeredOn === "spike" ? " (on nail)" : "");
     case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
@@ -214,7 +215,7 @@ export function areasInText(text) {
     prevCentre = centre;
     if (centre) {
       area.centeredOn = centre;
-      if (area.kind === "burst" && !area.self && !area.target && centre !== "object" && centre !== "pits" && centre !== "spike") area[centre] = true;
+      if (area.kind === "burst" && !area.self && !area.target && centre !== "object" && centre !== "pits" && centre !== "plants" && centre !== "spike") area[centre] = true;
     }
     // R33c: an area whose sentence is a terrain effect lasts on the map and carries what its spaces are
     // (Morrigan's Dark Wing p.171, "a small blast terrain effect in range 3. The area is dangerous terrain for
@@ -257,6 +258,10 @@ function centreOf(before, rest) {
   // Rampant Nail Talent I (p.227): "a small blast area centered on the nail is dangerous terrain" goes on the
   // spike already on the map ("spike": the ability's Aura 2 around a space, placed by placeAreaTemplate).
   if (/\bcent(?:er|r)ed on (?:the|your) (?:nail|spike)\b/.test(rest)) return "spike";
+  // Harvest's HARVEST MOON (p.186): "When this ability passes through a plant, you can cause that plant to explode,
+  // dealing 2 piercing damage in a small blast area effect centered on each plant": one blast on every plant
+  // inside the ability's area ("plants", placed by plantBlastCells).
+  if (/\bcent(?:er|r)ed on (?:each|every) plant\b/.test(rest)) return "plants";
   const m = /\bcent(?:er|r)ed on (you|yourself|them|it|(?:the|your|its|that) (?:attack )?(?:character|foe|target|enemy|ally))\b/.exec(rest);
   if (!m) return "";
   if (m[1] === "it") return "object";
@@ -877,7 +882,9 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   let removeIds = null;   // null = the usual replacement of every earlier one
   // R49: the pits' explosion (Holy Talent I, PURGATORIO, p.177) is an area effect set off inside the
   // ability's own area: that area stays on the map, only an earlier explosion of the same ability is replaced.
-  const pitBlast = area?.centeredOn === "pits";
+  // HARVEST MOON's plant explosions (p.186) are placed the same way, on the plants instead of the pits.
+  const plantBlast = area?.centeredOn === "plants";
+  const pitBlast = area?.centeredOn === "pits" || plantBlast;
   if (pitBlast) {
     lasting = false; terrain = null; stack = 1;
     removeIds = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => t.flags[FLAG_NS].pitBlast).map(t => t.id);
@@ -943,6 +950,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
         effectUuid: holder.actor.effects?.find(e => { const k = e.getFlag?.(FLAG_NS, "mark"); return k?.sourceActorId === actor.id && k.abilityKey === abilityKey; })?.uuid ?? "" } : null;
   const sourceCells = tokenCells(holder.document);
   let cells, originCell;
+  let notTargets = area.kind === "burst" ? [token.id] : [];
   // An area centred on a character (Death's Slay / Finishing Blow, p.155:
   // "explodes in a large blast area effect centered on them") goes on that
   // token: the one target, or the user for "centered on you".
@@ -950,10 +958,12 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     : area.centeredOn === "target" && !isAura && !atSpace ? centreTargetToken(token)
     : area.centeredOn === "object" && !isAura && !atSpace ? centreObjectToken(token) : null;
   if (pitBlast) {
-    const blown = pitBlastCells({ actor, abilityKey, area });
+    const blown = plantBlast ? await plantBlastCells({ actor, abilityKey, area }) : pitBlastCells({ actor, abilityKey, area });
     if (!blown) return null;
     ({ cells, origin: originCell } = blown);
     area.label = `${area.label} × ${blown.pits}`;
+    // The exploding plants are what sets the blasts off, not characters they hit.
+    if (blown.plantIds) notTargets = notTargets.concat(blown.plantIds);
   } else if (spike) {
     originCell = canvas.grid.getOffset({ x: spike.x, y: spike.y });
     cells = shapeCells(area, originCell);
@@ -1083,7 +1093,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     } catch (err) { console.error("ICON 1.5 | wild card check failed", err); }
   }
 
-  const targets = tokensInCells(cells, { exclude: area.kind === "burst" ? [token.id] : [] });
+  const targets = tokensInCells(cells, { exclude: notTargets });
   _setUserTargets(targets);
   // Switching to the template layer released the token: give it back its selection.
   if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
@@ -1219,6 +1229,56 @@ function pitBlastCells({ actor, abilityKey, area }) {
     if (!seen.has(k)) { seen.add(k); cells.push(c); }
   }
   return { cells, origin: pits[0], pits: pits.length };
+}
+
+/**
+ * Is this token a plant (Harvester, p.184)? Only when it can be told for sure: a Plant from the system's summons
+ * pack (core records the pack entry it was imported from in `_stats.compendiumSource`, also on the world copy),
+ * or a Megamushroom object, which "counts as a plant" (Spore Shroud p.187). A plant made by hand is not one.
+ * @param {Token} t
+ * @param {Set<string>} plantUuids  the summons pack's Plant entries
+ */
+function isPlantToken(t, plantUuids) {
+  const a = t.actor;
+  const src = a?._stats?.compendiumSource ?? a?.baseActor?._stats?.compendiumSource ?? "";
+  if (src && plantUuids.has(src)) return true;
+  return /^megamushroom$/i.test(String(t.document?.flags?.[FLAG_NS]?.mapObject?.name ?? "").trim());
+}
+
+/**
+ * HARVEST MOON (Harvest's mastery, p.186): "When this ability passes through a plant, you can cause that plant to
+ * explode, dealing 2 piercing damage in a small blast area effect centered on each plant … Characters can only be
+ * damaged by one of these explosions a turn." The plants are the plant tokens (isPlantToken) standing in this
+ * ability's own area already on the map (the newest one of this actor and ability that is not an aura or an
+ * earlier explosion); each gets a blast of `area`'s size centred on its space, and the blasts are joined into one
+ * set of spaces, so a character in several is hit once. Warns and resolves null when there is no such area or no
+ * plant inside it.
+ * @returns {Promise<{cells:Array<{i:number,j:number}>, origin:{i:number,j:number}, pits:number}|null>}
+ */
+async function plantBlastCells({ actor, abilityKey, area }) {
+  const own = findAreaTemplates({ actorId: actor.id, abilityKey })
+    .filter(t => { const f = t.flags[FLAG_NS]; return !f.pitBlast && !f.terrain?.pit && !f.followTokenId && f.area?.kind !== "space" && f.area?.kind !== "aura"; })
+    .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0));
+  if (!own.length) {
+    ui.notifications.warn("Plants this ability passes through explode: place this ability's area first (its attack), then the plants' blasts.");
+    return null;
+  }
+  const plantUuids = new Set((await loadSummonIndex()).filter(e => /^plant$/i.test(e.name)).map(e => e.uuid));
+  const inArea = new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
+  const plants = canvas.tokens.placeables.filter(t => isPlantToken(t, plantUuids) && tokenCells(t.document).some(c => inArea.has(cellKey(c))));
+  if (!plants.length) {
+    ui.notifications.warn("No plant inside this ability's area (only Plants from the summons pack and Megamushrooms are recognised): nothing explodes.");
+    return null;
+  }
+  const blast = { kind: area.kind, size: area.size };
+  const seen = new Set();
+  const cells = [];
+  for (const p of plants) for (const c of shapeCells(blast, tokenCells(p.document)[0])) {
+    const k = cellKey(c);
+    if (!seen.has(k)) { seen.add(k); cells.push(c); }
+  }
+  _log(`plantBlastCells — ${plants.map(p => p.name).join(", ")}`);
+  return { cells, origin: tokenCells(plants[0].document)[0], pits: plants.length, plantIds: plants.map(p => p.id) };
 }
 
 /**

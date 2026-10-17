@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Harvest Moon: esplosioni sulle plant con un clic (versione 1.15.142)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Harvest, mastery HARVEST MOON**: le Small Blast "centered on each plant" (p.186) si piazzavano a mano, una alla
+  volta → il sistema non riconosceva le plant sulla mappa → ora una plant è riconosciuta in modo sicuro: un token il
+  cui attore viene dalla Plant del compendio summons (Foundry lo annota da solo quando il token arriva dal pack, chip
+  compreso), oppure un oggetto Megamushroom, che "counts as a plant" (p.187). La variante "Mastery: Small Blast (on
+  plants)" mette con un clic una Small Blast su ogni plant dentro l'Arc di Harvest già piazzato; le blast sono unite,
+  così chi sta in più blast è preso una volta sola ("only be damaged by one of these explosions a turn"). Le plant non
+  diventano bersagli e l'Arc resta sulla mappa. Una plant creata a mano non viene riconosciuta. Solo codice.
+
 ## 17 ottobre 2026 — Split Heaven and Hell: fascia di distanza misurata sulla linea (versione 1.15.141)
 
 ### Round di debug del 16 ottobre, voce emersa su R37
