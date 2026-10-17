@@ -23,8 +23,9 @@ function parseChunk(text) {
   // explicit flat damage: "3 damage", "2 piercing damage". Damage dealt to
   // the user ("each adjacent foe deals 1 piercing damage to you", Provoke
   // p.142) is what they take, not what they deal: skip it. "2 additional
-  // divine damage" (Passage to the Afterlife p.190) counts too.
-  const flatMatch = lower.match(/(\d+)\s+(?:additional\s+)?(?:divine\s+|piercing\s+|true\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
+  // divine damage" (Passage to the Afterlife p.190) counts too, and so does
+  // "2 unerring damage" (Astral Chain's Mark p.156).
+  const flatMatch = lower.match(/(\d+)\s+(?:additional\s+)?(?:divine\s+|piercing\s+|true\s+|unerring\s+)?damage(?!\s+to\s+you(?:rself)?\b)/);
   const flat = flatMatch ? Number(flatMatch[1]) : 0;
   // Damage type written next to the amount X
   // p.179; "[D]+fray divine damage", Gigaflare; "2 piercing damage"), so
@@ -79,8 +80,10 @@ function _masteryRetype(s) {
  *
  * Returns an object with per-outcome parsing results. Empty/non-damaging
  * fields default to zeros and no dice.
+ * `opts.baseBlocks` (a PC ability on the PC sheet): the damage written in the
+ * description's other blocks (Mark, Effect, …) is listed under "Other" too.
  */
-export function parseAbilityDamage(itemSystem) {
+export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
   const s = itemSystem ?? {};
   const isAttack = !!s.isAttack;
 
@@ -122,9 +125,10 @@ export function parseAbilityDamage(itemSystem) {
   // came up empty but the description has damage-shaped text, use it as the
   // hit chunk so the Damage button still shows.
   const anyDamage = (c) => c.mult > 0 || c.flat > 0 || c.fray;
+  let descAsHit = false;
   if (!anyDamage(hit) && !anyDamage(miss) && !anyDamage(area) && s.description) {
     const descChunk = parseChunk(s.description);
-    if (anyDamage(descChunk)) hit = descChunk;
+    if (anyDamage(descChunk)) { hit = descChunk; descAsHit = true; }
   }
 
   // No area damage in the ability's own text: the upgrade in play (selected
@@ -164,6 +168,33 @@ export function parseAbilityDamage(itemSystem) {
   // that changes the ability's damage instead of adding some ("deals 4 damage
   // instead of 2", "damage increases by 1", "becomes divine").
   const extras = [];
+  // Same for damage written in the base text's own blocks besides Hit / Miss
+  // / Area: Incubus's Mark (p.164) "both the target and any adjacent foes take
+  // 2 damage and are dazed", Chastise's Effect (p.179) "they take 1 divine
+  // damage three times", Astral Chain's Mark (p.156). One entry per sentence
+  // with damage, named after the block it sits in. Not read: an ability whose
+  // description already is its Hit (the fallback above), the Hit / Miss / Area
+  // lines themselves, an "Area effect:" when Area already deals damage, the
+  // Infuse versions (infusedAbilityDamage has those), and a sentence that
+  // changes the damage instead of adding some.
+  if (baseBlocks && !descAsHit && s.description) {
+    const BLOCK_RE = /\b(mark|(?:terrain\s+|special\s+|summon\s+|area\s+)?effect|(?:gain\s+)?stance|special|refresh|trigger|object|summon|gamble|attack|on\s+hit|auto[-\s]?hit|hit|miss)\s*:/gi;
+    const desc = String(s.description).replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ")
+      .replace(/\b(?:slay\s+or\s+)?infuse\s+(?:\d+|x)\b(?:\s+or\s+slay)?\s*:.*$/i, "");
+    let block = "";
+    for (const sentence of desc.split(/(?<=\.)\s+/)) {
+      const labels = [...sentence.matchAll(BLOCK_RE)].map(m => m[1].toLowerCase().replace(/\s+/g, " "));
+      if (labels.length) block = labels.at(-1).replace(/^gain /, "");
+      if (!block || !/\bdamage\b/i.test(sentence)) continue;
+      if (/^(?:attack|on hit|auto[-\s]?hit|hit|miss|trigger|refresh)$/.test(block)) continue;
+      if (block === "area effect" && anyDamage(area)) continue;
+      if (/\b(?:instead|increases?|becomes|bonus\s+damage)\b|\+\s*\d+\s+damage/i.test(sentence)) continue;
+      const chunk = parseChunk(sentence);
+      if (!anyDamage(chunk)) continue;
+      extras.push({ source: block.replace(/\b\w/g, ch => ch.toUpperCase()), text: sentence.trim(), ...chunk,
+                    area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
+    }
+  }
   for (const u of upgrades) {
     for (const sentence of u.sentences) {
       if (sentence === areaSentence || !/\bdamage\b/i.test(sentence)) continue;

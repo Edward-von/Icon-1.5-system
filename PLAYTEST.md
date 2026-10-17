@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R40 — Il danno dei blocchi Mark / Effect della base si tira da Other (17 ottobre 2026, versione 1.15.100)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Incubus (Shade): Damage → Other mostra la chip "Mark 2 flat"; cliccandola la card fa 2 danni. Hit resta
+      [D]+fray, Miss resta fray.
+- [ ] Incubus con il combo token: in Other ci sono sia "Mark" sia "Combo — Succubus 3 flat".
+- [ ] Chastise: Other mostra "Effect 1 flat divine"; la card applica 3 istanze da 1 divine.
+- [ ] Astral Chain: Other mostra "Mark 2 flat".
+- [ ] Nothung con EXCALIBUR sbloccata: la chip Effect da 1 piercing risulta divine; GRAM resta la sua chip separata.
+- [ ] Draken Cross: nessuna chip in Other per la seconda area (si usa Area). Cryo / Geo / Eye of the Storm: nessuna
+      chip nuova dalle loro versioni Infuse.
+- [ ] Showdown e Warding Bolts: il bottone Damage tira 2 (Showdown 2 ×2).
+- [ ] Un foe o una legend con "Effect: … take 2 damage" (es. Kelpie, Savage Fang): Other è come prima, nessuna chip
+      nuova.
+
 ## Emerso R46 — Slay or Infuse armato mostrato una volta sola, come versione infusa (17 ottobre 2026, versione 1.15.99)
 
 Setup: solo codice (F5 basta).

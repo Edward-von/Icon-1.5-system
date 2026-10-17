@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il danno dei blocchi Mark / Effect della base si tira da Other (versione 1.15.100)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Danno dei blocchi della base**: il Mark di Incubus (p.164, "both the target and any adjacent foes take 2 damage
+  and are dazed"), l'Effect di Chastise (p.179, "1 divine damage three times") e simili non comparivano nel Damage
+  Roll, nemmeno sotto Other → Other leggeva solo talenti, mastery, combo e versioni Infuse, non i blocchi della
+  descrizione base → per le abilità dei PG ogni frase con danno dentro Mark / Effect / Terrain Effect / Stance /
+  Summon Effect diventa una chip in Other col nome del blocco: Incubus, Chastise, Astral Chain, Sidhe, Quaking Palm,
+  Rook, Blitz, Circle the Oak, Dark Sliver, Astra, Nothung (divine con EXCALIBUR), Drifting Leaf. Restano fuori le
+  righe Hit / Miss / Area, un Area effect già coperto da Area, le versioni Infuse e le frasi che cambiano il danno
+  invece di aggiungerne. Foe, legend e summon non cambiano. Confrontate tutte le 271 voci del pack jobs: Hit / Miss /
+  Area cambiano solo dove è giusto (sotto).
+- **Danno "unerring"**: "2 unerring damage" (Mark di Astral Chain p.156, Showdown p.157, Warding Bolts) non contava
+  come danno → la parola "unerring" tra il numero e "damage" non era riconosciuta → ora conta: Showdown e Warding
+  Bolts hanno il loro Damage Roll. Solo codice.
+
 ## 17 ottobre 2026 — Slay or Infuse armato mostrato una volta sola, come versione infusa (versione 1.15.99)
 
 ### Round di debug del 16 ottobre, voce emersa su R46

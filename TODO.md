@@ -486,10 +486,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R40 — il chip "Combo — Succubus" si vede anche senza combo** (S): il chip sotto Other
       appare anche quando il combo token non è pieno (come la casella "Combo version"); decidere se mostrarlo solo con
       la combo armata. La voce del pulsante Other dice ancora "mastery / talent / free" e non nomina la combo.
-- [ ] **Emerso lavorando su R40 — danno del Mark di Incubus** (S): i "2 damage" del Mark della base (p.164: "both the
+- [x] **Emerso lavorando su R40 — danno del Mark di Incubus** (S): i "2 damage" del Mark della base (p.164: "both the
       target and any adjacent foes take 2 damage and are dazed") non compaiono nel Damage Roll, nemmeno sotto Other
       (lì finisce solo il danno di talenti e mastery). Probabilmente lo stesso per i danni dentro altri blocchi Mark /
       Effect della base (vedi "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
+(FATTO il 17 ottobre 2026, versione 1.15.100: il danno scritto nei blocchi Mark / Effect / Terrain Effect / Stance
+      della descrizione base delle abilità PG è proposto in Other, una chip per frase col nome del blocco (Incubus
+      "Mark 2", Chastise, Astral Chain, Nothung e altre nove); esclusi Hit / Miss / Area, Area effect già coperto,
+      Infuse e frasi che modificano il danno; "unerring damage" conta come danno. Copre anche le due voci di R24 del
+      round del 15 ottobre e quella di R46 su Excalibur.)
 - [x] **Emerso lavorando su R49 — aree che esplodono da tutti i pit dell'area** (M): Holy Talent I ("all pits in the
       area explode for a medium blast area effect, centered on them") e la combo Purgatorio di Pandaemonium (p.178) si
       piazzano ancora a mano, una Medium Blast alla volta. Con i pit sulla mappa (template con flag `terrain`)
@@ -609,6 +614,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       STORMLASH standalone): armata con Inner Furnace nel round 1 e non usata, annullata nel round 2 dopo un altro
       Inner Furnace → si può usare una seconda volta nel round 2 ("Once a round", p.208). Azzerare il flag solo se è
       ancora quello scritto da questo armo (stesso combat / round).
+- [ ] **Emerso lavorando su R40 — chip Mark nel combo Succubus** (S): Succubus dice "Instead of the mark", ma in Other
+      resta anche la chip "Mark" della base; andrebbe nascosta con il combo in uso.
+- [ ] **Emerso lavorando su R40 — danno dei blocchi Effect di foe e legend** (M): azioni di foe e legend come Kelpie
+      Savage Fang, Overpower, Mighty Smite e Heavy Arquebus scrivono danni extra nei loro "Effect:" che non vengono
+      proposti; allargare la regola vuol dire circa 150 frasi da controllare (i blocchi Collide / Exceed / Charge
+      finirebbero sotto "Effect").
+- [ ] **Emerso lavorando su R40 — chip senza Unerring né ×N** (S): la chip di Astral Chain non spunta Unerring; le
+      chip non mostrano "×N" anche quando la card applica N istanze (Chastise ×3); Blitz scrive due istanze da 1
+      piercing nella stessa frase e propone una sola chip.
+- [ ] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
+      quando le chip vengono dai blocchi base, dal combo o dalle versioni Infuse.
 
 ---
 
