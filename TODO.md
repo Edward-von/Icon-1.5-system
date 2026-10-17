@@ -171,12 +171,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       speso — ÄTHERSTURM allunga la Line 3 di Ätherwand di 1 per Aether fino a +3, MAGNARIME fa Arc 4 + Aether a range
       6 — e la versione armata è la prima scelta; le mastery che sono un Infuse cambiano l'area solo da armate. Solo
       codice.)
-- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M, in attesa di risposta): "Comeback: You may extend Sturmreiten's area by another
+- [ ] **R47b. Sturmreiten Talent II, seconda Line 3** (S/M, pronto: risposta di Maar del 17 ottobre 2026): "Comeback: You may extend Sturmreiten's area by another
       line 3 area, drawn in a different direction" (p.227): "A way to use talent 2's extension would be useful." Il
       piazzamento fa una sola Line alla volta; servirebbe, col Talent II scelto, una seconda Line 3 in un'altra
       direzione dallo stesso punto (o dalla fine della prima: il testo non lo dice, da chiedere a Edoardo) unita alla
       prima per i bersagli.
       Domanda per Edoardo: la seconda Line 3 parte dallo stesso punto della prima o dalla sua fine? (p.227 non lo dice)
+      Risposta di Maar (17 ottobre 2026): "it should be either-or. So, choosing to place it in either place as the
+      extension- first or last square." → l'utente sceglie: la seconda Line 3 parte dal primo o dall'ultimo spazio
+      della prima, in un'altra direzione.
 - [x] **R48. Aure date ad altri o in alternativa** (M, bug)
       - Warding Bolts, mastery Phantom Bolts ("hover around you as an Aura 2 instead"): "No way to give self aura 2".
       - Fulminate: "No way to apply the aura to the marked character" ("The character gains aura 2 while marked"); i
@@ -212,7 +215,7 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       manuale cosa cambia al capitolo 3.
       (FATTO il 16 ottobre 2026, versione 1.15.53: al capitolo 3 Death's Apprentice permette 2 Stacked Dice (p.150);
       il template passava un massimo vuoto al click, che si fermava a 1. Ora il secondo dado si accende.)
-- [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati) (in attesa di risposta)
+- [ ] **R52. Chronotemper: tag "Power Die" senza power die** (S, dati) (pronto: risposta di Maar del 17 ottobre 2026)
       "(This is an error with the book) Ability tag says 'Power Die' despite not utilizing die mechanics." Verificare
       sul manuale; se è un errore del libro, decidere se toglierlo (pack + migrazione) o lasciarlo come nel libro.
       Verificato: il libro (p.152) stampa davvero "1 action / Mark, Power die", ma né il testo né altro usa un dado
@@ -222,6 +225,8 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Domanda per Edoardo: (a) togliere il tag "power-die" da Chronotemper nel compendio Jobs, con una migrazione che lo
       toglie anche dalle schede dove l'abilità è già presa (si discosta dal libro, ma l'etichetta non trae in inganno),
       oppure (b) lasciarlo come stampato nel libro e chiudere il punto senza modifiche?
+      Risposta di Maar (17 ottobre 2026): "Yes, I think removing it just to be more clear so a player doesn't get
+      confused." → (a): togliere "power-die" dal pack Jobs + migrazione sulle copie già prese.
 - [x] **R53. Heave-Ho: l'Effect dopo l'Area** (S, dati)
       "The 'Effect' is currently listed after the area, when the effect should go first, as the area is made with the
       effect." (Nel round 4, 30 agosto, era stato separato Trigger/Effect; l'ordine "Effect dopo Area per gli attacchi" di
@@ -302,11 +307,25 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       "Some way to actively modify the crit/exceed values on the roller would be useful here, especially if automated.
       There's a relic that does something similar (-1 required number per round in game for crit/exceed)". Trovare la
       relic sul manuale.
+      Risposta di Maar (17 ottobre 2026): "It's ARENHEIR, tier 3, and aspected." Arenheir (p.252): "III. Your threshold
+      for exceed and critical hits is decreased by 1, and decreases again by 1 at round 3 and 5. Aspected: When you
+      score a critical hit, reduce the threshold for critical hits by 1. This cannot reduce it lower than 15+."
+      Soulfire (Enochian, p.208): "Comeback: Your threshold to critical hit becomes 18+, and your threshold to exceed
+      becomes 13+. If you're at 1 hp, these thresholds are reduced to 15+ and 10+." Da fare: soglie di crit / exceed
+      variabili nel tiro d'attacco (oggi fisse), calcolate da Soulfire e da Arenheir III / Aspected.
 - [ ] **R64. Ridurre il costo in Aether delle abilità** (M/L, da decidere)
       Conqueror's Edge "and the one from Enochian": "there is no way to reduce aether costs on abilities … how to
       implement, I have no idea." Domanda per Maar: quale abilità dell'Enochian?
-- [ ] **R65. Aethershard come un summon** (M, da decidere)
+      Risposta di Maar (17 ottobre 2026): "The trait's name is 'Inner furnace'." Inner Furnace (Enochian, p.208):
+      "Once a round, you may burn your own life force when you Infuse an ability. You can sacrifice 25% of your max hp
+      to reduce the Aether cost of that ability by 2." Da fare: all'Infuse, se c'è il tratto e non è già stato usato
+      nel round, proporre il sacrificio del 25% degli hp massimi per pagare 2 Aether in meno (insieme a Conqueror's
+      Edge).
+- [x] **R65. Aethershard come un summon** (M, da decidere)
       "Something similar to a summon ability would be useful here." Forse rientra in R33 (oggetti sulla mappa).
+      (CHIUSO il 17 ottobre 2026: Maar conferma che rientra in R33, "That sounds right, yeah." Già fatto in R33a-R33a4,
+      versioni 1.15.65-1.15.68: Aethershard è un oggetto sulla mappa con Move del Talent I, i danni quando è preso in
+      un'area e AETHERSHIFT; il Talent II resta in R33a5. Nessuna modifica nuova, da far verificare a Maar.)
 
 ### Emersi lavorando
 
