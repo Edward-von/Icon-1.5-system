@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Gli usi dei kit contano anche con clic rapidissimi (versione 1.15.136)
+
+### Dal playtest della 1.15.1, usi dei kit
+
+- **Usi dei kit con clic veloci**: due clic sullo stesso oggetto del kit (o su due oggetti dello stesso kit) prima che
+  la scheda si ridisegnasse contavano come uno → ogni clic leggeva gli usi prima che il salvataggio precedente fosse
+  arrivato e scriveva lo stesso valore (l'elenco degli usi è uno solo per kit) → ora le modifiche a un kit fanno la
+  fila (`#queueKitWrite` in IconSheet): ognuna aspetta la precedente e rilegge il kit, così ogni clic conta; vale per
+  l'uso, lo Shift + clic e il "−". Solo codice.
+
 ## 17 ottobre 2026 — Reap da lontano guadagna Unerring (versione 1.15.135)
 
 ### Round di debug del 15 ottobre, voce emersa su R1

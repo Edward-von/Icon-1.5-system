@@ -1396,10 +1396,6 @@ export class IconSheet extends BaseActorSheet {
     const kit  = this.document.items.get(target.dataset.itemId);
     const name = target.dataset.name;
     if (!kit || !name) return;
-    const counts = foundry.utils.deepClone(kit.system.counts ?? []);
-    let row = counts.find(c => c.name === name);
-    if (!row) { row = { name, spent: 0, max: 0 }; counts.push(row); }
-    const used = new Set(kit.system.used ?? []);
 
     if (event.shiftKey) {
       const { max } = itemCount(kit.system, name);
@@ -1414,17 +1410,45 @@ export class IconSheet extends BaseActorSheet {
         });
       } catch { n = null; }
       if (!n || n < 1) return;
-      row.max = Math.min(99, n);
-      row.spent = Math.min(row.spent, row.max);
-      if (row.spent >= row.max) used.add(name); else used.delete(name);
-      await kit.update({ "system.counts": counts, "system.used": [...used] });
-      return;
+      return IconSheet.#queueKitWrite(kit, (counts, row, used) => {
+        row.max = Math.min(99, n);
+        row.spent = Math.min(row.spent, row.max);
+        if (row.spent >= row.max) used.add(name); else used.delete(name);
+      }, name);
     }
 
-    const { spent, max } = itemCount(kit.system, name);
-    if (spent >= max) { row.spent = 0; used.delete(name); }           // all gone: a click gets it back
-    else { row.spent = spent + 1; if (row.spent >= max) used.add(name); }
-    await kit.update({ "system.counts": counts, "system.used": [...used] });
+    return IconSheet.#queueKitWrite(kit, (counts, row, used, k) => {
+      const { spent, max } = itemCount(k.system, name);
+      if (spent >= max) { row.spent = 0; used.delete(name); }           // all gone: a click gets it back
+      else { row.spent = spent + 1; if (row.spent >= max) used.add(name); }
+    }, name);
+  }
+
+  /** Pending kit writes, per kit: see #queueKitWrite. */
+  static #kitWrites = new Map();
+
+  /**
+   * Change one item row of a kit after the kit's previous change has landed.
+   * Two quick clicks used to read the same counts before the first update was
+   * saved, and counted as one: each write now waits its turn and reads the
+   * kit afresh. `change(counts, row, used, kit)` edits the copies in place.
+   */
+  static #queueKitWrite(kit, change, name) {
+    const key = kit.uuid;
+    const run = async () => {
+      const k = fromUuidSync(key);
+      if (!k) return;
+      const counts = foundry.utils.deepClone(k.system.counts ?? []);
+      let row = counts.find(c => c.name === name);
+      if (!row) { row = { name, spent: 0, max: 0 }; counts.push(row); }
+      const used = new Set(k.system.used ?? []);
+      if (change(counts, row, used, k) === false) return;
+      await k.update({ "system.counts": counts, "system.used": [...used] });
+    };
+    const next = (IconSheet.#kitWrites.get(key) ?? Promise.resolve()).catch(() => {}).then(run);
+    IconSheet.#kitWrites.set(key, next);
+    next.catch(() => {}).finally(() => { if (IconSheet.#kitWrites.get(key) === next) IconSheet.#kitWrites.delete(key); });
+    return next;
   }
 
   /** Give back one use of a counted kit item (the "−" next to it). */
@@ -1433,13 +1457,12 @@ export class IconSheet extends BaseActorSheet {
     const kit  = this.document.items.get(target.dataset.itemId);
     const name = target.dataset.name;
     if (!kit || !name) return;
-    const { spent } = itemCount(kit.system, name);
-    if (spent <= 0) return;
-    const counts = foundry.utils.deepClone(kit.system.counts ?? []);
-    let row = counts.find(c => c.name === name);
-    if (!row) { row = { name, spent: 0, max: 0 }; counts.push(row); }
-    row.spent = spent - 1;
-    await kit.update({ "system.counts": counts, "system.used": (kit.system.used ?? []).filter(n => n !== name) });
+    return IconSheet.#queueKitWrite(kit, (counts, row, used, k) => {
+      const { spent } = itemCount(k.system, name);
+      if (spent <= 0) return false;
+      row.spent = spent - 1;
+      used.delete(name);
+    }, name);
   }
 
   /** A new expedition: used and lost kit items come back (p.35). */

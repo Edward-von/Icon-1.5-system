@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso playtest 1.15.1 — Gli usi dei kit contano anche con clic rapidissimi (17 ottobre 2026, versione 1.15.136)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Kit con "5 fire stones": tre clic rapidissimi → 3 usi spesi (non 1).
+- [ ] Clic rapidi alternati su due oggetti diversi dello stesso kit → tutti contati, nessuno perso.
+- [ ] "−" cliccato due volte di fila in fretta → restituisce 2 usi.
+- [ ] Shift + clic → impostare il numero di usi funziona ancora; finiti gli usi un clic fa tornare l'oggetto.
+
 ## Emerso R1 — Reap da lontano guadagna Unerring (17 ottobre 2026, versione 1.15.135)
 
 Setup: solo codice (F5 basta).
