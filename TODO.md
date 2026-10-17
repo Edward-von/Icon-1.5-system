@@ -488,12 +488,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       target and any adjacent foes take 2 damage and are dazed") non compaiono nel Damage Roll, nemmeno sotto Other
       (lì finisce solo il danno di talenti e mastery). Probabilmente lo stesso per i danni dentro altri blocchi Mark /
       Effect della base (vedi "Emerso lavorando su R24 — danno scritto negli Effect del testo base").
-- [ ] **Emerso lavorando su R49 — aree che esplodono da tutti i pit dell'area** (M): Holy Talent I ("all pits in the
+- [x] **Emerso lavorando su R49 — aree che esplodono da tutti i pit dell'area** (M): Holy Talent I ("all pits in the
       area explode for a medium blast area effect, centered on them") e la combo Purgatorio di Pandaemonium (p.178) si
       piazzano ancora a mano, una Medium Blast alla volta. Con i pit sulla mappa (template con flag `terrain`)
       servirebbe: trovare i pit dentro l'area appena piazzata, una Medium Blast centrata su ognuno e bersagliare chi
       sta in almeno una delle aree. Oggi `centreOf` in `area-templates.mjs` lascia apposta a mano le aree "centered on
       them" dopo pits/plants/nails/clouds.
+(FATTO il 17 ottobre 2026, versione 1.15.93: solo i pit; `centreOf` dà "pits" per "them" dopo i pit, `pitBlastCells`
+      trova i pit (flag `terrain.pit`) dentro l'area più recente dell'abilità, una blast per pit unite in un solo
+      template con flag `pitBlast`, ognuno bersagliato una volta sola; il tiro d'attacco la esclude. Plants / nails /
+      clouds restano a mano.)
 - [x] **Emerso lavorando su R41 — Show in Chat delle azioni foe / legend non divide le righe di un'area** (S):
       `FoeSheet.#statusHtmlFor` e `LegendSheet` (~riga 380) chiamano `statusBlockHtml` senza `attackTargetId`; con
       un'area dell'azione ancora sulla mappa (abilityKey `action:<nome>`) si potrebbe usare lo stesso centro del Blast
@@ -528,6 +532,19 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
       danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
       Edoardo: serve?
+- [ ] **Emerso lavorando su R49 — Dulce Purgatorio su tutti i pit del campo** (S): la Mastery DULCE PURGATORIO (p.178,
+      "Pandaemonium's area effect and Purgatorio's pit explosion effect extend to all pits on the battlefield") non è
+      letta: l'esplosione prende solo i pit dentro l'area. Basterebbe saltare il filtro "dentro l'area" in
+      `pitBlastCells` con la Mastery scelta.
+- [ ] **Emerso lavorando su R49 — l'area di Holy forse resta come terrain effect** (S, da verificare): `#areaLasts`
+      legge `baseAreaText`, che contiene anche il testo della combo; la riga "Terrain Effect: Create a pit under your
+      target" di Hades rende probabilmente "lasting" la Medium Blast di Holy/Hades (flag `terrain`), che a fine turno
+      non viene tolta.
+- [ ] **Emerso lavorando su R49 — "centered on them" dopo plants / nails / clouds** (S/M): stesso schema dei pit,
+      ancora a mano; plant / nail / cloud non hanno un tipo `terrain` riconoscibile sulla mappa come `pit`, servirebbe
+      prima quello.
+- [ ] **Emerso lavorando su R49 — Purgatorio Talent II** (S): "its effect causes pits to appear under every pacified
+      foe" (p.178) non crea i pit sotto i foe pacified: oggi si mettono a mano con il chip.
 
 ---
 

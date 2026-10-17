@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — I pit esplodono dall'area: Holy Talent I e Purgatorio (versione 1.15.93)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Esplosioni dei pit da piazzare a mano**: le esplosioni dei pit di Holy Talent I e della combo Purgatorio di
+  Pandaemonium (p.177, "all pits in the area explode for a medium blast area effect, centered on them") andavano
+  piazzate a mano, una Medium Blast alla volta, e chi era preso da due esplosioni andava contato una volta sola a
+  occhio → `centreOf` lasciava apposta a mano le aree "centered on them" dopo i pit, e quella Medium Blast aveva la
+  stessa etichetta dell'area dell'attacco, quindi la scelta dell'area non la proponeva nemmeno → ora il bottone
+  dell'area propone "Medium Blast (on pits)": prende l'area dell'abilità già sulla mappa (la più recente), trova tutti
+  i pit al suo interno e mette una Medium Blast su ognuno, unite in un solo template, e bersaglia chi sta in almeno
+  una delle esplosioni una volta sola ("characters in at least one area"). L'area dell'abilità resta; viene sostituita
+  solo un'esplosione precedente della stessa abilità. Il tiro d'attacco non la usa mai come area dell'attacco. Se
+  l'area o i pit mancano compare un avviso e non succede nulla. Plants / nails / clouds restano a mano. Solo codice.
+
 ## 17 ottobre 2026 — L'infusione si consuma con l'uso dell'abilità (versione 1.15.92)
 
 ### Round di debug del 16 ottobre, voce emersa su R38b

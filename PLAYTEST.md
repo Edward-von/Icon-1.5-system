@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — I pit esplodono dall'area: Holy Talent I e Purgatorio (17 ottobre 2026, versione 1.15.93)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Personaggio con Holy e Talent I scelto, Hades armato: tira l'attacco (Medium Blast) e crea il pit sotto il
+      bersaglio con il chip "Pit"; mettine un altro a mano dentro l'area. Bottone dell'area → "Talent I: Medium Blast
+      (on pits)": compare un solo template "Medium Blast (on pits) × 2" con una Medium Blast centrata su ciascun pit,
+      e l'area di Hades resta sulla mappa.
+- [ ] Un token che sta in tutte e due le esplosioni è bersagliato una volta sola; il messaggio "… placed — X, Y in the
+      area" lo nomina una volta.
+- [ ] Un pit fuori dall'area di Hades non esplode.
+- [ ] Nessun pit dentro l'area: avviso "No pit inside this ability's area: nothing explodes." e nessun template.
+- [ ] Area dell'abilità non ancora sulla mappa: avviso "place this ability's area first…" e non succede nulla.
+- [ ] Ripeti l'esplosione: quella vecchia viene sostituita, l'area dell'abilità e i pit restano.
+- [ ] Pandaemonium con la combo Purgatorio armata: stessa prova con "Combo: Medium Blast (on pits)".
+- [ ] Tiro d'attacco di Hades o di Purgatorio senza area sulla mappa: la scelta dell'area non propone "(on pits)" e
+      l'attacco piazza la sua Medium Blast come prima.
+- [ ] Al turno successivo dell'utente l'esplosione sparisce come un'area normale, e i pit restano.
+
 ## Emerso R38b — L'infusione si consuma con l'uso dell'abilità (17 ottobre 2026, versione 1.15.92)
 
 Setup: solo codice (F5 basta).

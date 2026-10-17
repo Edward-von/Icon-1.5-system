@@ -170,8 +170,8 @@ export function rangeFromTags(tags) {
 export function areaLabel(area) {
   if (!area) return "";
   switch (area.kind) {
-    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : "");
-    case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : area.centeredOn === "object" ? " (on object)" : ""}`;
+    case "blast": return (BLAST_LABELS[area.size] ?? "Blast") + (area.centeredOn === "target" ? " (target)" : area.centeredOn === "self" ? " (self)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : "");
+    case "burst": return `Burst ${area.size}${area.self ? " (self)" : area.target ? " (target)" : area.centeredOn === "object" ? " (on object)" : area.centeredOn === "pits" ? " (on pits)" : ""}`;
     case "line":  return (area.size ? `Line ${area.size}` : "Line") + (area.width > 1 ? ` (width ${area.width})` : "");
     case "arc":   return area.size ? `Arc ${area.size}` : "Arc";
     case "aura":  return (area.size ? `Aura ${area.size}` : "Aura") + (area.atSpace ? " (terrain effect)" : "");
@@ -214,7 +214,7 @@ export function areasInText(text) {
     prevCentre = centre;
     if (centre) {
       area.centeredOn = centre;
-      if (area.kind === "burst" && !area.self && !area.target && centre !== "object") area[centre] = true;
+      if (area.kind === "burst" && !area.self && !area.target && centre !== "object" && centre !== "pits") area[centre] = true;
     }
     // R33c: an area whose sentence is a terrain effect lasts on the map and carries what its spaces are
     // (Morrigan's Dark Wing p.171, "a small blast terrain effect in range 3. The area is dangerous terrain for
@@ -232,10 +232,10 @@ export function areasInText(text) {
 /**
  * Whom the rest of an area's sentence centres it on: "target" for "centered on
  * them / the character / your foe / your ally / the attack target", "self" for
- * "centered on you", else "" (the area is placed in range as usual). "Them"
- * after objects ("all pits in the area explode … centered on them", Holy's
- * Talent I; Helix Heel's objects) and "it" (Geyser's geyser) are things on the
- * map, not a token to target: left to placing by hand.
+ * "centered on you", "pits" for "them" after pits ("all pits in the area
+ * explode … centered on them", Holy's Talent I, R49), "object" for "them" after
+ * objects (Helix Heel) and "it" (Geyser's geyser), else "" (the area is placed
+ * in range as usual; plants / nails / clouds are still left to placing by hand).
  * @param {string} before  the sentence before the shape, lower case
  * @param {string} rest    the sentence after the shape, lower case
  */
@@ -250,7 +250,11 @@ function centreOf(before, rest) {
   if (!m) return "";
   if (m[1] === "it") return "object";
   if (m[1] === "them" && /\b(?:objects?|boulders?|geysers?|aethershards?|shards?)\b/.test(before)) return "object";
-  if (m[1] === "them" && /\b(?:pits?|plants?|nails?|clouds?)\b/.test(before)) return "";
+  // R49: "all pits in the area explode for a medium blast area effect, centered on them" (Holy Talent I and
+  // Pandaemonium's PURGATORIO, p.177): one blast on every pit inside the ability's area ("pits", placed by
+  // pitBlastCells). Plants / nails / clouds are still placed by hand.
+  if (m[1] === "them" && /\bpits?\b/.test(before)) return "pits";
+  if (m[1] === "them" && /\b(?:plants?|nails?|clouds?)\b/.test(before)) return "";
   return /^you(?:rself)?$/.test(m[1]) ? "self" : "target";
 }
 
@@ -834,6 +838,13 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // R33c: several areas of the same ability at once ("you cannot have more than three areas active", Gust's
   // NORTHSOUL p.234; "Create a second cloud", Mist Strider p.170): ask before placing instead of replacing.
   let removeIds = null;   // null = the usual replacement of every earlier one
+  // R49: the pits' explosion (Holy Talent I, PURGATORIO, p.177) is an area effect set off inside the
+  // ability's own area: that area stays on the map, only an earlier explosion of the same ability is replaced.
+  const pitBlast = area?.centeredOn === "pits";
+  if (pitBlast) {
+    lasting = false; terrain = null; stack = 1;
+    removeIds = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => t.flags[FLAG_NS].pitBlast).map(t => t.id);
+  }
   if (replace && stack > 1) {
     const earlier = findAreaTemplates({ actorId: actor.id, abilityKey })
       .filter(t => !t.flags[FLAG_NS].followTokenId)
@@ -889,7 +900,12 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   const centre = area.centeredOn === "self" ? token
     : area.centeredOn === "target" && !isAura && !atSpace ? centreTargetToken(token)
     : area.centeredOn === "object" && !isAura && !atSpace ? centreObjectToken(token) : null;
-  if (centre) {
+  if (pitBlast) {
+    const blown = pitBlastCells({ actor, abilityKey, area });
+    if (!blown) return null;
+    ({ cells, origin: originCell } = blown);
+    area.label = `${area.label} × ${blown.pits}`;
+  } else if (centre) {
     const centreCells = tokenCells(centre.document);
     if (area.kind === "burst") {
       cells = cellsInRange(centreCells, area.size).concat(centreCells);
@@ -954,6 +970,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       expiry,
       // Removed with the mark it depends on ("while marked")
       ...(whileMarked ? { whileMarked } : {}),
+      // R49: the pits' explosion, not the ability's own area (pitBlastCells looks past it)
+      ...(pitBlast ? { pitBlast: true } : {}),
       // R33c: a terrain effect's spaces (dangerous, difficult, what entering sets off), read at movement by
       // terrain-spaces.mjs as for its single spaces
       ...(terrain && !isAura ? { terrain: { group: "", source: "", ...terrain, kind: "area", creatorId: actor.id, itemId: abilityKey ?? "" } } : {}),
@@ -1056,6 +1074,50 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
   ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first line.`);
   const placed = await new AreaPlacement({ area: second, sourceCells: [end], rangeCells: starts, originInRange: true, check }).run();
   return placed?.cells ?? null;
+}
+
+/**
+ * R49: the spaces of "all pits in the area explode for a medium blast area
+ * effect, centered on them" (Holy Talent I, Pandaemonium's PURGATORIO, p.177).
+ * "The area" is this ability's own area already on the map (the newest one of
+ * this actor and ability that is not a pit, an aura or an earlier explosion;
+ * Holy's area is kept as a terrain effect, so those count); every pit space (terrain-spaces.mjs, `terrain.pit`) inside it
+ * gets a blast of `area`'s size centred on it, and the blasts are joined into
+ * one set of spaces: "characters in at least one area" are hit once each.
+ * Warns and resolves null when there is no such area or no pit inside it.
+ * @returns {{cells:Array<{i:number,j:number}>, origin:{i:number,j:number}, pits:number}|null}
+ */
+function pitBlastCells({ actor, abilityKey, area }) {
+  const own = findAreaTemplates({ actorId: actor.id, abilityKey })
+    .filter(t => { const f = t.flags[FLAG_NS]; return !f.pitBlast && !f.terrain?.pit && !f.followTokenId && f.area?.kind !== "space" && f.area?.kind !== "aura"; })
+    .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0));
+  if (!own.length) {
+    ui.notifications.warn("All pits in the area explode: place this ability's area first (its attack), then the pits' blasts.");
+    return null;
+  }
+  const inArea = new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
+  const pits = [];
+  const seenPit = new Set();
+  for (const t of canvas.scene.templates) {
+    const f = t.flags?.[FLAG_NS];
+    if (!f?.terrain?.pit) continue;
+    for (const c of f.cells ?? []) {
+      const k = cellKey(c);
+      if (inArea.has(k) && !seenPit.has(k)) { seenPit.add(k); pits.push({ i: c.i, j: c.j }); }
+    }
+  }
+  if (!pits.length) {
+    ui.notifications.warn("No pit inside this ability's area: nothing explodes.");
+    return null;
+  }
+  const blast = { kind: area.kind, size: area.size };
+  const seen = new Set();
+  const cells = [];
+  for (const p of pits) for (const c of shapeCells(blast, p)) {
+    const k = cellKey(c);
+    if (!seen.has(k)) { seen.add(k); cells.push(c); }
+  }
+  return { cells, origin: pits[0], pits: pits.length };
 }
 
 /**

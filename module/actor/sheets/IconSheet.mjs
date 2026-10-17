@@ -2483,7 +2483,8 @@ export class IconSheet extends BaseActorSheet {
     const opts = this.#areaPlacementOpts(ab, area);
     const placed = await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, text: this.#auraText(ab), ...opts });
     // R33c: Tsunami's edge, the moves and growth it has (area-motion.mjs).
-    if (placed?.template && opts.lasting) await afterAreaPlaced(placed.template, this.document, this.document.items.get(ab.id));
+    // (Not the pits' blasts, R49: an area effect that is gone once resolved.)
+    if (placed?.template && opts.lasting && area.centeredOn !== "pits") await afterAreaPlaced(placed.template, this.document, this.document.items.get(ab.id));
   }
 
   /**
@@ -2557,8 +2558,9 @@ export class IconSheet extends BaseActorSheet {
     // not the attack's area: the attack keeps its target and the area goes
     // down with the area button. Placing it here retargeted the area instead.
     const allVariants = this._areaVariantsFor(ab);
-    // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character.
-    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object";
+    // The same for an area set off after the attack (Death's Slay, p.155) or centred on a character,
+    // and the pits' blasts inside the attack's area (R49: Holy Talent I, PURGATORIO, p.177).
+    const notTheAttack = (a) => a?.fromTarget || a?.afterAttack || a?.centeredOn === "target" || a?.centeredOn === "object" || a?.centeredOn === "pits";
     const attackVariants = allVariants.filter(v => v.area?.kind !== "aura" && !notTheAttack(v.area));
     const noAttackArea = !attackVariants.length && allVariants.some(v => notTheAttack(v.area));
     if (canvas?.ready && this.document.getActiveTokens().length && !findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id }).length) {
