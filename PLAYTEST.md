@@ -1675,68 +1675,63 @@ Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy 
 - [ ] **Copia nuova**: trascina il job Demon Slayer (o il Limit Break) dal compendio Jobs su un PG nuovo → stesso testo.
 - [ ] **Altri elenchi invariati**: Eclipse, Raging Wolf, March of the Saints mostrano le righe "•" come prima.
 
-## voce emersa su R33b — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (17 ottobre 2026, versione 1.15.78)
+## Emerso R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (17 ottobre 2026, versione 1.15.86)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Su una mappa con due portali, porta un token accanto a un portale e avvia "Teleport here". Con gli spazi
-      evidenziati, clic destro **sopra un token**: la scelta si chiude senza spostare nessuno e l'HUD del token
-      **non** si apre.
-- [ ] Stessa prova con "Erupt" e con "Move" dello shard: come sopra.
-- [ ] Avvia di nuovo la scelta e chiudila con Esc: si chiude come prima.
-- [ ] Clic sinistro su uno spazio evidenziato: l'oggetto o il token va lì come prima; su uno spazio non evidenziato
-      compare ancora "Pick one of the highlighted spaces".
-- [ ] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
+- [ ] **Auto-hit con Blast**: un'abilità auto-hit con Blast e uno status nell'Hit/Effect (es. Holy o Astra con il
+      combo token), Blast piazzato con un foe al centro e altri due dentro → nessun dialog in più. Nella card la riga
+      dell'area dice "attack: <centro> · area: …". Nell'Inflict il foe al centro viene per primo con "(attack target)"
+      e i bottoni dell'attacco, gli altri hanno "(area)" e solo il blocco Area. Il dialog del danno che segue ha già
+      il token al centro come bersaglio d'attacco.
+- [ ] **Auto-hit con Blast, centro vuoto o Line**: con lo spazio centrale vuoto (o un'auto-hit con Line) e due o più
+      token dentro → si apre il dialog "Attack target — <abilità>" con un radio per token. Conferma → la card divide
+      le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno.
+- [ ] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima.
+- [ ] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
+      in Chat della stessa abilità → righe divise come sulla card d'attacco. Senza area sulla mappa e con più bersagli
+      → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata.
 
-## voce emersa su R62 — Avvio del combat senza promemoria "End of round 0" (17 ottobre 2026, versione 1.15.79)
-
-Setup: solo codice (F5 basta).
-
-- [ ] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
-      "End of round 0" né "Tick the Paleblood die up by 1".
-- [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
-      round 1).
-- [ ] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
-      una volta sola, insieme al promemoria R62 del round 2.
-- [ ] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round.
-- [ ] Riserve dell'Encounter Designer previste a fine round 2: al passaggio al round 3 arriva al GM "Reserves due —
-      end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
-- [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
-
-## voce emersa su R48 — L'aura di Fulminate finisce con il mark (17 ottobre 2026, versione 1.15.80)
+## Emerso R42 — Wish, mastery: Unstoppable all'alleato, non a te (17 ottobre 2026, versione 1.15.85)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Fulminate, due foe sulla scena. Bersaglia il foe A → Mark: compare "Marked — Fulminate" su A. Con A
-      ancora bersagliato, bottone area di Fulminate → Aura 2: l'aura va attorno ad A e lo segue quando si muove.
-- [ ] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark.
-- [ ] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
-      sparisce (quella di B si piazza a mano con il bottone area).
-- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce.
-- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark.
-- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento.
-- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso.
-- [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
-      data a un alleato restano dove sono quando si toglie un mark qualsiasi.
+- [ ] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
+      bottoni per gli alleati, "Defiance" senza durata e "Unstoppable" con "until the end of their next turn". Nessun
+      Unstoppable su di te.
+- [ ] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
+      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza.
+- [ ] Con la mastery bloccata i due bottoni non compaiono.
+- [ ] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
+      all'alleato) come prima.
 
-## voce emersa su R38b — L'infusione armata non sopravvive al combattimento (17 ottobre 2026, versione 1.15.81)
+## Emerso R49 — Aria: la blast cresciuta resta centrata su di te (17 ottobre 2026, versione 1.15.84)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Wright in combattimento con almeno 3 Aether: premi un tasto Infuse di un'abilità (es. "Infuse 3") senza tirarla
-      → il tasto appare armato e l'Aether scende.
-- [ ] "End Encounter" → conferma "Sì" → Aether a 0; sulla scheda nessuna infusione resta armata e la card
-      dell'abilità, se la usi, è quella base.
-- [ ] Nuovo combattimento, usa la stessa abilità: nella card non compare la versione infusa.
-- [ ] Ripeti con un'infusione del Limit Break (es. TETRAFLARE): dopo "End Encounter" il pannello del Limit Break non
-      la mostra più armata.
-- [ ] Con Inner Furnace: arma un'infusione sacrificando gli hp, poi "End Encounter": gli hp sacrificati NON tornano e
-      nessun messaggio dice "Aether returned".
-- [ ] Controprova: arma un'infusione e premi di nuovo il tasto prima di finire il combattimento: l'annullamento
-      rimborsa ancora Aether e hp (R64).
-- [ ] "End Encounter" → "No": l'infusione resta armata.
+- [ ] Un PG Chanter con Aria, il suo token in scena, due o tre token intorno. Bottone area di Aria: il dialogo offre
+      Small Blast (self), Medium Blast (self) e Large Blast (self).
+- [ ] Scegli Medium Blast (self): l'area compare subito centrata sul token del Chanter (niente clic sulla mappa); la
+      notifica elenca chi è dentro.
+- [ ] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
+      viene sostituita.
+- [ ] Small Blast (self) funziona ancora come prima.
+- [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
+      si piazza ancora a mano nella sua portata.
 
-## voce emersa su R37 — L'Ultimate dei Limit Break compare su scheda e card (17 ottobre 2026, versione 1.15.82)
+## Emerso R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (17 ottobre 2026, versione 1.15.83)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Incubus (Shade). Combo token pieno (combo armata), un foe bersagliato, Damage Roll su Incubus: "Combo
+      version" spuntato, la riga sotto dice [D] + fray (non "3 flat"); Hit = [D]+fray, Miss = fray.
+- [ ] Nello stesso dialogo scegliere **Other**: c'è il chip "Combo — Succubus" con "3 flat". Cliccarlo: Fixed damage =
+      3, Dice 0, niente Fray, niente Area. Roll Damage: la card dice 3 danni con l'etichetta della combo.
+- [ ] Senza combo token: Damage Roll su Incubus dà [D]+fray su Hit come prima.
+- [ ] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
+      Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima.
+
+## Emerso R37 — L'Ultimate dei Limit Break compare su scheda e card (17 ottobre 2026, versione 1.15.82)
 
 Setup: solo codice (F5 basta).
 
@@ -1754,61 +1749,66 @@ Setup: solo codice (F5 basta).
       vuoto, e la card resta come prima.
 - [ ] Il Damage Roll non cambia: al capitolo 3 propone ancora il danno dell'Ultimate sotto Other, al capitolo 1 no.
 
-## voce emersa su R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (17 ottobre 2026, versione 1.15.83)
+## Emerso R38b — L'infusione armata non sopravvive al combattimento (17 ottobre 2026, versione 1.15.81)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Incubus (Shade). Combo token pieno (combo armata), un foe bersagliato, Damage Roll su Incubus: "Combo
-      version" spuntato, la riga sotto dice [D] + fray (non "3 flat"); Hit = [D]+fray, Miss = fray.
-- [ ] Nello stesso dialogo scegliere **Other**: c'è il chip "Combo — Succubus" con "3 flat". Cliccarlo: Fixed damage =
-      3, Dice 0, niente Fray, niente Area. Roll Damage: la card dice 3 danni con l'etichetta della combo.
-- [ ] Senza combo token: Damage Roll su Incubus dà [D]+fray su Hit come prima.
-- [ ] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
-      Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima.
+- [ ] Wright in combattimento con almeno 3 Aether: premi un tasto Infuse di un'abilità (es. "Infuse 3") senza tirarla
+      → il tasto appare armato e l'Aether scende.
+- [ ] "End Encounter" → conferma "Sì" → Aether a 0; sulla scheda nessuna infusione resta armata e la card
+      dell'abilità, se la usi, è quella base.
+- [ ] Nuovo combattimento, usa la stessa abilità: nella card non compare la versione infusa.
+- [ ] Ripeti con un'infusione del Limit Break (es. TETRAFLARE): dopo "End Encounter" il pannello del Limit Break non
+      la mostra più armata.
+- [ ] Con Inner Furnace: arma un'infusione sacrificando gli hp, poi "End Encounter": gli hp sacrificati NON tornano e
+      nessun messaggio dice "Aether returned".
+- [ ] Controprova: arma un'infusione e premi di nuovo il tasto prima di finire il combattimento: l'annullamento
+      rimborsa ancora Aether e hp (R64).
+- [ ] "End Encounter" → "No": l'infusione resta armata.
 
-## voce emersa su R49 — Aria: la blast cresciuta resta centrata su di te (17 ottobre 2026, versione 1.15.84)
-
-Setup: solo codice (F5 basta).
-
-- [ ] Un PG Chanter con Aria, il suo token in scena, due o tre token intorno. Bottone area di Aria: il dialogo offre
-      Small Blast (self), Medium Blast (self) e Large Blast (self).
-- [ ] Scegli Medium Blast (self): l'area compare subito centrata sul token del Chanter (niente clic sulla mappa); la
-      notifica elenca chi è dentro.
-- [ ] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
-      viene sostituita.
-- [ ] Small Blast (self) funziona ancora come prima.
-- [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
-      si piazza ancora a mano nella sua portata.
-
-## voce emersa su R42 — Wish, mastery: Unstoppable all'alleato, non a te (17 ottobre 2026, versione 1.15.85)
+## Emerso R48 — L'aura di Fulminate finisce con il mark (17 ottobre 2026, versione 1.15.80)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
-      bottoni per gli alleati, "Defiance" senza durata e "Unstoppable" con "until the end of their next turn". Nessun
-      Unstoppable su di te.
-- [ ] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
-      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza.
-- [ ] Con la mastery bloccata i due bottoni non compaiono.
-- [ ] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
-      all'alleato) come prima.
+- [ ] PG con Fulminate, due foe sulla scena. Bersaglia il foe A → Mark: compare "Marked — Fulminate" su A. Con A
+      ancora bersagliato, bottone area di Fulminate → Aura 2: l'aura va attorno ad A e lo segue quando si muove.
+- [ ] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark.
+- [ ] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
+      sparisce (quella di B si piazza a mano con il bottone area).
+- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce.
+- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark.
+- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento.
+- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso.
+- [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
+      data a un alleato restano dove sono quando si toglie un mark qualsiasi.
 
-## voce emersa su R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (17 ottobre 2026, versione 1.15.86)
+## Emerso R62 — Avvio del combat senza promemoria "End of round 0" (17 ottobre 2026, versione 1.15.79)
 
 Setup: solo codice (F5 basta).
 
-- [ ] **Auto-hit con Blast**: un'abilità auto-hit con Blast e uno status nell'Hit/Effect (es. Holy o Astra con il
-      combo token), Blast piazzato con un foe al centro e altri due dentro → nessun dialog in più. Nella card la riga
-      dell'area dice "attack: <centro> · area: …". Nell'Inflict il foe al centro viene per primo con "(attack target)"
-      e i bottoni dell'attacco, gli altri hanno "(area)" e solo il blocco Area. Il dialog del danno che segue ha già
-      il token al centro come bersaglio d'attacco.
-- [ ] **Auto-hit con Blast, centro vuoto o Line**: con lo spazio centrale vuoto (o un'auto-hit con Line) e due o più
-      token dentro → si apre il dialog "Attack target — <abilità>" con un radio per token. Conferma → la card divide
-      le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno.
-- [ ] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima.
-- [ ] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
-      in Chat della stessa abilità → righe divise come sulla card d'attacco. Senza area sulla mappa e con più bersagli
-      → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata.
+- [ ] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
+      "End of round 0" né "Tick the Paleblood die up by 1".
+- [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
+      round 1).
+- [ ] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
+      una volta sola, insieme al promemoria R62 del round 2.
+- [ ] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round.
+- [ ] Riserve dell'Encounter Designer previste a fine round 2: al passaggio al round 3 arriva al GM "Reserves due —
+      end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
+- [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
+
+## Emerso R33b — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (17 ottobre 2026, versione 1.15.78)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Su una mappa con due portali, porta un token accanto a un portale e avvia "Teleport here". Con gli spazi
+      evidenziati, clic destro **sopra un token**: la scelta si chiude senza spostare nessuno e l'HUD del token
+      **non** si apre.
+- [ ] Stessa prova con "Erupt" e con "Move" dello shard: come sopra.
+- [ ] Avvia di nuovo la scelta e chiudila con Esc: si chiude come prima.
+- [ ] Clic sinistro su uno spazio evidenziato: l'oggetto o il token va lì come prima; su uno spazio non evidenziato
+      compare ancora "Pick one of the highlighted spaces".
+- [ ] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
 
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
