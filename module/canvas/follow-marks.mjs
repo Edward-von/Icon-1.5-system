@@ -189,6 +189,7 @@ async function endFollowMark(tpl) {
 /**
  * End of `prev`'s turn (active GM, from IconCombat): Amico's "You can gamble at the end of any turn after yours to
  * detonate it" — a card, to the creator's owners and the GM, with Detonate. Not at the end of the creator's turn.
+ * Only the latest card stays in the chat: the previous turn's one, unused, is deleted.
  * @param {Combatant} prev
  */
 export async function followMarkTurnEnd(prev) {
@@ -201,8 +202,12 @@ export async function followMarkTurnEnd(prev) {
     const { td } = holderOf(tpl);
     if (!creator || !td) continue;
     const whisper = game.users.filter(u => u.isGM || creator.testUserPermission(u, "OWNER")).map(u => u.id);
+    // One Detonate card at a time: the one of the previous turn, not used, goes when the new one comes.
+    const old = game.messages.filter(m => m.getFlag(NS, "detonateFor") === tpl.uuid).map(m => m.id);
+    if (old.length) { try { await ChatMessage.deleteDocuments(old); } catch (err) { console.warn("[ICON | FollowMarks] could not remove the old Detonate card", err); } }
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: creator }), whisper,
+      flags: { [NS]: { detonateFor: tpl.uuid } },
       content: `<div class="icon-chat-card icon-chat-card--terrain">
           <p><strong><i class="fa-solid fa-bomb"></i> ${esc(tpl.flags[NS].abilityName)}</strong> <small>(${esc(f.source)})</small>: end of ${esc(prev.name ?? prev.actor?.name ?? "")}'s turn — ${esc(creator.name)} may gamble to detonate the ${esc(String(f.name || "mark").toLowerCase())} on <strong>${esc(td.name)}</strong>.</p>
           <p><small>${esc(f.rules)}</small></p>

@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Amico: una sola card Detonate in chat (versione 1.15.156)
+
+### Round di debug del 15 ottobre, R33d2
+
+- **Detonate di Amico**: a ogni fine turno non del creatore si accumulava una card sussurrata nuova, anche se nessuno
+  voleva farla esplodere → ogni turno creava una card in più → ogni nuova card cancella la precedente non usata dello
+  stesso mark, quindi in chat ce n'è solo una, l'ultima. Solo codice.
+
 ## 17 ottobre 2026 — Segno sul personaggio: il token giusto su più scene (versione 1.15.155)
 
 ### Round di debug del 15 ottobre, R33d2
