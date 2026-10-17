@@ -519,10 +519,13 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.95: una nuova area dell'abilità sulla mappa fa dimenticare il bersaglio
       scelto per l'area precedente; il tiro che piazza l'area sceglie dopo, quindi la sua scelta resta; l'esplosione
       dei pit non la azzera. Solo codice.)
-- [ ] **Emerso lavorando su R33a3 — Aethershard: il danno dello shard letto come danno dell'abilità** (S, da
+- [x] **Emerso lavorando su R33a3 — Aethershard: il danno dello shard letto come danno dell'abilità** (S, da
       verificare): `parseAbilityDamage` sulla descrizione di Aethershard (vecchia e nuova forma) dà `dealsDamage: true`
       con Hit 2 piercing, cioè i "2 piercing damage" del Summon Effect (che li infligge l'area che include lo shard, non
       l'abilità che lo evoca). Controllare se la scheda mostra un bottone danno su Aethershard e, se sì, toglierlo.
+(FATTO il 17 ottobre 2026, versione 1.15.101: confermato; sulla scheda PG il danno dentro "Summon Effect:" / "Object
+      Effect:" non è più danno dell'abilità, quindi Aethershard non ha più il bottone danno; foe e legend invariati;
+      nel pack jobs cambia solo Aethershard. Solo codice.)
 - [ ] **Emerso lavorando su R37 — status degli Infuse non armati sulla card del Limit Break** (S, da decidere): la
       card di "Use Limit Break" legge gli status da tutto il testo dell'effetto e dell'Ultimate, comprese le versioni
       Infuse non armate: se una versione Infuse nomina uno status, i bottoni compaiono anche senza infonderla (oggi

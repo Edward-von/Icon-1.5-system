@@ -82,9 +82,26 @@ function _masteryRetype(s) {
  * fields default to zeros and no dice.
  * `opts.baseBlocks` (a PC ability on the PC sheet): the damage written in the
  * description's other blocks (Mark, Effect, …) is listed under "Other" too.
+ * The damage inside a "Summon Effect:" / "Object Effect:" block is left out
+ * there: the summon or object the ability creates deals it later, not the
+ * ability. Aethershard (p.210-211): "Summon Effect: When you include the
+ * Aethershard in the area effect of any ability … dealing 2 piercing damage"
+ * — the resonance card deals it when an area catches the shards. Foe and
+ * legend actions keep reading it: their Damage button is how the GM rolls a
+ * torpedo's or a munition's blast.
  */
+// A "Summon Effect:" / "Object Effect:" block, up to the end of its paragraph
+// (a new line, or "</p>" in an HTML text) or the next label that opens a
+// block of the ability itself.
+const SUMMON_EFFECT_BLOCK = /\b(?:summon|object)\s+effect\s*:[^\n]*?(?=\n|<\/p>|[\s>](?:summon\s+action|(?:area\s+|terrain\s+)?effect|attack|on\s+hit|auto[-\s]?hit|miss|infuse\s+(?:\d+|x)|charge|heroic|exceed|collide|slay|critical|comeback|finishing\s+blow)\s*:|$)/gi;
+
 export function parseAbilityDamage(itemSystem, { baseBlocks = false } = {}) {
-  const s = itemSystem ?? {};
+  const s0 = itemSystem ?? {};
+  // Object.create, not a spread: the system can be a data model, or already a
+  // shadowing copy (withActiveCombo) whose fields sit on its prototype.
+  const s = baseBlocks && typeof s0.description === "string" && s0.description.search(SUMMON_EFFECT_BLOCK) >= 0
+    ? Object.create(s0, { description: { value: s0.description.replace(SUMMON_EFFECT_BLOCK, " "), enumerable: true } })
+    : s0;
   const isAttack = !!s.isAttack;
 
   const combined = [

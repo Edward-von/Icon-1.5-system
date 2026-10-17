@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aethershard senza bottone danno (versione 1.15.101)
+
+### Round di debug del 16 ottobre, voce emersa su R33a3
+
+- **Aethershard: bottone "Damage Roll" sull'abilità**: la scheda offriva un tiro danno Hit 2 piercing su Aethershard →
+  il parser del danno, non trovando "On hit:" né "Area Effect:", leggeva tutta la descrizione e prendeva i "2 piercing
+  damage" del Summon Effect, che li infligge lo shard quando un'area lo include (p.210-211), non l'abilità → sulla
+  scheda del personaggio il danno scritto dentro un blocco "Summon Effect:" / "Object Effect:" non conta più come
+  danno dell'abilità, né come Hit né come voce sotto Other; il danno della risonanza resta sulla sua carta; le azioni
+  di foe e legend continuano a leggerlo (lì il bottone serve al GM per torpedo, munition e simili). Su tutte le 703
+  combinazioni del pack jobs cambia solo Aethershard. Solo codice.
+
 ## 17 ottobre 2026 — Il danno dei blocchi Mark / Effect della base si tira da Other (versione 1.15.100)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

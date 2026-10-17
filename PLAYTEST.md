@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33a3 — Aethershard senza bottone danno (17 ottobre 2026, versione 1.15.101)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Aethershard (Enochian): nel tab Combat l'abilità non ha più il bottone "Damage Roll"; la carta in chat e
+      il piazzamento dello shard funzionano come prima.
+- [ ] Un'area di un'altra abilità che copre uno shard chiede ancora la risonanza e la carta danno fa 2 piercing per
+      shard.
+- [ ] Altre abilità con danno (es. Dropkick, Harvest Moon con talento, un'abilità con Infuse) hanno ancora il loro
+      bottone danno con gli stessi valori; Incubus ha ancora la chip "Mark 2" in Other.
+- [ ] Foe Azurian Weapon, azione Torpedo: il bottone danno c'è ancora ([D]+fray).
+
 ## Emerso R40 — Il danno dei blocchi Mark / Effect della base si tira da Other (17 ottobre 2026, versione 1.15.100)
 
 Setup: solo codice (F5 basta).
