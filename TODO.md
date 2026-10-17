@@ -1638,10 +1638,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
       "Interrupt N: Trigger: … Effect: …" vengono letti, un tratto con un trigger di danno comparirebbe anche sulla
       card del danno. Non è stato controllato quali tratti dei PG lo fanno.
-- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent II, danni fuori dalla finestra** (S): il "bonus damage from all
+- [x] **Emerso lavorando su R33b2 — Deepwrath Talent II, danni fuori dalla finestra** (S): il "bonus damage from all
       sources" si aggiunge solo nella finestra del danno. I danni fissi (terreno pericoloso, bottoni delle card con
       danno fisso) non lo ricevono, e se un pit viene cancellato mentre il foe ci sta sopra non arriva la card per
       togliere Shattered+.
+(FATTO il 17 ottobre 2026, versione 1.15.210: la parte del pit cancellato; il bonus damage sui danni fissi è una voce
+      a parte da decidere)
 - [ ] **Emerso lavorando su R33b2 — Elden Rune, il +3 al range e GREAT RUNE** (S, da decidere): il "+3 range" mentre
       si sta sulla rune (e per gli alleati sull'Arkenrune) e lo shatter di GREAT RUNE restano solo testo. Domanda per
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
@@ -1652,6 +1654,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - nessuno
 - nessuno
+- [ ] **Emerso lavorando su R33b2 — Deepwrath Talent II, bonus damage sui danni fissi** (S, da decidere): il "bonus
+      damage from all sources" (p.235) si aggiunge solo nella finestra del danno. Il libro dice che "bonus damage"
+      vuol dire tirare un dado in più e tenere il più alto (p.95), ma per i danni fissi senza dado (terreno
+      pericoloso, bottoni "2 damage" delle card) non dice cosa succede. Domanda per Edoardo: li lasciamo senza bonus,
+      come oggi, o vuoi una regola tua (per esempio +1 danno, o solo un promemoria nella card)?
 
 ---
 

@@ -1656,6 +1656,15 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (17 ottobre 2026, versione 1.15.210)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Nemico marchiato da Deepwrath con Talent II, dentro un pit, con Shattered+: cancella il pit dalla card o con
+      Canc. Arriva una card con il bottone "Remove Shattered".
+- [ ] Stessa prova con un nemico in volo (elevazione > 0) o senza marchio: nessuna card.
+- [ ] Nemico su due pit sovrapposti: ne togli uno solo, nessuna card, perché è ancora dentro un pit.
+
 ## Emerso R33 — Lo shove di Implode bloccato segnala la collisione (17 ottobre 2026, versione 1.15.209)
 
 Setup: solo codice (F5 basta).

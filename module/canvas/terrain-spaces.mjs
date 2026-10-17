@@ -1767,6 +1767,18 @@ export function registerTerrainSpaceHooks() {
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });
+  // Deepwrath Talent II (p.235) "shattered+ while inside pits": a pit removed under a marked foe (Remove, Delete on
+  // the map) takes them out of it — the card to remove Shattered. Active GM only, so the card comes once.
+  Hooks.on("deleteMeasuredTemplate", (doc) => {
+    if (game.users.activeGM?.id !== game.user.id || !terrainFlag(doc)?.pit) return;
+    const scene = doc.parent;
+    const keys = new Set((doc.flags[NS].cells ?? []).map(cellKey));
+    if (!scene || !keys.size) return;
+    for (const td of scene.tokens) {
+      if (!td.actor || isMapObject(td) || (Number(td.elevation) || 0) > 0 || !touches(cellsOf(td), keys)) continue;
+      offerPitShatter(td, true, tokenInPit(td)).catch(err => console.warn("[ICON | TerrainSpaces] pit shatter offer failed", err));
+    }
+  });
 
   // R33c2: the status buttons of a terrain-effect area entered or left (offerInsideEffects).
   Hooks.on("renderChatMessageHTML", (_message, html) => {

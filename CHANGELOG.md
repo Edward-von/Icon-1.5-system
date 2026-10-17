@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (versione 1.15.210)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Deepwrath Talent II, pit cancellato**: se si cancellava un pit mentre un nemico marchiato ci stava sopra, non
+  arrivava la card per togliere Shattered+ → il controllo partiva solo quando il token si muoveva o quando un pit
+  veniva creato → ora, quando un pit viene cancellato (bottone Remove o Canc sulla mappa), il GM attivo manda la card
+  con "Remove Shattered" a chi era dentro (p.235). Solo codice.
+
 ## 17 ottobre 2026 — Lo shove di Implode bloccato segnala la collisione (versione 1.15.209)
 
 ### Round di debug del 15 ottobre, voce emersa su R33
