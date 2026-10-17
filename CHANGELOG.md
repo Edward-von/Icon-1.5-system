@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — La × e il badge combo tornano sui riquadri delle abilità (versione 1.15.177)
+
+### Round di debug del 15 ottobre, voce emersa su R5
+
+- **× e combo sui riquadri pieni**: sui riquadri delle abilità equipaggiate non compariva mai la × per togliere
+  l'abilità, e il badge combo (fulmine) non si accendeva con il gettone combo attivo → dentro il blocco `{{#with}}`
+  del riquadro, `../isEditable`, `../abilitiesLocked` e `../comboActive` puntavano al numero del riquadro invece che
+  alla scheda → ora li legge con `@root.` (`templates/actor/icon-combat.hbs`). Solo codice.
+
 ## 17 ottobre 2026 — Le caselle di terreno guardano anche gli spazi attraversati (versione 1.15.176)
 
 ### Round di debug del 15 ottobre, R33b2

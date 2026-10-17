@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R5 — La × e il badge combo tornano sui riquadri delle abilità (17 ottobre 2026, versione 1.15.177)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Scheda PG, tab Combat, abilità sbloccate (lucchetto aperto): su ogni riquadro pieno compare la × in angolo;
+      cliccandola l'abilità esce dal riquadro.
+- [ ] Con il lucchetto chiuso ("Locked") la × sparisce dai riquadri.
+- [ ] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×.
+- [ ] Con un'abilità combo in un riquadro: COMBO OFF, il badge fulmine è spento; spunta COMBO ON, il badge sul
+      riquadro si accende.
+
 ## R33b2 — Le caselle di terreno guardano anche gli spazi attraversati (17 ottobre 2026, versione 1.15.176)
 
 Setup: solo codice (F5 basta).

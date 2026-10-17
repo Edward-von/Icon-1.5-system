@@ -1422,10 +1422,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       sulla mappa, `foe-summons.mjs` copia `sm.rules` in `system.summonEffect` dell'attore Summon e `SummonSheet` lo
       passa a `enrichHTML` così com'è, quindi lì l'elenco resta su una riga; usare `summonRulesHTML` anche per
       `enrichedSummonEffect`, o al momento della copia.
-- [ ] **Emerso lavorando su R5 — × e combo acceso sui riquadri pieni** (S): in `icon-combat.hbs`, dentro il
+- [x] **Emerso lavorando su R5 — × e combo acceso sui riquadri pieni** (S): in `icon-combat.hbs`, dentro il
       `{{#with}}` dei riquadri pieni, `../isEditable`, `../abilitiesLocked` e `../comboActive` puntano al numero del
       riquadro e non alla scheda, quindi la × per togliere l'abilità dal riquadro non compare mai e il badge combo non
       si accende; usare `@root.` (verificato con Handlebars 4.7.8).
+(FATTO il 17 ottobre 2026, versione 1.15.177: × e badge combo sui riquadri pieni leggono i dati della scheda con
+      @root.)
 - [ ] **Emerso lavorando su R16 — mastery che fanno scattare l'Exceed** (S/M): BLOOD FESTIVAL di Matsuri ("triggers
       all exceed effects" al primo uso nel combattimento) e BURIAL FIST di Open the Gates ("always triggers exceed
       effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
@@ -1489,6 +1491,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33b2 — esplosione a metà percorso** (S): una mote di Symphony attraversata esplode
       "centered on them" (p.178), ma il token ha già finito il movimento: la Small Blast va dove si è fermato, non
       sulla mote attraversata.
+- nessuno
 
 ---
 
