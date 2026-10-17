@@ -414,9 +414,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       il libro (p.210-211) "the ability resonates with the shards, dealing 2 piercing damage as an area effect … Then
       destroy all Aethershards activated this way and gain 1 Aether". Il codice di R33a3 legge tutte e due le forme;
       ripristinare il testo del libro (pack + migrazione sulle copie).
-- [ ] **Emerso lavorando su R33b — clic destro durante la scelta di uno spazio degli oggetti** (S): `pickSpace` di
+- [x] **Emerso lavorando su R33b — clic destro durante la scelta di uno spazio degli oggetti** (S): `pickSpace` di
       `map-objects.mjs` (Teleport here, Erupt, Move dello shard) chiude la scelta col clic destro ma non ferma l'evento: sopra
       un token potrebbe aprirsi anche l'HUD del token. Il picker nuovo di `terrain-spaces.mjs` lo ferma (`stopPropagation`).
+(FATTO il 17 ottobre 2026, versione 1.15.78: in pickSpace di map-objects.mjs il clic destro chiama stopPropagation
+      prima di chiudere la scelta, come pickSpaces di terrain-spaces.mjs.)
 - [ ] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, regola): MJÖLLNIR (p.227) "Create
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la

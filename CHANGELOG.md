@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (versione 1.15.78)
+
+### Round di debug del 16 ottobre, voce emersa su R33b
+
+- **Clic destro nella scelta di uno spazio degli oggetti della mappa**: durante "Teleport here", "Erupt" o "Move"
+  dello shard il clic destro chiudeva la scelta, ma se sotto il cursore c'era un token si apriva anche il suo HUD →
+  `pickSpace` (`module/canvas/map-objects.mjs`) chiudeva la scelta senza fermare l'evento, che proseguiva fino al
+  token (il clic sinistro invece veniva già fermato) → ora il clic destro viene fermato anche lui (`stopPropagation`),
+  come fa già la scelta degli spazi del terreno in `terrain-spaces.mjs`.
+
 ## 17 ottobre 2026 — Tre Limit Break riallineati al libro (versione 1.15.77)
 
 ### Round di debug del 16 ottobre, voce emersa su R39

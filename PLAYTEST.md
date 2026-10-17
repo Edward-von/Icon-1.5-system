@@ -1675,6 +1675,19 @@ Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy 
 - [ ] **Copia nuova**: trascina il job Demon Slayer (o il Limit Break) dal compendio Jobs su un PG nuovo → stesso testo.
 - [ ] **Altri elenchi invariati**: Eclipse, Raging Wolf, March of the Saints mostrano le righe "•" come prima.
 
+## voce emersa su R33b — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (17 ottobre 2026, versione 1.15.78)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Su una mappa con due portali, porta un token accanto a un portale e avvia "Teleport here". Con gli spazi
+      evidenziati, clic destro **sopra un token**: la scelta si chiude senza spostare nessuno e l'HUD del token
+      **non** si apre.
+- [ ] Stessa prova con "Erupt" e con "Move" dello shard: come sopra.
+- [ ] Avvia di nuovo la scelta e chiudila con Esc: si chiude come prima.
+- [ ] Clic sinistro su uno spazio evidenziato: l'oggetto o il token va lì come prima; su uno spazio non evidenziato
+      compare ancora "Pick one of the highlighted spaces".
+- [ ] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

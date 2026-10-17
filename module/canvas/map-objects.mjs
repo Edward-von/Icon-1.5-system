@@ -205,7 +205,8 @@ function pickSpace(cells, hint) {
     };
     const down = (ev) => {
       const button = ev.button ?? ev.data?.button ?? 0;
-      if (button === 2) { done(null); return; }
+      // Stop the right-click too, or a token under the cursor opens its HUD as the pick closes.
+      if (button === 2) { ev.stopPropagation(); done(null); return; }
       if (button !== 0) return;
       ev.stopPropagation();
       const pos = ev.getLocalPosition(canvas.stage);
