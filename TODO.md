@@ -461,13 +461,16 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       un token potrebbe aprirsi anche l'HUD del token. Il picker nuovo di `terrain-spaces.mjs` lo ferma (`stopPropagation`).
 (FATTO il 17 ottobre 2026, versione 1.15.78: in pickSpace di map-objects.mjs il clic destro chiama stopPropagation
       prima di chiudere la scelta, come pickSpaces di terrain-spaces.mjs.)
-- [ ] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, pronto: risposta del 17 ottobre 2026): MJÖLLNIR (p.227) "Create
+- [x] **Emerso lavorando su R47b — Sturmreiten con mastery e Talent II insieme** (S, pronto: risposta del 17 ottobre 2026): MJÖLLNIR (p.227) "Create
       an arc 5 area any time you would create an area with this ability instead"; con la mastery l'area è Arc 5 e
       l'estensione del Talent II non viene offerta (R47b la offre solo dopo una Line). Domanda per Edoardo: con la
       mastery, l'estensione diventa un secondo Arc 5 (attaccato al primo)?
       Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): sì. MJÖLLNIR "Create an arc 5 area any time you
       would create an area with this ability instead" (p.227) vale anche per l'area del Talent II: l'estensione è un
       secondo Arc 5, in una direzione diversa, dal primo o dall'ultimo spazio come per la Line.
+(FATTO il 17 ottobre 2026, versione 1.15.102: con MJÖLLNIR l'estensione del Talent II è un secondo Arc 5, dal primo o
+      dall'ultimo spazio del primo arco, non nel verso in cui il primo arco corre lì e senza sovrapporsi; un solo
+      template con entrambi gli archi. Solo codice.)
 - [x] **Emerso lavorando su R39 — altre parole dei Limit Break diverse dal libro** (S, dati): Split Heaven and Hell
       (p.127) dice "depending on their distance from you" (libro: "their distance on the line from you") e "(maximum 3
       width)" (libro: ", to a maximum of 3 width,"); Lycanthropy (p.168) ha perso "(including this one!)" dopo "abilities,
@@ -662,6 +665,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       piercing nella stessa frase e propone una sola chip.
 - [ ] **Emerso lavorando su R40 — etichetta di Other** (S): l'esito Other dice ancora "mastery / talent / free" anche
       quando le chip vengono dai blocchi base, dal combo o dalle versioni Infuse.
+- [ ] **Emerso lavorando su R47b — MJÖLLNIR "instead" e la scelta dell'area** (S, da verificare): MJÖLLNIR crea l'Arc
+      5 *al posto* dell'area normale (p.227), ma il codice aggiunge l'Arc 5 come variante "Mastery" accanto alla Line
+      3, quindi probabilmente chiede ancora di scegliere tra le due invece di usare sempre l'Arc 5 (`_areaVariantsFor`
+      / `areaVariants`).
 
 ---
 

@@ -936,12 +936,14 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
     // R47b: a second line from the first or last space of this one (Sturmreiten Talent II, p.227).
-    if (extension && area.kind === "line" && placed.dir) {
-      const more = await extendLine({ actor, area, origin: originCell, dir: placed.dir, cells, extension, abilityName });
+    // With MJÖLLNIR ("Create an arc 5 area any time you would create an area with this ability
+    // instead", p.227) the area is an Arc 5 and so is the extension.
+    if (extension && ((area.kind === "line" && placed.dir) || area.kind === "arc")) {
+      const more = await extendLine({ actor, area, origin: originCell, dir: placed.dir, cells, extension, abilityName, blocked });
       if (more) {
         const seen = new Set(cells.map(cellKey));
-        cells = cells.concat(more.filter(c => !seen.has(cellKey(c))));
-        area.label = `${area.label} + ${areaLabel({ kind: "line", size: extension.size })}`;
+        cells = cells.concat(more.cells.filter(c => !seen.has(cellKey(c))));
+        area.label = `${area.label} + ${more.label}`;
       }
     }
   }
@@ -1033,10 +1035,18 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
  * The user picks the first or the last space of the placed line (Maar's ruling,
  * the book doesn't say), then draws the new line from the space next to it, in
  * any orthogonal direction but the first line's own and without crossing it.
- * Resolves the new cells, or null (declined / cancelled: the first line stays).
+ * With MJÖLLNIR the area is an Arc (p.227, "Create an arc 5 area any time you
+ * would create an area with this ability instead"): the extension is an arc of
+ * the same size, painted from the space next to the first or last space of the
+ * first arc, not in the direction the first arc runs at that end, not over it.
+ * Resolves { cells, label }, or null (declined / cancelled: the first area stays).
  */
-async function extendLine({ actor, area, origin, dir, cells, extension, abilityName }) {
-  const label = areaLabel({ kind: "line", size: extension.size });
+async function extendLine({ actor, area, origin, dir, cells, extension, abilityName, blocked = [] }) {
+  const isArc = area.kind === "arc";
+  const second = isArc ? { kind: "arc", size: Math.max(1, area.size) } : { kind: "line", size: extension.size };
+  const label = areaLabel(second);
+  second.label = label;
+  const shape = isArc ? "arc" : "line";
   const notBloodied = extension.comeback && actor?.isBloodied === false;
   let from = null;
   try {
@@ -1044,7 +1054,7 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
       window: { title: `${abilityName || "Line"} — another ${label}?` },
       content: `<p><small>${escapeHTML(extension.source ? `${extension.source}: ` : "")}${escapeHTML(extension.rule)}</small></p>`
         + (notBloodied ? `<p><strong>Comeback</strong>: you are not bloodied, so this doesn't apply right now.</p>` : "")
-        + `<p>Draw the extra ${label} from which end of the first line?</p>`,
+        + `<p>Draw the extra ${label} from which end of the first ${shape}?</p>`,
       buttons: [
         { action: "first", label: "From the first space", default: !notBloodied },
         { action: "last",  label: "From the last space" },
@@ -1055,25 +1065,39 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
   } catch { from = null; }
   if (from !== "first" && from !== "last") return null;
   const len = Math.max(1, area.size);
-  const end = from === "first" ? origin : { i: origin.i + dir.di * (len - 1), j: origin.j + dir.dj * (len - 1) };
   const taken = new Set(cells.map(cellKey));
-  const second = { kind: "line", size: extension.size, label };
   const dirs = [{ di: 0, dj: 1 }, { di: 1, dj: 0 }, { di: 0, dj: -1 }, { di: -1, dj: 0 }];
-  const sameDir = (a, b) => a.di === b.di && a.dj === b.dj;
-  const allowed = dirs.filter(d => !sameDir(d, dir)
-    && !shapeCells(second, { i: end.i + d.di, j: end.j + d.dj }, { dir: d }).some(c => taken.has(cellKey(c))));
+  const sameDir = (a, b) => !!a && !!b && a.di === b.di && a.dj === b.dj;
+  let end, ownDir;
+  if (isArc) {
+    // The painted arc: its end space, and the step the arc takes there (into it from the first space,
+    // out of it to the last space) — the extension goes another way.
+    const n = cells.length;
+    end = from === "first" ? cells[0] : cells[n - 1];
+    const [a, b] = from === "first" ? [cells[0], cells[1]] : [cells[n - 2], cells[n - 1]];
+    ownDir = a && b ? { di: b.i - a.i, dj: b.j - a.j } : null;
+  } else {
+    end = from === "first" ? origin : { i: origin.i + dir.di * (len - 1), j: origin.j + dir.dj * (len - 1) };
+    ownDir = dir;
+  }
+  const blockedKeys = new Set(blocked.map(cellKey));
+  const allowed = dirs.filter(d => !sameDir(d, ownDir) && (isArc
+    ? !taken.has(cellKey({ i: end.i + d.di, j: end.j + d.dj })) && !blockedKeys.has(cellKey({ i: end.i + d.di, j: end.j + d.dj }))
+    : !shapeCells(second, { i: end.i + d.di, j: end.j + d.dj }, { dir: d }).some(c => taken.has(cellKey(c)))));
   if (!allowed.length) { ui.notifications.warn(`No free direction for another ${label} from that space.`); return null; }
   const starts = allowed.map(d => ({ i: end.i + d.di, j: end.j + d.dj }));
-  const check = (newCells, start, d) => {
+  const check = isArc ? null : (newCells, start, d) => {
     if (!start || !d) return "";
     const step = { di: start.i - end.i, dj: start.j - end.j };
     if (!sameDir(step, d) || !allowed.some(a => sameDir(a, d)))
       return `The extra ${label} goes away from the ${from} space of the first line, in a different direction (mouse wheel rotates it).`;
     return "";
   };
-  ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first line.`);
-  const placed = await new AreaPlacement({ area: second, sourceCells: [end], rangeCells: starts, originInRange: true, check }).run();
-  return placed?.cells ?? null;
+  ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first ${shape}.`);
+  // An arc is painted space by space: the first arc and the user's spaces are off limits (sourceCells).
+  const sourceCells = isArc ? [...cells, ...blocked] : [end];
+  const placed = await new AreaPlacement({ area: second, sourceCells, rangeCells: starts, originInRange: true, check }).run();
+  return placed?.cells ? { cells: placed.cells, label } : null;
 }
 
 /**
@@ -1400,7 +1424,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" ? extension : null });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null });
 }
 
 /**

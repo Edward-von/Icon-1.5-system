@@ -2351,7 +2351,8 @@ export class IconSheet extends BaseActorSheet {
   #areaPlacementOpts(ab, area) {
     const s = this.document.items.get(ab.id)?.system ?? {};
     const lasting = this.#areaLasts(ab, area);
-    const extension = area?.kind === "line" ? this.#lineExtension(ab, s) : null;
+    // With MJÖLLNIR (p.227) the area is an Arc 5, and so is the Talent II extension.
+    const extension = area?.kind === "line" || area?.kind === "arc" ? this.#lineExtension(ab, s) : null;
     if (!lasting || area?.kind === "aura") return { lasting, extension };
     const terrain = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
     const stack = areaStackLimit(activeAreaTexts(s));

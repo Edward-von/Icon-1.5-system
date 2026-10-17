@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R47b — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5 (17 ottobre 2026, versione 1.15.102)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Sturmreiten con MJÖLLNIR sbloccata e Talent II selezionato, personaggio bloodied: dopo aver dipinto l'Arc 5
+      compare la finestra "Arc 5 — another Arc 5?" con il testo del Talent II.
+- [ ] "From the last space": sono evidenziate solo le caselle libere accanto all'ultimo spazio, tranne quella che
+      prosegue nel verso dell'ultimo passo dell'arco; il secondo arco si dipinge per 5 caselle (Invio o tasto destro
+      lo chiudono prima).
+- [ ] "From the first space": stessa cosa partendo dal primo spazio.
+- [ ] Il secondo arco non può passare su caselle del primo arco né sulle caselle del personaggio (avviso).
+- [ ] Il risultato è un solo template "Arc 5 + Arc 5"; i bersagli presi sono quelli di entrambi gli archi.
+- [ ] Personaggio non bloodied: la finestra dice che Comeback non si applica e il pulsante predefinito è "No
+      extension"; scelto quello, resta solo il primo arco.
+- [ ] Esc o tasto destro durante il secondo arco: resta il primo arco e l'attacco va avanti.
+- [ ] Senza mastery (Line 3): l'estensione Line 3 di R47b funziona ancora come prima.
+- [ ] Con la mastery ma senza Talent II: l'Arc 5 si piazza e nessuna finestra di estensione compare.
+
 ## Emerso R33a3 — Aethershard senza bottone danno (17 ottobre 2026, versione 1.15.101)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5 (versione 1.15.102)
+
+### Round di debug del 16 ottobre, voce emersa su R47b
+
+- **Sturmreiten con mastery e Talent II**: con MJÖLLNIR l'area diventa un Arc 5 e l'estensione del Talent II non
+  veniva offerta → R47b la proponeva solo dopo una Line, ma MJÖLLNIR "Create an arc 5 area any time you would create
+  an area with this ability instead" (p.227) vale anche per l'area aggiunta dal Talent II → ora, piazzato l'Arc 5, la
+  stessa finestra chiede "dal primo spazio / dall'ultimo spazio / nessuna estensione"; il secondo Arc 5 si dipinge
+  partendo da una casella evidenziata accanto a quell'estremità, non nel verso in cui il primo arco corre lì ("drawn
+  in a different direction", lettura scelta: come per la Line), senza passare sul primo arco né sul personaggio; i due
+  archi diventano un solo template ("Arc 5 + Arc 5") e colpiscono insieme. Solo codice.
+
 ## 17 ottobre 2026 — Aethershard senza bottone danno (versione 1.15.101)
 
 ### Round di debug del 16 ottobre, voce emersa su R33a3
