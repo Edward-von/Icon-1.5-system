@@ -101,3 +101,49 @@ export async function noteCriticalHit(actor) {
     _log(`${actor.name}: Arenheir Aspect crits this combat = ${count}`);
   } catch (err) { console.warn("[ICON | crit-thresholds] could not count the crit", err); }
 }
+
+/* -------------------------------------------------- */
+/*  Masteries that trigger the Exceed without a 15+    */
+/* -------------------------------------------------- */
+
+const FIRST_USE_FLAG = "exceedFirstUse";
+
+/**
+ * An unlocked mastery that makes the ability trigger its exceed effects
+ * whatever the total, or null:
+ *   • BLOOD FESTIVAL (Matsuri, p.192): "The first time you use Matsuri in a
+ *     combat, you may … and it triggers all exceed effects." Optional ("may"),
+ *     so the attack dialog ticks it on the first use and the player decides.
+ *   • BURIAL FIST (Open the Gates, p.194): "Any version of this ability …
+ *     always triggers exceed effects at round 4 or later."
+ * Read from the mastery's text, so every version (the armed combo too) gets it.
+ * @param {Actor} actor  the attacker
+ * @param {Item}  item   the ability
+ * @returns {{ source:string, on:boolean, why:string, firstUse:boolean }|null}
+ */
+export function masteryExceed(actor, item) {
+  const s = item?.system;
+  if (!s?.masteryUnlocked || !s.mastery) return null;
+  const plain = String(s.mastery).replace(/<[^>]+>/g, " ").replace(/’/g, "'").replace(/\s+/g, " ").trim();
+  const text = plain.toLowerCase();
+  const name = /^([A-Z][A-Za-z' -]*[A-Za-z])\s*:/.exec(plain)?.[1] ?? "Mastery";
+  const round = currentRound(actor);
+  const fromRound = /always triggers? (?:all |any )?exceed effects at round (\d+) or later/.exec(text);
+  if (fromRound) {
+    const n = Number(fromRound[1]);
+    return { source: name, on: !!round && round >= n, why: `round ${n} or later${round ? ` (now round ${round})` : ""}`, firstUse: false };
+  }
+  if (/first time you use .+? in (?:a|each) combat\b.*?triggers? (?:all |any )?exceed effects/.test(text)) {
+    const used = round ? item.getFlag?.("icon-system", FIRST_USE_FLAG) === game.combat.id : false;
+    return { source: name, on: !!round && !used, why: round ? (used ? "already used this combat" : "first use this combat") : "first use in a combat", firstUse: true };
+  }
+  return null;
+}
+
+/** Note the first use of the ability in this combat (BLOOD FESTIVAL). No-op outside a combat. */
+export async function noteFirstUseThisCombat(actor, item) {
+  if (!item || !currentRound(actor)) return;
+  if (item.getFlag?.("icon-system", FIRST_USE_FLAG) === game.combat.id) return;
+  try { await item.setFlag("icon-system", FIRST_USE_FLAG, game.combat.id); }
+  catch (err) { console.warn("[ICON | crit-thresholds] could not note the first use", err); }
+}

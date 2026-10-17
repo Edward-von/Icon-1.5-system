@@ -285,7 +285,8 @@ const DIALOG_OPTS = { classes: ["icon-roll-window"], position: { width: 460 } };
  * the elevation difference; Defense from the lowest targeted token.
  * @returns {Promise<{boons:number, curses:number, defense:number|null}|null>}
  */
-export async function promptAttackMods(ab, actor, { modsActor = null, area = null } = {}) {
+export async function promptAttackMods(ab, actor, { modsActor = null, area = null, forceExceed = null } = {}) {
+  // `forceExceed`: crit-thresholds.mjs#masteryExceed — a box to trigger the exceed whatever the total.
   // `modsActor`: whose statuses give the automatic boons / curses (a summon uses its summoner's).
   // `area`: the area placed for this attack — with one on the table the extra
   // tokens are in the area, not attack targets, so the dialog asks which one
@@ -347,6 +348,10 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             ${_stepper({ name: "exceedAt", label: "Exceed on", hint: "total needed to exceed (normally 15+)",           value: thr.exceed, min: 1, max: 30 })}
           </div>
           ${thr.sources.length ? `<p class="icon-roll-card__hint" data-role="thresholds">${thr.sources.map(esc).join(" · ")}</p>` : ""}
+          ${forceExceed ? `
+            <label class="icon-roll-chip" title="${esc(forceExceed.source)} (mastery): this use triggers all exceed effects, whatever the total — ${esc(forceExceed.why)}.">
+              <input type="checkbox" name="forceExceed" ${forceExceed.on ? "checked" : ""}><span><i class="fa-solid fa-star"></i> ${esc(forceExceed.source)} <small>triggers all exceed effects · ${esc(forceExceed.why)}</small></span>
+            </label>` : ""}
           <div class="icon-roll-preview"><span class="icon-roll-preview__formula"></span><span class="icon-roll-preview__note"></span></div>
         </section>
       </div>
@@ -428,6 +433,8 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
             defense: defenseVal !== "" && defenseVal != null ? Number(defenseVal) : null,
             critAt:   Math.max(1, Number(f.elements.critAt?.value)   || thr.crit),
             exceedAt: Math.max(1, Number(f.elements.exceedAt?.value) || thr.exceed),
+            // A mastery's "triggers all exceed effects" (BLOOD FESTIVAL, BURIAL FIST): its name, or "".
+            forceExceed: forceExceed && f.elements.forceExceed?.checked ? forceExceed.source : "",
             attackTargetId,
             targetIds: rows.map(r => r.dataset.tokenId),
             // "Defender has evasion" per target token: rollEvasion uses it in

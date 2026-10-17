@@ -1656,6 +1656,21 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R16 — Blood Festival e Burial Fist fanno scattare l'Exceed (17 ottobre 2026, versione 1.15.189)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Matsuri con Blood Festival sbloccata, in combattimento, primo attacco: nella finestra la casella "BLOOD
+      FESTIVAL" è già spuntata. Con un totale sotto 15 la card mostra "Exceed (BLOOD FESTIVAL)".
+- [ ] Secondo attacco con Matsuri nello stesso combattimento: la casella c'è ma non è spuntata ("already used this
+      combat"). Con un totale sotto 15 la card non mostra l'Exceed.
+- [ ] Primo uso di Matsuri con la casella tolta a mano: la card non mostra l'Exceed, e al secondo uso la casella non è
+      più spuntata.
+- [ ] Open the Gates con Burial Fist sbloccata: ai round 1-3 la casella non è spuntata, dal round 4 sì. Con un totale
+      sotto 15 la card mostra "Exceed (BURIAL FIST)". Vale anche per la versione combo (Center the Temple).
+- [ ] Fuori dal combattimento la casella c'è ma non è spuntata. Spuntata a mano, l'Exceed compare.
+- [ ] Un'abilità senza queste mastery non ha la casella. Con 15+ la card scrive "Exceed (15+)" come prima.
+
 ## Emerso R33 — Pierce degli Aethershard ridà il weakened (17 ottobre 2026, versione 1.15.188)
 
 Setup: solo codice (F5 basta).

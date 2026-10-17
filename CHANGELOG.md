@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Blood Festival e Burial Fist fanno scattare l'Exceed (versione 1.15.189)
+
+### Round di debug del 15 ottobre, voce emersa su R16
+
+- **Mastery che fanno scattare l'Exceed**: con BLOOD FESTIVAL (Matsuri, p.192) o BURIAL FIST (Open the Gates, p.194)
+  sbloccate, la card dell'attacco mostrava l'Exceed solo con un totale di 15+ → la card guardava solo il totale del
+  tiro e non la mastery → ora la finestra dell'attacco ha una casella con il nome della mastery. Per Blood Festival è
+  già spuntata al primo uso nel combattimento e si può togliere, perché il libro dice "you may". Per Burial Fist è
+  spuntata dal round 4. Con la casella spuntata la card mostra il blocco "Exceed (BLOOD FESTIVAL)" anche sotto 15, e i
+  bottoni degli status dell'Exceed si accendono. Solo codice.
+
 ## 17 ottobre 2026 — Pierce degli Aethershard ridà il weakened (versione 1.15.188)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

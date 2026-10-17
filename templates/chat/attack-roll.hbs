@@ -79,7 +79,7 @@
   {{#if exceedEffect}}
     {{#if isExceed}}
       <div class="icon-chat-card__effect-block icon-chat-card__effect-block--exceed">
-        <span class="icon-chat-card__effect-label">Exceed ({{exceedAt}}+)</span>
+        <span class="icon-chat-card__effect-label">Exceed ({{#if exceedSource}}{{exceedSource}}{{else}}{{exceedAt}}+{{/if}})</span>
         <span class="icon-chat-card__effect-text">{{{exceedEffect}}}</span>
       </div>
     {{/if}}

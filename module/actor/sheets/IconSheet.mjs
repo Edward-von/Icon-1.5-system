@@ -21,6 +21,7 @@ import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvoke
 import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses, captureTargets } from "../../combat/ability-statuses.mjs";
 import { promptAttackTarget, rememberAttackTarget, rememberedAttackTarget } from "../../apps/roll-dialogs.mjs";
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
+import { masteryExceed, noteFirstUseThisCombat } from "../../combat/crit-thresholds.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
@@ -2788,9 +2789,14 @@ export class IconSheet extends BaseActorSheet {
       return;
     }
 
-    const mods = await promptAttackMods(ab, this.document, { area: placement?.area ?? null });
+    // BLOOD FESTIVAL (p.192) / BURIAL FIST (p.194): the unlocked mastery triggers the exceed whatever the total.
+    const abilityItem = this.document.items.get(itemId);
+    const forceExceed = masteryExceed(this.document, abilityItem);
+    const mods = await promptAttackMods(ab, this.document, { area: placement?.area ?? null, forceExceed });
     if (!mods) return;
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.attack);
+    // "The first time you use Matsuri in a combat": any use counts, taken or not.
+    if (forceExceed?.firstUse) await noteFirstUseThisCombat(this.document, abilityItem);
 
     // With an area on the table the extra tokens only take the area effect:
     // the d20 (and the Evasion roll) is for the attack target picked in the dialog.
@@ -2865,6 +2871,7 @@ export class IconSheet extends BaseActorSheet {
       defense:      mods.defense,
       critAt:      mods.critAt,
       exceedAt:      mods.exceedAt,
+      forceExceed:  mods.forceExceed,
       hitEffect:    card.hit,
       missEffect:   card.miss,
       exceedEffect: card.exceed,

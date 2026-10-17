@@ -1436,9 +1436,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       si accende; usare `@root.` (verificato con Handlebars 4.7.8).
 (FATTO il 17 ottobre 2026, versione 1.15.177: × e badge combo sui riquadri pieni leggono i dati della scheda con
       @root.)
-- [ ] **Emerso lavorando su R16 — mastery che fanno scattare l'Exceed** (S/M): BLOOD FESTIVAL di Matsuri ("triggers
+- [x] **Emerso lavorando su R16 — mastery che fanno scattare l'Exceed** (S/M): BLOOD FESTIVAL di Matsuri ("triggers
       all exceed effects" al primo uso nel combattimento) e BURIAL FIST di Open the Gates ("always triggers exceed
       effects" dal round 4) non entrano nella card dell'attacco, che mostra l'Exceed solo con 15+.
+(FATTO il 17 ottobre 2026, versione 1.15.189: casella nella finestra dell'attacco per Blood Festival (primo uso nel
+      combattimento, facoltativa) e Burial Fist (dal round 4); la card mostra l'Exceed con il nome della mastery.)
 - [ ] **Emerso lavorando su R16 — Izuna Drop al posto del Collide** (S): la mastery di Gigaton Whip sostituisce il
       Collide ("Instead of the normal collide effect"), ma la card dell'attacco non lo dice.
 - [x] **Emerso lavorando su R36 — resto della Wheel of Fate** (S/M): il sistema non aiuta con la pesca a inizio
@@ -1546,6 +1548,14 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — "Gain vigor 4" non ha chip** (S): la regex dei promemoria vigor in
       `ability-statuses.mjs` (`NOTE_VIGOR_RE`) legge solo "gain 4 vigor", non "gain vigor 4". Il Heroic di Righteous
       Disdain quindi non ha la chip promemoria nemmeno dalla scheda.
+- [ ] **Emerso lavorando su R16 — "triggers all exceed effects" fuori dalle mastery** (S/M): nel libro molte altre
+      frasi fanno scattare l'Exceed, per esempio "your next attack triggers all exceed effects" (p.~196),
+      "automatically triggers all exceed effects", il tratto di Paleblood e lo Special di Open the Gates ("triggers
+      any exceed effects the first time it is used in combat", p.194). Per ora l'unica via è la casella "Exceed on"
+      messa a mano.
+- [ ] **Emerso lavorando su R16 — resto di Blood Festival** (S): "increase all its teleports by +2, it deals bonus
+      damage" (p.192) non arriva né alla finestra del danno né alla card. Lo stesso vale per il bonus damage di Burial
+      Fist.
 
 ---
 

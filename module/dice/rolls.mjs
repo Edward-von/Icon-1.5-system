@@ -204,12 +204,13 @@ function _buildNarrativeDiceData(rawDice, result, isLowest) {
  * @param {object}   [opts.evasionOverride] { tokenId: boolean } — the attack dialog's "Defender has evasion" boxes
  * @param {number}   [opts.critAt=20]     Total needed for a crit (attack dialog: Soulfire, Arenheir, by hand)
  * @param {number}   [opts.exceedAt=15]   Total needed to exceed
+ * @param {string}   [opts.forceExceed]   Name of the mastery that triggers the exceed whatever the total ("" = none)
  * @param {Actor}    [opts.actor]
  * @returns {Promise<{d20, modifier, total, isCrit, isHit, isExceed, rolls, evasion}>}
  */
 export async function combatRoll({
   abilityName, boons = 0, curses = 0, defense,
-  critAt = BASE_CRIT, exceedAt = BASE_EXCEED,
+  critAt = BASE_CRIT, exceedAt = BASE_EXCEED, forceExceed = "",
   hitEffect, missEffect, exceedEffect, critEffect, effects = [], talentEffects = [],
   costLabel, tags = [], areaHtml = "",
   relicInvokes = [], relicNotes = [],
@@ -248,7 +249,8 @@ export async function combatRoll({
   const exceedT   = Number(exceedAt) || BASE_EXCEED;
   const isCrit    = !evaded && total >= critT;
   const isHit     = evaded ? false : (defense != null ? total >= defense : null);
-  const isExceed  = !evaded && total >= exceedT;
+  // A mastery that "triggers all exceed effects" (BLOOD FESTIVAL p.192, BURIAL FIST p.194) needs no 15+.
+  const isExceed  = !evaded && (total >= exceedT || !!forceExceed);
   // Thresholds moved from 20+ / 15+: the card says so next to the total.
   const thresholdNote = (critT !== BASE_CRIT || exceedT !== BASE_EXCEED) ? `crit ${critT}+ · exceed ${exceedT}+` : "";
 
@@ -277,6 +279,8 @@ export async function combatRoll({
     isExceed,
     critAt:        critT,
     exceedAt:      exceedT,
+    // Exceed reached by the mastery, not by the total: the label names it instead of "15+".
+    exceedSource:  forceExceed && total < exceedT ? String(forceExceed) : "",
     thresholdNote,
     evaded,
     evasionHtml:   evasionBlockHtml(evasion),
