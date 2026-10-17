@@ -1656,6 +1656,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R49 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (17 ottobre 2026, versione 1.15.226)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Harvest con HARVEST MOON: piazza l'area di Harvest sopra 2 plant del compendio summons, poi la variante "Small
+      Blast (on plants)" → si apre "Harvest Moon — which plants explode?" con le 2 plant spuntate e un menu "a chi va
+      la blessing".
+- [ ] Togli la spunta a una plant → l'esplosione copre solo l'altra; quella non spuntata resta sulla mappa e non è
+      bersaglio.
+- [ ] Nel menu ci sono il PG ("yourself") e solo gli alleati (stessa disposition) entro 3 caselle da quella plant; un
+      alleato a 4 caselle non compare.
+- [ ] Dopo l'esplosione: chi è stato scelto ha +1 Blessed, il token della plant esplosa sparisce e in chat c'è la riga
+      "Harvest Moon (p.186): …".
+- [ ] Token chiamato "Mote of life" con Blessed: esplode, perde la blessing, NON viene cancellato e compare la card
+      RECYCLE "Becomes a terrain effect".
+- [ ] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa.
+- [ ] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template.
+- [ ] Giocatore non GM con una plant di cui non è proprietario → arriva l'avviso che la toglie il GM; la blessing
+      viene comunque data (tramite GM).
+
 ## Emerso R33 — Symphony: il Charge dà 2 mote gratis (17 ottobre 2026, versione 1.15.225)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (versione 1.15.226)
+
+### Round di debug del 16 ottobre, voce emersa su R49
+
+- **Harvest Moon**: tutte le plant attraversate esplodevano per forza; poi la plant restava sulla mappa e la blessing
+  andava data a mano → il "you can" e il "granting its blessing to yourself or any other ally in range 3 of that
+  plant" (p.186) non venivano letti → ora una finestra mostra una casella per ogni plant nell'area (già spuntate) e,
+  per ognuna, chi prende la blessing: tu o un alleato entro 3 caselle da quella plant. Esplodono solo le plant
+  spuntate. Chi è stato scelto riceve la blessing. Poi la plant viene tolta dalla mappa ("When the blessing is
+  removed, remove the plant", p.184). Fanno eccezione due casi: un "Mote of life" perde la sua blessing e arriva la
+  card RECYCLE per trasformarlo in terrain effect (p.187); un Megamushroom resta sulla mappa ("isn't removed", p.187)
+  e la sua blessing risulta presa. Una riga in chat riassume tutto. Solo codice.
+
 ## 17 ottobre 2026 — Symphony: il Charge dà 2 mote gratis (versione 1.15.225)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

@@ -927,6 +927,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // HARVEST MOON's plant explosions (p.186) are placed the same way, on the plants instead of the pits.
   const plantBlast = area?.centeredOn === "plants";
   const pitBlast = area?.centeredOn === "pits" || plantBlast;
+  let plantGifts = null;   // HARVEST MOON: the exploded plants and who takes each one's blessing
   if (pitBlast) {
     lasting = false; terrain = null; stack = 1;
     removeIds = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => t.flags[FLAG_NS].pitBlast).map(t => t.id);
@@ -1028,6 +1029,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     area.label = `${area.label} × ${blown.pits}`;
     // The exploding plants are what sets the blasts off, not characters they hit.
     if (blown.plantIds) notTargets = notTargets.concat(blown.plantIds);
+    if (blown.gifts) plantGifts = blown.gifts;
   } else if (area.centeredOn === "cells" && area.centres?.length) {
     // R33b2: blasts centred on given spaces (Eclipse's brand, a mine, the Polaris spaces), joined: each character once.
     const seen = new Set();
@@ -1166,6 +1168,10 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   } catch (err) {
     console.warn("[ICON | AreaTemplates] template creation failed (permissions?)", err);
     ui.notifications.warn("Could not create the template on the scene (you may lack the 'Create Measured Template' permission) — targets were still selected.");
+  }
+  if (plantGifts?.length) {
+    try { await explodedPlantsGiveBlessings(plantGifts, { actor, abilityName }); }
+    catch (err) { console.warn("[ICON | AreaTemplates] the exploded plants' blessings failed", err); }
   }
 
   if (isAura) {
@@ -1422,11 +1428,16 @@ async function plantBlastCells({ actor, abilityKey, area }) {
   }
   const plantUuids = new Set((await loadSummonIndex()).filter(e => /^plant$/i.test(e.name)).map(e => e.uuid));
   const inArea = new Set((own[0].flags[FLAG_NS].cells ?? []).map(cellKey));
-  const plants = canvas.tokens.placeables.filter(t => isPlantToken(t, plantUuids) && tokenCells(t.document).some(c => inArea.has(cellKey(c))));
-  if (!plants.length) {
+  const inside = canvas.tokens.placeables.filter(t => isPlantToken(t, plantUuids) && tokenCells(t.document).some(c => inArea.has(cellKey(c))));
+  if (!inside.length) {
     ui.notifications.warn("No plant inside this ability's area (only Plants from the summons pack, Megamushrooms and tokens named 'Mote of life' are recognised): nothing explodes.");
     return null;
   }
+  // "you can cause that plant to explode": one box per plant; "granting its blessing to yourself or any other ally
+  // in range 3 of that plant": who takes it, per plant.
+  const picked = await askPlantExplosions(inside, actor);
+  if (!picked) return null;
+  const plants = picked.map(x => x.plant);
   const blast = { kind: area.kind, size: area.size };
   const seen = new Set();
   const cells = [];
@@ -1435,7 +1446,84 @@ async function plantBlastCells({ actor, abilityKey, area }) {
     if (!seen.has(k)) { seen.add(k); cells.push(c); }
   }
   _log(`plantBlastCells — ${plants.map(p => p.name).join(", ")}`);
-  return { cells, origin: tokenCells(plants[0].document)[0], pits: plants.length, plantIds: plants.map(p => p.id) };
+  return { cells, origin: tokenCells(plants[0].document)[0], pits: plants.length, plantIds: plants.map(p => p.id), gifts: picked };
+}
+
+/**
+ * HARVEST MOON (p.186): which plants in the area explode ("you can cause that plant to explode") and who takes each
+ * one's blessing ("granting its blessing to yourself or any other ally in range 3 of that plant"). Allies are the
+ * tokens of the user's disposition, not objects nor plants, within 3 spaces of the plant (p.85, diagonals count).
+ * Resolves [{plant, recipient}] (at least one plant) or null (cancelled / none ticked).
+ * @param {Token[]} plants
+ * @param {Actor} actor  the user
+ */
+async function askPlantExplosions(plants, actor) {
+  const own = sourceTokenFor(actor);
+  const disposition = own?.document?.disposition ?? CONST.TOKEN_DISPOSITIONS.FRIENDLY;
+  const plantIds = new Set(plants.map(p => p.id));
+  const allies = canvas.tokens.placeables.filter(t => t.actor && t.id !== own?.id && t.actor.id !== actor.id && !plantIds.has(t.id)
+    && !t.document?.flags?.[FLAG_NS]?.mapObject && t.document?.disposition === disposition
+    && !/^(?:plant|mote of life)$/i.test(String(t.document?.name ?? "").trim()));
+  const rows = plants.map((p, k) => {
+    const pc = tokenCells(p.document);
+    const near = allies.filter(a => tokenCells(a.document).some(c => pc.some(o => chebyshev(o, c) <= 3)));
+    const options = [`<option value="">${escapeHTML(actor.name)} (yourself)</option>`]
+      .concat(near.map(a => `<option value="${escapeHTML(a.id)}">${escapeHTML(a.name)}</option>`)).join("");
+    return `<div class="form-group"><label><input type="checkbox" name="x${k}" checked> ${escapeHTML(p.name)}</label><select name="to${k}">${options}</select></div>`;
+  }).join("");
+  let picked = null;
+  try {
+    picked = await foundry.applications.api.DialogV2.wait({
+      window: { title: "Harvest Moon — which plants explode?" },
+      content: `<p><small>HARVEST MOON (p.186): When this ability passes through a plant, you can cause that plant to explode, dealing 2 piercing damage in a small blast area effect centered on each plant, and granting its blessing to yourself or any other ally in range 3 of that plant.</small></p>`
+        + `<p>Tick the plants that explode, and who takes each one's blessing. Its blessing gone, the plant is removed (p.184).</p>${rows}`,
+      buttons: [{ action: "ok", label: "Explode", default: true, callback: (_ev, button) => {
+        const form = button.form;
+        return plants.map((plant, k) => form.elements[`x${k}`]?.checked
+          ? { plant, recipient: (form.elements[`to${k}`]?.value ? canvas.tokens.get(form.elements[`to${k}`].value)?.actor : null) ?? actor } : null).filter(Boolean);
+      } }, { action: "cancel", label: "Cancel" }],
+      rejectClose: false,
+    });
+  } catch { picked = null; }
+  if (!Array.isArray(picked)) return null;
+  if (!picked.length) { ui.notifications.info("No plant ticked: nothing explodes."); return null; }
+  return picked;
+}
+
+/**
+ * HARVEST MOON (p.186) once the explosions are on the map: each exploded plant gives its blessing to the character
+ * picked, then goes — Plant (p.184) "When the blessing is removed, remove the plant"; a mote of life loses its
+ * Blessed instead, and becomes a terrain effect (RECYCLE p.187, its card); a Megamushroom "isn't removed if the token
+ * is removed" (Spore Shroud p.187): its blessing is marked as taken. One chat line says what happened.
+ */
+async function explodedPlantsGiveBlessings(gifts, { actor, abilityName }) {
+  const { grantStatus, removeBlessings } = await import("../combat/inflict-status.mjs");
+  const lines = [];
+  const toDelete = [];
+  for (const { plant, recipient } of gifts) {
+    const td = plant.document;
+    if (!td?.parent) continue;
+    await grantStatus({ target: recipient, source: actor, statusId: "blessed", label: "Blessing", abilityName: abilityName || "Harvest Moon" });
+    const name = td.name;
+    if (/^megamushroom$/i.test(String(td.flags?.[FLAG_NS]?.mapObject?.name ?? "").trim())) {
+      if (plant.actor?.isOwner) await plant.actor.setFlag(FLAG_NS, "blessingTaken", true);
+      lines.push(`${name}: blessing to ${recipient.name} (the Megamushroom stays)`);
+    } else if (/^mote of life$/i.test(String(name ?? "").trim()) || /^mote of life$/i.test(String(plant.actor?.name ?? "").trim())) {
+      if (plant.actor?.statuses?.has?.("blessed")) await removeBlessings({ target: plant.actor, source: actor, count: 1, abilityName: abilityName || "Harvest Moon" });
+      lines.push(`${name}: blessing to ${recipient.name} (a mote of life becomes a terrain effect, RECYCLE p.187)`);
+    } else {
+      toDelete.push(td);
+      lines.push(`${name}: blessing to ${recipient.name}, plant removed`);
+    }
+  }
+  const mine = toDelete.filter(d => d.isOwner || game.user.isGM);
+  if (mine.length) await canvas.scene.deleteEmbeddedDocuments("Token", mine.map(d => d.id));
+  const left = toDelete.length - mine.length;
+  if (left) ui.notifications.warn(`${left} exploded plant${left === 1 ? "" : "s"} could not be removed (not yours): the GM removes ${left === 1 ? "it" : "them"}.`);
+  if (lines.length) await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ actor }),
+    content: `<div class="icon-chat-card"><strong><i class="fa-solid fa-seedling"></i> Harvest Moon</strong> (p.186): ${lines.map(escapeHTML).join("; ")}.</div>`,
+  });
 }
 
 /**

@@ -790,10 +790,12 @@ verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta
       prevede di spostare lo spuntone).
 (FATTO il 17 ottobre 2026, versione 1.15.182: la blast del Talent I si sposta con lo spuntone; Shift + freccia sulla
       blast sposta lo spuntone)
-- [ ] **Emerso lavorando su R49 — Harvest Moon: "you can" e la plant che esplode** (S, da decidere): oggi esplodono
+- [x] **Emerso lavorando su R49 — Harvest Moon: "you can" e la plant che esplode** (S, da decidere): oggi esplodono
       tutte le plant attraversate, ma il libro dice "you can", quindi forse serve una casella per ogni plant; dopo
       l'esplosione la plant (che dà la sua blessing) resta sulla mappa e va tolta a mano, e anche la blessing data a
       sé o a un alleato in range 3 resta a mano.
+(FATTO il 17 ottobre 2026, versione 1.15.226: "yourself or any other ally in range 3 of that plant" (p.186) letto
+      così: tu sempre, gli alleati solo se entro 3 caselle da quella plant.)
 - [x] **Emerso lavorando su R49 — Mote of life non riconosciuta come plant** (S): la mote of life di Dark Sliver
       (RECYCLE, p.187) "is a plant", ma non è nel pack summons né è un oggetto, quindi HARVEST MOON non la vede.
 (FATTO il 17 ottobre 2026, versione 1.15.183: un token chiamato "Mote of life" conta come pianta per HARVEST MOON)
