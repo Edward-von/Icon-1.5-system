@@ -1637,9 +1637,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Righteous Disdain (damage-card-mods).
 (FATTO il 17 ottobre 2026, versione 1.15.206: Aether Deflection usata dalla card d'attacco scrive la resistenza sulla
       card del danno che quell'abilità posta subito dopo)
-- [ ] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
+- [x] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
       "Interrupt N: Trigger: … Effect: …" vengono letti, un tratto con un trigger di danno comparirebbe anche sulla
       card del danno. Non è stato controllato quali tratti dei PG lo fanno.
+      (CHIUSO il 17 ottobre 2026: non è un difetto. Nei compendi solo Aether Deflection (trigger "targeted", va sulla card
+      d'attacco) e Godly Smite (trigger "attack roll") sono letti come tratti-interrupt; nessuno dei due ha un trigger di danno.)
 - [x] **Emerso lavorando su R33b2 — Deepwrath Talent II, danni fuori dalla finestra** (S): il "bonus damage from all
       sources" si aggiunge solo nella finestra del danno. I danni fissi (terreno pericoloso, bottoni delle card con
       danno fisso) non lo ricevono, e se un pit viene cancellato mentre il foe ci sta sopra non arriva la card per
