@@ -1656,6 +1656,19 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R23 — Danno dei summon con la finestra condivisa (17 ottobre 2026, versione 1.15.115)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Scheda summon con un'azione che fa danno e un summoner collegato: clic su Damage, si apre la stessa finestra
+      delle foe (band, bersagli, esiti a bottoni).
+- [ ] Le formule mostrate usano il [D] e il fray del summoner.
+- [ ] L'esito "Other" c'è: dadi / fisso / fray scritti a mano finiscono sulla card del danno.
+- [ ] Pierce, Divine e True Strike spuntati compaiono sulla card e valgono quando si preme Apply.
+- [ ] Hit c'è sempre; Crit / Miss / Area compaiono solo se il testo dell'azione li prevede.
+- [ ] Annullare la finestra non manda niente in chat.
+- [ ] Summon senza summoner collegato: la finestra si apre lo stesso e usa le statistiche del summon.
+
 ## Emerso R19 — Aure dei foe senza numero (17 ottobre 2026, versione 1.15.114)
 
 Setup: solo codice (F5 basta).

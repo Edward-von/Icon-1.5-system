@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Danno dei summon con la finestra condivisa (versione 1.15.115)
+
+### Round di debug del 15 ottobre, voce emersa su R23
+
+- **Danno dei summon**: la finestra del danno dei summon aveva solo Hit / Crit / Miss / Area, senza "Other" né Pierce
+  / Divine / True Strike → la scheda summon usava ancora una sua vecchia finestra semplice (`#promptSummonDamageMods`)
+  invece di quella condivisa da PG, foe e legend → ora usa la finestra condivisa di `roll-dialogs.mjs`: esito Other,
+  danno fisso, tipi di danno, Unerring, Hatred, bersagli e istanze; [D] e fray restano quelli del summoner, letti
+  prima di aprire la finestra. L'esito Hit c'è sempre, perché il summon ha il suo tiro d'attacco. La vecchia finestra
+  è stata tolta. Solo codice.
+
 ## 17 ottobre 2026 — Aure dei foe senza numero (versione 1.15.114)
 
 ### Round di debug del 15 ottobre, voce emersa su R19

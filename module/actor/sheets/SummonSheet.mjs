@@ -3,7 +3,7 @@
  */
 import { enrichHTML } from "../../helpers/enrich.mjs";
 import { combatRoll } from "../../dice/rolls.mjs";
-import { promptAttackMods } from "../../apps/roll-dialogs.mjs";
+import { promptAttackMods, promptDamageMods } from "../../apps/roll-dialogs.mjs";
 import { postAbilityDamageCard } from "../../combat/damage.mjs";
 import { summonStatusEntries } from "../../combat/ability-statuses.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
@@ -204,11 +204,18 @@ export class SummonSheet extends BaseActorSheet {
       return;
     }
 
-    const mods = await SummonSheet.#promptSummonDamageMods(actor, parsed);
-    if (!mods) return;
-
     const { damagedie, fray } = _resolveDamageStats(summoner ?? actor);
     const abilityName = actor.system.sourceAbilityName || actor.name;
+    // Same damage dialog as PCs / foes / legends: Other outcome, Pierce /
+    // Divine / True Strike, targets. The summon has its own Attack roll, so
+    // Hit is always offered.
+    const mods = await promptDamageMods(
+      { name: abilityName, cost: "", tags: [], parsed, isAttack: true, isAutoHit: !!parsed.isAutoHit, parsedCombo: null },
+      { damagedie, fray },
+      { actor },
+    );
+    if (!mods) return;
+
     _log(`rollSummonDamage — summon: "${actor.name}" | summoner: "${summoner?.name ?? "(none)"}" | [D]: ${damagedie} | fray: ${fray}`);
     await postAbilityDamageCard(actor, {
       parsed,
@@ -220,54 +227,17 @@ export class SummonSheet extends BaseActorSheet {
       vulnerable:  mods.vulnerable,
       resistance:  mods.resistance,
       weakened:    mods.weakened,
-    });
-  }
-
-  static async #promptSummonDamageMods(actor, parsed) {
-    const content = `
-      <form>
-        <div class="form-group">
-          <label>Outcome</label>
-          <select name="outcome">
-            <option value="hit"  selected>Hit</option>
-            ${parsed.hit.mult > 0 ? '<option value="crit">Critical (+1 die)</option>' : ""}
-            ${parsed.miss.fray || parsed.miss.flat > 0 ? '<option value="miss">Miss</option>' : ""}
-            ${parsed.area.mult > 0 || parsed.area.flat > 0 || parsed.area.fray ? '<option value="area">Area</option>' : ""}
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Bonus dice</label>
-          <input type="number" name="bonusDice" value="0" min="0">
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="vulnerable"> Target is vulnerable (+1)</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="resistance"> Target has resistance (½)</label>
-        </div>
-        <div class="form-group">
-          <label><input type="checkbox" name="weakened"> Attacker is weakened (−2)</label>
-        </div>
-      </form>
-    `;
-    const abilityName = actor.system.sourceAbilityName || actor.name;
-    return foundry.applications.api.DialogV2.wait({
-      window:  { title: `Damage: ${abilityName}` },
-      content,
-      buttons: [
-        { action: "roll", label: "Roll Damage", default: true, callback: (_e, btn) => {
-          const f = btn.form;
-          return {
-            outcome:    f.elements.outcome.value,
-            bonusDice:  Number(f.elements.bonusDice.value) || 0,
-            vulnerable: f.elements.vulnerable.checked,
-            resistance: f.elements.resistance.checked,
-            weakened:   f.elements.weakened.checked,
-          };
-        } },
-        { action: "cancel", label: "Cancel", callback: () => null },
-      ],
-      rejectClose: false,
+      hatred:      mods.hatred,
+      flatBonus:   mods.flatBonus,
+      pierce:      mods.pierce,
+      divine:      mods.divine,
+      trueStrike:  mods.trueStrike,
+      unerring:    mods.unerring,
+      targetName:  mods.targetName,
+      targetIds:   mods.targetIds,
+      attackTargetId: mods.attackTargetId,
+      other:       mods.other,
+      instances:   mods.instances,
     });
   }
 

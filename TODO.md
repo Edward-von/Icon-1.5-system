@@ -1262,9 +1262,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.114: confermato; il tag "aura" senza numero dei sei demoni faceva chiedere la
       dimensione sulle schede foe; ora la dimensione si prende dal testo dell'azione ("gains aura 2", p.407), anche
       per le legend e per i foe già importati. Solo codice.)
-- [ ] **Emerso lavorando su R23 — finestra del danno dei summon senza "Other"** (S): la scheda summon usa ancora una
+- [x] **Emerso lavorando su R23 — finestra del danno dei summon senza "Other"** (S): la scheda summon usa ancora una
       sua finestra semplice (`SummonSheet.#promptSummonDamageMods`, select Hit/Crit/Miss/Area) e non quella condivisa
       di `roll-dialogs.mjs`, quindi non ha l'esito Other né Pierce/Divine/True Strike.
+(FATTO il 17 ottobre 2026, versione 1.15.115: la scheda summon usa la finestra del danno condivisa di
+      roll-dialogs.mjs, come foe e legend, con Other, Pierce / Divine / True Strike / Unerring, Hatred e bersagli; la
+      vecchia finestra è stata tolta. Solo codice.)
 
 ---
 
