@@ -1074,7 +1074,7 @@ automatically hit … fail all saves"), Objects p.95 ("size 1-3 … can be stack
 removed when you are defeated"), Terrain effects p.96 ("passive effects that modify the terrain spaces … can overlap
 … not removed if you are defeated"), Pit / Dangerous / Difficult p.89.
 
-- [ ] **R33. Oggetti e segni piazzabili sulla mappa** — elenco originale, diviso in R33a–R33d qui sotto.
+- [x] **R33. Oggetti e segni piazzabili sulla mappa** — elenco originale, diviso in R33a–R33d qui sotto.
       Symphony (motes, terrain effect), Fairy Ring (megamushroom della mastery), Comet ("thrown weapon"), Spirit
       Shrine (santuario con la sua aura), Gates of Hell (flash step della mastery), Eclipse (il singolo dangerous
       terrain dove cade la stella), Astra (medium blast messo sui foe), Polaris (uno spazio a terra), Blood Grove
@@ -1085,6 +1085,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       col Talent II), Blitz (Talent I e mastery), Rampant Nail, Deepwrath (mastery), Geyser (oggetto), Gust (più di uno),
       Rime (pit di Magnarime), Tsunami, Waterspout (anche la mastery); forse Aethershard (R65).
       Darkside: lo Shadow è un summon del pack summons, il chip c'è già da R44 (1.15.46).
+      (FATTO il 17 ottobre 2026, versione 1.15.227: chiusi tutti i sotto-punti R33a-R33d2, con i muri di R33a5 come ultimo pezzo.)
 - [x] **R33a. Oggetti sulla mappa** (L) (FATTO il 16 ottobre 2026, versione 1.15.65: chip col cubo sull'abilità / tratto
       per ogni "height N <nome> object", "<Nome> — Height N object", "object (<Nome>, height N)"; trascinato sulla mappa
       diventa un token di un attore Summon con flag (cartella "Map Objects", creato dal GM anche per i giocatori);
