@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Danno rilanciato di un uso infuso: "Reroll (same use)" (versione 1.15.108)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **Danno rilanciato di un uso infuso**: un secondo Damage Roll della stessa abilità infusa (o del Limit Break) nello
+  stesso turno usciva base e cancellava l'infusione, anche se a tavolo era solo lo stesso tiro rifatto → ogni Damage
+  Roll dopo il primo contava sempre come uso nuovo (p.204: l'Aether "is consumed at the start of the action"; il libro
+  non parla di rilanci) → nel dialog del danno c'è la casella "Reroll (same use)": spuntata si tira di nuovo la
+  versione infusa e l'infusione resta; vuota è un uso nuovo, sulla versione base, e l'infusione viene cancellata;
+  cambiarla riapre il dialog sulla versione scelta. Chiudere il dialog senza tirare non cancella più l'infusione.
+- **Il secondo tiro di MAGNARIME cancellava l'infusione**: il danno "again" di MAGNARIME (p.233), come le esplosioni
+  di MAGNAPYRE e GREAT SPIRIT LANCE, si tira a parte dopo il danno base, ma il secondo Damage Roll cancellava
+  l'infusione e usciva base con l'Aether già speso → stessa causa → quando la versione infusa aggiunge danni suoi
+  sotto "Other", la casella "Reroll (same use)" parte già spuntata. Solo codice.
+
 ## 17 ottobre 2026 — Limit Break con danno in percentuale degli hp (versione 1.15.107)
 
 ### Round di debug del 16 ottobre, voce emersa su R37

@@ -581,13 +581,17 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       danno scritto negli Effect del testo base".
       (FATTO il 17 ottobre 2026, versione 1.15.100, con la voce del Mark di Incubus: la chip Effect di Nothung in
       Other diventa divine con EXCALIBUR.)
-- [ ] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, pronto: risposta del 17 ottobre 2026): un secondo
+- [x] **Emerso lavorando su R38b — il danno rilanciato di un uso infuso esce base** (S, pronto: risposta del 17 ottobre 2026): un secondo
       Damage Roll sulla stessa abilità infusa conta come uso nuovo e cancella l'infusione. Se a tavolo si rilancia il
       danno per errore serve un modo per dire "stesso uso" (es. un'opzione "reroll" nel dialog del danno). Domanda per
       Edoardo: serve?
       Risposta di Edoardo (17 ottobre 2026): sì, serve. Il libro non ne parla (p.204: l'Aether "is consumed at the
       start of the action"): aggiungere nel dialog del danno un'opzione "Reroll (same use)" che non consuma
       l'infusione.
+(FATTO il 17 ottobre 2026, versione 1.15.108: a un secondo Damage Roll della stessa abilità o del Limit Break infusi
+      nello stesso turno il dialog del danno ha la casella "Reroll (same use)": spuntata tira di nuovo la versione
+      infusa e non consuma l'infusione, vuota è un uso nuovo sulla versione base; cambiarla riapre il dialog su quella
+      versione. Solo codice.)
 - [x] **Emerso lavorando su R49 — Dulce Purgatorio su tutti i pit del campo** (S): la Mastery DULCE PURGATORIO (p.178,
       "Pandaemonium's area effect and Purgatorio's pit explosion effect extend to all pits on the battlefield") non è
       letta: l'esplosione prende solo i pit dentro l'area. Basterebbe saltare il filtro "dentro l'area" in
@@ -699,6 +703,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 - [ ] **Emerso lavorando su R37 — Gigantas Crusher, Legend che salva: rimborso della resolve** (S): "refunding this
       ability's resolve cost on a successful save" (p.135) è solo una nota nella card, la resolve non torna da sola;
       la distanza sulla linea di Split Heaven and Hell si sceglie a mano, non viene misurata sulla mappa.
+- [ ] **Emerso lavorando su R38b — il dialog del danno riaperto riparte da capo** (S): cambiando "Reroll (same use)"
+      il dialog si riapre sull'altra versione, ma esito, bersaglio d'attacco e modificatori tornano ai valori
+      iniziali; si potrebbero passare al dialog riaperto quelli già scelti.
 
 ---
 

@@ -1656,6 +1656,25 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R38b — Danno rilanciato di un uso infuso: "Reroll (same use)" (17 ottobre 2026, versione 1.15.108)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Abilità con Infuse a costo fisso (senza danni aggiunti): armarla, tirare il danno, poi tirarlo una seconda volta
+      nello stesso turno. Compare "Reroll (same use)" vuota e il dialog mostra la versione base; tirando così
+      l'infusione sparisce.
+- [ ] Stesso caso spuntando la casella: il dialog si riapre con la versione infusa (formule e nome "Abilità —
+      VERSIONE"); tirando, il chip dell'infusione resta e l'Aether non cambia.
+- [ ] Rime con MAGNARIME armata (Infuse X, almeno 2 Aether): primo Damage Roll, poi un secondo nello stesso turno. La
+      casella parte spuntata, sotto "Other" c'è MAGNARIME e dopo il tiro il chip "Infuse X — MAGNARIME" resta.
+- [ ] Nel caso MAGNARIME togliere la spunta: il dialog si riapre sulla versione base, senza MAGNARIME; tirando,
+      l'infusione si cancella.
+- [ ] Chiudere il dialog (X) al secondo Damage Roll: l'infusione resta armata.
+- [ ] Turno dopo, o abilità mai tirata: il dialog del danno non mostra la casella.
+- [ ] Limit Break infuso (Gigaflare / TETRAFLARE): due Damage Roll nello stesso turno; la casella compare e funziona
+      come per le abilità.
+- [ ] Damage Utility e dialog del danno di foe e legend: nessuna casella nuova.
+
 ## Emerso R37 — Limit Break con danno in percentuale degli hp (17 ottobre 2026, versione 1.15.107)
 
 Setup: solo codice (F5 basta).

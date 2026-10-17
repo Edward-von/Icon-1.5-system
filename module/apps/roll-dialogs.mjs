@@ -581,6 +581,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip icon-roll-chip--combo" title="Roll the combo version's damage instead of the base ability's.">
               <input type="checkbox" name="useCombo" ${comboDefault ? "checked" : ""}><span><i class='fa-solid fa-bolt'></i> Combo version <small>${esc(comboFormula)}</small></span>
             </label>` : ""}
+          ${ab.reroll ? `
+            <label class="icon-roll-chip" title="Ticked: the same use rolled again, the infused version stays and no Aether is spent. Unticked: a new use of the ability, the base version (the Aether pays for one use, p.204). Changing it reopens the dialog on that version.">
+              <input type="checkbox" name="sameUse" ${ab.reroll.sameUse ? "checked" : ""}><span><i class='fa-solid fa-rotate'></i> Reroll (same use) <small>${ab.reroll.sameUse ? "infused version" : "new use: base version"}</small></span>
+            </label>` : ""}
           <div class="icon-roll-other" data-other-panel hidden>
             ${free ? `<label class="icon-roll-other__label">Source <small>optional, shown on the card</small>
               <input type="text" name="otherLabel" placeholder="Counter, hazard, mastery…" maxlength="60">
@@ -709,6 +713,11 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     // ✕ drops a target from this roll (and untargets it on the map); the
     // radios move the attack target. Neither changes the formula.
     _wireTargetCard(root, () => {});
+    // "Reroll (same use)" changes which version is rolled: the caller reopens the dialog on it.
+    f.elements.sameUse?.addEventListener("change", () => {
+      f.dataset.rerollSwitch = "1";
+      f.querySelector('button[data-action="ok"]')?.click();
+    });
     syncType();
     update();
   });
@@ -753,6 +762,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             divine:     !!f.elements.divine?.checked,
             trueStrike: !!f.elements.trueStrike?.checked,
             unerring:   !!f.elements.unerring?.checked,
+            sameUse:      !!f.elements.sameUse?.checked,
+            rerollSwitch: f.dataset.rerollSwitch === "1",
           };
         },
       },

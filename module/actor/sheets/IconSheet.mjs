@@ -29,7 +29,7 @@ import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../c
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
 import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
-         startInfusionStep, noteInfusionStep, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml,
+         startInfusionStep, noteInfusionStep, infusionStepRepeats, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml,
          withoutUnarmedInfusions } from "../../helpers/infuse.mjs";
 import { CLASS_INFO, buildClassTraitDocs, buildClassGambitDoc, ensureClassGambits } from "../../helpers/classes.mjs";
 import { expectedApTotal, expectedSkillRanksFromLevels,
@@ -138,6 +138,16 @@ import { grantStatus } from "../../combat/inflict-status.mjs";
 import { TROPHY_UNITS } from "../../data/item/TrophyData.mjs";
 import { bondGearRules, bondNameOf, looseGearLimit, addBondKits, bondKitItems, partyBondGear, itemCount } from "../../helpers/gear.mjs";
 export { _parseAbilityDamage };
+
+/**
+ * Whether the infused damage adds damage of its own under "Other" that the
+ * base doesn't have (MAGNARIME's "again", MAGNAPYRE's explosion, p.233): it
+ * is rolled after the base damage, so a second Damage Roll in the same turn
+ * starts as "Reroll (same use)".
+ */
+function _addsDamage(infused, base) {
+  return (infused?.extras?.length ?? 0) > (base?.extras?.length ?? 0);
+}
 
 /** The armed one of an ability's infusions (infusionsOf), with the Aether spent on it, or null. */
 function _armedVersion(infusions, actor) {
@@ -1680,13 +1690,15 @@ export class IconSheet extends BaseActorSheet {
     return true;
   }
 
-  async _getAbilityDetail(itemId, { comboMode = null } = {}) {
+  async _getAbilityDetail(itemId, { comboMode = null, noInfusion = false } = {}) {
     const item = this.document.items.get(itemId);
     if (!item) return null;
     await loadSummonIndex();   // chat cards can be posted before any sheet render
     const s = this._comboSystem(item);
     const desc = parseAbilitySections(s.description);
-    const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id);
+    // noInfusion: the base version, as the next use after an infused one reads it.
+    const infusions = infusionsOf([...desc.sections, ...masteryInfusion(s)], this.document, item.id)
+      .map(i => noInfusion ? { ...i, armed: false } : i);
     // The armed Infuse version's damage replaces the base where it writes its own (p.117).
     const parsed = infusedAbilityDamage(_parseAbilityDamage(s, { baseBlocks: true }), _armedVersion(infusions, this.document), { infusions, system: s });
     const parsedCombo = parseComboAbilityDamage(s);
@@ -2762,10 +2774,14 @@ export class IconSheet extends BaseActorSheet {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
     if (!(await this._pickCombo(this.document.items.get(itemId)))) return;
-    // A damage roll after the damage of an infused use is the next use (p.204).
-    await startInfusionStep(this.document, itemId, INFUSE_STEP.damage);
-    const ab = await this._getAbilityDetail(itemId);
-    if (!ab) return;
+    // A damage roll after the damage of an infused use is the next use (p.204),
+    // unless the dialog's "Reroll (same use)" says it is the same one rolled again.
+    const repeat  = infusionStepRepeats(this.document, itemId, INFUSE_STEP.damage);
+    const infused = await this._getAbilityDetail(itemId);
+    if (!infused) return;
+    const base    = repeat ? await this._getAbilityDetail(itemId, { noInfusion: true }) : null;
+    let sameUse   = repeat && _addsDamage(infused.parsed, base.parsed);
+    let ab        = repeat && !sameUse ? base : infused;
     const combat = this.document.system.combat;
     _log(`abilityDamageRoll — "${ab.name}" | parsed:`, ab.parsed, "| parsedCombo:", ab.parsedCombo);
 
@@ -2780,8 +2796,16 @@ export class IconSheet extends BaseActorSheet {
     const comboSpentOn = this.document.getFlag("icon-system", "comboSpentOnItem");
     const comboDefault = !!ab.parsedCombo && (comboToken || comboSpentOn === itemId);
 
-    const mods = await promptDamageMods(ab, combat, { comboDefault, actor: this.document });
-    if (!mods) return;
+    let mods;
+    for (;;) {
+      mods = await promptDamageMods(repeat ? { ...ab, reroll: { sameUse } } : ab, combat, { comboDefault, actor: this.document });
+      if (!mods) return;
+      if (!repeat || !mods.rerollSwitch) break;
+      // The chip was flipped: the dialog opens again on the other version.
+      sameUse = !!mods.sameUse;
+      ab = sameUse ? infused : base;
+    }
+    if (repeat && !sameUse) await startInfusionStep(this.document, itemId, INFUSE_STEP.damage);
     // The area button still reads the version afterwards, until the next use or the end of the turn.
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.damage);
 
@@ -3226,8 +3250,8 @@ export class IconSheet extends BaseActorSheet {
    * Damage of the limit break (effect, and the ultimate from chapter 3, p.113),
    * with the armed Infuse version of it, if any (Tetraflare: "twice instead").
    */
-  static #limitBreakDamage(actor, lb) {
-    const armed = armedInfusion(actor);
+  static #limitBreakDamage(actor, lb, { noInfusion = false } = {}) {
+    const armed = noInfusion ? null : armedInfusion(actor);
     return parseLimitBreakDamage(lb.system, {
       ultimate: (actor.system.combat?.chapter ?? 1) >= 3,
       infused:  armed?.itemId === lb.id ? armed.label : null,
@@ -3275,20 +3299,32 @@ export class IconSheet extends BaseActorSheet {
     event?.stopPropagation?.();
     const lb = this.document.items.find(i => i.type === "limit-break");
     if (!lb) return ui.notifications.warn("No Limit Break equipped.");
-    await startInfusionStep(this.document, lb.id, INFUSE_STEP.damage);
-    const parsed = IconSheet.#limitBreakDamage(this.document, lb);
+    // As an ability's: a second Damage Roll is the next use unless it is "Reroll (same use)".
+    const repeat = infusionStepRepeats(this.document, lb.id, INFUSE_STEP.damage);
+    const infused = IconSheet.#limitBreakDamage(this.document, lb);
+    const baseParsed = repeat ? IconSheet.#limitBreakDamage(this.document, lb, { noInfusion: true }) : null;
+    let sameUse = repeat && _addsDamage(infused, baseParsed);
+    let parsed = repeat && !sameUse ? baseParsed : infused;
     _log(`limitBreakDamageRoll — "${lb.name}" | parsed:`, parsed);
     if (!parsed.dealsDamage) return ui.notifications.warn(`"${lb.name}" does not deal damage.`);
     const combat = this.document.system.combat;
-    // The armed Infuse version names the roll ("Gigaflare — TETRAFLARE").
-    const name = parsed.version?.name ? `${lb.name} — ${parsed.version.name}` : lb.name;
-    const ab = {
-      name, cost: abilityCostLabel(lb.system.cost ?? ""),
-      tags: resolveAbilityTags(lb.system), parsed, parsedCombo: null,
-      isAttack: parsed.isAttack, isAutoHit: parsed.isAutoHit, dealsDamage: true,
-    };
-    const mods = await promptDamageMods(ab, combat, { actor: this.document });
-    if (!mods) return;
+    const abOf = (p) => ({
+      // The armed Infuse version names the roll ("Gigaflare — TETRAFLARE").
+      name: p.version?.name ? `${lb.name} — ${p.version.name}` : lb.name,
+      cost: abilityCostLabel(lb.system.cost ?? ""),
+      tags: resolveAbilityTags(lb.system), parsed: p, parsedCombo: null,
+      isAttack: p.isAttack, isAutoHit: p.isAutoHit, dealsDamage: true,
+    });
+    let mods;
+    for (;;) {
+      mods = await promptDamageMods(repeat ? { ...abOf(parsed), reroll: { sameUse } } : abOf(parsed), combat, { actor: this.document });
+      if (!mods) return;
+      if (!repeat || !mods.rerollSwitch) break;
+      sameUse = !!mods.sameUse;
+      parsed = sameUse ? infused : baseParsed;
+    }
+    if (repeat && !sameUse) await startInfusionStep(this.document, lb.id, INFUSE_STEP.damage);
+    const name = abOf(parsed).name;
     await noteInfusionStep(this.document, lb.id, INFUSE_STEP.damage);
     await postAbilityDamageCard(this.document, {
       parsed,

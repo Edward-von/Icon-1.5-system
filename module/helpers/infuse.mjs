@@ -287,6 +287,17 @@ function _sameTurn(used, now) {
 }
 
 /**
+ * Whether this step of using `itemId` would be the next use of an infused
+ * ability (startInfusionStep would clear the infusion). The damage dialog
+ * asks then whether it is a reroll of the same use instead.
+ */
+export function infusionStepRepeats(actor, itemId, step) {
+  const armed = armedInfusion(actor);
+  if (!armed || armed.itemId !== itemId || !armed.used) return false;
+  return step <= (Number(armed.used.step) || 0);
+}
+
+/**
  * Before a step of using `itemId` (INFUSE_STEP) reads the armed version: when
  * that use already went this far — a second card, a second attack, a damage
  * roll after the damage — this is the next use of the ability, and the
@@ -294,9 +305,8 @@ function _sameTurn(used, now) {
  * @returns {Promise<boolean>} true when it was cleared
  */
 export async function startInfusionStep(actor, itemId, step) {
+  if (!infusionStepRepeats(actor, itemId, step)) return false;
   const armed = armedInfusion(actor);
-  if (!armed || armed.itemId !== itemId || !armed.used) return false;
-  if (step > (Number(armed.used.step) || 0)) return false;
   _log(`"${armed.label}" was used already (step ${armed.used.step}, now ${step}): cleared for the next use`);
   await clearInfusion(actor);
   return true;
