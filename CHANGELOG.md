@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il Mark di Incubus sparisce con Succubus (versione 1.15.126)
+
+### Round di debug del 16 ottobre, voce emersa su R40
+
+- **Chip Mark con il combo Succubus**: con la Combo version spuntata restava anche la chip "Mark" (2) della base → il
+  dialog non sapeva che Succubus scrive "Instead of the mark" (p.164) → la combo ora dice quali blocchi della base
+  sostituisce ("instead of the mark / effect / stance"), e con Combo version spuntata quelle chip si nascondono. Nel
+  pack jobs riguarda solo Incubus. Solo codice.
+
 ## 17 ottobre 2026 — Chip della combo di Succubus solo con la combo (versione 1.15.125)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

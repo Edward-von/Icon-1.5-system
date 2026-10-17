@@ -530,6 +530,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   const baseExtras = Array.isArray(p.extras) ? p.extras : [];
   const extras = [...baseExtras, ...(ab.parsedCombo?.comboExtras ?? [])];
   const isComboExtra = (i) => i >= baseExtras.length;
+  // ...and a base block the combo replaces ("Instead of the mark") is hidden then.
+  const replaced = ab.parsedCombo?.replacesBlocks ?? [];
+  const isReplaced = (i) => !isComboExtra(i) && replaced.includes(String(extras[i].source ?? "").toLowerCase());
   const typeWord = (t) => t === "divine" ? " divine" : t === "piercing" ? " piercing" : "";
   // "Hit (no damage)" only where a hit can happen: an attack (its target may
   // take only the hit's statuses while the rest of the area takes damage), or
@@ -594,7 +597,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             </label>` : ""}
             ${extras.length ? `<div class="icon-roll-chips" data-other-chips>
               ${extras.map((x, i) => `
-                <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}"${isComboExtra(i) ? " data-combo-chip" : ""}>
+                <label class="icon-roll-chip" title="${esc(`${x.source}: ${x.text}`)}"${isComboExtra(i) ? " data-combo-chip" : isReplaced(i) ? " data-combo-replaced" : ""}>
                   <input type="radio" name="otherPick" value="${i}"><span>${esc(x.source)} <small>${esc(chunkFormula(x))}${typeWord(x.type)}${x.area ? " · area" : ""}</small></span>
                 </label>`).join("")}
             </div>` : ""}
@@ -714,10 +717,12 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     const syncComboChips = () => {
       const on = f.elements.useCombo ? !!f.elements.useCombo.checked : comboDefault;
       // style.display, not `hidden`: the chip's CSS display would override it.
-      root.querySelectorAll("[data-combo-chip]").forEach(l => {
-        l.style.display = on ? "" : "none";
+      // The base block the combo replaces ("Instead of the mark") the other way round.
+      root.querySelectorAll("[data-combo-chip], [data-combo-replaced]").forEach(l => {
+        const show = l.hasAttribute("data-combo-chip") ? on : !on;
+        l.style.display = show ? "" : "none";
         const r = l.querySelector('input[name="otherPick"]');
-        if (!on && r?.checked) r.checked = false;
+        if (!show && r?.checked) r.checked = false;
       });
       const box = root.querySelector("[data-other-chips]");
       if (box) box.style.display = Array.from(box.children).some(l => l.style.display !== "none") ? "" : "none";

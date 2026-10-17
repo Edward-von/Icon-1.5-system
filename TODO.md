@@ -691,8 +691,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.113: all'armo il flag infused ricorda in `furnaceAt` combattimento e round
       dell'Inner Furnace pagato; `cancelInfusion` azzera `flags.icon-system.innerFurnace` solo se è ancora quello.
       Solo codice.)
-- [ ] **Emerso lavorando su R40 — chip Mark nel combo Succubus** (S): Succubus dice "Instead of the mark", ma in Other
+- [x] **Emerso lavorando su R40 — chip Mark nel combo Succubus** (S): Succubus dice "Instead of the mark", ma in Other
       resta anche la chip "Mark" della base; andrebbe nascosta con il combo in uso.
+(FATTO il 17 ottobre 2026, versione 1.15.126: con la Combo version spuntata la chip "Mark" della base è nascosta,
+      perché Succubus scrive "Instead of the mark". Solo codice.)
 - [ ] **Emerso lavorando su R40 — danno dei blocchi Effect di foe e legend** (M): azioni di foe e legend come Kelpie
       Savage Fang, Overpower, Mighty Smite e Heavy Arquebus scrivono danni extra nei loro "Effect:" che non vengono
       proposti; allargare la regola vuol dire circa 150 frasi da controllare (i blocchi Collide / Exceed / Charge

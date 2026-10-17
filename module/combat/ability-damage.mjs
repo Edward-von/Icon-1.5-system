@@ -295,6 +295,10 @@ export function parseComboAbilityDamage(itemSystem) {
                          area: /\b(?:area|blast|arc|line|burst|aura)\b/i.test(sentence) });
     }
   } else if (!anyLabel && deals(combo.hit)) rewrites.hit = true;
+  // Base blocks the combo takes the place of ("Instead of the mark", Succubus
+  // p.164): their damage lines are not offered while the combo is rolled.
+  const replacesBlocks = [...text.matchAll(/\binstead\s+of\s+the\s+(mark|(?:terrain\s+|area\s+)?effect|stance)\b/gi)]
+    .map(m => m[1].toLowerCase().replace(/\s+/g, " "));
   const hit  = rewrites.hit  ? combo.hit  : base.hit;
   const miss = rewrites.miss ? combo.miss : base.miss;
   const area = rewrites.area ? combo.area : base.area;
@@ -305,6 +309,7 @@ export function parseComboAbilityDamage(itemSystem) {
     hit, miss, area,
     extras:      [...(base.extras ?? []), ...comboExtras],
     comboExtras, // the combo's own "Other" damage, listed by the damage dialog
+    replacesBlocks, // ["mark"]: base blocks whose "Other" lines the combo hides
   };
 }
 
