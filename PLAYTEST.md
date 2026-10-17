@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Aree terrain effect: status per chi sta dentro (17 ottobre 2026, versione 1.15.164)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Mist Strider: un foe entra nella nuvola → card "Blind+ a <foe>", il clic lo rende Blind ongoing; quando esce →
+      "Remove Blind".
+- [ ] Un alleato che entra nella nuvola di Mist Strider non riceve nessuna card (vale solo "Foes").
+- [ ] Nocturne: il Shade entra nelle proprie shadow clouds → nessuna card (immune); un altro personaggio → Blind+.
+- [ ] Magnabio piazzata su personaggi già dentro → una sola card con i bottoni Shattered+ per ciascuno.
+- [ ] Dark Wing: un alleato entra → bottone Cover; un foe non riceve niente.
+- [ ] Quench: entrando → Cover; uscendo → "Remove Cover" e "gains Stealth".
+- [ ] Tsunami con Talent II: un foe entra → riga "+1 curse on saves while inside", senza bottone.
+- [ ] Il bottone di un foe è grigio per il giocatore e attivo per il GM.
+
 ## R33a5 — Bottone Pick up a inizio turno per Comet (17 ottobre 2026, versione 1.15.163)
 
 Setup: solo codice (F5 basta).

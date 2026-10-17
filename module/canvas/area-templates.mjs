@@ -1105,6 +1105,14 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     const { offerAreaObjectTriggers } = await import("./map-objects.mjs");
     await offerAreaObjectTriggers(cells, { actor, abilityName });
   } catch (err) { console.error("ICON 1.5 | object area check failed", err); }
+  // R33c2: a terrain effect that does something to the characters inside it (blinded+, cover…): offered to those
+  // already there, on a click (terrain-spaces.mjs). Lazy import: terrain-spaces.mjs imports this module.
+  if (template?.flags?.[FLAG_NS]?.terrain?.inside?.length) {
+    try {
+      const { offerInsideOnPlace } = await import("./terrain-spaces.mjs");
+      await offerInsideOnPlace(template);
+    } catch (err) { console.error("ICON 1.5 | inside-area check failed", err); }
+  }
   return { template, cells, targets, area };
 }
 

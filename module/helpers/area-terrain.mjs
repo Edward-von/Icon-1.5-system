@@ -214,6 +214,56 @@ export function markGrowTo(texts) {
   return null;
 }
 
+// Statuses an area gives the characters inside it, as the book spells them → status id (statuses.mjs).
+const INSIDE_STATUS = { blinded: "blind", blind: "blind", shattered: "shattered", dazed: "dazed", weakened: "weakened",
+  vulnerable: "vulnerable", slashed: "slashed", cover: "cover", stealth: "stealth", evasion: "evasion" };
+const INSIDE_WORD = Object.keys(INSIDE_STATUS).join("|");
+const whoOf = (w) => /^(?:yourself and allies|you and allies)$/i.test(w) ? "self+allies" : /^allies$/i.test(w) ? "allies"
+  : /^foes$/i.test(w) ? "foes" : /^(?:you|yourself)$/i.test(w) ? "self" : "all";
+
+/**
+ * What a terrain-effect area does to the characters inside it (R33c2), from the ability's active blocks and its
+ * terrain's rules:
+ *   while inside  "Foes inside are blinded+" (Mist Strider p.169), "While inside this terrain space, characters are
+ *                 blinded+ … You are immune" (Shadow Cloud p.161), "characters inside are shattered+" (Magnabio
+ *                 p.218), "allies in the area have cover" (Dark Wing p.171), "The area grants cover" (Quench p.157)
+ *                 → { when: "inside", status, ongoing, who }: offered on entering, its removal on leaving
+ *   on leaving    "yourself and allies exiting the area can gain stealth" (Quench p.157) → { when: "exit" }
+ *   enter / exit  "when you enter or exit the area, you can gain stealth" (Mist Strider Talent I p.169) → { when: "move" }
+ *   a note        "Foes inside Tsunami take +1 curse on saves" (Tsunami Talent II p.233) → { when: "inside", note }
+ * `who` is "foes", "allies", "self+allies", "self" or "all"; `immune` leaves the creator out.
+ * @param {Array<[string, string]>} texts
+ * @returns {Array<{when:string, status?:string, ongoing?:boolean, note?:string, who:string, immune?:boolean, source:string, rule:string}>}
+ */
+export function insideEffectsOf(texts) {
+  const out = [];
+  const add = (e) => { if (!out.some(o => o.when === e.when && o.status === e.status && o.note === e.note && o.who === e.who)) out.push(e); };
+  for (const [source, text] of texts ?? []) {
+    const t = plain(text);
+    const res = [
+      [new RegExp(`\\b(foes|allies|characters)\\s+(?:inside|in the area)(?:\\s+the area)?\\s+(?:are|have|has)\\s+(${INSIDE_WORD})(\\+)?(?![a-z])`, "gi"), "inside", 1],
+      [new RegExp(`\\bwhile inside (?:this terrain space|the area|it)[^.;]*?,\\s*(characters|foes|allies) are (${INSIDE_WORD})(\\+)?(?![a-z])`, "gi"), "inside", 1],
+      [new RegExp(`\\bthe area grants (${INSIDE_WORD})\\b`, "gi"), "inside", 0],
+      [new RegExp(`\\b(yourself and allies|you and allies|allies|you)\\s+(?:exiting|that exit|who exit) the area (?:can|may) gain (${INSIDE_WORD})\\b`, "gi"), "exit", 1],
+      [new RegExp(`\\bwhen (you) enter or exit the area, you (?:can|may) gain (${INSIDE_WORD})\\b`, "gi"), "move", 1],
+    ];
+    for (const [re, when, hasWho] of res) {
+      for (const m of t.matchAll(re)) {
+        const word = (hasWho ? m[2] : m[1]).toLowerCase();
+        const rule = sentenceAt(t, m.index);
+        // Once, not while inside: "When the trigram activates, all foes inside are weakened" (Six Hells Trigram p.130).
+        if (when === "inside" && /^(?:when|whenever|at|after|if|on)\b/i.test(rule)) continue;
+        add({ when, status: INSIDE_STATUS[word], ongoing: hasWho ? m[3] === "+" : false, who: hasWho ? whoOf(m[1]) : "all",
+          immune: /\byou are immune to (?:these|this|its) effects?\b/i.test(t.slice(m.index, m.index + 200)), source, rule });
+      }
+    }
+    for (const m of t.matchAll(/\b(foes|allies|characters) inside [\w-]+ (?:take|have|gain) ([+-]\d+ (?:curses?|boons?) on [^.;]+)/gi)) {
+      add({ when: "inside", note: `${m[2]}`, who: whoOf(m[1]), source, rule: sentenceAt(t, m.index) });
+    }
+  }
+  return out;
+}
+
 /**
  * The blocks of an ability that are in play: the base text and its effect blocks, the selected talent, the unlocked
  * mastery (as terrainSpacesForItem / objectsForItem).

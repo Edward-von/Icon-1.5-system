@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aree terrain effect: status per chi sta dentro (versione 1.15.164)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **Status dentro l'area**: chi entrava nella nuvola di Mist Strider, nelle shadow clouds di Nocturne, nella toxic
+  cloud di Magnabio, nell'area di Dark Wing o di Quench non riceveva niente → le frasi "foes inside are blinded+"
+  (p.169), "characters are blinded+" (p.161), "characters inside are shattered+" (p.218), "allies in the area have
+  cover" (p.171), "the area grants cover" (p.157) erano solo testo → ora entrando (o quando l'area viene piazzata su
+  chi c'è già) esce una card con il bottone dello status (es. "Blind+ a X"), uscendo il bottone "Remove …"; Quench
+  "exiting the area can gain stealth" e Mist Strider Talent I offrono "X gains Stealth"; per Tsunami Talent II solo il
+  promemoria "+1 curse on saves while inside". Il creatore è escluso quando il testo dice "You are immune" (shadow
+  cloud p.161). Tutto su clic; il "once a round" di Quench e Mist Strider Talent I resta a mano. Solo codice.
+
 ## 17 ottobre 2026 — Bottone Pick up a inizio turno per Comet (versione 1.15.163)
 
 ### Round di debug del 15 ottobre, R33a5

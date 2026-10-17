@@ -479,12 +479,15 @@ async function offerTerrainOnMove(td, prev, to) {
   const hostile = isHostile(td);
   let danger = null;
   const reminders = [];
+  const inside = [];
   for (const { doc, f, keys } of terrainOn(scene)) {
     const was = touches(before, keys), now = touches(after, keys);
     if (was === now) continue;
     if (f.dangerous && (!f.foesOnly || hostile) && !danger) danger = { f, entered: now, doc };
     if (f.onEnter && (now || f.enterExit) && (!f.enterFoes || hostile) && !(f.enterAllies && hostile)) reminders.push({ doc, f, entered: now });
+    if (f.inside?.length) inside.push({ doc, f, entered: now });
   }
+  if (inside.length) await offerInsideEffects(td, inside);
   if (reminders.length) {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ token: td }),
@@ -509,6 +512,95 @@ async function offerTerrainOnMove(td, prev, to) {
   if (!ok) return;
   const { applyDamageToActor } = await import("../combat/damage.mjs");
   await applyDamageToActor(td.actor, 2, { ignoreVigor: true, chatConfirm: true });
+}
+
+/** Does an area's inside effect (area-terrain.mjs insideEffectsOf) concern the character of `td`? */
+function insideConcerns(e, td, creatorId) {
+  const self = !!creatorId && td.actor?.id === creatorId;
+  if (e.immune && self) return false;
+  switch (e.who) {
+    case "self": return self;
+    case "allies": return !self && !isHostile(td);
+    case "self+allies": return !isHostile(td);
+    case "foes": return isHostile(td);
+    default: return true;
+  }
+}
+
+/** A chat button that gives or takes a status from one character, on a click (registerTerrainSpaceHooks binds it). */
+function insideStatusButton(td, status, { op = "apply", ongoing = false, label = "" } = {}) {
+  return `<button type="button" class="icon-btn icon-btn--sm" data-action="terrainInsideStatus" data-token-uuid="${esc(td.uuid)}" data-status="${esc(status)}" data-ongoing="${ongoing ? "true" : "false"}" data-op="${op}"><i class="fa-solid ${op === "apply" ? "fa-plus" : "fa-minus"}"></i> ${esc(label)}</button>`;
+}
+
+/**
+ * R33c2: a character moved into or out of a terrain-effect area that does something to the characters inside it
+ * ("Foes inside are blinded+", Mist Strider p.169; shadow clouds p.161; Magnabio's "characters inside are
+ * shattered+" p.218; Dark Wing's "allies in the area have cover" p.171; Quench's cover and "exiting the area can
+ * gain stealth" p.157; Tsunami Talent II's "+1 curse on saves" p.233). One chat card with a button per status:
+ * nothing is given or taken without a click. "+" statuses are ongoing (p.104): they stay while inside, and leaving
+ * offers their removal.
+ * @param {TokenDocument} td
+ * @param {Array<{doc: MeasuredTemplateDocument, f: object, entered: boolean}>} moves
+ */
+async function offerInsideEffects(td, moves) {
+  const blocks = await insideBlocks(td, moves);
+  if (!blocks.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker({ token: td }),
+    content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
+  });
+}
+
+/**
+ * R33c2: a terrain-effect area just placed: the same offers for the characters already inside it, in one card.
+ * @param {MeasuredTemplateDocument} doc
+ */
+export async function offerInsideOnPlace(doc) {
+  const f = terrainFlag(doc);
+  const scene = doc?.parent;
+  if (!f?.inside?.length || !scene) return;
+  const keys = new Set((doc.flags[NS].cells ?? []).map(cellKey));
+  const blocks = [];
+  for (const td of scene.tokens) {
+    if (!td.actor || isMapObject(td) || !touches(cellsOf(td), keys)) continue;
+    blocks.push(...await insideBlocks(td, [{ doc, f, entered: true }], { placed: true }));
+  }
+  if (!blocks.length) return;
+  await ChatMessage.create({
+    speaker: ChatMessage.getSpeaker(),
+    content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
+  });
+}
+
+/** The card blocks of offerInsideEffects for one character. */
+async function insideBlocks(td, moves, { placed = false } = {}) {
+  const { hasStatus, ICON_STATUSES } = await import("../combat/statuses.mjs");
+  const nameOf = (id) => ICON_STATUSES.find(s => s.id === id)?.name ?? id;
+  const blocks = [];
+  for (const { doc, f, entered } of moves) {
+    const lines = [];
+    for (const e of f.inside) {
+      if (!insideConcerns(e, td, f.creatorId)) continue;
+      const src = e.source ? ` <small>(${esc(e.source)})</small>` : "";
+      if (e.note) {
+        if (entered) lines.push(`<p>${esc(td.name)}: ${esc(e.note)} while inside.${src}</p>`);
+        else lines.push(`<p><small>${esc(td.name)} no longer has ${esc(e.note)}.</small></p>`);
+        continue;
+      }
+      const name = `${nameOf(e.status)}${e.ongoing ? "+" : ""}`;
+      const has = hasStatus(td.actor, e.status);
+      if (e.when === "inside") {
+        if (entered && !has) lines.push(`<p>Inside: ${esc(name)}.${src}<br>${insideStatusButton(td, e.status, { ongoing: e.ongoing, label: `${name} to ${td.name}` })}</p>`);
+        else if (!entered && has) lines.push(`<p>Left the area: no longer ${esc(name)}?${src}<br>${insideStatusButton(td, e.status, { op: "remove", label: `Remove ${nameOf(e.status)}` })}</p>`);
+      } else if (!placed && ((e.when === "exit" && !entered) || e.when === "move")) {
+        if (!has) lines.push(`<p><small>${esc(e.rule)}</small>${src}<br>${insideStatusButton(td, e.status, { label: `${td.name} gains ${name}` })}</p>`);
+      }
+    }
+    if (!lines.length) continue;
+    const by = doc.flags[NS].abilityName;
+    blocks.push(`<p><strong><i class="fa-solid fa-location-dot"></i> ${esc(td.name)}</strong> ${placed ? "is inside" : entered ? "enters" : "leaves"} the area${by ? ` of <strong>${esc(by)}</strong>` : ""}.</p>${lines.join("")}`);
+  }
+  return blocks;
 }
 
 /**
@@ -543,6 +635,29 @@ export function registerTerrainSpaceHooks() {
     if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerTerrainOnMove(tokenDoc, options.iconPrevPos, to).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
+  });
+
+  // R33c2: the status buttons of a terrain-effect area entered or left (offerInsideEffects).
+  Hooks.on("renderChatMessageHTML", (_message, html) => {
+    for (const btn of html.querySelectorAll('[data-action="terrainInsideStatus"]')) {
+      if (btn.dataset.iconBound) continue;
+      btn.dataset.iconBound = "true";
+      const actorOf = () => fromUuidSync(btn.dataset.tokenUuid)?.actor ?? null;
+      const actor = actorOf();
+      if (!actor) { btn.disabled = true; btn.title = "That character is no longer on the scene"; btn.style.opacity = "0.5"; continue; }
+      if (!actor.isOwner && !game.user.isGM) { btn.disabled = true; btn.title = "Only the owner of that character or the GM"; btn.style.opacity = "0.5"; continue; }
+      btn.addEventListener("click", async (ev) => {
+        ev.preventDefault(); ev.stopPropagation();
+        const a = actorOf();
+        if (!a) return;
+        const { applyStatus, removeStatus } = await import("../combat/statuses.mjs");
+        try {
+          if (btn.dataset.op === "remove") await removeStatus(a, btn.dataset.status);
+          else await applyStatus(a, btn.dataset.status, btn.dataset.ongoing === "true");
+        } catch (err) { console.warn("[ICON | TerrainSpaces] status change failed", err); return; }
+        btn.disabled = true; btn.style.opacity = "0.5";
+      });
+    }
   });
 
   // "Remove" / "Remove all" on the cards.

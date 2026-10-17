@@ -28,7 +28,7 @@ import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canv
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
 import { characterSpecOf } from "../../canvas/follow-marks.mjs";
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
-import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText } from "../../helpers/area-terrain.mjs";
+import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText, insideEffectsOf } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          startInfusionStep, noteInfusionStep, infusionStepRepeats, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml,
          withoutUnarmedInfusions } from "../../helpers/infuse.mjs";
@@ -2406,7 +2406,10 @@ export class IconSheet extends BaseActorSheet {
     const extension = area?.kind === "line" || area?.kind === "arc" ? this.#lineExtension(ab, s) : null;
     const allPits = this.#areaOnAllPits(ab, s, area);
     if (!lasting || area?.kind === "aura") return { lasting, extension, allPits };
-    const terrain = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
+    const base = area?.terrain ?? terrainBlockOf(s.description) ?? { kind: "area", name: "", label: "Terrain", rules: "" };
+    // R33c2: what the area does to the characters inside it (blinded+, cover, stealth on exiting…), offered at movement.
+    const inside = insideEffectsOf([...activeAreaTexts(s), ["", base.rules ?? ""]]);
+    const terrain = inside.length ? { ...base, inside } : base;
     const stack = areaStackLimit(activeAreaTexts(s));
     return { lasting, terrain, extension, allPits, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
   }

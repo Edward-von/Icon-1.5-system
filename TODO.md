@@ -1438,6 +1438,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R33a5 — pierce degli shard e weakened** (S): il pierce ignora anche weakened (p.104), ma
       weakened è già tolto dal totale della card quando viene creata; per il solo bersaglio vicino allo shard non
       viene ridato.
+- [ ] **Emerso lavorando su R33c2 — area spostata sopra i personaggi** (S): quando un'area si muove (Tsunami, Shift +
+      frecce) chi ci finisce dentro o ne esce non riceve l'offerta di status; si controlla solo quando si muove il
+      token o si piazza l'area.
+- [ ] **Emerso lavorando su R33c2 — Mist Strider Talent II** (S): "Foes in the area count all characters as having
+      evasion" non ha nessun promemoria.
 
 ---
 
