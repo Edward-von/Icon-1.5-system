@@ -28,7 +28,7 @@ import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canv
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
 import { characterSpecOf } from "../../canvas/follow-marks.mjs";
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
-import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText, insideEffectsOf } from "../../helpers/area-terrain.mjs";
+import { terrainBlockOf, areaStackLimit, activeAreaTexts, baseAreaText, insideEffectsOf, areaExtendsOld, impassableAlternative } from "../../helpers/area-terrain.mjs";
 import { infusionsOf, armInfusion, cancelInfusion, armedInfusion, masteryInfusion, limitBreakInfusions,
          startInfusionStep, noteInfusionStep, infusionStepRepeats, INFUSE_STEP, splitInfuseBlocks, infuseVersionParts, infuseVersionHtml,
          withoutUnarmedInfusions } from "../../helpers/infuse.mjs";
@@ -2411,7 +2411,11 @@ export class IconSheet extends BaseActorSheet {
     const inside = insideEffectsOf([...activeAreaTexts(s), ["", base.rules ?? ""]]);
     const terrain = inside.length ? { ...base, inside } : base;
     const stack = areaStackLimit(activeAreaTexts(s));
-    return { lasting, terrain, extension, allPits, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "" };
+    // R33c2: Ätherwand Talent I extends the old area instead of replacing it; HELLERWIND may make it impassable.
+    const extendsOld = areaExtendsOld(activeAreaTexts(s));
+    const impassable = impassableAlternative(activeAreaTexts(s));
+    return { lasting, terrain, extension, allPits, stack: stack?.max ?? 1, stackRule: stack ? `${stack.source ? `${stack.source}: ` : ""}${stack.rule}` : "",
+      ...(extendsOld ? { extendsOld } : {}), ...(impassable ? { impassable } : {}) };
   }
 
   /**
@@ -2557,6 +2561,28 @@ export class IconSheet extends BaseActorSheet {
     if (!area) return;
     _log(`abilityPlaceArea — "${ab.name}" | ${area.label}`);
     const opts = this.#areaPlacementOpts(ab, area);
+    // R33c2: HELLERWIND (p.226) "You can create a powerful gale instead": asked; the gale is impassable, never
+    // extended (Talent I) nor moved (Talent II, area-motion.mjs reads `impassable` on the terrain flag).
+    if (opts.impassable && opts.terrain) {
+      const alt = opts.impassable;
+      let pick = null;
+      try {
+        pick = await foundry.applications.api.DialogV2.wait({
+          window: { title: `${ab.name} — ${alt.source || "Mastery"}` },
+          content: `<p><small>${foundry.utils.escapeHTML(alt.rule)}</small></p>`,
+          buttons: [{ action: "normal", label: ab.name, default: true }, { action: "alt", label: alt.name.replace(/^\w/, c => c.toUpperCase()) }],
+          rejectClose: false,
+        });
+      } catch { pick = null; }
+      if (!pick) return;
+      if (pick === "alt") {
+        const name = alt.name.replace(/^\w/, c => c.toUpperCase());
+        opts.terrain = { ...opts.terrain, name, impassable: true, label: `${name} · Impassable`,
+          rules: `${opts.terrain.rules ?? ""} ${alt.rule} Impassable (p.89): provides obstruction and cover, and blocks line of sight.`.trim() };
+        delete opts.extendsOld;
+      }
+    }
+    delete opts.impassable;
     const placed = await placeAreaTemplate({ actor: this.document, area, abilityName: ab.name, abilityKey: ab.id, text: this.#auraText(ab), ...opts });
     // R33c: Tsunami's edge, the moves and growth it has (area-motion.mjs).
     // (Not the pits' blasts, R49: an area effect that is gone once resolved.)

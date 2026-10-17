@@ -228,6 +228,34 @@ export function areaDamage(texts) {
 }
 
 /**
+ * R33c2: Ätherwand Talent I (p.226) "When you use this ability again, it doesn't replace the old area, but extends
+ * it, as long as at least one space of the new area is adjacent to the old" → { source, rule }, or null.
+ * @param {Array<[string, string]>} texts
+ */
+export function areaExtendsOld(texts) {
+  for (const [source, text] of texts ?? []) {
+    const t = plain(text);
+    const m = /\bdoesn't replace the old area, but extends it, as long as at least one space of the new area is adjacent to the old\b/i.exec(t.replace(/’/g, "'"));
+    if (m) return { source, rule: sentenceAt(t, m.index) };
+  }
+  return null;
+}
+
+/**
+ * R33c2: HELLERWIND (Ätherwand's mastery, p.226) "You can create a powerful gale instead. If you do, you can't extend
+ * or move the area, but it becomes impassable terrain" → { name: "powerful gale", source, rule }, or null.
+ * @param {Array<[string, string]>} texts
+ */
+export function impassableAlternative(texts) {
+  for (const [source, text] of texts ?? []) {
+    const t = plain(text).replace(/’/g, "'");
+    const m = /\byou can create an? ([\w -]{2,30}?) instead\. if you do, you can't extend or move the area, but it becomes impassable terrain\b/i.exec(t);
+    if (m) return { name: m[1].trim(), source, rule: t.slice(m.index, m.index + m[0].length) + "." };
+  }
+  return null;
+}
+
+/**
  * A single-space mark that grows into an area from a round on: HURRICANE (p.235), "At round 4 or later, waterspouts
  * grow to a small blast area instead of a single space. They become dangerous terrain …".
  * @param {Array<[string, string]>} texts

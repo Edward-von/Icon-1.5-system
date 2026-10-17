@@ -67,6 +67,8 @@ function rulesOf(doc) {
   const name = String(tf?.name ?? "").toLowerCase();
   let motion = areaMotion(texts);
   if (motion && mark) motion = motion.free && name && motion.free.noun === name ? { free: motion.free, freeAlt: motion.freeAlt, vacate: motion.vacate, startShove: motion.startShove } : null;
+  // R33c2: HELLERWIND's gale "you can't extend or move the area" (p.226).
+  if (tf?.impassable) motion = null;
   let growTo = mark ? markGrowTo(texts) : null;
   if (growTo && growTo.noun !== name) growTo = null;
   return { actor, item, f, motion, growth: mark ? null : areaGrowth(texts), growTo, damage: mark ? null : areaDamage(texts) };

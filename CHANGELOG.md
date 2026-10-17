@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (versione 1.15.168)
+
+### Round di debug del 15 ottobre, R33c2
+
+- **HEIMDALL**: la seconda line poteva coprire la prima → "cannot overlap the first" (p.226) non era controllato → ora
+  il piazzamento la rifiuta se tocca la prima.
+- **Ätherwand Talent I**: riusare l'abilità sostituiva l'area → "doesn't replace the old area, but extends it" (p.226)
+  non era letto → ora gli spazi nuovi si aggiungono all'area già sulla mappa, a patto che almeno uno sia adiacente.
+- **HELLERWIND**: non c'era modo di creare il gale → ora il bottone area chiede "Ätherwand / Powerful gale"; il gale è
+  "Impassable" (p.89), non si estende e non ha bottoni di movimento (l'impassabilità non blocca davvero i token). Solo
+  codice.
+
 ## 17 ottobre 2026 — Waterspout: terreno lasciato, HURRICANE (versione 1.15.167)
 
 ### Round di debug del 15 ottobre, R33c2

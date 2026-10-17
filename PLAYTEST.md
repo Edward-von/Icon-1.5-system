@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33c2 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (17 ottobre 2026, versione 1.15.168)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Bifröst HEIMDALL: "Add another" → una line sopra la prima viene rifiutata, una accanto va.
+- [ ] Ätherwand Talent I: seconda volta → gli spazi si aggiungono alla prima area (un solo template); se nessuno
+      spazio è adiacente, avviso.
+- [ ] Ätherwand con HELLERWIND: domanda all'uso; il gale ha l'etichetta Impassable e niente frecce di Talent II a
+      inizio turno.
+
 ## R33c2 — Waterspout: terreno lasciato, HURRICANE (17 ottobre 2026, versione 1.15.167)
 
 Setup: solo codice (F5 basta).

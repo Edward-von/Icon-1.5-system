@@ -897,7 +897,7 @@ export const isPlacingArea = () => AreaPlacement.active;
  * @param {string}  [opts.stackRule=""] the sentence that allows it, shown in the question
  * @param {object|null} [opts.extension] R47b: a second line the user may add (lineExtensionInText, plus `source`)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false, extendsOld = null }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -906,6 +906,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // R33c: several areas of the same ability at once ("you cannot have more than three areas active", Gust's
   // NORTHSOUL p.234; "Create a second cloud", Mist Strider p.170): ask before placing instead of replacing.
   let removeIds = null;   // null = the usual replacement of every earlier one
+  let noOverlapKeys = null;   // R33c2: spaces the new area may not cover (HEIMDALL)
   // R49: the pits' explosion (Holy Talent I, PURGATORIO, p.177) is an area effect set off inside the
   // ability's own area: that area stays on the map, only an earlier explosion of the same ability is replaced.
   // HARVEST MOON's plant explosions (p.186) are placed the same way, on the plants instead of the pits.
@@ -945,7 +946,20 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       } catch { choice = null; }
       if (!choice) return null;
       removeIds = choice === "add" ? earlier.slice(0, Math.max(0, earlier.length - stack + 1)).map(t => t.id) : earlier.map(t => t.id);
+      // R33c2: HEIMDALL (Bifröst p.226) "Create a new line 3 terrain effect, which cannot overlap the first".
+      if (choice === "add" && /\bcannot overlap\b/i.test(stackRule)) {
+        const kept = earlier.filter(t => !removeIds.includes(t.id)).flatMap(t => t.flags[FLAG_NS].cells ?? []);
+        if (kept.length) noOverlapKeys = new Set(kept.map(cellKey));
+      }
     }
+  }
+  // R33c2: Ätherwand Talent I (p.226) "it doesn't replace the old area, but extends it, as long as at least one space
+  // of the new area is adjacent to the old": the new spaces join the area already on the map.
+  let extendInto = null;
+  if (replace && extendsOld && !pitBlast && !onSpike) {
+    extendInto = findAreaTemplates({ actorId: actor.id, abilityKey }).filter(t => !t.flags[FLAG_NS].followTokenId && t.flags[FLAG_NS].lasting)
+      .sort((a, b) => (b._stats?.createdTime ?? 0) - (a._stats?.createdTime ?? 0))[0] ?? null;
+    if (extendInto && !(extendInto.isOwner || game.user.isGM)) extendInto = null;
   }
 
   area = { ...area };
@@ -1020,7 +1034,14 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     const range = anchor ? 1 : area.range;
     const rangeCells = area.mapEdge ? null : Number.isFinite(range) ? cellsInRange(originCells, Math.max(1, range)) : null;
     const blocked = anchor ? [...originCells, ...sourceCells] : sourceCells;
-    const check = area.mapEdge ? mapEdgeCheck(canvas.scene) : null;
+    const edgeCheck = area.mapEdge ? mapEdgeCheck(canvas.scene) : null;
+    const oldCells = extendInto?.flags?.[FLAG_NS]?.cells ?? [];
+    const checks = [
+      edgeCheck,
+      noOverlapKeys ? (cs) => cs.some(c => noOverlapKeys.has(cellKey(c))) ? "This area cannot overlap the first (p.226)." : "" : null,
+      oldCells.length ? (cs) => cs.some(c => oldCells.some(o => chebyshev(o, c) <= 1)) ? "" : `At least one space must be adjacent to the ${abilityName || "area"} already on the map: it extends it (${extendsOld.source || "Talent I"}).` : null,
+    ].filter(Boolean);
+    const check = checks.length ? (cs, o, d) => { for (const fn of checks) { const w = fn(cs, o, d); if (w) return w; } return ""; } : null;
     const placed = await new AreaPlacement({ area, sourceCells: blocked, rangeCells, originInRange: atSpace, check }).run();
     if (!placed) return null;
     ({ cells, origin: originCell } = placed);
@@ -1050,6 +1071,18 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
       }
     }
     if (added) area.label = `${area.label} + all pits`;
+  }
+
+  // R33c2: Ätherwand Talent I — the new spaces join the old area (one template, its terrain and moves kept).
+  if (extendInto && !isAura && !atSpace) {
+    const old = extendInto.flags[FLAG_NS].cells ?? [];
+    const seen = new Set(old.map(cellKey));
+    const added = cells.filter(c => !seen.has(cellKey(c))).map(c => ({ i: c.i, j: c.j }));
+    await extendInto.update({ [`flags.${FLAG_NS}.cells`]: [...old.map(c => ({ i: c.i, j: c.j })), ...added] });
+    if (token.isOwner && !token.controlled) token.control({ releaseOthers: false });
+    ui.notifications.info(`${abilityName || area.label} extended by ${added.length} space${added.length === 1 ? "" : "s"} (${old.length + added.length} in all): ${extendsOld.source ? `${extendsOld.source}, ` : ""}it doesn't replace the old area.`);
+    _log(`extended "${abilityName}" by ${added.length} cells`);
+    return { template: extendInto, cells: [...old, ...added], targets: [], area, extended: true };
   }
 
   if (replace && removeIds) {

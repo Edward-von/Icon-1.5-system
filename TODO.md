@@ -1450,6 +1450,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Domanda per Edoardo: "removed from the battlefield" come lo rendiamo (token nascosto, token spostato fuori
       mappa, o solo un promemoria con l'elenco)? E a fine turno la risputata si fa cliccando uno spazio per ciascuno,
       entro range 2?
+- [ ] **Emerso lavorando su R33c2 — PATH TO ERENHELION, il rimbalzo** (S, da decidere): "bounces if its end space
+      lands in the space of an object, creating a second line 3 area" (p.226) resta a mano. Domanda per Edoardo: in
+      quale direzione rimbalza la seconda line (il libro non lo dice)?
 
 ---
 
