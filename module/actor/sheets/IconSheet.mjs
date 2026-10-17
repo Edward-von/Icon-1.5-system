@@ -13,11 +13,13 @@ import { buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayN
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
-         areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, areaLabel, infusedAreas, rangeFromTags } from "../../canvas/area-templates.mjs";
+         areasInText, aurasInText, areaDrawnFromTarget, lineExtensionInText, areaLabel, infusedAreas, rangeFromTags,
+         attackSpaceTokenId, retargetFromTemplate } from "../../canvas/area-templates.mjs";
 import { marksOn, marksBy, applyMark, removeMark, markFromTags, abilityTracks } from "../../combat/marks.mjs";
 import { buildAbilityProfile, abilityRelicReminders, attackInvokes, gambitInvokes,
          relicInvokeRank } from "../../combat/relic-reminders.mjs";
-import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses } from "../../combat/ability-statuses.mjs";
+import { abilityStatusEntries, statusBlockHtml, parseInflictedStatuses, captureTargets } from "../../combat/ability-statuses.mjs";
+import { promptAttackTarget, rememberAttackTarget, rememberedAttackTarget } from "../../apps/roll-dialogs.mjs";
 import { currentTargets, tagKey } from "../../combat/defenses.mjs";
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
@@ -1829,7 +1831,19 @@ export class IconSheet extends BaseActorSheet {
     // Statuses the text inflicts → "Inflict" buttons for the current targets
     // (non-attack abilities like Implode / Gentleness only have this card).
     const sys  = this._comboSystem(item);
-    const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name });
+    // An attack whose area is on the map: the token in its attack space (the
+    // centre of a Blast / Burst, p.97), else the attack target picked for it
+    // in the attack / auto-hit that placed it, gets the attack part and the others the
+    // area part, as on the attack card. Nothing asked here: unknown = all buttons.
+    const cardTargets = captureTargets();
+    let attackTargetId = "";
+    if (ab.isAttack && cardTargets.length > 1) {
+      const tpl = findAreaTemplates({ actorId: this.document.id, abilityKey: ab.id })[0];
+      if (tpl) attackTargetId = attackSpaceTokenId(await retargetFromTemplate(tpl, { retarget: false }))
+                             || rememberedAttackTarget(this.document, ab);
+      if (!cardTargets.some(t => t.tokenId === attackTargetId)) attackTargetId = "";
+    }
+    const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name, targets: cardTargets, attackTargetId });
 
     // Combo version: the blocks are rebuilt with the combo text merged in, so
     // an ability whose combo only ADDS something (Low Blow / The Hook) still
@@ -2552,7 +2566,6 @@ export class IconSheet extends BaseActorSheet {
     const areaOpts = this.#areaPlacementOpts(ab, areaChoice ?? areaFromTags(ab.tags));
     const placement = noAttackArea ? undefined : await ensureAreaTargets({ actor: this.document, tags: ab.tags, abilityName: ab.name, abilityKey: ab.id, lasting: areaOpts.lasting, terrain: areaOpts.terrain ?? null, extension: areaOpts.extension ?? null, area: areaChoice });
     if (placement === null) ui.notifications.info(`${ab.name}: area not placed — rolling the attack only.`);
-    const areaHtml = placement ? areaSummaryHtml(placement) : "";
 
     // Relic integration: "Invoke (Attack, N+)" checks on the raw d20 and the
     // relic reminders that apply to this attack (round-gated ones only when
@@ -2569,6 +2582,20 @@ export class IconSheet extends BaseActorSheet {
     if (ab.isAutoHit) {
       // Auto-hit: no d20 roll, just announce and (optionally) chain into damage.
       // With an attack invoke, p.245 says to roll 1d20 anyway just to check it.
+      // Area on the table with several characters in it: one of them is the
+      // attack target (p.97) — the token in a Blast / Burst's central space,
+      // otherwise asked — so its row gets the attack part, the rest the area.
+      let attackTargetId = "";
+      const inCard = captureTargets();
+      if (placement?.area && inCard.length > 1) {
+        attackTargetId = attackSpaceTokenId(placement);
+        if (!attackTargetId || !inCard.some(t => t.tokenId === attackTargetId)) {
+          attackTargetId = await promptAttackTarget(ab, this.document, { areaLabel: placement.area.label ?? "" });
+          if (attackTargetId === null) return;   // closing the dialog calls the attack off
+        }
+        rememberAttackTarget(this.document, ab, attackTargetId);
+      }
+      const autoAreaHtml = placement ? areaSummaryHtml(placement, { attackTargetId }) : "";
       let invokeHtml = "";
       const rolls = [];
       if (relicInvokes.length) {
@@ -2583,11 +2610,11 @@ export class IconSheet extends BaseActorSheet {
                       <strong>${escapeHTML(ab.name)}</strong>
                       <span class="icon-badge icon-badge--primary">Auto-hit</span>
                     </div>
-                    ${areaHtml}
+                    ${autoAreaHtml}
                     <p>This attack ignores the attack roll and goes directly to damage.</p>
                     ${invokeHtml}
                     ${relicNotesHtml(relicNotes)}
-                    ${statusBlockHtml(statusEntries, { source: this.document, abilityName: ab.name, outcome: { isHit: true, isCrit: false, isExceed: false } })}
+                    ${statusBlockHtml(statusEntries, { source: this.document, abilityName: ab.name, outcome: { isHit: true, isCrit: false, isExceed: false }, targets: inCard, attackTargetId })}
                   </div>`,
         rolls,
       });

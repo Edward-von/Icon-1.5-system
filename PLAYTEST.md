@@ -1793,6 +1793,23 @@ Setup: solo codice (F5 basta).
 - [ ] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
       all'alleato) come prima.
 
+## voce emersa su R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (17 ottobre 2026, versione 1.15.86)
+
+Setup: solo codice (F5 basta).
+
+- [ ] **Auto-hit con Blast**: un'abilità auto-hit con Blast e uno status nell'Hit/Effect (es. Holy o Astra con il
+      combo token), Blast piazzato con un foe al centro e altri due dentro → nessun dialog in più. Nella card la riga
+      dell'area dice "attack: <centro> · area: …". Nell'Inflict il foe al centro viene per primo con "(attack target)"
+      e i bottoni dell'attacco, gli altri hanno "(area)" e solo il blocco Area. Il dialog del danno che segue ha già
+      il token al centro come bersaglio d'attacco.
+- [ ] **Auto-hit con Blast, centro vuoto o Line**: con lo spazio centrale vuoto (o un'auto-hit con Line) e due o più
+      token dentro → si apre il dialog "Attack target — <abilità>" con un radio per token. Conferma → la card divide
+      le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno.
+- [ ] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima.
+- [ ] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
+      in Chat della stessa abilità → righe divise come sulla card d'attacco. Senza area sulla mappa e con più bersagli
+      → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata.
+
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner

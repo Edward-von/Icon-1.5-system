@@ -372,10 +372,14 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.83: il danno scritto in un "Effect:" aggiunto da una combo senza etichette
       Hit/Miss/Area non sostituisce più l'Hit della base; per Succubus i 3 danni sono il chip "Combo — Succubus" sotto
       Other, Hit resta [D]+fray, p.164; controllate tutte le 17 combo del pack Jobs, cambia solo Incubus.)
-- [ ] **Emerso lavorando su R41 — Show in Chat e card Auto-hit non sanno chi è il bersaglio d'attacco** (S): senza il
+- [x] **Emerso lavorando su R41 — Show in Chat e card Auto-hit non sanno chi è il bersaglio d'attacco** (S): senza il
       dialog dell'attacco, con più token bersagliati (area piazzata) i bottoni Inflict restano su tutti, con il gruppo
       etichettato "attack target only". La card Auto-hit potrebbe chiedere il bersaglio d'attacco (o prendere
       l'attack space dell'area: il centro di un Blast / Burst, p.97) e dividere le righe come la card d'attacco.
+(FATTO il 17 ottobre 2026, versione 1.15.86: la card Auto-hit prende come bersaglio d'attacco il token al centro di un
+      Blast / Burst (p.97), altrimenti lo chiede in un piccolo dialog, e divide le righe Inflict come la card
+      d'attacco; il dialog del danno parte da quel token. Show in Chat usa il centro dell'area ancora sulla mappa, o
+      il bersaglio scelto per quell'area, e non chiede mai niente.)
 - [x] **Emerso lavorando su R42 — Wish, mastery: Unstoppable a te invece che all'alleato** (S): "they also gain
       defiance, then become unstoppable until the end of their next turn" (Star Scorned Hermit): dopo R42 la Defiance
       va all'alleato, ma "then become unstoppable" è letto come imperativo e il Gain Unstoppable va su di te. In più la
@@ -478,6 +482,10 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       servirebbe: trovare i pit dentro l'area appena piazzata, una Medium Blast centrata su ognuno e bersagliare chi
       sta in almeno una delle aree. Oggi `centreOf` in `area-templates.mjs` lascia apposta a mano le aree "centered on
       them" dopo pits/plants/nails/clouds.
+- [ ] **Emerso lavorando su R41 — Show in Chat delle azioni foe / legend non divide le righe di un'area** (S):
+      `FoeSheet.#statusHtmlFor` e `LegendSheet` (~riga 380) chiamano `statusBlockHtml` senza `attackTargetId`; con
+      un'area dell'azione ancora sulla mappa (abilityKey `action:<nome>`) si potrebbe usare lo stesso centro del Blast
+      / Burst (`attackSpaceTokenId`) come sulla scheda PG.
 
 ---
 

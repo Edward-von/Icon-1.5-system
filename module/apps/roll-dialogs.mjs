@@ -404,6 +404,61 @@ export async function promptAttackMods(ab, actor, { modsActor = null, area = nul
   } catch (err) { _log("attack dialog closed", err); return null; }
 }
 
+/**
+ * Remember (or forget, with "") the attack target of an attack that had no
+ * attack dialog (an auto-hit), so the damage dialog starts on it as well.
+ */
+export function rememberAttackTarget(actor, ab, tokenId) {
+  if (tokenId) _lastAttackTarget.set(_attackKey(actor, ab), tokenId);
+  else _lastAttackTarget.delete(_attackKey(actor, ab));
+}
+
+/** The attack target last picked for this attacker and ability ("" when none). */
+export function rememberedAttackTarget(actor, ab) {
+  return _lastAttackTarget.get(_attackKey(actor, ab)) ?? "";
+}
+
+/**
+ * An auto-hit area attack has no attack dialog, but still one attack target
+ * (p.97: "For a character in the attack space … apply the attack part of your
+ * ability instead of the area effect"). Asked here when the area does not fix
+ * it (a Line / Arc: "the attack space is any character in the area"), with the
+ * user's current targets. Remembers the pick for the damage dialog.
+ * @returns {Promise<string|null>} token id, "" when no choice was needed, null when closed
+ */
+export async function promptAttackTarget(ab, actor, { areaLabel = "" } = {}) {
+  const targets = _targets();
+  if (targets.length < 2) return "";
+  const content = `
+    <div class="icon-roll-dialog icon-roll-dialog--pick-target">
+      ${_hero({ actor, kicker: "Auto-hit · attack target", title: ab.name ?? "Attack", cost: ab.cost, tags: ab.tags, dieLabel: "—", dieSub: "no attack roll" })}
+      <div class="icon-roll-body">
+        ${_targetCard(targets, { showDefense: false, pickAttackTarget: true, areaLabel, pickedId: rememberedAttackTarget(actor, ab),
+             pickHint: "pick the attack target (attack part of the ability), the others only take the area effect" })}
+      </div>
+    </div>`;
+  _onDialogRender(".icon-roll-dialog--pick-target", root => _wireTargetCard(root, () => {}));
+  try {
+    const picked = await foundry.applications.api.DialogV2.prompt({
+      ...DIALOG_OPTS,
+      window: { title: `Attack target — ${ab.name ?? "Attack"}` },
+      content,
+      ok: {
+        label: "Confirm", icon: "fa-solid fa-crosshairs",
+        callback: (_e, button) => {
+          const f = button.form;
+          return f.querySelector('input[name="attackTarget"]:checked')?.value
+              ?? f.querySelector(".icon-roll-target")?.dataset.tokenId ?? "";
+        },
+      },
+      rejectClose: false,
+    });
+    if (picked == null) return null;
+    rememberAttackTarget(actor, ab, picked);
+    return picked;
+  } catch (err) { _log("attack target dialog closed", err); return null; }
+}
+
 /* -------------------------------------------------- */
 /*  Damage roll                                        */
 /* -------------------------------------------------- */

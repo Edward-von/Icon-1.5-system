@@ -1440,6 +1440,25 @@ export function areaSummaryHtml(placement, { attackTargetId = "" } = {}) {
   return `<div class="icon-chat-card__area"><span class="icon-chat-card__area-label"><i class='fa-solid fa-vector-square'></i> ${esc(placement.area.label)}</span> <span class="icon-chat-card__area-targets">${names}</span>${btn}</div>`;
 }
 
+/**
+ * The token in the attack space of a placed Blast / Burst (p.97: "The origin
+ * space and the attack space (if there is one) is the central space"), or ""
+ * when the area has none of its own: a Line / Arc's attack space is "any
+ * character in the area" (the attacker picks it), and a Burst (self) is
+ * centred on the user, who is not in it. The template sits on the centre
+ * cell (placeAreaTemplate), also after being nudged with Shift + arrows.
+ * @param {{template, targets, area}} placement  placeAreaTemplate / retargetFromTemplate result
+ * @returns {string} token id, one of `placement.targets`
+ */
+export function attackSpaceTokenId(placement) {
+  const kind = placement?.area?.kind;
+  const doc = placement?.template;
+  if (!doc || !canvas?.grid || (kind !== "blast" && kind !== "burst")) return "";
+  const key = cellKey(canvas.grid.getOffset({ x: doc.x, y: doc.y }));
+  const hit = (placement.targets ?? []).find(t => tokenCells(t.document).some(c => cellKey(c) === key));
+  return hit?.id ?? "";
+}
+
 /* -------------------------------------------------- */
 /*  Canvas object                                      */
 /* -------------------------------------------------- */

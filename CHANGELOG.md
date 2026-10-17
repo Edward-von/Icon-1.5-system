@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (versione 1.15.86)
+
+### Round di debug del 16 ottobre, voce emersa su R41
+
+- **Bersaglio d'attacco senza il dialog dell'attacco**: con più token in un'area piazzata, la card "Auto-hit" e la
+  card di Show in Chat davano tutti i bottoni Inflict a tutti, e i gruppi erano solo etichettati "attack target only"
+  → la divisione per righe (attacco al bersaglio d'attacco, blocco Area agli altri) la faceva solo la card del tiro
+  d'attacco, perché il bersaglio d'attacco veniva solo dal dialog dell'attacco, che l'auto-hit salta → ora l'auto-hit
+  prende come bersaglio d'attacco il token nello spazio centrale di un Blast / Burst (p.97: "The origin space and the
+  attack space (if there is one) is the central space"); con un Line / Arc ("the attack space is any character in the
+  area", p.97) lo chiede in un piccolo dialog. Poi divide le righe come la card d'attacco ("(attack target)" /
+  "(area)"), la riga dell'area dice "attack: X · area: Y, Z" e il dialog del danno che segue parte già su quel token.
+  Show in Chat di un'abilità d'attacco la cui area è ancora sulla mappa usa il centro dell'area, o il bersaglio scelto
+  per quell'area; se non si sa resta come prima. Show in Chat non chiede mai niente.
+
 ## 17 ottobre 2026 — Wish, mastery: Unstoppable all'alleato, non a te (versione 1.15.85)
 
 ### Round di debug del 16 ottobre, voce emersa su R42
