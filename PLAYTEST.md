@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Usi degli interrupt sulle schede di foe e legend (17 ottobre 2026, versione 1.15.203)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Scheda di un foe con un interrupt "Interrupt 2": sotto l'intestazione dell'interrupt ci sono 2 caselline accese
+      e la scritta "Uses 2/2".
+- [ ] Clic sul bottone chat dell'interrupt del foe: la card va in chat e la scheda mostra "Uses 1/2". Al secondo clic
+      0/2, al terzo esce l'avviso "no uses left" e non si posta niente.
+- [ ] Clic su una casella spenta: gli usi tornano. Clic sulla prima casella accesa: scendono a 0.
+- [ ] Bottone interrupt del foe sulla card del danno: dopo il clic la scheda del foe scende di un uso.
+- [ ] All'inizio del turno del foe le caselline tornano tutte accese.
+- [ ] Scheda di un legend: nella riga dell'interrupt c'è il bottone chat, spende un uso e le caselline tornano accese
+      all'inizio del round.
+
 ## Emerso R40 — Assault Wave chiede quanti minion contano (17 ottobre 2026, versione 1.15.202)
 
 Setup: solo codice (F5 basta).

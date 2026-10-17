@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Usi degli interrupt sulle schede di foe e legend (versione 1.15.203)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Usi degli interrupt di foe e legend**: le schede di foe e legend mostravano solo il limite ("/ turn") e non quanti
+  usi restavano, e il bottone chat dell'interrupt postava senza spendere niente → l'azione `tickInterrupt` esisteva ma
+  nessun template la usava, e il bottone chat non contava gli usi → sotto ogni interrupt ora ci sono le caselline
+  degli usi rimasti, con lo stesso aspetto della scheda PG e lo stesso flag `interruptUses` che spendono i bottoni
+  della card del danno e della card d'attacco. Un clic su una casella accesa spende fino a lì, uno su una spenta ridà
+  gli usi. Il bottone chat spende un uso e si rifiuta con 0 usi rimasti. Anche la scheda del legend ora ha il bottone
+  chat degli interrupt (prima c'era solo l'azione, senza bottone). Gli usi tornano all'inizio del turno del foe e
+  all'inizio del round per il legend (p.292). Solo codice.
+
 ## 17 ottobre 2026 — Assault Wave chiede quanti minion contano (versione 1.15.202)
 
 ### Round di debug del 16 ottobre, voce emersa su R40

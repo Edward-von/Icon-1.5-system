@@ -21,6 +21,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { interruptsOf, interruptLeft, interruptUsesView, spendUse, setInterruptLeft } from "../../combat/damage-interrupts.mjs";
 import { comboView, noteComboUse, setComboNext } from "../../combat/foe-combo.mjs";
 import { applyFoeTemplate, removeFoeTemplate } from "../foe-templates.mjs";
 
@@ -52,6 +53,7 @@ export class LegendSheet extends BaseActorSheet {
       addInterrupt:      LegendSheet.#onAddInterrupt,
       removeInterrupt:   LegendSheet.#onRemoveInterrupt,
       foeInterruptShowInChat: LegendSheet.#onFoeInterruptShowInChat,
+      setInterruptUses:  LegendSheet.#onSetInterruptUses,
       setComboNext:     LegendSheet.#onSetComboNext,
       foeActionShowInChat:    LegendSheet.#onFoeActionShowInChat,
       foeRoundActionShowInChat: LegendSheet.#onFoeRoundActionShowInChat,
@@ -208,8 +210,11 @@ export class LegendSheet extends BaseActorSheet {
       };
     }));
 
+    // Uses left of each interrupt: the same flag the damage / attack card buttons spend (damage-interrupts.mjs).
+    const counted = interruptsOf(actor);
     context.enrichedInterrupts = await Promise.all(system.interrupts.map(async (r, i) => ({
       i,
+      uses:        (it => it ? interruptUsesView(actor, it) : null)(counted.find(c => c.index === i)),
       name:        r.name ?? "",
       limit:       r.limit ?? 2,
       trigger:     r.trigger ?? "",
@@ -594,8 +599,32 @@ export class LegendSheet extends BaseActorSheet {
     const actor     = this.document;
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
-    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}"`);
+    // Posting the interrupt is using it: one use spent, as the damage card's button does.
+    const it = interruptsOf(actor).find(c => c.index === idx);
+    if (it) {
+      const { left, max } = interruptLeft(actor, it);
+      if (left <= 0) { ui.notifications.warn(`${interrupt.name}: no uses left this round (0/${max}).`); return; }
+      await spendUse(actor, it);
+    }
+    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}" | use spent: ${!!it}`);
     await postNpcInterruptCard(actor, interrupt, { statusHtml: this.#statusHtmlFor(interrupt, interrupt.name) });
+  }
+
+  /**
+   * Tick box of an interrupt's uses (data-key, data-n = the box clicked, from 1),
+   * as on the PC sheet: clicking a lit box spends down to it, a dark one gives
+   * uses back up to it.
+   */
+  static async #onSetInterruptUses(event, target) {
+    event.stopPropagation();
+    if (!this.isEditable) return;
+    const it = interruptsOf(this.document).find(i => i.key === target.dataset.key);
+    if (!it) return;
+    const n = Number(target.dataset.n) || 0;
+    const { left, max } = interruptLeft(this.document, it);
+    const next = n <= left ? n - 1 : n;
+    _log(`setInterruptUses — "${this.document.name}" | ${it.name} | left ${left} → ${next} / ${max}`);
+    await setInterruptLeft(this.document, it, next);
   }
 
   static async #onFoeTraitShowInChat(event, target) {

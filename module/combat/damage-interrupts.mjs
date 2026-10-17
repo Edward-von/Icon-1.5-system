@@ -297,6 +297,16 @@ export function interruptLeft(actor, it) {
   return { left: Math.max(0, it.limit - interruptUsesOf(actor, it.key)), max: it.limit };
 }
 
+/**
+ * The tick boxes of one interrupt on a sheet: {key, left, max, banked, pips}.
+ * The foe and legend sheets use it; the PC sheet builds the same shape.
+ */
+export function interruptUsesView(actor, it) {
+  const { left, max } = interruptLeft(actor, it);
+  return { key: it.key, name: it.name, left, max, banked: !!it.bankMax,
+           pips: Array.from({ length: max }, (_, n) => ({ n: n + 1, on: n < left })) };
+}
+
 /** Spend one use (also the PC sheet's interrupt chat button, R61). */
 export async function spendUse(actor, it) {
   if (it.bankMax) return actor.setFlag(FLAG_NS, `interruptBank.${it.key}`, Math.max(0, bankOf(actor, it.key) - 1));

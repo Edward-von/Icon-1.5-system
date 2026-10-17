@@ -322,11 +322,26 @@
                        value="{{interrupt.limit}}" min="0"
                        {{#unless ../isEditable}}disabled{{/unless}}>
               </span>
+              <button type="button" class="icon-btn icon-btn--sm icon-btn--chat"
+                      data-action="foeInterruptShowInChat" data-interrupt-index="{{interrupt.i}}"
+                      title="Post this interrupt to chat (spends one use)"><i class="fa-solid fa-comment"></i></button>
               {{#if ../isEditable}}
                 <button type="button" class="icon-btn icon-btn--remove"
                         data-action="removeInterrupt" data-index="{{interrupt.i}}">✕</button>
               {{/if}}
             </div>
+            {{#if interrupt.uses}}
+              <div class="icon-trait__quick icon-power-die-widget icon-interrupt-uses"
+                   title="Uses of {{interrupt.name}} left this round (they come back at the start of each round). The chat button and the damage card's interrupt button spend one. Click a box to spend down to it, or a dark one to get uses back.">
+                <span class="icon-trait__quick-label"><i class="fa-solid fa-bolt"></i> Uses {{interrupt.uses.left}}/{{interrupt.uses.max}}</span>
+                <span class="icon-vigilance-track icon-vigilance-track--inline">
+                  {{#each interrupt.uses.pips as |p|}}
+                    <span class="icon-vigilance-pip {{#if p.on}}icon-vigilance-pip--active{{/if}}"
+                          {{#if @root.isEditable}}data-action="setInterruptUses" data-key="{{interrupt.uses.key}}" data-n="{{p.n}}"{{/if}}><i class="fa-solid fa-bolt"></i></span>
+                  {{/each}}
+                </span>
+              </div>
+            {{/if}}
             <div class="legend-interrupt__trigger">
               <strong>Trigger:</strong>
               <input type="text" name="system.interrupts.{{interrupt.i}}.trigger"

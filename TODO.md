@@ -1558,10 +1558,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.184: una mote solo attraversata esplode sulla propria casella, e la card lo
       dice)
 - nessuno
-- [ ] **Emerso lavorando su R35 — la scheda dei foe non mostra gli usi degli interrupt** (S): `FoeSheet` ha l'azione
+- [x] **Emerso lavorando su R35 — la scheda dei foe non mostra gli usi degli interrupt** (S): `FoeSheet` ha l'azione
       `tickInterrupt` ma nessun template la usa, e `foe-main.hbs` / `legend-combat.hbs` mostrano solo il limite "/
       turn", non gli usi spesi. Anche il bottone chat dell'interrupt del foe (`foeInterruptShowInChat`) non spende un
       uso.
+(FATTO il 17 ottobre 2026, versione 1.15.203: caselline degli usi sotto ogni interrupt di foe e legend, il bottone
+      chat spende un uso; il legend ora ha il bottone chat)
 - [ ] **Emerso lavorando su R35 — "Show in Chat" di un'abilità a costo Interrupt non spende un uso** (S, da decidere):
       solo il bottone chat dell'interrupt concesso e quello della card del danno spendono un uso; il "Show in Chat"
       dell'abilità intera (costo "Interrupt N") e il bottone chat della maestria che concede un interrupt (Grace of
@@ -1635,6 +1637,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+- nessuno
 - nessuno
 
 ---

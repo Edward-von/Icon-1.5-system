@@ -23,6 +23,7 @@ import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES, adjustStatusCharges } from "../../combat/statuses.mjs";
 import { enrichHTML, postNpcTraitCard, summonRulesHTML, postNpcInterruptCard, postNpcActionCard, postNpcRoundActionCard } from "../../helpers/enrich.mjs";
 import { getFoeBaseStats, FOE_CLASS_LABELS } from "../../data/actor/FoeData.mjs";
+import { interruptsOf, interruptLeft, interruptUsesView, spendUse, setInterruptLeft } from "../../combat/damage-interrupts.mjs";
 import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-damage.mjs";
 import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
@@ -62,7 +63,7 @@ export class FoeSheet extends BaseActorSheet {
       foeRoundActionShowInChat: FoeSheet.#onFoeRoundActionShowInChat,
       addRoundAction:   FoeSheet.#onAddRoundAction,
       removeRoundAction:FoeSheet.#onRemoveRoundAction,
-      tickInterrupt:    FoeSheet.#onTickInterrupt,
+      setInterruptUses: FoeSheet.#onSetInterruptUses,
       removeTemplate:   FoeSheet.#onRemoveTemplate,
       npcSummonShowInChat: FoeSheet.#onNpcSummonShowInChat,
       openTemplate:     FoeSheet.#onOpenTemplate,
@@ -134,8 +135,11 @@ export class FoeSheet extends BaseActorSheet {
         isAttack: isFoeActionAttack(a),
       };
     }));
+    // Uses left of each interrupt: the same flag the damage / attack card buttons spend (damage-interrupts.mjs).
+    const counted = interruptsOf(actor);
     context.enrichedInterrupts = await Promise.all(system.interrupts.map(async (r, i) => ({
       ...r, i,
+      uses: (it => it ? interruptUsesView(actor, it) : null)(counted.find(c => c.index === i)),
       enrichedEffect: await enrich(r.effect),
       enrichedDesc:   await enrich(r.description),
     })));
@@ -387,7 +391,14 @@ export class FoeSheet extends BaseActorSheet {
     const actor     = this.document;
     const interrupt = actor.system.interrupts[idx];
     if (!interrupt) return;
-    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}"`);
+    // Posting the interrupt is using it: one use spent, as the damage card's button does.
+    const it = interruptsOf(actor).find(c => c.index === idx);
+    if (it) {
+      const { left, max } = interruptLeft(actor, it);
+      if (left <= 0) { ui.notifications.warn(`${interrupt.name}: no uses left (0/${max}).`); return; }
+      await spendUse(actor, it);
+    }
+    _log(`foeInterruptShowInChat — actor: "${actor.name}" | interrupt[${idx}]: "${interrupt.name}" | use spent: ${!!it}`);
     await postNpcInterruptCard(actor, interrupt, { statusHtml: this.#statusHtmlFor(interrupt, interrupt.name) });
   }
 
@@ -723,14 +734,20 @@ export class FoeSheet extends BaseActorSheet {
     else ui.notifications.warn("That template is no longer in its compendium.");
   }
 
-  /** Track interrupt uses during combat. Uses a flag (not persisted to DB via update). */
-  static async #onTickInterrupt(event, target) {
-    const idx       = Number(target.dataset.index);
-    const interrupt = this.document.system.interrupts[idx];
-    if (!interrupt) return;
-    const uses = this.document.getFlag("icon-system", `interruptUses.${idx}`) ?? 0;
-    const next = Math.min(uses + 1, interrupt.limit);
-    _log(`tickInterrupt — actor: "${this.document.name}" | idx: ${idx} | name: "${interrupt.name}" | uses: ${uses} → ${next} / ${interrupt.limit}`);
-    await this.document.setFlag("icon-system", `interruptUses.${idx}`, next);
+  /**
+   * Tick box of an interrupt's uses (data-key, data-n = the box clicked, from 1),
+   * as on the PC sheet: clicking a lit box spends down to it, a dark one gives
+   * uses back up to it.
+   */
+  static async #onSetInterruptUses(event, target) {
+    event.stopPropagation();
+    if (!this.isEditable) return;
+    const it = interruptsOf(this.document).find(i => i.key === target.dataset.key);
+    if (!it) return;
+    const n = Number(target.dataset.n) || 0;
+    const { left, max } = interruptLeft(this.document, it);
+    const next = n <= left ? n - 1 : n;
+    _log(`setInterruptUses — "${this.document.name}" | ${it.name} | left ${left} → ${next} / ${max}`);
+    await setInterruptLeft(this.document, it, next);
   }
 }
