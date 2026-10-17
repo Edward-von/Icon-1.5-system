@@ -1238,7 +1238,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **R35c. Interrupt strani sul danno** (M/L)
       Dire Parry mastery (usi messi da parte), interrupt del Seer che annullano il danno: il bottone di R35a toglie
       o riduce il danno già calcolato sulla card.
-- [ ] **R36. Carte del Seer** — "Currently practically nonfunctional", diviso in R36a–R36c.
+- [x] **R36. Carte del Seer** — "Currently practically nonfunctional", diviso in R36a–R36c.
       I tre mazzi (deck, mano, scarti) ci sono, ma le carte non hanno effetti e giocarle non scrive niente in chat.
       Maar non consiglia di legarle alla scheda; con il sistema di carte di Foundry servirebbero gli effetti sulle
       carte, la carta giocata in chat e i bersagli. "Probably a big ask in terms of workload."
