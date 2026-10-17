@@ -20,8 +20,8 @@
  *   PC sheet's Damage Utility): no ability, just dice / fixed / fray / area.
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
-import { hatredDamageHint } from "../combat/marks.mjs";
-import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasionThreshold, hasSureEvasion } from "../combat/defenses.mjs";
+import { hatredDamageHint, marksBy } from "../combat/marks.mjs";
+import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasionThreshold, hasSureEvasion, gridDistance, tokenOf } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
@@ -98,6 +98,21 @@ function _elevationMods(actor, targets) {
   if (worst < 0) return { boons: 0, curses: -worst, note: `Height disadvantage Δ${-worst}: +${-worst} curse${-worst > 1 ? "s" : ""}` };
   if (best > 0)  return { boons: best, curses: 0, note: `Height advantage Δ${best}: +${best} boon${best > 1 ? "s" : ""}` };
   return { boons: 0, curses: 0, note: "" };
+}
+
+/**
+ * Names of the targets an ability's combo may strike "regardless of distance"
+ * because they carry the ability's own mark, and that stand out of melee reach
+ * (more than 1 space away): Sow's combo Reap, which "also gains unerring if
+ * made this way" (p.185). Empty when the combo text says nothing of the kind.
+ */
+function _markedBeyondReach(ab, actor, targets) {
+  const text = String(ab?.comboEffect ?? "").replace(/<[^>]*>/g, " ");
+  if (!actor || !ab?.id || !/regardless\s+of\s+distance/i.test(text) || !/gains?\s+unerring/i.test(text)) return [];
+  const marked = new Set(marksBy(actor.id, ab.id).map(m => m.targetActor?.uuid));
+  const src = tokenOf(actor);
+  if (!src || !marked.size) return [];
+  return targets.filter(t => marked.has(t.actor?.uuid) && gridDistance(src, canvas.tokens.get(t.id)) > 1).map(t => t.name);
 }
 
 /** Tags as chips (accepts raw strings or {raw,label} objects). */
@@ -500,6 +515,11 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // start ticked, so Apply ignores Dodge / Cover / Aetherwall without the
   // player having to remember (the checkbox can still be unticked).
   const ignores = attackIgnores(actor, ab.tags ?? []);
+  // Reap (Sow's combo, p.185): "You can make this melee attack against the
+  // target marked by Sow regardless of distance or line of sight. It also
+  // gains unerring if made this way." A target carrying this ability's mark
+  // and out of melee reach is that case: the combo version ticks Unerring.
+  const reapFar = _markedBeyondReach(ab, actor, targets);
   const whyTick = (r, name) => r === "tag" ? "from the ability's tag" : r === "status" ? `from your ${name} status` : "";
 
   // Finishing Blow (Vagabond): the block triggers when the ability targets a
@@ -708,7 +728,14 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
       // "2 unerring damage" (Astral Chain's Mark p.156) ticks Unerring; the
       // other outcomes go back to the tag / status default.
-      if (f.elements.unerring) f.elements.unerring.checked = !!ignores.unerring || (outcome === "other" && !!picked?.unerring);
+      // Reap against Sow's marked foe out of reach gains unerring (p.185).
+      const comboOn = f.elements.useCombo ? !!f.elements.useCombo.checked : comboDefault;
+      const reap = comboOn && reapFar.length && outcome !== "other";
+      if (f.elements.unerring) {
+        f.elements.unerring.checked = !!ignores.unerring || !!reap || (outcome === "other" && !!picked?.unerring);
+        const small = f.elements.unerring.closest("label")?.querySelector("small");
+        if (small && !ignores.unerring) small.textContent = reap ? `${reapFar.join(", ")} marked, out of reach (p.185)` : "ignores Cover / Aetherwall";
+      }
       // Same for the number of instances written in the text ("three times").
       const chunk = outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;

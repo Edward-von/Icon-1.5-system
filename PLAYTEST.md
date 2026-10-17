@@ -1656,6 +1656,17 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R1 — Reap da lontano guadagna Unerring (17 ottobre 2026, versione 1.15.135)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Harvester con Sow: marcare un foe, allontanarsi di 3 o più caselle, armare la combo e aprire il Damage di Sow
+      con quel foe come bersaglio → Unerring spuntato, con la scritta "<foe> marked, out of reach (p.185)".
+- [ ] Nella stessa finestra togliere "Combo version" → Unerring si toglie; rimetterla → torna.
+- [ ] Stesso foe marcato ma adiacente → Unerring non spuntato.
+- [ ] Foe lontano NON marcato da Sow → Unerring non spuntato.
+- [ ] Bersaglio marcato lontano in Cover: Apply → il danno non viene dimezzato (chip "Cover — ignored (Unerring)").
+
 ## Emerso R37 — La spesa di resolve del Limit Break finisce col combattimento (17 ottobre 2026, versione 1.15.134)
 
 Setup: solo codice (F5 basta).

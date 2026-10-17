@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Reap da lontano guadagna Unerring (versione 1.15.135)
+
+### Round di debug del 15 ottobre, voce emersa su R1
+
+- **Reap contro il bersaglio di Sow lontano**: il Reap fatto da lontano sul foe marcato da Sow non guadagnava
+  Unerring, quindi Cover e Aetherwall dimezzavano lo stesso il danno → la finestra del danno non sapeva della regola
+  speciale di Reap ("You can make this melee attack against the target marked by sow regardless of distance or line of
+  sight", e così guadagna Unerring, p.185) → ora, con la versione combo e il bersaglio marcato da Sow (dallo stesso
+  attaccante) a più di 1 casella, Unerring è già spuntato e la riga dice perché ("<nome> marked, out of reach
+  (p.185)"). Il tiro d'attacco non avvisa né blocca un bersaglio lontano, come vuole la regola. Da adiacente è un
+  attacco in mischia normale (lettura scelta). Solo codice.
+
 ## 17 ottobre 2026 — La spesa di resolve del Limit Break finisce col combattimento (versione 1.15.134)
 
 ### Round di debug del 16 ottobre, voce emersa su R37

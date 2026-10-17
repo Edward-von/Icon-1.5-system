@@ -1320,10 +1320,12 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 (FATTO il 17 ottobre 2026, versione 1.15.115: la scheda summon usa la finestra del danno condivisa di
       roll-dialogs.mjs, come foe e legend, con Other, Pierce / Divine / True Strike / Unerring, Hatred e bersagli; la
       vecchia finestra è stata tolta. Solo codice.)
-- [ ] **Emerso lavorando su R1 — Reap "regardless of distance"** (S): Reap si può fare contro il bersaglio marcato da
+- [x] **Emerso lavorando su R1 — Reap "regardless of distance"** (S): Reap si può fare contro il bersaglio marcato da
       Sow a qualunque distanza e senza linea di vista, e in quel caso guadagna Unerring (p.185); con il tag Melee il
       sistema considera la portata 1. Controllare se il tiro avvisa o blocca un bersaglio marcato lontano, e se
       Unerring va proposto in quel caso.
+(FATTO il 17 ottobre 2026, versione 1.15.135: il tiro non avvisa né blocca un bersaglio lontano, come vuole la regola;
+      la finestra del danno spunta Unerring per Reap sul bersaglio marcato da Sow fuori portata, p.185. Solo codice.)
 - [ ] **Emerso lavorando su R5 — numero del riquadro vuoto sui riquadri pieni** (S, da verificare): in
       `icon-combat.hbs` i riquadri già occupati scrivono `data-slot="{{@index}}"`, ma l'helper `icon-range`
       (`handlebars.mjs`) non fornisce `@index`, quindi il numero esce vuoto e `#onDropAbilitySlot` lo legge come 0:
