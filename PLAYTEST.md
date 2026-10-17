@@ -1656,6 +1656,16 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R38b — Il dialog del danno riaperto ricorda le scelte (17 ottobre 2026, versione 1.15.129)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Abilità infusa, secondo Damage Roll: scegliere Miss, un bersaglio d'attacco, Vulnerable e +2 Flat, poi cambiare
+      Reroll (same use) → il dialog riaperto ha ancora Miss, lo stesso bersaglio, Vulnerable e +2.
+- [ ] MAGNACRYO (dadi bonus dall'Aether): passando alla versione base i dadi dell'Infuse spariscono, quelli aggiunti a
+      mano restano.
+- [ ] Stessa prova con un Limit Break infuso.
+
 ## Emerso R40 — L'esito Other dice da dove vengono le chip (17 ottobre 2026, versione 1.15.128)
 
 Setup: solo codice (F5 basta).

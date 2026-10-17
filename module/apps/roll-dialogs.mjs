@@ -479,10 +479,12 @@ export async function promptAttackTarget(ab, actor, { areaLabel = "" } = {}) {
  * `combat` needs { damagedie, fray }; `opts.actor` (the attacker) enables the
  * Hatred hint, `opts.comboDefault` pre-ticks the combo version, `opts.free`
  * hides the outcome choice and keeps only the free "Other" panel, with a
- * source label for the card (Damage Utility on the PC sheet).
+ * source label for the card (Damage Utility on the PC sheet). `opts.prev`:
+ * the result of the same dialog closed by "Reroll (same use)", whose choices
+ * (outcome, attack target, modifiers, Other panel) the reopened one keeps.
  * @returns {Promise<object|null>}  see file header
  */
-export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null, free = false } = {}) {
+export async function promptDamageMods(ab, combat, { comboDefault = false, actor = null, free = false, prev = null } = {}) {
   const p   = ab.parsed ?? { hit: {}, miss: {}, area: {} };
   const die = combat?.damagedie ?? "d6";
   const fray = Number(combat?.fray ?? 0);
@@ -563,7 +565,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // miss damage, the rest of the area takes the area effect. Several targets
   // on an ability with an area → the dialog asks which one was attacked,
   // starting on the token picked in the attack dialog.
-  const remembered = _lastAttackTarget.get(_attackKey(actor, ab)) ?? "";
+  const remembered = prev?.attackTargetId || (_lastAttackTarget.get(_attackKey(actor, ab)) ?? "");
   const areaTag = areaFromTags(ab.tags ?? []);
   const hasArea = (!!areaTag && areaTag.kind !== "aura") || !!(p.area?.mult > 0 || p.area?.flat > 0 || p.area?.fray)
                || targets.some(t => t.id === remembered);
@@ -752,6 +754,29 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       f.dataset.rerollSwitch = "1";
       f.querySelector('button[data-action="ok"]')?.click();
     });
+    // Reopened by "Reroll (same use)": the choices made before come back.
+    // Divine / Pierce / Unerring and Instances follow the new version's text
+    // (syncType below); the bonus dice it adds by itself are swapped too.
+    if (prev) {
+      const out = f.querySelector(`input[name="outcome"][value="${prev.outcome}"]`);
+      if (out) out.checked = true;
+      if (f.elements.useCombo) f.elements.useCombo.checked = !!prev.useCombo;
+      for (const n of ["vulnerable", "resistance", "weakened", "hatred"]) {
+        if (f.elements[n]) f.elements[n].checked = !!prev[n];
+      }
+      f.elements.flatBonus.value = prev.flatBonus ?? 0;
+      f.elements.bonusDice.value = Math.max(0, (prev.bonusDice ?? 0) - (prev.autoBonus ?? 0) + fbBonus + infBonus);
+      const pick = extras.findIndex(x => `${x.source}|${x.text}` === prev.otherPickKey);
+      const radio = pick >= 0 && f.querySelector(`input[name="otherPick"][value="${pick}"]`);
+      if (radio) radio.checked = true;
+      if (prev.other) {
+        f.elements.otherDice.value = prev.other.mult ?? 0;
+        f.elements.otherFlat.value = prev.other.flat ?? 0;
+        f.elements.otherFray.checked = !!prev.other.fray;
+        f.elements.otherArea.checked = !!prev.other.area;
+        if (f.elements.otherLabel && !radio) f.elements.otherLabel.value = prev.other.label ?? "";
+      }
+    }
     syncComboChips();
     syncType();
     update();
@@ -799,6 +824,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             unerring:   !!f.elements.unerring?.checked,
             sameUse:      !!f.elements.sameUse?.checked,
             rerollSwitch: f.dataset.rerollSwitch === "1",
+            // For a dialog reopened on the other version (opts.prev).
+            otherPickKey: picked ? `${picked.source}|${picked.text}` : "",
+            autoBonus:    fbBonus + infBonus,
           };
         },
       },

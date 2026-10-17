@@ -2810,7 +2810,7 @@ export class IconSheet extends BaseActorSheet {
 
     let mods;
     for (;;) {
-      mods = await promptDamageMods(repeat ? { ...ab, reroll: { sameUse } } : ab, combat, { comboDefault, actor: this.document });
+      mods = await promptDamageMods(repeat ? { ...ab, reroll: { sameUse } } : ab, combat, { comboDefault, actor: this.document, prev: mods });
       if (!mods) return;
       if (!repeat || !mods.rerollSwitch) break;
       // The chip was flipped: the dialog opens again on the other version.
@@ -3329,7 +3329,7 @@ export class IconSheet extends BaseActorSheet {
     });
     let mods;
     for (;;) {
-      mods = await promptDamageMods(repeat ? { ...abOf(parsed), reroll: { sameUse } } : abOf(parsed), combat, { actor: this.document });
+      mods = await promptDamageMods(repeat ? { ...abOf(parsed), reroll: { sameUse } } : abOf(parsed), combat, { actor: this.document, prev: mods });
       if (!mods) return;
       if (!repeat || !mods.rerollSwitch) break;
       sameUse = !!mods.sameUse;

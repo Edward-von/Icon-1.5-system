@@ -737,9 +737,11 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
 (FATTO il 17 ottobre 2026, versione 1.15.111: un Legend che salva contro Gigantas Crusher fa tornare il costo in
       resolve nelle stesse riserve personale / party da cui era stato pagato, una volta per uso; la distanza su Split
       Heaven and Hell resta a mano, voce emersa a parte. Solo codice.)
-- [ ] **Emerso lavorando su R38b — il dialog del danno riaperto riparte da capo** (S): cambiando "Reroll (same use)"
+- [x] **Emerso lavorando su R38b — il dialog del danno riaperto riparte da capo** (S): cambiando "Reroll (same use)"
       il dialog si riapre sull'altra versione, ma esito, bersaglio d'attacco e modificatori tornano ai valori
       iniziali; si potrebbero passare al dialog riaperto quelli già scelti.
+(FATTO il 17 ottobre 2026, versione 1.15.129: il dialog riaperto da Reroll (same use) tiene esito, bersaglio,
+      modificatori e pannello Other; tipo di danno e istanze seguono la nuova versione. Solo codice.)
 
 Scelte confermate da Edoardo il 17 ottobre 2026 (il libro non le dice): con MJÖLLNIR il secondo Arc 5 non prosegue nel
 verso del primo, come per la Line (1.15.102); con DULCE PURGATORIO il PG che sta su un pit è preso anche lui dall'area

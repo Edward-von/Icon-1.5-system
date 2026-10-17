@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Il dialog del danno riaperto ricorda le scelte (versione 1.15.129)
+
+### Round di debug del 16 ottobre, voce emersa su R38b
+
+- **Reroll (same use)**: cambiando la casella, il dialog si riapriva sull'altra versione con tutto da capo → il dialog
+  nuovo non riceveva le scelte del precedente → ora tornano esito, bersaglio d'attacco, Vulnerable / Resistance /
+  Weakened / Hatred, Flat damage, bonus dice, chip e pannello di Other; i dadi bonus che la versione aggiunge da sola
+  (dall'Aether dell'Infuse, Finishing Blow) vengono tolti o rimessi; Divine, Pierce, Unerring, True Strike e Instances
+  seguono il testo della nuova versione. Vale per abilità e Limit Break. Solo codice.
+
 ## 17 ottobre 2026 — L'esito Other dice da dove vengono le chip (versione 1.15.128)
 
 ### Round di debug del 16 ottobre, voce emersa su R40
