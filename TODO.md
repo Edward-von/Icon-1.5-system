@@ -1241,10 +1241,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       gli elenchi con " • " in linea, senza a capo, quindi restano un paragrafo unico. La resa a righe di R12 vale solo
       per "\n•"; per usarla lì bisogna mettere l'a capo nei pack foes/legends, controllando a mano dove finisce l'ultima
       voce (es. "3+: 1 damage. Phase 2: …" dell'Eternal Star).
-- [ ] **Emerso lavorando su R5 — tag dei foe ancora grigi** (S/M): nel pack delle foe abilities restano senza
+- [x] **Emerso lavorando su R5 — tag dei foe ancora grigi** (S/M): nel pack delle foe abilities restano senza
       tooltip "per-round-N", "per-combat-N", "repeatable", "usable-when-bloodied", "round-3+(-only)", "area-effect",
       "burst-N-target/self", più i tag da meccanica di fazione ("cauldron-action",
       "might-of-the-wild", "blade-consume-N", "requires-N-tally", …). Servono le regole dal manuale per ognuno.
+(FATTO il 17 ottobre 2026, versione 1.15.122: spiegazioni dal manuale con la pagina per tutti i 35 tag dei pack che ne
+      erano senza; i tag di fazione rimandano alla loro fazione; nei compendi non resta nessun tag senza spiegazione.
+      Solo codice.)
 - [ ] **Emerso lavorando su R5 — costo grezzo nei riquadri delle abilità** (S): i sei riquadri della tab Combat
       mostrano il costo come è salvato ("1action", "interrupt-1") invece di "1 Action" / "Interrupt 1"
       (`icon-combat.hbs`, `item.system.cost`), e non seguono la mastery di Catapult.

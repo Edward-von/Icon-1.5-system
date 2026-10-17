@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Spiegazioni per gli ultimi tag grigi dei foe (versione 1.15.122)
+
+### Round di debug del 15 ottobre, voce emersa su R5
+
+- **Tag dei foe senza spiegazione**: passando il mouse su "Per Round 1", "Repeatable", "Per Combat 1", "Usable When
+  Bloodied", "Round 3+ Only", "Burst 1 Target", "Cauldron Action", "Might Of The Wild" e altri non compariva niente →
+  mancavano dall'elenco delle spiegazioni, e alcuni hanno il numero in mezzo al nome ("burst-2-self",
+  "requires-6+-tally", "4-assets"), una forma che il sistema non leggeva → aggiunte le spiegazioni prese dal manuale,
+  ognuna con la sua pagina: usi limitati e Repeatable (p.290), Area effect e Burst target / self (p.97), Range 4+
+  (p.342), Usable only on bloodied foes (p.333); le meccaniche delle singole fazioni con la loro fazione: Cauldron
+  action del Troll (p.452), Might of the Wild dell'Apex (p.360-361), Path of Ruin del Wyrm (p.362-363), Forge action
+  del Keeper of the Eldflame (p.461), Blade consume del Violence Demon (p.420), Gaze target only del Pale Man (p.416),
+  Tally dell'Aurelian (p.373), Assets del Churn Baron (p.375), Thievery della Falling Leaf Aesi (p.485). Nei compendi
+  non resta nessun tag senza spiegazione (35 aggiunti). Solo codice.
+
 ## 17 ottobre 2026 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (versione 1.15.121)
 
 ### Round di debug del 15 ottobre, voce emersa su R8

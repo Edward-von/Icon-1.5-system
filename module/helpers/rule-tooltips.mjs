@@ -169,7 +169,42 @@ const RULES = {
   "ongoing":     "Ongoing (+): a + next to a status means it cannot be saved against and requires the source to be removed.",
   "wounds":      "Wounds: permanent reduction of max HP by VIT each. Fallen at 4 wounds. Healed only in Interludes.",
   "resolve":     "Resolve: resource for Limit Breaks. Party Resolve +1 per round (shared). Personal Resolve +1 after combat.",
+
+  /* ==================== FOE RULES (p.290) ==================== */
+  "repeatable":  "Repeatable: this action can be used any number of times in a turn, ignoring the no repeats rule (p.290).",
+  "usable-when-bloodied": "Usable when bloodied: a limited use — the foe can only use this ability while it is bloodied (p.290).",
+  "usable-only-on-bloodied-foes": "Usable only on bloodied foes: the ability can only be used against a bloodied foe (p.333).",
+  "area-effect": "Area effect: the ability applies its effect to every specified character in its area (p.97). In an area attack, characters outside the attack space take the area effect instead of the attack.",
+
+  /* ==================== FACTION / UNIQUE MECHANICS ==================== */
+  "cauldron-action": "Cauldron action (Troll): an extra action the Troll gains only while it is within range 2 of its cauldron (p.452).",
+  "might-of-the-wild": "Might of the Wild (Apex): one of the abilities given by the Apex's beast type, rolled or chosen. They can be used twice a round in any combination, plus once more with 4 or more player characters; the third one only becomes usable in phase II (round 4+). While the Apex holds a ploy die, the ability chosen by that player is disabled (p.360-361).",
+  "path-of-ruin": "Path of Ruin (Wyrm): the effect keys off the Path of Ruin, a map edge the GM announces at the start of combat that moves clockwise at the start of each round. In phase II (bloodied) every Path of Ruin effect activates twice: towards where the edge is now, then where it will be next (p.362-363).",
+  "forge-action": "Forge action (Keeper of the Eldflame): usable only while the Keeper is in the aura 2 of its Everforge. Each use makes the area on and adjacent to the forge explode for 2 piercing damage, the forge takes 10 damage, and the Keeper gains 10 vigor (p.461).",
+  "gaze-target-only": "Gaze target only (Pale Man): can only target the character the Pale Man is gazing at, chosen with its Lidless Gaze round action at the start of the round (p.416).",
+  "resets-tally": "Resets Tally (Aurelian): using this action resets the Tally power die (p.373).",
+  "thievery":    "Thievery (Falling Leaf Aesi): when this ability is used, the Aesi creates a memory summon in a free space within range 4 of that character. A character ends the thievery effects on them by passing over and picking up a memory, any memory will do (p.485).",
 };
+
+/** Tally, the Aurelian's power die, explained once for every tally tag. */
+const TALLY = "Tally is the Aurelian's d10 power die: it ticks up by 1 whenever a foe attacks the Aurelian or an ally in its aura 2, and whenever it picks up a valuables token (p.373).";
+
+/**
+ * Tag families whose number is not at the end ("per-round-1", "burst-2-self",
+ * "requires-6+-tally", "4-assets"), as the foe-abilities pack writes them.
+ */
+const PATTERNS = [
+  [/^per-round-(\d+)$/,  (n) => `${n}/round: a limited use — this ability can be used only ${n} time${n > 1 ? "s" : ""} per round (p.290).`],
+  [/^per-combat-(\d+)$/, (n) => `${n}/combat: a limited use — this ability can be used only ${n} time${n > 1 ? "s" : ""} per combat (p.290).`],
+  [/^round-(\d+)\+(?:-only)?$/, (n) => `Round ${n}+ only: a limited use — this ability can only be used from round ${n} onward (p.290).`],
+  [/^burst-(\d+)-target$/, (n) => `Burst ${n} (target): a targeted space or character in range, plus every space within range ${n} of it and in its line of sight. Doesn't affect the user unless specified (p.97).`],
+  [/^burst-(\d+)-self$/,   (n) => `Burst ${n} (self): every space within range ${n} of the user and in its line of sight. Doesn't affect the user unless specified (p.97).`],
+  [/^range-(\d+)\+$/,      (n) => `Range ${n}+: the target must be at range ${n} or further away (p.342).`],
+  [/^blade-consume-(\d+)$/, (n) => `Blade consume ${n} (Violence Demon): the action must consume ${n} blade${n > 1 ? "s" : ""} of agony to be used. Blades are consumed at the start of the action, must be within range 3 of the demon, and are destroyed (p.420).`],
+  [/^requires-(\d+)(\+?)-tally$/, (n, plus) => `Requires ${n}${plus} Tally (Aurelian): usable only with the Tally die at ${n}${plus ? " or more" : ""}. ${TALLY}`],
+  [/^reduces-tally-by-(\d+)$/, (n) => `Reduces Tally by ${n} (Aurelian): using this action ticks the Tally die down by ${n}. ${TALLY}`],
+  [/^(\d+)-assets?$/, (n) => `Costs ${n} Asset${n > 1 ? "s" : ""} (Churn Baron): tick the Baron's Assets power die down by ${n} to use it. Assets is a d6 that starts at 6, ticks up by 1 at the start of the Baron's turn and by 2 every time it picks up a valuables token (p.375).`],
+];
 
 /**
  * Return a tooltip text for a tag. Handles tag families with numeric
@@ -185,6 +220,11 @@ export function explainTag(tag) {
   const direct = RULES[normalized];
   if (direct != null) {
     return typeof direct === "function" ? direct() : direct;
+  }
+
+  for (const [re, fn] of PATTERNS) {
+    const p = re.exec(normalized);
+    if (p) return fn(Number(p[1]), p[2] ?? "");
   }
 
   // Numeric-suffix family: "range-3", "rush-2", "teleport-5", "aura-2"

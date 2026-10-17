@@ -1656,6 +1656,24 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R5 — Spiegazioni per gli ultimi tag grigi dei foe (17 ottobre 2026, versione 1.15.122)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Scheda di un foe con abilità "1/round" e "repeatable" (es. Warrior → Bull rush, Night Troll → Bale Curse): sul
+      chip compare la spiegazione con la pagina (p.290).
+- [ ] Hag / Troll: "Cauldron Action" spiega che serve stare entro range 2 dal calderone (p.452).
+- [ ] Apex: "Might Of The Wild" mostra la regola dei due usi a round e della terza abilità in fase II.
+- [ ] Aurelian: "Requires 6+ Tally" e "Reduces Tally By 2" spiegano il dado Tally; "Resets Tally" su Collect.
+- [ ] Churn Baron: "4 Assets" su Problem Solver spiega il dado Assets.
+- [ ] Violence Demon "Blade Consume 3", Pale Man "Gaze Target Only", Falling Leaf Aesi "Thievery", Wyrm "Path Of
+      Ruin", Keeper of the Eldflame "Forge Action": ognuno ha la sua spiegazione.
+- [ ] "Burst 2 Self" (Summer Flame Aesi) e "Burst 1 Target" (Head Lopper): spiegazione del burst, non più grigio.
+- [ ] Dread Lords → Dark Grip, "Range 4+": spiega "a range 4 o più lontano".
+- [ ] Il blocco "Area Effect:" nella card di un'abilità ora ha il tooltip anche sul titolo: controllare che non
+      disturbi.
+- [ ] "Range 3", "Burst 2", "+1 Boon" hanno ancora la spiegazione di prima.
+
 ## Emerso R8 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (17 ottobre 2026, versione 1.15.121)
 
 Setup: solo codice (F5 basta).
