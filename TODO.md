@@ -1129,6 +1129,15 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (Comet "enter or exit", Megamushroom).
       - Bale Portal: foe "shoved into portals" (spinti dentro un portale) e il "once a round" non sono contati.
       - Comet "or start your turn there": a inizio turno solo una card, non la domanda.
+      (17 ottobre 2026, versioni 1.15.157-1.15.163: fatti copertura dagli oggetti (chip suggerimento), avviso del
+      rampart di Comet, pierce degli Aethershard per bersaglio, salire / scendere dagli oggetti camminando, percorso
+      del movimento, Bale Portal spinti e una volta per round, Pick up di Comet a inizio turno. RESTA APERTO solo per
+      i muri.)
+      Domanda per Edoardo: muri veri di Foundry attorno agli oggetti (vista e movimento, "Provides obstruction", p.89,
+      tranne Underway)? Pro: vista e movimento bloccati davvero. Contro: muri orfani o token bloccati se qualcosa va
+      storto, molti aggiornamenti a ogni spostamento, il libro non dice se un oggetto di altezza 1 blocca la vista, e
+      vanno tolti a mano se l'oggetto si cancella a Foundry spento. Via di mezzo proposta: un bottone "Add walls /
+      Remove walls" sulla scheda dell'oggetto, solo per il GM e solo a clic.
 - [x] **R33b. Spazi di terreno** (L) (FATTO il 16 ottobre 2026, versione 1.15.69: chip colorati sull'abilità / tratto
       letti dal testo ("Pit · 2", "Dangerous · 3", "Mote · 4", "Area +2"), si cliccano gli spazi sulla mappa; ogni spazio è un
       template di una casella col flag `terrain` (riusabile da R33c / R33d); tasto destro sul chip o "Remove all" li toglie;
@@ -1142,7 +1151,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       (afterimage), Apex Talent I, Morrigan Talent II, Blitz Talent I, Pyroclast Talent I e mastery (pit), Bio charge,
       Deepwrath (pit sotto il marcato; Darktide), Rime / Magnarime / Dagon (pit), Tsunami Talent I, Terraforming (pit,
       difficult), Geo charge (pit), Blood Grove Talent II / mastery (spazi aggiunti all'area).
-- [ ] **R33b2. Spazi di terreno: quello che resta dopo R33b** (M/L)
+- [x] **R33b2. Spazi di terreno: quello che resta dopo R33b** (M/L)
       Oggi gli spazi si segnano a mano dal chip e il dangerous / i segni con una frase "enters" fanno una domanda o una card.
       Restano a mano:
       - Deepwrath (p.235): "create a watery pit under them at the start of their turn" (pit automatico a inizio turno del
@@ -1161,6 +1170,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
         afterimage libero e piazzarsi lì) senza bottone; Bio Talent I / II (pit, oggetti e difficult che diventano dangerous;
         2 piercing a chi è nel / accanto al dangerous) e Terraforming "Remove any difficult or dangerous terrain" a mano.
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come gli oggetti, R33a5).
+      (FATTO il 17 ottobre 2026, versioni 1.15.170-1.15.176: Deepwrath (pit a inizio turno, Drag under, DARKTIDE),
+      Eclipse dalla card, Detonate di mote e mine, gamble di Polaris e attivazione di Implode, pit un livello più in
+      basso e avviso del difficult, Elden Rune a fine scena / Flash Step / Bio / Terraforming, spazi attraversati. I
+      pezzi rimasti sono voci emerse a parte.)
 - [x] **R33c. Aree terrain effect che durano, si muovono o crescono** (L) (FATTO il 16 ottobre 2026, versione 1.15.70:
       le aree terrain portano il flag `terrain` letto dal loro blocco (dangerous / difficult / for foes, shadow clouds,
       frase "enter"), così la domanda dei 2 danni e i promemoria valgono anche per Tsunami, Blood Grove, Dark Wing, Gungnir,
@@ -1174,7 +1187,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       spazi a fine round; Blood Grove), più aree insieme invece di sostituirle (Gust Northsoul fino a tre, Mist Strider
       charge "second cloud", Bifröst Heimdall seconda line), e le aree terrain dei talenti / mastery: Nocturne (shadow
       clouds), Mist Strider, Morrigan Dark Wing, Showdown Quench, Blitz Gungnir, Bio Magnabio (toxic cloud).
-- [ ] **R33c2. Aree terrain effect: quello che resta dopo R33c** (M/L)
+- [x] **R33c2. Aree terrain effect: quello che resta dopo R33c** (M/L)
       Oggi le aree si piazzano, restano, portano dangerous / difficult e si muovono o crescono con un clic. Restano a mano:
       - Status per chi sta dentro: "Foes inside are blinded+" (Mist Strider p.169), shadow clouds "characters are blinded+"
         (p.161), "characters inside are shattered+" (Magnabio p.218), "Foes inside Tsunami take +1 curse on saves"
@@ -1197,6 +1210,10 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       - Mist Strider: "consume a cloud … summoning a beast in any of its spaces" a inizio turno senza promemoria; Nocturne
         Talent I (teleport dentro / fuori) e Trap Door Spider Technique a mano.
       - Movimento: si guardano solo partenza e arrivo, non gli spazi attraversati (come R33a5 / R33b2).
+      (FATTO il 17 ottobre 2026, versioni 1.15.164-1.15.169: status per chi sta dentro, danni dell'area su clic,
+      Tsunami contro il bordo, Waterspout (terreno lasciato, HURRICANE), HEIMDALL / Ätherwand Talent I / HELLERWIND,
+      consumare una nuvola di Mist Strider; spazi attraversati fatti in R33b2. Risucchio del Waterspout e rimbalzo di
+      PATH TO ERENHELION sono voci emerse da decidere.)
 - [x] **R33d. Segni che seguono un personaggio** (M) (FATTO il 16 ottobre 2026, versione 1.15.71: con Polaris Talent I,
       Amico o WAKING VOID in gioco il chip chiede "On a space / On <bersaglio>"; sul personaggio targettato nasce il mark
       di marks.mjs (Waking Void come tracker) e il GM attivo aggiunge lo spazio sulle sue caselle, che lo segue; mark e
@@ -1205,7 +1222,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Il resto in R33d2. Solo codice.)
       Un segno di R33b / R33c messo su un personaggio invece che su uno spazio: Polaris Talent I ("follow a character
       as a mark"), Party Favor mastery Amico, Implode mastery Waking Void.
-- [ ] **R33d2. Segni sul personaggio: quello che resta dopo R33d** (S/M)
+- [x] **R33d2. Segni sul personaggio: quello che resta dopo R33d** (S/M)
       - Range non controllato: "any character in range" (Amico, range 3 di Party Favor p.151), il range 6 di Implode,
         il range 5 di Polaris: si targetta chiunque.
       - WAKING VOID (p.211): "Implode immediately activates" è solo una card col testo; lo spostamento della large blast
@@ -1217,6 +1234,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       - Un personaggio collegato (linked) con token su più scene: lo spazio va sul primo token trovato.
       - Amico: la card "Detonate" esce a fine di ogni turno non del creatore (sussurrata a lui e al GM), anche quando
         nessuno ha intenzione di farlo esplodere.
+      (FATTO il 17 ottobre 2026, versioni 1.15.152-1.15.156: range del segno sul personaggio, WAKING VOID con la large
+      blast, scelta del mark che resta, token giusto su più scene, una sola card Detonate di Amico; il gamble di
+      Polaris sul personaggio è in R33b2 (1.15.173).)
+      Domanda per Edoardo: Amico, va bene una sola card Detonate per volta in chat (l'ultima), o meglio nessuna card
+      per turno e un solo bottone Detonate sulla card del piazzamento?
 - [x] **R34. Open the Gates riformattata** (S)
       Proposta: l'ultimo effetto ("This attack gains +1 boon, cannot miss" ecc.) come "Special" davanti alle due
       versioni dell'attacco, come in Raging Wolf. Oggi sembra che dipenda dall'exceed. Il manuale è ambiguo: Edoardo
