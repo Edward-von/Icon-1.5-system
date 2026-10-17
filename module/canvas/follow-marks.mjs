@@ -66,6 +66,40 @@ function tokenOfActor(actor) {
 }
 
 /**
+ * The ability's range, for "any character in range": its range tag (Polaris "range-5", Implode "range-6"), else the
+ * first "in range N" of its text (Party Favor "a free space in range 3", p.151). 0 when it says none.
+ */
+async function rangeOfItem(item) {
+  const { resolveAbilityTags } = await import("../helpers/rule-tooltips.mjs");
+  const { rangeFromTags } = await import("./area-templates.mjs");
+  const fromTags = rangeFromTags(resolveAbilityTags(item.system));
+  if (fromTags) return fromTags;
+  const m = /\bin range (\d+)\b/i.exec(plainText(item.system?.description));
+  return m ? Number(m[1]) : 0;
+}
+
+/**
+ * "Any character in range" (Amico p.151; Polaris range 5 p.202, Implode range 6 p.211): with both tokens on this
+ * scene and the target beyond the ability's range, the user is asked before marking (default: no). True to go on.
+ */
+async function withinRangeOrConfirmed(actor, item, target) {
+  const range = await rangeOfItem(item);
+  const own = actor.getActiveTokens?.(false, false)?.find(t => t.document?.parent === target.document?.parent);
+  if (!range || !Number.isFinite(range) || !own) return true;
+  const { gridDistance } = await import("../combat/defenses.mjs");
+  const dist = gridDistance(own, target);
+  if (dist <= range) return true;
+  try {
+    return !!(await foundry.applications.api.DialogV2.confirm({
+      window: { title: `${item.name} — out of range` },
+      content: `<p><strong>${esc(target.name)}</strong> is ${dist} spaces away, beyond ${esc(item.name)}'s range ${range}.</p><p>Put it on ${esc(target.name)} anyway?</p>`,
+      yes: { label: "Anyway" }, no: { label: "Cancel", default: true },
+      rejectClose: false,
+    }));
+  } catch { return false; }
+}
+
+/**
  * The chip's "On a character": mark the one targeted token (the effect first; the active GM adds the space, see
  * onMarkCreated). With no single target, says how to target one.
  * @param {Actor} actor
@@ -81,6 +115,7 @@ export async function placeMarkOnCharacter(actor, item, sp) {
   }
   const target = targets[0];
   const oc = sp.onCharacter;
+  if (!(await withinRangeOrConfirmed(actor, item, target))) return;
   _log(`${item.name} on ${target.name} (${oc.mark ? "mark" : "tracker"})`);
   await applyMark({
     source: actor, target: target.actor, abilityKey: item.id, abilityName: item.name,

@@ -1656,6 +1656,14 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R33d2 — Segno sul personaggio: controllo del range (17 ottobre 2026, versione 1.15.152)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Party Favor con Amico, bersaglio a 3 spazi: "On <bersaglio>" segna senza chiedere niente.
+- [ ] Bersaglio a 5 spazi: compare "out of range". Cancel non mette niente, Anyway mette mark e spazio.
+- [ ] Polaris Talent I a 6 spazi e Implode / WAKING VOID a 7: chiede. Entro 5 e 6: non chiede.
+
 ## R35c — Interrupt strani sul danno (17 ottobre 2026, versione 1.15.151)
 
 Setup: solo codice (F5 basta).

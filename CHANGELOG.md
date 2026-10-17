@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Segno sul personaggio: controllo del range (versione 1.15.152)
+
+### Round di debug del 15 ottobre, R33d2
+
+- **Range del segno sul personaggio**: con "On <bersaglio>" si poteva segnare chiunque, a qualsiasi distanza → il chip
+  non guardava il range dell'abilità ("any character in range", Amico p.151; Polaris range 5 p.202; Implode range 6
+  p.211) → se i due token sono sulla stessa scena e il bersaglio è più lontano del range (tag `range-N`, oppure "in
+  range N" nel testo: Party Favor 3), una finestra chiede "Anyway / Cancel", con Cancel come scelta predefinita. Solo
+  codice.
+
 ## 17 ottobre 2026 — Interrupt strani sul danno (versione 1.15.151)
 
 ### Round di debug del 15 ottobre, R35c

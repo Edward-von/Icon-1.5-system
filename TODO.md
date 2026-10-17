@@ -1424,6 +1424,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - [ ] **Emerso lavorando su R35 — interrupt "when targeted" sulla card d'attacco** (M): Aether Deflection, Endless
       Battlement e i foe "is targeted by an attack" scattano prima del tiro; il posto giusto è la card d'attacco, non
       quella del danno (solo Dire Parry è stato aggiunto al danno come eccezione).
+- [ ] **Emerso lavorando su R33d2 — range sul bottone Mark** (S): il bottone Mark delle schede (PG, foe, legend) non
+      controlla il range dell'abilità per nessun mark, Polaris Talent I e Amico compresi (il controllo c'è solo sul
+      chip "On a character").
 
 ---
 
