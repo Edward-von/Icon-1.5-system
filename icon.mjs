@@ -114,6 +114,7 @@ import { parseInflictedStatuses, abilityStatusEntries, npcActionStatusEntries, s
 import { bindInflictButtons, inflictStatus } from "./module/combat/inflict-status.mjs";
 import { rollGamble } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
+import { decorateDamageInterrupts } from "./module/combat/damage-interrupts.mjs";
 
 /* ================================================== */
 /*  init                                              */
@@ -788,6 +789,11 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
     const firstBtn = row.querySelector("button");
     firstBtn ? row.insertBefore(holder, firstBtn) : row.appendChild(holder);
   });
+
+  // Interrupts this damage triggers (R35): buttons under each target row for
+  // the characters this user plays (damage-interrupts.mjs).
+  try { decorateDamageInterrupts(message, html); }
+  catch (err) { console.warn("ICON 1.5 | damage-card interrupts failed:", err); }
 
   buttons.forEach(btn => {
     if (btn.dataset.iconBound) return;

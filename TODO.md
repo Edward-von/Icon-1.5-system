@@ -1229,10 +1229,13 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       interrupts could do similar on damage cards as needed), then I wouldn't do it. Keep in mind there are weird
       interrupts like Dire Parry's mastery which lets it bank interrupt usages, or the ones from seer that wholly
       prevent damage."
-- [ ] **R35a. Interrupt dalle card del danno: la base** (L)
+- [x] **R35a. Interrupt dalle card del danno: la base** (L)
       Sulla card del danno, per il personaggio colpito (e per chi ha un interrupt con trigger "damaged" / "an ally …
       is damaged"), un bottone per ogni interrupt che quel danno fa scattare: spende un uso, posta Trigger ed Effect
       (come R61). Modulare, come chiede Turz Ven: un solo punto dove dire "questo interrupt scatta sul danno".
+(FATTO il 17 ottobre 2026, versione 1.15.149: bottoni interrupt sotto ogni riga bersaglio della card del danno,
+      lettura dei trigger in damage-interrupts.mjs, uso speso e card postata, usi dei PG azzerati a inizio turno. Solo
+      codice.)
 - [ ] **R35b. Righteous Disdain** (M)
       Il suo effetto applicato dalla card del danno, sopra R35a.
 - [ ] **R35c. Interrupt strani sul danno** (M/L)
@@ -1404,6 +1407,9 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       combattimento fino a 5, Skein (1 carta a inizio turno, +1 a fine turno se non ha attaccato), il limite di 7
       carte a fine turno, il rimescolare gli scarti nel mazzo e Bend Fate (scartare carte dopo un gamble per un dado
       in più, p.199): oggi si fa a mano con i Cards di Foundry.
+- [ ] **Emerso lavorando su R35 — usi degli interrupt dei PG sulla scheda** (S): ora gli usi dei PG si contano (flag
+      `interruptUses`), ma la scheda PG non li mostra né permette di spuntarli come la scheda dei foe; anche il
+      bottone "posta in chat" di R61 non spende un uso.
 
 ---
 

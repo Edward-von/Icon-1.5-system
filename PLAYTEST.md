@@ -1656,6 +1656,22 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## R35a — Interrupt dalle card del danno (17 ottobre 2026, versione 1.15.149)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con Sturmreiten colpito da un foe: sotto la sua riga c'è "Sturmreiten · Nome 1/1"; il clic posta la card con
+      Trigger / Effect e la riga "On X's damage…", e il bottone passa a 0/1, disattivato.
+- [ ] Seer con Wish e un alleato colpito da un foe: il bottone compare sotto la riga dell'alleato, solo per il
+      giocatore del Seer.
+- [ ] Danno da un alleato (area amica): gli interrupt "by a foe's ability" non compaiono.
+- [ ] PG Stunned: bottone disattivato.
+- [ ] All'inizio del turno del PG gli usi tornano pieni (ricaricare la card per vederlo).
+- [ ] Foe con "The knight is damaged by an ability": il GM vede il bottone, che spunta lo stesso uso della scheda del
+      foe.
+- [ ] Il GM non vede i bottoni dei PG che hanno un giocatore; il giocatore non vede quelli dei foe.
+- [ ] Un interrupt della stance (Dire Parry) compare solo mentre si è in stance.
+
 ## R36c — Carte del Seer: bersagli e area (17 ottobre 2026, versione 1.15.148)
 
 Setup: solo codice (F5 basta).

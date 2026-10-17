@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Interrupt dalle card del danno (versione 1.15.149)
+
+### Round di debug del 15 ottobre, R35a
+
+- **Interrupt sul danno**: un interrupt che scatta quando si viene colpiti (Sturmreiten, Wish, Righteous Disdain, "The
+  knight is damaged" dei foe) andava cercato a mano sulla scheda e gli usi dei PG non erano contati → la card del
+  danno non sapeva quali interrupt fa scattare → sotto ogni bersaglio della card c'è un bottone per ogni interrupt che
+  quel danno attiva, per i personaggi che giochi tu (il colpito, o un alleato se il trigger dice "an ally … is
+  damaged"); il clic spende un uso e posta Trigger ed Effect. Chi decide quali interrupt scattano sta in un punto solo
+  (`module/combat/damage-interrupts.mjs`), modulare come chiedeva Turz Ven. Gli usi dei PG ora si contano (flag
+  `interruptUses`) e tornano a inizio del loro turno; i foe usano le stesse spunte della scheda. Gittata, aura, linea
+  di vista e "un interrupt per turno" restano al tavolo. Solo codice.
+
 ## 17 ottobre 2026 — Carte del Seer: bersagli e area (versione 1.15.148)
 
 ### Round di debug del 15 ottobre, R36c

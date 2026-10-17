@@ -947,9 +947,11 @@ export function registerCombatHooks() {
         }
 
         /* Non-legend foes recharge interrupts at the start of their own
-         * turn. Legends recharge at round start (handled in nextRound). */
+         * turn. Legends recharge at round start (handled in nextRound). PCs'
+         * interrupt uses (spent from a damage card, R35) come back at the
+         * start of each of their turns too (Quick Guide FAQ). */
         const actor = current.actor;
-        if (actor?.type === "foe" && actor.getFlag(FLAG_NS, "interruptUses") != null) {
+        if ((actor?.type === "foe" || actor?.type === "icon") && actor.getFlag(FLAG_NS, "interruptUses") != null) {
           await actor.unsetFlag(FLAG_NS, "interruptUses");
         }
       }
