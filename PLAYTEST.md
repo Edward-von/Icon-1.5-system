@@ -11,6 +11,716 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Piano del playtest del 18 ottobre 2026 (versioni 1.15.2 – 1.15.232)
+
+Dall'ultimo playtest (1.15.1, 13 ottobre) sono uscite 231 versioni mai provate in Foundry. Questo piano dice cosa
+preparare, in che ordine fare le prove e quali abilità ricontrollare. Le prove vere restano nelle loro sezioni, più
+sotto in questo file: qui c'è solo l'elenco. La 1.15.2 non ha una sezione sua (sono le correzioni dell'esito della
+1.15.1, già provate quel giorno); la 1.15.61 ha una sezione senza titolo (vedi blocco 12). In tutto le sezioni da fare
+sono **230**.
+
+**Come trovare una sezione**: Ctrl+F e cercare `versione 1.15.N)` con la parentesi chiusa (per esempio
+`versione 1.15.23)`), così non escono anche la 1.15.230, 231, 232.
+
+### 1. Preparazione
+
+**Build e mondo**
+
+- Foundry locale, mondo **"test"**, entrare come GM. Controllare che il sistema sia alla **1.15.232** (Impostazioni →
+  "Sistema di gioco", oppure la finestra del sistema nella schermata di avvio). Se è più vecchio, prima va fatto il
+  deploy.
+- Tenere la console aperta (F12 → Console) al primo caricamento: le migrazioni da 20 a 36 scrivono lì
+  "Migration N: …". Se il mondo è già stato aperto con questa build, i messaggi non ricompaiono: è normale.
+- **Quello che è già nel mondo non si aggiorna dai compendi.** Foe, legend, abilità, tratti e Limit Break presi
+  prima di oggi hanno il testo vecchio (le migrazioni correggono solo alcune abilità, e solo se il testo non è stato
+  toccato a mano). Per le prove: cancellare i foe vecchi e **importarli di nuovo dal compendio**; per i PG, creare
+  personaggi nuovi e trascinare le abilità dal compendio Jobs. Le poche prove che chiedono "una copia presa prima
+  dell'aggiornamento" (migrazioni) si possono fare solo se nel mondo c'è ancora un PG vecchio: se non c'è, segnare
+  "non provabile" e controllare solo la copia nuova.
+
+**Scena**
+
+- Una scena nuova, per esempio "Playtest 18 ottobre": griglia **quadrata**, almeno 30 × 20 caselle, nessun muro
+  disegnato (i muri li creano le prove). Serve un bordo della mappa raggiungibile (Tsunami).
+- Una seconda scena piccola, "Scena B", per la prova del token su due scene (1.15.155).
+- Un combattimento con dentro i PG e qualche foe: molte prove dicono "a inizio / fine turno" o "al round N".
+
+**Secondo utente**
+
+- Creare un utente **"Giocatore"** (ruolo Player) e aprirlo in una seconda finestra di Chrome (finestra in incognito o
+  un altro profilo), così GM e giocatore sono collegati insieme. Dare al Giocatore la proprietà (Owner) di: Seer
+  "Ann", Chanter, Spellblade, Harvester, Demon Slayer. Le righe che dicono "da giocatore" si possono lasciare per la
+  fine (blocco 18).
+
+**Personaggi da creare** (un PG per job; "TEST" davanti al nome, tranne i Seer). Ogni PG ha sei riquadri abilità:
+mettere le prime sei della lista e scambiare le altre quando servono (× sul riquadro, poi trascinare la nuova dal
+compendio Jobs). Talenti e mastery si cambiano dalla finestra che si apre al trascinamento o sul riquadro.
+
+| PG | Classe / job | Abilità | Tratti, Limit Break, note |
+|---|---|---|---|
+| TEST Stormbender | Wright / Stormbender | Waterspout, Tsunami, Gust, Rime, Geyser, Deepwrath; poi Cryo, Heave-Ho, Eye of the Storm | Pelagic Rage; LB Elemental; Aether 6; capitolo 3 per Eye of the Storm |
+| TEST Enochian | Wright / Enochian | Elden Rune, Aethershard, Implode, Pyroclast, Blazing Bond, Blackstar; poi Pyre, Lance, Soul Burn | Inner Furnace, Soulfire; LB Gigaflare (capitolo 3 per Meteor) |
+| TEST Spellblade | Wright / Spellblade | Bifröst, Blitz, Ätherwand, Sturmreiten, Fulminate, Rampant Nail; poi Drifting Leaf, Nothung | Aether Deflection, Conqueror's Edge, Storm Hilt Rage; LB Gran Levincross |
+| TEST Geomancer | Wright / Geomancer | Geo, Terraforming, Bio, Quaking Palm, Helix Heel, Dragon Dive | Stone Double; LB Cataclysm |
+| Ann | Mendicant / Seer | Polaris, Eclipse, Wish, The Tower, Chaos Tarot, Sleight of Hand; poi Astra | Bend Fate; LB High Prophecy; mazzo di carte (vedi sotto) |
+| Bo | Mendicant / Seer | nessuna in particolare | serve solo per 1.15.199 (due Seer) |
+| TEST Chanter | Mendicant / Chanter | Symphony, Holy, Pandaemonium, Aria, Dervish, Gentleness; poi Felicity, Chastise, Monogatari | Blessing of Faith |
+| TEST Harvester | Mendicant / Harvester | Harvest, Sow, Dark Sliver, Fairy Ring, Blood Grove, Rot; poi Gravebirth, Crimson Bloom | LB Death Sentence |
+| TEST Sealer | Mendicant / Sealer | Open the Gates, Matsuri, Spirit Shrine, God Hand, Justice, Grand Banishment; poi Divine Aegis | LB Passage to the Afterlife |
+| TEST Demon Slayer | Stalwart / Demon Slayer | Comet, Gates of Hell, Righteous Disdain, Draken Cross | LB Split Heaven and Hell |
+| TEST Knave | Stalwart / Knave | Riposte, Bleak Mercy, Revenge, Low Blow, Intimidate, Provoke; poi Dark Knight | LB Mock; qualche carica di Vigilance |
+| TEST Colossus | Stalwart / Colossus | Gigaton Whip, Dropkick, Massive Overhead, Raging Wolf, Upheaval, Takedown | Pulverize; LB Gigantas Crusher (capitolo 3 per Atomos Crusher) |
+| TEST Bastion | Stalwart / Bastion | Endless Battlement, Rook, Land Waster, Catapult | Shieldmaster; LB Helion |
+| TEST Fool | Vagabond / Fool | Party Favor, Chronotemper, Death, Cavaliere, Spinning Top | Stack Dice, Curse of Chaos, Cheap Trick; capitolo 3 per due Stacked Dice; LB Curtain Call |
+| TEST Freelancer | Vagabond / Freelancer | Showdown, Warding Bolts, Soul Shot, Astral Chain, Exorcism | Aether Shot, Bound Spirit; LB Paradiso; relic Paleblood e Arenheir (si possono dare a chiunque) |
+| TEST Warden | Vagabond / Warden | Mist Strider, Morrigan, Underway, Circle the Oak, Sidhe, Apex; poi Strength of the Pack | Beast Master; LB Lycanthropy |
+| TEST Shade | Vagabond / Shade | Incubus, Umbra, Nocturne, Shadow Play, Harrow, Death Blossom; poi Nightmare | Darkside |
+
+**Foe e legend da importare** (dal compendio, nuovi): Bale Troll, Warrior, Night Troll, Hag o Troll, Shopkeep,
+Violence Demon, Battle Demon, Churn Baron, Imperial Spy, Arc Spectre, Kelpie, Knuckle (o Tomb Guard), Janissary (o
+Hotshot), Razer, Basic Mob, Shotgun Trooper, Trooper, Pepperbox, Scout, Junk Mage, Deep Snow Aesi, Keeper of the
+Eldflame, Fetid Idol, Silent One, Rider of the Primal Storm, Warden of the Aeongate, Apex, Aurelian, Pale Man, Falling
+Leaf Aesi, Summer Flame Aesi, Wyrm. Legend: **Master** (Assault Wave, p.312), Azurian Weapon, Dread Lords, Head
+Lopper. Più un foe qualsiasi con un interrupt "… is damaged by an ability" (cercare la frase nel compendio Foes) e
+un foe 2×2. Non servono tutti insieme sulla scena: importarli quando arriva il loro blocco.
+
+**Oggetti sulla mappa**: nascono dai chip col cubo sulle abilità (Boulder da Geo o Terraforming, Underway dal
+Warden, Geyser dallo Stormbender, Thrown Weapon da Comet, Shrine dallo Spirit Shrine, Megamushroom da Fairy Ring con
+la mastery, Pillar da Upheaval con la mastery, Magma Spire da Pyroclast, Statue da Stone Double). Le **Plant** si
+prendono dal compendio Summons.
+
+**Mazzo del Seer** (blocco 15): un mazzo di carte di Foundry dal preset "Poker Deck" (per 1.15.180 basta una sola
+seme, 13 carte), le mani "Ann hand" e "Bo hand", le pile "Ann discard", "Bo discard" e una pila "Discard"
+generica (per le prove con un solo Seer, togliere temporaneamente le pile con il nome). Dare al Giocatore il
+permesso Owner su mazzo, mano e pile di Ann.
+
+### 2. Ordine consigliato
+
+Si comincia dalle cose più a rischio (muri e rampart degli oggetti, Waterspout, Inflict sulla card del danno, usi
+degli interrupt), poi il resto per argomento. Dentro ogni blocco l'ordine è libero. Ogni sezione compare in un solo
+blocco.
+
+#### Blocco 1 — Oggetti sulla mappa: muri, rampart di Comet, copertura, salire e scendere (rischio alto) (17 sezioni)
+
+Servono: TEST Geomancer (Boulder), TEST Demon Slayer (Comet), TEST Warden (Underway, mastery Bale Portal), TEST Stormbender (Geyser), TEST Enochian (Aethershard, Pyroclast), TEST Sealer (Spirit Shrine), TEST Harvester (Fairy Ring con mastery), TEST Colossus (Upheaval); un foe con lo status flying, uno unstoppable e, se c'è, uno con il tratto "Hovering: Immune to rampart". Le prove dei muri vanno fatte da GM.
+
+- `1.15.227` — R33a5 — Muri di Foundry attorno agli oggetti, a clic del GM
+- `1.15.229` — Emerso R33 — Il rampart di Comet ferma davvero i foe
+- `1.15.158` — R33a5 — Avviso del rampart di Comet
+- `1.15.228` — Emerso R33 — Copertura degli oggetti calcolata per direzione
+- `1.15.157` — R33a5 — Copertura dagli oggetti sulla mappa
+- `1.15.160` — R33a5 — Salire e scendere dagli oggetti camminando
+- `1.15.161` — R33a5 — Gli oggetti guardano il percorso del movimento
+- `1.15.163` — R33a5 — Bottone Pick up a inizio turno per Comet
+- `1.15.162` — R33a5 — Bale Portal: foe spinti e una volta per round
+- `1.15.65` — R33a — Oggetti sulla mappa
+- `1.15.66` — R33a2 — Effetti degli oggetti, pile, aree sugli oggetti
+- `1.15.67` — R33a3 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro, scheda dalla barra laterale
+- `1.15.68` — R33a4 — Oggetti e movimento: Underway, Comet, Megamushroom, Geyser, pile con personaggi sopra, Aethershard
+- `1.15.78` — Emerso R33b — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token
+- `1.15.159` — R33a5 — Pierce degli Aethershard bersaglio per bersaglio
+- `1.15.188` — Emerso R33 — Pierce degli Aethershard ridà il weakened
+- `1.15.101` — Emerso R33a3 — Aethershard senza bottone danno
+
+#### Blocco 2 — Waterspout e aree terrain effect (rischio alto) (13 sezioni)
+
+Servono: TEST Stormbender (Waterspout con Talent I e II e HURRICANE, Tsunami, Gust con NORTHSOUL), TEST Spellblade (Bifröst, Blitz con GUNGNIR, Ätherwand), TEST Warden (Mist Strider, Morrigan con DARK WING), TEST Shade (Nocturne), TEST Freelancer (Showdown con QUENCH), TEST Geomancer (Bio con MAGNABIO), TEST Harvester (Blood Grove); un alleato e due foe; combattimento avviato. Il bordo della mappa raggiungibile per Tsunami.
+
+- `1.15.232` — Emerso R33 — Waterspout: risucchia i personaggi e li risputa
+- `1.15.167` — R33c2 — Waterspout: terreno lasciato, HURRICANE
+- `1.15.166` — R33c2 — Tsunami si piazza contro un bordo della mappa
+- `1.15.165` — R33c2 — Aree terrain effect: danni su clic
+- `1.15.164` — R33c2 — Aree terrain effect: status per chi sta dentro
+- `1.15.70` — R33c — Aree terrain effect che durano, si muovono o crescono
+- `1.15.191` — Emerso R33 — Area spostata sopra i personaggi: offerta degli status
+- `1.15.207` — Emerso R33 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove
+- `1.15.192` — Emerso R33 — Mist Strider Talent II: evasion per i foe dentro la nuvola
+- `1.15.169` — R33c2 — Mist Strider: consumare una nuvola
+- `1.15.193` — Emerso R33 — Ätherwand: shattered a fine turno dentro l'area
+- `1.15.168` — R33c2 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND
+- `1.15.224` — Emerso R33 — Il rimbalzo di Bifröst (PATH TO ERENHELION)
+
+#### Blocco 3 — Card del danno: Inflict, pierce, weakened, divine, tiri salvezza, istanze (rischio alto per la 1.15.231) (15 sezioni)
+
+Servono: un PG con un attacco che infligge uno status (es. Hit: stunned), la legend Master (Assault Wave), il Pepperbox, il Bale Troll, un foe con armatura e uno con vigor; il TEST Colossus (Dropkick), il TEST Knave (Provoke), il TEST Chanter (Gentleness).
+
+- `1.15.231` — Emerso status sulla card del danno — I bottoni Inflict anche sulla card del danno
+- `1.15.222` — Emerso R37 — applyDamagePipeline accetta danno pierce e divine
+- `1.15.216` — Emerso R40 — "X damage, twice" sul tiro salvezza: un solo tiro
+- `1.15.215` — Emerso R40 — Il danno dopo un tiro salvezza tiene conto di Weakened
+- `1.15.202` — Emerso R40 — Assault Wave chiede quanti minion contano
+- `1.15.201` — Emerso R40 — Il danno dei tiri salvezza tiene il tipo piercing / divine
+- `1.15.109` — Emerso R37 — Il danno divine salta il vigor anche dalle card
+- `1.15.4` — R2 — vigor oltre il massimo
+- `1.15.28` — R24 — Più istanze dello stesso danno nel tiro del danno
+- `1.15.31` — R27 — Damage Utility sulla scheda PG
+- `1.15.30` — R26 — [D] mostrato con il dado del personaggio
+- `1.15.17` — R15 — Il tiro del danno spunta Divine e Pierce dal testo
+- `1.15.16` — R14 — Provoke propone il danno giusto
+- `1.15.143` — Emerso R14 — Il danno che un foe infligge a se stesso non è più proposto
+- `1.15.47` — R45 — Niente "Hit (no damage)" sulle abilità che danneggiano solo con l'area
+
+#### Blocco 4 — Usi degli interrupt e bottoni "when targeted" (rischio alto) (15 sezioni)
+
+Servono: TEST Spellblade (Aether Deflection, Sturmreiten), TEST Demon Slayer (Righteous Disdain), TEST Knave (Riposte con Strong Left), TEST Bastion (Endless Battlement), Ann (Wish), TEST Sealer (Spirit Shrine con mastery), TEST Enochian (Blazing Bond con mastery), TEST Fool (Chronotemper), TEST Harvester (Fairy Ring); un foe con "Interrupt 2", il Violence Demon, una legend con interrupt; combattimento avviato.
+
+- `1.15.217` — Emerso R35 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero
+- `1.15.178` — Emerso R35 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno
+- `1.15.203` — Emerso R35 — Usi degli interrupt sulle schede di foe e legend
+- `1.15.204` — Emerso R35 — Niente interrupt dalla scheda se Stunned
+- `1.15.195` — Emerso R35 — Interrupt "when targeted" sulla card dell'attacco
+- `1.15.218` — Emerso R35 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted"
+- `1.15.230` — Emerso R35 — Scritta dei bottoni "targeted" giusta anche senza attacco
+- `1.15.149` — R35a — Interrupt dalle card del danno
+- `1.15.150` — R35b — Righteous Disdain dalla card del danno
+- `1.15.151` — R35c — Interrupt strani sul danno
+- `1.15.186` — Emerso R35 — Righteous Disdain: bottone per il vigor del Heroic
+- `1.15.205` — Emerso R35 — Chip vigor anche per "gain vigor N"
+- `1.15.187` — Emerso R35 — Great Soul Bond usabile dalla card del danno
+- `1.15.206` — Emerso R35 — Aether Deflection dà la resistenza sulla card del danno
+- `1.15.62` — R61 — Interrupt concessi in chat da soli
+
+#### Blocco 5 — Card d'attacco, Exceed e soglie di crit (11 sezioni)
+
+Servono: TEST Colossus (Gigaton Whip con IZUNA DROP, Pulverize), TEST Sealer (Open the Gates con BURIAL FIST, Matsuri con BLOOD FESTIVAL, God Hand), TEST Freelancer (Aether Shot, Soul Shot, relic Arenheir e Paleblood), TEST Enochian (Soulfire), TEST Fool (Death, Curse of Chaos), TEST Harvester (Sow); combattimento avviato per contare i round.
+
+- `1.15.214` — Emerso R16 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop
+- `1.15.213` — Emerso R16 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno
+- `1.15.212` — Emerso R16 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco
+- `1.15.220` — Emerso R16 — Burial Fist: il round 4 vale anche per il bonus damage
+- `1.15.190` — Emerso R16 — Izuna Drop sulla card dell'attacco di Gigaton Whip
+- `1.15.189` — Emerso R16 — Blood Festival e Burial Fist fanno scattare l'Exceed
+- `1.15.138` — Emerso R16 — Talento nella card auto-hit
+- `1.15.18` — R16 — I talenti compaiono nella card dell'attacco
+- `1.15.75` — R63 — Soglie di crit / exceed variabili: Soulfire, Arenheir, a mano
+- `1.15.59` — R58 — Casella "Defender has evasion" nella finestra dell'attacco
+- `1.15.135` — Emerso R1 — Reap da lontano guadagna Unerring
+
+#### Blocco 6 — Finestra del danno: esito Other e chip (11 sezioni)
+
+Servono: TEST Shade (Incubus), TEST Freelancer (Astral Chain), TEST Chanter (Chastise), TEST Spellblade (Blitz, Nothung), TEST Warden (Circle the Oak), TEST Geomancer (Quaking Palm), TEST Harvester (Harvest), TEST Demon Slayer (Draken Cross), TEST Colossus (Dropkick), TEST Fool; i foe Kelpie, Knuckle, Janissary, Razer, Basic Mob, Shotgun Trooper, la legend Azurian Weapon, un summon con un'azione di danno.
+
+- `1.15.145` — Emerso R40 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other
+- `1.15.144` — Emerso R40 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N
+- `1.15.128` — Emerso R40 — L'esito Other dice da dove vengono le chip
+- `1.15.127` — Emerso R40 — Chip di Other con Unerring, ×N e due danni di Blitz
+- `1.15.126` — Emerso R40 — Il Mark di Incubus sparisce con Succubus
+- `1.15.125` — Emerso R40 — Chip della combo di Succubus solo con la combo
+- `1.15.100` — Emerso R40 — Il danno dei blocchi Mark / Effect della base si tira da Other
+- `1.15.83` — Emerso R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other
+- `1.15.115` — Emerso R23 — Danno dei summon con la finestra condivisa
+- `1.15.27` — R23 — Opzione "Other" nel tiro del danno per il danno delle mastery
+- `1.15.25` — R21 — Con la mastery di Dropkick il tiro del danno propone l'Area
+
+#### Blocco 7 — Bersaglio d'attacco nelle aree e bottoni Inflict / Gain (11 sezioni)
+
+Servono: TEST Enochian (Blackstar), TEST Spellblade (Drifting Leaf), TEST Stormbender (Heave-Ho), TEST Warden (Mist Strider), Ann (Wish con mastery), TEST Shade (Shadow Play), TEST Knave (Revenge, Intimidate), TEST Chanter (Holy, Blessing of Faith), TEST Fool (Death); tre foe vicini, un foe e una legend con un'azione d'attacco ad area.
+
+- `1.15.42` — R41 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area
+- `1.15.86` — Emerso R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area
+- `1.15.88` — Emerso R41 — Show in Chat delle azioni foe / legend divide le righe di un'area
+- `1.15.95` — Emerso R41 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione
+- `1.15.117` — Emerso R41 — Bersaglio d'attacco ricordato solo se è ancora nell'area
+- `1.15.44` — R42b — Inflict per gli status dati a chi "finisce il turno" in un'area
+- `1.15.43` — R42 — Gain dei talenti con "one of them" e "Grant you and your ally"
+- `1.15.85` — Emerso R42 — Wish, mastery: Unstoppable all'alleato, non a te
+- `1.15.130` — Emerso R1 — "Gains True Strike" non è più uno status
+- `1.15.221` — Emerso R1 — Blessing of Faith: True Strike solo su quell'abilità, niente status
+- `1.15.20` — R18 — La mastery di Intimidate propone Unstoppable
+
+#### Blocco 8 — Segni sul personaggio: mark, track, aure sul marcato, Polaris, Implode, Party Favor (17 sezioni)
+
+Servono: Ann (Polaris con Talent I, The Tower), TEST Fool (Party Favor con AMICO), TEST Enochian (Implode con WAKING VOID e Talent II), TEST Spellblade (Fulminate), TEST Sealer (Grand Banishment, Divine Aegis), TEST Geomancer (Quaking Palm), TEST Warden (Sidhe), TEST Harvester (Dark Sliver), TEST Stormbender (Deepwrath per il bottone Mark); due foe e un alleato; la Scena B per la 1.15.155.
+
+- `1.15.71` — R33d — Segni che seguono un personaggio
+- `1.15.152` — R33d2 — Segno sul personaggio: controllo del range
+- `1.15.153` — R33d2 — Implode su un personaggio: la large blast con un clic
+- `1.15.154` — R33d2 — Segnare di nuovo: si sceglie quale mark resta
+- `1.15.155` — R33d2 — Segno sul personaggio: il token giusto su più scene
+- `1.15.156` — R33d2 — Amico: una sola card Detonate in chat
+- `1.15.131` — Emerso R17 — Testo del mark di Polaris e Party Favor
+- `1.15.198` — Emerso R33 — Il bottone Mark controlla il range
+- `1.15.19` — R17 — Polaris può marcare un personaggio col Talent I
+- `1.15.34` — R30 — Track target: un segno che non è un mark
+- `1.15.57` — R56 — Track target su Quaking Palm, Sidhe e Dark Sliver
+- `1.15.80` — Emerso R48 — L'aura di Fulminate finisce con il mark
+- `1.15.105` — Emerso R48 — L'aura di Fulminate arriva da sola con il mark
+- `1.15.173` — R33b2 — Polaris e Implode si attivano dalle card
+- `1.15.194` — Emerso R33 — Implode: shove guidato verso il centro
+- `1.15.208` — Emerso R33 — Implode su un personaggio: bottoni Shove verso di lui
+- `1.15.209` — Emerso R33 — Lo shove di Implode bloccato segnala la collisione
+
+#### Blocco 9 — Spazi di terreno e pit (21 sezioni)
+
+Servono: TEST Stormbender (Deepwrath con Talent I, II e DARKTIDE, Rime), TEST Chanter (Symphony, Holy, Pandaemonium con DULCE PURGATORIO), Ann (Eclipse, Polaris), TEST Enochian (Elden Rune, Implode), TEST Geomancer (Terraforming, Bio, Geo), TEST Demon Slayer (Gates of Hell con mastery), TEST Fool (Party Favor), TEST Harvester (Dark Sliver), una scena con qualche foe pacified.
+
+- `1.15.69` — R33b — Spazi di terreno: pit, dangerous, difficult, segni con nome
+- `1.15.170` — R33b2 — Deepwrath crea e usa i pit dalle card
+- `1.15.196` — Emerso R33 — I talenti di Deepwrath funzionano dentro i pit
+- `1.15.210` — Emerso R33 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered
+- `1.15.174` — R33b2 — Il pit conta come un livello più in basso
+- `1.15.175` — R33b2 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno
+- `1.15.176` — R33b2 — Le caselle di terreno guardano anche gli spazi attraversati
+- `1.15.172` — R33b2 — Mote e mine esplodono con un clic
+- `1.15.171` — R33b2 — Eclipse esplode da una card
+- `1.15.184` — Emerso R33 — Mote attraversata: l'esplosione va sulla mote
+- `1.15.225` — Emerso R33 — Symphony: il Charge dà 2 mote gratis
+- `1.15.197` — Emerso R33 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa
+- `1.15.223` — Emerso R33 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma
+- `1.15.96` — Emerso R49 — Dulce Purgatorio fa esplodere tutti i pit del campo
+- `1.15.97` — Emerso R49 — Pit sotto i foe pacified (Pandaemonium Talent II)
+- `1.15.106` — Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit
+- `1.15.118` — Emerso R49 — I due chip dei pit di Pandaemonium non si cancellano a vicenda
+- `1.15.119` — Emerso R49 — Commento corretto in pitBlastCells
+- `1.15.93` — Emerso R49 — I pit esplodono dall'area: Holy Talent I e Purgatorio
+- `1.15.98` — Emerso R49 — L'area di Holy non resta più sulla mappa
+- `1.15.103` — Emerso R49 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa
+
+#### Blocco 10 — Plant, mote of life, Rampant Nail (6 sezioni)
+
+Servono: TEST Harvester (Harvest con HARVEST MOON, Dark Sliver con RECYCLE, Fairy Ring con mastery), TEST Spellblade (Rampant Nail con Talent I), due o tre Plant dal compendio Summons, un token rinominato "Mote of life".
+
+- `1.15.226` — Emerso R49 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing
+- `1.15.211` — Emerso R49 — Mote of life senza blessing: diventa un terrain effect
+- `1.15.183` — Emerso R49 — HARVEST MOON riconosce la mote of life
+- `1.15.142` — Emerso R49 — Harvest Moon: esplosioni sulle plant con un clic
+- `1.15.182` — Emerso R49 — La blast del Rampant Nail segue lo spuntone
+- `1.15.140` — Emerso R49 — Rampant Nail: la Small Blast del Talent I sullo spuntone
+
+#### Blocco 11 — Aree delle abilità e aure (13 sezioni)
+
+Servono: TEST Fool (Death), TEST Freelancer (Soul Shot, Warding Bolts), TEST Sealer (Matsuri, God Hand), TEST Stormbender (Gust, Eye of the Storm, Pelagic Rage), TEST Chanter (Aria, Gentleness, Dervish), TEST Enochian (Elden Rune), TEST Spellblade (Fulminate, Rampant Nail, Sturmreiten con Talent II e MJÖLLNIR), TEST Bastion (Rook, Land Waster, Endless Battlement, Shieldmaster), TEST Knave (Bleak Mercy con Painkiller, Dark Knight), TEST Harvester (Sow con Spectral Scythe), TEST Shade (Nightmare), il Battle Demon e il Trooper; combattimento avviato.
+
+- `1.15.51` — R49 — Aree di Slay, Finishing Blow, Exceed e Collide; aree "centered on them"
+- `1.15.50` — R48 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect
+- `1.15.36` — R32 — Dimensione dell'aura con + e −
+- `1.15.23` — R19c — I tratti che danno un'aura hanno il bottone area
+- `1.15.22` — R19b — L'aura di Endless Battlement va sull'alleato
+- `1.15.21` — R19 — Le aure scritte nel testo danno il tag e l'area
+- `1.15.5` — R3 — avviso in chat quando un'aura scade
+- `1.15.84` — Emerso R49 — Aria: la blast cresciuta resta centrata su di te
+- `1.15.102` — Emerso R47b — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5
+- `1.15.116` — Emerso R47b — MJÖLLNIR sostituisce sempre l'area di Sturmreiten
+- `1.15.73` — R47b — Sturmreiten Talent II, seconda Line 3
+- `1.15.114` — Emerso R19 — Aure dei foe senza numero
+- `1.15.132` — Emerso R19 — Painkiller: l'aura di Sweet Torment resta
+
+#### Blocco 12 — Infuse (Wright) (14 sezioni)
+
+Servono i quattro PG Wright con Aether 6: TEST Stormbender (Rime, Cryo, Tsunami, Eye of the Storm), TEST Enochian (Pyre, Lance, Soul Burn, Inner Furnace, Gigaflare), TEST Spellblade (Ätherwand, Nothung, Blitz, Drifting Leaf, Conqueror's Edge, Aether Deflection), TEST Geomancer (Bio, Geo, Dragon Dive, Quaking Palm); un foe come bersaglio; combattimento avviato.
+
+- `1.15.39` — R38b — Versioni Infuse dei Limit Break
+- `1.15.48` — R46 — Il tiro del danno legge la versione Infuse armata
+- `1.15.49` — R47 — Le aree degli Infuse X crescono con l'Aether speso
+- `1.15.61` — (blocco senza titolo, subito dopo la sezione R61: comincia con "Setup: un PG Wright Geomancer con Bio") — Versioni Infuse nella card: solo quella usata
+- `1.15.76` — R64 — Infuse più economico: Conqueror's Edge e Inner Furnace
+- `1.15.81` — Emerso R38b — L'infusione armata non sopravvive al combattimento
+- `1.15.91` — Emerso R46 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other
+- `1.15.92` — Emerso R38b — L'infusione si consuma con l'uso dell'abilità
+- `1.15.99` — Emerso R46 — Slay or Infuse armato mostrato una volta sola, come versione infusa
+- `1.15.108` — Emerso R38b — Danno rilanciato di un uso infuso: "Reroll (same use)"
+- `1.15.112` — Emerso R38b — PHANTOM BLADE resta attiva fino al tuo turno successivo
+- `1.15.113` — Emerso R38b — Annullare un'infusione non sblocca più Inner Furnace due volte
+- `1.15.129` — Emerso R38b — Il dialog del danno riaperto ricorda le scelte
+- `1.15.60` — R59 — Aether senza attacco: Stormlash e Aether Deflection
+
+#### Blocco 13 — Limit Break (9 sezioni)
+
+Servono i PG con i Limit Break: Gigaflare (Enochian), Gran Levincross (Spellblade), Gigantas Crusher (Colossus), Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer), High Prophecy (Seer), Elemental (Stormbender), Death Sentence (Harvester), Cataclysm (Geomancer), Curtain Call (Fool), Passage to the Afterlife (Sealer), Mock (Knave), Helion (Bastion); Resolve personale e di party; prove al capitolo 1-2 e al capitolo 3; un foe da 40 hp e una legend.
+
+- `1.15.37` — R37 — Tiro del danno dei Limit Break
+- `1.15.38` — R38 — Aura e aree dei Limit Break sulla mappa
+- `1.15.82` — Emerso R37 — L'Ultimate dei Limit Break compare su scheda e card
+- `1.15.90` — Emerso R37 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato
+- `1.15.104` — Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate
+- `1.15.107` — Emerso R37 — Limit Break con danno in percentuale degli hp
+- `1.15.111` — Emerso R37 — Gigantas Crusher restituisce la resolve quando un Legend salva
+- `1.15.134` — Emerso R37 — La spesa di resolve del Limit Break finisce col combattimento
+- `1.15.141` — Emerso R37 — Split Heaven and Hell: fascia di distanza misurata sulla linea
+
+#### Blocco 14 — Combo, talenti e mastery (7 sezioni)
+
+Servono: TEST Chanter (Chastise, Dervish, Felicity, Pandaemonium, Holy), TEST Harvester (Sow, Rot), TEST Sealer (God Hand, Justice), Ann (Astra), TEST Knave (Bleak Mercy, Revenge, Low Blow), TEST Shade (Umbra, Incubus, Death Blossom), TEST Sealer per Spirit Shrine; il combo token (bottone COMBO).
+
+- `1.15.3` — R1 — combo che ereditavano la versione base
+- `1.15.41` — R40 — Combo "instead of …" che sostituiscono solo una parte della base
+- `1.15.139` — Emerso R1 — Barrato solo il blocco sostituito dalla combo
+- `1.15.32` — R28 — Combo alternativa data dalla mastery
+- `1.15.33` — R29 — Dervish: base e combo insieme con la mastery
+- `1.15.35` — R31 — Mastery e talento in chat da soli
+- `1.15.24` — R20 — L'Arc 4 della mastery di Sow si piazza dal bersaglio
+
+#### Blocco 15 — Seer, mazzo e gamble (11 sezioni)
+
+Servono: Ann e Bo con mazzo, mani e pile (vedi Preparazione), un alleato; TEST Fool (Stack Dice, capitolo 3 per i due dadi; Spinning Top, Chaos Tarot su Ann), TEST Knave (Riposte e Vigilance).
+
+- `1.15.146` — R36a — Carte del Seer: l'effetto su ogni carta
+- `1.15.147` — R36b — Carte del Seer giocate in chat
+- `1.15.148` — R36c — Carte del Seer: bersagli e area
+- `1.15.180` — Emerso R36 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare
+- `1.15.181` — Emerso R36 — Bend Fate dalla card del gamble
+- `1.15.199` — Emerso R36 — Foretell scarta nella pila del proprio Seer
+- `1.15.200` — Emerso R36 — Foretell dal mazzo con la mano vuota
+- `1.15.219` — Emerso R36 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble
+- `1.15.29` — R25 — Bottone Gamble sulle abilità
+- `1.15.58` — R57 — Stack Dice: bottone Use
+- `1.15.53` — R51 — Stack Dice: il secondo dado al capitolo 3
+
+#### Blocco 16 — Schede, riquadri, summon, tooltip, promemoria di round (14 sezioni)
+
+Servono: un PG qualsiasi con sei abilità, un kit con "5 fire stones", i foe dei tag grigi (Warrior, Night Troll, Hag, Apex, Aurelian, Churn Baron, Violence Demon, Pale Man, Falling Leaf Aesi, Wyrm, Keeper of the Eldflame, Summer Flame Aesi, Head Lopper, Dread Lords), i PG dei summon (Shade, Harvester, Fool, Freelancer, Warden, Stormbender), relic Paleblood e Conquering King, Junk Mage.
+
+- `1.15.177` — Emerso R5 — La × e il badge combo tornano sui riquadri delle abilità
+- `1.15.137` — Emerso R5 — Abilità trascinata su un riquadro pieno
+- `1.15.136` — Emerso playtest 1.15.1 — Gli usi dei kit contano anche con clic rapidissimi
+- `1.15.123` — Emerso R5 — Costo leggibile nei riquadri delle abilità
+- `1.15.122` — Emerso R5 — Spiegazioni per gli ultimi tag grigi dei foe
+- `1.15.6` — R4 — talento e mastery chiesti per ogni abilità trascinata
+- `1.15.7` — R5 — tooltip su Sacrifice, sui Blast e sul costo degli interrupt
+- `1.15.45` — R43 — Summon solo sulle abilità che lo creano
+- `1.15.46` — R44 — Summon sui tratti che lo creano
+- `1.15.9` — R7 — nessun summon di un altro job sulle abilità
+- `1.15.52` — R50 — Keyword "summon" sul verbo e nomi delle combo
+- `1.15.26` — R22 — Voce FAQ sulle difficoltà dei tiri narrativi
+- `1.15.63` — R62 — Promemoria "round N or later" a inizio round
+- `1.15.79` — Emerso R62 — Avvio del combat senza promemoria "End of round 0"
+
+#### Blocco 17 — Testi e compendi (dopo il re-import) (23 sezioni)
+
+Si fanno insieme alla parte 3 (controllo delle abilità). Servono le abilità prese di nuovo dal compendio Jobs e i foe importati di nuovo; per le prove di migrazione, un PG creato prima dell'aggiornamento (se non c'è, solo la copia nuova).
+
+- `1.15.8` — R6 — testo di colore delle abilità senza tooltip delle keyword
+- `1.15.10` — R8 — Massive Overhead: regole fuori dal testo di colore
+- `1.15.11` — R9 — Fairy Ring: il trigger di Spirit Away al suo posto
+- `1.15.12` — R10 — Sleight of Hand e Chaos Tarot senza il Wild Card ripetuto
+- `1.15.13` — R11 — Tabelle 1-6 una riga per risultato
+- `1.15.14` — R12 — Eclipse e Raging Wolf con gli elenchi a righe
+- `1.15.15` — R13 — Superbolide della Tower fedele al libro
+- `1.15.54` — R53 — Heave-Ho: l'Effect prima dell'Area
+- `1.15.55` — R54 — Eye of the Storm: Special, Area, Effect
+- `1.15.56` — R55 — Helix Heel: la prima riga è un Effect
+- `1.15.72` — R34 — Open the Gates: lo Special davanti alle due versioni
+- `1.15.74` — R52 — Chronotemper senza l'etichetta "Power Die"
+- `1.15.77` — Emerso su R39 — testi dei Limit Break come nel libro
+- `1.15.87` — Emerso R55 — Helix Heel: tornano le tre parole del libro
+- `1.15.89` — Emerso R33a3 — Aethershard: torna il testo del libro
+- `1.15.94` — Emerso R39 — Split Heaven and Hell e Lycanthropy con le parole del libro
+- `1.15.120` — Emerso R1 — Reap, la combo di Sow, ha i suoi tag
+- `1.15.121` — Emerso R8 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore
+- `1.15.124` — Emerso R12 — Elenchi a righe anche nei foe
+- `1.15.133` — Emerso R12 — Elenchi "•" a righe nelle regole dei summon di foe e legend
+- `1.15.179` — Emerso R12 — Elenchi puntati nella scheda del Summon di un foe
+- `1.15.64` — Regex rotte di R39 e R59
+- `1.15.40` — R39 — Testo dei Limit Break impaginato come nel libro
+
+#### Blocco 18 — Da provare con un secondo client (2 sezioni)
+
+Serve la finestra del Giocatore collegata insieme al GM. Oltre a queste due sezioni, qui si recuperano le righe "da giocatore" / "un giocatore che non possiede…" / "due GM" lasciate indietro negli altri blocchi.
+
+- `1.15.110` — Emerso R48 — La misura dell'aura di Fulminate la sceglie chi marca
+- `1.15.185` — Emerso R33 — Symphony toglie davvero le blessing
+
+### 3. Controllo delle abilità corrette
+
+**Passo generale, da fare per primo**: per ogni voce dei compendi toccata in queste versioni (elenco qui sotto),
+aprirla di nuovo dal compendio (non dalla copia già nel mondo) e confrontare il testo con la pagina citata del
+manuale. Per trovare la frase giusta: aprire `ICON 1.5.txt` (il testo del PDF) e cercare il nome dell'abilità con
+Ctrl+F; il PDF alla pagina indicata fa da prova finale. Le parole devono essere le stesse del libro, comprese le
+etichette (Effect:, Special:, Trigger:…) e gli elenchi a righe.
+
+Le voci con **(testo)** hanno avuto il testo corretto nel compendio (e di solito una migrazione per le copie già nel
+mondo): lì si confronta parola per parola con il manuale. Le altre hanno un'automazione nuova o cambiata: si
+controlla che il bottone faccia quello che c'è scritto. Tra parentesi quadre le versioni che le hanno toccate, per
+ritrovare la sezione di prova.
+
+**Compendi toccati**: il compendio **Jobs** (abilità, Limit Break, template dei job) nelle versioni 1.15.10, 11, 12,
+14, 15, 40, 54, 55, 56, 72, 74, 77, 87, 89, 94, 120, 121 (migrazioni da 20 a 36); i compendi **Foes, Legends, Foe
+Abilities** e i template dei foe solo nella 1.15.124 (elenchi a righe, senza migrazione: valgono solo per i foe
+importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambiati.
+
+#### Stalwart — Bastion
+
+- [ ] **Shieldmaster** (tratto Bastion, p.121) — cosa controllare: il bottone "Aura 1" nell'intestazione del tratto piazza un'aura che segue il token [1.15.23]
+- [ ] **Endless Battlement** (Bastion, p.122-123) — cosa controllare: Aura 1 senza domanda, attorno all'alleato bersagliato (avviso oltre range 4, niente avviso con Perfect Battlement); bottone chat di Heroic Intervention e bottone "when targeted" sotto la card d'attacco [1.15.21, 22, 62, 195]
+- [ ] **Rook** (Bastion, p.123) — cosa controllare: Aura 1 dal testo, scelta "Heroic: Aura 2", avviso in chat quando scade, niente bottone "Gain True Strike" [1.15.5, 21, 50, 100, 130]
+- [ ] **Catapult** (Bastion, p.123) — cosa controllare: con la mastery il badge del costo e il riquadro dicono "Interrupt 3", senza tag doppio [1.15.7, 123]
+- [ ] **Perseus** (Bastion, p.123) — cosa controllare: il tag aura senza numero diventa Aura 1 senza domanda [1.15.21]
+- [ ] **Land Waster** (Bastion, p.122) — cosa controllare: scelta "Heroic: Burst 2 (target)", chip del boulder, la Burst 1 non resta sulla mappa, niente "Gain True Strike" [1.15.50, 51, 65, 69, 70, 130]
+- [ ] **Battering Ram** (Bastion, p.122) — cosa controllare: "flying" nel testo in corsivo senza tooltip, le keyword dell'Effect con tooltip [1.15.8]
+- [ ] **Great Giorgios** (Bastion, p.124) — cosa controllare: c'è il bottone Track target [1.15.34]
+
+#### Stalwart — Demon Slayer
+
+- [ ] **Comet** (Demon Slayer, p.128) — cosa controllare: chip "Thrown Weapon"; domanda "cannot attack" con Roll anyway; Pick up (anche a inizio turno e passando accanto); aura Rampart che segue l'arma; foe che volano o si teletrasportano rifiutati, a piedi domanda "dash?"; tag Medium Blast con tooltip [1.15.7, 47, 65, 66, 68, 158, 161, 163, 229]
+- [ ] **Righteous Disdain** (Demon Slayer, p.128-129) — cosa controllare: sulla card del danno aggiunge la riga del Demon Slayer, tutte e due con resistenza ½; con Shirahadori si ferma a 1 HP; bottone "Heroic: gain 4 vigor" una volta sola; chip "Gain vigor 4" [1.15.149, 150, 186, 205]
+- [ ] **Draken Cross** (Demon Slayer, p.128) — cosa controllare: "fray again" del Talent I e i 2 divine di Dark Wind Devil Blade come scelte rapide sotto Other; niente "Gain True Strike" [1.15.27, 130]
+- [ ] **Demon Cutter** (Demon Slayer, p.128) — cosa controllare: negli attacchi ad area l'Inflict va solo sul bersaglio d'attacco [1.15.42]
+- [ ] **Gates of Hell** (Demon Slayer, p.129) — cosa controllare: con la mastery chip "Afterimage" (dangerous solo per i foe) e bottone Flash Step che porta il token sull'afterimage libero [1.15.69, 70, 175]
+- [ ] **Six Hells Trigram** (Demon Slayer, p.129) — cosa controllare: "summon" nel testo in corsivo senza tooltip [1.15.8]
+- [ ] **Wicked Sheath** (Demon Slayer, p.130) — cosa controllare: con il Talent II il tiro del danno propone l'Area (2) [1.15.25]
+
+#### Stalwart — Colossus
+
+- [ ] **Gigaton Whip** (Colossus, p.137) — cosa controllare: la card d'attacco mostra Effect, Collide "They take fray damage" e, con IZUNA DROP, il blocco "Collide — Izuna Drop"; nella finestra del danno "Collide · fray" oppure "Izuna Drop · fray ×2" [1.15.190, 214]
+- [ ] **Raging Wolf** (testo; Colossus, p.137) — cosa controllare: ordine Special, Comeback, Heroic, Special; le tre soglie del Comeback ("Bloodied:", "25% or lower:", "1 hp or lower:") su righe separate; nessun summon Beast. Migrazione 23 [1.15.9, 14]
+- [ ] **Massive Overhead** (testo; Colossus, p.136) — cosa controllare: niente corsivo, si apre con "Effect: End your turn…" e poi "Special Effect: If your target was already in a pit…"; "Rush" di Blood Rush senza tooltip. Migrazione 20 [1.15.10, 51, 52, 65, 69]
+- [ ] **Upheaval** (Colossus, p.136) — cosa controllare: danno del Talent I (2), chip Boulder, chip "Pillar · H2" solo con la mastery [1.15.25, 65, 67]
+- [ ] **Dropkick** (Colossus, p.136) — cosa controllare: tag Sacrifice con tooltip; con Giant Kicker il danno propone l'Area (fray) [1.15.7, 25, 69]
+- [ ] **Takedown** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno; niente "Gain True Strike" sull'Exceed / Heroic [1.15.69, 130]
+- [ ] **Valkyrie** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno [1.15.69]
+- [ ] **Pulverize** (tratto Colossus, p.135) — cosa controllare: casella "Pulverize" nella finestra dell'attacco, spuntata da 2 livelli più in alto [1.15.212]
+
+#### Stalwart — Knave
+
+- [ ] **Boiling Blood** (testo; Knave, p.138) — cosa controllare: il corsivo finisce con "…before expiring." senza "Defy Death —"; Trigger "You are defeated."; l'Effect comincia con "Defy Death — You fight on, …". Migrazione 36 [1.15.121]
+- [ ] **Provoke** (Knave, p.142) — cosa controllare: il danno proposto è 2 (non l'1 piercing "to you"), Pierce non spuntato [1.15.16, 17, 144]
+- [ ] **Riposte** (Knave, p.142-143) — cosa controllare: bottone Gamble con le cariche di Vigilance; blocco "Dire Parry — Interrupt 1" con bottone chat; con Strong Left riserva fino a 3; "Refresh Riposte" [1.15.29, 62, 151]
+- [ ] **Revenge** (Knave, p.142) — cosa controllare: Indignation sostituisce solo l'Effect (barrato solo quello); "armor" nel corsivo senza tooltip; niente "Gain True Strike" [1.15.3, 8, 130, 139]
+- [ ] **Low Blow** (Knave, p.142) — cosa controllare: con The Hook la base non è barrata e la combo si aggiunge sotto [1.15.3, 139]
+- [ ] **Spite** (Knave, p.141) — cosa controllare: la Hatred+ dura "until the end of your next turn" [1.15.2]
+- [ ] **Strongarm** (Knave, p.143) — cosa controllare: Instances ×N e chip "up to ×N" con il tetto [1.15.28, 144]
+- [ ] **Dark Knight** (Knave, p.143) — cosa controllare: con la mastery tag "Aura 1" e bottone area; "Hatred" nel nome della mastery senza tooltip [1.15.2, 21, 52]
+- [ ] **Intimidate** (Knave, p.144) — cosa controllare: con Iron Skull bottone "Gain Unstoppable" su di sé fino alla fine del turno successivo [1.15.20]
+- [ ] **Bleak Mercy** (Knave, p.144) — cosa controllare: Sweet Torment sostituisce solo l'Effect; Aura 1 con avviso di scadenza; con Painkiller l'aura non scade [1.15.3, 5, 21, 132, 139]
+
+#### Vagabond — Fool
+
+- [ ] **Curse of Chaos** (tratto Fool, p.149) — cosa controllare: un foe che attacca il Fool da 3+ caselle ha la casella "Defender has evasion" [1.15.59]
+- [ ] **Stack Dice** (tratto Fool, p.149 e p.152) — cosa controllare: bottone Use (posta "gamble result is 6"), al capitolo 3 due dadi (0/2), opzione Stacked Die nel gamble senza doppio scalo [1.15.29, 53, 58]
+- [ ] **Cheap Trick** (tratto Fool, p.149) — cosa controllare: chip del summon Bomb sul tratto [1.15.46]
+- [ ] **Death** (Fool, p.150) — cosa controllare: scelta "Slay / Finishing Blow: Large Blast (target)" centrata sul bersaglio; l'attacco piazza solo la Line 6; Slay del Talent II sulla card auto-hit [1.15.51, 138]
+- [ ] **Cavaliere** (Fool, p.150) — cosa controllare: chip summon Bomb [1.15.45]
+- [ ] **Diablo** (Fool, p.151) — cosa controllare: Inflict solo sul bersaglio d'attacco [1.15.42]
+- [ ] **Party Favor** (Fool, p.151) — cosa controllare: chip Mine e Detonate (gamble + Medium Blast); con AMICO tag e bottone Mark, "On a character", controllo del range, una sola card Detonate in chat, testo del mark preso da Amico [1.15.19, 69, 71, 131, 152, 156, 172, 198]
+- [ ] **Chronotemper** (testo; Fool, p.152) — cosa controllare: tra i tag solo "Mark" (niente "Power Die"); blocco "Cheat Time — Interrupt 1" con bottone chat, riga della mastery Revolution. Migrazione 30 [1.15.62, 74]
+
+#### Vagabond — Freelancer
+
+- [ ] **Aether Shot** (tratto Freelancer, p.155) — cosa controllare: casella Exceed spuntata ai round 3 e 6, +1 dado bonus nella finestra del danno [1.15.212, 213]
+- [ ] **Bound Spirit** (tratto Freelancer, p.155) — cosa controllare: chip del summon Astral Seraph [1.15.46]
+- [ ] **Astral Chain** (Freelancer, p.156) — cosa controllare: chip "Mark 2 unerring" sotto Other che spunta Unerring [1.15.100, 127]
+- [ ] **Trick Shot** (Freelancer, p.156) — cosa controllare: la chip del Talent II spunta Unerring [1.15.127]
+- [ ] **Exorcism** (Freelancer, p.156) — cosa controllare: area e danno del Talent II, area centrata sul bersaglio [1.15.24, 25, 51]
+- [ ] **Ace** (Freelancer, p.157) — cosa controllare: bottone area del Talent I, centrata sul bersaglio [1.15.24, 51]
+- [ ] **Deus Ex Machina** (Freelancer, p.157) — cosa controllare: un solo blocco "Divine Intervention — Interrupt" con bottone chat [1.15.62]
+- [ ] **Showdown** (Freelancer, p.157) — cosa controllare: Track target; Damage "2 unerring"; con QUENCH lo smoke va da solo sul PG e resta; Cover entrando, Stealth uscendo [1.15.24, 34, 70, 100, 164, 191]
+- [ ] **Soul Shot** (Freelancer, p.158) — cosa controllare: scelta "Exceed / Finishing Blow: Large Blast (target)"; casella Exceed vuota con la frase del libro [1.15.42, 51, 212]
+- [ ] **Warding Bolts** (Freelancer, p.158) — cosa controllare: con Phantom Bolts scelta "Mastery: Aura 2" attorno al PG; Damage con "unerring" [1.15.50, 100, 127]
+
+#### Vagabond — Shade
+
+- [ ] **Darkside** (tratto Shade, p.161) — cosa controllare: chip del summon Shadow [1.15.46]
+- [ ] **Umbra** (Shade, p.162) — cosa controllare: Penumbra sostituisce solo l'Effect del teletrasporto (barrato solo quello); chip Shadow dal Finishing Blow [1.15.41, 45, 139]
+- [ ] **Harrow** (Shade, p.162) — cosa controllare: nessun chip Shadow; chip degli spazi di terreno [1.15.45, 69]
+- [ ] **Death Blossom** (Shade, p.162) — cosa controllare: "Flying" di Flying Sleeves senza tooltip; con la combo niente barrato [1.15.52, 69, 139]
+- [ ] **Nightmare** (Shade, p.162) — cosa controllare: Aura 2 dal testo senza domanda; avviso all'inizio del turno successivo [1.15.5, 21]
+- [ ] **Nocturne** (Shade, p.161 e p.163) — cosa controllare: nessun summon; le shadow cloud restano; Blind+ a chi entra, il Shade è immune [1.15.45, 51, 70, 164]
+- [ ] **Shadow Play** (Shade, p.163) — cosa controllare: con il Talent II "Gain Evasion" agli alleati; nessun chip Shadow [1.15.43, 45]
+- [ ] **Assassinate** (Shade, p.163) — cosa controllare: Track target; nessun chip Shadow [1.15.34, 45]
+- [ ] **Incubus** (Shade, p.164) — cosa controllare: Succubus toglie blocco, tag e bottone Mark; Hit resta [D]+fray; "Combo — Succubus 3" sotto Other solo con "Combo version"; "Mark 2" sotto Other senza combo [1.15.41, 83, 100, 125, 126, 128, 139]
+
+#### Vagabond — Warden
+
+- [ ] **Beast Master** (tratto Warden, p.168) — cosa controllare: chip Great Beast, nessun chip Beast [1.15.46]
+- [ ] **Underway** (Warden, p.170-171) — cosa controllare: chip del portale; "Teleport here"; domanda di teletrasporto accanto al portale; Bale Portal a fine turno del foe, una volta per round; "Cover? underway" con il Talent II; niente "Add walls" [1.15.45, 65, 68, 157, 161, 162, 227]
+- [ ] **Circle the Oak** (Warden, p.169) — cosa controllare: con il Talent II "Gain Evasion" su di sé; chip "fray · up to ×4" [1.15.20, 100, 144]
+- [ ] **Mist Strider** (Warden, p.169-170) — cosa controllare: solo summon Beast; seconda nuvola; Blind+ ai foe che entrano; River Guardians "2 damage + Dazed"; Consume; con il Talent II i foe dentro hanno evasion [1.15.9, 44, 70, 164, 165, 169, 191, 192]
+- [ ] **Strength of the Pack** (Warden, p.170) — cosa controllare: Aura 2 dal testo senza domanda [1.15.21]
+- [ ] **Sidhe** (Warden, p.171) — cosa controllare: area e danno del Talent II; bottone Track target [1.15.24, 25, 57, 100]
+- [ ] **Morrigan** (Warden, p.171) — cosa controllare: "you summon a massive flock" senza tooltip su summon; con DARK WING area che resta, dangerous per i foe, Cover agli alleati [1.15.24, 52, 70, 164, 191]
+
+#### Mendicant — Chanter
+
+- [ ] **Blessing of Faith** (tratto Chanter, p.176) — cosa controllare: niente bottone "Gain True Strike" (è un promemoria sull'abilità) [1.15.221, 225]
+- [ ] **Felicity** (Chanter, p.177) — cosa controllare: Fleet sostituisce la base; con la mastery si sceglie Fleet o Fantasia [1.15.3, 32]
+- [ ] **Holy** (Chanter, p.177) — cosa controllare: "Talent I: Medium Blast (on pits)"; la Medium Blast di Hades sparisce al turno dopo, il pit resta; MAGNASANCTI resta [1.15.3, 69, 93, 98]
+- [ ] **Pandaemonium** (Chanter, p.177-178) — cosa controllare: Purgatorio fa esplodere i pit (tutti con DULCE PURGATORIO); area "Medium Blast + all pits"; chip "Pits under pacified foes" del Talent II; i due chip dei pit indipendenti [1.15.3, 93, 96, 97, 106, 118]
+- [ ] **Symphony** (Chanter, p.178-179) — cosa controllare: chip Mote (non adiacenti); Detonate; finestra delle blessing da togliere; Charge "+2 more spaces"; bottone chat della mastery Crescendo [1.15.35, 51, 69, 172, 184, 185, 225]
+- [ ] **Dervish** (Chanter, p.178) — cosa controllare: Aura 1 col Talent I e con Dawn; con la mastery card "Dervish + Dawn" e base non barrata [1.15.3, 5, 21, 33, 139]
+- [ ] **Aria** (Chanter, p.178) — cosa controllare: Small, Medium e Large Blast "(self)" centrate sul Chanter senza clic [1.15.51, 84]
+- [ ] **Gentleness** (Chanter, p.179) — cosa controllare: Divine già spuntato nel danno; + / − sull'aura da 1 a 3 con la mastery [1.15.17, 36]
+- [ ] **Chastise** (Chanter, p.179-180) — cosa controllare: Charism sostituisce la base; chip "1 divine ×3" sotto Other con Instances 3 [1.15.3, 27, 28, 51, 100, 127]
+- [ ] **Monogatari** (Chanter, p.179) — cosa controllare: i sei racconti su sei righe numerate [1.15.13]
+- [ ] **March of the Saints** (testo; Limit Break Chanter, p.176) — cosa controllare: Stance, Refresh, poi i quattro santi uno per riga col nome in grassetto. Migrazione 25 [1.15.40]
+
+#### Mendicant — Harvester
+
+- [ ] **Sow** (testo; Harvester, p.185) — cosa controllare: con REAP armato i tag sono Attack, Melee, Combo (via Range 4, Mark, Pierce); Unerring da lontano su un marcato; Arc 4 di Spectral Scythe dal bersaglio; Comeback del Talent II sull'auto-hit. Migrazione 35 [1.15.3, 24, 25, 120, 135, 138]
+- [ ] **Growing Season** (Harvester, p.185) — cosa controllare: chip dell'oggetto Blood Tree [1.15.65, 70]
+- [ ] **Harvest** (Harvester, p.186) — cosa controllare: con HARVEST MOON "Small Blast (on plants)", finestra "which plants explode?" e scelta della blessing; chip "Mastery 2 flat piercing · area" sotto Other; chip summon Thrall, niente Plant [1.15.27, 45, 142, 183, 226]
+- [ ] **Blood Grove** (Harvester, p.186) — cosa controllare: chip "Area +2" del Talent II; dangerous solo per i foe; status offerti nelle caselle nuove [1.15.69, 70, 207]
+- [ ] **Rot** (Harvester, p.186) — cosa controllare: Damage del Talent II ("2 flat piercing"); terzo bottone "Mark target (Regrowth)" con la mastery [1.15.3, 27, 32]
+- [ ] **Crimson Bloom** (Harvester, p.186) — cosa controllare: il Talent I dà "Gain Defiance" all'alleato [1.15.43]
+- [ ] **Dark Sliver** (Harvester, p.187) — cosa controllare: Track target; l'area dell'attacco non resta; la mote of life conta come plant; senza blessing card "Becomes a terrain effect" (RECYCLE) [1.15.52, 57, 100, 103, 183, 211, 226]
+- [ ] **Fairy Ring** (testo; Harvester, p.187) — cosa controllare: niente "Trigger:" in cima; blocco "Spirit Away — Interrupt 2" con il suo Trigger dopo il Terrain Effect; Megamushroom con "Pick up blessing", che esplode come una plant e resta. Migrazione 21 [1.15.11, 45, 62, 65, 67, 68, 142, 161, 226]
+- [ ] **Death Sentence** (testo; Limit Break Harvester, p.184) — cosa controllare: "Summon:", la riga "Severed Soul — Size 1…", "Summon Effect:"; bottone Line 4. Migrazione 25 [1.15.38, 40]
+
+#### Mendicant — Sealer
+
+- [ ] **Blessing of War** (tratto Sealer, p.191) — cosa controllare: casella Exceed col suo nome, vuota, con la frase del libro [1.15.212]
+- [ ] **God Hand** (Sealer, p.192) — cosa controllare: talenti sulla card d'attacco; con la mastery scelta Devil Hand / Fists of Heaven And Hell; aree "(target)" [1.15.18, 32, 51]
+- [ ] **Matsuri** (Sealer, p.192) — cosa controllare: bottone "Large Blast (target)"; casella BLOOD FESTIVAL spuntata al primo uso; blocco "BLOOD FESTIVAL (this use)" e +1 dado bonus [1.15.51, 189, 212, 213]
+- [ ] **Spirit Shrine** (Sealer, p.192-193) — cosa controllare: oggetto Shrine con Aura 2 e righe per altezza; bottone chat di Spirit Patronage; "Grace of the Spirits" sulla card del danno rende l'alleato immune [1.15.35, 62, 65, 66, 151]
+- [ ] **Grand Banishment** (Sealer, p.193) — cosa controllare: bottone Track target [1.15.34]
+- [ ] **Divine Aegis** (Sealer, p.193) — cosa controllare: il Talent II dà "Gain Defiance" all'alleato [1.15.43]
+- [ ] **Open the Gates** (testo; Sealer, p.194) — cosa controllare: prima riga **Special** ("This attack gains +1 boon, cannot miss…"), poi Effect, Hit, Miss, Exceed, anche in Center the Temple; casella Exceed al primo uso; BURIAL FIST dal round 4 con il dado bonus. Migrazione 29 [1.15.63, 72, 189, 212, 213, 220]
+- [ ] **Justice** (Sealer, p.194) — cosa controllare: con la mastery scelta Judgement / Gran Judicata; niente "Hit (no damage)" [1.15.32, 47, 62]
+- [ ] **Passage to the Afterlife** (Limit Break Sealer, p.191) — cosa controllare: Damage Roll con Hit ×3 e sotto Other l'Exceed e i 2 divine per alleato [1.15.37]
+
+#### Mendicant — Seer
+
+- [ ] **Bend Fate** (tratto Seer, p.199) — cosa controllare: bottone sulla card del gamble (scarta carte, +1d6 per carta, una riga di tabella per risultato); non è nel tooltip di "Set the number" [1.15.29, 181, 219]
+- [ ] **Wheel of Fate / Skein / Foretell** (tratti Seer, p.199) — cosa controllare: "Draw up to 5" all'avvio, "Draw 1" e "Discard down to 7"; lo scarto va nella pila del proprio Seer; "Foretell from the deck" con la mano vuota [1.15.146, 147, 148, 180, 199, 200]
+- [ ] **The Great Wheel** (carte del Seer, p.199) — cosa controllare: sotto il nome di ogni carta il suo effetto (A The World … K The Sun); la carta giocata posta la card con i bottoni; il 4 piazza la small blast sull'alleato [1.15.146, 147, 148]
+- [ ] **Chaos Tarot** (testo; Seer, p.201) — cosa controllare: tabella del gamble a sei righe, poi "Summon: Then, summon a wild card in the area." e basta, senza il blocco del Wild Card. Migrazione 22 [1.15.12, 13, 42, 47, 69]
+- [ ] **Sleight of Hand** (testo; Seer, p.201) — cosa controllare: Attack, "Effect: Your foe is pacified.", Area Effect, "Effect: Summon a wild card in range 2 of your foe.", senza "Wild Card — Size 1" né "Summon Effect". Migrazione 22 [1.15.12, 42]
+- [ ] **Astra** (Seer, p.201) — cosa controllare: con Fortuna card con "Combo — Fortuna", Hit [D]+fray, Area e Summon, senza la base [1.15.3, 65, 100]
+- [ ] **Polaris** (Seer, p.202) — cosa controllare: Talent I dà tag e bottone Mark, "On a character", controllo del range 5; card a fine turno degli altri con Gamble, blast unite, Stun e difficult / pits del Talent II [1.15.19, 65, 69, 71, 131, 152, 173, 198]
+- [ ] **Gran Reversa** (Seer, p.202) — cosa controllare: il vigor può superare il massimo; blocco "Reverse Fate — Interrupt 1" con bottone chat [1.15.4, 11, 62]
+- [ ] **Eclipse** (testo; Seer, p.203) — cosa controllare: dopo "…standing in that space:" due righe "If there is, …" / "If there isn't, …", poi "Then, end the effect." a capo; chip Brand e card a inizio turno con Explode. Migrazione 23 [1.15.14, 69, 171]
+- [ ] **Wish** (Seer, p.203) — cosa controllare: con la mastery Defiance e Unstoppable all'alleato (non a te); bottone sulla card del danno "Not below 1 HP" [1.15.43, 85, 149, 151]
+- [ ] **The Tower** (testo; Seer, p.203) — cosa controllare: mastery Superbolide "…they take double damage from Eclipse's meteor effect, and the effect also ignores defiance."; Track target; il meteorite resta, l'area no. Migrazione 24 [1.15.15, 34, 65, 103]
+- [ ] **High Prophecy** (Limit Break Seer, p.199) — cosa controllare: bottone Aura 2, sparisce all'inizio del turno successivo [1.15.5, 38]
+
+#### Wright — Enochian
+
+- [ ] **Inner Furnace** (tratto Enochian, p.208) — cosa controllare: una volta per round "Sacrifice N hp" per −2 Aether; annullare rimborsa e non lo sblocca due volte; a fine combattimento gli hp non tornano [1.15.76, 81, 113]
+- [ ] **Soulfire** (tratto Enochian, p.208) — cosa controllare: da bloodied crit 18+ / exceed 13+, a 1 hp 15+ / 10+ [1.15.75]
+- [ ] **Phoenix Rage** (tratto Enochian, p.208) — cosa controllare: promemoria nella card "Round 5" [1.15.63]
+- [ ] **Elden Rune** (Enochian, p.209) — cosa controllare: la runa va sotto il token; "End of the scene?" a fine combattimento; Teleport del Talent I; Infuse −1 del Talent II; scelta Arkenrune; +3 al range; GREAT RUNE dà il bottone Shattered [1.15.51, 69, 175, 197, 223]
+- [ ] **Pyre** (Enochian, p.209) — cosa controllare: righe chiuse PYROTIC e MAGNAPYRE nella card; esplosioni di MAGNAPYRE sotto Other [1.15.48, 49, 61, 91, 108]
+- [ ] **Lance** (Enochian, p.209-210) — cosa controllare: riga chiusa GREAT SPIRIT LANCE con Hit / Miss / Area; "twice instead" con Instances 2 sotto Other [1.15.42, 48, 49, 61, 91, 108]
+- [ ] **Aethershard** (testo; Enochian, p.210-211) — cosa controllare: Summon Effect "…the ability resonates with the shards, dealing 2 piercing damage as an area effect, once, … Then destroy all Aethershards activated this way and gain 1 Aether."; Resonate; Move del Talent I; Phasing di AETHERSHIFT; niente Damage Roll; Pierce per bersaglio. Migrazione 33 [1.15.52, 65, 67, 68, 89, 101, 159, 188]
+- [ ] **Blazing Bond** (Enochian, p.210) — cosa controllare: Comeback del Talent II dà Defiance a te e all'alleato; Heartfire sulla card del danno; bottone Great Soul Bond [1.15.43, 62, 151, 187]
+- [ ] **Soul Burn** (Enochian, p.210) — cosa controllare: INCANDIUS sotto Other con 1 piercing [1.15.61, 91]
+- [ ] **Implode** (Enochian, p.211) — cosa controllare: Activate a inizio turno; con WAKING VOID "Large Blast on X"; bottoni Shove verso il centro con collisione; controllo del range [1.15.69, 71, 152, 153, 173, 194, 208, 209]
+- [ ] **Pyroclast** (Enochian, p.211) — cosa controllare: chip Magma Spire (Pyrospire solo con l'Infuse armato) che solleva chi c'è sopra; Track target; chip Dangerous con Talent I / MAGMOTIC [1.15.25, 34, 51, 65, 66, 68, 69]
+- [ ] **Blackstar** (Enochian, p.212) — cosa controllare: nessun summon Bomb; Shattered solo sul bersaglio d'attacco [1.15.9, 42, 69]
+- [ ] **Gigaflare** (testo; Limit Break Enochian, p.208) — cosa controllare: riga "Divine, Unerring, True Strike" a sé, poi "Effect:" e a capo "Infuse 6: TETRAFLARE"; Damage Roll; bottoni Infuse 6 / 8; METEOR "999 divine" sotto Other. Migrazione 25 [1.15.37, 39, 40, 52]
+
+#### Wright — Geomancer
+
+- [ ] **Orogenic Rage** (tratto Geomancer, p.217) — cosa controllare: promemoria nella card "Round 5" [1.15.63]
+- [ ] **Stone Double** (tratto Geomancer, p.217) — cosa controllare: chip "Statue · H1" sul tratto [1.15.65]
+- [ ] **Bio** (Geomancer, p.218) — cosa controllare: righe chiuse BIOTIC / MAGNABIO nella card; danno di MAGNABIO 2[D]+fray; Shattered+ a chi è nella nuvola; "To dangerous" e "Boil" dei talenti [1.15.42, 48, 49, 61, 69, 70, 164, 175]
+- [ ] **Dragon Dive** (Geomancer, p.218) — cosa controllare: niente "Hit (no damage)", Area 2 piercing; BOULDER KICK sotto Other [1.15.47, 51, 91]
+- [ ] **Geo** (Geomancer, p.218-219) — cosa controllare: MAGNAGEO Area [D]+fray; chip Boulder; l'Arc 6 non resta [1.15.48, 49, 61, 65, 103]
+- [ ] **Helix Heel** (testo; Geomancer, p.219) — cosa controllare: niente corsivo, tre blocchi Effect; il secondo dice "…you can keep extending the line by 3 spaces this way each time, but can only extend it once per object."; scelta "Burst 1 (on object)". Migrazioni 28 e 32 [1.15.56, 66, 67, 87]
+- [ ] **Terraforming** (Geomancer, p.219) — cosa controllare: chip "Pit · 2", "Difficult · 3", Boulder; bottone "Clear terrain" [1.15.65, 69, 175]
+- [ ] **Obsidian Flesh** (Geomancer, p.219) — cosa controllare: danno del Talent II (2 piercing) [1.15.25]
+- [ ] **Midas** (Geomancer, p.220) — cosa controllare: area del Talent II sul bersaglio; chip dell'oggetto [1.15.51, 65]
+- [ ] **Realignment** (Geomancer, p.220) — cosa controllare: chip "up to ×N"; nessun Track target [1.15.57, 144]
+- [ ] **Quaking Palm** (Geomancer, p.221) — cosa controllare: Track target; il Collide sta dentro la riga PRIMAL BURST; chip "1 piercing · up to ×4" [1.15.51, 57, 61, 100, 144]
+- [ ] **Cataclysm** (testo; Limit Break Geomancer, p.217) — cosa controllare: due "Effect:" e "Gain Delay:"; esplosioni sotto Other; bottone Area con Line o Medium Blast. Migrazione 25 [1.15.37, 38, 40]
+
+#### Wright — Spellblade
+
+- [ ] **Conqueror's Edge** (tratto Spellblade, p.224) — cosa controllare: Infuse −1 con un foe entro range 2 [1.15.76]
+- [ ] **Aether Deflection** (tratto Spellblade, p.224) — cosa controllare: "Regain (2 Aether)"; bottone "when targeted" sotto la card d'attacco; resistenza sulla card del danno [1.15.60, 64, 195, 206, 218, 230]
+- [ ] **Storm Hilt Rage** (tratto Spellblade, p.224) — cosa controllare: promemoria nella card "Round 5" [1.15.63]
+- [ ] **Blitz** (Spellblade, p.225) — cosa controllare: chip "Effect — 1st" / "2nd"; bottone Infuse di GRAN BLITZ; GUNGNIR area che resta con "1 piercing to all inside" [1.15.70, 91, 99, 100, 127, 165]
+- [ ] **Nothung** (Spellblade, p.225) — cosa controllare: bottone "Slay or Infuse 3"; GRAM sotto Other; con EXCALIBUR il danno diventa divine; card "Nothung — GRAM" [1.15.48, 91, 99, 100, 144]
+- [ ] **RUINÖS** (versione "Infuse 3 or Slay" di Rampant Nail, Spellblade, p.227) — cosa controllare: il blocco "Slay or Infuse" ha il bottone Infuse [1.15.91]
+- [ ] **Ätherwand** (Spellblade, p.226) — cosa controllare: Inflict Shattered; ÄTHERSTURM Line +1 per Aether; frecce del Talent II; il Talent I allarga la stessa area; HELLERWIND Impassable; Shattered a fine turno dentro [1.15.44, 49, 70, 168, 193, 207]
+- [ ] **Bifröst** (Spellblade, p.226) — cosa controllare: niente "Hit (no damage)"; Talent II "Add 2 spaces" e 1 piercing; HEIMDALL seconda linea non sovrapposta; PATH TO ERENHELION rimbalzo sull'oggetto [1.15.47, 70, 91, 165, 168, 207, 224]
+- [ ] **Fulminate** (Spellblade, p.226) — cosa controllare: Aura 2 sul marcato che arriva e finisce con il mark; Aura 2 / 3 col Talent I chiesta a chi marca [1.15.50, 80, 105, 110, 155]
+- [ ] **Sturmreiten** (Spellblade, p.227) — cosa controllare: seconda Line 3 del Talent II; con MJÖLLNIR solo Arc 5 (e secondo Arc 5); bottone interrupt sulla card del danno [1.15.73, 102, 116, 149]
+- [ ] **Rampant Nail** (Spellblade, p.227) — cosa controllare: "Aura 2 (terrain effect)" entro range 3; Small Blast del Talent I sullo spuntone, che si sposta con lui [1.15.50, 52, 140, 182]
+- [ ] **Drifting Leaf** (Spellblade, p.227) — cosa controllare: blocco "LEAF ON THE WIND — Interrupt 2" con bottone chat; PHANTOM BLADE armata fino al turno successivo; promemoria GREAT CYCLONE al round 4 [1.15.11, 42, 62, 63, 91, 100, 112]
+- [ ] **Gran Levincross** (testo; Limit Break Spellblade, p.224) — cosa controllare: "Effect:" e capoversi come nel compendio; bottoni RAGNARÖK / GÖTTERDÄMMERUNG; Ragnarök sotto Other. Migrazione 25 (corretta nella 1.15.64) [1.15.39, 40, 64]
+
+#### Wright — Stormbender
+
+- [ ] **Selkie** (tratto Stormbender, p.232) — cosa controllare: chip del summon Selkie [1.15.46]
+- [ ] **Pelagic Rage** (tratto Stormbender, p.232) — cosa controllare: bottone Aura 2; promemoria "Round 5" [1.15.23, 63]
+- [ ] **Geyser** (Stormbender, p.234) — cosa controllare: Erupt guidato e Salt Sprite piazzato; il Talent I alza l'altezza a inizio turno; Volcanic Geyser dangerous sotto i foe; cover per chi ci sta sopra [1.15.52, 65, 66, 67, 68, 69, 157, 228]
+- [ ] **Tsunami** (Stormbender, p.233) — cosa controllare: piazzata contro un bordo della mappa; "Move 4" e "Drag them with it"; STORMLASH spesa subito; LEGENDARY STORM dal round 4 [1.15.60, 70, 164, 166, 191]
+- [ ] **Rime** (Stormbender, p.233) — cosa controllare: DAGON dà "Pit · 1"; MAGNARIME Arc che cresce con l'Aether e danno sotto Other; Reroll (same use) [1.15.49, 52, 69, 91, 108]
+- [ ] **Gust** (Stormbender, p.234) — cosa controllare: "Collide: Burst 1 (target)"; con NORTHSOUL fino a 3 aree [1.15.51, 70]
+- [ ] **Heave-Ho** (testo; Stormbender, p.234) — cosa controllare: ordine Trigger, Effect, Area, Collide ("Summon a salt sprite"). Migrazione 26 [1.15.42, 45, 54, 69]
+- [ ] **Cryo** (Stormbender, p.234) — cosa controllare: CRYOTIC Hit e Area fray; MAGNACRYO Attack Roll con dadi bonus dall'Aether; promemoria del Talent I al round 4 [1.15.42, 48, 49, 61, 63, 69]
+- [ ] **Waterspout** (Stormbender, p.235) — cosa controllare: chip e frecce di spostamento; HURRICANE Grow; difficult lasciato con il Talent II; risucchio, "Spit them out" e Place; Shove del Talent I [1.15.52, 70, 167, 191, 207, 232]
+- [ ] **Deepwrath** (Stormbender, p.235) — cosa controllare: "Create watery pit", "Drag under"; boon e dado bonus nel pit; Shattered+ e Remove Shattered; DARKTIDE; controllo del range del Mark [1.15.69, 170, 196, 198, 210]
+- [ ] **Eye of the Storm** (testo; Stormbender, p.236) — cosa controllare: corsivo solo "A storm of vigorous thunder … the center remains calm."; poi Special, Area ([D]), Effect, Infuse 3: AEONCLOUD; AEONCLOUD Area [D]+fray. Migrazione 27 [1.15.48, 51, 55, 65, 69]
+- [ ] **Elemental** (testo; Limit Break Stormbender, p.232) — cosa controllare: "Effect:", "While you are an Elemental:" e tre voci; bottone Aura 2 che resta tutto il combattimento. Migrazione 25 [1.15.38, 40]
+
+#### Limit Break degli altri job
+
+- [ ] **Split Heaven and Hell** (testo; Demon Slayer, p.127) — cosa controllare: "depending on their distance on the line from you:", le tre distanze su righe "◦", in Divine Delay "…to a maximum of 3 width, and its length by 3 spaces"; "% Max HP" con la fascia misurata sulla linea. Migrazioni 31 e 34 [1.15.38, 40, 77, 94, 107, 111, 141]
+- [ ] **Gigantas Crusher** (Colossus, p.135) — cosa controllare: "% Max HP" 50% / 25% sui foe, 25% o divine fray sui Legend; rimborso della resolve se il Legend salva, una volta; Atomos Crusher al capitolo 3 (75% / 50%); la spesa finisce col combattimento [1.15.40, 107, 111, 134]
+- [ ] **Paradiso** (testo; Freelancer, p.155) — cosa controllare: blocco "Aura:" con "You gain an aura of supernatural accuracy, charging your weapons and the weapons of your allies with aether."; bottone Aura 2. Migrazione 31 [1.15.5, 38, 40, 52, 77]
+- [ ] **Lycanthropy** (testo; Warden, p.168) — cosa controllare: corsivo che finisce con "…granting you massively increased speed and power."; secondo punto "…(including this one!) may be increased by +1, and grant phasing while moving". Migrazioni 31 e 34 [1.15.40, 77, 94]
+- [ ] **Helion** (Bastion, p.121) — cosa controllare: corsivo sopra e due "Effect:" separati; Ultimate (Perfect Helion) col lucchetto fino al capitolo 3 [1.15.40, 82]
+- [ ] **Curtain Call** (Fool, p.149) — cosa controllare: tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; bottone Line che chiede la lunghezza [1.15.38, 40]
+- [ ] **Mock** (Knave, p.141) — cosa controllare: "Effect:" e "Special:"; bottoni Slashed+ / Weakened+ / Hatred+; Damage Roll e Dread Mock solo dal capitolo 3 [1.15.2, 37, 40, 82]
+- [ ] **Tutti i Limit Break** (p.113) — cosa controllare: blocco Ultimate col lucchetto fino al capitolo 3; nessun bottone di status doppio o da una versione Infuse non armata; l'infusione si consuma con l'uso [1.15.82, 90, 92, 104, 108]
+
+#### Reliquie
+
+- [ ] **Arenheir** (reliquia, p.252) — cosa controllare: crit / exceed −1, −2, −3 secondo il round col rango III; l'Aspect abbassa il crit dopo ogni critico fino a 15+; casella Exceed del rango II sotto il 25% hp [1.15.63, 75, 212]
+- [ ] **Paleblood** (reliquia, p.252) — cosa controllare: niente "End of round 0" all'avvio del combattimento; casella Exceed vuota con la frase [1.15.79, 212]
+- [ ] **Silver Rabbit** (reliquia, p.250) — cosa controllare: "Set the number" nel gamble, il tooltip nomina solo Silver Rabbit III e Golden Mask [1.15.29, 219]
+- [ ] **Conquering King** (reliquia, p.250-252) — cosa controllare: card "Round 5" al rango I, nulla al round 7 finché non è al rango II [1.15.63]
+- [ ] **Domain e Skipjack** (reliquie, p.250-252) — cosa controllare: le righe "Round N" a inizio round quando si accendono [1.15.63]
+- [ ] **Golden Mask** (p.340) — cosa controllare: "Set the number" nel gamble [1.15.29, 219]
+
+#### Foe, legend e summon (compendio)
+
+- [ ] **Assault Wave** (legend Master, p.312) — cosa controllare: tiro salvezza fallito → "How many minions…" (massimo 6), 3 piercing per istanza; riuscito → 1 piercing per minion; Pierce attivo [1.15.201, 202, 216]
+- [ ] **Bale Troll — Incredible Bulk** (foe, p.457) — cosa controllare: niente bottone Damage (il danno va a se stesso); Boulder Fist e Hurl Boulder invariati [1.15.143]
+- [ ] **Blocchi Effect dei foe** (Kelpie Savage Fang p.354, Knuckle / Tomb Guard Overpower, Azurian Weapon Flak Blast, Basic Mob Rabble p.449) — cosa controllare: il danno dell'Effect è una chip sotto Other; Hit / Miss invariati [1.15.145]
+- [ ] **Shotgun Trooper — Double Barrel** (foe, p.389) — cosa controllare: Instances parte da 1 e si ferma a 3 [1.15.144]
+- [ ] **Pistolero e simili** (Scout p.389, Razor Shot p.431, Collect Bounty p.369, Stutterslash p.328) — cosa controllare: nessun bottone "Gain Unerring" [1.15.130]
+- [ ] **Aura of Slaughter** (Battle / Armor / Gaping / Horn / Starving / Nail Demon, p.407) — cosa controllare: bottone "Aura 2" che si piazza senza chiedere la dimensione [1.15.114]
+- [ ] **Summon dei foe con elenchi** (Churn Baron: Crony, Blunderbuss, Arkentech Explosives p.375; Deep Snow Aesi: Icicle p.488; Keeper of the Eldflame: Everforge p.461; Violence Demon: Blade of Agony p.420) — cosa controllare: le voci "•" una per riga, sulla scheda del foe, in chat e sulla scheda del Summon trascinato [1.15.133, 179]
+- [ ] **Elenchi "•" nei testi dei foe** (testo; Imperial Spy p.390, Relict p.324, trappola Lowlander p.428, Warden of the Aeongate Eternal Star p.463, Silent One Possess p.330, Rider of the Primal Storm Static Charge p.459, Head Lopper God Waster p.442, Fetid Idol, Cannoneer nel compendio Foe Abilities) — cosa controllare: ogni voce su una riga, le parole uguali al libro; solo sui foe importati di nuovo [1.15.124]
+- [ ] **Tag grigi dei foe** (Warrior Bull rush e Night Troll Bale Curse p.290, Troll / Hag Cauldron Action p.452, Apex Might of the Wild p.360-361, Aurelian Tally p.373, Churn Baron 4 Assets p.375, Violence Demon Blade Consume p.420, Pale Man Gaze p.416, Falling Leaf Aesi Thievery p.485, Wyrm Path of Ruin p.362-363, Keeper Forge Action p.461, Summer Flame Aesi e Head Lopper Burst p.97, Dread Lords Range 4+ p.342) — cosa controllare: passando il mouse il tag ha la spiegazione con la pagina [1.15.122]
+- [ ] **Tag Sacrifice, Blast, Terrain Effect** (PG e foe, p.95-98, p.103) — cosa controllare: non più grigi, con tooltip [1.15.7]
+- [ ] **Tabelle 1-6 dei foe** (Troll Strange Brew p.452, Shopkeep Rummage p.371) — cosa controllare: una riga per risultato, sulla scheda e in chat [1.15.13]
+- [ ] **Aure a tempo dei foe** (Trooper Hold the Line! p.388) — cosa controllare: avviso in chat alla scadenza con Remove area [1.15.5]
+- [ ] **Pepperbox — Riddle** (foe, p.302) — cosa controllare: su Hit Instances ×3, su Miss 1 [1.15.28]
+- [ ] **Trooper — Blunderbuss e azioni d'area dei foe** (p.375) — cosa controllare: niente scelta "Hit (no damage)", solo Area [1.15.47]
+- [ ] **Interrupt di foe e legend** ("is damaged by an ability", Violence Demon "is targeted by an attack", p.292) — cosa controllare: caselle degli usi sulla scheda, bottoni sotto le card d'attacco e di danno, avviso se Stunned [1.15.149, 195, 203, 204]
+- [ ] **Promemoria di round dei foe** (Junk Mage / Sniper / Barkeep "At round 3+", Dread Lords Eternal Imperium) — cosa controllare: card "Round N" al GM, una riga per foe anche con più token [1.15.63]
+- [ ] **Plant** (summon, p.184) — cosa controllare: una Plant del compendio è riconosciuta da HARVEST MOON, una fatta a mano no [1.15.142]
+- [ ] **Salt Sprite** (summon, p.232) — cosa controllare: compare da solo nello spazio del geyser dopo l'Erupt [1.15.68]
+- [ ] **Wild Card** (testo; summon, p.200) — cosa controllare: Summon Effect e le due note solo sull'attore del compendio Summons [1.15.12]
+- [ ] **Summon con un'azione di danno** — cosa controllare: Damage apre la stessa finestra dei foe, con [D] e fray del summoner [1.15.115]
+
+#### Altro
+
+- [ ] **Oggetti sulla mappa** (p.88-95) — cosa controllare: altezza massima 3 nelle pile, "Add walls" del GM, copertura ½ per direzione, domanda "Stand on height N" [1.15.65, 66, 67, 68, 157, 160, 161, 227, 228]
+- [ ] **Spazi di terreno** (p.89, p.96) — cosa controllare: dangerous 2 piercing una volta per turno, il pit vale un livello più in basso, anche gli spazi attraversati contano [1.15.69, 70, 164, 174, 176]
+- [ ] **Vigor oltre il massimo** (p.?) — cosa controllare: il vigor scritto a mano sopra la VIT resta e assorbe il danno [1.15.4]
+- [ ] **Gear kit** — cosa controllare: tre clic rapidissimi su "5 fire stones" spendono 3 usi [1.15.136]
+- [ ] **Quick Guide, FAQ** (p.18-20, p.29) — cosa controllare: voce "What are the difficulties of a narrative roll?" con controlled / risky / desperate e strain 1, 2, 4 [1.15.26]
+- [ ] **Damage Utility** (scheda PG) — cosa controllare: riquadro in fondo alla tab Combat, campo Source, nessun danno → avviso [1.15.31]
+
+### 4. Come segnare l'esito
+
+- Durante le prove: spuntare le caselle `- [ ]` → `- [x]` **dentro le sezioni** (non in questo piano). Una casella
+  che non si può provare (manca un client, manca una copia vecchia) resta vuota con accanto "(non provabile: …)".
+- Ogni problema va scritto nella sezione **"Esito playtest del 18 ottobre 2026"** qui sotto, con la versione della
+  sezione (es. "1.15.229, terza casella") e cosa si è visto. Poi i problemi passano in `TODO.md` come al solito.
+
+## Esito playtest del 18 ottobre 2026 (Foundry locale, mondo "test", build 1.15.232)
+
+Da compilare durante il playtest.
+
+### Funziona
+
+- …
+
+### Non funziona
+
+- …
+
+### Dubbi
+
+- …
+
+---
+
 ## Esito playtest del 9 settembre 2026 (mondo Jade Regent su foundry.codrillo.it, scena "test")
 
 Provato con copie "TEST" dei PG e foe importati dal compendio, poi cancellate; il combat reale della Field
