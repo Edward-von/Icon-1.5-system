@@ -34,9 +34,12 @@
  *  • mapCoverHint()      — "Cover?" chip when the token stands next to a wall
  *                          (a hint only: cover also depends on the attacker's
  *                          side, so it is never applied automatically).
+ *  • objectCoverAgainst() — cover behind a map object, by the attacker's
+ *                          side (p.92): halved on Apply where the book is
+ *                          clear, a hint on an unclear diagonal.
  */
 import { unlockedRelics } from "./relic-reminders.mjs";
-import { objectCoverHint } from "../canvas/map-objects.mjs";
+import { objectCoverHint, objectCoverAgainst } from "../canvas/map-objects.mjs";
 
 const _log = (...a) => console.debug("[ICON | Defenses]", ...a);
 
@@ -208,6 +211,7 @@ export function mapCoverHint(token) {
       const d = wall.document;
       if (!d) continue;
       if (d.door && d.ds === 1) continue;                      // open door
+      if (d.flags?.["icon-system"]?.objectWall) continue;      // an object's own walls: objectCoverAgainst reads the object
       const [x1, y1, x2, y2] = d.c ?? [];
       if (x1 == null) continue;
       if (_segmentDistance(cx, cy, x1, y1, x2, y2) <= reach) return true;
@@ -274,8 +278,13 @@ export function defenseChipsHtml(actor, { outcome = null, halvedOnRoll = false, 
   if (wall.active && unerring) chips.push(_chip("resistance", "Aetherwall — ignored (Unerring)", "Unerring ignores Aetherwall (p.105): the damage is not halved for it."));
   else if (wall.active) chips.push(_chip("resistance", halvedOnRoll ? `Aetherwall (already ½)` : `Aetherwall ½`, `Aetherwall (Artillery, p.298): resistance against abilities from characters outside range 2 — the attacker is ${wall.distance} spaces away, so the damage is halved when it is applied.`, !halvedOnRoll));
   // R33a5: the objects on the map (p.89 "take cover behind them", Underway / Geyser talents) — a hint too.
-  const objHint = p.cover ? null : objectCoverHint(tokenOf(actor, tokenId));
-  if (objHint) chips.push(_chip("cover-hint", objHint.label, objHint.title));
+  // With the attacker's token known, the object's cover is measured by direction (p.92) and applied when clear.
+  const objCover = p.cover ? null : objectCoverAgainst(tokenOf(actor, tokenId), attacker ? tokenOf(attacker) : null);
+  const objHint = p.cover || objCover ? null : objectCoverHint(tokenOf(actor, tokenId));
+  if (objCover?.state === "cover" && unerring) chips.push(_chip("cover", `${objCover.label.replace(/^Cover ½/, "Cover")} — ignored (Unerring)`, "Unerring ignores Cover (p.105): the damage is not halved for it."));
+  else if (objCover?.state === "cover") chips.push(_chip("cover", halvedOnRoll ? `${objCover.label.replace(/^Cover ½/, "Cover")} (already ½)` : objCover.label, objCover.title, !halvedOnRoll));
+  else if (objCover?.state === "maybe") chips.push(_chip("cover-hint", objCover.label, objCover.title));
+  else if (objHint) chips.push(_chip("cover-hint", objHint.label, objHint.title));
   else if (!p.cover && mapCoverHint(tokenOf(actor, tokenId))) chips.push(_chip("cover-hint", "Cover? wall", "This token stands next to a wall: it may be in cover from attacks coming from the other side (p.92). Set the Cover status if it applies — nothing is halved automatically."));
   if (p.stealth && !compact)    chips.push(_chip("stealth", "Stealth", "Stealth: cannot be targeted directly except from an adjacent space (p.146)."));
   if (p.intangible && !compact) chips.push(_chip("intangible", "Intangible", "Intangible: see the character's text — usually immune to damage."));
@@ -537,9 +546,12 @@ export function damageMitigation(actor, { outcome = "hit", halvedOnRoll = false,
   // Unerring ignores it by name (glossary, p.105: "Ignores cover and
   // aetherwall").
   const wall = unerring ? { active: false } : aetherwallAgainst(actor, attacker, { attackerTokenId, targetTokenId });
-  if (p.cover || p.resistance || wall.active) {
+  // R33a5: cover behind an object, by the attacker's side (p.92) — only where the book is clear (objectCoverAgainst).
+  const objCover = p.cover || unerring || !attacker ? null : objectCoverAgainst(tokenOf(actor, targetTokenId), tokenOf(attacker, attackerTokenId));
+  const objHalf = objCover?.state === "cover";
+  if (p.cover || objHalf || p.resistance || wall.active) {
     out.half = true;
-    const why = [p.cover ? "Cover" : "", p.resistance ? "Resistance" : "", wall.active ? `Aetherwall (range ${wall.distance})` : ""].filter(Boolean);
+    const why = [p.cover ? "Cover" : objHalf ? objCover.reason : "", p.resistance ? "Resistance" : "", wall.active ? `Aetherwall (range ${wall.distance})` : ""].filter(Boolean);
     out.halfReason = why.length > 1 ? `${why.join(" + ")} (½ once)` : why[0];
   }
   return out;

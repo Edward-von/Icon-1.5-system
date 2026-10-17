@@ -1517,11 +1517,14 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       chip "On a character").
 (FATTO il 17 ottobre 2026, versione 1.15.198: il bottone Mark di PG/foe/legend chiede conferma oltre il range
       dell'abilità, come il chip "On a character")
-- [ ] **Emerso lavorando su R33a5 — copertura degli oggetti per direzione** (S, da decidere): "cover against all
+- [x] **Emerso lavorando su R33a5 — copertura degli oggetti per direzione** (S, da decidere): "cover against all
       characters past the row of spaces … that their cover is currently occupying" (p.92) si potrebbe calcolare
       all'Apply conoscendo il token dell'attaccante, ma con un oggetto in diagonale non è chiaro se conti la riga o la
       colonna; serve una scelta prima di dimezzare in automatico (anche per Geyser Talent I, che vale in ogni
       direzione).
+(FATTO il 17 ottobre 2026, versione 1.15.228: copertura dagli oggetti calcolata all'Apply col token dell'attaccante,
+      p.92; in diagonale vale solo se l'attaccante è oltre sia la riga sia la colonna, se è oltre una sola resta un
+      suggerimento. Underway Talent II resta un suggerimento perché non dice la direzione.)
 - [ ] **Emerso lavorando su R33a5 — bloccare davvero il rampart** (S, da decidere): il sistema non distingue un dash
       da un passo normale; se si vuole il blocco vero (rifiutare il movimento) basta deciderlo per fly / blink /
       flying, per il dash servirebbe una scelta di chi muove.

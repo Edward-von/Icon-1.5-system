@@ -1191,6 +1191,74 @@ export function objectCoverHint(token) {
 }
 
 /**
+ * Cover from the objects against one attacker, read when the damage is applied (p.92 "Cover is always determined
+ * when and where damage is applied"):
+ *   - "Characters cannot benefit from cover against adjacent foes" and "Characters on a higher elevation ignore cover
+ *     against all characters on a lower elevation" (p.92): an adjacent or higher attacker → none.
+ *   - Geyser Talent I (p.232): an ally standing on a geyser has "cover from all directions" → cover.
+ *   - an adjacent object 1 or more higher than where the character stands gives "cover against all characters past
+ *     the row of spaces on that battlefield that their cover is currently occupying" (p.92). An object beside the
+ *     character (in its rows, or in its columns) occupies the line across the attack: cover when the attacker is
+ *     wholly past that line. On a diagonal the book doesn't say whether its row or its column counts: past both →
+ *     cover either way, past neither → none, past only one → a hint, the GM sets the Cover status by hand.
+ *   - Underway Talent II (p.168) "Allies adjacent to underways have cover" names no direction: still a hint.
+ * @param {Token|TokenDocument|null} token          the character hit
+ * @param {Token|TokenDocument|null} attackerToken  the character dealing the damage
+ * @returns {{state:"cover"|"maybe"|"none", label?:string, title?:string, reason?:string}|null}
+ *   null = the attacker isn't on the same scene (then objectCoverHint)
+ */
+export function objectCoverAgainst(token, attackerToken) {
+  try {
+    const td = token?.document ?? token;
+    const ad = attackerToken?.document ?? attackerToken;
+    const scene = td?.parent;
+    if (!scene || !ad || ad.parent !== scene || ad.id === td.id || mapObjectFlag(td)) return null;
+    const none = { state: "none" };
+    if (!scene.tokens.some(t => mapObjectFlag(t))) return none;
+    const mine = cellsOf(td), theirs = cellsOf(ad);
+    const elev = Number(td.elevation) || 0;
+    if (gapBetween(mine, theirs) <= 1) return none;
+    if ((Number(ad.elevation) || 0) > elev) return none;
+    const ally = !isHostile(td);
+    const span = (cells, k) => [Math.min(...cells.map(c => c[k])), Math.max(...cells.map(c => c[k]))];
+    const [iMin, iMax] = span(mine, "i"), [jMin, jMax] = span(mine, "j");
+    const [aiMin, aiMax] = span(theirs, "i"), [ajMin, ajMax] = span(theirs, "j");
+    // Is the attacker wholly past the line `[lo, hi]` of axis `k`, on the side `dir` (+1 / −1) away from the target?
+    const past = (k, lo, hi, dir) => dir > 0 ? (k === "i" ? aiMin : ajMin) > hi : (k === "i" ? aiMax : ajMax) < lo;
+    let maybe = null;
+    for (const o of scene.tokens.filter(t => mapObjectFlag(t) && t.actor)) {
+      const oc = cellsOf(o);
+      const g = gapBetween(mine, oc);
+      if (g > 1) continue;
+      const info = objectSheetInfo(o.actor);
+      if (!info) continue;
+      const name = info.name.toLowerCase();
+      if (ally && g === 0 && info.moves.coverOn)
+        return { state: "cover", label: `Cover ½ — on ${name}`, reason: `Cover (on the ${name}, ${info.moves.coverOn.source})`,
+          title: `${info.moves.coverOn.source} (p.232): allies standing on the ${name} have cover from all directions — the attacker is neither adjacent nor higher (p.92), so the damage is halved when it is applied.` };
+      if (g !== 1) continue;
+      if (ally && info.moves.coverNear && !maybe)
+        maybe = { state: "maybe", label: `Cover? ${name}`, title: `${info.moves.coverNear.source} (p.168): allies adjacent to the ${name} have cover. Set the Cover status if it applies — nothing is halved automatically.` };
+      const total = (Number(o.elevation) || 0) + tokenHeight(o);
+      if (total <= elev) continue;
+      const [oiMin, oiMax] = span(oc, "i"), [ojMin, ojMax] = span(oc, "j");
+      const inRows = oiMin >= iMin && oiMax <= iMax, inCols = ojMin >= jMin && ojMax <= jMax;
+      const di = oiMin > iMax ? 1 : oiMax < iMin ? -1 : 0;
+      const dj = ojMin > jMax ? 1 : ojMax < jMin ? -1 : 0;
+      const pastCol = dj !== 0 && past("j", ojMin, ojMax, dj);
+      const pastRow = di !== 0 && past("i", oiMin, oiMax, di);
+      const why = `the ${info.name} (total height ${total}) next to it`;
+      if ((inRows && pastCol) || (inCols && pastRow) || (!inRows && !inCols && pastCol && pastRow))
+        return { state: "cover", label: `Cover ½ — ${name}`, reason: `Cover (${info.name})`,
+          title: `Behind ${why}: the attacker is past the row of spaces the object occupies, not adjacent nor higher (p.92), so the damage is halved when it is applied.` };
+      if (!inRows && !inCols && (pastCol || pastRow) && !maybe)
+        maybe = { state: "maybe", label: `Cover? ${name} (diagonal)`, title: `Behind ${why}, on a diagonal: the attacker is past its ${pastCol ? "column" : "row"} but not its ${pastCol ? "row" : "column"}, and the book doesn't say which one counts (p.92). Set the Cover status if the table rules it — nothing is halved automatically.` };
+    }
+    return maybe ?? none;
+  } catch (err) { console.warn("[ICON | MapObjects] object cover failed", err); return null; }
+}
+
+/**
  * At the start or the end of `combatant`'s turn (active GM, from the combat hook), what the objects on the scene
  * say about it, in one chat card:
  *   Geyser (p.232)       "If any character either starts or ends their turn on a geyser, you can cause it to erupt"

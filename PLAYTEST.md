@@ -1656,6 +1656,20 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R33 — Copertura degli oggetti calcolata per direzione (17 ottobre 2026, versione 1.15.228)
+
+Setup: solo codice (F5 basta).
+
+- [ ] PG con un boulder alto 1 subito a est, foe a 3 spazi a est nella stessa riga: la card del danno mostra "Cover ½
+      — boulder" e Apply dimezza.
+- [ ] Stesso schema con il foe a ovest, o adiacente al PG: nessuna copertura, danno intero.
+- [ ] Foe su un'elevazione più alta del PG: nessuna copertura.
+- [ ] Boulder in diagonale (nord-est), foe molto a nord-est: dimezza. Foe solo a est (oltre la colonna ma non la
+      riga): chip "Cover? boulder (diagonal)" e danno intero.
+- [ ] Attacco unerring: il chip dice "ignored (Unerring)" e il danno non viene dimezzato.
+- [ ] Geyser con Talent I, alleato in piedi sul geyser, foe a distanza a terra: dimezza.
+- [ ] Nei dialoghi di tiro (senza attaccante) resta il chip suggerimento di prima.
+
 ## R33a5 — Muri di Foundry attorno agli oggetti, a clic del GM (17 ottobre 2026, versione 1.15.227)
 
 Setup: solo codice (F5 basta).

@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Copertura degli oggetti calcolata per direzione (versione 1.15.228)
+
+### Round di debug del 15 ottobre, voce emersa su R33
+
+- **Copertura dagli oggetti**: vicino a un oggetto il bersaglio aveva solo il chip tratteggiato "Cover? object" e il
+  danno non veniva mai dimezzato → la regola dipende dal lato da cui arriva l'attacco e il sistema non la calcolava →
+  all'Apply si guarda il token dell'attaccante. Se l'oggetto è accanto al bersaglio, almeno 1 più alto di lui, e
+  l'attaccante sta tutto oltre la riga di spazi occupata dall'oggetto, il danno viene dimezzato con chip "Cover ½ —
+  boulder" ("cover against all characters past the row of spaces … that their cover is currently occupying", p.92).
+  Non c'è copertura se l'attaccante è adiacente o più in alto (p.92). Un alleato in piedi su un geyser con Geyser
+  Talent I ha copertura da tutte le direzioni (p.232). Oggetto in diagonale: se l'attaccante è oltre sia la riga sia
+  la colonna la copertura vale, se non è oltre nessuna delle due non vale, se è oltre una sola resta un chip
+  suggerimento e il GM decide. Underway Talent II resta un suggerimento. Unerring ignora questa copertura (p.105), il
+  danno divine no. I muri dell'oggetto non accendono più il chip generico "Cover? wall". Solo codice.
+
 ## 17 ottobre 2026 — Muri di Foundry attorno agli oggetti, a clic del GM (versione 1.15.227)
 
 ### Round di debug del 15 ottobre, R33a5
