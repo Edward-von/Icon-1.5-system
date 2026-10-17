@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — Aether Deflection dà la resistenza sulla card del danno (versione 1.15.206)
+
+### Round di debug del 15 ottobre, voce emersa su R35
+
+- **Aether Deflection sul danno**: "Gain resistance against damage from that ability" (Spellblade, p.224) restava solo
+  testo → l'interrupt si usa dalla card d'attacco, quando la card del danno non esiste ancora → quando lo si usa, la
+  resistenza resta in attesa sul personaggio. La card del danno che quella stessa abilità posta subito dopo la scrive
+  sulla riga del personaggio: chip della resistenza e danno dimezzato su Apply, come Righteous Disdain. Vale solo per
+  l'ultima card d'attacco di quell'abilità: un'attesa rimasta da un attacco vecchio non conta, e chi crea la card la
+  cancella. Solo codice.
+
 ## 17 ottobre 2026 — Chip vigor anche per "gain vigor N" (versione 1.15.205)
 
 ### Round di debug del 15 ottobre, voce emersa su R35

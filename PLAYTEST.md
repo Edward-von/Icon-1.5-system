@@ -1656,6 +1656,18 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R35 — Aether Deflection dà la resistenza sulla card del danno (17 ottobre 2026, versione 1.15.206)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Un foe attacca lo Spellblade con un'abilità: sulla card d'attacco lo Spellblade usa Aether Deflection. Poi il
+      foe tira il danno: sulla riga dello Spellblade c'è la chip della resistenza (Aether Deflection) e Apply dimezza
+      il danno.
+- [ ] Un altro bersaglio della stessa card non ha la chip.
+- [ ] L'attacco dopo, con la stessa abilità ma senza usare Aether Deflection: la card del danno non ha più la chip.
+- [ ] Danno divine: la chip c'è ma Apply non dimezza (il divine non si dimezza, p.104).
+- [ ] Se il danno è stato tirato prima di premere Aether Deflection, quella card non cambia (va applicato a mano).
+
 ## Emerso R35 — Chip vigor anche per "gain vigor N" (17 ottobre 2026, versione 1.15.205)
 
 Setup: solo codice (F5 basta).

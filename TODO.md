@@ -1625,9 +1625,11 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       "targeted by an ability", ma le abilità che non sono attacchi (Show in Chat) non salvano i bersagli, quindi lì
       non c'è nessun bottone. Inoltre negli attacchi ad area i bottoni vanno solo al bersaglio dell'attacco e non agli
       altri nell'area. Domanda per Edoardo: chi è nell'area conta come "targeted"?
-- [ ] **Emerso lavorando su R35 — effetto di Aether Deflection sul danno** (S): "Gain resistance against damage from
+- [x] **Emerso lavorando su R35 — effetto di Aether Deflection sul danno** (S): "Gain resistance against damage from
       that ability" resta solo come testo. Si potrebbe aggiungere la resistenza alla card del danno che segue, come
       Righteous Disdain (damage-card-mods).
+(FATTO il 17 ottobre 2026, versione 1.15.206: Aether Deflection usata dalla card d'attacco scrive la resistenza sulla
+      card del danno che quell'abilità posta subito dopo)
 - [ ] **Emerso lavorando su R35 — tratti-interrupt sulla card del danno** (S, da verificare): ora che i tratti con
       "Interrupt N: Trigger: … Effect: …" vengono letti, un tratto con un trigger di danno comparirebbe anche sulla
       card del danno. Non è stato controllato quali tratti dei PG lo fanno.
@@ -1640,6 +1642,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
       Edoardo, scelte fatte senza conferma dal manuale: (a) lo sconto del Talent II viene applicato prima di
       Conqueror's Edge, quindi un Infuse 2 può arrivare a 0; (b) lo sconto vale anche per un alleato nell'Arkenrune
       ("their benefits also extend to allies"); (c) il teletrasporto porta solo nelle rune proprie. Vanno bene?
+- nessuno
 - nessuno
 - nessuno
 - nessuno

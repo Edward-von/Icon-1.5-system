@@ -92,6 +92,19 @@ export const INTERRUPT_SPECS = {
     },
   },
 
+  /* Aether Deflection (Spellblade trait, p.224): "Trigger: You are targeted by
+   * an ability from a character in range 2. Effect: Gain resistance against
+   * damage from that ability." Used from the attack card, before any damage
+   * card exists: the resistance waits on the character (pendingCardMods) and
+   * is written on the damage card that ability posts next (damage.mjs). */
+  "aether deflection": {
+    async onTargeted({ owner, message }) {
+      const atk = message?.flags?.[FLAG_NS]?.attack;
+      if (!atk?.sourceActorUuid) return;
+      await addPendingCardMod(owner, message.id, atk, { source: "Aether Deflection", half: true });
+    },
+  },
+
   /* Heartfire (Blazing Bond, p.210): "You or your ally takes damage […]
    * Effect: You can choose to reduce that damage by 3 (as if by armor) […] If
    * you do, the other partner sacrifices 3." Only for the marked partner. */
@@ -102,6 +115,64 @@ export const INTERRUPT_SPECS = {
     },
   },
 };
+
+/* -------------------------------------------------- */
+/*  Changes waiting for the next damage card            */
+/* -------------------------------------------------- */
+
+/**
+ * A change an interrupt used on an attack card makes to that ability's damage
+ * (Aether Deflection): kept on the character as `icon-system.pendingCardMods`
+ * = [{ attackMessageId, sourceActorUuid, abilityName, mod }], one per attack card.
+ */
+async function addPendingCardMod(owner, attackMessageId, atk, mod) {
+  const list = (owner.getFlag(FLAG_NS, "pendingCardMods") ?? []).filter(p => p.attackMessageId !== attackMessageId || p.mod?.source !== mod.source);
+  list.push({ attackMessageId, sourceActorUuid: atk.sourceActorUuid, abilityName: atk.abilityName ?? "", mod });
+  _log(`pendingCardMod — "${owner.name}" | ${mod.source} | waiting for the damage of ${atk.sourceName ?? "?"}'s ${atk.abilityName ?? "?"} (attack card ${attackMessageId})`);
+  await owner.setFlag(FLAG_NS, "pendingCardMods", list);
+}
+
+/** The latest attack card of this character's ability in the chat log (its id), or "". */
+function latestAttackCardId(sourceActorUuid, abilityName) {
+  const msgs = game.messages?.contents ?? [];
+  for (let i = msgs.length - 1; i >= 0; i--) {
+    const atk = msgs[i].flags?.[FLAG_NS]?.attack;
+    if (atk && atk.sourceActorUuid === sourceActorUuid && (atk.abilityName ?? "") === (abilityName ?? "")) return msgs[i].id;
+  }
+  return "";
+}
+
+/**
+ * The waiting changes a new damage card takes over (damage.mjs): those of its
+ * targets made on the latest attack card of the same character's ability. A
+ * change made on an older attack card no longer applies. What is taken over,
+ * and what is stale, is removed from the character when the user may.
+ * @param {Actor} source         who deals the damage
+ * @param {string} abilityName
+ * @param {string[]} targetUuids the damage card's targets
+ * @returns {Promise<Array<object>>} entries for `damage.mods` (damage-card-mods.mjs)
+ */
+export async function takePendingCardMods(source, abilityName, targetUuids = []) {
+  if (!source) return [];
+  const latest = latestAttackCardId(source.uuid, abilityName);
+  const out = [];
+  for (const uuid of new Set(targetUuids)) {
+    let target = null;
+    try { target = fromUuidSync(uuid); } catch { target = null; }
+    const list = target?.getFlag?.(FLAG_NS, "pendingCardMods");
+    if (!Array.isArray(list) || !list.length) continue;
+    const mine = list.filter(p => p.sourceActorUuid === source.uuid && (p.abilityName ?? "") === (abilityName ?? ""));
+    if (!mine.length) continue;
+    for (const p of mine) if (latest && p.attackMessageId === latest) out.push({ ...p.mod, actorUuid: target.uuid });
+    if (target.isOwner) {
+      const rest = list.filter(p => !mine.includes(p));
+      if (rest.length) await target.setFlag(FLAG_NS, "pendingCardMods", rest);
+      else await target.unsetFlag(FLAG_NS, "pendingCardMods");
+    }
+  }
+  if (out.length) _log(`takePendingCardMods — ${source.name}'s ${abilityName} | ${out.map(m => m.source).join(", ")}`);
+  return out;
+}
 
 /** "Damage" wording of a trigger: being damaged, taking damage, damage about to land. */
 const DAMAGE_RE = /\b(?:is|are|gets?|being|was) damaged\b|\btakes? damage\b|\btook damage\b|\bdamages? (?:you|your|an?|the|one|any)\b|\bdamage to (?:you|your|an?|the)\b|\bdeals damage\b[^.]*\bto (?:you|your|an?|the)\b/;
@@ -640,6 +711,12 @@ export async function useDamageInterrupt(message, { ownerUuid, key, targetUuid, 
   if (spec.onUse) {
     try { await spec.onUse({ owner, it, item: it.itemId ? owner.items.get(it.itemId) : null, target, message }); }
     catch (err) { console.error(`ICON 1.5 | ${it.name}: changing the damage card failed`, err); }
+  }
+  // From an attack card: what the interrupt does to the damage that follows (Aether Deflection).
+  const onTargeted = onAttack ? interruptSpec(it.name).onTargeted : null;
+  if (onTargeted) {
+    try { await onTargeted({ owner, it, target, message }); }
+    catch (err) { console.error(`ICON 1.5 | ${it.name}: keeping the change for the damage card failed`, err); }
   }
   return true;
 }

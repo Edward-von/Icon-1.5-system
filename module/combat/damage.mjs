@@ -716,6 +716,11 @@ export async function postAbilityDamageCard(actor, opts = {}) {
                : outcome === "other" ? `${abilityName} — ${other?.label ? `${other.label} damage` : "Other damage"}${other?.area ? " (area)" : ""}`
                : `${abilityName} — Hit`;
 
+  // Changes made on this ability's attack card by an interrupt of a target
+  // (Aether Deflection's resistance, damage-interrupts.mjs) come onto the card.
+  const { takePendingCardMods } = await import("./damage-interrupts.mjs");
+  const pendingMods = await takePendingCardMods(actor, abilityName, targets.map(t => t.actorUuid));
+
   await ChatMessage.create({
     speaker: ChatMessage.getSpeaker({ actor }),
     flavor,
@@ -742,6 +747,7 @@ export async function postAbilityDamageCard(actor, opts = {}) {
           // only pierced on Apply, this much comes back.
           weakened:   weakenedTaken,
           targets: targets.map(t => t.actorUuid),
+          ...(pendingMods.length ? { mods: pendingMods } : {}),
         },
       },
     },
