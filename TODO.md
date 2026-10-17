@@ -477,12 +477,15 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       summons, or actions" nel secondo "•". Pack + migrazione sulle copie. (FATTO il 17 ottobre 2026, versione 1.15.94:
       pack jobs corretto su Limit Break e template Demon Slayer/Warden, script
       `../icon-compendium-audit/r39-lb-wording/fix-lb-wording.mjs`; migrazione 34 sulle copie col testo vecchio.)
-- [ ] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, pronto: risposta del 17 ottobre 2026): quando
+- [x] **Emerso lavorando su R48 — l'aura di Fulminate non compare da sola sul nuovo marcato** (S, pronto: risposta del 17 ottobre 2026): quando
       il mark di Fulminate passa a un altro personaggio, l'aura sul primo sparisce, ma sul nuovo marcato va rimessa
       con il bottone area. Domanda per Edoardo: piazzarla da sola sul token appena marcato, oppure chiedere prima?
       Risposta dal manuale (17 ottobre 2026, confermata da Edoardo): da sola. "The character gains aura 2 while
       marked" (p.226): l'aura viene con il mark, senza scelta; solo il Talent I ("When marking a character, you can
       increase the area to 3…") chiede Aura 2 o 3.
+(FATTO il 17 ottobre 2026, versione 1.15.105: quando nasce il mark, l'aura "while marked" si piazza da sola sul token
+      marcato ed è legata a quel mark; solo il Talent I chiede Aura 2 o 3; se l'aura c'è già non viene doppiata. Solo
+      codice.)
 - [x] **Emerso lavorando su R38b — l'infusione armata non si consuma quando si usa l'abilità o il Limit Break** (S/M):
       l'Aether si spende "all'inizio dell'azione" e si sceglie una sola infusione per volta (p.204), quindi la
       versione infusa vale per un uso; ma la card dell'abilità (`IconSheet`, ~riga 2628) e il Limit Break (~riga 3318)
@@ -675,6 +678,9 @@ Già fatti o già coperti (nessun punto nuovo, solo da far verificare a Maar):
       5 *al posto* dell'area normale (p.227), ma il codice aggiunge l'Arc 5 come variante "Mastery" accanto alla Line
       3, quindi probabilmente chiede ancora di scegliere tra le due invece di usare sempre l'Arc 5 (`_areaVariantsFor`
       / `areaVariants`).
+- [ ] **Emerso lavorando su R48 — la domanda del Talent I di Fulminate arriva al GM quando il mark passa da lui** (S):
+      se il giocatore marca un personaggio che non è suo, il mark lo crea il GM, quindi la finestra "Aura 2 / Aura 3"
+      compare al GM e non al giocatore; portare la domanda al client di chi ha marcato prima di passare il mark al GM.
 
 ---
 

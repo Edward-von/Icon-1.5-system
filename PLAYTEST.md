@@ -1656,6 +1656,23 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Movimento tutto in una volta**: Quick Guide → Turn → riquadro Limits: ultima riga "Your standard move is
       taken all at once…" con il rimando a p.88.
 
+## Emerso R48 — L'aura di Fulminate arriva da sola con il mark (17 ottobre 2026, versione 1.15.105)
+
+Setup: solo codice (F5 basta).
+
+- [ ] Fulminate senza talenti: bersaglia un personaggio e premi Mark. Intorno al suo token compare da sola Aura 2,
+      senza domande, e si muove con lui.
+- [ ] Rimarca un secondo personaggio: l'aura sparisce dal primo e compare da sola sul secondo.
+- [ ] Rimarca lo stesso personaggio: alla fine c'è una sola aura, e non sparisce.
+- [ ] Con il Talent I sbloccato: marcando, una finestra chiede Aura 2 / Aura 3, e l'aura ha la misura scelta.
+      Chiudendo la finestra si mette Aura 2.
+- [ ] Prima metti l'aura con il bottone area (bersaglio sul personaggio), poi marca lo stesso personaggio: l'aura
+      resta una sola. Togliendo il mark, l'aura sparisce.
+- [ ] Togli il mark a mano dal chip, oppure abbatti Fulminate, oppure chiudi il combattimento: l'aura sparisce.
+- [ ] Un giocatore marca un nemico che non è suo (il mark passa dal GM): l'aura compare lo stesso; con il Talent I la
+      domanda sulla misura appare al GM.
+- [ ] Un'altra abilità con Mark che non dà aura: non compare nessuna aura.
+
 ## Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate (17 ottobre 2026, versione 1.15.104)
 
 Setup: solo codice (F5 basta).

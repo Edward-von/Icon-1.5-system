@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 17 ottobre 2026 — L'aura di Fulminate arriva da sola con il mark (versione 1.15.105)
+
+### Round di debug del 16 ottobre, voce emersa su R48
+
+- **Aura di Fulminate sul nuovo marcato**: quando il mark di Fulminate andava su un personaggio (o passava da un
+  altro), l'aura "while marked" spariva dal primo bersaglio ma sul nuovo non compariva, e bisognava rimetterla a mano
+  con il bottone area → la 1.15.80 la toglieva quando il mark finisce, ma niente la metteva quando il mark comincia →
+  ora, quando nasce un mark e il testo dell'abilità dice "The character gains aura N while marked" (p.226), l'aura N
+  si piazza da sola intorno al token marcato, lo segue ed è legata a quel mark (finisce con lui). Solo con il Talent I
+  ("When marking a character, you can increase the area to 3") una finestra chiede Aura 2 o Aura 3. Se l'aura di quel
+  mark è già sulla mappa non ne viene messa una seconda; rimarcando lo stesso personaggio resta una sola aura. Solo
+  codice.
+
 ## 17 ottobre 2026 — Card del Limit Break: niente status dalle versioni Infuse non armate (versione 1.15.104)
 
 ### Round di debug del 16 ottobre, voce emersa su R37

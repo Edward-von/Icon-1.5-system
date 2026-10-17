@@ -891,7 +891,9 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   // deleteActiveEffect hook in registerAreaTemplates).
   const whileMarked = isAura && holder !== token && holder.actor
     && /\bwhile marked\b/i.test(String(text ?? "").replace(/<[^>]+>/g, " "))
-    ? { sourceActorId: actor.id, abilityKey: abilityKey ?? "", targetActorUuid: holder.actor.uuid } : null;
+    ? { sourceActorId: actor.id, abilityKey: abilityKey ?? "", targetActorUuid: holder.actor.uuid,
+        // the mark it goes with, when already there (follow-marks.mjs places it by itself at marking)
+        effectUuid: holder.actor.effects?.find(e => { const k = e.getFlag?.(FLAG_NS, "mark"); return k?.sourceActorId === actor.id && k.abilityKey === abilityKey; })?.uuid ?? "" } : null;
   const sourceCells = tokenCells(holder.document);
   let cells, originCell;
   // An area centred on a character (Death's Slay / Finishing Blow, p.155:
@@ -1677,7 +1679,8 @@ export function registerAreaTemplates() {
     for (const scene of game.scenes ?? []) {
       const ids = scene.templates.filter(t => {
         const w = t.flags?.[FLAG_NS]?.whileMarked;
-        return w && w.sourceActorId === mark.sourceActorId && w.abilityKey === mark.abilityKey && w.targetActorUuid === targetUuid;
+        return w && w.sourceActorId === mark.sourceActorId && w.abilityKey === mark.abilityKey && w.targetActorUuid === targetUuid
+          && (!w.effectUuid || w.effectUuid === effect.uuid);   // not the aura of a new mark on the same character
       }).map(t => t.id);
       if (!ids.length) continue;
       try {

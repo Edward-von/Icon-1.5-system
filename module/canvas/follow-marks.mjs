@@ -223,9 +223,76 @@ async function onDefeated(actor) {
   }
 }
 
+/**
+ * A mark whose ability gives the marked character an aura "while marked" (Fulminate p.226: "A character in range 6
+ * is marked. The character gains aura 2 while marked."): the aura comes with the mark, no question, around the
+ * marked token and following it, tied to that mark (whileMarked, removed with it by area-templates.mjs). Only when
+ * a text offers another size ("When marking a character, you can increase the area to 3", Talent I) the user picks.
+ * Nothing is placed when that mark's aura is already on the map (placed with the area button before marking).
+ * Run on the client that created the mark (the marker's user, or the GM a mark was relayed to).
+ */
+async function placeWhileMarkedAura(effect, mark) {
+  const creator = fromUuidSync(mark.sourceActorUuid);
+  const item = creator?.items?.get(mark.abilityKey);
+  const s = item?.system;
+  if (!s) return;
+  const own = [s.description, s.effect, s.areaEffect, s.hitEffect].filter(v => typeof v === "string" && v).join(" ");
+  const m = /\b(?:that|the|target|marked|chosen)\s+character\s+(?:gains?|has)\s+(?:an?\s+)?aura\s+(\d+)\b[^.]*\bwhile marked\b/i.exec(plainText(own));
+  if (!m) return;
+  const td = tokenOfActor(effect.parent);
+  const scene = td?.parent;
+  if (!scene) { _log(`${item.name}: no token for ${effect.parent?.name}, no aura on the map`); return; }
+  const { placeAuraOnToken, aurasInText } = await import("./area-templates.mjs");
+  // Already there: an aura of this mark (or placed for this character before the mark existed) is not doubled.
+  const same = scene.templates.filter(t => {
+    const w = t.flags?.[NS]?.whileMarked;
+    return w && w.sourceActorId === creator.id && w.abilityKey === mark.abilityKey && w.targetActorUuid === effect.parent.uuid
+      && (!w.effectUuid || w.effectUuid === effect.uuid || fromUuidSync(w.effectUuid));
+  });
+  if (same.length) {
+    for (const t of same.filter(t => !t.flags[NS].whileMarked.effectUuid)) {
+      try { await t.update({ [`flags.${NS}.whileMarked.effectUuid`]: effect.uuid }); } catch { /* not this user's */ }
+    }
+    return;
+  }
+  // The other sizes an unlocked text offers: Talent I "increase the area to 3"; the mastery, if it says one.
+  const extra = [
+    (s.talentSelected ?? 0) === 1 ? s.talent1 : "", (s.talentSelected ?? 0) === 2 ? s.talent2 : "", s.masteryUnlocked ? s.mastery : "",
+  ].filter(t => typeof t === "string" && t.trim());
+  const sizes = [...new Set([Number(m[1]), ...extra.flatMap(t => aurasInText(t, { resize: true }).map(a => a.size))])].filter(n => n > 0);
+  let size = sizes[0];
+  if (sizes.length > 1) {
+    try {
+      size = await foundry.applications.api.DialogV2.wait({
+        window: { title: `${item.name} — aura` },
+        content: `<p><strong>${esc(td.name)}</strong> is marked and gains an aura. Which size?</p>${extra.map(t => `<p><small>${esc(plainText(t))}</small></p>`).join("")}`,
+        buttons: sizes.map((n, i) => ({ action: String(n), label: `Aura ${n}`, default: i === 0, callback: () => n })),
+        rejectClose: false,
+      }) ?? sizes[0];
+    } catch { size = sizes[0]; }
+  }
+  const effAlive = effect.parent?.effects?.get(effect.id);
+  if (!effAlive) return;   // the mark ended while the size was asked
+  try {
+    await placeAuraOnToken(td, {
+      actor: creator, size, abilityName: item.name, abilityKey: mark.abilityKey,
+      flags: { whileMarked: { sourceActorId: creator.id, abilityKey: mark.abilityKey, targetActorUuid: effect.parent.uuid, effectUuid: effect.uuid } },
+    });
+    ui.notifications.info(`${item.name}: Aura ${size} placed around ${td.name}, while marked; it follows the token and ends with the mark.`);
+  } catch (err) {
+    console.warn("[ICON | FollowMarks] could not place the aura of the marked character", err);
+    ui.notifications.warn(`${item.name}: could not place the aura around ${td.name} (you may lack the 'Create Measured Template' permission). Use the area button.`);
+  }
+}
+
 export function registerFollowMarks() {
-  Hooks.on("createActiveEffect", (effect) => {
-    if (!isActiveGM() || !effect.getFlag?.(NS, "mark")) return;
+  Hooks.on("createActiveEffect", (effect, _options, userId) => {
+    const mark = effect.getFlag?.(NS, "mark");
+    if (!mark) return;
+    // The aura "while marked" (Fulminate p.226), on the client that marked: it may ask the Talent I size.
+    if (!mark.tracked && mark.sourceActorUuid && userId === game.user.id)
+      placeWhileMarkedAura(effect, mark).catch(err => console.warn("[ICON | FollowMarks] could not place the while-marked aura", err));
+    if (!isActiveGM()) return;
     onMarkCreated(effect).catch(err => console.warn("[ICON | FollowMarks] could not put the mark on the map", err));
   });
   // The mark ended: its space goes too.
