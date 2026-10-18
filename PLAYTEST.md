@@ -3842,13 +3842,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Battle Demon (o Armor / Gaping / Horn / Starving / Nail Demon) importato dal compendio: l'azione Aura of
-      Slaughter ha il bottone area "Aura 2" (non "Aura").
-- [ ] Clic sul bottone area: l'aura 2 si piazza attorno al token del demone, senza la finestra che chiede la
-      dimensione.
+- [x] Battle Demon (o Armor / Gaping / Horn / Starving / Nail Demon) importato dal compendio: l'azione Aura of
+      Slaughter ha il bottone area "Aura 2" (non "Aura"). **(bottone 'Place the Aura 2…')**
+- [x] Clic sul bottone area: l'aura 2 si piazza attorno al token del demone, senza la finestra che chiede la
+      dimensione. **(Aura 2 attorno al Battle Demon, nessuna domanda)**
 - [ ] Controllo: un'azione foe con Blast / Line / Arc numerati si piazza come prima; un "line" o "arc" senza numero
-      chiede ancora la dimensione.
-- [ ] Controllo PG: Endless Battlement continua a dare Aura 1 senza domanda.
+      chiede ancora la dimensione. **(non provato)**
+- [x] Controllo PG: Endless Battlement continua a dare Aura 1 senza domanda. **(Endless Battlement: Aura 1 senza domanda)**
 
 ## Emerso R38b — Annullare un'infusione non sblocca più Inner Furnace due volte (17 ottobre 2026, versione 1.15.113)
 
@@ -4287,15 +4287,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un PG Chanter con Aria, il suo token in scena, due o tre token intorno. Bottone area di Aria: il dialogo offre
-      Small Blast (self), Medium Blast (self) e Large Blast (self).
-- [ ] Scegli Medium Blast (self): l'area compare subito centrata sul token del Chanter (niente clic sulla mappa); la
-      notifica elenca chi è dentro.
-- [ ] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
-      viene sostituita.
-- [ ] Small Blast (self) funziona ancora come prima.
+- [x] Un PG Chanter con Aria, il suo token in scena, due o tre token intorno. Bottone area di Aria: il dialogo offre
+      Small Blast (self), Medium Blast (self) e Large Blast (self). **(dialogo Small / Medium / Large Blast (self))**
+- [x] Scegli Medium Blast (self): l'area compare subito centrata sul token del Chanter (niente clic sulla mappa); la
+      notifica elenca chi è dentro. **(Medium centrata sul Chanter senza clic)**
+- [x] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
+      viene sostituita. **(Large sostituisce la Medium)**
+- [ ] Small Blast (self) funziona ancora come prima. **(non provato)**
 - [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
-      si piazza ancora a mano nella sua portata.
+      si piazza ancora a mano nella sua portata. **(non provato)**
 
 ## Emerso R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (17 ottobre 2026, versione 1.15.83)
 
@@ -5324,17 +5324,17 @@ Geomancer (Cataclysm), Knave (Mock), Bastion (Helion); un foe targettato sulla m
 Setup: un PG Chanter con Gentleness e la mastery sbloccata, un PG con un tratto ad aura (es. Shieldmaster); un foe
 vicino, scena a griglia quadrata.
 
-- [ ] **Avviso al piazzamento**: piazzare l'aura di Gentleness → l'avviso dice "… Mouse over it and press + or − to
-      change its size (1 to 3)."
-- [ ] **Allargare**: mouse sopra l'aura (anche con il livello Token attivo), premere + → l'aura passa a 2 caselle
+- [x] **Avviso al piazzamento**: piazzare l'aura di Gentleness → l'avviso dice "… Mouse over it and press + or − to
+      change its size (1 to 3)." **('… change its size (1 to 3)')**
+- [x] **Allargare**: mouse sopra l'aura (anche con il livello Token attivo), premere + → l'aura passa a 2 caselle
       attorno al token, l'etichetta sulla mappa diventa "Aura 2 · Gentleness", l'avviso mostra "Aura 2 (Gentleness) —
-      When you do, foes inside must save or be pacified."
-- [ ] **Limiti del testo**: premere ancora + → Aura 3; ancora + → avviso "Aura 3 is already at its maximum (3)" e
-      niente cambia; − fino ad Aura 1, poi − → "already at its minimum (1)".
-- [ ] **Segue il token**: con l'aura a 3, muovere il token → l'aura lo segue con la nuova dimensione.
-- [ ] **Senza limiti nel testo**: l'aura del tratto Shieldmaster va da 1 a 5 con + / −.
+      When you do, foes inside must save or be pacified." **(Aura 2 con l'avviso del testo)**
+- [x] **Limiti del testo**: premere ancora + → Aura 3; ancora + → avviso "Aura 3 is already at its maximum (3)" e
+      niente cambia; − fino ad Aura 1, poi − → "already at its minimum (1)". **(a 3 'already at its maximum (3)'; il − non provato)**
+- [ ] **Segue il token**: con l'aura a 3, muovere il token → l'aura lo segue con la nuova dimensione. **(non provato)**
+- [ ] **Senza limiti nel testo**: l'aura del tratto Shieldmaster va da 1 a 5 con + / −. **(non provato)**
 - [ ] **Senza mastery**: Gentleness con la mastery NON sbloccata, ripiazzare l'aura → l'avviso non scrive "(1 to 3)"
-      e + / − vanno da 1 a 5.
+      e + / − vanno da 1 a 5. **(non provato)**
 - [ ] **Non interferisce**: con il mouse fuori dall'aura, o sopra una scheda, o scrivendo in un campo di testo
       (chat, scheda), + e − non cambiano nessuna aura; piazzando una Line, + e − cambiano ancora la sua larghezza.
 - [ ] **Permessi**: da giocatore, + / − sull'aura di un altro PG non fanno nulla; il GM può cambiare qualsiasi aura.
@@ -5629,17 +5629,17 @@ Setup: un mondo con un PG Bastion (Stalwart) con Endless Battlement (va bene una
 dell'aggiornamento) e almeno due altri token alleati sulla scena a griglia quadrata; tab Combat; un combattimento
 avviato per la durata.
 
-- [ ] **Alleato bersagliato**: bersagliare (T) un alleato entro 4 spazi → bottone area "Aura 1" di Endless
+- [x] **Alleato bersagliato**: bersagliare (T) un alleato entro 4 spazi → bottone area "Aura 1" di Endless
       Battlement → l'aura 1 compare attorno al token dell'alleato, non attorno al Bastion; la notifica dice
-      "Aura 1 placed around <alleato>".
+      "Aura 1 placed around <alleato>". **('Aura 1 placed around Ann')**
 - [ ] **L'aura segue l'alleato**: muovere l'alleato → l'aura si sposta con lui; muovere il Bastion → l'aura resta
-      ferma sull'alleato.
+      ferma sull'alleato. **(non provato)**
 - [ ] **Durata**: la notifica e il conto alla rovescia sono "until the start of your next turn" del Bastion: all'inizio
-      del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area.
+      del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area. **(non provato)**
 - [ ] **Refresh**: bersagliare un altro alleato e ripremere il bottone area → la vecchia aura sparisce, la nuova è
-      attorno al nuovo alleato.
+      attorno al nuovo alleato. **(non provato)**
 - [ ] **Nessun bersaglio**: togliere tutti i target → bottone area → avviso "target that ally's token…" e aura attorno
-      al Bastion (come prima).
+      al Bastion (come prima). **(non provato)**
 - [ ] **Più bersagli**: due alleati bersagliati → avviso "target only that ally's token…" e aura attorno al Bastion.
 - [ ] **Fuori range**: bersagliare un alleato a più di 4 spazi → avviso "beyond range 4" ma l'aura si piazza sul
       suo token. Con la mastery Perfect Battlement sbloccata l'avviso non compare.
