@@ -780,6 +780,11 @@ Da compilare durante il playtest.
   niente bottoni interrupt sulle card. Con F5 tutto a posto. Nello stesso momento il server era lento (i "tour" di
   Foundry andavano in timeout, caricamento di 30–40 s). Probabilmente un caricamento fallito, non del sistema; se Maar
   dice "non vedo i bottoni", prima cosa: F5.
+- **1.15.226, seconda casella**: la plant non spuntata resta sulla mappa, ma se sta dentro la Small Blast di un'altra
+  plant che esplode viene bersagliata ("Small Blast (on plants) × 2 placed — Plant in the area"). È giusto (è un
+  personaggio dentro l'esplosione) o la plant non scelta va esclusa dai bersagli?
+- **Nome nel messaggio della mote of life**: "Plant loses 0 blessings (now 0)" firmato "Mote of life": il messaggio usa
+  il nome dell'attore (Plant) invece di quello del token rinominato. Solo estetico.
 - **Bottone interrupt dopo l'uso**: sul client del GM "Grace of the Spirits · TEST Sealer" dopo il clic diventa "0/1"
   ma resta cliccabile finché non si preme Apply; sul giocatore invece il bottone si spegne subito. Da controllare.
 
@@ -2536,21 +2541,21 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Harvest con HARVEST MOON: piazza l'area di Harvest sopra 2 plant del compendio summons, poi la variante "Small
+- [x] Harvest con HARVEST MOON: piazza l'area di Harvest sopra 2 plant del compendio summons, poi la variante "Small
       Blast (on plants)" → si apre "Harvest Moon — which plants explode?" con le 2 plant spuntate e un menu "a chi va
-      la blessing".
-- [ ] Togli la spunta a una plant → l'esplosione copre solo l'altra; quella non spuntata resta sulla mappa e non è
-      bersaglio.
-- [ ] Nel menu ci sono il PG ("yourself") e solo gli alleati (stessa disposition) entro 3 caselle da quella plant; un
-      alleato a 4 caselle non compare.
-- [ ] Dopo l'esplosione: chi è stato scelto ha +1 Blessed, il token della plant esplosa sparisce e in chat c'è la riga
-      "Harvest Moon (p.186): …".
-- [ ] Token chiamato "Mote of life" con Blessed: esplode, perde la blessing, NON viene cancellato e compare la card
-      RECYCLE "Becomes a terrain effect".
-- [ ] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa.
-- [ ] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template.
+      la blessing". **(2 plant + la mote of life spuntate, menu blessing)**
+- [x] Togli la spunta a una plant → l'esplosione copre solo l'altra; quella non spuntata resta sulla mappa e non è
+      bersaglio. **(la plant non spuntata resta; vedi Dubbi sul bersaglio)**
+- [x] Nel menu ci sono il PG ("yourself") e solo gli alleati (stessa disposition) entro 3 caselle da quella plant; un
+      alleato a 4 caselle non compare. **(yourself + TEST Freelancer (entro 3); l'alleato a 4 non provato)**
+- [x] Dopo l'esplosione: chi è stato scelto ha +1 Blessed, il token della plant esplosa sparisce e in chat c'è la riga
+      "Harvest Moon (p.186): …". **(Freelancer +1 Blessed, plant tolta, riga 'Harvest Moon (p.186)')**
+- [x] Token chiamato "Mote of life" con Blessed: esplode, perde la blessing, NON viene cancellato e compare la card
+      RECYCLE "Becomes a terrain effect". **(la mote perde la blessing, resta, card RECYCLE)**
+- [ ] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa. **(non provato)**
+- [ ] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template. **(non provato)**
 - [ ] Giocatore non GM con una plant di cui non è proprietario → arriva l'avviso che la toglie il GM; la blessing
-      viene comunque data (tramite GM).
+      viene comunque data (tramite GM). **(non provato)**
 
 ## Emerso R33 — Symphony: il Charge dà 2 mote gratis (17 ottobre 2026, versione 1.15.225)
 
@@ -2738,13 +2743,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazza un token chiamato "Mote of life" con Blessed e togli lo status (o consuma l'ultima carica): arriva la
-      card "lost its blessing" con il bottone.
-- [ ] Premi il bottone: compare il terrain effect "Mote of life" sulla sua casella e il token della mote sparisce. La
-      card ha il bottone Remove.
-- [ ] Muovi un alleato dentro la casella: arriva l'offerta di Regeneration. Quando esce arriva l'offerta di toglierla.
-      Un nemico che entra non riceve niente.
-- [ ] Togli Blessed a un token che non si chiama "Mote of life": nessuna card.
+- [x] Piazza un token chiamato "Mote of life" con Blessed e togli lo status (o consuma l'ultima carica): arriva la
+      card "lost its blessing" con il bottone. **((arrivata dall'esplosione di Harvest Moon))**
+- [x] Premi il bottone: compare il terrain effect "Mote of life" sulla sua casella e il token della mote sparisce. La
+      card ha il bottone Remove. **(terrain 'Mote of life' sulla casella, token tolto, card con Remove)**
+- [x] Muovi un alleato dentro la casella: arriva l'offerta di Regeneration. Quando esce arriva l'offerta di toglierla.
+      Un nemico che entra non riceve niente. **(alleato che entra: offerta Regeneration; uscita e nemico non provati)**
+- [ ] Togli Blessed a un token che non si chiama "Mote of life": nessuna card. **(non provato)**
 
 ## Emerso R33 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (17 ottobre 2026, versione 1.15.210)
 
@@ -3079,23 +3084,23 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Harvester con HARVEST MOON e Dark Sliver con RECYCLE: evocare una Plant dal pack e rinominare il token "Mote of
-      life". Piazzare l'area dell'abilità sopra la mote, poi il chip "on plants": la Small Blast va sulla mote.
+- [x] Harvester con HARVEST MOON e Dark Sliver con RECYCLE: evocare una Plant dal pack e rinominare il token "Mote of
+      life". Piazzare l'area dell'abilità sopra la mote, poi il chip "on plants": la Small Blast va sulla mote. **(la mote rinominata è riconosciuta)**
 - [ ] Un token qualsiasi chiamato "Mote of life" (anche creato a mano) viene riconosciuto; un token "Mote" o "Life"
-      no.
-- [ ] Senza piante nell'area, l'avviso cita anche i token "Mote of life".
+      no. **(non provato)**
+- [ ] Senza piante nell'area, l'avviso cita anche i token "Mote of life". **(non provato)**
 
 ## Emerso R49 — La blast del Rampant Nail segue lo spuntone (17 ottobre 2026, versione 1.15.182)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Rampant Nail con Talent I: piazzare lo spuntone (Aura 2) e poi la blast "on nail". Mouse sull'aura fuori dalla
+- [x] Rampant Nail con Talent I: piazzare lo spuntone (Aura 2) e poi la blast "on nail". Mouse sull'aura fuori dalla
       blast, Shift + freccia destra: spuntone e blast si spostano insieme di 1 casella.
-- [ ] Mouse sul centro (sopra la blast), Shift + freccia su: si spostano tutte e due, la blast resta centrata sullo
+- [x] Mouse sul centro (sopra la blast), Shift + freccia su: si spostano tutte e due, la blast resta centrata sullo
       spuntone.
 - [ ] Spostare un personaggio dentro la blast dopo lo spostamento: compare l'avviso di terreno pericoloso nelle
-      caselle nuove, non in quelle vecchie.
-- [ ] Rimuovere lo spuntone: sparisce anche la blast, come prima.
+      caselle nuove, non in quelle vecchie. **(non provato)**
+- [x] Rimuovere lo spuntone: sparisce anche la blast, come prima.
 
 ## Emerso R36 — Bend Fate dalla card del gamble (17 ottobre 2026, versione 1.15.181)
 
@@ -3535,15 +3540,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Harvester con la mastery di Harvest: trascinare due Plant dal chip (o dal compendio summons) e un token Plant
-      fatto a mano; piazzare l'Arc 6 di Harvest passando sulle tre.
-- [ ] Bottone area, "Mastery: Small Blast (on plants)": compaiono le croci solo sulle due Plant del pack, l'etichetta
-      dice "× 2", l'Arc resta, le Plant non sono tra i bersagli.
-- [ ] Un foe vicino a tutte e due le plant appare una volta sola tra i bersagli.
-- [ ] Senza l'Arc sulla mappa compare l'avviso "place this ability's area first"; con l'Arc ma senza plant dentro,
-      l'avviso "No plant inside this ability's area".
-- [ ] Un Megamushroom dentro l'Arc esplode come una plant.
-- [ ] Il tiro d'attacco di Harvest non propone la Small Blast (on plants) come area dell'attacco.
+- [x] PG Harvester con la mastery di Harvest: trascinare due Plant dal chip (o dal compendio summons) e un token Plant
+      fatto a mano; piazzare l'Arc 6 di Harvest passando sulle tre. **(due Plant del pack + la mote nell'Arc 6)**
+- [x] Bottone area, "Mastery: Small Blast (on plants)": compaiono le croci solo sulle due Plant del pack, l'etichetta
+      dice "× 2", l'Arc resta, le Plant non sono tra i bersagli. **('Small Blast (on plants) × 2', l'Arc resta)**
+- [ ] Un foe vicino a tutte e due le plant appare una volta sola tra i bersagli. **(non provato)**
+- [x] Senza l'Arc sulla mappa compare l'avviso "place this ability's area first"; con l'Arc ma senza plant dentro,
+      l'avviso "No plant inside this ability's area". **(senza Arc: 'place this ability's area first')**
+- [ ] Un Megamushroom dentro l'Arc esplode come una plant. **(non provato)**
+- [ ] Il tiro d'attacco di Harvest non propone la Small Blast (on plants) come area dell'attacco. **(non provato)**
 
 ## Emerso R37 — Split Heaven and Hell: fascia di distanza misurata sulla linea (17 ottobre 2026, versione 1.15.141)
 
@@ -3562,15 +3567,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Rampant Nail e Talent I: senza spuntone sulla mappa, il bottone area con "Talent I: Small Blast (on
+- [x] PG con Rampant Nail e Talent I: senza spuntone sulla mappa, il bottone area con "Talent I: Small Blast (on
       nail)" avvisa "place the nail first" e non piazza nulla.
-- [ ] Piazzare lo spuntone (Aura 2), poi "Small Blast (on nail)": la croce di 5 caselle compare centrata sullo
+- [x] Piazzare lo spuntone (Aura 2), poi "Small Blast (on nail)": la croce di 5 caselle compare centrata sullo
       spuntone senza clic sulla mappa, e lo spuntone resta.
-- [ ] Un foe che entra nella blast riceve il messaggio del terreno dangerous.
-- [ ] Ripiazzare la blast: la vecchia sparisce, lo spuntone resta.
-- [ ] Togliere lo spuntone (Remove area o Canc), e in un'altra prova piazzarne uno nuovo: in tutti e due i casi la
-      blast sparisce (serve un GM connesso).
-- [ ] A inizio turno del PG la blast non viene cancellata.
+- [ ] Un foe che entra nella blast riceve il messaggio del terreno dangerous. **(non provato)**
+- [ ] Ripiazzare la blast: la vecchia sparisce, lo spuntone resta. **(non provato)**
+- [x] Togliere lo spuntone (Remove area o Canc), e in un'altra prova piazzarne uno nuovo: in tutti e due i casi la
+      blast sparisce (serve un GM connesso). **(tolto lo spuntone (Canc), la blast sparisce)**
+- [ ] A inizio turno del PG la blast non viene cancellata. **(non provato)**
 
 ## Emerso R1 — Barrato solo il blocco sostituito dalla combo (17 ottobre 2026, versione 1.15.139)
 
