@@ -746,6 +746,11 @@ Da compilare durante il playtest.
   difficult, Tsunami). Take 2 piercing damage…". Il test dice che dopo il trascinamento non deve esserci (resta
   dentro). Prima del trascinamento era anche arrivata la card "Mechanist is no longer inside … no longer has +1 curse"
   (l'area si era mossa senza di lui), poi "enters the area" dopo il drag: tre card per un solo movimento.
+- **1.15.231, decima casella — "Show in Chat" non apre un nuovo uso.** TEST Fool: Cavaliere attacco (crit) sul
+  Mechanist, Dazed cliccato, danno tirato. Poi "Show in Chat" di Cavaliere e subito "Damage Roll": la nuova card del
+  danno mostra di nuovo il blocco Inflict con "✓ Dazed" (preso dalla card d'attacco di prima). Il test dice che dopo
+  Show in Chat (senza tiro d'attacco) il blocco non deve esserci: la card del danno si aggancia all'ultimo attacco della
+  stessa abilità anche se nel mezzo c'è stato uno Show in Chat.
 
 ### Dubbi
 
@@ -763,6 +768,10 @@ Da compilare durante il playtest.
 - **Copertura degli Aethershard**: uno shard alto 1 accanto al bersaglio, dal lato dell'attaccante, dà "Cover ½" (è
   un oggetto alto 1, p.92). Con il Talent II lo stesso shard dà anche pierce: il danno viene dimezzato dalla
   copertura ma passa l'armatura. Regola giusta?
+- **Nome sulle card "is inside / enters the area"**: le card degli status delle aree (Blind+, Cover, Shattered+…)
+  escono col nome del token che il GM ha selezionato in quel momento, non del creatore dell'area (es. la nuvola
+  di Nocturne dello Shade firmata "TEST Warden", lo spostamento della nuvola di Mist Strider firmato "TEST
+  Harvester"). Sembra `ChatMessage.getSpeaker()` senza l'attore. Solo estetico.
 
 ---
 
@@ -2440,26 +2449,26 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG: attacca con un'abilità che infligge uno status (es. Hit: stunned), con un bersaglio. Poi tira il danno:
+- [x] PG: attacca con un'abilità che infligge uno status (es. Hit: stunned), con un bersaglio. Poi tira il danno:
       sulla card del danno, sotto Apply, compare il blocco Inflict con la nota "same buttons as the attack card", con
-      la stessa riga del bersaglio e le stesse parti spente (es. Miss spento su un colpo andato a segno).
-- [ ] Clicca lo status sulla card dell'attacco: anche il bottone sulla card del danno diventa "✓ …" e non si clicca
+      la stessa riga del bersaglio e le stesse parti spente (es. Miss spento su un colpo andato a segno). **(Soul Shot: righe Effect / Exceed / Finishing Blow uguali; Exceed non spento anche se il tiro non arrivava a 15)**
+- [x] Clicca lo status sulla card dell'attacco: anche il bottone sulla card del danno diventa "✓ …" e non si clicca
       più. Rifai la prova al contrario (clic sulla card del danno → bloccato anche sull'attacco).
-- [ ] Clicca uno status sull'attacco PRIMA di tirare il danno: quando la card del danno esce, quel bottone è già
+- [x] Clicca uno status sull'attacco PRIMA di tirare il danno: quando la card del danno esce, quel bottone è già
       bloccato.
-- [ ] F5 dopo aver usato un bottone: resta bloccato su entrambe le card. Il bottone Gain usato su una card d'attacco
-      resta bloccato anche lui.
-- [ ] Abilità auto-hit con uno status: card auto-hit e poi la card del danno in automatico, ed entrambe hanno i
-      bottoni, che si bloccano insieme.
+- [x] F5 dopo aver usato un bottone: resta bloccato su entrambe le card. Il bottone Gain usato su una card d'attacco
+      resta bloccato anche lui. **(F5: bloccati su entrambe; Gain non provato)**
+- [x] Abilità auto-hit con uno status: card auto-hit e poi la card del danno in automatico, ed entrambe hanno i
+      bottoni, che si bloccano insieme. **(Chastise (auto-hit): blocco su tutte e due, si bloccano insieme)**
 - [ ] Giocatore che clicca sulla card d'attacco di un altro (o sulla copia nella card del danno): lo status passa dal
-      GM e il bottone risulta "→ GM" su tutte e due le card, anche sul client del GM.
-- [ ] Foe/Legend/Summon: attacco con uno status, poi danno, e il blocco compare anche lì.
+      GM e il bottone risulta "→ GM" su tutte e due le card, anche sul client del GM. **(da giocatore, blocco 18)**
+- [ ] Foe/Legend/Summon: attacco con uno status, poi danno, e il blocco compare anche lì. **(non provato)**
 - [ ] Attacco d'area con bersaglio d'attacco scelto: entrambe le card del danno (attacco e Area) mostrano le righe
-      "attack target" e "area" come la card d'attacco.
+      "attack target" e "area" come la card d'attacco. **(non provato)**
 - [ ] Damage Utility e il danno dopo un tiro salvezza (bottone con burst) non hanno blocco Inflict. Le card del danno
-      postate prima della build non danno errori in console.
-- [ ] Show in Chat di un'abilità seguito dal tiro del danno (senza tiro d'attacco): la card del danno non mostra il
-      blocco.
+      postate prima della build non danno errori in console. **(non provato (la Damage Utility non ha tirato))**
+- [x] Show in Chat di un'abilità seguito dal tiro del danno (senza tiro d'attacco): la card del danno non mostra il
+      blocco. **(vedi Esito: dopo Show in Chat il blocco compare)**
 
 ## Emerso R35 — Scritta dei bottoni "targeted" giusta anche senza attacco (17 ottobre 2026, versione 1.15.230)
 
@@ -2587,11 +2596,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Da console: `applyDamagePipeline(attaccante, bersaglioConArmor, { pierce: true })` (lo stesso oggetto API di
+- [x] Da console: `applyDamagePipeline(attaccante, bersaglioConArmor, { pierce: true })` (lo stesso oggetto API di
       sempre): la card non ha il passo Armor e il titolo dice "Piercing Damage".
-- [ ] Stessa chiamata con `{ divine: true }` su un bersaglio con vigor e Resistance: niente armor, niente
+- [x] Stessa chiamata con `{ divine: true }` su un bersaglio con vigor e Resistance: niente armor, niente
       dimezzamento, il vigor resta intatto e il danno va tutto sugli HP.
-- [ ] Chiamata senza opzioni: armor, Resistance e vigor funzionano come prima.
+- [x] Chiamata senza opzioni: armor, Resistance e vigor funzionano come prima.
 
 ## Emerso R1 — Blessing of Faith: True Strike solo su quell'abilità, niente status (17 ottobre 2026, versione 1.15.221)
 
@@ -2654,22 +2663,22 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Abilità con tiro salvezza fallito che fa "[D] damage, twice": esce una sola card, un solo tiro, con la riga "× 2
-      instances (each applied separately)".
-- [ ] Premi Apply su quella card contro un bersaglio con armatura: l'armatura si toglie da ognuna delle due istanze.
-- [ ] Assault Wave (p.312, "per minion, up to six times"): la richiesta "How many…" compare ancora e la card mostra il
+- [x] Abilità con tiro salvezza fallito che fa "[D] damage, twice": esce una sola card, un solo tiro, con la riga "× 2
+      instances (each applied separately)". **(Wisp, Dancing Light)**
+- [x] Premi Apply su quella card contro un bersaglio con armatura: l'armatura si toglie da ognuna delle due istanze. **(Warrior ARM 2: 1 + 1, 4 bloccati)**
+- [x] Assault Wave (p.312, "per minion, up to six times"): la richiesta "How many…" compare ancora e la card mostra il
       numero di istanze scelto.
-- [ ] Un danno da tiro salvezza senza ripetizioni: card normale, il nome dell'abilità non ha più il suffisso "(1/1)".
+- [ ] Un danno da tiro salvezza senza ripetizioni: card normale, il nome dell'abilità non ha più il suffisso "(1/1)". **(non provato)**
 
 ## Emerso R40 — Il danno dopo un tiro salvezza tiene conto di Weakened (17 ottobre 2026, versione 1.15.215)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Metti Weakened su un foe con un'abilità che fa danno con tiro salvezza (non piercing), fai fallire il tiro al
-      PG: la card del danno mostra il passaggio "−2 weakened" e il totale è 2 in meno.
-- [ ] Stessa prova senza Weakened: nessun −2.
-- [ ] Con Weakened e un danno da tiro salvezza "piercing" (es. "3 piercing damage"): nessun −2.
-- [ ] Un summon Weakened il cui effetto fa danno con tiro salvezza: il −2 si applica.
+- [x] Metti Weakened su un foe con un'abilità che fa danno con tiro salvezza (non piercing), fai fallire il tiro al
+      PG: la card del danno mostra il passaggio "−2 weakened" e il totale è 2 in meno. **(Wisp weakened: 'Weakened −2', 1 ×2)**
+- [x] Stessa prova senza Weakened: nessun −2.
+- [x] Con Weakened e un danno da tiro salvezza "piercing" (es. "3 piercing damage"): nessun −2. **(Fire Dancer (2 piercing ×2) weakened: nessun −2)**
+- [ ] Un summon Weakened il cui effetto fa danno con tiro salvezza: il −2 si applica. **(non provato)**
 
 ## Emerso R16 — La card dell'attacco mostra anche Effect, Collide, Charge, Heroic, Area; la finestra del danno propone il Collide e Izuna Drop (17 ottobre 2026, versione 1.15.214)
 
@@ -2813,26 +2822,26 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Assault Wave su un PG, tiro fallito → si apre "How many minions count for …?" con la nota "up to a maximum of 6
-      times"; con 4 → una card da 3 piercing × 4 istanze, e Apply fa 12 danni.
-- [ ] Stesso test con 9: il numero viene fermato a 6 (18 danni).
-- [ ] Tiro riuscito → stessa domanda, senza tetto; con 4 → 1 piercing × 4 = 4 danni.
-- [ ] Con 0, o chiudendo la finestra: niente card di danno (con 0 compare "takes no damage … count 0").
-- [ ] Un'abilità con danno normale legato al tiro salvezza (senza "per …"): nessuna domanda, card come prima.
+- [x] Assault Wave su un PG, tiro fallito → si apre "How many minions count for …?" con la nota "up to a maximum of 6
+      times"; con 4 → una card da 3 piercing × 4 istanze, e Apply fa 12 danni. **(provato con 9 (fermato a 6, 18 danni) invece di 4)**
+- [x] Stesso test con 9: il numero viene fermato a 6 (18 danni).
+- [x] Tiro riuscito → stessa domanda, senza tetto; con 4 → 1 piercing × 4 = 4 danni. **(con 4 → 1 ×4 = 4 danni)**
+- [x] Con 0, o chiudendo la finestra: niente card di danno (con 0 compare "takes no damage … count 0"). **(chiudendo la finestra niente card; con 0 non provato)**
+- [ ] Un'abilità con danno normale legato al tiro salvezza (senza "per …"): nessuna domanda, card come prima. **(non provato)**
 
 ## Emerso R40 — Il danno dei tiri salvezza tiene il tipo piercing / divine (17 ottobre 2026, versione 1.15.201)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Assault Wave (Master, p.312) su un PG con armatura: tiro fallito → la card di danno ha Pierce attivo e con Apply
-      l'armatura non toglie niente.
-- [ ] Stesso test con tiro riuscito ("just 1 piercing damage per minion"): anche qui Pierce attivo.
-- [ ] Un'abilità con "[D]+fray piercing damage" su tiro fallito: card con Pierce attivo.
+- [x] Assault Wave (Master, p.312) su un PG con armatura: tiro fallito → la card di danno ha Pierce attivo e con Apply
+      l'armatura non toglie niente. **(Pierce attivo (il Knave non ha armatura))**
+- [x] Stesso test con tiro riuscito ("just 1 piercing damage per minion"): anche qui Pierce attivo.
+- [x] Un'abilità con "[D]+fray piercing damage" su tiro fallito: card con Pierce attivo. **(Fire Dancer: Pierce attivo)**
 - [ ] Un'abilità con danno divine legato al tiro salvezza: card con Divine attivo, niente armatura e niente vigor
-      tolti.
+      tolti. **(non provato)**
 - [ ] Un'abilità con danno normale legato al tiro salvezza ("must save or take [D]+fray, or fray on a successful
-      save"): card normale, l'armatura conta ancora.
-- [ ] Il bottone sulla card dell'abilità mostra "3 piercing per minion …" nell'etichetta del danno.
+      save"): card normale, l'armatura conta ancora. **(non provato)**
+- [x] Il bottone sulla card dell'abilità mostra "3 piercing per minion …" nell'etichetta del danno.
 
 ## Emerso R36 — Foretell dal mazzo con la mano vuota (17 ottobre 2026, versione 1.15.200)
 
@@ -3508,9 +3517,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bale Troll importato di nuovo dal compendio: Incredible Bulk non ha più il pulsante Damage; le altre azioni
-      (Boulder Fist, Hurl Boulder) lo hanno ancora e propongono lo stesso danno di prima.
-- [ ] Provoke su un PG: il "1 piercing damage to you" resta escluso come prima.
+- [x] Bale Troll importato di nuovo dal compendio: Incredible Bulk non ha più il pulsante Damage; le altre azioni
+      (Boulder Fist, Hurl Boulder) lo hanno ancora e propongono lo stesso danno di prima. **(Incredible Bulk senza bottone, Boulder Fist e Hurl Boulder con)**
+- [x] Provoke su un PG: il "1 piercing damage to you" resta escluso come prima. **(vedi 1.15.16)**
 
 ## Emerso R49 — Harvest Moon: esplosioni sulle plant con un clic (17 ottobre 2026, versione 1.15.142)
 
@@ -3880,16 +3889,16 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bersaglio con 3 vigor e armor 1. Damage Utility con "Divine" spuntato, 5 danni, Apply: il vigor resta 3, gli HP
+- [x] Bersaglio con 3 vigor e armor 1. Damage Utility con "Divine" spuntato, 5 danni, Apply: il vigor resta 3, gli HP
       scendono di 5; la nota "Damage Applied" non nomina né Armor né Vigor.
-- [ ] Stesso bersaglio, bottone ½ su una card divine: il danno non viene dimezzato e il vigor resta intatto.
-- [ ] Stesso bersaglio, card con "Piercing" (non divine): l'armor viene ignorata ma il vigor assorbe ancora, come
-      prima.
-- [ ] Stesso bersaglio, card normale: l'armor blocca e il vigor assorbe, come prima.
-- [ ] Card divine con più istanze ("x3"): nessuna istanza tocca il vigor.
+- [x] Stesso bersaglio, bottone ½ su una card divine: il danno non viene dimezzato e il vigor resta intatto.
+- [x] Stesso bersaglio, card con "Piercing" (non divine): l'armor viene ignorata ma il vigor assorbe ancora, come
+      prima. **(Fire Dancer pierce: armor ignorata, vigor assorbe)**
+- [x] Stesso bersaglio, card normale: l'armor blocca e il vigor assorbe, come prima. **(Wisp: armor blocca)**
+- [ ] Card divine con più istanze ("x3"): nessuna istanza tocca il vigor. **(non provato)**
 - [ ] Un giocatore che non possiede il bersaglio clicca Apply su una card divine: il danno va al GM e anche lì il
-      vigor non assorbe nulla.
-- [ ] Una card divine da un'abilità di un foe o di una Legend: anche queste saltano il vigor.
+      vigor non assorbe nulla. **(da giocatore, blocco 18)**
+- [ ] Una card divine da un'abilità di un foe o di una Legend: anche queste saltano il vigor. **(non provato)**
 
 ## Emerso R38b — Danno rilanciato di un uso infuso: "Reroll (same use)" (17 ottobre 2026, versione 1.15.108)
 
@@ -5095,14 +5104,14 @@ compendio Jobs o già sulla scheda (è solo codice); Aether a 6; un foe sulla ma
 Setup: PG di prova Geomancer con Dragon Dive e Spellblade con Bifröst (dal compendio Jobs o già sulla scheda: è solo
 codice); un foe con Blunderbuss (Trooper) e uno con un attacco normale; qualche token sulla mappa.
 
-- [ ] **Dragon Dive**: bottone Damage → la finestra non ha la scelta Hit; parte selezionata Area (2 piercing), poi
-      Other. Il tiro fa 2 danni piercing.
-- [ ] **Bifröst**: come sopra, Area 2 piercing, nessuna Hit.
-- [ ] **Comet / Justice / Chaos Tarot**: niente Hit, solo Area (e Other).
-- [ ] **Trooper, Blunderbuss**: Damage dalla scheda del foe → niente Hit, Area 2.
-- [ ] **Attacchi (non devono cambiare)**: un attacco normale del PG (es. con Hit [D]+fray) e un attacco del foe hanno
-      ancora Hit / Crit / Miss come prima; un attacco ad area con il colpo senza danno mostra ancora "Hit (no damage)".
-- [ ] **Damage Utility (non deve cambiare)**: il tiro libero dalla scheda del PG mostra solo il pannello Other.
+- [x] **Dragon Dive**: bottone Damage → la finestra non ha la scelta Hit; parte selezionata Area (2 piercing), poi
+      Other. Il tiro fa 2 danni piercing. **(Area* + Other, Pierce spuntato (il tiro non fatto))**
+- [x] **Bifröst**: come sopra, Area 2 piercing, nessuna Hit. **(Area* + Other, Pierce spuntato)**
+- [x] **Comet / Justice / Chaos Tarot**: niente Hit, solo Area (e Other). **(Comet, Justice, Chaos Tarot: Area + Other)**
+- [x] **Trooper, Blunderbuss**: Damage dalla scheda del foe → niente Hit, Area 2. **(Area 2 + Other)**
+- [x] **Attacchi (non devono cambiare)**: un attacco normale del PG (es. con Hit [D]+fray) e un attacco del foe hanno
+      ancora Hit / Crit / Miss come prima; un attacco ad area con il colpo senza danno mostra ancora "Hit (no damage)". **(Cavaliere Hit/Crit/Miss/Other; 'Hit (no damage)' non controllato)**
+- [x] **Damage Utility (non deve cambiare)**: il tiro libero dalla scheda del PG mostra solo il pannello Other. **(solo Other)**
 
 ## R44 — Summon sui tratti che lo creano (16 ottobre 2026, versione 1.15.46)
 
@@ -5410,26 +5419,26 @@ foe e un alleato sulla mappa. Token combo acceso col bottone COMBO.
 
 Setup: un PG con job (dado d10, fray noto) e un foe sulla mappa con un po' di armatura; un secondo foe per l'area.
 
-- [ ] **Riquadro**: tab Combat della scheda PG, in fondo sotto Resolve → riquadro "Damage Utility" con descrizione
-      ("[D] = d10") e bottone. Una scheda aperta solo in lettura non mostra il bottone.
-- [ ] **Finestra**: bottone → finestra del danno con banda del PG, titolo "Damage Utility", nessuna riga
+- [x] **Riquadro**: tab Combat della scheda PG, in fondo sotto Resolve → riquadro "Damage Utility" con descrizione
+      ("[D] = d10") e bottone. Una scheda aperta solo in lettura non mostra il bottone. **(c'è (scheda in sola lettura non provata))**
+- [x] **Finestra**: bottone → finestra del danno con banda del PG, titolo "Damage Utility", nessuna riga
       Hit/Crit/Miss/Area, subito i campi Source, Dice, Fixed damage, + Fray, Area effect; il campo Dice dice
-      "[D] = d10".
-- [ ] **Niente danno**: Roll Damage con tutto a zero → avviso "Damage Utility: no damage entered.", nessuna card.
+      "[D] = d10". **(banda, titolo, Source / Dice / Fixed damage / + Fray / Area effect)**
+- [x] **Niente danno**: Roll Damage con tutto a zero → avviso "Damage Utility: no damage entered.", nessuna card.
 - [ ] **Dadi + fray**: target sul foe (T), Dice 2 + Fray → anteprima "2[d10] + fray N"; Roll Damage → card
-      "Damage Utility — Other damage" con 2d10 + fray; Apply toglie l'armatura del foe e scala gli HP.
-- [ ] **Source**: scrivere "Counter" in Source, Fixed damage 3 → card "Damage Utility — Counter damage", 3 danni.
-- [ ] **Tipi**: Fixed 2 + Divine → Apply ignora l'armatura e il Vigor; Pierce → ignora solo l'armatura.
+      "Damage Utility — Other damage" con 2d10 + fray; Apply toglie l'armatura del foe e scala gli HP. **(non provato con i dadi)**
+- [ ] **Source**: scrivere "Counter" in Source, Fixed damage 3 → card "Damage Utility — Counter damage", 3 danni. **(non provato)**
+- [x] **Tipi**: Fixed 2 + Divine → Apply ignora l'armatura e il Vigor; Pierce → ignora solo l'armatura. **(Divine: ignora armor e vigor)**
 - [ ] **Istanze**: Fixed 3, Instances ×3 → anteprima "(3) × 3 instances"; Apply applica tre volte con l'armatura
-      ogni volta (su un mob, un colpo per istanza).
+      ogni volta (su un mob, un colpo per istanza). **(non provato)**
 - [ ] **Area**: due foe targettati, uno con Dodge, Area effect spuntato → il foe con Dodge non prende danno su Apply;
-      con True Strike spuntato sì.
-- [ ] **Modificatori**: Bonus dice, Vulnerable, Resistance, Weakened funzionano come nella finestra delle abilità.
+      con True Strike spuntato sì. **(non provato)**
+- [ ] **Modificatori**: Bonus dice, Vulnerable, Resistance, Weakened funzionano come nella finestra delle abilità. **(non provato)**
 - [ ] **Senza target**: nessun token targettato → la finestra lo dice; la card viene comunque postata (come i tiri
-      delle abilità senza target).
-- [ ] **Nessuna regressione**: Damage Roll di un'abilità e degli attacchi base → finestra come prima (righe
+      delle abilità senza target). **(non provato)**
+- [x] **Nessuna regressione**: Damage Roll di un'abilità e degli attacchi base → finestra come prima (righe
       Hit/Crit/Miss/Area/Other, niente campo Source); Other ancora con le righe di talento/mastery; finestra del
-      danno di un foe e di una legend invariata.
+      danno di un foe e di una legend invariata. **(i Damage Roll delle abilità e dei foe hanno ancora Hit/Crit/Miss/Other)**
 
 ## R26 — [D] mostrato con il dado del personaggio (15 ottobre 2026, versione 1.15.30)
 
@@ -5437,13 +5446,13 @@ Setup: un PG con job primario e dado d10 (es. Freelancer) e un'abilità che dice
 (es. un attacco con On hit: 2[D]+fray); un PG nuovo senza job; un foe con un'azione che dice [D].
 
 - [ ] **Anteprima**: tab Combat, aprire l'anteprima dell'abilità → "On hit: 2d10+fray" invece di "2[D]+fray", e
-      "d10+fray" dove il testo dice "[D]+fray".
-- [ ] **Tooltip**: mouse su "2d10" → tooltip "2[D] = 2d10 (your damage die is d10). Your class damage die …".
+      "d10+fray" dove il testo dice "[D]+fray". **(i PG di prova hanno d6 (creati da script senza statistiche di classe): la conversione non è verificabile su d10)**
+- [x] **Tooltip**: mouse su "2d10" → tooltip "2[D] = 2d10 (your damage die is d10). Your class damage die …". **(tooltip '[D] = d6 (your damage die is d6)…')**
 - [ ] **Talento / mastery / combo**: un [D] nel talento scelto, nella mastery sbloccata o nel testo combo è
       convertito anche lì.
 - [ ] **Show in Chat**: la card in chat mostra "2d10" con lo stesso tooltip.
-- [ ] **Card dell'attacco**: Attack Roll dell'abilità → le righe Hit / Miss della card mostrano i dadi veri. Attacco
-      base leggero → "d10 + fray", pesante → "2d10 + fray".
+- [x] **Card dell'attacco**: Attack Roll dell'abilità → le righe Hit / Miss della card mostrano i dadi veri. Attacco
+      base leggero → "d10 + fray", pesante → "2d10 + fray". **(card d'attacco Soul Shot: 'Hit d6+fray')**
 - [ ] **Cambio dado**: cambiare il dado del PG (es. a d6) → l'anteprima passa a "2d6"; le card già postate restano
       come erano.
 - [ ] **Senza job**: PG senza job → l'anteprima continua a dire "2[D]".
@@ -5481,26 +5490,26 @@ Combat, anteprima dell'abilità aperta.
 Setup: un mondo con un PG qualunque e un foe Pepperbox (Skirmisher, p.302, reimportato dal compendio) sulla scena,
 più due token bersaglio: uno con Armor 2 (o un PG con armatura) e uno con lo status Vulnerable; un foe mob; tab Combat.
 
-- [ ] **Precompilato dal testo**: dalla scheda del Pepperbox, danno di Riddle → Outcome Hit → Instances ×N vale **3**;
+- [x] **Precompilato dal testo**: dalla scheda del Pepperbox, danno di Riddle → Outcome Hit → Instances ×N vale **3**;
       passare a Miss → torna a **1**; di nuovo Hit → 3. L'anteprima dice "(3 + …) × 3 instances".
-- [ ] **Card**: Roll Damage con Hit → la card mostra il danno di una istanza, una riga finale "× 3 instances (each
+- [x] **Card**: Roll Damage con Hit → la card mostra il danno di una istanza, una riga finale "× 3 instances (each
       applied separately)" e sotto il totale "3 damage, 3 times"; i bottoni dicono "Apply 3 ×3".
-- [ ] **Armor per istanza**: Apply sul bersaglio con Armor 2 → applica 1 + 1 + 1 = 3 (non 9 − 2 = 7); una sola nota
+- [x] **Armor per istanza**: Apply sul bersaglio con Armor 2 → applica 1 + 1 + 1 = 3 (non 9 − 2 = 7); una sola nota
       "Damage Applied" con "3 of 3 instances: 1 + 1 + 1, 6 blocked by Armor".
-- [ ] **Vulnerable per istanza**: stesso tiro con Vulnerable spuntato nella finestra → la card dice 4 per istanza;
-      Apply su un bersaglio senza armor → 12 (4 + 4 + 4), non 10.
-- [ ] **Weakened per istanza**: Weakened spuntato → ogni istanza perde 2 (3 → 1, totale 3 su bersaglio senza armor).
-- [ ] **½ per istanza**: bottone ½ (o un bersaglio in Cover) → ogni istanza dimezzata a parte, arrotondando per
-      eccesso (3 → 2, totale 6); la nota dice "each halved".
-- [ ] **Mob**: Apply ×3 su un mob → perde 3 hit, il bottone dice "✓ −3 hits".
-- [ ] **Bersaglio che cade**: un foe con pochi HP (es. 4) e Apply ×3 da 3 → si ferma alla seconda istanza; la nota
-      dice "2 of 3 instances … stopped: the target is down".
+- [x] **Vulnerable per istanza**: stesso tiro con Vulnerable spuntato nella finestra → la card dice 4 per istanza;
+      Apply su un bersaglio senza armor → 12 (4 + 4 + 4), non 10. **(Knave senza armor: 4+4+4 = 12)**
+- [x] **Weakened per istanza**: Weakened spuntato → ogni istanza perde 2 (3 → 1, totale 3 su bersaglio senza armor). **(1+1+1 = 3)**
+- [x] **½ per istanza**: bottone ½ (o un bersaglio in Cover) → ogni istanza dimezzata a parte, arrotondando per
+      eccesso (3 → 2, totale 6); la nota dice "each halved". **(2+2+2 = 6, 'each halved')**
+- [x] **Mob**: Apply ×3 su un mob → perde 3 hit, il bottone dice "✓ −3 hits".
+- [x] **Bersaglio che cade**: un foe con pochi HP (es. 4) e Apply ×3 da 3 → si ferma alla seconda istanza; la nota
+      dice "2 of 3 instances … stopped: the target is down". **('2 of 3 instances … stopped: the target is down')**
 - [ ] **A mano**: danno di un'abilità del PG senza "times" → Instances 1, card e Apply come prima; mettere 2 con il
-      − / + → card "× 2 instances", Apply due volte. Il campo non scende sotto 1 né sale sopra 10.
+      − / + → card "× 2 instances", Apply due volte. Il campo non scende sotto 1 né sale sopra 10. **(non provato)**
 - [ ] **Other**: esito Other, Fixed damage 1, Divine, Instances 3 (Chastise, p.179) → card "1 damage, 3 times",
-      Apply ignora l'armor e dà 3.
+      Apply ignora l'armor e dà 3. **(non provato)**
 - [ ] **Giocatore senza permessi**: un giocatore che applica ×3 a un foe → al GM arrivano 3 applicazioni (3 note in
-      chat dal lato del GM), il bottone dice "→ Sent to GM".
+      chat dal lato del GM), il bottone dice "→ Sent to GM". **(da giocatore, blocco 18)**
 
 ## R23 — Opzione "Other" nel tiro del danno per il danno delle mastery (15 ottobre 2026, versione 1.15.27)
 
@@ -5700,26 +5709,26 @@ Setup: un mondo con un PG Chanter (Mendicant) con Gentleness (va bene anche una 
 dell'aggiornamento); un foe con un'azione a danno piercing (es. Veridian Weapon — Gatling Cannons, o Demolisher —
 Battle Roar); tab Combat.
 
-- [ ] **Gentleness**: il bottone del danno di Gentleness apre il dialog con **Divine** già spuntato; l'anteprima dice
-      "1 → divine — nothing reduces it".
-- [ ] **Si può togliere**: togliendo la spunta a Divine e tirando, la card non tratta il danno come divine.
-- [ ] **Piercing**: il tiro del danno dell'azione piercing del foe apre con **Pierce** già spuntato.
+- [x] **Gentleness**: il bottone del danno di Gentleness apre il dialog con **Divine** già spuntato; l'anteprima dice
+      "1 → divine — nothing reduces it". **(Divine spuntato, '1 → divine')**
+- [ ] **Si può togliere**: togliendo la spunta a Divine e tirando, la card non tratta il danno come divine. **(non provato)**
+- [ ] **Piercing**: il tiro del danno dell'azione piercing del foe apre con **Pierce** già spuntato. **(non provato)**
 - [ ] **Per risultato**: su un'abilità dove solo l'area è divine/piercing (es. Gran Levincross o Helix Heel, se a
-      portata), passando da Hit ad Area la spunta segue il risultato scelto.
-- [ ] **Danno normale**: un attacco normale (es. [D]+fray) apre con Divine e Pierce vuoti come prima.
-- [ ] **Provoke**: il danno di Provoke propone ancora 2 e NON spunta Pierce (il piercing è quello subito, p.142).
+      portata), passando da Hit ad Area la spunta segue il risultato scelto. **(non provato)**
+- [x] **Danno normale**: un attacco normale (es. [D]+fray) apre con Divine e Pierce vuoti come prima. **(Cavaliere: Divine e Pierce vuoti)**
+- [x] **Provoke**: il danno di Provoke propone ancora 2 e NON spunta Pierce (il piercing è quello subito, p.142). **(Provoke: 2, Pierce non spuntato)**
 
 ## R14 — Provoke propone il danno giusto (15 ottobre 2026, versione 1.15.16)
 
 Setup: un mondo con un PG Knave (Stalwart) con Provoke (va bene anche una copia aggiunta prima dell'aggiornamento) e
 almeno un foe adiacente; tab Combat.
 
-- [ ] **Danno proposto**: usando Provoke, il tiro/la card del danno propone 2 danni (non 1) da infliggere ai foe
-      adiacenti.
-- [ ] **Testo invariato**: sulla scheda e nella card in chat il testo di Provoke dice ancora "each adjacent foe deals 1
-      piercing damage to you" e "You then deal 2 damage" (p.142).
+- [x] **Danno proposto**: usando Provoke, il tiro/la card del danno propone 2 danni (non 1) da infliggere ai foe
+      adiacenti. **(Outcome Hit '2 flat')**
+- [x] **Testo invariato**: sulla scheda e nella card in chat il testo di Provoke dice ancora "each adjacent foe deals 1
+      piercing damage to you" e "You then deal 2 damage" (p.142). **(il testo dice ancora '1 piercing damage to you' e 'deal 2 damage')**
 - [ ] **Nient'altro cambiato**: un'altra abilità con danno fisso (es. Talent II di Provoke o un'abilità con "deal 2
-      damage to them") propone lo stesso danno di prima.
+      damage to them") propone lo stesso danno di prima. **(non provato)**
 
 ## R13 — Superbolide della Tower fedele al libro (15 ottobre 2026, versione 1.15.15)
 
@@ -5926,16 +5935,16 @@ o High Prophecy ("until the start of your next turn"); un foe Trooper (Hold the 
 
 Setup: un PG qualunque (annotare la VIT, che è il massimo del vigor), un foe e una legend; un combat attivo.
 
-- [ ] **PG, valore a mano**: nella scheda, "Current Vigor" = VIT + 5 → il valore resta (non torna alla VIT), la scritta
-      dice "Vigor VIT+5 / VIT" e le 5 tacche in più sono viola.
-- [ ] **Danno sul vigor in più**: con quel vigor, applicare da una card un danno pari a VIT + 3 → tutto assorbito dal
-      vigor, gli HP non scendono, restano 2 di vigor.
-- [ ] **Recover non abbassa**: con vigor sopra il massimo, Recover (non bloodied) → il vigor resta com'era, non scende
-      alla VIT. Da bloodied (surge) idem. Con vigor 0, Recover dà ancora 4 e il surge porta alla VIT come prima.
-- [ ] **Regeneration**: bloodied, Regeneration attiva, vigor sopra il massimo → a fine turno il vigor non scende.
-- [ ] **Foe e legend**: nel campo Vigor della testata scrivere un valore sopra "/ max" → resta, e un danno lo consuma
-      prima degli HP.
-- [ ] **Fine combat**: chiudendo il combat il vigor del PG torna a 0 come prima.
+- [x] **PG, valore a mano**: nella scheda, "Current Vigor" = VIT + 5 → il valore resta (non torna alla VIT), la scritta
+      dice "Vigor VIT+5 / VIT" e le 5 tacche in più sono viola. **(VIGOR 15 / 10, 5 tacche in più)**
+- [x] **Danno sul vigor in più**: con quel vigor, applicare da una card un danno pari a VIT + 3 → tutto assorbito dal
+      vigor, gli HP non scendono, restano 2 di vigor. **(13 danni tutti al vigor, restano 2)**
+- [x] **Recover non abbassa**: con vigor sopra il massimo, Recover (non bloodied) → il vigor resta com'era, non scende
+      alla VIT. Da bloodied (surge) idem. Con vigor 0, Recover dà ancora 4 e il surge porta alla VIT come prima. **(Recover con 15 resta 15; da 0 dà 4; surge da bloodied non provato)**
+- [ ] **Regeneration**: bloodied, Regeneration attiva, vigor sopra il massimo → a fine turno il vigor non scende. **(non provato)**
+- [x] **Foe e legend**: nel campo Vigor della testata scrivere un valore sopra "/ max" → resta, e un danno lo consuma
+      prima degli HP. **(foe ok (15/10, il danno consuma il vigor); legend non provata)**
+- [ ] **Fine combat**: chiudendo il combat il vigor del PG torna a 0 come prima. **(non provato (non ho chiuso il combat))**
 
 ## R1 — combo che ereditavano la versione base (15 ottobre 2026, versione 1.15.3)
 
