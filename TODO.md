@@ -35,6 +35,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [ ] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1. S.
 - [ ] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
       escono come slug grezzi senza spiegazione; sui foe le spiegazioni della 1.15.122 ci sono. S.
+- [ ] **P9** — scheda di un'abilità / tratto: il menu Chapter non mostra il valore salvato (chiavi "2" contro il
+      numero 2 in `icon-eq`), quindi ogni salvataggio riporta il capitolo 2 o 3 a 1. Controllare anche le copie già
+      rovinate nei mondi. S.
+- [ ] **P10** — Sow con REAP armato: il bottone dice "✦ Auto-Hit" ma apre il tiro d'attacco vero; l'anteprima usa
+      `isAutoHit` della versione base invece della combo. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.

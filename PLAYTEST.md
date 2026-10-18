@@ -760,8 +760,19 @@ Da compilare durante il playtest.
 - **1.15.100, settima casella — Showdown non porta le 2 istanze.** Damage di Showdown (Freelancer): Hit "2 flat" con
   Instances 1. Il testo dice "they take 2 unerring damage from you twice" e il test si aspetta "Showdown 2 ×2".
   (Warding Bolts: Hit 2 flat, come previsto.)
+- **1.15.14, quinta casella — salvare la scheda di un'abilità riporta il capitolo a 1.** Eclipse e Raging Wolf
+  (capitolo 2): aperta la scheda dell'item e salvata senza cambiare niente, il capitolo diventa 1. Il menu
+  "Chapter" non mostra mai il valore salvato: in `IconItemSheet.mjs` `chapterChoices` ha chiavi di testo ("2")
+  e `icon-eq` in `item-main.hbs` le confronta in modo stretto col numero salvato (2), quindi resta selezionata la
+  prima opzione. Vale per tutte le abilità e i tratti di capitolo 2 e 3, a ogni salvataggio della loro scheda.
+- **1.15.120, prima casella — con REAP armato il bottone di Sow dice ancora "✦ Auto-Hit".** Il tiro è giusto (si
+  apre la finestra d'attacco vera di Reap), sbaglia solo la scritta: l'anteprima usa `parsed.isAutoHit` della
+  versione base invece di quella della combo (`IconSheet.mjs`, riga 527 circa).
 
 ### Dubbi
+
+- **1.15.10, quinta casella**: il test si aspetta il tooltip su "pit" nel testo di Massive Overhead, ma "pit" non è
+  tra le keyword del testo (`helpers/keywords.mjs`); c'è solo come tag. Da decidere se aggiungerla.
 
 - **1.15.157, seconda casella**: un foe accanto a un Underway riceve il suggerimento generico "Cover? object" (il
   portale è un oggetto alto 1). Il libro dice solo che i portali non danno obstruction (p.168), non parla di
@@ -3146,12 +3157,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Foe con un summon che ha un elenco "•" nelle regole: trascinare il chip sulla mappa, aprire la scheda del Summon
-      → ogni punto dell'elenco sta sulla sua riga, come sulla scheda del foe.
+- [x] Foe con un summon che ha un elenco "•" nelle regole: trascinare il chip sulla mappa, aprire la scheda del Summon
+      → ogni punto dell'elenco sta sulla sua riga, come sulla scheda del foe. **(Icicle di Deep Snow Aesi: tre righe)**
 - [ ] Un Summon dello stesso tipo trascinato prima di questa versione: riaprendo la scheda, anche lui mostra l'elenco
-      su righe separate.
-- [ ] Il Summon di un PG (da un'abilità) si vede come prima.
-- [ ] Modificare il testo dell'effetto nella textarea della scheda Summon: il testo salvato resta quello scritto (con
+      su righe separate. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] Il Summon di un PG (da un'abilità) si vede come prima.
+- [x] Modificare il testo dell'effetto nella textarea della scheda Summon: il testo salvato resta quello scritto (con
       i "•" in fila).
 
 ## Emerso R35 — Usi degli interrupt dei PG sulla scheda, e il bottone chat ne spende uno (17 ottobre 2026, versione 1.15.178)
@@ -3645,15 +3656,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Churn Baron (da compendio): nella sezione Summons & Objects, sotto Crony, Blunderbuss e Arkentech Explosives
+- [x] Churn Baron (da compendio): nella sezione Summons & Objects, sotto Crony, Blunderbuss e Arkentech Explosives
       stanno su due righe con "•" e la frase iniziale resta sopra.
-- [ ] Deep Snow Aesi: Icicle mostra tre righe "•" (2 piercing damage / vulnerable+ / difficult terrain).
-- [ ] Keeper of the Eldflame: Everforge mostra il paragrafo e sotto tre righe "•".
-- [ ] Violence Demon: Blade of Agony mostra due righe con "Blade Slash:" e "Blade consume X:" in grassetto.
-- [ ] Bottone chat su ognuno di questi summon: la card mostra il descrittore in corsivo e poi le stesse righe "•"; i
+- [x] Deep Snow Aesi: Icicle mostra tre righe "•" (2 piercing damage / vulnerable+ / difficult terrain).
+- [x] Keeper of the Eldflame: Everforge mostra il paragrafo e sotto tre righe "•".
+- [x] Violence Demon: Blade of Agony mostra due righe con "Blade Slash:" e "Blade consume X:" in grassetto.
+- [x] Bottone chat su ognuno di questi summon: la card mostra il descrittore in corsivo e poi le stesse righe "•"; i
       tooltip delle parole chiave ci sono ancora.
-- [ ] Un summon senza elenco (es. Bale Troll / Loose Limbs) si vede come prima, su scheda e in chat.
-- [ ] Un Churn Baron già importato in un mondo prima di questa build mostra anche lui le righe.
+- [x] Un summon senza elenco (es. Bale Troll / Loose Limbs) si vede come prima, su scheda e in chat.
+- [ ] Un Churn Baron già importato in un mondo prima di questa build mostra anche lui le righe. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 
 ## Emerso R19 — Painkiller: l'aura di Sweet Torment resta (17 ottobre 2026, versione 1.15.132)
 
@@ -3726,23 +3737,23 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Importare di nuovo dal compendio Imperial Spy: il tratto con Commanding Officer / Orders mostra due righe col
+- [x] Importare di nuovo dal compendio Imperial Spy: il tratto con Commanding Officer / Orders mostra due righe col
       pallino d'oro e il titolo in grassetto, sulla scheda e nella card in chat.
-- [ ] Un foe Relict qualsiasi (es. Arc Spectre): la frase d'apertura del tratto Relict resta normale, poi due voci a
+- [x] Un foe Relict qualsiasi (es. Arc Spectre): la frase d'apertura del tratto Relict resta normale, poi due voci a
       righe.
-- [ ] Warden of the Aeongate, round action Eternal Star: quattro righe (0, 1, 2, 3+) e poi "Phase 2: … Phase 3: …" di
+- [x] Warden of the Aeongate, round action Eternal Star: quattro righe (0, 1, 2, 3+) e poi "Phase 2: … Phase 3: …" di
       nuovo come testo normale.
-- [ ] Head Lopper (legend), God Waster: "Raze Hell:" e "Raze Heaven:" come voci, con le quattro altezze rientrate
+- [x] Head Lopper (legend), God Waster: "Raze Hell:" e "Raze Heaven:" come voci, con le quattro altezze rientrate
       sotto ciascuna.
-- [ ] Silent One, Possess: le tre azioni libere rientrate sotto la seconda voce, poi "A character may save…" di nuovo
+- [x] Silent One, Possess: le tre azioni libere rientrate sotto la seconda voce, poi "A character may save…" di nuovo
       come voce piena.
-- [ ] Rider of the Primal Storm, Static Charge: le quattro voci di "While stuck" rientrate.
-- [ ] Fetid Idol, Manifestations: tre righe (1-2, 3-4, 5-6), poi "Phase 2: …" come testo normale, poi la riga "Pit of
+- [x] Rider of the Primal Storm, Static Charge: le quattro voci di "While stuck" rientrate.
+- [x] Fetid Idol, Manifestations: tre righe (1-2, 3-4, 5-6), poi "Phase 2: …" come testo normale, poi la riga "Pit of
       Sacrifice".
-- [ ] Compendio Foe Abilities: "Cannoneer — Full auto": due voci, poi "They can only exit this stance…" come testo
+- [x] Compendio Foe Abilities: "Cannoneer — Full auto": due voci, poi "They can only exit this stance…" come testo
       normale.
-- [ ] Applicare il template Lowlander a un foe nuovo: il tratto della trappola arriva già a righe.
-- [ ] Un foe già importato prima di questa build resta col vecchio paragrafo unico: è atteso.
+- [x] Applicare il template Lowlander a un foe nuovo: il tratto della trappola arriva già a righe. **(il tratto Suddenly! arriva con una voce per riga)**
+- [ ] Un foe già importato prima di questa build resta col vecchio paragrafo unico: è atteso. **(non verificabile: nessun foe importato prima di questa build)**
 
 ## Emerso R5 — Costo leggibile nei riquadri delle abilità (17 ottobre 2026, versione 1.15.123)
 
@@ -3777,23 +3788,23 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Boiling Blood sulla scheda (copia aggiunta prima di questa versione): il testo di colore finisce con "…before
+- [x] Boiling Blood sulla scheda (copia aggiunta prima di questa versione): il testo di colore finisce con "…before
       expiring." senza "Defy Death —"; il Trigger è "You are defeated."; l'Effect comincia con "Defy Death — You fight
       on, …".
-- [ ] Console al caricamento del mondo: "Migration 36: … copy/copies of Boiling Blood …".
-- [ ] Card in chat di Boiling Blood: testo di colore pulito, Trigger, Effect con il nome, Heroic.
-- [ ] Boiling Blood trascinato di nuovo dal compendio Jobs: stesso testo.
+- [ ] Console al caricamento del mondo: "Migration 36: … copy/copies of Boiling Blood …". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] Card in chat di Boiling Blood: testo di colore pulito, Trigger, Effect con il nome, Heroic.
+- [x] Boiling Blood trascinato di nuovo dal compendio Jobs: stesso testo.
 
 ## Emerso R1 — Reap, la combo di Sow, ha i suoi tag (17 ottobre 2026, versione 1.15.120)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Sow sulla scheda (copia aggiunta prima di questa versione): senza combo token i tag sono Attack, Range 4, Mark,
-      Pierce, Combo; con il combo token armato (REAP) i tag sono Attack, Melee, Combo, senza Range 4, Mark e Pierce.
-- [ ] Console al caricamento del mondo: "Migration 35: … copy/copies of Sow given REAP's own tags".
-- [ ] Sow trascinato di nuovo dal compendio Jobs: con il combo token stessi tag (Attack, Melee, Combo).
-- [ ] Sow con Spectral Scythe sbloccata e combo armata: il bottone area propone ancora l'Arc 4 dal bersaglio.
-- [ ] Damage Roll di Reap: niente Pierce, quindi l'armatura del bersaglio conta.
+- [x] Sow sulla scheda (copia aggiunta prima di questa versione): senza combo token i tag sono Attack, Range 4, Mark,
+      Pierce, Combo; con il combo token armato (REAP) i tag sono Attack, Melee, Combo, senza Range 4, Mark e Pierce. **(con REAP armato: Attack, Melee, Combo. Senza combo c'è anche il tag Autohit (lo aggiunge il sistema da "Auto hit"). Con REAP il bottone dice ancora "✦ Auto-Hit" ma apre il tiro d'attacco vero (bug P10))**
+- [ ] Console al caricamento del mondo: "Migration 35: … copy/copies of Sow given REAP's own tags". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] Sow trascinato di nuovo dal compendio Jobs: con il combo token stessi tag (Attack, Melee, Combo).
+- [x] Sow con Spectral Scythe sbloccata e combo armata: il bottone area propone ancora l'Arc 4 dal bersaglio. **(bottone Arc 4 con Spectral Scythe e combo armata)**
+- [x] Damage Roll di Reap: niente Pierce, quindi l'armatura del bersaglio conta.
 
 ## Emerso R49 — Commento corretto in pitBlastCells (17 ottobre 2026, versione 1.15.119)
 
@@ -4135,14 +4146,14 @@ Setup: solo codice (F5 basta).
 
 Setup: pack jobs cambiato (copia con Foundry chiuso), poi apri il mondo: la migrazione 34 parte da sola.
 
-- [ ] Compendio Jobs → Split Heaven and Hell: "depending on their distance on the line from you:" e, in Divine Delay,
+- [x] Compendio Jobs → Split Heaven and Hell: "depending on their distance on the line from you:" e, in Divine Delay,
       "increase the width of the line by 1 space, to a maximum of 3 width, and its length by 3 spaces" (p.127).
-- [ ] Compendio Jobs → Lycanthropy: secondo punto "abilities, summons, or actions (including this one!) may be
+- [x] Compendio Jobs → Lycanthropy: secondo punto "abilities, summons, or actions (including this one!) may be
       increased by +1, and grant phasing while moving" (p.168).
-- [ ] Template Demon Slayer e Warden: il Limit Break mostra lo stesso testo corretto.
+- [ ] Template Demon Slayer e Warden: il Limit Break mostra lo stesso testo corretto. **(template dei job non aperti)**
 - [ ] Mondo con un PG Knight/Demon Slayer o Warden creato prima: dopo l'aggiornamento il suo Limit Break dice le frasi
       nuove; in console "Migration 34: N limit break(s) …". Un Limit Break modificato a mano senza le frasi vecchie
-      resta com'è.
+      resta com'è. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 
 ## Emerso R49 — I pit esplodono dall'area: Holy Talent I e Purgatorio (17 ottobre 2026, versione 1.15.93)
 
@@ -4224,14 +4235,14 @@ Setup: solo codice (F5 basta).
 
 Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 33 (parte da sola al caricamento del mondo, da GM).
 
-- [ ] **Compendio**: Jobs → Aethershard (Enochian) → il Summon Effect dice "…the ability resonates with the shards,
+- [x] **Compendio**: Jobs → Aethershard (Enochian) → il Summon Effect dice "…the ability resonates with the shards,
       dealing 2 piercing damage as an area effect, once, to all characters in the area for every one of your
       Aethershards caught in the same ability. Then destroy all Aethershards activated this way and gain 1 Aether."
 - [ ] **Copia già sulla scheda**: un PG Enochian che aveva Aethershard prima dell'aggiornamento → dopo il caricamento
-      del mondo (console: "Migration 33: N copy/copies of Aethershard…") la scheda mostra lo stesso testo.
+      del mondo (console: "Migration 33: N copy/copies of Aethershard…") la scheda mostra lo stesso testo. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 - [ ] **Shard presi da un'area**: piazzare un Aethershard, poi un'area di un'altra abilità che lo include → il dialog
       "Aethershard caught" chiede ancora "Deal 2 piercing damage × 1 = 2 … and gain 1 Aether"; su Resonate lo shard
-      sparisce, l'Aether sale di 1 e parte la card del danno.
+      sparisce, l'Aether sale di 1 e parte la card del danno. **(non rifatto qui (provato nel blocco 1))**
 
 ## Emerso R41 — Show in Chat delle azioni foe / legend divide le righe di un'area (17 ottobre 2026, versione 1.15.88)
 
@@ -4253,11 +4264,11 @@ Setup: solo codice (F5 basta).
 
 Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 32 (parte da sola al caricamento del mondo, da GM).
 
-- [ ] **Compendio**: Jobs → Helix Heel (Geomancer) → il secondo Effect dice "…you can keep extending the line by 3
+- [x] **Compendio**: Jobs → Helix Heel (Geomancer) → il secondo Effect dice "…you can keep extending the line by 3
       spaces this way each time, but can only extend it once per object."
 - [ ] **Copia già sulla scheda**: un PG Geomancer che aveva Helix Heel prima dell'aggiornamento → dopo il caricamento
       del mondo (console: "Migration 32: N copy/copies of Helix Heel…") la scheda mostra lo stesso testo. Il resto
-      dell'abilità (Effect iniziale, bottone line 3, Charge) è invariato.
+      dell'abilità (Effect iniziale, bottone line 3, Charge) è invariato. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 
 ## Emerso R41 — Card Auto-hit e Show in Chat sanno chi è il bersaglio d'attacco di un'area (17 ottobre 2026, versione 1.15.86)
 
@@ -4400,18 +4411,18 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs). Tre PG che hanno gi
 Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy (Warden).
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 31: 3 limit
-      break(s) now match the book…" (più le copie nella sidebar, se ce ne sono).
-- [ ] **Split Heaven and Hell** (p.127): pannello del Limit Break → sotto "Sever Divine Thread" le tre distanze sono
+      break(s) now match the book…" (più le copie nella sidebar, se ce ne sono). **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Split Heaven and Hell** (p.127): pannello del Limit Break → sotto "Sever Divine Thread" le tre distanze sono
       tre righe rientrate con "◦" ("1 space: 100% of max hp", "2-4 spaces: 50% of max hp", "5+ spaces: 25% of max hp"),
       poi "Divine Cancel" e "Divine Delay" tornano a filo come opzioni "•"; "Legend characters…" è un paragrafo sotto.
-      Uguale nella card "Use Limit Break" e nella sheet dell'item.
-- [ ] **Paradiso** (p.155): il blocco **Aura:** dice "You gain an aura of supernatural accuracy, charging your weapons
+      Uguale nella card "Use Limit Break" e nella sheet dell'item. **(scheda e scheda dell'item; card Use Limit Break non provata)**
+- [x] **Paradiso** (p.155): il blocco **Aura:** dice "You gain an aura of supernatural accuracy, charging your weapons
       and the weapons of your allies with aether."; "You gain Aura 2 until the end of your next turn…" è il paragrafo
-      sotto. Il bottone area propone ancora Aura 2.
-- [ ] **Lycanthropy** (p.168): il testo di colore finisce con "…pours into you, granting you massively increased speed
+      sotto. Il bottone area propone ancora Aura 2. **(blocco Aura giusto; bottone area non provato)**
+- [x] **Lycanthropy** (p.168): il testo di colore finisce con "…pours into you, granting you massively increased speed
       and power."; i tre "•" del dash restano righe come prima.
-- [ ] **Copia nuova**: trascina il job Demon Slayer (o il Limit Break) dal compendio Jobs su un PG nuovo → stesso testo.
-- [ ] **Altri elenchi invariati**: Eclipse, Raging Wolf, March of the Saints mostrano le righe "•" come prima.
+- [x] **Copia nuova**: trascina il job Demon Slayer (o il Limit Break) dal compendio Jobs su un PG nuovo → stesso testo.
+- [x] **Altri elenchi invariati**: Eclipse, Raging Wolf, March of the Saints mostrano le righe "•" come prima.
 
 ## R64 — Infuse più economico: Conqueror's Edge e Inner Furnace (17 ottobre 2026, versione 1.15.76)
 
@@ -4463,13 +4474,13 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Fool di c
 scheda da prima di questa versione.
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 30: "power-die"
-      tag removed from … copy/copies of Chronotemper".
-- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Chronotemper: tra i tag c'è solo "Mark", niente "Power Die";
+      tag removed from … copy/copies of Chronotemper". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Scheda, copia vecchia**: tab Combat, pannello di Chronotemper: tra i tag c'è solo "Mark", niente "Power Die";
       nessun contatore di dado comparso o sparito.
-- [ ] **Copia nuova dal compendio**: trascina Chronotemper dal compendio Jobs su un PG → solo il tag "Mark".
-- [ ] **Chat**: 💬 Show in Chat → la card mostra solo "Mark"; il mark e l'interrupt Cheat Time funzionano come prima.
+- [x] **Copia nuova dal compendio**: trascina Chronotemper dal compendio Jobs su un PG → solo il tag "Mark".
+- [ ] **Chat**: 💬 Show in Chat → la card mostra solo "Mark"; il mark e l'interrupt Cheat Time funzionano come prima. **(card non guardata; mark e Cheat Time non provati)**
 - [ ] **Altre abilità con power die invariate**: un'abilità che usa davvero un power die (es. una con contatore sulla
-      scheda) ha ancora il tag "Power Die" e il suo contatore.
+      scheda) ha ancora il tag "Power Die" e il suo contatore. **(non provato)**
 
 ## R47b — Sturmreiten Talent II, seconda Line 3 (17 ottobre 2026, versione 1.15.73)
 
@@ -4500,19 +4511,19 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Sealer di
 sulla scheda da prima di questa versione, e un PG Sealer nuovo.
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 29: … Open the
-      Gates given the "Special:" in front of both versions".
-- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Open the Gates: sotto il corsivo, prima riga **Special** ("This
+      Gates given the "Special:" in front of both versions". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Scheda, copia vecchia**: tab Combat, pannello di Open the Gates: sotto il corsivo, prima riga **Special** ("This
       attack gains +1 boon, cannot miss…"), poi Effect (Teleport 1), Hit, Miss, Exceed. Dopo l'Exceed non c'è più niente
       (a parte talenti / mastery / combo).
-- [ ] **Copia nuova dal compendio**: trascina Open the Gates dal compendio Jobs su un PG → stessi blocchi, stesso ordine.
-- [ ] **Chat, versione base**: 💬 Show in Chat → la card ha lo stesso ordine (Special in cima).
-- [ ] **Chat, versione combo**: con un combo token, arma la combo e Show in Chat → la card di Center the Temple ha in cima
+- [x] **Copia nuova dal compendio**: trascina Open the Gates dal compendio Jobs su un PG → stessi blocchi, stesso ordine.
+- [x] **Chat, versione base**: 💬 Show in Chat → la card ha lo stesso ordine (Special in cima).
+- [x] **Chat, versione combo**: con un combo token, arma la combo e Show in Chat → la card di Center the Temple ha in cima
       lo Special, poi Effect (Teleport spaces equal to the round number…), Hit, Miss, Exceed della combo; niente
       "Teleport 1" né "pacified" della base.
-- [ ] **Attacco**: il tiro d'attacco e il danno di entrambe le versioni funzionano come prima.
-- [ ] **Altre combo invariate**: God Hand / Devil Hand e Reap con la combo armata → card come prima (nessun blocco della
-      base in più).
-- [ ] **Raging Wolf invariato**: Special, Comeback, Heroic, Special come prima.
+- [ ] **Attacco**: il tiro d'attacco e il danno di entrambe le versioni funzionano come prima. **(aperta solo la finestra del danno, tiri non fatti)**
+- [x] **Altre combo invariate**: God Hand / Devil Hand e Reap con la combo armata → card come prima (nessun blocco della
+      base in più). **(Reap con la combo: tag Attack, Melee, Combo; God Hand / Devil Hand non provati)**
+- [x] **Raging Wolf invariato**: Special, Comeback, Heroic, Special come prima.
 
 ## R33d — Segni che seguono un personaggio (16 ottobre 2026, versione 1.15.71)
 
@@ -4811,10 +4822,10 @@ Prima di provare: in un mondo con schema vecchio (ultimo deploy 1.15.2), un PG c
 Death Sentence preso **prima** dell'aggiornamento. Solo JS: F5 dopo il deploy.
 
 - [ ] **Migrazione 25**: al caricamento (GM) la console dice "Migration 25" con un numero > 0; il Limit Break del PG
-      ora ha "Effect:" e i capoversi come nel compendio (test R39 più sotto).
+      ora ha "Effect:" e i capoversi come nel compendio (test R39 più sotto). **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 - [ ] **Regain di Aether Deflection**: rifai i test R59 su Aether Deflection: il bottone "Regain (2 Aether)" compare
-      sul tratto, è spento con meno di 2 Aether e, premuto, toglie 2 Aether e scrive in chat.
-- [ ] **Stormlash** (controllo che non si sia rotto niente): Infuse 1 di Tsunami speso subito, senza restare armato.
+      sul tratto, è spento con meno di 2 Aether e, premuto, toglie 2 Aether e scrive in chat. **(non rifatto qui)**
+- [ ] **Stormlash** (controllo che non si sia rotto niente): Infuse 1 di Tsunami speso subito, senza restare armato. **(non rifatto qui)**
 
 ## R62 — Promemoria "round N or later" a inizio round (16 ottobre 2026, versione 1.15.63)
 
@@ -4963,14 +4974,14 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Geomancer
 prima di questa versione, e un PG Geomancer nuovo.
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 28: … Helix Heel
-      given the p.219 "Effect:" label".
-- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Helix Heel: niente riga in corsivo; tre blocchi Effect ("Release
+      given the p.219 "Effect:" label". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Scheda, copia vecchia**: tab Combat, pannello di Helix Heel: niente riga in corsivo; tre blocchi Effect ("Release
       a shockwave in a line 3 area effect, dealing 2 piercing damage to all foes.", "If an object is in the end space…",
       "Then, all objects this line passed through resonate…"), poi Charge. "line 3", "piercing" ecc. hanno il tooltip.
-- [ ] **Copia nuova dal compendio**: trascina Helix Heel dal compendio Jobs su un PG → stessi blocchi.
-- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card mostra gli stessi tre Effect, senza corsivo in cima.
-- [ ] **Area e danno**: il bottone area piazza una Line 3 come prima; il tiro del danno propone 2 piercing damage.
-- [ ] **Massive Overhead invariato**: apre ancora con Effect ("End your turn…"), come dopo R8.
+- [x] **Copia nuova dal compendio**: trascina Helix Heel dal compendio Jobs su un PG → stessi blocchi.
+- [x] **Chat**: 💬 Show in Chat / uso dell'abilità → la card mostra gli stessi tre Effect, senza corsivo in cima.
+- [x] **Area e danno**: il bottone area piazza una Line 3 come prima; il tiro del danno propone 2 piercing damage. **(Line 3; il danno propone 2 flat con pierce)**
+- [x] **Massive Overhead invariato**: apre ancora con Effect ("End your turn…"), come dopo R8.
 
 ## R54 — Eye of the Storm: Special, Area, Effect (16 ottobre 2026, versione 1.15.55)
 
@@ -4978,16 +4989,16 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbend
 Storm sulla scheda da prima di questa versione, e un PG Stormbender nuovo.
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 27: … Eye of
-      the Storm given the p.236 Special / Area / Effect blocks".
-- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Eye of the Storm: in corsivo solo "A storm of vigorous thunder
+      the Storm given the p.236 Special / Area / Effect blocks". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Scheda, copia vecchia**: tab Combat, pannello di Eye of the Storm: in corsivo solo "A storm of vigorous thunder
       … the center remains calm."; poi Special ("This attack has no attack space. Instead, the attack space is clear
       and exempt from this area."), poi Area ("[D]"), poi Effect ("If an ally is in the center space, they may fly 4
       …"), poi Infuse 3: AEONCLOUD. Nell'Effect le parole chiave (es. "vulnerable") hanno il tooltip.
-- [ ] **Copia nuova dal compendio**: trascina Eye of the Storm dal compendio Jobs su un PG → stesso ordine e stesse
+- [x] **Copia nuova dal compendio**: trascina Eye of the Storm dal compendio Jobs su un PG → stesso ordine e stesse
       etichette.
-- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Special → Area → Effect → Infuse 3.
-- [ ] **Danno**: tiro del danno dell'area → [D] come prima; con Infuse 3 (Aeoncloud) → [D]+fray e large blast.
-- [ ] **Altre abilità invariate**: Heave-Ho (Effect prima dell'Area) e Comet (Area prima dell'Effect) come prima.
+- [x] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Special → Area → Effect → Infuse 3.
+- [x] **Danno**: tiro del danno dell'area → [D] come prima; con Infuse 3 (Aeoncloud) → [D]+fray e large blast. **(Area [D]; Infuse 3 (Aeoncloud) non provato senza Aether)**
+- [x] **Altre abilità invariate**: Heave-Ho (Effect prima dell'Area) e Comet (Area prima dell'Effect) come prima.
 
 ## R53 — Heave-Ho: l'Effect prima dell'Area (16 ottobre 2026, versione 1.15.54)
 
@@ -4995,13 +5006,13 @@ Setup: deploy con Foundry chiuso (cambia il compendio Jobs), poi un PG Stormbend
 prima di questa versione, e un PG Stormbender nuovo.
 
 - [ ] **Migrazione**: all'apertura del mondo (GM) compare l'avviso di migrazione; in console "Migration 26: … Heave-Ho
-      now show Effect before Area".
-- [ ] **Scheda, copia vecchia**: tab Combat, pannello di Heave-Ho: Trigger in alto, poi Effect ("After the triggering
+      now show Effect before Area". **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Scheda, copia vecchia**: tab Combat, pannello di Heave-Ho: Trigger in alto, poi Effect ("After the triggering
       ability resolves, create a crashing wave …"), poi Area ("Characters caught in the area are shoved 1 …"), poi
       Collide ("Summon a salt sprite").
-- [ ] **Copia nuova dal compendio**: trascina Heave-Ho dal compendio Jobs su un PG → stesso ordine.
-- [ ] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Effect → Area → Collide.
-- [ ] **Altre abilità invariate**: Comet (Area prima dell'Effect, p.128) e Draken Cross come prima.
+- [x] **Copia nuova dal compendio**: trascina Heave-Ho dal compendio Jobs su un PG → stesso ordine.
+- [x] **Chat**: 💬 Show in Chat / uso dell'abilità → la card ha lo stesso ordine Effect → Area → Collide.
+- [x] **Altre abilità invariate**: Comet (Area prima dell'Effect, p.128) e Draken Cross come prima.
 
 ## R51 — Stack Dice: il secondo dado al capitolo 3 (16 ottobre 2026, versione 1.15.53)
 
@@ -5236,26 +5247,26 @@ Setup: PG di prova; uno alla volta i Limit Break dal compendio Jobs (trascinati 
 primario). Per la migrazione: un mondo con un PG che aveva già Gigaflare o March of the Saints prima
 dell'aggiornamento.
 
-- [ ] **Gigaflare**: tab Combat → riquadro Limit Break → sotto il nome una riga "Divine, Unerring, True Strike" a sé;
+- [x] **Gigaflare**: tab Combat → riquadro Limit Break → sotto il nome una riga "Divine, Unerring, True Strike" a sé;
       poi "**Effect:** You summon the eldflame…" (con [D] mostrato col dado del PG) e, a capo, "**Infuse 6:
-      TETRAFLARE** Deal … twice instead.". Nessun "Divine, Unerring, True Strike." in testa all'effetto.
-- [ ] **Helion / Mock**: la descrizione in corsivo sopra; due paragrafi "**Effect:**" separati (Helion), "**Effect:**"
+      TETRAFLARE** Deal … twice instead.". Nessun "Divine, Unerring, True Strike." in testa all'effetto. **(dalla scheda dell'item (sul PG di prova si vede solo il Limit Break del job primario))**
+- [x] **Helion / Mock**: la descrizione in corsivo sopra; due paragrafi "**Effect:**" separati (Helion), "**Effect:**"
       e "**Special:**" (Mock).
-- [ ] **Elenchi**: Lycanthropy e Split Heaven and Hell mostrano le voci "•" una per riga; March of the Saints mostra
+- [x] **Elenchi**: Lycanthropy e Split Heaven and Hell mostrano le voci "•" una per riga; March of the Saints mostra
       Stance, Refresh e poi i quattro santi (Parzival, Leon, Angrboda, Farnese) uno per riga col nome in grassetto;
-      Elemental mostra "Effect:", "While you are an Elemental:" e tre voci.
+      Elemental mostra "Effect:", "While you are an Elemental:" e tre voci. **(Lycanthropy, Split Heaven and Hell, March of the Saints sì; Elemental non guardato)**
 - [ ] **Altri blocchi**: Passage to the Afterlife ha "Attack:", "Exceed:", "Effect:" su righe diverse; High Prophecy e
       Paradiso "Aura:"; Death Sentence "Summon:", la riga "Severed Soul — Size 1…", "Summon Effect:" e l'ultima
-      riga; Curtain Call ha la tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; Cataclysm due "Effect:" e "Gain Delay:".
+      riga; Curtain Call ha la tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; Cataclysm due "Effect:" e "Gain Delay:". **(Passage, High Prophecy e Paradiso giusti; Death Sentence, Curtain Call e Cataclysm non guardati)**
 - [ ] **Card in chat**: "Use Limit Break" su Gigaflare → la card ha la stessa impaginazione del riquadro (tag, Effect,
-      Infuse); con Tetraflare armato c'è ancora la riga dell'infusione sotto.
-- [ ] **Scheda oggetto**: aprendo Gigaflare dal compendio (e il job template Enochian, sezione Limit Break) l'Effect è
+      Infuse); con Tetraflare armato c'è ancora la riga dell'infusione sotto. **(non provato)**
+- [x] **Scheda oggetto**: aprendo Gigaflare dal compendio (e il job template Enochian, sezione Limit Break) l'Effect è
       impaginato allo stesso modo.
 - [ ] **Migrazione 25**: nel mondo con un Gigaflare / March of the Saints già sulla scheda, al primo avvio da GM la
-      console dice "Migration 25: N limit break(s)…" e la scheda mostra le nuove righe.
+      console dice "Migration 25: N limit break(s)…" e la scheda mostra le nuove righe. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 - [ ] **Nulla cambiato nei numeri**: Damage Roll di Gigaflare, Gran Levincross e Cataclysm propone gli stessi danni di
       prima (Cataclysm: Hit [D]+fray, Other le esplosioni e 2[D]+fray); i bottoni area (Cataclysm "Area", Death
-      Sentence "Line 4", Elemental "Aura 2") e Infuse funzionano come prima.
+      Sentence "Line 4", Elemental "Aura 2") e Infuse funzionano come prima. **(non provato)**
 
 ## R38b — Versioni Infuse dei Limit Break (16 ottobre 2026, versione 1.15.39)
 
@@ -5757,12 +5768,12 @@ Setup: un mondo con un PG Seer (Mendicant) con The Tower aggiunta PRIMA dell'agg
 un'altra copia trascinata dal compendio Jobs DOPO; tab Combat.
 
 - [ ] **Migrazione**: al primo avvio dopo l'aggiornamento, in console (F12) compare "Migration 24: … The Tower's
-      mastery …" e la copia vecchia ha lo stesso testo di quella nuova.
-- [ ] **Testo della mastery**: sulla scheda, nella card in chat (Show in Chat) e nella scheda dell'abilità la mastery
+      mastery …" e la copia vecchia ha lo stesso testo di quella nuova. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Testo della mastery**: sulla scheda, nella card in chat (Show in Chat) e nella scheda dell'abilità la mastery
       Superbolide dice "…they take double damage from Eclipse's meteor effect, and the effect also ignores
-      defiance." (come a p.203).
-- [ ] **Nient'altro cambiato**: Talent I e II, Attack, Area Effect e Terrain effect di The Tower sono come prima;
-      usando l'abilità il danno proposto e lo status sealed sono gli stessi di prima.
+      defiance." (come a p.203). **(scheda e card con la mastery sbloccata)**
+- [x] **Nient'altro cambiato**: Talent I e II, Attack, Area Effect e Terrain effect di The Tower sono come prima;
+      usando l'abilità il danno proposto e lo status sealed sono gli stessi di prima. **(blocchi Hit > Area > Terrain Effect; danno non tirato)**
 
 ## R12 — Eclipse e Raging Wolf con gli elenchi a righe (15 ottobre 2026, versione 1.15.14)
 
@@ -5770,43 +5781,43 @@ Setup: un mondo con un PG Seer (Mendicant) con Eclipse e un PG Colossus (Stalwar
 dell'aggiornamento (per la migrazione 23) e altre due copie trascinate dal compendio Jobs DOPO; tab Combat.
 
 - [ ] **Migrazione**: al primo avvio dopo l'aggiornamento, in console (F12) compare "Migration 23: … Eclipse / Raging
-      Wolf …" e le copie vecchie hanno lo stesso aspetto di quelle nuove.
-- [ ] **Eclipse, anteprima sulla scheda**: nel blocco "End your turn and create a Terrain Effect" dopo "…standing in
+      Wolf …" e le copie vecchie hanno lo stesso aspetto di quelle nuove. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Eclipse, anteprima sulla scheda**: nel blocco "End your turn and create a Terrain Effect" dopo "…standing in
       that space:" ci sono due righe con il pallino in oro ("If there is, …" e "If there isn't, …"), poi "Then, end
       the effect." a capo, come testo normale e non dentro l'ultima riga.
-- [ ] **Raging Wolf, anteprima sulla scheda**: ordine Special (no effect if not bloodied) → Comeback → Heroic →
+- [x] **Raging Wolf, anteprima sulla scheda**: ordine Special (no effect if not bloodied) → Comeback → Heroic →
       Special (defeated); nel Comeback, dopo "…takes place in order.", tre righe con "Bloodied:", "25% or lower:",
       "1 hp or lower:" in grassetto.
-- [ ] **Show in Chat**: le card delle due abilità mostrano gli stessi elenchi a righe, senza paragrafi vuoti.
-- [ ] **Scheda dell'abilità** (doppio clic): la descrizione di Eclipse e il campo Comeback di Raging Wolf sono a
-      righe; aprendo la modifica il testo ha una voce per riga, e salvando senza cambiare niente resta uguale.
-- [ ] **Già a capo prima**: il Limit Break Lycanthropy (Warden) e Split Heaven and Hell (Demon Slayer) ora mostrano le
+- [x] **Show in Chat**: le card delle due abilità mostrano gli stessi elenchi a righe, senza paragrafi vuoti.
+- [x] **Scheda dell'abilità** (doppio clic): la descrizione di Eclipse e il campo Comeback di Raging Wolf sono a
+      righe; aprendo la modifica il testo ha una voce per riga, e salvando senza cambiare niente resta uguale. **(righe giuste e testo invariato dopo il salvataggio, MA il salvataggio riporta il capitolo da 2 a 1 (bug P9))**
+- [x] **Già a capo prima**: il Limit Break Lycanthropy (Warden) e Split Heaven and Hell (Demon Slayer) ora mostrano le
       loro voci "•" una per riga.
-- [ ] **Nessun cambiamento altrove**: un foe con "•" scritti in linea (es. Imperial Spy, Relict) e un'abilità senza
+- [x] **Nessun cambiamento altrove**: un foe con "•" scritti in linea (es. Imperial Spy, Relict) e un'abilità senza
       elenco restano come prima; i tooltip delle keyword (sealed, slashed, shove, dangerous terrain) funzionano
-      dentro le righe.
-- [ ] **Automazioni**: usando Raging Wolf e Eclipse gli status proposti (slashed, sealed) sono gli stessi di prima.
+      dentro le righe. **(Imperial Spy e Relict ora sono a righe, come vuole la 1.15.124)**
+- [x] **Automazioni**: usando Raging Wolf e Eclipse gli status proposti (slashed, sealed) sono gli stessi di prima. **(Raging Wolf propone slashed; Eclipse non usata)**
 
 ## R11 — Tabelle 1-6 una riga per risultato (15 ottobre 2026, versione 1.15.13)
 
 Setup: un mondo con un PG Chanter (Mendicant) con Monogatari e un PG Seer con Chaos Tarot (anche copie già sulle
 schede prima dell'aggiornamento); tab Combat. Un foe Troll (o Hag / Shopkeep / Diviner) sulla scena.
 
-- [ ] **Monogatari, anteprima sulla scheda**: nel blocco Effect, dopo "…once per song.", i sei racconti sono su sei
+- [x] **Monogatari, anteprima sulla scheda**: nel blocco Effect, dopo "…once per song.", i sei racconti sono su sei
       righe, numero 1-6 in oro a sinistra, "A Tale of Fury:" ecc. in grassetto; il Charge resta sotto, separato.
-- [ ] **Chaos Tarot, anteprima sulla scheda**: l'Area Effect mostra "Gamble, then apply the listed effect in the
+- [x] **Chaos Tarot, anteprima sulla scheda**: l'Area Effect mostra "Gamble, then apply the listed effect in the
       area." e poi sei righe (Card explodes… / teleported 2 / difficult terrain / Bless / Seal / Choose two); la riga
       2 finisce con "teleported 2." senza perdere il numero.
 - [ ] **Copie già sulle schede**: stesso aspetto anche per le abilità aggiunte prima dell'aggiornamento (nessuna
-      migrazione: è solo la resa).
-- [ ] **Show in Chat**: nelle card delle due abilità la tabella è a righe, senza paragrafi vuoti o testo spostato
-      fuori dal blocco.
-- [ ] **Scheda dell'abilità** (doppio clic su Monogatari): la descrizione mostra la tabella a righe.
-- [ ] **Foe**: l'azione Strange Brew del Troll (e Rummage dello Shopkeep: "1 · 10 foot pole:", "2 · Lantern:") è a
-      righe sulla scheda del foe e nella card in chat.
+      migrazione: è solo la resa). **(non guardate a parte (stessa resa, solo codice))**
+- [x] **Show in Chat**: nelle card delle due abilità la tabella è a righe, senza paragrafi vuoti o testo spostato
+      fuori dal blocco. **(card con gli stessi blocchi della scheda)**
+- [x] **Scheda dell'abilità** (doppio clic su Monogatari): la descrizione mostra la tabella a righe.
+- [x] **Foe**: l'azione Strange Brew del Troll (e Rummage dello Shopkeep: "1 · 10 foot pole:", "2 · Lantern:") è a
+      righe sulla scheda del foe e nella card in chat. **(Strange Brew e Rummage a 6 righe nella card in chat; sulla scheda del foe (in modifica) sono caselle di testo)**
 - [ ] **Nessun falso positivo**: abilità con numeri nel testo ma senza tabella (es. "Gain aura 1. … shove 2") restano
-      testo normale.
-- [ ] **Tooltip delle keyword** (es. "Bless", "Seal", "teleported", "difficult terrain") ancora attivi dentro le righe.
+      testo normale. **(non provato)**
+- [x] **Tooltip delle keyword** (es. "Bless", "Seal", "teleported", "difficult terrain") ancora attivi dentro le righe.
 
 ## R10 — Sleight of Hand e Chaos Tarot senza il Wild Card ripetuto (15 ottobre 2026, versione 1.15.12)
 
@@ -5814,17 +5825,17 @@ Setup: un mondo con un PG Seer (Mendicant) che aveva già Sleight of Hand e Chao
 un PG a cui si aggiungono ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
 
 - [ ] **Migrazione**: in console compare "Migration 22: … copy/copies of Sleight of Hand / Chaos Tarot …" (solo se
-      c'erano copie vecchie); riaprendo il mondo non ricompare.
-- [ ] **Sleight of Hand, anteprima sulla scheda**: dopo il testo di colore ci sono Attack (auto-hit), "Effect: Your
+      c'erano copie vecchie); riaprendo il mondo non ricompare. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Sleight of Hand, anteprima sulla scheda**: dopo il testo di colore ci sono Attack (auto-hit), "Effect: Your
       foe is pacified.", Area Effect e "Effect: Summon a wild card in range 2 of your foe.", poi talenti e mastery
       (King of Swords). Niente "Wild Card — Size 1, intangible" né "Summon Effect: The card emits…".
-- [ ] **Chaos Tarot, anteprima sulla scheda**: Area Effect con la tabella del gamble (1-6), poi "Summon: Then, summon
+- [x] **Chaos Tarot, anteprima sulla scheda**: Area Effect con la tabella del gamble (1-6), poi "Summon: Then, summon
       a wild card in the area." e basta; niente "When a wild card is summoned, it can be summoned in range 2…" né il
       blocco del Wild Card. Talenti e mastery (Royalty Gold) invariati.
-- [ ] **Copia nuova dal compendio**: stesso aspetto delle copie migrate, anche nella scheda dell'abilità (doppio clic).
-- [ ] **Show in Chat**: le card delle due abilità mostrano gli stessi blocchi, senza il testo del Wild Card.
-- [ ] **Wild Card ancora raggiungibile**: nel pannello di entrambe le abilità c'è ancora il Wild Card da piazzare;
-      aprendo l'attore (compendio Summons) si leggono il Summon Effect e le due note (p.200).
+- [x] **Copia nuova dal compendio**: stesso aspetto delle copie migrate, anche nella scheda dell'abilità (doppio clic).
+- [x] **Show in Chat**: le card delle due abilità mostrano gli stessi blocchi, senza il testo del Wild Card.
+- [x] **Wild Card ancora raggiungibile**: nel pannello di entrambe le abilità c'è ancora il Wild Card da piazzare;
+      aprendo l'attore (compendio Summons) si leggono il Summon Effect e le due note (p.200). **(chip Wild Card presente su entrambe; l'attore del compendio Summons non riaperto)**
 
 ## R9 — Fairy Ring: il trigger di Spirit Away al suo posto (15 ottobre 2026, versione 1.15.11)
 
@@ -5832,20 +5843,20 @@ Setup: un mondo con un PG che aveva già Fairy Ring (Harvester, Mendicant) prima
 la si aggiunge ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
 
 - [ ] **Migrazione**: in console compare "Migration 21: … copy/copies of Fairy Ring …" (solo se c'erano copie
-      vecchie); riaprendo il mondo non ricompare.
-- [ ] **Anteprima sulla scheda**: niente "Trigger:" in cima; dopo il testo di colore c'è il blocco "Terrain Effect"
+      vecchie); riaprendo il mondo non ricompare. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Anteprima sulla scheda**: niente "Trigger:" in cima; dopo il testo di colore c'è il blocco "Terrain Effect"
       che finisce con "The ring lasts until this ability is used again." (senza "Spirit Away —" in fondo), poi un
       blocco intitolato "Spirit Away — Interrupt 2" con "Trigger: A foe enters or exits the area.", poi "Effect:
       Teleport that foe 2 and seal them…", talenti e mastery.
-- [ ] **Tooltip**: passando sull'intestazione "Spirit Away — Interrupt 2" compare la spiegazione degli Interrupt
+- [x] **Tooltip**: passando sull'intestazione "Spirit Away — Interrupt 2" compare la spiegazione degli Interrupt
       (usabile 2 volte per round).
-- [ ] **Copia nuova dal compendio**: stesso aspetto della copia migrata; nella scheda dell'abilità (doppio clic) il
-      campo "Interrupt Trigger" è vuoto.
-- [ ] **Show in Chat**: la card mostra gli stessi blocchi, senza "Trigger:" in cima.
-- [ ] **Stesso nome appeso, altre abilità**: Gran Reversa (Stance che finisce con "…gain the following interrupt:",
+- [x] **Copia nuova dal compendio**: stesso aspetto della copia migrata; nella scheda dell'abilità (doppio clic) il
+      campo "Interrupt Trigger" è vuoto. **(il campo interruptTrigger è vuoto (nella scheda il campo non compare))**
+- [x] **Show in Chat**: la card mostra gli stessi blocchi, senza "Trigger:" in cima.
+- [x] **Stesso nome appeso, altre abilità**: Gran Reversa (Stance che finisce con "…gain the following interrupt:",
       poi "Reverse Fate — Interrupt 1") e Drifting Leaf (Effect che finisce con "…until the start of your next
-      turn.", poi "LEAF ON THE WIND — Interrupt 2", e in fondo ancora "Infuse 3 or Slay: PHANTOM BLADE").
-- [ ] **Area di Fairy Ring**: il bottone dell'area piazza ancora il Burst 2 come prima.
+      turn.", poi "LEAF ON THE WIND — Interrupt 2", e in fondo ancora "Infuse 3 or Slay: PHANTOM BLADE"). **(Gran Reversa: Stance > Reverse Fate — Interrupt 1; Drifting Leaf: … > LEAF ON THE WIND — Interrupt 2 > Effect > Infuse 3 or Slay)**
+- [x] **Area di Fairy Ring**: il bottone dell'area piazza ancora il Burst 2 come prima. **(bottone Burst 2 (self); piazzamento non rifatto)**
 
 ## R8 — Massive Overhead: regole fuori dal testo di colore (15 ottobre 2026, versione 1.15.10)
 
@@ -5853,15 +5864,15 @@ Setup: un mondo con un PG che aveva già Massive Overhead (Colossus, Stalwart) p
 a cui la si aggiunge ora dal compendio Jobs; tab Combat. Aprire il mondo da GM con la console (F12) aperta.
 
 - [ ] **Migrazione**: in console compare "Migration 20: … copy/copies of Massive Overhead …" (solo se c'erano copie
-      vecchie); riaprendo il mondo non ricompare.
-- [ ] **Anteprima sulla scheda**: niente frase in corsivo; i blocchi di regole sono "Effect: End your turn. Your next
+      vecchie); riaprendo il mondo non ricompare. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
+- [x] **Anteprima sulla scheda**: niente frase in corsivo; i blocchi di regole sono "Effect: End your turn. Your next
       attack…" e "Special Effect: If your target was already in a pit…", poi Comeback/Heroic, talenti e mastery.
-- [ ] **Copia nuova dal compendio**: stesso aspetto della copia migrata.
-- [ ] **Show in Chat**: la card mostra gli stessi blocchi, senza testo di colore.
-- [ ] **Scheda dell'abilità** (doppio clic): il testo comincia con "Effect:" e le keyword (es. "pit", "exceed") hanno
-      il tooltip.
+- [x] **Copia nuova dal compendio**: stesso aspetto della copia migrata.
+- [x] **Show in Chat**: la card mostra gli stessi blocchi, senza testo di colore.
+- [x] **Scheda dell'abilità** (doppio clic): il testo comincia con "Effect:" e le keyword (es. "pit", "exceed") hanno
+      il tooltip. **(exceed ha il tooltip, "pit" no: pit non è tra le keyword del testo (helpers/keywords.mjs), c'è solo come tag)**
 - [ ] **Copia modificata a mano**: se prima di aggiornare si era cambiato il testo di Massive Overhead su un PG, resta
-      com'era.
+      com'era. **(non verificabile: nessuna copia modificata a mano prima dell'aggiornamento)**
 
 ## R7 — nessun summon di un altro job sulle abilità (15 ottobre 2026, versione 1.15.9)
 
@@ -5880,18 +5891,18 @@ evoca davvero (Apex o Strength of the Pack del Warden, Carnevale del Fool, Sow d
 Setup: un PG con Battering Ram (Valiant, Stalwart), Six Hells Trigram e Revenge (da GM si possono aggiungere da
 compendio), tab Combat.
 
-- [ ] **Battering Ram**: nell'anteprima dell'abilità la frase in corsivo "…send your target flying." non ha più
+- [x] **Battering Ram**: nell'anteprima dell'abilità la frase in corsivo "…send your target flying." non ha più
       "flying" evidenziato né tooltip; più sotto, nell'Effect, "shoved", "Collide", "slashed" hanno ancora il tooltip.
-- [ ] **Six Hells Trigram**: nella frase di colore "summon" non è evidenziato; nei blocchi di regole le keyword
+- [x] **Six Hells Trigram**: nella frase di colore "summon" non è evidenziato; nei blocchi di regole le keyword
       (summon compreso, se c'è) hanno ancora il tooltip.
-- [ ] **Revenge**: "…hands, feet, and armor are ready to retaliate." senza tooltip su "armor".
-- [ ] **Show in Chat**: per le tre abilità la card in chat ha la frase di colore senza keyword evidenziate e i blocchi
+- [x] **Revenge**: "…hands, feet, and armor are ready to retaliate." senza tooltip su "armor".
+- [x] **Show in Chat**: per le tre abilità la card in chat ha la frase di colore senza keyword evidenziate e i blocchi
       di regole con i tooltip come prima.
-- [ ] **Scheda dell'abilità**: aprire Battering Ram dal compendio (o dalla scheda, icona di modifica) → nel riquadro
+- [x] **Scheda dell'abilità**: aprire Battering Ram dal compendio (o dalla scheda, icona di modifica) → nel riquadro
       Description la frase iniziale è senza tooltip, la parte da "Effect:" in poi li ha.
-- [ ] **Abilità senza testo di colore** (che comincia subito con "Effect:"): tooltip come prima su tutto il testo.
+- [x] **Abilità senza testo di colore** (che comincia subito con "Effect:"): tooltip come prima su tutto il testo.
 - [ ] **Abilità con descrizione scritta a mano in HTML** (con paragrafi/grassetti): la scheda dell'abilità la mostra
-      come prima, impaginazione intatta.
+      come prima, impaginazione intatta. **(non provato: nessuna abilità con descrizione HTML scritta a mano a portata)**
 
 ## R5 — tooltip su Sacrifice, sui Blast e sul costo degli interrupt (15 ottobre 2026, versione 1.15.7)
 
