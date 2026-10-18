@@ -441,13 +441,13 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 #### Stalwart — Bastion
 
 - [ ] **Shieldmaster** (tratto Bastion, p.121) — cosa controllare: il bottone "Aura 1" nell'intestazione del tratto piazza un'aura che segue il token [1.15.23]
-- [ ] **Endless Battlement** (Bastion, p.122-123) — cosa controllare: Aura 1 senza domanda, attorno all'alleato bersagliato (avviso oltre range 4, niente avviso con Perfect Battlement); bottone chat di Heroic Intervention e bottone "when targeted" sotto la card d'attacco [1.15.21, 22, 62, 195]
-- [ ] **Rook** (Bastion, p.123) — cosa controllare: Aura 1 dal testo, scelta "Heroic: Aura 2", avviso in chat quando scade, niente bottone "Gain True Strike" [1.15.5, 21, 50, 100, 130]
-- [ ] **Catapult** (Bastion, p.123) — cosa controllare: con la mastery il badge del costo e il riquadro dicono "Interrupt 3", senza tag doppio [1.15.7, 123]
-- [ ] **Perseus** (Bastion, p.123) — cosa controllare: il tag aura senza numero diventa Aura 1 senza domanda [1.15.21]
-- [ ] **Land Waster** (Bastion, p.122) — cosa controllare: scelta "Heroic: Burst 2 (target)", chip del boulder, la Burst 1 non resta sulla mappa, niente "Gain True Strike" [1.15.50, 51, 65, 69, 70, 130]
-- [ ] **Battering Ram** (Bastion, p.122) — cosa controllare: "flying" nel testo in corsivo senza tooltip, le keyword dell'Effect con tooltip [1.15.8]
-- [ ] **Great Giorgios** (Bastion, p.124) — cosa controllare: c'è il bottone Track target [1.15.34]
+- [ ] **Endless Battlement** (Bastion, p.122-123) — cosa controllare: Aura 1 senza domanda, attorno all'alleato bersagliato (avviso oltre range 4, niente avviso con Perfect Battlement); bottone chat di Heroic Intervention e bottone "when targeted" sotto la card d'attacco [1.15.21, 22, 62, 195] **(dalla scheda: bottone Aura 1 e bottone chat di Heroic Intervention ci sono; alleato bersagliato, avvisi e bottone "when targeted" non riprovati qui)**
+- [ ] **Rook** (Bastion, p.123) — cosa controllare: Aura 1 dal testo, scelta "Heroic: Aura 2", avviso in chat quando scade, niente bottone "Gain True Strike" [1.15.5, 21, 50, 100, 130] **(dalla scheda: tag e bottone Aura 1, niente "Gain True Strike"; scelta Heroic Aura 2 e avviso di scadenza non riprovati qui)**
+- [x] **Catapult** (Bastion, p.123) — cosa controllare: con la mastery il badge del costo e il riquadro dicono "Interrupt 3", senza tag doppio [1.15.7, 123] **(con la mastery il badge dice Interrupt 3, nessun tag doppio)**
+- [x] **Perseus** (Bastion, p.123) — cosa controllare: il tag aura senza numero diventa Aura 1 senza domanda [1.15.21] **(tag e bottone Aura 1 (piazzamento non riprovato))**
+- [ ] **Land Waster** (Bastion, p.122) — cosa controllare: scelta "Heroic: Burst 2 (target)", chip del boulder, la Burst 1 non resta sulla mappa, niente "Gain True Strike" [1.15.50, 51, 65, 69, 70, 130] **(dalla scheda: chip Boulder · H1 e bottone Burst 1, niente "Gain True Strike"; scelta Heroic Burst 2 e sparizione della Burst 1 non riprovate qui)**
+- [x] **Battering Ram** (Bastion, p.122) — cosa controllare: "flying" nel testo in corsivo senza tooltip, le keyword dell'Effect con tooltip [1.15.8] **(controllato nel blocco 17)**
+- [x] **Great Giorgios** (Bastion, p.124) — cosa controllare: c'è il bottone Track target [1.15.34] **(bottone Track target presente)**
 
 #### Stalwart — Demon Slayer
 
