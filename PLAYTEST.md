@@ -3938,18 +3938,18 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Colossus con Gigantas Crusher: nel riquadro Limit Break c'è il bottone "% Max HP"; con un PG senza questi
-      Limit Break il bottone non c'è.
-- [ ] Senza bersagli: "% Max HP" mostra l'avviso "Target the characters first".
+- [x] PG Colossus con Gigantas Crusher: nel riquadro Limit Break c'è il bottone "% Max HP"; con un PG senza questi
+      Limit Break il bottone non c'è. **('% Max HP' su Colossus, non sul Knave)**
+- [ ] Senza bersagli: "% Max HP" mostra l'avviso "Target the characters first". **(non provato)**
 - [ ] Gigantas Crusher su un foe da 40 hp massimi: "Failed save" toglie 20, "Successful save" 10. Armatura e vigor non
-      tolgono niente; card di riepilogo e "Damage Applied" corrette.
+      tolgono niente; card di riepilogo e "Damage Applied" corrette. **(non provato)**
 - [ ] Gigantas Crusher su un Legend: le scelte sono "Failed save" (25%) e "Successful save" (divine fray del PG, con
-      la nota "refunds the resolve cost").
+      la nota "refunds the resolve cost"). **(non provato)**
 - [ ] Split Heaven and Hell (Demon Slayer) su tre foe: scelte 1 casella / 2-4 caselle / 5+ caselle (100% / 50% / 25%);
-      su un Legend solo "Legend" al 25%.
-- [ ] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti.
+      su un Legend solo "Legend" al 25%. **(non provato)**
+- [ ] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti. **(non provato)**
 - [ ] Capitolo 3, Gigantas Crusher, PG a 1 hp: la casella Atomos Crusher è già spuntata e il foe prende 75% / 50%; sui
-      Legend la casella non cambia nulla.
+      Legend la casella non cambia nulla. **(non provato)**
 - [ ] Un giocatore senza i permessi sul foe: il danno passa al GM e viene applicato senza toccare il vigor.
 
 ## Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (17 ottobre 2026, versione 1.15.106)
@@ -5300,18 +5300,18 @@ Setup: PG di prova con il token su una scena a griglia quadrata e, uno alla volt
 Setup: PG di prova con, uno alla volta, i Limit Break di Enochian (Gigaflare), Sealer (Passage to the Afterlife),
 Geomancer (Cataclysm), Knave (Mock), Bastion (Helion); un foe targettato sulla mappa.
 
-- [ ] **Gigaflare**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è "Damage Roll". Cliccandolo si
+- [x] **Gigaflare**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è "Damage Roll". Cliccandolo si
       apre la finestra del danno delle abilità con Hit "1[dX] + fray N", Divine, True Strike e Unerring già spuntati,
       Instances 1. Roll Damage → card del danno con il nome "Gigaflare" e il bottone Apply; Apply sul foe ignora
-      l'armatura. La Resolve NON viene spesa dal Damage Roll (solo da "Use Limit Break").
-- [ ] **Passage to the Afterlife**: Hit "[D] + fray" con Instances 3; Miss mostra "[D] + fray" e passa a Instances 1;
+      l'armatura. La Resolve NON viene spesa dal Damage Roll (solo da "Use Limit Break"). **(Hit 1[d6]+fray, Divine / True Strike / Unerring spuntati, Instances 1 (Other offre anche 'METEOR — Special effect 999 flat divine' al capitolo 3); il tiro e la Resolve non provati)**
+- [x] **Passage to the Afterlife**: Hit "[D] + fray" con Instances 3; Miss mostra "[D] + fray" e passa a Instances 1;
       Other offre "Limit Break" per l'Exceed ([D] + fray, Instances 2) e per i "2 additional divine damage" per
-      alleato adiacente (fisso 2, Divine).
-- [ ] **Cataclysm**: Hit "[D] + fray" divine; Other offre l'esplosione ([D] + fray, Area effect spuntato) e i 2[D] +
-      fray per chi è preso da due o più esplosioni.
-- [ ] **Ultimate dal capitolo 3**: con il PG al capitolo 1 o 2, Mock (Knave) non ha il bottone Damage Roll; portato
+      alleato adiacente (fisso 2, Divine). **(Hit Instances 3, Miss [D]+fray; Other 'Limit Break 1[d6]+fray divine ×2' e '2 flat divine')**
+- [x] **Cataclysm**: Hit "[D] + fray" divine; Other offre l'esplosione ([D] + fray, Area effect spuntato) e i 2[D] +
+      fray per chi è preso da due o più esplosioni. **(Hit divine; Other: esplosione [D]+fray area e 2[D]+fray area)**
+- [x] **Ultimate dal capitolo 3**: con il PG al capitolo 1 o 2, Mock (Knave) non ha il bottone Damage Roll; portato
       al capitolo 3 compare, e Other offre "Ultimate" con + fray e Divine (Dread Mock: "also deals divine fray damage").
-      Con Passage to the Afterlife al capitolo 3, Other offre anche "Ultimate" (2 divine, Instances 2).
+      Con Passage to the Afterlife al capitolo 3, Other offre anche "Ultimate" (2 divine, Instances 2). **(capitolo 1 nessun Damage Roll; capitolo 3 Other 'Ultimate fray 4 divine')**
 - [ ] **Senza danno**: Helion, Paradiso, Abyssal Ecstasy, Split Heaven and Hell (danno in % degli hp) non hanno il
       bottone Damage Roll.
 - [ ] **Abilità, Divine automatico**: Gentleness (Chanter, "1 divine damage") → Damage Roll dell'abilità apre con
