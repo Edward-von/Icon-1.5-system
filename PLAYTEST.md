@@ -2534,7 +2534,7 @@ Setup: solo codice (F5 basta).
 - [x] Cancellare il token del boulder: i suoi muri spariscono.
 - [x] "Remove walls" toglie solo i muri di quell'oggetto, non gli altri muri della scena.
 - [x] Piazzare un Underway: sulla sua scheda il bottone "Add walls" non c'è.
-- [ ] Da giocatore, la scheda dell'oggetto non mostra il bottone. **(da giocatore, blocco 18)**
+- [x] Da giocatore, la scheda dell'oggetto non mostra il bottone. **(da giocatore, blocco 18)** **(sulla scheda della Thrown Weapon del giocatore niente Add walls né Make destructible)**
 - [x] Ricaricare la scena (F5) dopo aver tolto un oggetto con muri a mano: i muri orfani spariscono.
 
 ## Emerso R49 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (17 ottobre 2026, versione 1.15.226)
@@ -3891,14 +3891,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Giocatore con Fulminate e Talent I scelto, GM connesso: marcare un foe del GM. La finestra "Aura 2 / Aura 3"
-      compare al giocatore e non al GM; scegliendo Aura 3, attorno al foe compare un'aura 3 che lo segue.
-- [ ] Stesso caso, chiudendo la finestra senza scegliere: compare un'aura 2.
-- [ ] Fulminate senza Talent I, foe del GM: nessuna domanda a nessuno, compare l'aura 2.
-- [ ] Il giocatore marca un personaggio suo, con Talent I: la domanda compare a lui, come prima.
-- [ ] Il GM marca con un Fulminate con Talent I: la domanda compare al GM, come prima.
-- [ ] Aura messa prima col bottone area, poi mark su un foe del GM: nessuna domanda e nessuna seconda aura.
-- [ ] Togliere il mark (la × sul chip): sparisce anche l'aura.
+- [x] Giocatore con Fulminate e Talent I scelto, GM connesso: marcare un foe del GM. La finestra "Aura 2 / Aura 3"
+      compare al giocatore e non al GM; scegliendo Aura 3, attorno al foe compare un'aura 3 che lo segue. **(la finestra Aura 2 / Aura 3 compare al giocatore, non al GM; Aura 3 attorno al Mechanist)**
+- [ ] Stesso caso, chiudendo la finestra senza scegliere: compare un'aura 2. **(non provato)**
+- [ ] Fulminate senza Talent I, foe del GM: nessuna domanda a nessuno, compare l'aura 2. **(non provato)**
+- [ ] Il giocatore marca un personaggio suo, con Talent I: la domanda compare a lui, come prima. **(non provato)**
+- [ ] Il GM marca con un Fulminate con Talent I: la domanda compare al GM, come prima. **(non provato)**
+- [ ] Aura messa prima col bottone area, poi mark su un foe del GM: nessuna domanda e nessuna seconda aura. **(non provato)**
+- [ ] Togliere il mark (la × sul chip): sparisce anche l'aura. **(non provato)**
 
 ## Emerso R37 — Il danno divine salta il vigor anche dalle card (17 ottobre 2026, versione 1.15.109)
 
@@ -4752,8 +4752,8 @@ Nota: il test "Pyroclast / Geyser" di R33a cambia (i chip delle versioni Infuse 
 - [x] **Comet, non attaccare**: piazza "Thrown Weapon · H1" → sulla scheda dell'oggetto riga arancione "… cannot
       attack" e bottone "Pick up". Tira un attacco del Demon Slayer → domanda "you cannot attack": Cancel ferma il tiro,
       "Roll anyway" lo fa. Talent II scelto → riga "Talent II: … adjacent to your weapon gain 2 vigor". **(Cancel e Roll anyway ok sulle abilità; ma l'attacco base (Light Attack) non chiede niente, vedi Esito)**
-- [ ] **Pick up (giocatore)**: il giocatore preme "Pick up" → la scheda si chiude e il GM toglie il token. Di nuovo un
-      attacco → nessuna domanda. Su un Boulder il bottone dice "Remove". **(da giocatore, blocco 18 (il bottone Pick up da GM funziona))**
+- [x] **Pick up (giocatore)**: il giocatore preme "Pick up" → la scheda si chiude e il GM toglie il token. Di nuovo un
+      attacco → nessuna domanda. Su un Boulder il bottone dice "Remove". **(da giocatore, blocco 18 (il bottone Pick up da GM funziona))** **(dal giocatore: la scheda si chiude e il token sparisce)**
 - [x] **Pila che scende**: tre Boulder impilati (elevazione 0 / 1 / 2). Togli (Remove o Canc) quello in basso → gli altri
       due scendono a 0 e 1. Trascina via quello in basso di una pila di due → quello sopra scende a 0; trascinalo sopra
       un altro Boulder → la sua elevazione diventa 1. **(con 1-3 secondi di ritardo)**
@@ -4776,9 +4776,9 @@ Geomancer con Geo, Terraforming e il tratto Stone Double, Warden con Underway, M
       Aura 2 che lo segue). Geo "Boulder · H1", Terraforming "Boulder · H1", Underway "Underway · H1", tratto Stone
       Double "Statue · H1" nella riga del tratto. Fairy Ring senza chip finché la mastery è bloccata; sbloccata → chip
       "Megamushroom · H1".
-- [ ] **Piazzare (giocatore)**: il giocatore trascina "Boulder · H1" sulla mappa → messaggio "sent to the GM", poi il
+- [x] **Piazzare (giocatore)**: il giocatore trascina "Boulder · H1" sulla mappa → messaggio "sent to the GM", poi il
       token "Boulder (height 1)" compare nello spazio del drop, col nome sempre visibile; il giocatore lo può muovere.
-      Nella cartella attori "Map Objects" c'è l'attore Boulder. **(da giocatore, blocco 18)**
+      Nella cartella attori "Map Objects" c'è l'attore Boulder. **(da giocatore, blocco 18)** **('Thrown Weapon sent to the GM to place', poi piazzata (Comet invece del Boulder))**
 - [x] **Scheda dell'oggetto**: doppio clic sul token → badge "Object", "Height 1" con − / +, "Immune"; la sezione "Object
       Rules" mostra il testo da cui viene; niente Speed né Summon Action. + → "Height 2" e il token diventa "Boulder
       (height 2)"; a 3 il + è spento. **(dopo il rimedio al link (vedi Esito))**
