@@ -5209,15 +5209,15 @@ quelli già sulla scheda); tre foe vicini sulla mappa.
 Setup: PG Shade di prova con Umbra e Incubus (vanno bene anche quelli già sulla scheda: è solo codice), un combo
 token; un foe sulla mappa come bersaglio.
 
-- [ ] **Penumbra, Show in Chat**: con la combo di Umbra attiva, Show in Chat → la card si intitola "Penumbra (Umbra
+- [x] **Penumbra, Show in Chat**: con la combo di Umbra attiva, Show in Chat → la card si intitola "Penumbra (Umbra
       combo)" e ha un Effect (col segno della combo) "Teleport your foe up to 3 spaces towards you instead of
       teleporting yourself. A foe can save…" al posto di "You may teleport 3 before the attack"; c'è ancora "Effect:
-      Your foe is blinded." e il bottone Inflict per Blinded. Nessuna riga "Combo — Penumbra" in cima.
+      Your foe is blinded." e il bottone Inflict per Blinded. Nessuna riga "Combo — Penumbra" in cima. **('Penumbra (Umbra combo)' con l'Effect del teleport del foe, 'Your foe is blinded' e Inflict Blind)**
 - [ ] **Penumbra, attacco**: con la combo armata, attacco col bersaglio → la card d'attacco elenca l'Effect di
-      Penumbra; Hit / Miss sono quelli di Umbra.
-- [ ] **Succubus, Show in Chat**: con la combo di Incubus attiva → card "Succubus (Incubus combo)" con "Effect: deal 3
+      Penumbra; Hit / Miss sono quelli di Umbra. **(non provato)**
+- [x] **Succubus, Show in Chat**: con la combo di Incubus attiva → card "Succubus (Incubus combo)" con "Effect: deal 3
       damage to all characters marked by Incubus, and teleport them 2."; il blocco "Mark: Mark your foe…" non c'è,
-      e nemmeno la riga "Combo — Succubus: Instead of the mark, gain…".
+      e nemmeno la riga "Combo — Succubus: Instead of the mark, gain…". **('Succubus (Incubus combo)' con 'Effect: deal 3 damage…')**
 - [ ] **Succubus, niente Mark**: con la combo armata il tag Mark sparisce dai chip e non c'è il bottone Mark;
       disarmando la combo tornano tag, bottone e blocco Mark di Incubus.
 - [ ] **Altre combo invariate**: The Hook (Low Blow) mostra ancora "Combo — The Hook" in cima con la base sotto;
@@ -5967,14 +5967,14 @@ Setup: un PG Mendicant con le abilità combo citate sotto (Chanter, Harvester, S
 Bleak Mercy, Revenge e Low Blow; per Death Blossom un PG Vagabond;
 un foe da bersagliare. Accendere COMBO ON prima di ogni prova.
 
-- [ ] **Chastise → Charism**: Show in Chat → la card ha solo l'Effect di Charism; niente "Auto hit: Fray", niente
-      "Foe is sealed", niente Charge. Nessun bottone Sealed. Il bottone del danno non tira nulla (Charism non fa danno).
-- [ ] **Dervish → Dawn** e **Felicity → Fleet**: solo l'Effect della combo, senza Charge e senza il testo della base.
-- [ ] **Pandaemonium → Purgatorio**: niente Charge "Increase area to Large Blast"; Hit, Area e i due Effect della combo.
+- [x] **Chastise → Charism**: Show in Chat → la card ha solo l'Effect di Charism; niente "Auto hit: Fray", niente
+      "Foe is sealed", niente Charge. Nessun bottone Sealed. Il bottone del danno non tira nulla (Charism non fa danno). **(Charism: solo l'Effect, nessun bottone)**
+- [ ] **Dervish → Dawn** e **Felicity → Fleet**: solo l'Effect della combo, senza Charge e senza il testo della base. **(non provato)**
+- [ ] **Pandaemonium → Purgatorio**: niente Charge "Increase area to Large Blast"; Hit, Area e i due Effect della combo. **(non provato)**
 - [ ] **Astra → Fortuna**: card con riga "Combo — Fortuna: Range 5, Medium Blast.", poi Hit "[D]+fray", Area e Summon.
-      Il gamble e il testo della base non compaiono. Attack: la card dell'attacco mostra la riga Hit di Fortuna.
-- [ ] **Sow → Reap**: niente seal né Mark della base; niente bottone "Mark target" e niente tag Mark nella testata
-      della scheda con la combo accesa (con COMBO OFF il Mark di Sow c'è).
+      Il gamble e il testo della base non compaiono. Attack: la card dell'attacco mostra la riga Hit di Fortuna. **(non provato)**
+- [x] **Sow → Reap**: niente seal né Mark della base; niente bottone "Mark target" e niente tag Mark nella testata
+      della scheda con la combo accesa (con COMBO OFF il Mark di Sow c'è). **(con COMBO acceso niente bottone Mark target su Sow; spento c'è)**
 - [ ] **Holy → Hades**: niente Charge "Grant 3 vigor"; True Strike e Medium Blast nei tag.
 - [ ] **Rot → Regenerate**: il bottone "Mark target (Regenerate)" c'è ancora (la combo ha il suo Mark).
 - [ ] **God Hand → Devil Hand**: come prima (Teleport 1, attacco, esplosione, Exceed "Repeat the effect").
