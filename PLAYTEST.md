@@ -2622,8 +2622,8 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] Open the Gates con la mastery BURIAL FIST al round 3: la casella "triggers exceed" è vuota e il dialogo del
-      danno non aggiunge il dado bonus; spuntandola a mano il dado bonus arriva.
-- [ ] Stessa abilità al round 4: la casella è già spuntata e il danno ha il dado bonus.
+      danno non aggiunge il dado bonus; spuntandola a mano il dado bonus arriva. **(non provato)**
+- [x] Stessa abilità al round 4: la casella è già spuntata e il danno ha il dado bonus.
 
 ## Emerso R36 — Bend Fate non è più tra gli effetti che "scelgono il numero" del gamble (17 ottobre 2026, versione 1.15.219)
 
@@ -2691,45 +2691,45 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Gigaton Whip senza mastery: la card dell'attacco mostra Hit, Miss, Effect (Shove 2), Collide ("They take fray
-      damage") e Heroic; l'Exceed compare solo con 15+ e non è ripetuto.
-- [ ] Gigaton Whip con Izuna Drop: niente blocco Collide normale, c'è il blocco "Collide — Izuna Drop (Mastery,
+- [x] Gigaton Whip senza mastery: la card dell'attacco mostra Hit, Miss, Effect (Shove 2), Collide ("They take fray
+      damage") e Heroic; l'Exceed compare solo con 15+ e non è ripetuto. **(Exceed non mostrato su un 11)**
+- [x] Gigaton Whip con Izuna Drop: niente blocco Collide normale, c'è il blocco "Collide — Izuna Drop (Mastery,
       replaces the normal collide)".
-- [ ] Damage di Gigaton Whip → Other: senza mastery c'è "Collide · fray"; con Izuna Drop c'è solo "Collide — Izuna
+- [x] Damage di Gigaton Whip → Other: senza mastery c'è "Collide · fray"; con Izuna Drop c'è solo "Collide — Izuna
       Drop · fray ×2" e porta Instances a 2.
-- [ ] Un'abilità combo con la combo armata (es. God Hand / Devil Hand): le righe della combo non compaiono due volte.
+- [ ] Un'abilità combo con la combo armata (es. God Hand / Devil Hand): le righe della combo non compaiono due volte. **(non provato)**
 - [ ] Un'abilità Infuse (es. Bio) con una versione armata: le righe della versione non sono ripetute tra quelle della
-      base; con una versione completa (MAGNABIO) non compaiono righe della base.
-- [ ] Un'abilità con "Effect" scritto prima dell'attacco nell'ordine dei blocchi: il blocco Effect è sopra Hit.
+      base; con una versione completa (MAGNABIO) non compaiono righe della base. **(non provato)**
+- [ ] Un'abilità con "Effect" scritto prima dell'attacco nell'ordine dei blocchi: il blocco Effect è sopra Hit. **(non provato)**
 
 ## Emerso R16 — Blood Festival, Burial Fist e Aether Shot: il bonus damage arriva alla card e alla finestra del danno (17 ottobre 2026, versione 1.15.213)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Matsuri con Blood Festival, primo uso, casella spuntata: sulla card c'è il blocco "BLOOD FESTIVAL (this use)"
+- [x] Matsuri con Blood Festival, primo uso, casella spuntata: sulla card c'è il blocco "BLOOD FESTIVAL (this use)"
       con la frase dei teletrasporti +2 e del danno bonus; poi Damage: "Bonus dice" parte da 1 e c'è l'etichetta
       "BLOOD FESTIVAL: +1 bonus die (this use, from the attack)".
-- [ ] Stessa cosa con la casella tolta: nessun blocco sulla card e "Bonus dice" a 0.
-- [ ] Open the Gates al round 4 con Burial Fist: blocco sulla card e +1 dado nella finestra del danno.
-- [ ] Damage tirato al turno dopo (senza nuovo attacco): nessun dado bonus automatico.
-- [ ] Aether Shot al round 3: +1 dado bonus nella finestra del danno.
+- [ ] Stessa cosa con la casella tolta: nessun blocco sulla card e "Bonus dice" a 0. **(non provato)**
+- [x] Open the Gates al round 4 con Burial Fist: blocco sulla card e +1 dado nella finestra del danno.
+- [x] Damage tirato al turno dopo (senza nuovo attacco): nessun dado bonus automatico.
+- [x] Aether Shot al round 3: +1 dado bonus nella finestra del danno. **(la casella Aether Shot è spuntata al round 3; il dado nella finestra del danno non guardato)**
 
 ## Emerso R16 — Tutto quello che "fa scattare l'Exceed" ha la sua casella nella finestra dell'attacco (17 ottobre 2026, versione 1.15.212)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Open the Gates, primo attacco del combattimento: nella finestra c'è la casella "Open the Gates" già spuntata
-      ("first use this combat"); al secondo attacco è vuota ("already used this combat").
-- [ ] Open the Gates con Burial Fist sbloccata al round 4: compaiono due caselle (Open the Gates e BURIAL FIST); con
+- [x] Open the Gates, primo attacco del combattimento: nella finestra c'è la casella "Open the Gates" già spuntata
+      ("first use this combat"); al secondo attacco è vuota ("already used this combat"). **('first use this combat' / 'already used this combat')**
+- [x] Open the Gates con Burial Fist sbloccata al round 4: compaiono due caselle (Open the Gates e BURIAL FIST); con
       tutte e due spuntate e un totale sotto 15 la card dice "Exceed (Open the Gates / BURIAL FIST)".
-- [ ] PG Freelancer con Aether Shot: al round 3 e al round 6 la casella "Aether Shot" è spuntata, negli altri round è
-      vuota.
-- [ ] PG Colossus con Pulverize, token a 2 livelli sopra il bersaglio: casella "Pulverize" spuntata con "(height Δ2)";
-      a 1 livello resta vuota.
+- [x] PG Freelancer con Aether Shot: al round 3 e al round 6 la casella "Aether Shot" è spuntata, negli altri round è
+      vuota. **(spuntata al round 3, vuota a 1 e 4 (round 6 non provato))**
+- [x] PG Colossus con Pulverize, token a 2 livelli sopra il bersaglio: casella "Pulverize" spuntata con "(height Δ2)";
+      a 1 livello resta vuota. **(Δ2 spuntata, Δ1 vuota)**
 - [ ] Arenheir al rango II, bersaglio al 25% degli HP o meno: casella "Arenheir II" spuntata; con un bersaglio più
-      sano resta vuota.
-- [ ] Blessing of War, Paleblood I, Soul Shot: la casella c'è ma è vuota, e accanto si legge la frase del libro.
-- [ ] Matsuri con Blood Festival: si comporta come prima (spuntata al primo uso, facoltativa).
+      sano resta vuota. **(non provato)**
+- [x] Blessing of War, Paleblood I, Soul Shot: la casella c'è ma è vuota, e accanto si legge la frase del libro. **(Soul Shot: casella vuota con la frase del libro; Blessing of War e Paleblood non provati)**
+- [x] Matsuri con Blood Festival: si comporta come prima (spuntata al primo uso, facoltativa).
 
 ## Emerso R49 — Mote of life senza blessing: diventa un terrain effect (17 ottobre 2026, versione 1.15.211)
 
@@ -2991,25 +2991,25 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Gigaton Whip con Izuna Drop sbloccata: tirare l'attacco. Sotto Miss la card mostra il blocco "Collide — Izuna
+- [x] Gigaton Whip con Izuna Drop sbloccata: tirare l'attacco. Sotto Miss la card mostra il blocco "Collide — Izuna
       Drop (Mastery, replaces the normal collide)" con il testo della mastery.
-- [ ] Gigaton Whip senza la mastery sbloccata: il blocco non c'è.
-- [ ] Con un talento di Gigaton Whip selezionato, la sua riga resta sulla card insieme al blocco della mastery.
+- [x] Gigaton Whip senza la mastery sbloccata: il blocco non c'è.
+- [ ] Con un talento di Gigaton Whip selezionato, la sua riga resta sulla card insieme al blocco della mastery. **(non provato)**
 
 ## Emerso R16 — Blood Festival e Burial Fist fanno scattare l'Exceed (17 ottobre 2026, versione 1.15.189)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Matsuri con Blood Festival sbloccata, in combattimento, primo attacco: nella finestra la casella "BLOOD
+- [x] Matsuri con Blood Festival sbloccata, in combattimento, primo attacco: nella finestra la casella "BLOOD
       FESTIVAL" è già spuntata. Con un totale sotto 15 la card mostra "Exceed (BLOOD FESTIVAL)".
-- [ ] Secondo attacco con Matsuri nello stesso combattimento: la casella c'è ma non è spuntata ("already used this
-      combat"). Con un totale sotto 15 la card non mostra l'Exceed.
+- [x] Secondo attacco con Matsuri nello stesso combattimento: la casella c'è ma non è spuntata ("already used this
+      combat"). Con un totale sotto 15 la card non mostra l'Exceed. **('already used this combat' e vuota)**
 - [ ] Primo uso di Matsuri con la casella tolta a mano: la card non mostra l'Exceed, e al secondo uso la casella non è
-      più spuntata.
-- [ ] Open the Gates con Burial Fist sbloccata: ai round 1-3 la casella non è spuntata, dal round 4 sì. Con un totale
-      sotto 15 la card mostra "Exceed (BURIAL FIST)". Vale anche per la versione combo (Center the Temple).
-- [ ] Fuori dal combattimento la casella c'è ma non è spuntata. Spuntata a mano, l'Exceed compare.
-- [ ] Un'abilità senza queste mastery non ha la casella. Con 15+ la card scrive "Exceed (15+)" come prima.
+      più spuntata. **(non provato)**
+- [x] Open the Gates con Burial Fist sbloccata: ai round 1-3 la casella non è spuntata, dal round 4 sì. Con un totale
+      sotto 15 la card mostra "Exceed (BURIAL FIST)". Vale anche per la versione combo (Center the Temple). **(round 1 vuota, round 4 spuntata, 'Exceed (Open the Gates / BURIAL FIST)'; Center the Temple non provato)**
+- [ ] Fuori dal combattimento la casella c'è ma non è spuntata. Spuntata a mano, l'Exceed compare. **(non provato)**
+- [x] Un'abilità senza queste mastery non ha la casella. Con 15+ la card scrive "Exceed (15+)" come prima. **(Gigaton Whip non ha la casella)**
 
 ## Emerso R33 — Pierce degli Aethershard ridà il weakened (17 ottobre 2026, versione 1.15.188)
 
@@ -3585,9 +3585,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Death con Talent II: Auto-Hit → la card mostra "Slay (Talent II): create a pit…".
-- [ ] Sow con Talent II: Auto-Hit → la card mostra "Comeback (Talent II)".
-- [ ] Un attacco normale con talento mostra ancora il talento come prima.
+- [x] Death con Talent II: Auto-Hit → la card mostra "Slay (Talent II): create a pit…".
+- [x] Sow con Talent II: Auto-Hit → la card mostra "Comeback (Talent II)".
+- [ ] Un attacco normale con talento mostra ancora il talento come prima. **(non provato)**
 
 ## Emerso R5 — Abilità trascinata su un riquadro pieno (17 ottobre 2026, versione 1.15.137)
 
@@ -3610,12 +3610,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Harvester con Sow: marcare un foe, allontanarsi di 3 o più caselle, armare la combo e aprire il Damage di Sow
-      con quel foe come bersaglio → Unerring spuntato, con la scritta "<foe> marked, out of reach (p.185)".
-- [ ] Nella stessa finestra togliere "Combo version" → Unerring si toglie; rimetterla → torna.
-- [ ] Stesso foe marcato ma adiacente → Unerring non spuntato.
-- [ ] Foe lontano NON marcato da Sow → Unerring non spuntato.
-- [ ] Bersaglio marcato lontano in Cover: Apply → il danno non viene dimezzato (chip "Cover — ignored (Unerring)").
+- [x] Harvester con Sow: marcare un foe, allontanarsi di 3 o più caselle, armare la combo e aprire il Damage di Sow
+      con quel foe come bersaglio → Unerring spuntato, con la scritta "<foe> marked, out of reach (p.185)". **('marked, out of reach (p.185)')**
+- [x] Nella stessa finestra togliere "Combo version" → Unerring si toglie; rimetterla → torna.
+- [ ] Stesso foe marcato ma adiacente → Unerring non spuntato. **(non provato)**
+- [ ] Foe lontano NON marcato da Sow → Unerring non spuntato. **(non provato)**
+- [ ] Bersaglio marcato lontano in Cover: Apply → il danno non viene dimezzato (chip "Cover — ignored (Unerring)"). **(non provato)**
 
 ## Emerso R37 — La spesa di resolve del Limit Break finisce col combattimento (17 ottobre 2026, versione 1.15.134)
 
@@ -4428,20 +4428,20 @@ Furnace) con Aether 6, i loro token sulla scena, un foe ostile, un combat avviat
 Setup: solo codice (F5 basta). Un PG Enochian con il tratto Soulfire, un PG con la relic Arenheir (rank III, poi
 Aspect), un foe bersaglio, un combat avviato.
 
-- [ ] **Default**: un PG qualsiasi attacca → nel dialog l'intestazione dice "crit 20+ · exceed 15+", i due nuovi
-      stepper "Crit on" 20 e "Exceed on" 15, nessuna riga di fonti sotto; la card in chat è come prima ("Exceed (15+)").
-- [ ] **Soulfire bloodied**: PG Enochian sopra il 50% HP → 20 / 15. Portalo a metà HP o meno → il dialog propone 18 /
+- [x] **Default**: un PG qualsiasi attacca → nel dialog l'intestazione dice "crit 20+ · exceed 15+", i due nuovi
+      stepper "Crit on" 20 e "Exceed on" 15, nessuna riga di fonti sotto; la card in chat è come prima ("Exceed (15+)"). **(intestazione 'crit 20+ · exceed 15+')**
+- [x] **Soulfire bloodied**: PG Enochian sopra il 50% HP → 20 / 15. Portalo a metà HP o meno → il dialog propone 18 /
       13 e sotto gli stepper "Soulfire (bloodied): crit 18+, exceed 13+". Un totale di 13 attiva l'Exceed (riquadro
-      "Exceed (13+)"), un 18 è CRITICAL HIT; accanto al totale "crit 18+ · exceed 13+".
-- [ ] **Soulfire a 1 HP**: HP a 1 → 15 / 10 con la riga "Soulfire (1 hp)".
+      "Exceed (13+)"), un 18 è CRITICAL HIT; accanto al totale "crit 18+ · exceed 13+". **(bloodied 18/13 con la riga Soulfire; il tiro non fatto)**
+- [x] **Soulfire a 1 HP**: HP a 1 → 15 / 10 con la riga "Soulfire (1 hp)". **(15/10 con 'Soulfire (1 hp)')**
 - [ ] **Arenheir III**: rank III sbloccato, round 1 → 19 / 14 con "Arenheir III (round 1): −1"; round 3 → 18 / 13;
-      round 5 → 17 / 12. Fuori combat → 19 / 14.
-- [ ] **Soulfire + Arenheir**: Enochian bloodied con Arenheir III al round 3 → 16 / 11 (18 / 13 di Soulfire, −2).
+      round 5 → 17 / 12. Fuori combat → 19 / 14. **(non provato (relic))**
+- [ ] **Soulfire + Arenheir**: Enochian bloodied con Arenheir III al round 3 → 16 / 11 (18 / 13 di Soulfire, −2). **(non provato)**
 - [ ] **Arenheir Aspect**: Aspect sbloccato, round 1 → 19 / 14. Fai un critico (alza a mano "Crit on" o tira finché
       esce): all'attacco dopo il dialog propone crit 18 (exceed resta 14) con la riga "Arenheir Aspect (1 crit this
-      combat)". Più critici abbassano ancora, mai sotto 15. Un nuovo combat riparte da zero.
-- [ ] **A mano**: cambia "Crit on" / "Exceed on" nel dialog → l'intestazione si aggiorna, la card usa i valori scelti.
-- [ ] **Foe / Legend / Summon**: il loro dialog d'attacco ha gli stessi stepper (20 / 15) e si possono cambiare.
+      combat)". Più critici abbassano ancora, mai sotto 15. Un nuovo combat riparte da zero. **(non provato)**
+- [ ] **A mano**: cambia "Crit on" / "Exceed on" nel dialog → l'intestazione si aggiorna, la card usa i valori scelti. **(non provato)**
+- [x] **Foe / Legend / Summon**: il loro dialog d'attacco ha gli stessi stepper (20 / 15) e si possono cambiare. **(il foe ha gli stessi stepper (Mechanist))**
 
 ## R52 — Chronotemper senza l'etichetta "Power Die" (17 ottobre 2026, versione 1.15.74)
 
@@ -4903,18 +4903,18 @@ Setup: un PG che attacca, un Foe senza Evasion e un PG Fool (tratto Curse of Cha
 status Evasion. È JS + CSS: F5 dopo il deploy.
 
 - [ ] **Casella spenta**: targetta il foe senza Evasion e attacca → nella riga del bersaglio c'è "Defender has evasion"
-      non spuntata; nessuna nota Evasion sotto Modifiers; la card d'attacco non ha il blocco Evasion.
-- [ ] **Casella spuntata a mano**: stesso attacco, spunta la casella → sotto Modifiers compare "Evasion: <nome> rolls
+      non spuntata; nessuna nota Evasion sotto Modifiers; la card d'attacco non ha il blocco Evasion. **(non provato)**
+- [x] **Casella spuntata a mano**: stesso attacco, spunta la casella → sotto Modifiers compare "Evasion: <nome> rolls
       1d6 (4+ = miss) before the attack"; tira → la card ha il blocco Evasion con il d6 e "(set in the attack dialog)";
-      con 4+ l'attacco è mancato e il bersaglio è attenuato in "Inflict".
-- [ ] **Curse of Chaos**: un foe attacca il PG Fool da 3+ caselle → spunta la casella, stesso comportamento.
+      con 4+ l'attacco è mancato e il bersaglio è attenuato in "Inflict". **(vedi 1.15.192 (blocco Evasion '(set in the attack dialog)'))**
+- [ ] **Curse of Chaos**: un foe attacca il PG Fool da 3+ caselle → spunta la casella, stesso comportamento. **(non provato)**
 - [ ] **Spuntata da sola**: targetta il foe con lo status Evasion → casella già spuntata; togli la spunta → la nota
-      sparisce e il tiro non fa il d6 d'Evasion.
-- [ ] **True Strike**: abilità con tag True Strike, casella spuntata → nota "True Strike (tag): ignores Evasion", la card
-      dice "Evasion ignored".
+      sparisce e il tiro non fa il d6 d'Evasion. **(non provato)**
+- [x] **True Strike**: abilità con tag True Strike, casella spuntata → nota "True Strike (tag): ignores Evasion", la card
+      dice "Evasion ignored". **('Evasion ignored — attacker has True Strike')**
 - [ ] **Area**: attacco ad area con 2+ bersagli → la casella c'è solo sulla riga del bersaglio d'attacco (radio); cambiando
-      il radio la casella passa all'altro e la nota si aggiorna.
-- [ ] **Finestra del danno**: la finestra del tiro di danno NON ha la casella.
+      il radio la casella passa all'altro e la nota si aggiorna. **(non provato)**
+- [x] **Finestra del danno**: la finestra del tiro di danno NON ha la casella. **(le finestre del danno non hanno la casella)**
 
 ## R57 — Stack Dice: bottone Use (16 ottobre 2026, versione 1.15.58)
 
@@ -5698,17 +5698,17 @@ Setup: un mondo con un PG Sealer (Mendicant) con God Hand equipaggiata (va bene 
 dell'aggiornamento); almeno un foe come bersaglio; tab Combat. Per vedere l'Exceed serve un tiro di 15+ (aggiungere
 boon se serve).
 
-- [ ] **Base con Talent I**: God Hand con Talent I, senza combo token → attacco con 15+ → nel riquadro "Exceed (15+)"
+- [x] **Base con Talent I**: God Hand con Talent I, senza combo token → attacco con 15+ → nel riquadro "Exceed (15+)"
       c'è "You and allies in range 2 gain 3 vigor." e sotto "Talent I: Gain evasion until the end of your next turn."
-- [ ] **Sotto 15**: stesso attacco con un tiro sotto 15 → il riquadro Exceed (con la riga del talento) non compare.
+- [x] **Sotto 15**: stesso attacco con un tiro sotto 15 → il riquadro Exceed (con la riga del talento) non compare.
 - [ ] **Devil Hand con Talent I**: con il combo token → attacco → titolo "Devil Hand (God Hand combo)"; l'Exceed (15+)
-      dice "Repeat the effect." e sotto "Talent I: Gain evasion…". I riquadri viola della combo sono come prima.
-- [ ] **Talent II**: passare a Talent II → attacco base e attacco con combo token → in entrambe le card ci sono un
-      riquadro "Talent II: Increase teleports to 2" e uno "Slay (Talent II): gain or lose a combo token."
-- [ ] **Senza talento**: con nessun talento scelto la card dell'attacco è come prima (nessuna riga "Talent").
+      dice "Repeat the effect." e sotto "Talent I: Gain evasion…". I riquadri viola della combo sono come prima. **(non provato)**
+- [x] **Talent II**: passare a Talent II → attacco base e attacco con combo token → in entrambe le card ci sono un
+      riquadro "Talent II: Increase teleports to 2" e uno "Slay (Talent II): gain or lose a combo token." **(riquadri 'Talent II' e 'Slay (Talent II)' sull'attacco base; con combo non provato)**
+- [ ] **Senza talento**: con nessun talento scelto la card dell'attacco è come prima (nessuna riga "Talent"). **(non provato)**
 - [ ] **Altra abilità**: un'abilità d'attacco qualsiasi con un talento sbloccato (es. uno che dà +1 boon) → la card
-      dell'attacco mostra il riquadro "Talent I"/"Talent II" con il testo del talento.
-- [ ] **Show in Chat**: la card dello Show in Chat di God Hand / Devil Hand è come prima.
+      dell'attacco mostra il riquadro "Talent I"/"Talent II" con il testo del talento. **(non provato)**
+- [ ] **Show in Chat**: la card dello Show in Chat di God Hand / Devil Hand è come prima. **(non provato)**
 
 ## R15 — Il tiro del danno spunta Divine e Pierce dal testo (15 ottobre 2026, versione 1.15.17)
 
