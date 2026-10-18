@@ -16,6 +16,29 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
+## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare
+
+Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18 ottobre 2026". Un punto per volta.
+
+- [ ] **P1 (alta, blocca gli oggetti)** — `IconActor._preCreate` forza `prototypeToken.actorLink = true` anche sugli
+      attori che chiedono `false` (oggetti della mappa, summon dei foe): le copie di un oggetto condividono un attore
+      e la scheda del token è quella del template (niente "Add walls"). S.
+- [ ] **P2 (alta)** — gli hook `updateToken` leggono `options.movement`, ma Foundry 13.351 passa `options._movement`:
+      "passed through" di Comet / Megamushroom / terreni attraversati non scatta mai (`map-objects.mjs:1491`,
+      `terrain-spaces.mjs:1897`). S.
+- [ ] **P3** — `ignoresRampart` prende per immuni i foe con Tactics Aura (vale per gli alleati nell'aura). S.
+- [ ] **P4** — Comet "you cannot attack" non blocca l'attacco base della scheda (solo gli attacchi delle abilità). S.
+- [ ] **P5** — Tsunami "Drag them with it": dopo il trascinamento arriva la domanda del dangerous (non deve), e un
+      solo movimento produce tre card (fuori / dentro / dangerous). M.
+- [ ] **P6** — Inflict sulla card del danno: dopo uno "Show in Chat" la card del danno si aggancia ancora al vecchio
+      attacco della stessa abilità e mostra i suoi bottoni. S-M.
+- [ ] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1. S.
+- [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
+      dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
+      Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
+
+---
+
 ## Round di debug del 16 ottobre 2026 — documento "16.10.2026.docx"
 
 Versione aggiornata del documento del 15 ottobre: tutto quello che c'era ieri è identico, parola per parola. Le novità
