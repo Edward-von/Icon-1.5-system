@@ -2637,9 +2637,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Apri il dialogo del gamble di un'abilità e passa il mouse su "Set the number": il tooltip nomina solo Silver
+- [x] Apri il dialogo del gamble di un'abilità e passa il mouse su "Set the number": il tooltip nomina solo Silver
       Rabbit III e Golden Mask, non Bend Fate.
-- [ ] Con un Seer, tira un gamble: il pulsante Bend Fate c'è ancora sulla card e funziona come prima.
+- [x] Con un Seer, tira un gamble: il pulsante Bend Fate c'è ancora sulla card e funziona come prima. **(Bend Fate sulla card del gamble di Chaos Tarot)**
 
 ## Emerso R35 — Bottoni "when targeted" anche sulle abilità che non attaccano; chi è solo nell'area non è "targeted" (17 ottobre 2026, versione 1.15.218)
 
@@ -2862,29 +2862,29 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Svuotare la mano del Seer e aprirla: al posto di "No cards" c'è il bottone "Foretell from the deck" con l'icona
+- [x] Svuotare la mano del Seer e aprirla: al posto di "No cards" c'è il bottone "Foretell from the deck" con l'icona
       della ruota.
-- [ ] Con un alleato bersagliato, cliccarlo: in chat esce la card della Great Wheel di una carta del mazzo (con il
+- [x] Con un alleato bersagliato, cliccarlo: in chat esce la card della Great Wheel di una carta del mazzo (con il
       nome del bersaglio e i bottoni Gain), la carta finisce nella pila degli scarti del Seer, la mano resta vuota e
-      il bottone resta lì.
-- [ ] Mazzo esaurito con carte nella pila degli scarti: il bottone rimescola la pila nel mazzo e poi gioca una carta.
-- [ ] Mazzo e pila tutti e due vuoti: compare l'avviso "has no cards left to draw" e non succede altro.
-- [ ] Una mano con carte non mostra il bottone; giocando l'ultima carta con Foretell, il bottone compare.
+      il bottone resta lì. **(card 4 — The Ewer 'from Seer deck → Discard', la mano resta vuota)**
+- [ ] Mazzo esaurito con carte nella pila degli scarti: il bottone rimescola la pila nel mazzo e poi gioca una carta. **(non provato)**
+- [ ] Mazzo e pila tutti e due vuoti: compare l'avviso "has no cards left to draw" e non succede altro. **(non provato)**
+- [ ] Una mano con carte non mostra il bottone; giocando l'ultima carta con Foretell, il bottone compare. **(non provato)**
 - [ ] Da giocatore (non GM) con permesso Owner su mazzo e pila: il bottone funziona. Senza permesso: compare un errore
-      chiaro, nessun blocco.
+      chiaro, nessun blocco. **(non provato)**
 
 ## Emerso R36 — Foretell scarta nella pila del proprio Seer (17 ottobre 2026, versione 1.15.199)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Due Seer (es. "Ann" e "Bo"), ognuno con mano e pila col proprio nome ("Ann hand", "Ann discard", "Bo hand", "Bo
+- [x] Due Seer (es. "Ann" e "Bo"), ognuno con mano e pila col proprio nome ("Ann hand", "Ann discard", "Bo hand", "Bo
       discard"): Foretell da una carta della mano di Ann → la carta va in "Ann discard", non in quella di Bo né in una
-      "Discard" generica; la card in chat esce come sempre.
-- [ ] Stessa cosa dalla mano di Bo → la carta va in "Bo discard".
-- [ ] Un solo Seer e una sola pila "Discard" (nessuna pila col nome del personaggio): Foretell manda la carta in
-      "Discard" come prima.
+      "Discard" generica; la card in chat esce come sempre. **(la carta va in 'Ann discard')**
+- [x] Stessa cosa dalla mano di Bo → la carta va in "Bo discard". **(va in 'Bo discard')**
+- [x] Un solo Seer e una sola pila "Discard" (nessuna pila col nome del personaggio): Foretell manda la carta in
+      "Discard" come prima. **(vedi 1.15.147 (un solo Seer, pila Discard))**
 - [ ] Una mano che non è di nessun Seer riconoscibile e due pile senza "Discard" nel nome: Foretell apre la finestra
-      Play di Foundry per scegliere la pila (come prima).
+      Play di Foundry per scegliere la pila (come prima). **(non provato)**
 
 ## Emerso R33 — Il bottone Mark controlla il range (17 ottobre 2026, versione 1.15.198)
 
@@ -3106,34 +3106,34 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Seer con carte in mano: gamble di un'abilità con tabella 1-6 → sulla card c'è *Bend Fate*. Si scelgono 2 carte:
+- [x] Seer con carte in mano: gamble di un'abilità con tabella 1-6 → sulla card c'è *Bend Fate*. Si scelgono 2 carte:
       finiscono nella pila degli scarti, esce una card "Bend Fate: 2 cards discarded…" con 3 dadi (2 tratteggiati) e
-      una riga di tabella per ogni risultato diverso.
+      una riga di tabella per ogni risultato diverso. **(2 carte scartate, '+2d6 — choose any result', una riga per ogni risultato)**
 - [ ] Sulla nuova card c'è di nuovo *Bend Fate* (se la mano ha ancora carte): un'altra carta aggiunge un quarto dado;
-      il bottone della card precedente risulta già usato.
-- [ ] Gamble con Stacked Die o con "numero scelto": nessun bottone Bend Fate.
-- [ ] Seer con la mano vuota: nessun bottone. PG non Seer: nessun bottone.
-- [ ] Un giocatore che non possiede il Seer vede il bottone spento.
-- [ ] Gli scarti di Bend Fate NON fanno uscire la card dell'effetto della Great Wheel.
+      il bottone della card precedente risulta già usato. **(non provato)**
+- [ ] Gamble con Stacked Die o con "numero scelto": nessun bottone Bend Fate. **(non provato)**
+- [ ] Seer con la mano vuota: nessun bottone. PG non Seer: nessun bottone. **(non provato)**
+- [ ] Un giocatore che non possiede il Seer vede il bottone spento. **(non provato)**
+- [ ] Gli scarti di Bend Fate NON fanno uscire la card dell'effetto della Great Wheel. **(non provato)**
 
 ## Emerso R36 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (17 ottobre 2026, versione 1.15.180)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Mondo con un PG Seer, un mazzo di 13 carte (una sola seme), una mano chiamata col nome del PG e una pila
+- [x] Mondo con un PG Seer, un mazzo di 13 carte (una sola seme), una mano chiamata col nome del PG e una pila
       "Discard"; il giocatore ha permesso Owner su tutte e tre. Mano con 2 carte, si avvia il combattimento: compare
       "Wheel of Fate — start of combat" con *Draw up to 5*; il giocatore clicca e la mano arriva a 5. Il bottone si
-      spegne con la spunta e un secondo clic non pesca.
-- [ ] Mano già con 5 carte o più all'avvio: la card c'è ma senza bottone.
-- [ ] Inizio turno del Seer: card "Skein — start of turn", *Draw 1* pesca una carta. Il giocatore riceve la notifica
-      con il nome della carta, la chat dice solo quante sono.
-- [ ] Fine turno del Seer: card "Skein — end of turn" con *Didn't attack: draw 1*; con 7 carte o più c'è anche
+      spegne con la spunta e un secondo clic non pesca. **(da giocatore: la mano da 2 a 5, bottone spento, secondo clic niente)**
+- [ ] Mano già con 5 carte o più all'avvio: la card c'è ma senza bottone. **(non provato)**
+- [x] Inizio turno del Seer: card "Skein — start of turn", *Draw 1* pesca una carta. Il giocatore riceve la notifica
+      con il nome della carta, la chat dice solo quante sono. **(Draw 1: notifica 'Ann drew: Nine of Clubs.' al giocatore, la chat dice solo il numero)**
+- [x] Fine turno del Seer: card "Skein — end of turn" con *Didn't attack: draw 1*; con 7 carte o più c'è anche
       *Discard down to 7*. Con 8 carte, il dialogo accetta solo 1 carta scelta; dopo, la mano ha 7 carte, la carta è
-      nella pila Discard e NON esce la card della Great Wheel.
-- [ ] Svuotare il mazzo (tutte le carte in mano o negli scarti), poi *Draw 1*: le carte degli scarti tornano nel mazzo
-      mescolato, si pesca, e la chat scrive "The deck ran out…".
-- [ ] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato.
-- [ ] Un PG che non è Seer: nessuna di queste card.
+      nella pila Discard e NON esce la card della Great Wheel. **(8 carte: 'Didn't attack: draw 1' e 'Discard down to 7'; scartata una carta, mano a 7, nessuna card della Great Wheel)**
+- [x] Svuotare il mazzo (tutte le carte in mano o negli scarti), poi *Draw 1*: le carte degli scarti tornano nel mazzo
+      mescolato, si pesca, e la chat scrive "The deck ran out…". **('The deck ran out: the discard pile (3 cards) was shuffled back…')**
+- [ ] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato. **(non provato)**
+- [ ] Un PG che non è Seer: nessuna di queste card. **(non provato)**
 - [ ] Il giocatore senza permesso Owner sul mazzo: messaggio d'errore chiaro, nessun blocco.
 
 ## Emerso R12 — Elenchi puntati nella scheda del Summon di un foe (17 ottobre 2026, versione 1.15.179)
@@ -3473,35 +3473,35 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bersagliare un alleato e giocare un 4: la card mostra "Foretold on: <nome>" e il bottone dell'area.
-- [ ] Cliccare il bottone: il small blast si centra sull'alleato anche se è lontano; restano bersagliati solo gli
-      alleati nell'area (un avviso dice quanti foe sono stati esclusi); Blessed li benedice.
+- [x] Bersagliare un alleato e giocare un 4: la card mostra "Foretold on: <nome>" e il bottone dell'area. **('4 — The Ewer' con 'Place Small Blast (target)' e Blessed)**
+- [x] Cliccare il bottone: il small blast si centra sull'alleato anche se è lontano; restano bersagliati solo gli
+      alleati nell'area (un avviso dice quanti foe sono stati esclusi); Blessed li benedice. **(Small Blast (target) sulla Spellblade)**
 - [ ] Giocare la carta senza bersagli: la card dice di bersagliare l'alleato; bersagliarlo, poi cliccare il bottone:
-      funziona.
-- [ ] Con una wild card toccata dal blast, viene offerta l'esplosione.
+      funziona. **(non provato)**
+- [ ] Con una wild card toccata dal blast, viene offerta l'esplosione. **(non provato)**
 
 ## R36b — Carte del Seer giocate in chat (17 ottobre 2026, versione 1.15.147)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Con il token del Seer selezionato e un alleato bersagliato, cliccare la ruota su una Q nella mano: in chat
-      compare "Q — The Moon" con il bottone Gain "Evasion" e la carta finisce nella pila "Discard".
-- [ ] Cliccare Evasion: l'alleato bersagliato la riceve e scade all'inizio del suo turno successivo.
-- [ ] Con due pile senza "Discard" nel nome, la ruota apre la finestra di Foundry per scegliere la pila.
-- [ ] Il Play normale di Foundry verso una pila posta la stessa card.
-- [ ] Senza token selezionato né personaggio assegnato, la card dice di selezionare il token del Seer.
-- [ ] Controllare i promemoria di 2, 3, 5, 8, 9, 10, J e K.
+- [x] Con il token del Seer selezionato e un alleato bersagliato, cliccare la ruota su una Q nella mano: in chat
+      compare "Q — The Moon" con il bottone Gain "Evasion" e la carta finisce nella pila "Discard". **('Q — The Moon' con 'Evasion until the start of their next turn', carta nella pila Discard)**
+- [x] Cliccare Evasion: l'alleato bersagliato la riceve e scade all'inizio del suo turno successivo. **(la Spellblade ha Evasion; la scadenza non controllata)**
+- [ ] Con due pile senza "Discard" nel nome, la ruota apre la finestra di Foundry per scegliere la pila. **(non provato)**
+- [ ] Il Play normale di Foundry verso una pila posta la stessa card. **(non provato)**
+- [ ] Senza token selezionato né personaggio assegnato, la card dice di selezionare il token del Seer. **(non provato)**
+- [ ] Controllare i promemoria di 2, 3, 5, 8, 9, 10, J e K. **(non provato)**
 
 ## R36a — Carte del Seer: l'effetto su ogni carta (17 ottobre 2026, versione 1.15.146)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Creare un mazzo dal preset "Poker Deck", una mano e una pila "Discard"; pescare qualche carta: sotto il nome di
+- [x] Creare un mazzo dal preset "Poker Deck", una mano e una pila "Discard"; pescare qualche carta: sotto il nome di
       ognuna, nella mano, negli scarti e nel mazzo, c'è il suo effetto della p.199 (A The World … K The Sun), con i
-      tooltip sulle keyword.
-- [ ] Aprire il foglio di una singola carta: sotto l'intestazione c'è il riquadro "The Great Wheel (Seer)".
-- [ ] Rinominare una carta in "The Moon" e togliere il valore: mostra ancora l'effetto della Q.
-- [ ] Una carta passata coperta non mostra l'effetto.
+      tooltip sulle keyword. **(nella mano: 'Q — The Moon: …', '4 — The Ewer: …' ecc.; scarti e mazzo non guardati)**
+- [ ] Aprire il foglio di una singola carta: sotto l'intestazione c'è il riquadro "The Great Wheel (Seer)". **(non provato)**
+- [ ] Rinominare una carta in "The Moon" e togliere il valore: mostra ancora l'effetto della Q. **(non provato)**
+- [ ] Una carta passata coperta non mostra l'effetto. **(non provato)**
 
 ## Emerso R40 — Il danno dei blocchi Effect di foe e legend è proposto sotto Other (17 ottobre 2026, versione 1.15.145)
 
@@ -4928,14 +4928,14 @@ status Evasion. È JS + CSS: F5 dopo il deploy.
 
 Setup: PG Fool con il tratto Stack Dice (uno al capitolo 3 per avere 2 dadi). È template + JS: F5 dopo il deploy.
 
-- [ ] **Bottone**: tab Combat, tratto Stack Dice: accanto ai pallini c'è **Use**; con "0/1" è spento (grigio, non
-      cliccabile).
-- [ ] **Uso**: accendi un dado ("1/1"), clicca Use → la scheda torna a "0/1" e in chat c'è "<PG> uses a Stacked Die: the
-      gamble result is 6 (Stack Dice, p.149)" a nome del PG; Use torna spento.
-- [ ] **Capitolo 3**: con "2/2" Use → "1/2", di nuovo Use → "0/2"; due messaggi in chat.
-- [ ] **Niente doppio scalo**: con "1/1" usa la finestra Gamble di un'abilità e scegli "Stacked Die" → risultato 6 e
-      scheda a "0/1" (una sola volta); nessun messaggio extra di Use.
-- [ ] **Player senza permessi**: sulla scheda di un PG altrui (solo osservatore) Use è spento.
+- [x] **Bottone**: tab Combat, tratto Stack Dice: accanto ai pallini c'è **Use**; con "0/1" è spento (grigio, non
+      cliccabile). **(Use spento a 0)**
+- [x] **Uso**: accendi un dado ("1/1"), clicca Use → la scheda torna a "0/1" e in chat c'è "<PG> uses a Stacked Die: the
+      gamble result is 6 (Stack Dice, p.149)" a nome del PG; Use torna spento. **('uses a Stacked Die: the gamble result is 6 (Stack Dice, p.149)')**
+- [x] **Capitolo 3**: con "2/2" Use → "1/2", di nuovo Use → "0/2"; due messaggi in chat. **(a 2/2 Use → 1/2 → 0/2)**
+- [x] **Niente doppio scalo**: con "1/1" usa la finestra Gamble di un'abilità e scegli "Stacked Die" → risultato 6 e
+      scheda a "0/1" (una sola volta); nessun messaggio extra di Use. **(dal gamble: 6, un solo scalo, nessun messaggio di Use)**
+- [ ] **Player senza permessi**: sulla scheda di un PG altrui (solo osservatore) Use è spento. **(non provato)**
 
 ## R56 — Track target su Quaking Palm, Sidhe e Dark Sliver (16 ottobre 2026, versione 1.15.57)
 
@@ -5002,11 +5002,11 @@ prima di questa versione, e un PG Stormbender nuovo.
 Setup: PG Fool al capitolo 3 (tratto Death's Apprentice sbloccato) e un PG Fool al capitolo 1 o 2. È solo un template:
 F5 dopo il deploy.
 
-- [ ] **Capitolo 3**: tab Combat, tratto Stack Dice: "Stacked Dice 0/2" con due dadi. Click sul secondo → "2/2",
-      entrambi accesi; click sul primo → "1/2"; click sul primo acceso (l'ultimo) → "0/2".
-- [ ] **Gamble con 2 dadi**: con 2/2 apri la finestra del gamble e usa lo Stacked Die → il risultato è 6 e la scheda
-      torna a "1/2".
-- [ ] **Capitolo 1-2**: un solo dado, "0/1" → "1/1" → "0/1" come prima.
+- [x] **Capitolo 3**: tab Combat, tratto Stack Dice: "Stacked Dice 0/2" con due dadi. Click sul secondo → "2/2",
+      entrambi accesi; click sul primo → "1/2"; click sul primo acceso (l'ultimo) → "0/2". **(con il tratto Death's Apprentice: 'Stacked Dice 0/2', due pallini (senza il tratto 0/1))**
+- [x] **Gamble con 2 dadi**: con 2/2 apri la finestra del gamble e usa lo Stacked Die → il risultato è 6 e la scheda
+      torna a "1/2". **(dal gamble: 6 e 2/2 → 1/2)**
+- [ ] **Capitolo 1-2**: un solo dado, "0/1" → "1/1" → "0/1" come prima. **(non provato)**
 
 ## R50 — Keyword "summon" sul verbo e nomi delle combo (16 ottobre 2026, versione 1.15.52)
 
@@ -5481,18 +5481,18 @@ Setup: un PG Knave (Stalwart) con Riposte equipaggiata e qualche carica di Vigil
 un'abilità gamble (es. Spinning Top) e un'abilità con tabella 1-6 se disponibile (es. Chaos Tarot, Monogatari); tab
 Combat, anteprima dell'abilità aperta.
 
-- [ ] **Bottone**: Riposte → nell'anteprima c'è il bottone **Gamble** accanto a Show in Chat; un'abilità senza gamble
-      (es. Provoke) non lo ha.
-- [ ] **Tiro base**: Gamble → la finestra mostra Dice = 1 e "1d6"; Gamble → card in chat con un dado e "gamble result".
-- [ ] **Dadi in più**: Dice a 3 con + → anteprima "3d6, keep the highest"; la card mostra 3 dadi, il più alto
-      evidenziato in verde, e il risultato è quel dado (non la somma).
-- [ ] **Vigilance (Dire Parry)**: con 2 cariche, campo "Vigilance charges spent" presente; metterlo a 2 → si tirano
+- [x] **Bottone**: Riposte → nell'anteprima c'è il bottone **Gamble** accanto a Show in Chat; un'abilità senza gamble
+      (es. Provoke) non lo ha. **(Riposte sì, Provoke no)**
+- [ ] **Tiro base**: Gamble → la finestra mostra Dice = 1 e "1d6"; Gamble → card in chat con un dado e "gamble result". **(non provato)**
+- [x] **Dadi in più**: Dice a 3 con + → anteprima "3d6, keep the highest"; la card mostra 3 dadi, il più alto
+      evidenziato in verde, e il risultato è quel dado (non la somma). **(3d6 con il più alto)**
+- [x] **Vigilance (Dire Parry)**: con 2 cariche, campo "Vigilance charges spent" presente; metterlo a 2 → si tirano
       Dice + 2 dadi, la card dice "(2 from Vigilance)" e "2 Vigilance charges spent", e il tracker scende di 2. Su
-      un'abilità che non parla di Vigilance il campo non c'è.
-- [ ] **Stacked Die (Fool)**: con 1 Stacked Die acceso sul tratto Stack Dice → opzione "Stacked Die" presente;
-      sceglierla → nessun tiro, risultato 6, il pip del tratto si spegne. Senza Stacked Die l'opzione non c'è.
+      un'abilità che non parla di Vigilance il campo non c'è. **(vigilance 2: '(2 from Vigilance)', '2 Vigilance charges spent', tracker a 0)**
+- [x] **Stacked Die (Fool)**: con 1 Stacked Die acceso sul tratto Stack Dice → opzione "Stacked Die" presente;
+      sceglierla → nessun tiro, risultato 6, il pip del tratto si spegne. Senza Stacked Die l'opzione non c'è. **(Stacked Die: risultato 6, il pip si spegne)**
 - [ ] **Set the number**: scegliere "Set the number" → appare il campo Number; impostarlo a 4 → card con risultato 4
-      e nessun dado tirato.
+      e nessun dado tirato. **(non provato)**
 - [ ] **Tabella 1-6**: su un'abilità con tabella numerata, Gamble → sotto il risultato la card mostra la riga di quel
       numero.
 - [ ] **Card Show in Chat**: Show in Chat di Riposte → la card ha in fondo il bottone dorato Gamble, che apre la stessa
