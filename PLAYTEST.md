@@ -740,6 +740,12 @@ Da compilare durante il playtest.
   azione `basicAttackRoll`) tira senza domanda. Il controllo `objectsForbiddingAttacks` è solo in
   `IconSheet.mjs:2707` (attacco delle abilità). "While this object is active, you cannot attack" (p.128) vale anche
   per l'attacco base.
+- **1.15.70, settima casella — Tsunami "Drag them with it" fa scattare il dangerous.** Tsunami con il Mechanist
+  dentro, Move 4 → card "In it when it moved: Mechanist" → "Drag them with it" → "Drag them": il Mechanist si sposta di
+  4 con l'area (giusto), ma subito dopo arriva la domanda "Mechanist entered a dangerous terrain space (Dangerous &
+  difficult, Tsunami). Take 2 piercing damage…". Il test dice che dopo il trascinamento non deve esserci (resta
+  dentro). Prima del trascinamento era anche arrivata la card "Mechanist is no longer inside … no longer has +1 curse"
+  (l'area si era mossa senza di lui), poi "enters the area" dopo il drag: tre card per un solo movimento.
 
 ### Dubbi
 
@@ -2409,26 +2415,26 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Waterspout: piazza il waterspout dal chip vicino a un alleato e a un nemico. Dopo la card del piazzamento
-      ne arriva una "summoned" con "Suck in" sull'alleato e "Save, then suck in" sul nemico.
-- [ ] Clicca "Suck in" sull'alleato: il token sparisce per i giocatori (il GM lo vede semitrasparente) e il bottone
+- [x] PG con Waterspout: piazza il waterspout dal chip vicino a un alleato e a un nemico. Dopo la card del piazzamento
+      ne arriva una "summoned" con "Suck in" sull'alleato e "Save, then suck in" sul nemico. **(la card propone anche il creatore stesso (entro range 2))**
+- [x] Clicca "Suck in" sull'alleato: il token sparisce per i giocatori (il GM lo vede semitrasparente) e il bottone
       diventa grigio.
-- [ ] Clicca "Save, then suck in" sul nemico: esce la card del tiro salvezza. Se lo supera resta fuori, se lo fallisce
-      viene nascosto. Da giocatore (che non possiede il nemico), col GM connesso, il nemico viene nascosto lo stesso.
-- [ ] In combattimento, attiva il personaggio risucchiato: esce la card "X is inside the waterspout … they don't take
+- [x] Clicca "Save, then suck in" sul nemico: esce la card del tiro salvezza. Se lo supera resta fuori, se lo fallisce
+      viene nascosto. Da giocatore (che non possiede il nemico), col GM connesso, il nemico viene nascosto lo stesso. **(card del tiro ok, il Warrior l'ha superato (18 vs 10); il caso fallito e il lato giocatore non provati)**
+- [x] In combattimento, attiva il personaggio risucchiato: esce la card "X is inside the waterspout … they don't take
       turns until they return (p.88)" e il tracker funziona ancora.
-- [ ] Fine del turno del creatore: arriva la card "the waterspout spits out" con un bottone "Place <nome>" per ogni
+- [x] Fine del turno del creatore: arriva la card "the waterspout spits out" con un bottone "Place <nome>" per ogni
       personaggio. Il click su uno spazio occupato, dentro lo spout o oltre range 2 dà un avviso. Su uno spazio valido
-      il token compare lì, visibile.
-- [ ] Inizio del turno del creatore: arriva di nuovo la card di risucchio con i personaggi entro range 2 (quelli già
+      il token compare lì, visibile. **(avvisi: 'That space isn't free', 'Outside the spout', 'Within range 2')**
+- [x] Inizio del turno del creatore: arriva di nuovo la card di risucchio con i personaggi entro range 2 (quelli già
       dentro non ci sono).
-- [ ] Con il Talent I selezionato: sulla card di sputo, "Shove them 1 away" prima di piazzarli dà l'avviso "Place …
+- [x] Con il Talent I selezionato: sulla card di sputo, "Shove them 1 away" prima di piazzarli dà l'avviso "Place …
       first". Dopo averli piazzati li spinge di 1 lontano dallo spout. Chi è bloccato riceve l'avviso "shove by hand".
-- [ ] Con un personaggio dentro, togli il waterspout (Remove sulla card, Canc sul layer Templates, oppure usa di nuovo
-      l'abilità e scegli Replace): arriva la card "… is gone — place the characters inside back" con i bottoni Place.
-- [ ] Il bottone "Spit them out now" sulla card di risucchio crea subito la card di sputo (utile fuori dal
+- [x] Con un personaggio dentro, togli il waterspout (Remove sulla card, Canc sul layer Templates, oppure usa di nuovo
+      l'abilità e scegli Replace): arriva la card "… is gone — place the characters inside back" con i bottoni Place. **(provato con Remove sulla card)**
+- [x] Il bottone "Spit them out now" sulla card di risucchio crea subito la card di sputo (utile fuori dal
       combattimento).
-- [ ] Un giocatore che non è il creatore vede i bottoni grigi.
+- [ ] Un giocatore che non è il creatore vede i bottoni grigi. **(da giocatore, blocco 18)**
 
 ## Emerso status sulla card del danno — I bottoni Inflict anche sulla card del danno (17 ottobre 2026, versione 1.15.231)
 
@@ -2544,17 +2550,17 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Bifröst e la mastery PATH TO ERENHELION sbloccata, un oggetto sulla mappa (es. trascinato dalla scheda):
+- [x] PG con Bifröst e la mastery PATH TO ERENHELION sbloccata, un oggetto sulla mappa (es. trascinato dalla scheda):
       piazza la line 3 in modo che l'ultima casella cada sull'oggetto → compare "Bifröst — bounce?" con il testo della
       mastery e il nome dell'oggetto.
-- [ ] Scegli Bounce: le 4 caselle accanto a quella finale sono evidenziate; disegna la seconda line 3 in una direzione
+- [x] Scegli Bounce: le 4 caselle accanto a quella finale sono evidenziate; disegna la seconda line 3 in una direzione
       a scelta (rotella per ruotarla) → un unico template con le due line, etichetta "Line 3 + Line 3", i bersagli
-      comprendono chi sta su tutte e due.
-- [ ] Scegli No bounce → resta solo la prima line.
-- [ ] Line che NON finisce su un oggetto → nessuna domanda.
-- [ ] Senza la mastery sbloccata → nessuna domanda anche se finisce su un oggetto.
+      comprendono chi sta su tutte e due. **(un solo template 'Line 3 + Line 3'; i bersagli non controllati (area vuota))**
+- [ ] Scegli No bounce → resta solo la prima line. **(non provato)**
+- [x] Line che NON finisce su un oggetto → nessuna domanda.
+- [ ] Senza la mastery sbloccata → nessuna domanda anche se finisce su un oggetto. **(non provato)**
 - [ ] Con HEIMDALL (seconda area che non può sovrapporsi) e Talent II (crescita a fine round) il template con il
-      rimbalzo si comporta come una sola area.
+      rimbalzo si comporta come una sola area. **(non provato)**
 
 ## Emerso R33 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (17 ottobre 2026, versione 1.15.223)
 
@@ -2755,11 +2761,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazza un'area con uno status interno (per esempio i nemici dentro sono blinded+) e metti un nemico in una
+- [x] Piazza un'area con uno status interno (per esempio i nemici dentro sono blinded+) e metti un nemico in una
       casella accanto. Allargala con "Area +N" o "Add 2 spaces" includendo la sua casella: arriva una card con il
-      bottone dello status per quel nemico.
-- [ ] Allargala solo in caselle vuote: non arriva nessuna card in più, solo il messaggio "the area grows by N spaces".
-- [ ] Chi era già dentro prima dell'allargamento non riceve una seconda offerta.
+      bottone dello status per quel nemico. **(provato con extendAreaTemplate sulla nuvola di Mist Strider)**
+- [x] Allargala solo in caselle vuote: non arriva nessuna card in più, solo il messaggio "the area grows by N spaces".
+- [x] Chi era già dentro prima dell'allargamento non riceve una seconda offerta.
 
 ## Emerso R35 — Aether Deflection dà la resistenza sulla card del danno (17 ottobre 2026, versione 1.15.206)
 
@@ -2935,35 +2941,35 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazzare Ätherwand e far finire il turno a un foe dentro la line: alla fine del suo turno esce la card con
+- [x] Piazzare Ätherwand e far finire il turno a un foe dentro la line: alla fine del suo turno esce la card con
       "Shattered to <foe>"; cliccandolo il foe diventa shattered.
-- [ ] Un foe che finisce il turno fuori dall'area: nessuna riga.
-- [ ] Un PG che finisce il turno dentro: nessuna riga.
-- [ ] Un foe già shattered che finisce dentro: nessun bottone.
+- [x] Un foe che finisce il turno fuori dall'area: nessuna riga.
+- [x] Un PG che finisce il turno dentro: nessuna riga.
+- [x] Un foe già shattered che finisce dentro: nessun bottone. **(un foe già shattered non riceve nessuna card)**
 
 ## Emerso R33 — Mist Strider Talent II: evasion per i foe dentro la nuvola (17 ottobre 2026, versione 1.15.192)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Mist Strider e Talent II: piazzare una nuvola sopra un foe. La card dice "counts all characters as having
+- [x] PG con Mist Strider e Talent II: piazzare una nuvola sopra un foe. La card dice "counts all characters as having
       evasion while inside".
-- [ ] Il GM attacca un PG con quel foe: nel dialog d'attacco "Defender has evasion" è già spuntato e c'è la chip con
-      il nome della nuvola; tirando esce il d6 di evasion.
-- [ ] Lo stesso foe fuori dalla nuvola: niente spunta automatica.
-- [ ] Un PG che attacca da dentro la nuvola: niente spunta (vale solo per i foe).
-- [ ] Senza Talent II (Talent I selezionato): nessuna nota e nessuna spunta.
+- [x] Il GM attacca un PG con quel foe: nel dialog d'attacco "Defender has evasion" è già spuntato e c'è la chip con
+      il nome della nuvola; tirando esce il d6 di evasion. **(spunta automatica e d6 di evasion ok; la chip col nome della nuvola non l'ho vista nel dialogo)**
+- [x] Lo stesso foe fuori dalla nuvola: niente spunta automatica.
+- [x] Un PG che attacca da dentro la nuvola: niente spunta (vale solo per i foe).
+- [ ] Senza Talent II (Talent I selezionato): nessuna nota e nessuna spunta. **(non provato)**
 
 ## Emerso R33 — Area spostata sopra i personaggi: offerta degli status (17 ottobre 2026, versione 1.15.191)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazzare una nuvola di Mist Strider vicino a un foe, poi spostarla con Shift + frecce sopra di lui: esce una
+- [x] Piazzare una nuvola di Mist Strider vicino a un foe, poi spostarla con Shift + frecce sopra di lui: esce una
       card "is now inside the area" con il bottone Blind+.
-- [ ] Spostarla di nuovo via dal foe (già blinded): card "is no longer inside" con "Remove Blind".
-- [ ] Con Quench, far passare l'area sopra un alleato e poi lontano: compare solo il cover, nessuna offerta di stealth
+- [x] Spostarla di nuovo via dal foe (già blinded): card "is no longer inside" con "Remove Blind".
+- [x] Con Quench, far passare l'area sopra un alleato e poi lontano: compare solo il cover, nessuna offerta di stealth
       "uscendo".
-- [ ] Tsunami con "Move 4" sopra dei personaggi: arriva la card degli status oltre alla card del movimento; con "Drag
-      them with it" non si rompe niente (i trascinati possono ricevere di nuovo l'offerta "enters").
+- [x] Tsunami con "Move 4" sopra dei personaggi: arriva la card degli status oltre alla card del movimento; con "Drag
+      them with it" non si rompe niente (i trascinati possono ricevere di nuovo l'offerta "enters"). **(vedi 1.15.70: con 'Drag them' arriva anche la domanda del dangerous)**
 
 ## Emerso R16 — Izuna Drop sulla card dell'attacco di Gigaton Whip (17 ottobre 2026, versione 1.15.190)
 
@@ -3231,62 +3237,62 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Mist Strider con due nuvole: a inizio turno card con due bottoni Consume; il clic toglie quella nuvola e
+- [x] Mist Strider con due nuvole: a inizio turno card con due bottoni Consume; il clic toglie quella nuvola e
       ingrigisce l'altro.
-- [ ] Il giocatore che non possiede la nuvola riceve l'avviso.
+- [ ] Il giocatore che non possiede la nuvola riceve l'avviso. **(da giocatore, blocco 18)**
 
 ## R33c2 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (17 ottobre 2026, versione 1.15.168)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bifröst HEIMDALL: "Add another" → una line sopra la prima viene rifiutata, una accanto va.
-- [ ] Ätherwand Talent I: seconda volta → gli spazi si aggiungono alla prima area (un solo template); se nessuno
+- [x] Bifröst HEIMDALL: "Add another" → una line sopra la prima viene rifiutata, una accanto va.
+- [x] Ätherwand Talent I: seconda volta → gli spazi si aggiungono alla prima area (un solo template); se nessuno
       spazio è adiacente, avviso.
-- [ ] Ätherwand con HELLERWIND: domanda all'uso; il gale ha l'etichetta Impassable e niente frecce di Talent II a
+- [x] Ätherwand con HELLERWIND: domanda all'uso; il gale ha l'etichetta Impassable e niente frecce di Talent II a
       inizio turno.
 
 ## R33c2 — Waterspout: terreno lasciato, HURRICANE (17 ottobre 2026, versione 1.15.167)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Waterspout con Talent II: la freccia da 3 sulla card → bottone per il difficult terrain; il clic lo crea su uno
-      spazio lasciato.
-- [ ] Lo spostamento da 1 (e Shift + freccia) non offre il terreno.
-- [ ] HURRICANE dal round 4: dopo Grow, un personaggio adiacente che inizia il turno riceve la riga "shoved 1".
-- [ ] Il bottone area di Waterspout non propone più "Small Blast".
+- [x] Waterspout con Talent II: la freccia da 3 sulla card → bottone per il difficult terrain; il clic lo crea su uno
+      spazio lasciato. **(il clic crea il difficult terrain da solo sul primo spazio lasciato (non lo fa scegliere))**
+- [x] Lo spostamento da 1 (e Shift + freccia) non offre il terreno. **(Move 1 senza offerta; Shift+freccia non provato)**
+- [x] HURRICANE dal round 4: dopo Grow, un personaggio adiacente che inizia il turno riceve la riga "shoved 1".
+- [x] Il bottone area di Waterspout non propone più "Small Blast". **(sulla scheda Waterspout ha solo il chip, nessun bottone area)**
 
 ## R33c2 — Tsunami si piazza contro un bordo della mappa (17 ottobre 2026, versione 1.15.166)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Tsunami si piazza contro qualsiasi bordo anche lontano dal PG, senza Alt.
-- [ ] Al centro della mappa compare l'avviso "Its edge must be adjacent to an edge of the map".
-- [ ] Dopo il piazzamento la domanda sul bordo di arrivo e "Move 4" funzionano come prima.
+- [x] Tsunami si piazza contro qualsiasi bordo anche lontano dal PG, senza Alt.
+- [x] Al centro della mappa compare l'avviso "Its edge must be adjacent to an edge of the map".
+- [x] Dopo il piazzamento la domanda sul bordo di arrivo e "Move 4" funzionano come prima.
 
 ## R33c2 — Aree terrain effect: danni su clic (17 ottobre 2026, versione 1.15.165)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Blitz con GUNGNIR: all'inizio e alla fine del turno compare la card con il bottone; il clic apre la card del
+- [x] Blitz con GUNGNIR: all'inizio e alla fine del turno compare la card con il bottone; il clic apre la card del
       danno (1 piercing) per chi è nell'area in quel momento.
-- [ ] Bifröst Talent II: a fine round la card ha "Add 2 spaces" e "1 piercing damage to all inside".
-- [ ] River Guardians: un foe inizia il turno nella nuvola ed esce → a fine turno card con "2 damage" e "Dazed"; se
-      resta dentro, o se non c'era all'inizio, nessuna card.
-- [ ] Area vuota: il clic dice "No one is in …".
+- [x] Bifröst Talent II: a fine round la card ha "Add 2 spaces" e "1 piercing damage to all inside".
+- [x] River Guardians: un foe inizia il turno nella nuvola ed esce → a fine turno card con "2 damage" e "Dazed"; se
+      resta dentro, o se non c'era all'inizio, nessuna card. **(card con '2 damage' e 'Dazed' ok; i casi senza card non provati)**
+- [x] Area vuota: il clic dice "No one is in …".
 
 ## R33c2 — Aree terrain effect: status per chi sta dentro (17 ottobre 2026, versione 1.15.164)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Mist Strider: un foe entra nella nuvola → card "Blind+ a <foe>", il clic lo rende Blind ongoing; quando esce →
+- [x] Mist Strider: un foe entra nella nuvola → card "Blind+ a <foe>", il clic lo rende Blind ongoing; quando esce →
       "Remove Blind".
-- [ ] Un alleato che entra nella nuvola di Mist Strider non riceve nessuna card (vale solo "Foes").
-- [ ] Nocturne: il Shade entra nelle proprie shadow clouds → nessuna card (immune); un altro personaggio → Blind+.
-- [ ] Magnabio piazzata su personaggi già dentro → una sola card con i bottoni Shattered+ per ciascuno.
-- [ ] Dark Wing: un alleato entra → bottone Cover; un foe non riceve niente.
-- [ ] Quench: entrando → Cover; uscendo → "Remove Cover" e "gains Stealth".
-- [ ] Tsunami con Talent II: un foe entra → riga "+1 curse on saves while inside", senza bottone.
-- [ ] Il bottone di un foe è grigio per il giocatore e attivo per il GM.
+- [x] Un alleato che entra nella nuvola di Mist Strider non riceve nessuna card (vale solo "Foes").
+- [x] Nocturne: il Shade entra nelle proprie shadow clouds → nessuna card (immune); un altro personaggio → Blind+.
+- [x] Magnabio piazzata su personaggi già dentro → una sola card con i bottoni Shattered+ per ciascuno.
+- [x] Dark Wing: un alleato entra → bottone Cover; un foe non riceve niente.
+- [x] Quench: entrando → Cover; uscendo → "Remove Cover" e "gains Stealth".
+- [x] Tsunami con Talent II: un foe entra → riga "+1 curse on saves while inside", senza bottone.
+- [ ] Il bottone di un foe è grigio per il giocatore e attivo per il GM. **(da giocatore, blocco 18)**
 
 ## R33a5 — Bottone Pick up a inizio turno per Comet (17 ottobre 2026, versione 1.15.163)
 
@@ -4522,52 +4528,52 @@ tutti dentro. PG: Stormbender con Tsunami, Waterspout e Gust (mastery NORTHSOUL 
 Nocturne, Freelancer con Showdown (mastery QUENCH), Geomancer con Bio (mastery MAGNABIO), Harvester con Blood Grove, un
 Ätherwand con Talent II. Solo JS: F5 dopo il deploy.
 
-- [ ] **Aree dei talenti / mastery**: Morrigan con DARK WING sbloccata → bottone area "Small Blast"; piazzata in range 3 resta
+- [x] **Aree dei talenti / mastery**: Morrigan con DARK WING sbloccata → bottone area "Small Blast"; piazzata in range 3 resta
       a inizio del turno dopo. Blitz con GUNGNIR → "Small Blast" (range 3), resta. Showdown con QUENCH → "Small Blast" va
-      da sola centrata sul PG (nessun clic) e resta. Senza mastery sbloccata quei bottoni non ci sono.
-- [ ] **Non più tutto "lasting"**: Bio con MAGNABIO sbloccata ma non armata → la Small Blast dell'attacco sparisce a inizio
+      da sola centrata sul PG (nessun clic) e resta. Senza mastery sbloccata quei bottoni non ci sono. **(DARK WING, GUNGNIR, QUENCH ok; i casi senza mastery non provati)**
+- [x] **Non più tutto "lasting"**: Bio con MAGNABIO sbloccata ma non armata → la Small Blast dell'attacco sparisce a inizio
       del turno dopo (prima restava). Land Waster con la mastery Ajax: la Burst 1 sparisce anch'essa. Con MAGNABIO armata,
-      "Medium Blast" resta, "Large Blast" no.
-- [ ] **Dangerous dell'area**: trascinare il foe dentro l'area di DARK WING → domanda "Dangerous terrain — Take 2 damage";
+      "Medium Blast" resta, "Large Blast" no. **(la Small Blast di Bio sparisce al turno dopo; Land Waster e Large/Medium armate non provati)**
+- [x] **Dangerous dell'area**: trascinare il foe dentro l'area di DARK WING → domanda "Dangerous terrain — Take 2 damage";
       trascinarci il PG alleato → nessuna domanda ("for foes"). Tsunami: dentro o fuori chiunque → domanda (difficult e
       dangerous); di nuovo nello stesso turno → nessuna domanda. GUNGNIR, MAGNABIO (Medium Blast): domanda per tutti. Nocturne
-      (shadow clouds): nessuna domanda (difficult, non dangerous).
-- [ ] **Promemoria all'entrata**: Gust (Line 3) → trascinare un personaggio dentro → card "enters the Terrain (Gust)" con la
+      (shadow clouds): nessuna domanda (difficult, non dangerous). **(DARK WING, Bio, Blood Grove ok; Nocturne nessuna domanda)**
+- [x] **Promemoria all'entrata**: Gust (Line 3) → trascinare un personaggio dentro → card "enters the Terrain (Gust)" con la
       frase "Characters that enter any end space …" e Remove. Bifröst → un alleato che entra ha la card ("Yourself and
       allies …"), un foe no.
-- [ ] **Più aree insieme**: Gust con NORTHSOUL: secondo piazzamento → domanda "Add another (2 of 3) / Replace them"; Add →
+- [x] **Più aree insieme**: Gust con NORTHSOUL: secondo piazzamento → domanda "Add another (2 of 3) / Replace them"; Add →
       due Line sulla mappa; al quarto "Add (removes the oldest)" toglie la prima. Senza NORTHSOUL: sostituisce senza
       domanda come prima. Mist Strider ("Create a second cloud"): "Add another (2 of 2)". Bifröst (HEIMDALL): lo stesso.
       Chiudere la domanda con la X → niente piazzato, niente tolto.
-- [ ] **Tsunami, il bordo**: piazzarla (Alt per metterla lontano dal PG, contro un bordo) → domanda "which edge?" (Top /
+- [x] **Tsunami, il bordo**: piazzarla (Alt per metterla lontano dal PG, contro un bordo) → domanda "which edge?" (Top /
       Bottom / Left / Right); scelto Bottom → card "placed: it moves now, and at the start of your turns" con "Move 4 toward
       the bottom edge" e le quattro frecce di STORMLASH. Move 4 → l'area scende di 4 caselle, il bottone diventa grigio,
       card "moves 4 spaces toward the bottom edge". Chiudere la domanda del bordo → la card ha i quattro bottoni del bordo
-      da scegliere.
-- [ ] **Tsunami, chi c'è dentro**: con un token dentro, Move → card "In it when it moved: …" con la frase del libro e "Drag
+      da scegliere. **(Move 4 si spegne dopo il clic; chiusura della domanda del bordo non provata)**
+- [x] **Tsunami, chi c'è dentro**: con un token dentro, Move → card "In it when it moved: …" con la frase del libro e "Drag
       them with it"; il clic apre la lista con le caselle spuntate; "Drag them" li sposta delle stesse caselle; un giocatore
       che non possiede il foe riceve "Ask the GM". Senza il clic nessun token si muove. Dopo il trascinamento nessuna domanda
-      di dangerous (restano dentro).
-- [ ] **Tsunami, bordo della mappa**: muovere finché uno spazio uscirebbe → domanda "edge of the map … Remove it?"; Remove la
-      toglie, Keep la lascia dov'è. Con Talent I: la card del movimento ricorda "creates a pit in its center space …".
-- [ ] **Tsunami a inizio turno**: Next turn fino al turno dello Stormbender → card "Start of …'s turn — areas" con Move 4 (dal
+      di dangerous (restano dentro). **(vedi Esito: dopo 'Drag them' arriva la domanda del dangerous)**
+- [x] **Tsunami, bordo della mappa**: muovere finché uno spazio uscirebbe → domanda "edge of the map … Remove it?"; Remove la
+      toglie, Keep la lascia dov'è. Con Talent I: la card del movimento ricorda "creates a pit in its center space …". **(Keep e Remove ok; Talent I ricordato nella card del movimento)**
+- [x] **Tsunami a inizio turno**: Next turn fino al turno dello Stormbender → card "Start of …'s turn — areas" con Move 4 (dal
       GM attivo, una sola card con due GM). Con LEGENDARY STORM sbloccata e round 4+: bottoni 1, 2, 3, 4 al posto di Move 4.
-      STORMLASH (frecce nella card del piazzamento): muove di 2 tutte le Tsunami dello stesso PG.
-- [ ] **Shift + frecce**: mouse sopra un'area che resta (Tsunami, Gust, un pit, una mote) → Shift + freccia la sposta di 1
+      STORMLASH (frecce nella card del piazzamento): muove di 2 tutte le Tsunami dello stesso PG. **(LEGENDARY STORM 1-4 e STORMLASH ok)**
+- [x] **Shift + frecce**: mouse sopra un'area che resta (Tsunami, Gust, un pit, una mote) → Shift + freccia la sposta di 1
       casella, avviso "moved 1 down"; la domanda di dangerous scatta poi per chi entra / esce dalla nuova posizione. Con il
       mouse fuori dalla mappa, su una scheda, o in un campo di testo, Shift + freccia fa quello di sempre. Un giocatore non può
-      muovere l'area di un altro. Durante il piazzamento di un'area non fa niente.
-- [ ] **Waterspout**: chip "Waterspout · 1" sull'abilità → un clic su uno spazio → casella viola "Waterspout", card con
+      muovere l'area di un altro. Durante il piazzamento di un'area non fa niente. **(Shift+freccia ok; i casi negativi non provati)**
+- [x] **Waterspout**: chip "Waterspout · 1" sull'abilità → un clic su uno spazio → casella viola "Waterspout", card con
       "difficult terrain: +1 movement to exit". A inizio turno dello Stormbender: card con "Once during your turn, you may move
       the waterspout 1 space" e quattro frecce; una freccia lo sposta di 1 e le altre diventano grigie. Con Talent II una
       seconda riga di frecce da 3. Con HURRICANE sbloccata e round 4+: "Grow to Small Blast" → la casella diventa una croce di
       5 con etichetta "Waterspout · Dangerous & difficult"; entrarci chiede i 2 danni.
-- [ ] **Ätherwand Talent II**: a inizio turno del PG card con "At the start of your turn, you can move the area 1 space" e
+- [x] **Ätherwand Talent II**: a inizio turno del PG card con "At the start of your turn, you can move the area 1 space" e
       le frecce.
-- [ ] **Bifröst Talent II**: area piazzata, fine del round (Next round) → card "End of round N — Bifröst" con la frase, "When
+- [x] **Bifröst Talent II**: area piazzata, fine del round (Next round) → card "End of round N — Bifröst" con la frase, "When
       they grow, deal 1 piercing damage …" e "Add 2 spaces": il clic fa cliccare 2 caselle adiacenti all'area, che si
-      aggiungono; card "the area grows by 2 spaces". All'avvio del combat (round 1) nessuna card. Senza Talent II nessuna card.
-- [ ] **Blood Grove ancora**: "Area +2" (Talent II) trova ancora l'area piazzata (ora ha il flag terrain "Dangerous (foes)")
+      aggiungono; card "the area grows by 2 spaces". All'avvio del combat (round 1) nessuna card. Senza Talent II nessuna card. **(Add 2 spaces ok; round 1 e senza Talent II non provati)**
+- [x] **Blood Grove ancora**: "Area +2" (Talent II) trova ancora l'area piazzata (ora ha il flag terrain "Dangerous (foes)")
       e la estende; un foe che ci entra riceve la domanda dei 2 danni, un alleato no.
 
 ## R33b — Spazi di terreno: pit, dangerous, difficult, segni con nome (16 ottobre 2026, versione 1.15.69)
