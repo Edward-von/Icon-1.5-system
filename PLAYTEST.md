@@ -2616,9 +2616,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Manda in chat il tratto Blessing of Faith del Chanter: non c'è più il pulsante "Gain True Strike".
-- [ ] Attacca con un'abilità e spunta a mano "True Strike" nel dialogo d'attacco: Dodge viene ignorato come prima.
-- [ ] Un'abilità con "Allies in range 2 gain true strike until…" mostra ancora il pulsante Gain True Strike.
+- [x] Manda in chat il tratto Blessing of Faith del Chanter: non c'è più il pulsante "Gain True Strike".
+- [ ] Attacca con un'abilità e spunta a mano "True Strike" nel dialogo d'attacco: Dodge viene ignorato come prima. **(non provato)**
+- [ ] Un'abilità con "Allies in range 2 gain true strike until…" mostra ancora il pulsante Gain True Strike. **(non provato)**
 
 ## Emerso R16 — Burial Fist: il round 4 vale anche per il bonus damage (17 ottobre 2026, versione 1.15.220)
 
@@ -3666,10 +3666,10 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Revenge con il combo token (Indignation): la card offre "Gain Counter" ma non più "Gain True Strike".
-- [ ] Land Waster Heroic e Takedown Exceed / Heroic: nessun bottone "Gain True Strike" sulla card.
-- [ ] Un foe con Pistolero (es. Scout): nessun bottone "Gain Unerring".
-- [ ] Blessing of Faith / Chanter offrono ancora "Gain True Strike" agli alleati (invariato).
+- [x] Revenge con il combo token (Indignation): la card offre "Gain Counter" ma non più "Gain True Strike". **(solo 'Counter until the end of your next turn')**
+- [ ] Land Waster Heroic e Takedown Exceed / Heroic: nessun bottone "Gain True Strike" sulla card. **(non provato)**
+- [ ] Un foe con Pistolero (es. Scout): nessun bottone "Gain Unerring". **(non provato)**
+- [ ] Blessing of Faith / Chanter offrono ancora "Gain True Strike" agli alleati (invariato). **(non provato)**
 
 ## Emerso R38b — Il dialog del danno riaperto ricorda le scelte (17 ottobre 2026, versione 1.15.129)
 
@@ -4269,14 +4269,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
+- [x] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
       bottoni per gli alleati, "Defiance" senza durata e "Unstoppable" con "until the end of their next turn". Nessun
-      Unstoppable su di te.
+      Unstoppable su di te. **(gruppo col nome della mastery (STAR SCORNED HERMIT): Defiance e 'Unstoppable until the end of their next turn')**
 - [ ] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
-      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza.
-- [ ] Con la mastery bloccata i due bottoni non compaiono.
-- [ ] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
-      all'alleato) come prima.
+      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza. **(non provato)**
+- [x] Con la mastery bloccata i due bottoni non compaiono.
+- [x] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
+      all'alleato) come prima. **(vedi 1.15.43)**
 
 ## Emerso R49 — Aria: la blast cresciuta resta centrata su di te (17 ottobre 2026, versione 1.15.84)
 
@@ -5158,46 +5158,46 @@ dell'abilità e nella card di Show in Chat.
 Setup: PG di prova con Mist Strider e Ätherwand (dal compendio Jobs o già sulla scheda: è solo codice); un foe sulla
 mappa.
 
-- [ ] **Mist Strider, mastery**: sbloccare la mastery → Show in Chat → riquadro Inflict, gruppo "River Guardians":
-      bottone Dazed. Resta il Blinded del Terrain effect.
-- [ ] **Mist Strider senza mastery**: il Dazed non compare.
-- [ ] **Ätherwand**: Show in Chat → riquadro Inflict, gruppo "Terrain Effect": bottone Shattered.
+- [x] **Mist Strider, mastery**: sbloccare la mastery → Show in Chat → riquadro Inflict, gruppo "River Guardians":
+      bottone Dazed. Resta il Blinded del Terrain effect. **(gruppo 'River Guardians' con Dazed, resta il Blind+)**
+- [x] **Mist Strider senza mastery**: il Dazed non compare.
+- [x] **Ätherwand**: Show in Chat → riquadro Inflict, gruppo "Terrain Effect": bottone Shattered. **(gruppo 'Terrain Effect' con Shattered)**
 - [ ] **Abilità che tolgono uno status (non devono cambiare)**: un'abilità con "ends" / "removes" uno status (es. una
-      cura) non propone l'Inflict di quello status.
+      cura) non propone l'Inflict di quello status. **(non provato)**
 
 ## R42 — Gain dei talenti con "one of them" e "Grant you and your ally" (16 ottobre 2026, versione 1.15.43)
 
 Setup: PG di prova Shade con Shadow Play ed Enochian con Blazing Bond (vanno bene anche quelli già sulla scheda: è solo
 codice); un alleato sulla mappa.
 
-- [ ] **Shadow Play, Talent II**: scegliere il Talent II → Show in Chat → riquadro Gain: bottone "Gain Evasion" per gli
-      alleati, con la durata "until the start of their next turn"; restano Stealth (alleati) e Dazed (foe) dell'Effect.
-- [ ] **Shadow Play, Talent I**: con il Talent I scelto l'Evasion non compare.
-- [ ] **Blazing Bond, Talent II**: scegliere il Talent II → Show in Chat → bottoni Gain Defiance su di te e
-      sull'alleato (gruppo "Comeback").
+- [x] **Shadow Play, Talent II**: scegliere il Talent II → Show in Chat → riquadro Gain: bottone "Gain Evasion" per gli
+      alleati, con la durata "until the start of their next turn"; restano Stealth (alleati) e Dazed (foe) dell'Effect. **('Talent II Evasion until the start of their next turn', restano Stealth e Dazed)**
+- [x] **Shadow Play, Talent I**: con il Talent I scelto l'Evasion non compare.
+- [x] **Blazing Bond, Talent II**: scegliere il Talent II → Show in Chat → bottoni Gain Defiance su di te e
+      sull'alleato (gruppo "Comeback"). **(due bottoni Defiance (gruppo Comeback))**
 - [ ] **Crimson Bloom / Divine Aegis**: Talent I di Crimson Bloom, Talent II di Divine Aegis → Gain Defiance per
-      l'alleato.
-- [ ] **Intimidate (non deve cambiare, R18)**: mastery sbloccata → ancora "Gain Unstoppable" su di te.
+      l'alleato. **(non provato)**
+- [x] **Intimidate (non deve cambiare, R18)**: mastery sbloccata → ancora "Gain Unstoppable" su di te. **('Iron Skull: Unstoppable until the end of your next turn')**
 
 ## R41 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (16 ottobre 2026, versione 1.15.42)
 
 Setup: PG di prova con Blackstar (Enochian) e Drifting Leaf (dal compendio Jobs: è solo codice, vanno bene anche
 quelli già sulla scheda); tre foe vicini sulla mappa.
 
-- [ ] **Blackstar**: Attack → Large Blast piazzato sui tre foe → nel dialog scegliere il foe al centro come bersaglio
+- [x] **Blackstar**: Attack → Large Blast piazzato sui tre foe → nel dialog scegliere il foe al centro come bersaglio
       d'attacco → la card d'attacco, riquadro Inflict: prima riga quel foe con "(attack target)" e il bottone
-      Shattered; le altre due righe con "(area)" e nessun Shattered.
-- [ ] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga.
+      Shattered; le altre due righe con "(area)" e nessun Shattered. **(Knuckle (attack target) con Shattered, gli altri (area) senza)**
+- [ ] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga. **(non provato)**
 - [ ] **Blocco Area**: un'abilità con status nel blocco Area (Heave-Ho: "Characters caught in the area are shoved 1,
       and foes become vulnerable"; o Chaos Tarot) → Vulnerable / Sealed sulle righe "(area)", non sul bersaglio
-      d'attacco.
+      d'attacco. **(non provato)**
 - [ ] **Frasi per tutti**: Soul Shot con un Exceed (15+) → "Foes inside … are blinded": Blinded su tutte le righe,
-      bersaglio d'attacco compreso; il Blinded dell'Effect ("Foe is blinded") solo sul bersaglio d'attacco.
-- [ ] **Foe**: un foe con un'azione ad area che dà uno status al bersaglio → stessa divisione sulla card.
+      bersaglio d'attacco compreso; il Blinded dell'Effect ("Foe is blinded") solo sul bersaglio d'attacco. **(non provato)**
+- [ ] **Foe**: un foe con un'azione ad area che dà uno status al bersaglio → stessa divisione sulla card. **(non provato)**
 - [ ] **Senza area / un solo bersaglio**: attacco normale su un foe → riquadro Inflict come prima, senza le scritte
-      "(attack target)" / "(area)".
+      "(attack target)" / "(area)". **(non provato)**
 - [ ] **Show in Chat**: Blackstar → Show in Chat con tre foe bersagliati → bottoni su tutte e tre le righe, il gruppo
-      Effect etichettato "Effect · attack target only".
+      Effect etichettato "Effect · attack target only". **(non provato)**
 
 ## R40 — Combo "instead of …" che sostituiscono solo una parte della base (16 ottobre 2026, versione 1.15.41)
 
@@ -5667,15 +5667,15 @@ griglia quadrata; tab Combat.
 Setup: un mondo con un PG Knave (Stalwart) con Intimidate (va bene anche una copia aggiunta prima dell'aggiornamento);
 almeno un foe sulla scena; tab Combat.
 
-- [ ] **Senza mastery**: Intimidate con la mastery bloccata → usare / Show in Chat → nessun bottone "Gain Unstoppable"
+- [x] **Senza mastery**: Intimidate con la mastery bloccata → usare / Show in Chat → nessun bottone "Gain Unstoppable"
       (le note di rush / shove restano come prima).
-- [ ] **Con mastery**: sbloccare la mastery Iron Skull → usare l'abilità → nella card c'è il bottone "Gain Unstoppable"
-      (su di sé) con la durata "until the end of your next turn" e la frase della mastery nel tooltip / promemoria.
-- [ ] **Applicare**: cliccare il bottone → il PG riceve Unstoppable (icona sul token e nel tab Conditions).
-- [ ] **Circle the Oak**: un PG Warden (Vagabond) con Circle the Oak e il Talent II scelto → la card ha il bottone
-      "Gain Evasion" (su di sé, until the end of your next turn); con il Talent I non c'è.
-- [ ] **Altre abilità**: un'abilità che già dava un "Gain" (es. God Hand col Talent I, "Gain evasion…") lo dà come
-      prima.
+- [x] **Con mastery**: sbloccare la mastery Iron Skull → usare l'abilità → nella card c'è il bottone "Gain Unstoppable"
+      (su di sé) con la durata "until the end of your next turn" e la frase della mastery nel tooltip / promemoria. **(bottone 'Unstoppable until the end of your next turn')**
+- [ ] **Applicare**: cliccare il bottone → il PG riceve Unstoppable (icona sul token e nel tab Conditions). **(non provato)**
+- [x] **Circle the Oak**: un PG Warden (Vagabond) con Circle the Oak e il Talent II scelto → la card ha il bottone
+      "Gain Evasion" (su di sé, until the end of your next turn); con il Talent I non c'è. **(Talent II: 'Evasion until the end of your next turn'; Talent I niente)**
+- [x] **Altre abilità**: un'abilità che già dava un "Gain" (es. God Hand col Talent I, "Gain evasion…") lo dà come
+      prima. **(God Hand Talent I: 'Talent I: Gain evasion…' sulla card (1.15.18))**
 
 ## R17 — Polaris può marcare un personaggio col Talent I (15 ottobre 2026, versione 1.15.19)
 
