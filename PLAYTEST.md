@@ -2557,13 +2557,13 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] Symphony, turno normale, 2 blessing tolte e casella Charge non spuntata → si piazzano al massimo 2 mote e si
-      perdono 2 blessing.
+      perdono 2 blessing. **(non provato)**
 - [ ] Turno slow nel tracker (bottone Slow attivo): la casella Charge è già spuntata; 2 blessing tolte → si piazzano
-      fino a 4 mote, si perdono solo 2 blessing; la card dice "Charge: +2 more spaces, no blessing for them".
-- [ ] Nessun personaggio con blessing: la finestra si apre comunque e dice che nessuno ne ha; con Charge spuntato si
-      piazzano 2 mote, senza Charge non viene creato nessun mote.
-- [ ] Charge spuntato a mano in un turno normale (per Songweave): funziona come nel turno slow.
-- [ ] Le regole "non adiacenti e non sovrapposti" e "casella libera" valgono anche per i 2 mote in più.
+      fino a 4 mote, si perdono solo 2 blessing; la card dice "Charge: +2 more spaces, no blessing for them". **(non provato)**
+- [x] Nessun personaggio con blessing: la finestra si apre comunque e dice che nessuno ne ha; con Charge spuntato si
+      piazzano 2 mote, senza Charge non viene creato nessun mote. **(nessuno con blessing (Sealer ignorato): con Charge 'Click up to 2 spaces', card 'Charge: +2 more spaces, no blessing for them')**
+- [x] Charge spuntato a mano in un turno normale (per Songweave): funziona come nel turno slow. **(Charge spuntato a mano in un turno normale)**
+- [x] Le regole "non adiacenti e non sovrapposti" e "casella libera" valgono anche per i 2 mote in più. **(una casella occupata dà 'isn't free')**
 
 ## Emerso R33 — Il rimbalzo di Bifröst (PATH TO ERENHELION) (17 ottobre 2026, versione 1.15.224)
 
@@ -2750,10 +2750,10 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Nemico marchiato da Deepwrath con Talent II, dentro un pit, con Shattered+: cancella il pit dalla card o con
-      Canc. Arriva una card con il bottone "Remove Shattered".
-- [ ] Stessa prova con un nemico in volo (elevazione > 0) o senza marchio: nessuna card.
-- [ ] Nemico su due pit sovrapposti: ne togli uno solo, nessuna card, perché è ancora dentro un pit.
+- [x] Nemico marchiato da Deepwrath con Talent II, dentro un pit, con Shattered+: cancella il pit dalla card o con
+      Canc. Arriva una card con il bottone "Remove Shattered". **(cancellato il pit (Canc): card 'Remove Shattered')**
+- [ ] Stessa prova con un nemico in volo (elevazione > 0) o senza marchio: nessuna card. **(non provato)**
+- [ ] Nemico su due pit sovrapposti: ne togli uno solo, nessuna card, perché è ancora dentro un pit. **(non provato)**
 
 ## Emerso R33 — Lo shove di Implode bloccato segnala la collisione (17 ottobre 2026, versione 1.15.209)
 
@@ -2912,15 +2912,15 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] PG con Deepwrath Talent I: marca un alleato, mettilo su un pit (a terra) e fagli tirare un salvezza dalla
-      scheda: nel risultato si legge "+N (…, Deepwrath: in a pit)" e il boon è contato. Fuori dal pit niente boon.
+      scheda: nel risultato si legge "+N (…, Deepwrath: in a pit)" e il boon è contato. Fuori dal pit niente boon. **(non provato)**
 - [ ] Stesso alleato nel pit: un foe più in alto lo attacca. La finestra di attacco non dà boon di altezza e mostra
-      "No height advantage vs … (Deepwrath)". Un alleato più in alto invece li prende ancora.
-- [ ] Deepwrath Talent II: marca un foe, mettilo su un pit, aprigli contro la finestra del danno: "Bonus dice" parte a
-      1 e c'è la nota "marked, inside a pit — +1 bonus die". Con "Reroll (same use)" il dado non raddoppia.
+      "No height advantage vs … (Deepwrath)". Un alleato più in alto invece li prende ancora. **(non provato)**
+- [x] Deepwrath Talent II: marca un foe, mettilo su un pit, aprigli contro la finestra del danno: "Bonus dice" parte a
+      1 e c'è la nota "marked, inside a pit — +1 bonus die". Con "Reroll (same use)" il dado non raddoppia. **(Bonus dice 1 con 'marked, inside a pit — +1 bonus die')**
 - [ ] Foe marcato (Talent II) che entra trascinandosi in un pit: card con "Shattered+ to …". Il click dà Shattered+.
-      Quando esce dal pit, card con "Remove Shattered".
-- [ ] Bottone "Create pit" a inizio turno del foe marcato (Talent II): dopo il pit arriva anche la card Shattered+.
-- [ ] Senza talento selezionato, o con il Talent I su un foe: nessuno di questi effetti.
+      Quando esce dal pit, card con "Remove Shattered". **(non provato)**
+- [x] Bottone "Create pit" a inizio turno del foe marcato (Talent II): dopo il pit arriva anche la card Shattered+. **(dopo 'Create watery pit' arriva la card Shattered+)**
+- [ ] Senza talento selezionato, o con il Talent I su un foe: nessuno di questi effetti. **(non provato)**
 
 ## Emerso R35 — Interrupt "when targeted" sulla card dell'attacco (17 ottobre 2026, versione 1.15.195)
 
@@ -3198,10 +3198,10 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un PG attacca un foe in un pit, alla stessa elevazione: il dialog mostra "Height advantage Δ1".
-- [ ] Il PG nel pit attacca un foe fuori: "+1 curse".
-- [ ] Un token che vola (elevazione 1 o più) sopra un pit non perde il livello.
-- [ ] Uscire da una casella Difficult mostra l'avviso.
+- [x] Un PG attacca un foe in un pit, alla stessa elevazione: il dialog mostra "Height advantage Δ1". **('Height advantage Δ1: +1 boon')**
+- [ ] Il PG nel pit attacca un foe fuori: "+1 curse". **(non provato)**
+- [ ] Un token che vola (elevazione 1 o più) sopra un pit non perde il livello. **(non provato)**
+- [x] Uscire da una casella Difficult mostra l'avviso. **(avvisi 'leaves / crosses difficult terrain')**
 
 ## R33b2 — Polaris e Implode si attivano dalle card (17 ottobre 2026, versione 1.15.173)
 
@@ -3220,12 +3220,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un foe entra in una mote: "Detonate" fa la Small Blast su di lui e toglie la mote; la card dopo ha "Fray (N) to
-      foes" e "Pit under <foe>".
-- [ ] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1".
-- [ ] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card.
+- [x] Un foe entra in una mote: "Detonate" fa la Small Blast su di lui e toglie la mote; la card dopo ha "Fray (N) to
+      foes" e "Pit under <foe>". **(Warrior entra nella mote: Detonate → Small Blast (on Warrior), card con 'Fray (4) to foes' e 'Pit under Warrior')**
+- [ ] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1". **(non provato)**
+- [ ] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card. **(non provato)**
 - [ ] Un personaggio entra nella mine di Party Favor: Detonate apre il gamble, poi la Medium Blast sulla casella, poi
-      la mine sparisce. Chiudendo il gamble non succede niente.
+      la mine sparisce. Chiudendo il gamble non succede niente. **(non provato)**
 
 ## R33b2 — Eclipse esplode da una card (17 ottobre 2026, versione 1.15.171)
 
@@ -3242,15 +3242,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Marcare un foe con Deepwrath: a inizio del suo turno la card ha "Create watery pit"; il clic crea il pit sotto
-      di lui e il clic destro sul chip Pit lo toglie.
+- [x] Marcare un foe con Deepwrath: a inizio del suo turno la card ha "Create watery pit"; il clic crea il pit sotto
+      di lui e il clic destro sul chip Pit lo toglie. **('Create watery pit' sulla card di inizio turno, il pit compare)**
 - [ ] Il foe finisce il turno in un pit e c'è un altro pit libero entro 3: il GM clicca "Drag under" e poi quel pit,
-      il token ci va. Un pit occupato, troppo lontano o quello di partenza viene rifiutato.
+      il token ci va. Un pit occupato, troppo lontano o quello di partenza viene rifiutato. **(non provato)**
 - [ ] Con DARKTIDE sbloccata, il foe marcato si muove nel suo turno: compare la domanda "Leave it", solo la prima
-      volta nel turno.
+      volta nel turno. **(non provato)**
 - [ ] Con DARKTIDE: un alleato marcato entra in terreno dangerous e non c'è nessuna domanda (solo un avviso); un foe
-      marcato riceve la domanda "Take 3 damage".
-- [ ] Un giocatore senza permessi sul foe clicca "Drag under": compare l'avviso "ask the GM".
+      marcato riceve la domanda "Take 3 damage". **(non provato)**
+- [ ] Un giocatore senza permessi sul foe clicca "Drag under": compare l'avviso "ask the GM". **(non provato)**
 
 ## R33c2 — Mist Strider: consumare una nuvola (17 ottobre 2026, versione 1.15.169)
 
@@ -3997,13 +3997,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Geo (Geomancer): attaccare con l'Arc 6. Al turno dopo l'area sparisce dalla mappa; il masso creato (se messo)
-      resta.
-- [ ] The Tower (Seer): usarla su un foe. L'area non resta come terrain effect al turno dopo; il meteorite (oggetto)
-      resta.
-- [ ] Dark Sliver (Harvester): attaccare. L'area non resta sulla mappa al turno dopo.
-- [ ] Controllo: Blood Grove, Tsunami e Sanctify restano sulla mappa come prima (dangerous / difficult).
-- [ ] Controllo: Holy è ancora a posto (l'area sparisce, il pit della combo Hades resta).
+- [x] Geo (Geomancer): attaccare con l'Arc 6. Al turno dopo l'area sparisce dalla mappa; il masso creato (se messo)
+      resta. **(controllato con areaLasts(baseAreaText): Geo non resta)**
+- [x] The Tower (Seer): usarla su un foe. L'area non resta come terrain effect al turno dopo; il meteorite (oggetto)
+      resta. **(The Tower non resta (stesso controllo))**
+- [x] Dark Sliver (Harvester): attaccare. L'area non resta sulla mappa al turno dopo. **(Dark Sliver non resta (stesso controllo))**
+- [x] Controllo: Blood Grove, Tsunami e Sanctify restano sulla mappa come prima (dangerous / difficult). **(Blood Grove e Tsunami restano)**
+- [x] Controllo: Holy è ancora a posto (l'area sparisce, il pit della combo Hades resta). **(Holy non resta)**
 
 ## Emerso R47b — Sturmreiten: con MJÖLLNIR il Talent II aggiunge un secondo Arc 5 (17 ottobre 2026, versione 1.15.102)
 
@@ -4603,45 +4603,45 @@ Enochian con Elden Rune e Pyroclast (Talent I in una prova, mastery MAGMOTIC in 
 (mastery sbloccata), Seer con Eclipse e Polaris, Harvester con Blood Grove (Talent II), Wright con Geyser. Solo JS, template
 e CSS: F5 dopo il deploy.
 
-- [ ] **Chip**: Terraforming mostra "Pit · 2" (marrone) e "Difficult · 3" (verde oliva); Pyroclast con Talent I "Dangerous · 2"
+- [x] **Chip**: Terraforming mostra "Pit · 2" (marrone) e "Difficult · 3" (verde oliva); Pyroclast con Talent I "Dangerous · 2"
       (rosso), con MAGMOTIC "Dangerous pit · 1"; Eclipse "Brand · 1" e "Dangerous · any"; Symphony "Mote · 4" e "Pit · 1";
       Polaris "Polaris · 1", Implode "Implode · 1". Senza talento scelto / mastery bloccata i loro chip non ci sono. Mouse
-      sopra un chip → didascalia con la fonte, cosa fa e la frase del libro.
-- [ ] **Piazzare**: clic su "Pit · 2" → avviso "Click up to 2 spaces"; un clic illumina lo spazio, un secondo clic sullo stesso
+      sopra un chip → didascalia con la fonte, cosa fa e la frase del libro. **(tutti i chip giusti (Rime senza Infuse: nessun chip))**
+- [x] **Piazzare**: clic su "Pit · 2" → avviso "Click up to 2 spaces"; un clic illumina lo spazio, un secondo clic sullo stesso
       lo toglie; al secondo spazio finisce da solo → due caselle marroni con "Pit · Terraforming", card "Terraforming: 2 ×
       Pit" con "Remove all". "Dangerous · any": si clicca quanto serve, Invio o clic destro finisce; Esc → niente creato.
-      Clic destro durante la scelta su un token: non si apre l'HUD.
-- [ ] **Da giocatore**: stesso piazzamento con l'utente giocatore (proprietario del PG) → gli spazi compaiono anche per il GM.
-- [ ] **Togliere**: tasto destro sul chip → "Remove the 2 pit spaces of Terraforming?" → spariscono; "Remove all" sulla card →
+      Clic destro durante la scelta su un token: non si apre l'HUD. **(Pit · 2 con clic / riclic, card 'Remove all'; 'any', Esc e clic destro non provati)**
+- [ ] **Da giocatore**: stesso piazzamento con l'utente giocatore (proprietario del PG) → gli spazi compaiono anche per il GM. **(non provato)**
+- [x] **Togliere**: tasto destro sul chip → "Remove the 2 pit spaces of Terraforming?" → spariscono; "Remove all" sulla card →
       spariscono, il bottone si spegne; layer dei template di Foundry → selezione di uno spazio e Canc → sparisce solo quello.
-      Un template normale (area d'attacco) non viene toccato.
-- [ ] **Restano**: gli spazi non spariscono all'inizio del turno successivo del PG (le aree d'attacco sì).
-- [ ] **Dangerous terrain**: trascina il foe dentro uno spazio dangerous → domanda "Dangerous terrain … Take 2 piercing
+      Un template normale (area d'attacco) non viene toccato. **('Remove all' toglie tutto; gli altri modi non provati)**
+- [ ] **Restano**: gli spazi non spariscono all'inizio del turno successivo del PG (le aree d'attacco sì). **(non provato)**
+- [x] **Dangerous terrain**: trascina il foe dentro uno spazio dangerous → domanda "Dangerous terrain … Take 2 piercing
       damage, ignoring armor and vigor?"; "Take 2 damage" → card "Damage Applied", 2 hp in meno anche col vigor pieno e
       l'armatura. In combattimento, nello stesso turno, uscire o entrare in un altro spazio dangerous non chiede più; al turno
-      dopo chiede di nuovo. "Not this time" → niente danno. Da giocatore su un foe che non possiede: il danno passa dal GM.
+      dopo chiede di nuovo. "Not this time" → niente danno. Da giocatore su un foe che non possiede: il danno passa dal GM. **(vedi blocchi 1-2 (dangerous con domanda, una volta per turno))**
 - [ ] **Only for foes**: Gates of Hell mastery → "Afterimage · 1" (solo spazi liberi: su un token → avviso). Un alleato che ci
-      entra: nessuna domanda; un foe: la domanda del dangerous.
+      entra: nessuna domanda; un foe: la domanda del dangerous. **(non provato)**
 - [ ] **Mote**: Symphony → "Mote · 4": uno spazio accanto a una mote già messa → avviso "can't be adjacent"; su un token →
       avviso "isn't free". Un personaggio trascinato su una mote → card "<nome> enters the Mote (Symphony)" con la frase
       "Any character that enters an affected space … detonates the mote …" e Remove. Un personaggio che inizia il turno su una
-      mote → card "Start of <nome>'s turn" (una sola, dal GM).
+      mote → card "Start of <nome>'s turn" (una sola, dal GM). **(non provato)**
 - [ ] **Mine**: Party Favor → "Mine · 1" su uno spazio libero; un personaggio ci entra → card con "When any character enters
-      the space, the mine explodes …" e la tabella del gamble; Remove la toglie.
-- [ ] **Elden Rune**: clic sul chip → la runa compare da sola sotto il token del PG, senza clic sulla mappa. Un alleato che ci
-      entra: niente; un foe che entra o esce → card "A foe can scrub out an Elden Rune …".
+      the space, the mine explodes …" e la tabella del gamble; Remove la toglie. **(non provato)**
+- [x] **Elden Rune**: clic sul chip → la runa compare da sola sotto il token del PG, senza clic sulla mappa. Un alleato che ci
+      entra: niente; un foe che entra o esce → card "A foe can scrub out an Elden Rune …". **(la runa va da sola sotto il token; foe che entra → card 'A foe can scrub out…')**
 - [ ] **Replace**: un'abilità con "lasts until this ability is used again" che crea spazi (se non ce n'è nessuna nel gruppo,
-      saltare) → al secondo uso "Replace / Keep both".
+      saltare) → al secondo uso "Replace / Keep both". **(non provato)**
 - [ ] **Infuse**: Rime senza Infuse → nessun chip pit; Infuse 3 DAGON armato → "Pit · 1" (fonte "Dagon"); piazzato → l'Infuse
-      non è più armato. Con MAGNARIME sbloccata → "Pit · any".
-- [ ] **Blood Grove**: Talent II → chip "Area +2". Senza l'area sulla mappa → avviso "Place the area of Blood Grove first". Con
+      non è più armato. Con MAGNARIME sbloccata → "Pit · any". **(non provato)**
+- [x] **Blood Grove**: Talent II → chip "Area +2". Senza l'area sulla mappa → avviso "Place the area of Blood Grove first". Con
       la medium blast piazzata: clic su uno spazio non adiacente → avviso; due spazi adiacenti (il secondo può essere accanto al
-      primo nuovo) → l'area cresce, card "the area grows by 2 spaces (11 in all)".
+      primo nuovo) → l'area cresce, card "the area grows by 2 spaces (11 in all)". **(vedi 1.15.70)**
 - [ ] **Volcanic Geyser**: Erupt con "Place them now" e un foe nella medium blast → dopo averlo piazzato, domanda "Volcanic
       Geyser — dangerous terrain: mark a dangerous space under <foe>?" → "Mark" → spazio rosso dove è atterrato, card con
-      Remove. Un alleato piazzato non lo riceve. Erupt senza "Place them now" → nessuna domanda.
+      Remove. Un alleato piazzato non lo riceve. Erupt senza "Place them now" → nessuna domanda. **(non provato)**
 - [ ] **Tratto**: un tratto con uno spazio nel testo (se il PG ne ha uno) mostra il chip nella riga del tratto; tratto di un
-      capitolo non sbloccato → niente chip.
+      capitolo non sbloccato → niente chip. **(non provato)**
 
 ## R33a4 — Oggetti e movimento: Underway, Comet, Megamushroom, Geyser, pile con personaggi sopra, Aethershard (16 ottobre 2026, versione 1.15.68)
 
