@@ -713,11 +713,50 @@ Da compilare durante il playtest.
 
 ### Non funziona
 
-- …
+- **Oggetti sulla mappa sempre "linked" (blocca 1.15.227 e varie prove del blocco 1).** `IconActor._preCreate`
+  (`module/actor/IconActor.mjs:14`) forza `prototypeToken.actorLink = true` su ogni attore nuovo, anche su quelli
+  creati da `objectActorData` (`map-objects.mjs:265`, che chiede `actorLink: false`) e dai summon dei foe
+  (`foe-summons.mjs:58`). Risultato: il token del Boulder è legato all'attore del folder Map Objects, tutte le copie
+  condividono un solo attore (altezza, destructible, blessing presi), e la scheda aperta dal token è quella del
+  "template" (`actor.isToken` falso → `world: true`), quindi il bottone "Add walls" non compare mai. Fix proposto:
+  in `_preCreate` forzare il link solo se `data.prototypeToken?.actorLink` non è esplicitamente `false`.
+  Per proseguire il playtest ho messo un rimedio solo in pagina (patch runtime di `_preCreate`), il codice non è
+  toccato.
+- **1.15.229, sesta casella — falso positivo "ignora il rampart".** `ignoresRampart` (`map-objects.mjs:1133`)
+  legge come immuni i foe con il tratto **Tactics Aura** ("Allies ignore engagement and rampart effects while in the
+  aura": Mechanist, Decurion, Legatus, Artillerist, Sergeant, Evocatus). Provato: il Mechanist entra a piedi
+  accanto alla Thrown Weapon senza domanda. Il tratto vale per gli alleati nell'aura, non per il foe stesso. (Hovering
+  del War Balloon e Slip degli Artillery funzionano come previsto.)
+- **1.15.161 — il percorso del movimento non viene mai letto.** Gli hook `updateToken` leggono
+  `options.movement?.[id]` (`map-objects.mjs:1491`, `terrain-spaces.mjs:1897`), ma in Foundry 13.351 i dati del
+  movimento arrivano in `options._movement[id]` (con `passed.waypoints`); `options.movement` non esiste. Quindi
+  `movePath` vede solo partenza e arrivo: il creatore di Comet che passa accanto all'arma e si ferma lontano non riceve
+  la domanda "passed through … pick up?" (provato sia col trascinamento del mouse sia con `move`), e lo stesso vale per
+  la benedizione del Megamushroom attraversato e per i terrain spaces attraversati (blocco 9). Fix proposto: leggere
+  `options._movement?.[id] ?? options.movement?.[id]`, oppure usare l'hook `moveToken` di v13 che passa il movimento.
+  Per proseguire ho aggiunto in pagina un hook che copia `_movement` in `movement`.
+- **1.15.66, quinta casella — Comet non blocca l'attacco base.** Con la Thrown Weapon a terra, l'attacco di
+  un'abilità (Draken Cross) chiede "you cannot attack", ma l'attacco base della scheda (Basic Actions → Light Attack,
+  azione `basicAttackRoll`) tira senza domanda. Il controllo `objectsForbiddingAttacks` è solo in
+  `IconSheet.mjs:2707` (attacco delle abilità). "While this object is active, you cannot attack" (p.128) vale anche
+  per l'attacco base.
 
 ### Dubbi
 
-- …
+- **1.15.157, seconda casella**: un foe accanto a un Underway riceve il suggerimento generico "Cover? object" (il
+  portale è un oggetto alto 1). Il libro dice solo che i portali non danno obstruction (p.168), non parla di
+  copertura: va bene così o l'Underway non deve dare copertura a nessuno tranne gli alleati del Talent II?
+- **Collegamento col server**: due volte, durante movimenti o cancellazioni di più token, il client GM ha perso la
+  sincronia (avviso "lost connection… re-established") e mostrava posizioni vecchie finché non ho ricaricato. Il
+  server aveva applicato tutto. Probabilmente non è del sistema, lo segnalo nel caso Maar veda token "fermi".
+  Una terza volta la scheda del browser si è proprio bloccata (JS fermo) dopo una serie di spostamenti di token, e al
+  ricaricamento restava ferma al 98% del caricamento della scena; dopo aver chiuso la scheda e riaperto Foundry la
+  stessa scena si carica normalmente, quindi non dipende dai dati della scena. Non sono riuscito a riprodurlo.
+- **1.15.188**: il chip "Weakened −2" nella finestra del danno non si spunta da solo quando chi tira ha lo status
+  weakened (va spuntato a mano). Le prove della 1.15.188 funzionano solo spuntandolo. È voluto?
+- **Copertura degli Aethershard**: uno shard alto 1 accanto al bersaglio, dal lato dell'attaccante, dà "Cover ½" (è
+  un oggetto alto 1, p.92). Con il Talent II lo stesso shard dà anche pierce: il danno viene dimezzato dalla
+  copertura ma passa l'armatura. Regola giusta?
 
 ---
 
@@ -2427,46 +2466,46 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Comet a terra: trascinare un foe con l'azione Fly (o con lo status flying) dentro uno spazio accanto all'arma:
+- [x] Comet a terra: trascinare un foe con l'azione Fly (o con lo status flying) dentro uno spazio accanto all'arma:
       movimento rifiutato con avviso.
-- [ ] Stessa prova con l'azione Teleport (blink) di Foundry, verso uno spazio accanto o da uno spazio accanto verso
+- [x] Stessa prova con l'azione Teleport (blink) di Foundry, verso uno spazio accanto o da uno spazio accanto verso
       fuori: rifiutato.
-- [ ] Trascinare un foe a piedi attraverso uno spazio accanto all'arma: compare la domanda. "Dash — stay" lo lascia
+- [x] Trascinare un foe a piedi attraverso uno spazio accanto all'arma: compare la domanda. "Dash — stay" lo lascia
       dov'era, "Normal move or rush — go on" lo sposta.
-- [ ] Dopo "go on", muovere di nuovo lo stesso foe nello stesso turno: nessuna nuova domanda. Al turno dopo, la
-      domanda torna.
-- [ ] Muovere con la tastiera, passo per passo, accanto all'arma: una sola domanda per turno.
-- [ ] Foe con lo status unstoppable, o con il tratto "Hovering: Immune to rampart": nessun controllo.
-- [ ] Muovere un PG alleato accanto all'arma: nessun controllo. Il "Pick up" di Comet funziona come prima.
+- [x] Dopo "go on", muovere di nuovo lo stesso foe nello stesso turno: nessuna nuova domanda. Al turno dopo, la
+      domanda torna. **(il turno dopo la domanda torna; la stessa risposta vale fino al cambio turno)**
+- [x] Muovere con la tastiera, passo per passo, accanto all'arma: una sola domanda per turno.
+- [x] Foe con lo status unstoppable, o con il tratto "Hovering: Immune to rampart": nessun controllo. **(Hovering (War Balloon) ok; ma vedi Esito: falso positivo su Tactics Aura)**
+- [x] Muovere un PG alleato accanto all'arma: nessun controllo. Il "Pick up" di Comet funziona come prima.
 
 ## Emerso R33 — Copertura degli oggetti calcolata per direzione (17 ottobre 2026, versione 1.15.228)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con un boulder alto 1 subito a est, foe a 3 spazi a est nella stessa riga: la card del danno mostra "Cover ½
-      — boulder" e Apply dimezza.
-- [ ] Stesso schema con il foe a ovest, o adiacente al PG: nessuna copertura, danno intero.
-- [ ] Foe su un'elevazione più alta del PG: nessuna copertura.
-- [ ] Boulder in diagonale (nord-est), foe molto a nord-est: dimezza. Foe solo a est (oltre la colonna ma non la
+- [x] PG con un boulder alto 1 subito a est, foe a 3 spazi a est nella stessa riga: la card del danno mostra "Cover ½
+      — boulder" e Apply dimezza. **(11 → 6 con Apply)**
+- [x] Stesso schema con il foe a ovest, o adiacente al PG: nessuna copertura, danno intero.
+- [x] Foe su un'elevazione più alta del PG: nessuna copertura.
+- [x] Boulder in diagonale (nord-est), foe molto a nord-est: dimezza. Foe solo a est (oltre la colonna ma non la
       riga): chip "Cover? boulder (diagonal)" e danno intero.
-- [ ] Attacco unerring: il chip dice "ignored (Unerring)" e il danno non viene dimezzato.
-- [ ] Geyser con Talent I, alleato in piedi sul geyser, foe a distanza a terra: dimezza.
-- [ ] Nei dialoghi di tiro (senza attaccante) resta il chip suggerimento di prima.
+- [x] Attacco unerring: il chip dice "ignored (Unerring)" e il danno non viene dimezzato.
+- [x] Geyser con Talent I, alleato in piedi sul geyser, foe a distanza a terra: dimezza. **(controllato con objectCoverAgainst, non con una card)**
+- [x] Nei dialoghi di tiro (senza attaccante) resta il chip suggerimento di prima. **(il dialogo del Warrior mostra 'Cover? object')**
 
 ## R33a5 — Muri di Foundry attorno agli oggetti, a clic del GM (17 ottobre 2026, versione 1.15.227)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Da GM, piazzare un Boulder e aprire la sua scheda: c'è "Add walls". Cliccarlo: compaiono 4 muri attorno al token
-      e il bottone diventa "Remove walls".
-- [ ] Con i muri, trascinare un foe dentro lo spazio del boulder: Foundry lo ferma. La vista attraverso il boulder
+- [x] Da GM, piazzare un Boulder e aprire la sua scheda: c'è "Add walls". Cliccarlo: compaiono 4 muri attorno al token
+      e il bottone diventa "Remove walls". **(solo con il rimedio al link degli oggetti, vedi Esito)**
+- [x] Con i muri, trascinare un foe dentro lo spazio del boulder: Foundry lo ferma. La vista attraverso il boulder
       resta libera.
-- [ ] Trascinare il token del boulder in un altro spazio: il token esce dai suoi muri e i muri lo seguono.
-- [ ] Cancellare il token del boulder: i suoi muri spariscono.
-- [ ] "Remove walls" toglie solo i muri di quell'oggetto, non gli altri muri della scena.
-- [ ] Piazzare un Underway: sulla sua scheda il bottone "Add walls" non c'è.
-- [ ] Da giocatore, la scheda dell'oggetto non mostra il bottone.
-- [ ] Ricaricare la scena (F5) dopo aver tolto un oggetto con muri a mano: i muri orfani spariscono.
+- [x] Trascinare il token del boulder in un altro spazio: il token esce dai suoi muri e i muri lo seguono.
+- [x] Cancellare il token del boulder: i suoi muri spariscono.
+- [x] "Remove walls" toglie solo i muri di quell'oggetto, non gli altri muri della scena.
+- [x] Piazzare un Underway: sulla sua scheda il bottone "Add walls" non c'è.
+- [ ] Da giocatore, la scheda dell'oggetto non mostra il bottone. **(da giocatore, blocco 18)**
+- [x] Ricaricare la scena (F5) dopo aver tolto un oggetto con muri a mano: i muri orfani spariscono.
 
 ## Emerso R49 — Harvest Moon: scegli quali plant esplodono e chi prende la blessing (17 ottobre 2026, versione 1.15.226)
 
@@ -2954,13 +2993,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PC con Aethershard Talent II, weakened, attacca due foe: uno vicino a uno shard, uno no. Sulla card il totale ha
-      "Weakened −2". La riga del foe vicino allo shard mostra "Pierce (Aethershard) +2".
-- [ ] Apply sul foe vicino allo shard: prende totale +2, senza armatura. Apply sull'altro: prende il totale meno
+- [x] PC con Aethershard Talent II, weakened, attacca due foe: uno vicino a uno shard, uno no. Sulla card il totale ha
+      "Weakened −2". La riga del foe vicino allo shard mostra "Pierce (Aethershard) +2". **(con il chip Weakened spuntato a mano, vedi Dubbi)**
+- [x] Apply sul foe vicino allo shard: prende totale +2, senza armatura. Apply sull'altro: prende il totale meno
       l'armatura.
-- [ ] Danno ridotto a 0 dal weakened: sul foe vicino allo shard Apply toglie comunque i 2.
-- [ ] Senza weakened: la chip resta "Pierce (Aethershard)" senza +2 e il danno non cambia. Una card già Pierce di suo
-      non riceve aggiunte.
+- [x] Danno ridotto a 0 dal weakened: sul foe vicino allo shard Apply toglie comunque i 2.
+- [x] Senza weakened: la chip resta "Pierce (Aethershard)" senza +2 e il danno non cambia. Una card già Pierce di suo
+      non riceve aggiunte. **(senza weakened ok; card già Pierce non provata)**
 
 ## Emerso R35 — Great Soul Bond usabile dalla card del danno (17 ottobre 2026, versione 1.15.187)
 
@@ -3253,65 +3292,65 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Il creatore di Comet inizia il turno accanto alla Thrown Weapon: la card ha "Pick up" e il clic toglie l'arma (e
+- [x] Il creatore di Comet inizia il turno accanto alla Thrown Weapon: la card ha "Pick up" e il clic toglie l'arma (e
       la sua aura rampart).
-- [ ] Un altro giocatore che preme il bottone riceve "Only … can pick it up".
-- [ ] Premuto quando l'arma non c'è già più: messaggio "no longer on the map".
+- [ ] Un altro giocatore che preme il bottone riceve "Only … can pick it up". **(da giocatore, blocco 18)**
+- [x] Premuto quando l'arma non c'è già più: messaggio "no longer on the map". **(messaggio 'That object is no longer on the map.')**
 
 ## R33a5 — Bale Portal: foe spinti e una volta per round (17 ottobre 2026, versione 1.15.162)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Mastery Bale Portal sbloccata: il GM trascina un foe accanto a un underway, arriva la domanda; "Save failed —
+- [x] Mastery Bale Portal sbloccata: il GM trascina un foe accanto a un underway, arriva la domanda; "Save failed —
       teleport" fa scegliere lo spazio accanto all'altro portale.
-- [ ] Nello stesso round, riprova sullo stesso foe: un giocatore riceve il rifiuto, il GM la domanda "Teleport
-      anyway?".
-- [ ] Al round dopo il foe si può teletrasportare di nuovo.
+- [x] Nello stesso round, riprova sullo stesso foe: un giocatore riceve il rifiuto, il GM la domanda "Teleport
+      anyway?". **(da GM: domanda 'Teleport anyway?'; il rifiuto per il giocatore va provato nel blocco 18)**
+- [x] Al round dopo il foe si può teletrasportare di nuovo.
 
 ## R33a5 — Gli oggetti guardano il percorso del movimento (17 ottobre 2026, versione 1.15.161)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Il creatore di Comet passa accanto all'arma e si ferma lontano: arriva la domanda "passed through … pick up?".
-- [ ] Un alleato attraversa lo spazio del Megamushroom senza fermarsi: domanda della benedizione.
-- [ ] Un movimento con tappe col righello (più waypoint): conta ogni tratto.
+- [x] Il creatore di Comet passa accanto all'arma e si ferma lontano: arriva la domanda "passed through … pick up?". **(solo con il rimedio _movement, vedi Esito)**
+- [x] Un alleato attraversa lo spazio del Megamushroom senza fermarsi: domanda della benedizione. **(solo con il rimedio _movement)**
+- [x] Un movimento con tappe col righello (più waypoint): conta ogni tratto. **(con il rimedio; due tappe = due domande separate (entered, poi left))**
 
 ## R33a5 — Salire e scendere dagli oggetti camminando (17 ottobre 2026, versione 1.15.160)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Trascina un PG su un boulder di altezza 2: la domanda propone elevazione 2 e "+2 movement"; con "Stand on height
+- [x] Trascina un PG su un boulder di altezza 2: la domanda propone elevazione 2 e "+2 movement"; con "Stand on height
       2" l'elevazione diventa 2, con "Not now" resta com'era.
-- [ ] Trascinalo giù a terra: la domanda propone elevazione 0.
-- [ ] Un PG con elevazione 5 (in volo) passa sopra il boulder: nessuna domanda.
+- [x] Trascinalo giù a terra: la domanda propone elevazione 0.
+- [x] Un PG con elevazione 5 (in volo) passa sopra il boulder: nessuna domanda.
 
 ## R33a5 — Pierce degli Aethershard bersaglio per bersaglio (17 ottobre 2026, versione 1.15.159)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Talent II di Aethershard, due foe con armatura, uno accanto a uno shard: nella card del danno solo quello
-      ha il chip Pierce e all'Apply prende il danno pieno; all'altro l'armatura toglie danno.
-- [ ] Spostando lo shard via dal foe prima di premere Apply, l'armatura torna a contare.
+- [x] PG con Talent II di Aethershard, due foe con armatura, uno accanto a uno shard: nella card del danno solo quello
+      ha il chip Pierce e all'Apply prende il danno pieno; all'altro l'armatura toglie danno. **(8 → Warrior senza armatura, Mechanist −2)**
+- [x] Spostando lo shard via dal foe prima di premere Apply, l'armatura torna a contare.
 
 ## R33a5 — Avviso del rampart di Comet (17 ottobre 2026, versione 1.15.158)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Il GM trascina un foe dentro uno spazio accanto alla Thrown Weapon: compare il promemoria "if that was a dash…".
-- [ ] Lo stesso foe con lo status flying, oppure mosso in modalità teleport di Foundry: compare l'avviso più deciso, e
-      il foe resta dove l'hai messo.
-- [ ] Un alleato mosso lì: nessun avviso.
+- [x] Il GM trascina un foe dentro uno spazio accanto alla Thrown Weapon: compare il promemoria "if that was a dash…". **(ora al posto del promemoria c'è la domanda Dash/go on della 1.15.229)**
+- [x] Lo stesso foe con lo status flying, oppure mosso in modalità teleport di Foundry: compare l'avviso più deciso, e
+      il foe resta dove l'hai messo. **(con flying o teleport il movimento è rifiutato (1.15.229), il foe resta dov'era)**
+- [x] Un alleato mosso lì: nessun avviso.
 
 ## R33a5 — Copertura dagli oggetti sulla mappa (17 ottobre 2026, versione 1.15.157)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un PG accanto a un boulder di altezza 1 viene attaccato: sulla riga del bersaglio nella card del danno compare
-      "Cover? object". Con il PG in piedi sopra il boulder il chip non compare.
-- [ ] Underway con Talent II: un alleato accanto al portale mostra "Cover? underway"; un foe nella stessa posizione
-      no.
-- [ ] Geyser con Talent I: un alleato in piedi sul geyser mostra "Cover — on geyser".
-- [ ] Apply: il danno non viene dimezzato finché non si mette lo status Cover.
+- [x] Un PG accanto a un boulder di altezza 1 viene attaccato: sulla riga del bersaglio nella card del danno compare
+      "Cover? object". Con il PG in piedi sopra il boulder il chip non compare. **(con l'attaccante in scena ora c'è la copertura per direzione (1.15.228); il chip 'Cover? object' resta nel dialogo; in piedi sul boulder nessun chip)**
+- [x] Underway con Talent II: un alleato accanto al portale mostra "Cover? underway"; un foe nella stessa posizione
+      no. **(l'alleato ha 'Cover? underway'; il foe nella stessa posizione ha invece 'Cover? object', vedi Dubbi)**
+- [x] Geyser con Talent I: un alleato in piedi sul geyser mostra "Cover — on geyser". **(ora dice 'Cover ½ — on geyser' e dimezza (1.15.228))**
+- [x] Apply: il danno non viene dimezzato finché non si mette lo status Cover. **(superata dalla 1.15.228: la copertura certa ora dimezza da sola, quella dubbia no)**
 
 ## R33d2 — Amico: una sola card Detonate in chat (17 ottobre 2026, versione 1.15.156)
 
@@ -3963,13 +4002,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Aethershard (Enochian): nel tab Combat l'abilità non ha più il bottone "Damage Roll"; la carta in chat e
+- [x] PG con Aethershard (Enochian): nel tab Combat l'abilità non ha più il bottone "Damage Roll"; la carta in chat e
       il piazzamento dello shard funzionano come prima.
-- [ ] Un'area di un'altra abilità che copre uno shard chiede ancora la risonanza e la carta danno fa 2 piercing per
-      shard.
-- [ ] Altre abilità con danno (es. Dropkick, Harvest Moon con talento, un'abilità con Infuse) hanno ancora il loro
-      bottone danno con gli stessi valori; Incubus ha ancora la chip "Mark 2" in Other.
-- [ ] Foe Azurian Weapon, azione Torpedo: il bottone danno c'è ancora ([D]+fray).
+- [x] Un'area di un'altra abilità che copre uno shard chiede ancora la risonanza e la carta danno fa 2 piercing per
+      shard. **(vedi 1.15.67)**
+- [x] Altre abilità con danno (es. Dropkick, Harvest Moon con talento, un'abilità con Infuse) hanno ancora il loro
+      bottone danno con gli stessi valori; Incubus ha ancora la chip "Mark 2" in Other. **(Blackstar, Dropkick, Incubus (chip 'Mark 2' in Other))**
+- [x] Foe Azurian Weapon, azione Torpedo: il bottone danno c'è ancora ([D]+fray).
 
 ## Emerso R40 — Il danno dei blocchi Mark / Effect della base si tira da Other (17 ottobre 2026, versione 1.15.100)
 
@@ -4310,14 +4349,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Su una mappa con due portali, porta un token accanto a un portale e avvia "Teleport here". Con gli spazi
+- [x] Su una mappa con due portali, porta un token accanto a un portale e avvia "Teleport here". Con gli spazi
       evidenziati, clic destro **sopra un token**: la scelta si chiude senza spostare nessuno e l'HUD del token
       **non** si apre.
-- [ ] Stessa prova con "Erupt" e con "Move" dello shard: come sopra.
-- [ ] Avvia di nuovo la scelta e chiudila con Esc: si chiude come prima.
-- [ ] Clic sinistro su uno spazio evidenziato: l'oggetto o il token va lì come prima; su uno spazio non evidenziato
+- [x] Stessa prova con "Erupt" e con "Move" dello shard: come sopra.
+- [x] Avvia di nuovo la scelta e chiudila con Esc: si chiude come prima.
+- [x] Clic sinistro su uno spazio evidenziato: l'oggetto o il token va lì come prima; su uno spazio non evidenziato
       compare ancora "Pick one of the highlighted spaces".
-- [ ] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
+- [x] Fuori da qualsiasi scelta, clic destro su un token: l'HUD si apre normalmente.
 
 ## Emerso su R39 — testi dei Limit Break come nel libro (17 ottobre 2026, versione 1.15.77)
 
@@ -4586,48 +4625,48 @@ sbloccata in una prova), Demon Slayer con Comet, Harvester con Fairy Ring (maste
 GEYSER in una prova), Enochian con Aethershard (Talent I in una prova, mastery AETHERSHIFT in un'altra) e Pyroclast.
 Un foe sulla scena. Solo JS e template: F5 dopo il deploy.
 
-- [ ] **Underway, dalla scheda**: piazza due portali lontani. Metti il PG accanto al primo, selezionalo, apri la scheda del
+- [x] **Underway, dalla scheda**: piazza due portali lontani. Metti il PG accanto al primo, selezionalo, apri la scheda del
       secondo → "Teleport here" → spazi verdi liberi attorno al secondo portale; clic su uno → il token ci va senza
       animazione, card "<PG> teleports through the Underway (free action, p.168)". Clic su uno spazio non verde → avviso,
       la scelta resta aperta; Esc o clic destro → non si muove niente. PG non adiacente al primo portale → avviso (per il
       GM: domanda "Teleport anyway?").
-- [ ] **Underway, al movimento**: trascina un PG (non un foe) accanto a un portale → domanda "Underway — teleport?";
+- [x] **Underway, al movimento**: trascina un PG (non un foe) accanto a un portale → domanda "Underway — teleport?";
       "Teleport" → spazi verdi attorno all'altro portale (o agli altri), clic → il PG ci va; "Not now" → resta. Spostarsi
       tra due spazi già accanto allo stesso portale non chiede di nuovo. Il foe trascinato accanto non chiede niente.
-- [ ] **Bale Portal**: mastery sbloccata, il foe finisce il turno accanto a un portale → card "End of <foe>'s turn … Bale
+- [x] **Bale Portal**: mastery sbloccata, il foe finisce il turno accanto a un portale → card "End of <foe>'s turn … Bale
       Portal … save to avoid it, bloodied foes fail; once a round". Il GM seleziona il foe, apre l'altro portale →
       "Teleport here" → il suggerimento ricorda il save. Senza mastery nessuna riga, e un giocatore non può teletrasportare
-      un foe (avviso).
-- [ ] **Comet, rampart**: lancia la Thrown Weapon → attorno al token compare un'aura 1 "Rampart — Thrown Weapon (Comet)" che
+      un foe (avviso). **(card di fine turno ok; il lato giocatore nel blocco 18)**
+- [x] **Comet, rampart**: lancia la Thrown Weapon → attorno al token compare un'aura 1 "Rampart — Thrown Weapon (Comet)" che
       lo segue; la scheda dice "Spaces adjacent to it have rampart … (p.104)". Pick up → l'aura sparisce con l'oggetto.
-- [ ] **Comet, raccolta al movimento**: trascina il Demon Slayer in uno spazio accanto all'arma → "Thrown Weapon — pick up?"
+- [x] **Comet, raccolta al movimento**: trascina il Demon Slayer in uno spazio accanto all'arma → "Thrown Weapon — pick up?"
       "<PG> entered a space adjacent …"; "Pick up" → l'oggetto sparisce (da giocatore passando dal GM). Allontanandosi da uno
       spazio adjacente → "left a space adjacent". Un altro PG o un foe accanto → nessuna domanda. A inizio turno del Demon
-      Slayer accanto all'arma → card "Start of <PG>'s turn … can pick it up".
-- [ ] **Megamushroom**: trascina un PG (o un alleato) sullo spazio del Megamushroom → domanda "pick up its blessing token?";
+      Slayer accanto all'arma → card "Start of <PG>'s turn … can pick it up". **(da GM; 'passed through' solo col rimedio _movement)**
+- [x] **Megamushroom**: trascina un PG (o un alleato) sullo spazio del Megamushroom → domanda "pick up its blessing token?";
       "Pick up blessing" → +1 Blessed a quel PG, card, la scheda dice "picked up"; entrando di nuovo non chiede più. Un foe
-      sullo spazio → nessuna domanda.
-- [ ] **Geyser, eruzione guidata**: un PG sul geyser → "Erupt" → finestra con "Removed and placed: <PG>", due caselle
+      sullo spazio → nessuna domanda. **(in 1.15.67; il foe non provato)**
+- [x] **Geyser, eruzione guidata**: un PG sul geyser → "Erupt" → finestra con "Removed and placed: <PG>", due caselle
       ("Place them now …", "Then summon a Salt Sprite in its space"). "Erupt" → card, poi spazi verdi a 1-2 dal PG; clic →
       il PG ci va (a elevazione 0 se stava sul geyser); il geyser sparisce; un Salt Sprite compare nello spazio del geyser
       (attore del mondo riusato se c'è già). Caselle tolte → come prima (target, Salt Sprite a mano). "Cancel" → niente.
       Con GREAT GEYSER: un alleato ha spazi fino a 3, un foe fino a 2. Da giocatore con un foe sul geyser: il foe viene
-      spostato dal GM (socket). Volcanic Geyser: uno dopo l'altro tutti quelli nella medium blast; Esc ne salta uno.
-- [ ] **Geyser, inizio / fine turno**: un personaggio inizia o finisce il turno sul geyser → card "… starts/ends their turn on
+      spostato dal GM (socket). Volcanic Geyser: uno dopo l'altro tutti quelli nella medium blast; Esc ne salta uno. **(senza GREAT GEYSER e senza giocatore)**
+- [x] **Geyser, inizio / fine turno**: un personaggio inizia o finisce il turno sul geyser → card "… starts/ends their turn on
       the Geyser: <PG> can make it erupt".
-- [ ] **In piedi su una pila**: un PG su un Boulder (elevazione 1 messa a mano). Scheda del boulder: + → il PG va a 2; − → torna
+- [x] **In piedi su una pila**: un PG su un Boulder (elevazione 1 messa a mano). Scheda del boulder: + → il PG va a 2; − → torna
       a 1; Remove → il PG scende a 0. Un PG in volo a elevazione 3 sullo stesso spazio non cambia. Geyser Talent I che cresce
-      a inizio turno: il PG sopra sale con lui. Da giocatore con un foe sopra: il foe viene alzato dal GM.
-- [ ] **Pyroclast, "pushing them up"**: trascina "Magma Spire · H1" sullo spazio di un personaggio → il token dello spire e il
-      personaggio a elevazione 1, avviso "… lifting <nome>". Pyrospire (Infuse) → elevazione 3.
-- [ ] **Aethershard Talent I**: Talent I scelto, uno shard sulla mappa: scheda dello shard → "Move" → spazi verdi fino a 2;
+      a inizio turno: il PG sopra sale con lui. Da giocatore con un foe sopra: il foe viene alzato dal GM. **(+/−/Remove e PG in volo ok; crescita del Talent I con PG sopra e lato giocatore non provati)**
+- [x] **Pyroclast, "pushing them up"**: trascina "Magma Spire · H1" sullo spazio di un personaggio → il token dello spire e il
+      personaggio a elevazione 1, avviso "… lifting <nome>". Pyrospire (Infuse) → elevazione 3. **(Pyrospire non provato)**
+- [x] **Aethershard Talent I**: Talent I scelto, uno shard sulla mappa: scheda dello shard → "Move" → spazi verdi fino a 2;
       clic → lo shard si sposta (la pila si riassesta come prima). Spendi Aether dalla scheda (es. un Infuse) → avviso
       "spent Aether — Talent I: you can first move one of your aethershards up to range 2". Senza Talent I né bottone né avviso.
-- [ ] **AETHERSHIFT**: mastery sbloccata, l'Enochian finisce il turno accanto a uno shard → status Phasing, card "… gains
+- [x] **AETHERSHIFT**: mastery sbloccata, l'Enochian finisce il turno accanto a uno shard → status Phasing, card "… gains
       phasing until the end of your next turn. The spaces of objects cost …"; Phasing finisce alla fine del suo turno dopo.
-      Iniziando il turno accanto → Phasing che dura fino alla fine del turno seguente (non di quello in corso).
-- [ ] **Regressione**: trascinare token lontano dagli oggetti non chiede niente; pile, aure, Erupt senza caselle, Resonate degli
-      Aethershard e Pick up come in R33a3; due GM connessi → le card di inizio / fine turno escono una volta sola.
+      Iniziando il turno accanto → Phasing che dura fino alla fine del turno seguente (non di quello in corso). **(partendo accanto: phasing fino alla fine del turno dopo)**
+- [x] **Regressione**: trascinare token lontano dagli oggetti non chiede niente; pile, aure, Erupt senza caselle, Resonate degli
+      Aethershard e Pick up come in R33a3; due GM connessi → le card di inizio / fine turno escono una volta sola. **(due GM non provabile (un solo GM))**
 
 ## R33a3 — Aethershard nelle aree, eruzione del Geyser, Megamushroom, pilastro, scheda dalla barra laterale (16 ottobre 2026, versione 1.15.67)
 
@@ -4635,34 +4674,34 @@ Setup: come R33a2 (scena a griglia quadrata, GM + giocatore). PG: Enochian con A
 (Aether almeno 0-4, non 6), Wright con Geyser (Talent I scelto in una prova), Harvester con Fairy Ring (mastery sbloccata),
 un PG con Upheaval (mastery sbloccata), Geomancer con Helix Heel. Solo JS, template e CSS: F5 dopo il deploy.
 
-- [ ] **Aethershard nell'area**: piazza due Aethershard, poi un'area dell'Enochian che ne copre uno e un foe → finestra
+- [x] **Aethershard nell'area**: piazza due Aethershard, poi un'area dell'Enochian che ne copre uno e un foe → finestra
       "Aethershard caught": "1 of your aethershards … 2 piercing damage × 1 = 2". "Resonate" → lo shard sparisce, l'Aether
       sale di 1 (non oltre 6), card del danno "… — 1 Aethershard damage (area)" con 2 piercing e Apply per il foe (niente
-      riga per gli oggetti), card "1 Aethershard resonate". Con due shard nell'area → 2 × 2 = 4, tutti e due tolti, Aether +1.
-- [ ] **Aethershard, casi limite**: "Not this time" → shard restano, nessun danno. Area di un altro PG sopra lo shard →
+      riga per gli oggetti), card "1 Aethershard resonate". Con due shard nell'area → 2 × 2 = 4, tutti e due tolti, Aether +1. **(provato con uno shard nell'area (2 piercing, Aether 3 → 4, due card))**
+- [x] **Aethershard, casi limite**: "Not this time" → shard restano, nessun danno. Area di un altro PG sopra lo shard →
       nessuna domanda ("your Aethershards"). Con Bonus Damage sull'Enochian la card degli shard non lo consuma. Da
-      giocatore: lo shard viene tolto dal GM (socket).
-- [ ] **Geyser, eruzione**: piazza un Geyser, metti un PG sopra (stesso spazio). Scheda del geyser → bottone "Erupt" → card
+      giocatore: lo shard viene tolto dal GM (socket). **('Not this time' e area di un altro PG ok; Bonus Damage e giocatore non provati)**
+- [x] **Geyser, eruzione**: piazza un Geyser, metti un PG sopra (stesso spazio). Scheda del geyser → bottone "Erupt" → card
       "Geyser erupts": "Removed and placed one or two spaces away: <PG> (on the geyser)", "Then summon a Salt Sprite in its
-      space"; il PG è targettato e il geyser sparisce. Con la mastery sbloccata c'è anche la riga "Mastery: GREAT GEYSER …".
-- [ ] **Volcanic Geyser, eruzione**: con l'Infuse armato piazza il Volcanic Geyser, personaggi a 1-2 spazi → "Erupt" →
-      tutti quelli nella medium blast attorno, più la riga "Create dangerous terrain under the foes placed".
-- [ ] **Geyser Talent I**: Talent I scelto, geyser height 1 sulla mappa, combat avviato → all'inizio del turno del Wright
+      space"; il PG è targettato e il geyser sparisce. Con la mastery sbloccata c'è anche la riga "Mastery: GREAT GEYSER …". **(riga Mastery non controllata)**
+- [x] **Volcanic Geyser, eruzione**: con l'Infuse armato piazza il Volcanic Geyser, personaggi a 1-2 spazi → "Erupt" →
+      tutti quelli nella medium blast attorno, più la riga "Create dangerous terrain under the foes placed". **(card con la riga 'Create dangerous terrain'; il terreno sotto un foe piazzato non provato (ho saltato i piazzamenti))**
+- [x] **Geyser Talent I**: Talent I scelto, geyser height 1 sulla mappa, combat avviato → all'inizio del turno del Wright
       il geyser diventa height 2 (nome del token "Geyser (height 2)") e card "Start of <PG>'s turn: Geyser → height 2". A
       height 3 (o in una pila già alta 3) non cresce più. Senza Talent I non succede niente. Tornare indietro di un turno
       non lo fa crescere.
-- [ ] **Megamushroom**: trascina "Megamushroom · H1" (mastery di Fairy Ring) → scheda: "Blessing token: on it", nota "Counts as a
+- [x] **Megamushroom**: trascina "Megamushroom · H1" (mastery di Fairy Ring) → scheda: "Blessing token: on it", nota "Counts as a
       plant (p.184) …", bottone "Pick up blessing". Seleziona il token di un PG e premi → il PG ha 1 Blessed in più,
       card in chat, la scheda dice "picked up" e il bottone sparisce; l'oggetto resta. Senza token selezionato e senza
       personaggio assegnato → avviso.
-- [ ] **Upheaval, pilastro**: mastery sbloccata → oltre a "Boulder · H1" c'è il chip "Pillar · H2"; trascinato diventa
+- [x] **Upheaval, pilastro**: mastery sbloccata → oltre a "Boulder · H1" c'è il chip "Pillar · H2"; trascinato diventa
       "Pillar (height 2)". Mastery non sbloccata → niente chip Pillar.
-- [ ] **Helix Heel**: bottone area → scelta tra "Line 3" e "Text: Burst 1 (on object)". Con il token di un Boulder targettato
-      la Burst 1 va da sola attorno al boulder. L'attacco / il tiro di Helix Heel non offre la Burst come area d'attacco.
-- [ ] **Scheda dalla barra laterale**: Actors → cartella "Map Objects" → apri lo Shrine → niente − / + né Remove, badge
+- [x] **Helix Heel**: bottone area → scelta tra "Line 3" e "Text: Burst 1 (on object)". Con il token di un Boulder targettato
+      la Burst 1 va da sola attorno al boulder. L'attacco / il tiro di Helix Heel non offre la Burst come area d'attacco. **(la Burst va da sola attorno al boulder; il controllo sull'attacco non fatto)**
+- [x] **Scheda dalla barra laterale**: Actors → cartella "Map Objects" → apri lo Shrine → niente − / + né Remove, badge
       "Height 1 (as placed)", "on this scene: height 2, height 1 on height 1" (le copie sulla scena) o "none on this scene",
       e la nota "This is the template … Double-click a token …". Il doppio clic sul token mostra come prima l'altezza vera.
-- [ ] **Regressione**: Pyroclast non mostra "Erupt" sul Magma Spire; Shrine, Comet (Pick up), pile e aure come in R33a2.
+- [x] **Regressione**: Pyroclast non mostra "Erupt" sul Magma Spire; Shrine, Comet (Pick up), pile e aure come in R33a2.
 
 ## R33a2 — Effetti degli oggetti, pile, aree sugli oggetti (16 ottobre 2026, versione 1.15.66)
 
@@ -4671,31 +4710,31 @@ Talent I scelto e mastery sbloccata), Demon Slayer con Comet e un attacco qualun
 Enochian con Pyroclast, Geomancer con Geo. Aether del Wright almeno 3. Solo JS, template e CSS: F5 dopo il deploy.
 Nota: il test "Pyroclast / Geyser" di R33a cambia (i chip delle versioni Infuse ora si vedono solo con l'Infuse armato).
 
-- [ ] **Object Effect sulla scheda**: piazza lo Shrine, doppio clic sul token → in cima una sezione "Object Effect" con
+- [x] **Object Effect sulla scheda**: piazza lo Shrine, doppio clic sul token → in cima una sezione "Object Effect" con
       "total height 1", la lista 1 / 2 / 3+ con la riga 1 accesa (cover e +1 boon) e le altre spente; sotto, il testo
       dello Shrine (da "Effect: Create a shrine…" a "…have evasion") con le keyword evidenziate. Con Talent I scelto c'è
       la riga "Talent I: If you or an ally ends their turn inside the Shrine's aura…".
-- [ ] **Shrine per altezza totale**: + sulla scheda → "total height 2", righe 1 e 2 accese. Metti lo Shrine sopra un
+- [x] **Shrine per altezza totale**: + sulla scheda → "total height 2", righe 1 e 2 accese. Metti lo Shrine sopra un
       Boulder di Geo (height 1) → "height 1 on height 1 — total height 2". Con totale 3 → anche "3+" accesa.
-- [ ] **Spirit Patronage**: mastery dello Shrine sbloccata → riga "Mastery: height N → 2 divine damage ×N", N = altezza
+- [x] **Spirit Patronage**: mastery dello Shrine sbloccata → riga "Mastery: height N → 2 divine damage ×N", N = altezza
       dello Shrine (non quella della pila).
-- [ ] **Chat**: bottone "Chat" sulla scheda dell'oggetto → card col cubo, altezza, testo, righe accese / "(not yet)".
-- [ ] **Comet, non attaccare**: piazza "Thrown Weapon · H1" → sulla scheda dell'oggetto riga arancione "… cannot
+- [x] **Chat**: bottone "Chat" sulla scheda dell'oggetto → card col cubo, altezza, testo, righe accese / "(not yet)".
+- [x] **Comet, non attaccare**: piazza "Thrown Weapon · H1" → sulla scheda dell'oggetto riga arancione "… cannot
       attack" e bottone "Pick up". Tira un attacco del Demon Slayer → domanda "you cannot attack": Cancel ferma il tiro,
-      "Roll anyway" lo fa. Talent II scelto → riga "Talent II: … adjacent to your weapon gain 2 vigor".
+      "Roll anyway" lo fa. Talent II scelto → riga "Talent II: … adjacent to your weapon gain 2 vigor". **(Cancel e Roll anyway ok sulle abilità; ma l'attacco base (Light Attack) non chiede niente, vedi Esito)**
 - [ ] **Pick up (giocatore)**: il giocatore preme "Pick up" → la scheda si chiude e il GM toglie il token. Di nuovo un
-      attacco → nessuna domanda. Su un Boulder il bottone dice "Remove".
-- [ ] **Pila che scende**: tre Boulder impilati (elevazione 0 / 1 / 2). Togli (Remove o Canc) quello in basso → gli altri
+      attacco → nessuna domanda. Su un Boulder il bottone dice "Remove". **(da giocatore, blocco 18 (il bottone Pick up da GM funziona))**
+- [x] **Pila che scende**: tre Boulder impilati (elevazione 0 / 1 / 2). Togli (Remove o Canc) quello in basso → gli altri
       due scendono a 0 e 1. Trascina via quello in basso di una pila di due → quello sopra scende a 0; trascinalo sopra
-      un altro Boulder → la sua elevazione diventa 1.
-- [ ] **Infuse armato**: Geyser senza Infuse → solo il chip "Geyser · H1". Arma "Infuse 3: VOLCANIC GEYSER" → compare
+      un altro Boulder → la sua elevazione diventa 1. **(con 1-3 secondi di ritardo)**
+- [x] **Infuse armato**: Geyser senza Infuse → solo il chip "Geyser · H1". Arma "Infuse 3: VOLCANIC GEYSER" → compare
       "Volcanic Geyser · H1"; trascinalo → token piazzato e l'infusione non è più armata (il chip sparisce). Uguale per
       Pyroclast ("Magma Spire · H3" solo con PYROSPIRE armato).
-- [ ] **Area sull'oggetto**: con un Volcanic Geyser sulla mappa, targetta il suo token (T), poi bottone area di Geyser →
+- [x] **Area sull'oggetto**: con un Volcanic Geyser sulla mappa, targetta il suo token (T), poi bottone area di Geyser →
       "Medium Blast (on object)" → la blast va da sola centrata sul geyser (niente clic). Senza target → avviso "target
       the object's token" e si piazza a mano come prima.
-- [ ] **Regressione aree**: un'area "centered on them" su un personaggio (Death, Slay) va ancora sul bersaglio; una
-      normale Medium Blast di un attacco si piazza come prima.
+- [x] **Regressione aree**: un'area "centered on them" su un personaggio (Death, Slay) va ancora sul bersaglio; una
+      normale Medium Blast di un attacco si piazza come prima. **(Death → Slay: Large Blast centrata sul Warrior)**
 
 ## R33a — Oggetti sulla mappa (16 ottobre 2026, versione 1.15.65)
 
@@ -4703,32 +4742,32 @@ Setup: una scena a griglia quadrata, un GM e un giocatore connessi. PG del gioca
 Geomancer con Geo, Terraforming e il tratto Stone Double, Warden con Underway, Mendicant Harvester con Fairy Ring
 (mastery bloccata). Token del PG sulla scena. Solo JS e template: F5 dopo il deploy.
 
-- [ ] **Chip**: pannello di Spirit Shrine → accanto ai bottoni c'è un chip col cubo "Shrine · H1" (tooltip: height 1,
+- [x] **Chip**: pannello di Spirit Shrine → accanto ai bottoni c'è un chip col cubo "Shrine · H1" (tooltip: height 1,
       Aura 2 che lo segue). Geo "Boulder · H1", Terraforming "Boulder · H1", Underway "Underway · H1", tratto Stone
       Double "Statue · H1" nella riga del tratto. Fairy Ring senza chip finché la mastery è bloccata; sbloccata → chip
       "Megamushroom · H1".
 - [ ] **Piazzare (giocatore)**: il giocatore trascina "Boulder · H1" sulla mappa → messaggio "sent to the GM", poi il
       token "Boulder (height 1)" compare nello spazio del drop, col nome sempre visibile; il giocatore lo può muovere.
-      Nella cartella attori "Map Objects" c'è l'attore Boulder.
-- [ ] **Scheda dell'oggetto**: doppio clic sul token → badge "Object", "Height 1" con − / +, "Immune"; la sezione "Object
+      Nella cartella attori "Map Objects" c'è l'attore Boulder. **(da giocatore, blocco 18)**
+- [x] **Scheda dell'oggetto**: doppio clic sul token → badge "Object", "Height 1" con − / +, "Immune"; la sezione "Object
       Rules" mostra il testo da cui viene; niente Speed né Summon Action. + → "Height 2" e il token diventa "Boulder
-      (height 2)"; a 3 il + è spento.
-- [ ] **Impilare**: un secondo Boulder sullo stesso spazio del primo (height 1) → va sopra, elevazione 1. Alza il primo a
+      (height 2)"; a 3 il + è spento. **(dopo il rimedio al link (vedi Esito))**
+- [x] **Impilare**: un secondo Boulder sullo stesso spazio del primo (height 1) → va sopra, elevazione 1. Alza il primo a
       2 → l'oggetto sopra sale a elevazione 2. Un terzo Boulder lì (totale 4) → avviso "can't be past height 3 (p.95)"
       e nessun token.
-- [ ] **Underway**: trascina il portale → piazzato. Trascinalo di nuovo → domanda "replace?": "Keep both" → due portali.
+- [x] **Underway**: trascina il portale → piazzato. Trascinalo di nuovo → domanda "replace?": "Keep both" → due portali.
       Un portale su un altro oggetto → avviso "can't be stacked". Terza volta, "Replace" → resta solo il nuovo.
-- [ ] **Shrine con aura**: trascina "Shrine · H1" → token "Shrine (height 1)" con un'Aura 2 attorno, nel colore del PG.
+- [x] **Shrine con aura**: trascina "Shrine · H1" → token "Shrine (height 1)" con un'Aura 2 attorno, nel colore del PG.
       Muovi il santuario → l'aura lo segue. Cancella il token → l'aura sparisce.
-- [ ] **Shrine riusata**: trascina di nuovo lo Shrine → domanda "replace?"; "Replace" → il vecchio santuario e la sua
+- [x] **Shrine riusata**: trascina di nuovo lo Shrine → domanda "replace?"; "Replace" → il vecchio santuario e la sua
       aura spariscono, resta il nuovo.
-- [ ] **Distruttibile (GM)**: sulla scheda di un oggetto il GM vede "Make destructible" (il giocatore no) → badge
-      "Destructible — 10 hp", campi HP/Defense, barra HP sul token. "Make immune" lo riporta come prima.
-- [ ] **Aree**: piazza una Medium Blast di un attacco sopra un oggetto immune → l'oggetto NON è tra i bersagli; reso
-      distruttibile, sì.
-- [ ] **Creatore sconfitto**: porta il PG a 0 hp / sconfitto → gli oggetti restano sulla mappa.
-- [ ] **Pyroclast / Geyser**: un PG Enochian con Pyroclast ha due chip "Magma Spire · H1" e "Magma Spire · H3"
-      (Pyrospire); uno Stormbender con Geyser ha "Geyser · H1" e "Volcanic Geyser · H1".
+- [x] **Distruttibile (GM)**: sulla scheda di un oggetto il GM vede "Make destructible" (il giocatore no) → badge
+      "Destructible — 10 hp", campi HP/Defense, barra HP sul token. "Make immune" lo riporta come prima. **(da GM; il lato giocatore nel blocco 18)**
+- [x] **Aree**: piazza una Medium Blast di un attacco sopra un oggetto immune → l'oggetto NON è tra i bersagli; reso
+      distruttibile, sì. **(controllato con tokensInCells)**
+- [x] **Creatore sconfitto**: porta il PG a 0 hp / sconfitto → gli oggetti restano sulla mappa. **(a 0 hp i boulder restano)**
+- [x] **Pyroclast / Geyser**: un PG Enochian con Pyroclast ha due chip "Magma Spire · H1" e "Magma Spire · H3"
+      (Pyrospire); uno Stormbender con Geyser ha "Geyser · H1" e "Volcanic Geyser · H1". **(come da nota della 1.15.66: i chip Infuse solo con l'Infuse armato)**
 
 ## Regex rotte di R39 e R59 (16 ottobre 2026, versione 1.15.64)
 
