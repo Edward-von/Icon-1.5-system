@@ -33,6 +33,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [ ] **P6** — Inflict sulla card del danno: dopo uno "Show in Chat" la card del danno si aggancia ancora al vecchio
       attacco della stessa abilità e mostra i suoi bottoni. S-M.
 - [ ] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1. S.
+- [ ] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
+      escono come slug grezzi senza spiegazione; sui foe le spiegazioni della 1.15.122 ci sono. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.

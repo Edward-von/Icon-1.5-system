@@ -751,6 +751,12 @@ Da compilare durante il playtest.
   danno mostra di nuovo il blocco Inflict con "✓ Dazed" (preso dalla card d'attacco di prima). Il test dice che dopo
   Show in Chat (senza tiro d'attacco) il blocco non deve esserci: la card del danno si aggancia all'ultimo attacco della
   stessa abilità anche se nel mezzo c'è stato uno Show in Chat.
+- **1.15.122 — tag grigi delle legend senza spiegazione.** Sulle schede delle legend importate di nuovo (Apex,
+  Violence Demon, Wyrm, Keeper of the Eldflame, Falling Leaf Aesi) i tag escono come slug grezzi senza tooltip:
+  "might-of-the-wild", "blade-consume-1/3", "path-of-ruin", "forge-action", "thievery". Sui foe normali le
+  spiegazioni ci sono (Warrior "Repeatable … (p.290)", Night Troll "1/round", Hag "Cauldron Action", Aurelian
+  "Tally", Churn Baron "Assets", Pale Man "Gaze Target Only"). Sembra che la scheda Legend non passi i tag dallo
+  stesso helper della scheda Foe.
 - **1.15.100, settima casella — Showdown non porta le 2 istanze.** Damage di Showdown (Freelancer): Hit "2 flat" con
   Instances 1. Il testo dice "they take 2 unerring damage from you twice" e il test si aspetta "Showdown 2 ×2".
   (Warding Bolts: Hit 2 flat, come previsto.)
@@ -3168,12 +3174,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Scheda PG, tab Combat, abilità sbloccate (lucchetto aperto): su ogni riquadro pieno compare la × in angolo;
-      cliccandola l'abilità esce dal riquadro.
-- [ ] Con il lucchetto chiuso ("Locked") la × sparisce dai riquadri.
-- [ ] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×.
+- [x] Scheda PG, tab Combat, abilità sbloccate (lucchetto aperto): su ogni riquadro pieno compare la × in angolo;
+      cliccandola l'abilità esce dal riquadro. **((la scheda parte bloccata: sbloccata compaiono 4 ×))**
+- [x] Con il lucchetto chiuso ("Locked") la × sparisce dai riquadri.
+- [ ] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×. **(non provato)**
 - [ ] Con un'abilità combo in un riquadro: COMBO OFF, il badge fulmine è spento; spunta COMBO ON, il badge sul
-      riquadro si accende.
+      riquadro si accende. **(non provato)**
 
 ## R33b2 — Le caselle di terreno guardano anche gli spazi attraversati (17 ottobre 2026, versione 1.15.176)
 
@@ -3602,17 +3608,17 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] Con sei abilità equipaggiate, trascina un'altra abilità sul quinto riquadro: prende il posto della quinta e la
-      prima resta dov'è.
-- [ ] Trascinare su un riquadro vuoto funziona come prima.
+      prima resta dov'è. **(non provato (trascinamento HTML5))**
+- [ ] Trascinare su un riquadro vuoto funziona come prima. **(non provato)**
 
 ## Emerso playtest 1.15.1 — Gli usi dei kit contano anche con clic rapidissimi (17 ottobre 2026, versione 1.15.136)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Kit con "5 fire stones": tre clic rapidissimi → 3 usi spesi (non 1).
-- [ ] Clic rapidi alternati su due oggetti diversi dello stesso kit → tutti contati, nessuno perso.
-- [ ] "−" cliccato due volte di fila in fretta → restituisce 2 usi.
-- [ ] Shift + clic → impostare il numero di usi funziona ancora; finiti gli usi un clic fa tornare l'oggetto.
+- [ ] Kit con "5 fire stones": tre clic rapidissimi → 3 usi spesi (non 1). **(non provato)**
+- [ ] Clic rapidi alternati su due oggetti diversi dello stesso kit → tutti contati, nessuno perso. **(non provato)**
+- [ ] "−" cliccato due volte di fila in fretta → restituisce 2 usi. **(non provato)**
+- [ ] Shift + clic → impostare il numero di usi funziona ancora; finiti gli usi un clic fa tornare l'oggetto. **(non provato)**
 
 ## Emerso R1 — Reap da lontano guadagna Unerring (17 ottobre 2026, versione 1.15.135)
 
@@ -3742,25 +3748,25 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Tab Combat di un PG: sotto il nome nei sei riquadri si legge "1 Action" / "2 Actions" / "Free Action" /
-      "Interrupt 1", non più "1action".
-- [ ] Catapult con la mastery: il riquadro dice "Interrupt 3", come il badge del pannello; passando il mouse compare
-      la spiegazione.
+- [x] Tab Combat di un PG: sotto il nome nei sei riquadri si legge "1 Action" / "2 Actions" / "Free Action" /
+      "Interrupt 1", non più "1action". **('1 Action', '2 Actions', 'Interrupt 3 ★')**
+- [x] Catapult con la mastery: il riquadro dice "Interrupt 3", come il badge del pannello; passando il mouse compare
+      la spiegazione. **(tooltip 'From Mastery: Mangonel: Catapult becomes Interrupt 3…')**
 - [ ] Il riquadro risponde ancora come prima al clic (apre / chiude il pannello), al doppio clic (apre la scheda) e al
-      trascinamento.
+      trascinamento. **(non provato)**
 
 ## Emerso R5 — Spiegazioni per gli ultimi tag grigi dei foe (17 ottobre 2026, versione 1.15.122)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Scheda di un foe con abilità "1/round" e "repeatable" (es. Warrior → Bull rush, Night Troll → Bale Curse): sul
-      chip compare la spiegazione con la pagina (p.290).
-- [ ] Hag / Troll: "Cauldron Action" spiega che serve stare entro range 2 dal calderone (p.452).
-- [ ] Apex: "Might Of The Wild" mostra la regola dei due usi a round e della terza abilità in fase II.
-- [ ] Aurelian: "Requires 6+ Tally" e "Reduces Tally By 2" spiegano il dado Tally; "Resets Tally" su Collect.
-- [ ] Churn Baron: "4 Assets" su Problem Solver spiega il dado Assets.
-- [ ] Violence Demon "Blade Consume 3", Pale Man "Gaze Target Only", Falling Leaf Aesi "Thievery", Wyrm "Path Of
-      Ruin", Keeper of the Eldflame "Forge Action": ognuno ha la sua spiegazione.
+- [x] Scheda di un foe con abilità "1/round" e "repeatable" (es. Warrior → Bull rush, Night Troll → Bale Curse): sul
+      chip compare la spiegazione con la pagina (p.290). **(Warrior 'Repeatable … (p.290)', Night Troll '1/round … (p.290)')**
+- [x] Hag / Troll: "Cauldron Action" spiega che serve stare entro range 2 dal calderone (p.452). **(Hag 'Cauldron Action')**
+- [x] Apex: "Might Of The Wild" mostra la regola dei due usi a round e della terza abilità in fase II. **(vedi Esito: Apex 'might-of-the-wild' senza spiegazione)**
+- [x] Aurelian: "Requires 6+ Tally" e "Reduces Tally By 2" spiegano il dado Tally; "Resets Tally" su Collect. **(Aurelian Tally ok)**
+- [x] Churn Baron: "4 Assets" su Problem Solver spiega il dado Assets. **(Churn Baron Assets ok)**
+- [x] Violence Demon "Blade Consume 3", Pale Man "Gaze Target Only", Falling Leaf Aesi "Thievery", Wyrm "Path Of
+      Ruin", Keeper of the Eldflame "Forge Action": ognuno ha la sua spiegazione. **(Pale Man ok; Violence Demon, Falling Leaf Aesi, Wyrm, Keeper senza spiegazione (vedi Esito))**
 - [ ] "Burst 2 Self" (Summer Flame Aesi) e "Burst 1 Target" (Head Lopper): spiegazione del burst, non più grigio.
 - [ ] Dread Lords → Dark Grip, "Range 4+": spiega "a range 4 o più lontano".
 - [ ] Il blocco "Area Effect:" nella card di un'abilità ora ha il tooltip anche sul titolo: controllare che non
@@ -4364,8 +4370,8 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
-      "End of round 0" né "Tick the Paleblood die up by 1".
+- [x] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
+      "End of round 0" né "Tick the Paleblood die up by 1". **(nessuna 'End of round 0' all'avvio (senza Paleblood))**
 - [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
       round 1).
 - [ ] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
@@ -4816,14 +4822,14 @@ Setup: un combat con un PG Wright Spellblade con Drifting Leaf (mastery GREAT CY
 Hilt Rage, un PG Stalwart con Massive Overhead (mastery bloccata), un foe importato con un'azione "At round 3+" (es.
 Junk Mage, Sniper o Barkeep), e un secondo token dello stesso foe. Solo JS: F5 dopo il deploy.
 
-- [ ] **Round 1–2**: Begin Combat e Next Round fino al round 2 → nessuna card "Round 1" / "Round 2" (non c'è niente che
-      si accenda lì).
-- [ ] **Round 3, foe**: Next Round → card "Round 3" sussurrata al GM (badge "foes") con UNA riga del foe (non due per i
-      due token): "Junk Mage — … (now active): Round 3+: deals bonus damage…". Un giocatore non la vede.
-- [ ] **Round 4, PG**: Next Round → card pubblica "Round 4" (badge "round") con "Drifting Leaf (Mastery: GREAT
+- [x] **Round 1–2**: Begin Combat e Next Round fino al round 2 → nessuna card "Round 1" / "Round 2" (non c'è niente che
+      si accenda lì). **(nessuna card ai round 1-2)**
+- [x] **Round 3, foe**: Next Round → card "Round 3" sussurrata al GM (badge "foes") con UNA riga del foe (non due per i
+      due token): "Junk Mage — … (now active): Round 3+: deals bonus damage…". Un giocatore non la vede. **(round 3: card sussurrata al GM, una sola riga del Junk Mage (due token))**
+- [x] **Round 4, PG**: Next Round → card pubblica "Round 4" (badge "round") con "Drifting Leaf (Mastery: GREAT
       CYCLONE) (now active): At round 4 or later, Drifting Leaf's infuse is always active.", senza il nome della mastery
       ripetuto nel testo; NESSUNA riga di Massive Overhead (mastery bloccata). In un combat nuovo, con la mastery
-      sbloccata, la riga di Massive Overhead c'è.
+      sbloccata, la riga di Massive Overhead c'è. **(round 4: card pubblica Drifting Leaf GREAT CYCLONE)**
 - [ ] **Round 5, tratto**: Next Round → card "Round 5" con "Storm Hilt Rage: At the start of round 5 and for the rest
       of combat…". Al round 6 niente righe dei PG.
 - [ ] **Indietro e avanti**: Previous Round dal 5 al 4, poi Next Round → la card del round 5 NON esce di nuovo.
@@ -5134,12 +5140,12 @@ Setup: PG di prova Freelancer con Bound Spirit, Warden con Beast Master, Stormbe
 Shade con Darkside, Meld e Umbral Soul (dal compendio Jobs o già sulla scheda: è solo codice). Il chip compare
 nell'intestazione del tratto, nella tab dei tratti.
 
-- [ ] **Bound Spirit**: chip Astral Seraph; trascinarlo sulla mappa crea il token del seraph.
-- [ ] **Beast Master**: chip Great Beast, nessun chip Beast.
-- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token.
-- [ ] **Cheap Trick**: chip Bomb.
-- [ ] **Darkside**: chip Shadow.
-- [ ] **Meld / Umbral Soul**: nessun chip.
+- [x] **Bound Spirit**: chip Astral Seraph; trascinarlo sulla mappa crea il token del seraph. **(Bound Spirit: Astral Seraph)**
+- [x] **Beast Master**: chip Great Beast, nessun chip Beast. **(Beast Master: Great Beast, niente Beast)**
+- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token. **(non provato (Selkie non sulla scheda))**
+- [x] **Cheap Trick**: chip Bomb. **(Cheap Trick: Bomb)**
+- [x] **Darkside**: chip Shadow. **(Darkside: Shadow)**
+- [ ] **Meld / Umbral Soul**: nessun chip. **(non provato)**
 - [ ] **Tratto bloccato**: un tratto di capitolo più alto di quello del PG (lucchetto "Locked") non mostra il chip.
 - [ ] **Abilità (non devono cambiare)**: Umbra ha ancora il chip Shadow, Cavaliere il chip Bomb (R43).
 
@@ -5149,12 +5155,12 @@ Setup: PG di prova Shade con Harrow, Shadow Play, Umbra, Umbral Echo; un Harvest
 (dal compendio Jobs o già sulla scheda: è solo codice). Il summon compare come chip trascinabile nel pannello
 dell'abilità e nella card di Show in Chat.
 
-- [ ] **Harrow**: nessun chip Shadow (pannello e card), con qualunque talento scelto.
-- [ ] **Shadow Play**: nessun chip Shadow.
-- [ ] **Umbra**: chip Shadow presente (dal Finishing Blow); trascinarlo sulla mappa crea il token.
-- [ ] **Umbral Echo**: chip Shadow presente.
-- [ ] **Harvest**: chip Thrall, nessun chip Plant.
-- [ ] **Cavaliere**: chip Bomb.
+- [x] **Harrow**: nessun chip Shadow (pannello e card), con qualunque talento scelto. **(Harrow nessun chip)**
+- [x] **Shadow Play**: nessun chip Shadow. **(Shadow Play nessun chip)**
+- [x] **Umbra**: chip Shadow presente (dal Finishing Blow); trascinarlo sulla mappa crea il token. **(Umbra: Shadow)**
+- [ ] **Umbral Echo**: chip Shadow presente. **(non provato (Umbral Echo non sulla scheda))**
+- [x] **Harvest**: chip Thrall, nessun chip Plant. **(Harvest: Thrall, niente Plant)**
+- [x] **Cavaliere**: chip Bomb. **(Cavaliere: Bomb)**
 - [ ] **Non devono cambiare**: Nightmare (Shadow), Gravebirth (Plant e Thrall), Chaos Tarot (Wild Card e Master Card),
       Raging Wolf ancora senza Beast (R7).
 
@@ -5555,14 +5561,14 @@ dell'aggiornamento), i loro token e due o tre token foe su una scena, uno con lo
 
 Setup: un mondo qualsiasi; aprire la Quick Guide (bottone sulla scheda del PG) → tab FAQ.
 
-- [ ] **Voce presente**: nella sezione Narrative, dopo "What is the difference between 'aid' and 'set up?'", c'è
+- [x] **Voce presente**: nella sezione Narrative, dopo "What is the difference between 'aid' and 'set up?'", c'è
       "What are the difficulties of a narrative roll? Trivial, risky (standard), heroic?" con la risposta su
       controlled / risky / desperate (p.18), conseguenze e strain 1, 2, 4 (p.29), fortune roll (p.20) ed effetto
-      superpowered (pp.18-19).
-- [ ] **Ricerca**: nel campo di ricerca della guida scrivere "trivial", poi "heroic", poi "desperate" → la voce resta
-      visibile ogni volta.
-- [ ] **Aspetto**: i grassetti e gli a capo della risposta si vedono come nelle altre voci, senza tag HTML scritti in
-      chiaro.
+      superpowered (pp.18-19). **(voce presente)**
+- [x] **Ricerca**: nel campo di ricerca della guida scrivere "trivial", poi "heroic", poi "desperate" → la voce resta
+      visibile ogni volta. **('trivial', 'heroic', 'desperate' la trovano)**
+- [x] **Aspetto**: i grassetti e gli a capo della risposta si vedono come nelle altre voci, senza tag HTML scritti in
+      chiaro. **(nessun tag HTML in chiaro)**
 
 ## R21 — Con la mastery di Dropkick il tiro del danno propone l'Area (15 ottobre 2026, versione 1.15.25)
 
@@ -5862,12 +5868,12 @@ a cui la si aggiunge ora dal compendio Jobs; tab Combat. Aprire il mondo da GM c
 Setup: un PG con Raging Wolf (Colossus, Stalwart), Blackstar (Enochian) e Mist Strider (Warden), più un'abilità che
 evoca davvero (Apex o Strength of the Pack del Warden, Carnevale del Fool, Sow del Harvester), tab Combat.
 
-- [ ] **Raging Wolf**: nell'anteprima dell'abilità non compare più il summon "Beast" (né altri summon).
-- [ ] **Blackstar**: nessun "Bomb" proposto.
-- [ ] **Mist Strider**: propone solo "Beast", non più "Shadow".
-- [ ] **Abilità che evocano davvero**: Apex / Strength of the Pack propongono ancora "Beast", Carnevale "Bomb", Sow
-      "Thrall"; trascinare il summon sulla mappa funziona come prima.
-- [ ] **Show in Chat** di Raging Wolf: nessun summon sulla card.
+- [x] **Raging Wolf**: nell'anteprima dell'abilità non compare più il summon "Beast" (né altri summon). **(Raging Wolf nessun summon)**
+- [x] **Blackstar**: nessun "Bomb" proposto. **(Blackstar nessun Bomb)**
+- [x] **Mist Strider**: propone solo "Beast", non più "Shadow". **(Mist Strider solo Beast)**
+- [x] **Abilità che evocano davvero**: Apex / Strength of the Pack propongono ancora "Beast", Carnevale "Bomb", Sow
+      "Thrall"; trascinare il summon sulla mappa funziona come prima. **(Apex / Strength of the Pack: Beast; Sow: Thrall)**
+- [ ] **Show in Chat** di Raging Wolf: nessun summon sulla card. **(non provato)**
 
 ## R6 — testo di colore delle abilità senza tooltip delle keyword (15 ottobre 2026, versione 1.15.8)
 
@@ -5891,14 +5897,14 @@ compendio), tab Combat.
 
 Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiungere da compendio), tab Combat.
 
-- [ ] **Dropkick**: nell'anteprima dell'abilità il tag "Sacrifice" non è più grigio; passandoci sopra compare la regola
-      del Sacrifice (p.103). Show in Chat → stesso tag con tooltip nella card.
-- [ ] **Comet**: "Medium Blast" non è più grigio e ha il tooltip (3×3, 9 spazi); "Object" e "Range 3" come prima.
+- [x] **Dropkick**: nell'anteprima dell'abilità il tag "Sacrifice" non è più grigio; passandoci sopra compare la regola
+      del Sacrifice (p.103). Show in Chat → stesso tag con tooltip nella card. **(Dropkick: tooltip Sacrifice)**
+- [x] **Comet**: "Medium Blast" non è più grigio e ha il tooltip (3×3, 9 spazi); "Object" e "Range 3" come prima. **(Comet: 'Medium Blast: the 3×3 block … (p.98)')**
 - [ ] **Catapult senza mastery**: il badge del costo "Interrupt 1" in cima all'anteprima e alla card in chat ha il
-      tooltip della regola degli interrupt; nessun tag "Interrupt" tra i tag.
-- [ ] **Catapult con la mastery**: spuntare la mastery → il badge del costo diventa "Interrupt 3", evidenziato, con
+      tooltip della regola degli interrupt; nessun tag "Interrupt" tra i tag. **(non provato)**
+- [x] **Catapult con la mastery**: spuntare la mastery → il badge del costo diventa "Interrupt 3", evidenziato, con
       tooltip "From Mastery: Catapult becomes Interrupt 3" + la regola; nessun tag "Interrupt 3" a parte. Stesso nella
-      card Show in Chat. Togliendo la mastery torna "Interrupt 1".
+      card Show in Chat. Togliendo la mastery torna "Interrupt 1". **(badge 'Interrupt 3' con 'From Mastery: Mangonel…')**
 - [ ] **Altro interrupt**: un'abilità interrupt qualsiasi di un altro job (es. una con "Interrupt 1" già tra i tag) →
       il numero sta solo sul badge del costo, con il tooltip.
 - [ ] **Abilità normali**: un'abilità da 1 o 2 azioni → badge del costo come prima, senza tooltip; tag invariati.
@@ -5910,13 +5916,13 @@ Setup: un PG con meno di sei abilità (capitolo alto, o da GM) e il compendio de
 tab Combat.
 
 - [ ] **Drop su un riquadro**: trascinare un'abilità con talenti (es. Rook) su un riquadro "Drop ability here" → la
-      finestra "Equip: …" compare come prima; scegliendo Talent I e la mastery, il riquadro mostra TI e ★.
+      finestra "Equip: …" compare come prima; scegliendo Talent I e la mastery, il riquadro mostra TI e ★. **(non provato (trascinamento))**
 - [ ] **Drop fuori dai riquadri**: trascinare un'altra abilità con talenti nello spazio tra i riquadri, sul titolo
       della sezione o in un altro punto della scheda → compare la stessa finestra; dopo "Equip" l'abilità va nel primo
-      riquadro libero con i badge scelti.
-- [ ] **Annulla**: chiudere la finestra con la X → l'abilità NON viene aggiunta.
+      riquadro libero con i badge scelti. **(non provato)**
+- [ ] **Annulla**: chiudere la finestra con la X → l'abilità NON viene aggiunta. **(non provato)**
 - [ ] **Tante di fila**: aggiungere 4-5 abilità una dopo l'altra il più velocemente possibile, lasciandole dove
-      capita → ognuna chiede talento/mastery; nessuna arriva senza la finestra.
+      capita → ognuna chiede talento/mastery; nessuna arriva senza la finestra. **(non provato)**
 - [ ] **Drop mentre la finestra è aperta**: con la finestra della precedente ancora aperta, lasciare un'altra abilità
       fuori dai riquadri → notifica "The previous item is still being added…", la seconda non viene aggiunta; chiusa la
       prima, rilasciandola funziona.
