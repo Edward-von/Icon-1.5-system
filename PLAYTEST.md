@@ -2759,22 +2759,22 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Implode con un personaggio nella casella centrale e un altro a 3 caselle: premi Shove sul secondo. Arriva
-      accanto al centro e la card dice "collides with <nome> and stops (p.117)".
-- [ ] Shove contro un oggetto (Map Object) o un muro: la card dice "an object" o "a wall".
-- [ ] Shove di un personaggio che arriva vicino al centro senza ostacoli (centro vuoto): nessuna riga di collisione.
-- [ ] Personaggio già adiacente al centro occupato: la card dice "shoved 0 spaces" con la collisione, non solo un
-      avviso.
+- [x] Implode con un personaggio nella casella centrale e un altro a 3 caselle: premi Shove sul secondo. Arriva
+      accanto al centro e la card dice "collides with <nome> and stops (p.117)". **('Janissary collides with Knuckle and stops (p.117)')**
+- [ ] Shove contro un oggetto (Map Object) o un muro: la card dice "an object" o "a wall". **(non provato)**
+- [ ] Shove di un personaggio che arriva vicino al centro senza ostacoli (centro vuoto): nessuna riga di collisione. **(non provato)**
+- [x] Personaggio già adiacente al centro occupato: la card dice "shoved 0 spaces" con la collisione, non solo un
+      avviso. **('shoved 0 spaces' con la collisione)**
 
 ## Emerso R33 — Implode su un personaggio: bottoni Shove verso di lui (17 ottobre 2026, versione 1.15.208)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Implode con WAKING VOID su un nemico, con altri personaggi a 2-3 caselle da lui. All'inizio del turno lento
-      premi "Large Blast on …": arriva una card con un bottone Shove per ciascuno, ma non per il nemico al centro.
-- [ ] Premi i bottoni nell'ordine che vuoi: ogni personaggio si avvicina in linea retta e si ferma accanto al nemico
+- [x] Implode con WAKING VOID su un nemico, con altri personaggi a 2-3 caselle da lui. All'inizio del turno lento
+      premi "Large Blast on …": arriva una card con un bottone Shove per ciascuno, ma non per il nemico al centro. **(bottoni per Knave e Janissary, non per Knuckle)**
+- [x] Premi i bottoni nell'ordine che vuoi: ogni personaggio si avvicina in linea retta e si ferma accanto al nemico
       al centro.
-- [ ] Se nell'area c'è solo il personaggio al centro, non arriva nessuna card di shove.
+- [ ] Se nell'area c'è solo il personaggio al centro, non arriva nessuna card di shove. **(non provato)**
 
 ## Emerso R33 — Un'area che si allarga offre gli status a chi sta nelle caselle nuove (17 ottobre 2026, versione 1.15.207)
 
@@ -2885,12 +2885,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Deepwrath (range 6): bersaglia un token a 8 caselle e premi Mark: chiede conferma. Cancel non marca,
-      "Anyway" marca. Entro 6 marca subito.
-- [ ] Foe e legend con un'azione mark con tag range: stesso comportamento dalla loro scheda.
-- [ ] Polaris con Talent I e Party Favor con Amico: il bottone Mark oltre il range chiede conferma come il chip "On a
-      character".
-- [ ] Un mark senza range (né tag né "in range N" nel testo) marca senza chiedere nulla.
+- [x] PG con Deepwrath (range 6): bersaglia un token a 8 caselle e premi Mark: chiede conferma. Cancel non marca,
+      "Anyway" marca. Entro 6 marca subito. **(Deepwrath: 'out of range', Cancel non marca)**
+- [ ] Foe e legend con un'azione mark con tag range: stesso comportamento dalla loro scheda. **(non provato)**
+- [x] Polaris con Talent I e Party Favor con Amico: il bottone Mark oltre il range chiede conferma come il chip "On a
+      character". **(Party Favor via chip)**
+- [ ] Un mark senza range (né tag né "in range N" nel testo) marca senza chiedere nulla. **(non provato)**
 
 ## Emerso R33 — Elden Rune: teletrasporto, infuse ridotto e Arkenrune sulla mappa (17 ottobre 2026, versione 1.15.197)
 
@@ -3381,8 +3381,8 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Amico su un foe, tre turni di altri: in chat c'è una sola card Detonate, l'ultima.
-- [ ] Il Detonate dell'ultima card funziona (gamble, medium blast, mark finito).
+- [x] Amico su un foe, tre turni di altri: in chat c'è una sola card Detonate, l'ultima. **(una sola card Detonate dopo tre turni di altri, nessuna a fine turno del Fool)**
+- [x] Il Detonate dell'ultima card funziona (gamble, medium blast, mark finito). **(gamble, Medium Blast (target) su Kelpie, mark finito)**
 
 ## R33d2 — Segno sul personaggio: il token giusto su più scene (17 ottobre 2026, versione 1.15.155)
 
@@ -3405,19 +3405,19 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Implode con WAKING VOID su un foe, fine turno: all'inizio del turno successivo del creatore arriva la card (solo
-      al creatore e al GM); sulla mappa non compare niente finché non si clicca.
-- [ ] "Large Blast on X": la blast è centrata sul token di X, poi tracker e spazio spariscono.
-- [ ] Foe a 0 hp prima di quel turno: la card della sconfitta ha il bottone, e a inizio turno non esce un'altra card.
-- [ ] Implode messo su uno spazio normale: nessuna di queste card.
+- [x] Implode con WAKING VOID su un foe, fine turno: all'inizio del turno successivo del creatore arriva la card (solo
+      al creatore e al GM); sulla mappa non compare niente finché non si clicca. **(la card arriva al GM (whisper) con 'Large Blast on Knuckle' e 'Done: end it')**
+- [x] "Large Blast on X": la blast è centrata sul token di X, poi tracker e spazio spariscono. **(Large Blast (target) da 13 caselle, il tracker finisce)**
+- [ ] Foe a 0 hp prima di quel turno: la card della sconfitta ha il bottone, e a inizio turno non esce un'altra card. **(non provato)**
+- [ ] Implode messo su uno spazio normale: nessuna di queste card. **(non provato)**
 
 ## R33d2 — Segno sul personaggio: controllo del range (17 ottobre 2026, versione 1.15.152)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Party Favor con Amico, bersaglio a 3 spazi: "On <bersaglio>" segna senza chiedere niente.
-- [ ] Bersaglio a 5 spazi: compare "out of range". Cancel non mette niente, Anyway mette mark e spazio.
-- [ ] Polaris Talent I a 6 spazi e Implode / WAKING VOID a 7: chiede. Entro 5 e 6: non chiede.
+- [x] Party Favor con Amico, bersaglio a 3 spazi: "On <bersaglio>" segna senza chiedere niente. **(a 3 spazi nessuna domanda)**
+- [x] Bersaglio a 5 spazi: compare "out of range". Cancel non mette niente, Anyway mette mark e spazio. **(a 5 spazi 'out of range'; Cancel niente, Anyway mark e spazio)**
+- [ ] Polaris Talent I a 6 spazi e Implode / WAKING VOID a 7: chiede. Entro 5 e 6: non chiede. **(non provato)**
 
 ## R35c — Interrupt strani sul danno (17 ottobre 2026, versione 1.15.151)
 
@@ -3656,11 +3656,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Polaris con Talent I, un token bersagliato, Mark: il mark e la sua card in chat mostrano solo la frase del
-      Talent I, e lo spazio Polaris segue il personaggio.
-- [ ] Party Favor con Amico sbloccata: stessa cosa, con il testo di Amico, e la card Detonate alla fine dei turni dopo
-      il tuo.
-- [ ] Un'abilità con un vero blocco "Mark:" (es. Sisyphus) mostra ancora il suo testo.
+- [x] Polaris con Talent I, un token bersagliato, Mark: il mark e la sua card in chat mostrano solo la frase del
+      Talent I, e lo spazio Polaris segue il personaggio. **(solo la frase del Talent I)**
+- [x] Party Favor con Amico sbloccata: stessa cosa, con il testo di Amico, e la card Detonate alla fine dei turni dopo
+      il tuo. **(testo di Amico)**
+- [ ] Un'abilità con un vero blocco "Mark:" (es. Sisyphus) mostra ancora il suo testo. **(non provato)**
 
 ## Emerso R1 — "Gains True Strike" non è più uno status (17 ottobre 2026, versione 1.15.130)
 
@@ -3967,18 +3967,18 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Fulminate senza talenti: bersaglia un personaggio e premi Mark. Intorno al suo token compare da sola Aura 2,
+- [x] Fulminate senza talenti: bersaglia un personaggio e premi Mark. Intorno al suo token compare da sola Aura 2,
       senza domande, e si muove con lui.
-- [ ] Rimarca un secondo personaggio: l'aura sparisce dal primo e compare da sola sul secondo.
-- [ ] Rimarca lo stesso personaggio: alla fine c'è una sola aura, e non sparisce.
+- [x] Rimarca un secondo personaggio: l'aura sparisce dal primo e compare da sola sul secondo.
+- [x] Rimarca lo stesso personaggio: alla fine c'è una sola aura, e non sparisce.
 - [ ] Con il Talent I sbloccato: marcando, una finestra chiede Aura 2 / Aura 3, e l'aura ha la misura scelta.
-      Chiudendo la finestra si mette Aura 2.
+      Chiudendo la finestra si mette Aura 2. **(non provato)**
 - [ ] Prima metti l'aura con il bottone area (bersaglio sul personaggio), poi marca lo stesso personaggio: l'aura
-      resta una sola. Togliendo il mark, l'aura sparisce.
-- [ ] Togli il mark a mano dal chip, oppure abbatti Fulminate, oppure chiudi il combattimento: l'aura sparisce.
+      resta una sola. Togliendo il mark, l'aura sparisce. **(non provato)**
+- [x] Togli il mark a mano dal chip, oppure abbatti Fulminate, oppure chiudi il combattimento: l'aura sparisce. **(dal chip)**
 - [ ] Un giocatore marca un nemico che non è suo (il mark passa dal GM): l'aura compare lo stesso; con il Talent I la
-      domanda sulla misura appare al GM.
-- [ ] Un'altra abilità con Mark che non dà aura: non compare nessuna aura.
+      domanda sulla misura appare al GM. **(non provato)**
+- [ ] Un'altra abilità con Mark che non dà aura: non compare nessuna aura. **(non provato)**
 
 ## Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate (17 ottobre 2026, versione 1.15.104)
 
@@ -4343,17 +4343,17 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Fulminate, due foe sulla scena. Bersaglia il foe A → Mark: compare "Marked — Fulminate" su A. Con A
-      ancora bersagliato, bottone area di Fulminate → Aura 2: l'aura va attorno ad A e lo segue quando si muove.
-- [ ] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark.
-- [ ] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
-      sparisce (quella di B si piazza a mano con il bottone area).
-- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce.
-- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark.
-- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento.
-- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso.
+- [x] PG con Fulminate, due foe sulla scena. Bersaglia il foe A → Mark: compare "Marked — Fulminate" su A. Con A
+      ancora bersagliato, bottone area di Fulminate → Aura 2: l'aura va attorno ad A e lo segue quando si muove. **(vedi 1.15.105)**
+- [x] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark. **(✕ sul chip: mark e aura spariscono)**
+- [x] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
+      sparisce (quella di B si piazza a mano con il bottone area). **(il mark passa a Kelpie e l'aura di Knuckle sparisce (e quella di Kelpie arriva da sola, 1.15.105))**
+- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(non provato)**
+- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark. **(non provato)**
+- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento. **(non provato)**
+- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso. **(non provato)**
 - [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
-      data a un alleato restano dove sono quando si toglie un mark qualsiasi.
+      data a un alleato restano dove sono quando si toglie un mark qualsiasi. **(non provato)**
 
 ## Emerso R62 — Avvio del combat senza promemoria "End of round 0" (17 ottobre 2026, versione 1.15.79)
 
@@ -4509,35 +4509,35 @@ Setup: scena a griglia quadrata, GM + giocatore connessi, due foe (ostili) e un 
 PG del giocatore: Seer con Polaris (Talent I scelto), Fool con Party Favor (mastery AMICO sbloccata), Enochian con
 Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
 
-- [ ] **Chip che chiede**: Polaris con Talent I → clic su "Polaris · 1" → finestra "On a space / On a character" con la
+- [x] **Chip che chiede**: Polaris con Talent I → clic su "Polaris · 1" → finestra "On a space / On a character" con la
       frase del talento. Con un foe targettato il secondo bottone dice "On <nome>". Senza Talent I nessuna domanda (come
-      prima). Stessa cosa per "Mine · 1" con AMICO e "Implode · 1" con WAKING VOID.
-- [ ] **On a space**: sceglie lo spazio come in R33b (nessun cambiamento).
-- [ ] **On <foe>**: dal giocatore → il foe riceve "Marked — Polaris (<PG>)", sulle sue caselle appare lo spazio viola
+      prima). Stessa cosa per "Mine · 1" con AMICO e "Implode · 1" con WAKING VOID. **(Polaris Talent I: 'On a space / On Knuckle'; Party Favor AMICO e Implode WAKING VOID uguali)**
+- [ ] **On a space**: sceglie lo spazio come in R33b (nessun cambiamento). **(non provato)**
+- [x] **On <foe>**: dal giocatore → il foe riceve "Marked — Polaris (<PG>)", sulle sue caselle appare lo spazio viola
       "Polaris (mark)" e una card con la regola, "Polaris spaces active: N" ed **End mark**. Senza target o con due target:
-      avviso "target exactly one character", niente creato.
-- [ ] **Segue il token**: spostare il foe marcato → lo spazio si sposta con lui; nessuna domanda di dangerous terrain né
-      card "enters". Token 2×2: lo spazio copre tutte e quattro le caselle.
+      avviso "target exactly one character", niente creato. **(da GM: mark 'Marked — Polaris (Ann)', spazio viola, card con 'spaces active: 1' ed End mark)**
+- [x] **Segue il token**: spostare il foe marcato → lo spazio si sposta con lui; nessuna domanda di dangerous terrain né
+      card "enters". Token 2×2: lo spazio copre tutte e quattro le caselle. **(lo spazio segue, nessuna domanda; 2×2 non provato)**
 - [ ] **Conteggio Polaris**: un Polaris su uno spazio e uno sul foe → la card dice 2 spaces active. Rimettere Polaris sul
-      personaggio su un altro foe → il primo mark e il suo spazio spariscono (uno solo sul personaggio).
-- [ ] **Mark e spazio insieme**: ✕ sul chip del mark nella scheda del PG → lo spazio sparisce. Rimettere il mark, poi
+      personaggio su un altro foe → il primo mark e il suo spazio spariscono (uno solo sul personaggio). **(non provato)**
+- [x] **Mark e spazio insieme**: ✕ sul chip del mark nella scheda del PG → lo spazio sparisce. Rimettere il mark, poi
       selezionare lo spazio sul layer dei template e Canc (GM) → il mark sul foe finisce ("The mark … ends"). End mark sulla
-      card (dal giocatore) → spariscono tutti e due. Tasto destro sul chip "Polaris · 1" (GM) → tolti anche quelli sul foe.
+      card (dal giocatore) → spariscono tutti e due. Tasto destro sul chip "Polaris · 1" (GM) → tolti anche quelli sul foe. **(End mark sulla card: spariscono tutti e due; gli altri modi non provati)**
 - [ ] **Bottone Mark**: Polaris Talent I o Party Favor con AMICO → il bottone Mark della scheda col foe targettato mette
-      anche lo spazio sul foe.
+      anche lo spazio sul foe. **(non provato)**
 - [ ] **Creatore sconfitto**: PG con Polaris sul foe → portare il PG a 0 hp → il mark finisce (card di marks.mjs) e lo spazio
-      sparisce. Con WAKING VOID (tracker) lo spazio di Implode resta.
-- [ ] **Un mark per personaggio**: Polaris sul foe, poi dallo stesso PG un'altra abilità con Mark sullo stesso foe → il
-      mark Polaris viene sostituito e il suo spazio sparisce.
-- [ ] **AMICO**: Party Favor sul foe A → fine del turno del Fool: nessuna card. Fine del turno di qualcun altro → card
+      sparisce. Con WAKING VOID (tracker) lo spazio di Implode resta. **(non provato)**
+- [x] **Un mark per personaggio**: Polaris sul foe, poi dallo stesso PG un'altra abilità con Mark sullo stesso foe → il
+      mark Polaris viene sostituito e il suo spazio sparisce. **(Party Favor su Kelpie: il mark su Knuckle è sparito)**
+- [x] **AMICO**: Party Favor sul foe A → fine del turno del Fool: nessuna card. Fine del turno di qualcun altro → card
       sussurrata (solo GM e giocatore del Fool) con **Detonate** ed End mark. Detonate → finestra del gamble; chiusa senza
       tirare → niente. Tirato → card del gamble, Medium Blast centrata sul foe A (targetta chi c'è dentro), mark e spazio
-      spariscono; il bottone si spegne.
+      spariscono; il bottone si spegne. **(vedi 1.15.156)**
 - [ ] **WAKING VOID**: Implode sul foe B → card con la frase "doesn't stun the center character" → portare il foe B a 0 hp →
       card "<foe B> is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode e
-      "Done: end it" (toglie lo spazio e il tracker).
+      "Done: end it" (toglie lo spazio e il tracker). **(non provato)**
 - [ ] **Fine combat / token cancellato**: fine combat → i mark spariscono e con loro gli spazi. Cancellare il token di un foe
-      marcato → il suo spazio sparisce. Nessun errore in console.
+      marcato → il suo spazio sparisce. Nessun errore in console. **(non provato)**
 
 ## R33c — Aree terrain effect che durano, si muovono o crescono (16 ottobre 2026, versione 1.15.70)
 
@@ -4937,14 +4937,14 @@ Setup: PG Fool con il tratto Stack Dice (uno al capitolo 3 per avere 2 dadi). È
 Setup: un PG Geomancer con Quaking Palm, un PG Warden con Sidhe, un PG Harvester con Dark Sliver; un PG Sealer con
 Grand Banishment; due foe sulla mappa.
 
-- [ ] **Bottone**: nel pannello di Quaking Palm, di Sidhe e di Dark Sliver c'è **Track target**; su Grand Banishment
-      c'è ancora.
+- [x] **Bottone**: nel pannello di Quaking Palm, di Sidhe e di Dark Sliver c'è **Track target**; su Grand Banishment
+      c'è ancora. **(Quaking Palm, Sidhe, Dark Sliver e Grand Banishment)**
 - [ ] **Track**: targettare il foe A, Track target su Quaking Palm → in chat "<PG> tracks <A> — Quaking Palm (a
       reminder, not a mark)"; chip "A ✕" sotto l'abilità; nel tab Conditions di A la riga "Tracked: Quaking Palm"; nel
-      pannello status del token di A "Tracked: Quaking Palm (<PG>)". ✕ sul chip → segno tolto.
-- [ ] **Niente bottone sulle durate**: Wish (Seer), Geyser (Stormbender), Realignment (Geomancer) e Mock (Knave), che
-      dicono solo "until the end of their next turn", NON hanno Track target.
-- [ ] **Mark invariati**: un'abilità con Mark (es. Divine Aegis) ha solo Mark target, niente Track.
+      pannello status del token di A "Tracked: Quaking Palm (<PG>)". ✕ sul chip → segno tolto. **(non provato)**
+- [x] **Niente bottone sulle durate**: Wish (Seer), Geyser (Stormbender), Realignment (Geomancer) e Mock (Knave), che
+      dicono solo "until the end of their next turn", NON hanno Track target. **(Wish, Geyser, Mock senza Track)**
+- [x] **Mark invariati**: un'abilità con Mark (es. Divine Aegis) ha solo Mark target, niente Track.
 
 ## R55 — Helix Heel: la prima riga è un Effect (16 ottobre 2026, versione 1.15.56)
 
@@ -5357,26 +5357,26 @@ Setup: un PG Chanter con Symphony, un PG Sealer con Spirit Shrine; un foe sulla 
 Setup: un PG Sealer con Grand Banishment e una qualsiasi abilità con Mark (es. Divine Aegis), un PG Seer con The
 Tower; due foe sulla mappa.
 
-- [ ] **Bottone**: nell'anteprima di Grand Banishment e di The Tower c'è **Track target** (icona segnaposto); su
+- [x] **Bottone**: nell'anteprima di Grand Banishment e di The Tower c'è **Track target** (icona segnaposto); su
       Divine Aegis (mark) c'è solo Mark target, niente Track; su un'abilità qualunque senza "that foe's turn" (es.
-      Sanctify) nessuno dei due.
+      Sanctify) nessuno dei due. **(Track su Grand Banishment e The Tower, solo Mark su Divine Aegis)**
 - [ ] **Senza target / due target**: Track target senza token targettato o con due → avviso "Target exactly one
-      token to track it", nessun segno.
-- [ ] **Track**: targettare il foe A, Track target su Grand Banishment → in chat "<PG> tracks <A> — Grand
+      token to track it", nessun segno. **(non provato)**
+- [x] **Track**: targettare il foe A, Track target su Grand Banishment → in chat "<PG> tracks <A> — Grand
       Banishment (a reminder, not a mark)" col testo; sotto l'abilità compare il chip "A ✕"; nel tab Conditions di A
       la riga "Tracked: Grand Banishment — from <PG>" col testo; nel pannello status del token di A la riga
-      "Tracked: Grand Banishment (<PG>)".
+      "Tracked: Grand Banishment (<PG>)". **(chat 'tracks Knuckle — Grand Banishment (a reminder, not a mark)', effetto 'Tracked — Grand Banishment')**
 - [ ] **The Tower**: Track target su The Tower → il testo del segno contiene "Area Effect: At the end of that foe's
-      turn, gamble…".
-- [ ] **Non conta come mark**: con A tracciato da Grand Banishment, Mark target di Divine Aegis su A → il segno resta
-      e il mark si aggiunge; poi Track target di nuovo su A → il mark di Divine Aegis resta.
-- [ ] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato).
+      turn, gamble…". **(non provato)**
+- [x] **Non conta come mark**: con A tracciato da Grand Banishment, Mark target di Divine Aegis su A → il segno resta
+      e il mark si aggiunge; poi Track target di nuovo su A → il mark di Divine Aegis resta. **(Implode ha aggiunto un secondo Tracked senza togliere Grand Banishment)**
+- [ ] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato). **(non provato)**
 - [ ] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
-      chat "The tracker Grand Banishment on B ends.".
-- [ ] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta.
-- [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono.
+      chat "The tracker Grand Banishment on B ends.". **(non provato)**
+- [ ] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta. **(non provato)**
+- [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono. **(non provato)**
 - [ ] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
-      (GM connesso).
+      (GM connesso). **(non provato)**
 
 ## R29 — Dervish: base e combo insieme con la mastery (15 ottobre 2026, versione 1.15.33)
 
