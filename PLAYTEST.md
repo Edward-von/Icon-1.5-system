@@ -772,6 +772,13 @@ Da compilare durante il playtest.
   escono col nome del token che il GM ha selezionato in quel momento, non del creatore dell'area (es. la nuvola
   di Nocturne dello Shade firmata "TEST Warden", lo spostamento della nuvola di Mist Strider firmato "TEST
   Harvester"). Sembra `ChatMessage.getSpeaker()` senza l'attore. Solo estetico.
+- **Client giocatore senza sistema al primo ingresso**: al primo login del Giocatore (seconda finestra) la pagina del
+  gioco si è aperta ma il JS del sistema non risultava caricato (`game.icon` vuoto, solo 2 hook di chat invece di 16):
+  niente bottoni interrupt sulle card. Con F5 tutto a posto. Nello stesso momento il server era lento (i "tour" di
+  Foundry andavano in timeout, caricamento di 30–40 s). Probabilmente un caricamento fallito, non del sistema; se Maar
+  dice "non vedo i bottoni", prima cosa: F5.
+- **Bottone interrupt dopo l'uso**: sul client del GM "Grace of the Spirits · TEST Sealer" dopo il clic diventa "0/1"
+  ma resta cliccabile finché non si preme Apply; sul giocatore invece il bottone si spegne subito. Da controllare.
 
 ---
 
@@ -2474,7 +2481,7 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Show in Chat di un'abilità che non attacca, con un bersaglio che ha Aether Deflection: passando il mouse sulla
+- [x] Show in Chat di un'abilità che non attacca, con un bersaglio che ha Aether Deflection: passando il mouse sulla
       scritta "Interrupt · … targeted" il suggerimento dice "before the ability resolves".
 
 ## Emerso R33 — Il rampart di Comet ferma davvero i foe (17 ottobre 2026, versione 1.15.229)
@@ -2630,34 +2637,34 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Abilità non d'attacco con bersaglio singolo (es. una cura su un alleato): prendo di mira il token e faccio Show
+- [x] Abilità non d'attacco con bersaglio singolo (es. una cura su un alleato): prendo di mira il token e faccio Show
       in Chat → se il bersaglio ha un interrupt "You are targeted by an ability" (es. Aether Deflection), sotto la
-      card compare il suo bottone.
-- [ ] Stessa prova prendendo di mira solo me stesso → nessun bottone "targeted".
+      card compare il suo bottone. **(Divine Aegis (Show in Chat) su Spellblade: bottone Aether Deflection)**
+- [x] Stessa prova prendendo di mira solo me stesso → nessun bottone "targeted". **(bersaglio Sealer: nessun bottone)**
 - [ ] Abilità non d'attacco con Burst (target) piazzato sulla mappa, con più token dentro → il bottone "targeted"
-      compare solo per il token al centro.
+      compare solo per il token al centro. **(non provato)**
 - [ ] Abilità non d'attacco con un'area non centrata su un bersaglio (Line, Arc, Blast normale) piazzata sulla mappa →
-      nessun bottone "targeted".
+      nessun bottone "targeted". **(non provato)**
 - [ ] Attacco ad area con più token dentro → i bottoni "targeted" compaiono solo per il bersaglio dell'attacco, non
-      per gli altri nell'area (come prima).
-- [ ] Show in Chat di un'abilità d'attacco → nessun bottone "targeted" (compaiono sulla card dell'attacco).
+      per gli altri nell'area (come prima). **(non provato)**
+- [x] Show in Chat di un'abilità d'attacco → nessun bottone "targeted" (compaiono sulla card dell'attacco). **(God Hand: nessun bottone)**
 
 ## Emerso R35 — Le abilità a costo Interrupt spendono un uso quando vengono usate davvero (17 ottobre 2026, versione 1.15.217)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con un'abilità a costo Interrupt 1, in combattimento: Show in Chat → la card esce e i pallini degli usi sulla
-      scheda non cambiano.
-- [ ] Stessa abilità, Attack Roll → conferma il dialogo → gli usi passano da 1/1 a 0/1. Poi Damage Roll nello stesso
-      turno → nessun altro uso speso, il danno si tira.
-- [ ] Abilità Interrupt ad auto-hit con danno: Auto-Hit → il tiro del danno parte da solo → viene speso un uso solo.
-- [ ] Con 0 usi rimasti: Attack Roll e Damage Roll mostrano l'avviso "no uses left" e non tirano.
-- [ ] Personaggio Stunned: Attack Roll dell'abilità Interrupt → avviso "is Stunned and can't take interrupts", nessun
+- [x] PG con un'abilità a costo Interrupt 1, in combattimento: Show in Chat → la card esce e i pallini degli usi sulla
+      scheda non cambiano. **(Justice (Interrupt 1))**
+- [x] Stessa abilità, Attack Roll → conferma il dialogo → gli usi passano da 1/1 a 0/1. Poi Damage Roll nello stesso
+      turno → nessun altro uso speso, il danno si tira. **(con Damage Roll (nessuna abilità Interrupt dei PG di prova ha l'Attack Roll): 1/1 → 0/1, secondo Damage Roll nello stesso turno senza spesa)**
+- [ ] Abilità Interrupt ad auto-hit con danno: Auto-Hit → il tiro del danno parte da solo → viene speso un uso solo. **(non provato)**
+- [x] Con 0 usi rimasti: Attack Roll e Damage Roll mostrano l'avviso "no uses left" e non tirano. **('Justice: no uses left this round (0/1)')**
+- [x] Personaggio Stunned: Attack Roll dell'abilità Interrupt → avviso "is Stunned and can't take interrupts", nessun
       tiro.
 - [ ] Bottone interrupt dell'abilità sotto una card d'attacco o di danno (spende 1 uso), poi Attack Roll dalla scheda
-      nello stesso turno → non viene speso un secondo uso.
-- [ ] Attack Roll annullato (chiudo il dialogo dei modificatori) → nessun uso speso.
-- [ ] Al proprio turno successivo gli usi tornano pieni e il primo Attack Roll ne spende di nuovo uno.
+      nello stesso turno → non viene speso un secondo uso. **(non provato)**
+- [x] Attack Roll annullato (chiudo il dialogo dei modificatori) → nessun uso speso. **(dialogo chiuso: nessun uso speso)**
+- [x] Al proprio turno successivo gli usi tornano pieni e il primo Attack Roll ne spende di nuovo uno.
 
 ## Emerso R40 — "X damage, twice" sul tiro salvezza: un solo tiro (17 ottobre 2026, versione 1.15.216)
 
@@ -2780,13 +2787,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un foe attacca lo Spellblade con un'abilità: sulla card d'attacco lo Spellblade usa Aether Deflection. Poi il
+- [x] Un foe attacca lo Spellblade con un'abilità: sulla card d'attacco lo Spellblade usa Aether Deflection. Poi il
       foe tira il danno: sulla riga dello Spellblade c'è la chip della resistenza (Aether Deflection) e Apply dimezza
       il danno.
-- [ ] Un altro bersaglio della stessa card non ha la chip.
-- [ ] L'attacco dopo, con la stessa abilità ma senza usare Aether Deflection: la card del danno non ha più la chip.
-- [ ] Danno divine: la chip c'è ma Apply non dimezza (il divine non si dimezza, p.104).
-- [ ] Se il danno è stato tirato prima di premere Aether Deflection, quella card non cambia (va applicato a mano).
+- [ ] Un altro bersaglio della stessa card non ha la chip. **(non provato (un solo bersaglio))**
+- [x] L'attacco dopo, con la stessa abilità ma senza usare Aether Deflection: la card del danno non ha più la chip.
+- [ ] Danno divine: la chip c'è ma Apply non dimezza (il divine non si dimezza, p.104). **(non provato)**
+- [ ] Se il danno è stato tirato prima di premere Aether Deflection, quella card non cambia (va applicato a mano). **(non provato)**
 
 ## Emerso R35 — Chip vigor anche per "gain vigor N" (17 ottobre 2026, versione 1.15.205)
 
@@ -2799,24 +2806,24 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Stunned con un interrupt concesso dentro un'abilità (es. Cheat Time): il bottone chat del blocco dà l'avviso,
+- [x] PG Stunned con un interrupt concesso dentro un'abilità (es. Cheat Time): il bottone chat del blocco dà l'avviso,
       non posta niente e gli usi restano uguali.
-- [ ] Tolto lo Stunned, lo stesso bottone posta e spende un uso.
-- [ ] Foe e legend Stunned: anche il loro bottone chat dell'interrupt dà l'avviso e non spende.
+- [x] Tolto lo Stunned, lo stesso bottone posta e spende un uso.
+- [x] Foe e legend Stunned: anche il loro bottone chat dell'interrupt dà l'avviso e non spende. **(foe (Tick) ok; legend non provata)**
 
 ## Emerso R35 — Usi degli interrupt sulle schede di foe e legend (17 ottobre 2026, versione 1.15.203)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Scheda di un foe con un interrupt "Interrupt 2": sotto l'intestazione dell'interrupt ci sono 2 caselline accese
-      e la scritta "Uses 2/2".
-- [ ] Clic sul bottone chat dell'interrupt del foe: la card va in chat e la scheda mostra "Uses 1/2". Al secondo clic
+- [x] Scheda di un foe con un interrupt "Interrupt 2": sotto l'intestazione dell'interrupt ci sono 2 caselline accese
+      e la scritta "Uses 2/2". **(Tick (Scuttle, Interrupt 2))**
+- [x] Clic sul bottone chat dell'interrupt del foe: la card va in chat e la scheda mostra "Uses 1/2". Al secondo clic
       0/2, al terzo esce l'avviso "no uses left" e non si posta niente.
-- [ ] Clic su una casella spenta: gli usi tornano. Clic sulla prima casella accesa: scendono a 0.
-- [ ] Bottone interrupt del foe sulla card del danno: dopo il clic la scheda del foe scende di un uso.
-- [ ] All'inizio del turno del foe le caselline tornano tutte accese.
+- [x] Clic su una casella spenta: gli usi tornano. Clic sulla prima casella accesa: scendono a 0.
+- [ ] Bottone interrupt del foe sulla card del danno: dopo il clic la scheda del foe scende di un uso. **(non provato)**
+- [x] All'inizio del turno del foe le caselline tornano tutte accese.
 - [ ] Scheda di un legend: nella riga dell'interrupt c'è il bottone chat, spende un uso e le caselline tornano accese
-      all'inizio del round.
+      all'inizio del round. **(non provato)**
 
 ## Emerso R40 — Assault Wave chiede quanti minion contano (17 ottobre 2026, versione 1.15.202)
 
@@ -2916,21 +2923,21 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Un foe attacca un PG Spellblade con Aether Deflection: sotto la card dell'attacco compare "Interrupt · <PG>
+- [x] Un foe attacca un PG Spellblade con Aether Deflection: sotto la card dell'attacco compare "Interrupt · <PG>
       targeted" con il bottone Aether Deflection 1/1. Premendolo si posta la card con Trigger ed Effect e "On <PG>
-      being targeted … 0/1 use left this combat".
-- [ ] Aether Deflection dopo l'uso: il bottone resta disabilitato anche nei turni successivi dello stesso
-      combattimento. Dopo il bottone "spend 2 Aether" sulla scheda torna 1/1.
+      being targeted … 0/1 use left this combat". **(lato giocatore; vedi Esito per il primo caricamento del client giocatore)**
+- [x] Aether Deflection dopo l'uso: il bottone resta disabilitato anche nei turni successivi dello stesso
+      combattimento. Dopo il bottone "spend 2 Aether" sulla scheda torna 1/1. **(resta spento; ricarica con 2 Aether non provata)**
 - [ ] PG in stance Endless Battlement, un foe attacca un alleato: il bottone Heroic Intervention compare sotto la card
-      dell'attacco per il giocatore che ha quel PG (non per gli altri).
+      dell'attacco per il giocatore che ha quel PG (non per gli altri). **(non provato)**
 - [ ] Foe con interrupt "is targeted by an attack" (es. Violence Demon): un PG lo attacca e solo il GM vede il bottone
-      sotto la card. L'uso si spunta anche sulla scheda del foe.
+      sotto la card. L'uso si spunta anche sulla scheda del foe. **(non provato)**
 - [ ] Riposte / Dire Parry: un foe attacca un alleato e il bottone compare sulla card dell'attacco. Resta anche sulla
-      card del danno come prima.
-- [ ] Attacco ad area con più bersagli: i bottoni compaiono solo per il bersaglio dell'attacco scelto nella finestra.
-- [ ] La card del danno funziona come prima: Righteous Disdain, Wish, Grace of the Spirits e Heartfire cambiano ancora
-      il danno.
-- [ ] Le card d'attacco vecchie (precedenti alla build) non mostrano bottoni e non danno errori in console.
+      card del danno come prima. **(non provato)**
+- [ ] Attacco ad area con più bersagli: i bottoni compaiono solo per il bersaglio dell'attacco scelto nella finestra. **(non provato)**
+- [x] La card del danno funziona come prima: Righteous Disdain, Wish, Grace of the Spirits e Heartfire cambiano ancora
+      il danno. **(Righteous Disdain, Wish, Grace of the Spirits, Heartfire cambiano il danno)**
+- [ ] Le card d'attacco vecchie (precedenti alla build) non mostrano bottoni e non danno errori in console. **(non provato)**
 
 ## Emerso R33 — Implode: shove guidato verso il centro (17 ottobre 2026, versione 1.15.194)
 
@@ -3020,25 +3027,25 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Enochian con Blazing Bond, mastery sbloccata, mark su un alleato. Un foe danneggia l'alleato: sotto la sua riga
-      c'è "Great Soul Bond · <Enochian>". Lo vede chi gioca l'Enochian.
-- [ ] Premerlo: l'Enochian scende a 1 HP, la riga dell'alleato mostra la chip "Immune (Great Soul Bond)", Apply non
+- [x] Enochian con Blazing Bond, mastery sbloccata, mark su un alleato. Un foe danneggia l'alleato: sotto la sua riga
+      c'è "Great Soul Bond · <Enochian>". Lo vede chi gioca l'Enochian. **(lo vede il GM (Enochian senza giocatore))**
+- [x] Premerlo: l'Enochian scende a 1 HP, la riga dell'alleato mostra la chip "Immune (Great Soul Bond)", Apply non
       toglie niente, il mark di Blazing Bond sparisce (con il suo messaggio) e c'è la card in chat.
 - [ ] Al contrario: il foe danneggia l'Enochian, e il bottone appare sotto la riga dell'Enochian per chi gioca
-      l'alleato marcato. Premuto, è l'alleato a scendere a 1 HP.
-- [ ] Senza mastery sbloccata, o senza mark sulla scena, il bottone non c'è. Premuto una seconda volta sulla stessa
-      card: avviso "already changed this damage".
+      l'alleato marcato. Premuto, è l'alleato a scendere a 1 HP. **(non provato)**
+- [x] Senza mastery sbloccata, o senza mark sulla scena, il bottone non c'è. Premuto una seconda volta sulla stessa
+      card: avviso "already changed this damage". **(senza mastery il bottone non c'è)**
 
 ## Emerso R35 — Righteous Disdain: bottone per il vigor del Heroic (17 ottobre 2026, versione 1.15.186)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Demon Slayer con Righteous Disdain, un alleato colpito da un foe: sulla card del danno premere Righteous
+- [x] Demon Slayer con Righteous Disdain, un alleato colpito da un foe: sulla card del danno premere Righteous
       Disdain. La card postata mostra il bottone "Heroic: gain 4 vigor".
-- [ ] Premere il bottone: il vigor del Demon Slayer sale di 4 (fino alla VIT), compare l'avviso "vigor X → Y" e il
-      bottone si spegne.
+- [x] Premere il bottone: il vigor del Demon Slayer sale di 4 (fino alla VIT), compare l'avviso "vigor X → Y" e il
+      bottone si spegne. **(vigor 0 → 4, avviso, bottone spento)**
 - [ ] F5: il bottone di quella card resta spento. Un giocatore che non possiede il Demon Slayer vede il bottone
-      spento.
+      spento. **(non provato)**
 
 ## Emerso R33 — Symphony toglie davvero le blessing (17 ottobre 2026, versione 1.15.185)
 
@@ -3137,17 +3144,17 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con un'abilità a costo "Interrupt 1" o "Interrupt 2": aprendo l'anteprima compare la riga con il fulmine, il
-      nome, "2/2" e due caselline accese.
-- [ ] Clic su una casellina accesa: gli usi scendono fino a lei (es. 2/2, clic sulla seconda → 1/2). Clic su una
+- [x] PG con un'abilità a costo "Interrupt 1" o "Interrupt 2": aprendo l'anteprima compare la riga con il fulmine, il
+      nome, "2/2" e due caselline accese. **(pallini sì; l'anteprima con nome e '2/2' non guardata)**
+- [x] Clic su una casellina accesa: gli usi scendono fino a lei (es. 2/2, clic sulla seconda → 1/2). Clic su una
       spenta: gli usi tornano fino a lei.
-- [ ] Usare l'interrupt dal bottone sotto una card del danno: sulla scheda il conteggio scende di 1.
-- [ ] Abilità con un interrupt concesso nel testo (es. Chronotemper "Cheat Time — Interrupt 1"): bottone chat accanto
-      al blocco → posta la card e il contatore va a 0/1; un secondo clic avvisa "no uses left" e non posta nulla.
+- [ ] Usare l'interrupt dal bottone sotto una card del danno: sulla scheda il conteggio scende di 1. **(non provato)**
+- [x] Abilità con un interrupt concesso nel testo (es. Chronotemper "Cheat Time — Interrupt 1"): bottone chat accanto
+      al blocco → posta la card e il contatore va a 0/1; un secondo clic avvisa "no uses left" e non posta nulla. **(Cheat Time: solo con il marchio di Chronotemper in campo (senza marchio il bottone posta e non conta); col marchio 0/1 e avviso al secondo clic)**
 - [ ] Interrupt di uno stance (Riposte, Dire Parry): la riga compare solo quando lo stance è preso; con STRONG LEFT
-      mostra "banked" fino a 3.
-- [ ] A inizio turno del PG le caselline tornano tutte accese.
-- [ ] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente.
+      mostra "banked" fino a 3. **(non provato)**
+- [x] A inizio turno del PG le caselline tornano tutte accese. **(Justice torna piena al turno del Sealer)**
+- [ ] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente. **(da giocatore, blocco 18)**
 
 ## Emerso R5 — La × e il badge combo tornano sui riquadri delle abilità (17 ottobre 2026, versione 1.15.177)
 
@@ -3413,46 +3420,46 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Spirit Shrine con mastery sbloccata e alleato colpito: il bottone "Grace of the Spirits" mette il chip "Immune";
-      Apply e ½ postano "no damage".
-- [ ] Wish su un alleato: chip "Not below 1 HP (Wish)"; un danno letale lo lascia a 1 HP.
-- [ ] Blazing Bond: senza marchio non c'è Heartfire. Col marchio compare sulla riga dell'Enochian e su quella del
-      partner marcato, non su altri alleati. Apply toglie 3 in più come armatura; con pierce non li toglie.
+- [x] Spirit Shrine con mastery sbloccata e alleato colpito: il bottone "Grace of the Spirits" mette il chip "Immune";
+      Apply e ½ postano "no damage". **(chip Immune, Apply posta 'no damage')**
+- [x] Wish su un alleato: chip "Not below 1 HP (Wish)"; un danno letale lo lascia a 1 HP. **(3 HP, 5 danni → fermo a 1 (Wish))**
+- [x] Blazing Bond: senza marchio non c'è Heartfire. Col marchio compare sulla riga dell'Enochian e su quella del
+      partner marcato, non su altri alleati. Apply toglie 3 in più come armatura; con pierce non li toglie. **(Heartfire col marchio: −3 come armatura; pierce non provato)**
 - [ ] Riposte in stance con Strong Left: Dire Parry mostra "1/3 banked" sulla riga dell'alleato colpito; "Refresh
-      Riposte" porta a 2/3; a inizio turno +1; non supera 3.
-- [ ] Senza mastery: "Refresh Riposte" ridà l'uso di Dire Parry (0/1 → 1/1).
+      Riposte" porta a 2/3; a inizio turno +1; non supera 3. **(non provato)**
+- [ ] Senza mastery: "Refresh Riposte" ridà l'uso di Dire Parry (0/1 → 1/1). **(non provato)**
 
 ## R35b — Righteous Disdain dalla card del danno (17 ottobre 2026, versione 1.15.150)
 
 Setup: solo codice (F5 basta).
 
-- [ ] Foe colpisce un alleato del Demon Slayer: il clic su "Righteous Disdain" aggiunge la riga del Demon Slayer sotto
-      quella dell'alleato, ed entrambe hanno il chip "Resistance ½ (Righteous Disdain)".
-- [ ] Apply sulle due righe: il danno è dimezzato dopo l'armatura e la nota dice "halved (Righteous Disdain)".
-- [ ] Bersaglio già in Cover: dimezza una volta sola.
-- [ ] Danno divine: nessun dimezzamento.
+- [x] Foe colpisce un alleato del Demon Slayer: il clic su "Righteous Disdain" aggiunge la riga del Demon Slayer sotto
+      quella dell'alleato, ed entrambe hanno il chip "Resistance ½ (Righteous Disdain)". **(premuto dal giocatore)**
+- [x] Apply sulle due righe: il danno è dimezzato dopo l'armatura e la nota dice "halved (Righteous Disdain)". **(7 → 4 su tutte e due, 'halved (Righteous Disdain)')**
+- [ ] Bersaglio già in Cover: dimezza una volta sola. **(non provato)**
+- [ ] Danno divine: nessun dimezzamento. **(non provato)**
 - [ ] Con la mastery sbloccata e HP bassi: il Demon Slayer si ferma a 1 HP e la nota dice "stopped at 1 HP
-      (Shirahadori)".
-- [ ] Card postata dal GM e bottone premuto da un giocatore: la card si aggiorna (scrive il GM); senza GM collegato
-      esce un avviso.
-- [ ] Secondo clic sulla stessa card: avviso "already changed".
-- [ ] Dopo F5 le modifiche alla card restano.
+      (Shirahadori)". **(non provato)**
+- [x] Card postata dal GM e bottone premuto da un giocatore: la card si aggiorna (scrive il GM); senza GM collegato
+      esce un avviso. **(premuto dal giocatore, card aggiornata)**
+- [x] Secondo clic sulla stessa card: avviso "already changed". **(dopo il clic il bottone è spento (0/1))**
+- [ ] Dopo F5 le modifiche alla card restano. **(non provato)**
 
 ## R35a — Interrupt dalle card del danno (17 ottobre 2026, versione 1.15.149)
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Sturmreiten colpito da un foe: sotto la sua riga c'è "Sturmreiten · Nome 1/1"; il clic posta la card con
+- [x] PG con Sturmreiten colpito da un foe: sotto la sua riga c'è "Sturmreiten · Nome 1/1"; il clic posta la card con
       Trigger / Effect e la riga "On X's damage…", e il bottone passa a 0/1, disattivato.
-- [ ] Seer con Wish e un alleato colpito da un foe: il bottone compare sotto la riga dell'alleato, solo per il
-      giocatore del Seer.
-- [ ] Danno da un alleato (area amica): gli interrupt "by a foe's ability" non compaiono.
-- [ ] PG Stunned: bottone disattivato.
-- [ ] All'inizio del turno del PG gli usi tornano pieni (ricaricare la card per vederlo).
+- [x] Seer con Wish e un alleato colpito da un foe: il bottone compare sotto la riga dell'alleato, solo per il
+      giocatore del Seer. **(Wish visibile solo al giocatore di Ann)**
+- [ ] Danno da un alleato (area amica): gli interrupt "by a foe's ability" non compaiono. **(non provato)**
+- [ ] PG Stunned: bottone disattivato. **(non provato)**
+- [ ] All'inizio del turno del PG gli usi tornano pieni (ricaricare la card per vederlo). **(non provato)**
 - [ ] Foe con "The knight is damaged by an ability": il GM vede il bottone, che spunta lo stesso uso della scheda del
-      foe.
-- [ ] Il GM non vede i bottoni dei PG che hanno un giocatore; il giocatore non vede quelli dei foe.
-- [ ] Un interrupt della stance (Dire Parry) compare solo mentre si è in stance.
+      foe. **(non provato)**
+- [x] Il GM non vede i bottoni dei PG che hanno un giocatore; il giocatore non vede quelli dei foe. **(il GM vede solo Heave-Ho / Grace (PG senza giocatore), il giocatore non vede quelli)**
+- [ ] Un interrupt della stance (Dire Parry) compare solo mentre si è in stance. **(non provato)**
 
 ## R36c — Carte del Seer: bersagli e area (17 ottobre 2026, versione 1.15.148)
 
