@@ -4412,15 +4412,15 @@ Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner
 Furnace) con Aether 6, i loro token sulla scena, un foe ostile, un combat avviato.
 
-- [ ] **Senza tratti**: un Wright qualsiasi preme "Infuse 3" → paga 3 come prima, nessun dialog, nessuna riga in più.
-- [ ] **Conqueror's Edge, foe vicino**: foe a 2 spazi dallo Spellblade → "Infuse 3" toglie 2 Aether; la card dice
-      "2 Aether spent" e sotto "Conqueror's Edge: −1, a foe is in range 2".
-- [ ] **Conqueror's Edge, foe lontano**: foe a 3+ spazi (o nessun token del PG sulla scena) → paga 3.
-- [ ] **Inner Furnace**: l'Enochian preme "Infuse 3" → dialog con "Sacrifice N hp" (N = VIT, 25% degli hp massimi) e
-      "Pay 3 Aether". Sacrifice → Aether −1, hp −N, la card dice "Inner Furnace: −2, sacrificed N hp".
-- [ ] **Una volta per round**: nello stesso round un altro Infuse non mostra il dialog e paga pieno; al round dopo torna.
-- [ ] **Pay Aether**: scegliendo "Pay 3 Aether" paga 3, gli hp restano, e il dialog si può riavere nello stesso round.
-- [ ] **Hp bassi**: con 3 hp e VIT 10 → dopo il sacrificio hp 1, non 0, e nessun wound.
+- [ ] **Senza tratti**: un Wright qualsiasi preme "Infuse 3" → paga 3 come prima, nessun dialog, nessuna riga in più. **(non provato)**
+- [x] **Conqueror's Edge, foe vicino**: foe a 2 spazi dallo Spellblade → "Infuse 3" toglie 2 Aether; la card dice
+      "2 Aether spent" e sotto "Conqueror's Edge: −1, a foe is in range 2". **(Nothung Infuse 3: '2 Aether spent', 'Conqueror's Edge: −1, a foe is in range 2')**
+- [x] **Conqueror's Edge, foe lontano**: foe a 3+ spazi (o nessun token del PG sulla scena) → paga 3. **(foe a 6: paga 3)**
+- [x] **Inner Furnace**: l'Enochian preme "Infuse 3" → dialog con "Sacrifice N hp" (N = VIT, 25% degli hp massimi) e
+      "Pay 3 Aether". Sacrifice → Aether −1, hp −N, la card dice "Inner Furnace: −2, sacrificed N hp". **(vedi blocco 1 (dialog Inner Furnace con Pyroclast))**
+- [ ] **Una volta per round**: nello stesso round un altro Infuse non mostra il dialog e paga pieno; al round dopo torna. **(non provato)**
+- [x] **Pay Aether**: scegliendo "Pay 3 Aether" paga 3, gli hp restano, e il dialog si può riavere nello stesso round. **('Pay 3 Aether' ok)**
+- [ ] **Hp bassi**: con 3 hp e VIT 10 → dopo il sacrificio hp 1, non 0, e nessun wound. **(non provato)**
 - [ ] **Poco Aether**: Aether 1, "Infuse 3" → il dialog compare e avvisa che senza sacrificio non basta; Sacrifice →
       paga 1; "Pay 3 Aether" → avviso "needs 3 Aether", niente pagato.
 - [ ] **Chiudere il dialog** con la ✕ → nessun Aether né hp tolti, nessuna card.
@@ -4892,16 +4892,16 @@ sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 d
 Setup: un PG Wright Stormbender con Tsunami e un PG Wright Spellblade (tratto Aether Deflection), entrambi con qualche
 Aether. È JS + template: F5 dopo il deploy.
 
-- [ ] **Stormlash**: con 3 Aether clicca "Infuse 1" su Tsunami → Aether a 2, in chat "<nome> uses the infusion of
-      Tsunami — STORMLASH" con "Infuse 1: 1 Aether spent (2 left)" e il testo; il bottone NON diventa "armed".
-- [ ] **Stormlash due volte**: ricliccalo → scala un altro Aether (non lo restituisce) e posta di nuovo.
+- [x] **Stormlash**: con 3 Aether clicca "Infuse 1" su Tsunami → Aether a 2, in chat "<nome> uses the infusion of
+      Tsunami — STORMLASH" con "Infuse 1: 1 Aether spent (2 left)" e il testo; il bottone NON diventa "armed". **('uses the infusion of Tsunami — STORMLASH', 'Infuse 1: 1 Aether spent (2 left)')**
+- [x] **Stormlash due volte**: ricliccalo → scala un altro Aether (non lo restituisce) e posta di nuovo. **(ricliccato: scala un altro Aether)**
 - [ ] **Con un'altra infusione armata**: arma l'Infuse 3 di Rime (DAGON), poi clicca Stormlash → l'Aether di Dagon non
-      torna indietro e Rime resta "armed".
-- [ ] **Senza Aether**: a 0 Aether clicca Stormlash → avviso "Infuse 1 needs 1 Aether", nessun messaggio in chat.
-- [ ] **Altre infusioni invariate**: Infuse 3 di Rime si arma come prima (bottone "armed", ricliccare restituisce
-      l'Aether, tirando Rime la versione si consuma).
+      torna indietro e Rime resta "armed". **(non provato)**
+- [ ] **Senza Aether**: a 0 Aether clicca Stormlash → avviso "Infuse 1 needs 1 Aether", nessun messaggio in chat. **(non provato)**
+- [x] **Altre infusioni invariate**: Infuse 3 di Rime si arma come prima (bottone "armed", ricliccare restituisce
+      l'Aether, tirando Rime la versione si consuma). **(Infuse 3 si arma e si annulla restituendo l'Aether (Cryo, Nothung))**
 - [ ] **Aether Deflection**: nella riga del tratto c'è "Aether N" e il bottone "Regain (2 Aether)"; con 3 Aether
-      cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)".
+      cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)". **(non provato)**
 - [ ] **Aether insufficiente**: con 1 Aether il bottone è spento; su una scheda di un altro giocatore (solo
       osservatore) è spento.
 
@@ -5100,15 +5100,15 @@ solo codice); Aether a 6; il token del PG sulla mappa e un foe.
 Setup: PG di prova Wright con Cryo (Stormbender), Bio e Geo (Geomancer), Eye of the Storm e Nothung (Spellblade), dal
 compendio Jobs o già sulla scheda (è solo codice); Aether a 6; un foe sulla mappa come bersaglio.
 
-- [ ] **Cryo, CRYOTIC**: Infuse 3 → Damage: Hit "fray", Area "fray" (non più 1). Il titolo della card è "Cryo —
-      CRYOTIC". Disarmato di nuovo (secondo click, Aether restituito) il tiro torna a 1.
+- [x] **Cryo, CRYOTIC**: Infuse 3 → Damage: Hit "fray", Area "fray" (non più 1). Il titolo della card è "Cryo —
+      CRYOTIC". Disarmato di nuovo (secondo click, Aether restituito) il tiro torna a 1. **(CRYOTIC: Hit fray 4, Area fray 4; disarmato torna a 1 flat (Aether restituito); il titolo della card non controllato)**
 - [ ] **Cryo, MAGNACRYO**: mastery sbloccata, Infuse X con 4 Aether → il bottone dice Attack Roll (non Auto-Hit);
       Damage: Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray, Bonus dice già a 2 con la nota "MAGNACRYO: +2 bonus dice
-      from the Aether spent". Con 3 Aether i dadi bonus sono 1.
+      from the Aether spent". Con 3 Aether i dadi bonus sono 1. **(non provato)**
 - [ ] **Bio, MAGNABIO**: mastery sbloccata, Infuse 6 → Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray. Con BIOTIC
-      (Infuse 3) il danno resta quello base ([D]+fray / fray / fray).
-- [ ] **Geo, MAGNAGEO**: Infuse 6 → Area [D]+fray (non solo fray), Miss [D]+fray.
-- [ ] **Eye of the Storm, AEONCLOUD**: Infuse 3 → Area [D]+fray (base [D]).
+      (Infuse 3) il danno resta quello base ([D]+fray / fray / fray). **(non provato)**
+- [ ] **Geo, MAGNAGEO**: Infuse 6 → Area [D]+fray (non solo fray), Miss [D]+fray. **(non provato)**
+- [ ] **Eye of the Storm, AEONCLOUD**: Infuse 3 → Area [D]+fray (base [D]). **(non provato)**
 - [ ] **Nothung, EXCALIBUR**: mastery sbloccata e Talent I scelto → Damage → Other: il chip del Talent I dice "1
       divine"; sceglierlo spunta Divine (non Pierce). Senza mastery dice "1 piercing" e spunta Pierce.
 - [ ] **Non deve cambiare**: un'abilità senza Infuse armato tira come prima; un Limit Break con Infuse armato
