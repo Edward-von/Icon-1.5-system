@@ -41,7 +41,7 @@ come bersaglio (es. il Mechanist); per l'ultima casella un foe con un'azione d'a
 - [x] Attacco, Damage Roll, e poi un secondo Damage Roll della stessa abilità senza nuovo attacco → la seconda card
       del danno NON ha il blocco; la prima lo tiene. **(la seconda card del danno non ha il blocco)**
 - [ ] Attacco d'area con bersaglio d'attacco (es. Blackstar): le due card del danno ("— Hit" e "— Area damage")
-      hanno entrambe il blocco Inflict.
+      hanno entrambe il blocco Inflict. **(non provato per mancanza di tempo)**
 - [ ] Foe: attacco con un'azione che infligge uno status e danno (blocco presente); poi "Show in Chat" della stessa
       azione e danno → niente blocco. **(non provato: l'azione d'attacco del Knuckle (Overpower) non infligge status)**
 
