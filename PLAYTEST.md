@@ -689,12 +689,12 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Altro
 
-- [ ] **Oggetti sulla mappa** (p.88-95) — cosa controllare: altezza massima 3 nelle pile, "Add walls" del GM, copertura ½ per direzione, domanda "Stand on height N" [1.15.65, 66, 67, 68, 157, 160, 161, 227, 228]
-- [ ] **Spazi di terreno** (p.89, p.96) — cosa controllare: dangerous 2 piercing una volta per turno, il pit vale un livello più in basso, anche gli spazi attraversati contano [1.15.69, 70, 164, 174, 176]
-- [ ] **Vigor oltre il massimo** (p.?) — cosa controllare: il vigor scritto a mano sopra la VIT resta e assorbe il danno [1.15.4]
-- [ ] **Gear kit** — cosa controllare: tre clic rapidissimi su "5 fire stones" spendono 3 usi [1.15.136]
-- [ ] **Quick Guide, FAQ** (p.18-20, p.29) — cosa controllare: voce "What are the difficulties of a narrative roll?" con controlled / risky / desperate e strain 1, 2, 4 [1.15.26]
-- [ ] **Damage Utility** (scheda PG) — cosa controllare: riquadro in fondo alla tab Combat, campo Source, nessun danno → avviso [1.15.31]
+- [ ] **Oggetti sulla mappa** (p.88-95) — cosa controllare: altezza massima 3 nelle pile, "Add walls" del GM, copertura ½ per direzione, domanda "Stand on height N" [1.15.65, 66, 67, 68, 157, 160, 161, 227, 228] **(provati nel blocco 1: pile, copertura e "Stand on height" ok; "Add walls" del GM non va per il bug P1)**
+- [ ] **Spazi di terreno** (p.89, p.96) — cosa controllare: dangerous 2 piercing una volta per turno, il pit vale un livello più in basso, anche gli spazi attraversati contano [1.15.69, 70, 164, 174, 176] **(dangerous una volta per turno e pit un livello più in basso provati nel blocco 9 (1.15.69, 174); gli spazi attraversati non scattano per il bug P2)**
+- [x] **Vigor oltre il massimo** (p.?) — cosa controllare: il vigor scritto a mano sopra la VIT resta e assorbe il danno [1.15.4] **(già provato nella sezione 1.15.4)**
+- [x] **Gear kit** — cosa controllare: tre clic rapidissimi su "5 fire stones" spendono 3 usi [1.15.136] **(Outsider's Kit portato: tre clic rapidissimi su "5 fire stones" → 5/5 diventa 2/5. "−" doppio e Shift + clic non provati)**
+- [x] **Quick Guide, FAQ** (p.18-20, p.29) — cosa controllare: voce "What are the difficulties of a narrative roll?" con controlled / risky / desperate e strain 1, 2, 4 [1.15.26] **(già provato nella sezione 1.15.26)**
+- [x] **Damage Utility** (scheda PG) — cosa controllare: riquadro in fondo alla tab Combat, campo Source, nessun danno → avviso [1.15.31] **(riquadro e avviso "no damage" già provati; oggi Source "Counter", Fixed 3, Instances 3 → anteprima "(3) × 3 instances", card "Damage Utility — Counter damage" con "3 damage, 3 times")**
 
 ### 4. Come segnare l'esito
 
