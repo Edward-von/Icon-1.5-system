@@ -659,6 +659,25 @@ export function objectsForbiddingAttacks(actor) {
   return scene.tokens.filter(t => mapObjectFlag(t)?.creatorId === actor.id && t.actor && objectSheetInfo(t.actor)?.noAttack);
 }
 
+/**
+ * Ask before an attack while one of `actor`'s objects forbids attacking (Comet, p.128).
+ * Shared by every attack entry point (ability attacks, Light / Heavy Attack) so they all ask the same.
+ * @param {Actor} actor
+ * @param {string} attackName  shown in the dialog title
+ * @returns {Promise<boolean>} true = go on with the roll
+ */
+export async function confirmAttackAllowed(actor, attackName) {
+  const forbidding = objectsForbiddingAttacks(actor);
+  if (!forbidding.length) return true;
+  const names = forbidding.map(t => mapObjectFlag(t)?.name ?? t.name).join(", ");
+  const go = await foundry.applications.api.DialogV2.confirm({
+    window: { title: `${attackName} — you cannot attack` },
+    content: `<p>Your <strong>${foundry.utils.escapeHTML(names)}</strong> is on the map: while this object is active, you cannot attack. Pick it up first (open the object, Pick up).</p><p>Roll the attack anyway?</p>`,
+    yes: { label: "Roll anyway" }, no: { label: "Cancel", default: true }, rejectClose: false,
+  });
+  return !!go;
+}
+
 /* -------------------------------------------------- */
 /*  What the objects set off (R33a3)                   */
 /* -------------------------------------------------- */

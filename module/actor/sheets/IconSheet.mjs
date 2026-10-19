@@ -25,7 +25,7 @@ import { exceedTriggers, noteFirstUseThisCombat, exceedExtraBlocks, noteExceedBo
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
-import { objectChips, objectsForbiddingAttacks, mapObjectFlag } from "../../canvas/map-objects.mjs";
+import { objectChips, confirmAttackAllowed, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
 import { characterSpecOf, markRangeConfirmed } from "../../canvas/follow-marks.mjs";
 import { afterAreaPlaced } from "../../canvas/area-motion.mjs";
@@ -2704,16 +2704,7 @@ export class IconSheet extends BaseActorSheet {
     if (!(await useAbilityInterrupt(this.document, itemId, "attack", { spend: false }))) return;
 
     // Comet: "While this object is active, you cannot attack" (R33a2) — ask before rolling.
-    const forbidding = objectsForbiddingAttacks(this.document);
-    if (forbidding.length) {
-      const names = forbidding.map(t => mapObjectFlag(t)?.name ?? t.name).join(", ");
-      const go = await foundry.applications.api.DialogV2.confirm({
-        window: { title: `${ab.name} — you cannot attack` },
-        content: `<p>Your <strong>${escapeHTML(names)}</strong> is on the map: while this object is active, you cannot attack. Pick it up first (open the object, Pick up).</p><p>Roll the attack anyway?</p>`,
-        yes: { label: "Roll anyway" }, no: { label: "Cancel", default: true }, rejectClose: false,
-      });
-      if (!go) return;
-    }
+    if (!(await confirmAttackAllowed(this.document, ab.name))) return;
 
     // Area attack: Blast / Line / Arc / Burst on the map first, targets from it.
     // Cancelling the placement (Escape / right click) no longer kills the roll:
@@ -3107,6 +3098,8 @@ export class IconSheet extends BaseActorSheet {
     const heavy = target.dataset.heavy === "true";
     const ab = IconSheet.#basicAttackDetail(heavy, IconSheet.#basicAttackRange(this.document));
     _log(`basicAttackRoll — "${ab.name}"`);
+    // Comet's "you cannot attack" (p.128) covers the basic attacks too, not only ability attacks.
+    if (!(await confirmAttackAllowed(this.document, ab.name))) return;
     const mods = await promptAttackMods(ab, this.document);
     if (!mods) return;
     // Basic attacks are attacks too: relic invokes and attack reminders apply.

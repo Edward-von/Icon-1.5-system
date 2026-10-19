@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P4 — Comet: anche l'attacco base chiede "you cannot attack" (19 ottobre 2026, versione 1.15.236)
+
+Setup: solo codice (F5 basta). Un PG Comet con la Thrown Weapon a terra sulla scena, e un bersaglio.
+
+- [ ] Scheda → Combat → Basic Actions → Light Attack (d20) → arriva la domanda "Light Attack — you cannot attack"
+      (prima tirava senza domanda); Cancel ferma il tiro, nessuna card in chat.
+- [ ] Stessa cosa con Heavy Attack: domanda "Heavy Attack — you cannot attack"; "Roll anyway" apre il solito
+      dialog dell'attacco e tira.
+- [ ] Un attacco di abilità (es. Draken Cross) chiede ancora come prima (stesso testo e bottoni).
+- [ ] Raccolta l'arma (Pick up) → Light Attack, Heavy Attack e l'abilità tirano senza domanda.
+
 ## Esito 18 ottobre, P3 — Tactics Aura e rampart (19 ottobre 2026, versione 1.15.235)
 
 Setup: solo codice (F5 basta). Comet con la Thrown Weapon a terra (spazi accanto con rampart), un Mechanist (o un

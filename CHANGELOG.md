@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Comet: anche l'attacco base chiede "you cannot attack" (versione 1.15.236)
+
+### Esito del playtest del 18 ottobre, P4
+
+- **Light Attack e Heavy Attack con la Thrown Weapon a terra**: con l'arma della Comet sulla mappa, gli attacchi
+  delle abilità (es. Draken Cross) chiedevano "you cannot attack", ma l'attacco base della scheda (Basic Actions →
+  Light Attack / Heavy Attack) tirava senza domanda → il controllo stava solo nel codice degli attacchi delle
+  abilità; la regola "While this object is active, you cannot attack" (p.128) vale per ogni attacco → la domanda
+  ora è una funzione unica (`confirmAttackAllowed` in `map-objects.mjs`) usata sia dagli attacchi delle abilità sia
+  da Light / Heavy Attack, con lo stesso testo e gli stessi bottoni (Roll anyway / Cancel). Controllati gli altri
+  punti da cui parte un attacco: card in chat, token HUD e macro non tirano attacchi del PG (il danno dell'attacco
+  base viene dopo il tiro, quindi non serve chiedere di nuovo); summon, foe e legend sono altri attori e non
+  creano la Thrown Weapon.
+
 ## 19 ottobre 2026 — Tactics Aura: il rampart lo ignorano gli alleati, non chi ha l'aura (versione 1.15.235)
 
 ### Esito del playtest del 18 ottobre, P3
