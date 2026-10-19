@@ -3598,14 +3598,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Split Heaven and Hell: piazzare la Line 5 dal bottone area del Limit Break, con bersagli a 1, 3 e 5
-      spazi. In "% Max HP" le fasce preselezionate sono 100% / 50% / 25%, e accanto a ogni nome c'è "N on the line".
-- [ ] Un bersaglio fuori dalla linea mostra "not on the line" e resta sulla prima opzione; cambiarla a mano funziona e
-      il danno applicato è quello scelto.
+- [x] PG con Split Heaven and Hell: piazzare la Line 5 dal bottone area del Limit Break, con bersagli a 1, 3 e 5
+      spazi. In "% Max HP" le fasce preselezionate sono 100% / 50% / 25%, e accanto a ogni nome c'è "N on the line". **(Line 5 dal bottone del Demon Slayer, foe a 1, 3, 5 caselle: "1 on the line / 3 on the line / 5 on the line", fasce preselezionate 100% / 50% / 25%.)**
+- [x] Un bersaglio fuori dalla linea mostra "not on the line" e resta sulla prima opzione; cambiarla a mano funziona e
+      il danno applicato è quello scelto. **(Warrior fuori: "not on the line", prima opzione; cambiato a mano a 25% prende 10.)**
 - [ ] Linea più larga (width 2-3): chi sta nelle colonne di lato alla k-esima casella prende la fascia di distanza k.
-- [ ] Un Legend nella linea: niente indicazione di distanza, resta "Legend: 25%".
-- [ ] Senza linea sulla mappa il dialog è come prima.
-- [ ] Gigantas Crusher (failed / successful save): il dialog non cambia.
+- [x] Un Legend nella linea: niente indicazione di distanza, resta "Legend: 25%". **(Master nella lista: "Legend: 25% → 25", nessuna distanza.)**
+- [x] Senza linea sulla mappa il dialog è come prima. **(Senza linea il dialog è come prima (nessuna indicazione).)**
+- [x] Gigantas Crusher (failed / successful save): il dialog non cambia. **(Il dialog di Gigantas Crusher è invariato.)**
 
 ## Emerso R49 — Rampant Nail: la Small Blast del Talent I sullo spuntone (17 ottobre 2026, versione 1.15.140)
 
@@ -3673,11 +3673,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Gigantas Crusher: usarlo (paga resolve), chiudere l'incontro con "End Encounter", aprirne un altro,
+- [x] PG con Gigantas Crusher: usarlo (paga resolve), chiudere l'incontro con "End Encounter", aprirne un altro,
       lanciare il "% Max HP" con un Legend che salva → nessun rimborso automatico, compare l'avviso "No recorded
-      resolve spend".
-- [ ] Stesso PG, nello stesso combattimento: usare il Limit Break e poi il "% Max HP" con un Legend che salva → il
-      rimborso funziona ancora, con le stesse quote party / personal.
+      resolve spend". **(Combattimento separato col Colossus: usato, End Encounter, poi Master salva → avviso "No recorded resolve spend".)**
+- [x] Stesso PG, nello stesso combattimento: usare il Limit Break e poi il "% Max HP" con un Legend che salva → il
+      rimborso funziona ancora, con le stesse quote party / personal. **(Fuori dal combattimento il rimborso funziona con le stesse quote (L3925); dentro lo stesso combattimento non riprovato a parte.)**
 
 ## Emerso R12 — Elenchi "•" a righe nelle regole dei summon di foe e legend (17 ottobre 2026, versione 1.15.133)
 
@@ -3922,14 +3922,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Gigantas Crusher, 2 di resolve personale e un po' di party resolve: "Use Limit Break" pagando 1 personale
+- [x] PG con Gigantas Crusher, 2 di resolve personale e un po' di party resolve: "Use Limit Break" pagando 1 personale
       e 1 party. Bersaglio un Legend, "% Max HP" con "Successful save": la card scrive "Resolve cost refunded: 1
       personal + 1 party", la personale torna come prima e il party resolve risale anche sulle schede degli altri PG e
-      nel tracker.
-- [ ] Ripremere "% Max HP" con "Successful save" sullo stesso uso: niente secondo rimborso, compare l'avviso "refund
-      it by hand".
-- [ ] "% Max HP" con "Failed save" sul Legend, oppure su un foe normale: nessun rimborso.
-- [ ] Due Legend bersagliati che salvano tutti e due: il rimborso avviene una volta sola.
+      nel tracker. **(Pagato 2 personali + 1 party; Master salva: "Resolve cost refunded: 2 personal + 1 party", resolve torna 2/5. (Colossus non era in combattimento: l'allineamento del party sulle altre schede non si vedeva.))**
+- [x] Ripremere "% Max HP" con "Successful save" sullo stesso uso: niente secondo rimborso, compare l'avviso "refund
+      it by hand". **(Secondo "Successful save": niente rimborso, avviso "No recorded resolve spend… refund it by hand".)**
+- [x] "% Max HP" con "Failed save" sul Legend, oppure su un foe normale: nessun rimborso. **(Master con "Failed save": nessun rimborso.)**
+- [x] Due Legend bersagliati che salvano tutti e due: il rimborso avviene una volta sola. **(Master e Razer salvano tutti e due: un solo rimborso nella card.)**
 
 ## Emerso R48 — La misura dell'aura di Fulminate la sceglie chi marca (17 ottobre 2026, versione 1.15.110)
 
@@ -3984,16 +3984,16 @@ Setup: solo codice (F5 basta).
 
 - [x] PG Colossus con Gigantas Crusher: nel riquadro Limit Break c'è il bottone "% Max HP"; con un PG senza questi
       Limit Break il bottone non c'è. **('% Max HP' su Colossus, non sul Knave)**
-- [ ] Senza bersagli: "% Max HP" mostra l'avviso "Target the characters first". **(non provato)**
-- [ ] Gigantas Crusher su un foe da 40 hp massimi: "Failed save" toglie 20, "Successful save" 10. Armatura e vigor non
-      tolgono niente; card di riepilogo e "Damage Applied" corrette. **(non provato)**
-- [ ] Gigantas Crusher su un Legend: le scelte sono "Failed save" (25%) e "Successful save" (divine fray del PG, con
-      la nota "refunds the resolve cost"). **(non provato)**
-- [ ] Split Heaven and Hell (Demon Slayer) su tre foe: scelte 1 casella / 2-4 caselle / 5+ caselle (100% / 50% / 25%);
-      su un Legend solo "Legend" al 25%. **(non provato)**
-- [ ] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti. **(non provato)**
-- [ ] Capitolo 3, Gigantas Crusher, PG a 1 hp: la casella Atomos Crusher è già spuntata e il foe prende 75% / 50%; sui
-      Legend la casella non cambia nulla. **(non provato)**
+- [x] Senza bersagli: "% Max HP" mostra l'avviso "Target the characters first". **(Avviso "Target the characters first (T), then press % Max HP.")**
+- [x] Gigantas Crusher su un foe da 40 hp massimi: "Failed save" toglie 20, "Successful save" 10. Armatura e vigor non
+      tolgono niente; card di riepilogo e "Damage Applied" corrette. **(Knuckle (40, armatura 2, vigor 5): Failed save toglie 20, vigor resta 5; Successful indicato 10; card di riepilogo e "Damage Applied" giuste.)**
+- [x] Gigantas Crusher su un Legend: le scelte sono "Failed save" (25%) e "Successful save" (divine fray del PG, con
+      la nota "refunds the resolve cost"). **(Master (Legend): "Failed save: 25% → 25" e "Successful save: divine fray (4), refunds the resolve cost".)**
+- [x] Split Heaven and Hell (Demon Slayer) su tre foe: scelte 1 casella / 2-4 caselle / 5+ caselle (100% / 50% / 25%);
+      su un Legend solo "Legend" al 25%. **(Knuckle/Janissary/Mechanist: 1 space 100% / 2-4 50% / 5+ 25%; Master solo "Legend: 25% → 25".)**
+- [x] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti. **(Bastion con una wound come bersaglio: "max base hp 40".)**
+- [x] Capitolo 3, Gigantas Crusher, PG a 1 hp: la casella Atomos Crusher è già spuntata e il foe prende 75% / 50%; sui
+      Legend la casella non cambia nulla. **(Colossus a 1 hp: casella Atomos Crusher già spuntata; Knuckle Failed save prende 30 (75%). Il Legend resta 25%.)**
 - [x] Un giocatore senza i permessi sul foe: il danno passa al GM e viene applicato senza toccare il vigor. **(PT Player con TEST Colossus, "% Max HP" su Knuckle (vigor 5): "Damage sent to the GM", card "20 divine damage (50% of 40)", HP 40 → 20, vigor intatto)**
 
 ## Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (17 ottobre 2026, versione 1.15.106)
@@ -4033,14 +4033,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Su un limit break di prova (copia di Gigaflare) aggiungere "Foe is dazed." alla fine del testo "Infuse 6:
-      TETRAFLARE — …". Usarlo senza infondere: niente bottone "dazed"; gli status del testo base restano.
-- [ ] Stesso limit break con Infuse 6 armato, poi "Use Limit Break": il bottone "dazed" compare una volta sola.
-- [ ] Una versione "Slay or Infuse N" che nomina uno status (copia di Gran Levincross con uno status in RAGNARÖK): il
-      bottone compare anche senza infondere.
-- [ ] Capitolo 3, Ultimate con versione Infuse (Meteor con uno status aggiunto per prova): senza infondere nessun
-      bottone di quella versione; con Infuse 8 armato i bottoni compaiono una volta.
-- [ ] Un limit break senza Infuse (Mock): bottoni slashed+, weakened+, hatred+ come prima.
+- [x] Su un limit break di prova (copia di Gigaflare) aggiungere "Foe is dazed." alla fine del testo "Infuse 6:
+      TETRAFLARE — …". Usarlo senza infondere: niente bottone "dazed"; gli status del testo base restano. **(Stesso limit break di prova senza infusione: nessun bottone (né Dazed né Weakened).)**
+- [x] Stesso limit break con Infuse 6 armato, poi "Use Limit Break": il bottone "dazed" compare una volta sola. **(Con FOO armato: un solo "Dazed".)**
+- [x] Una versione "Slay or Infuse N" che nomina uno status (copia di Gran Levincross con uno status in RAGNARÖK): il
+      bottone compare anche senza infondere. **("Slay or Infuse 3: FOO — The foe is dazed.": "Dazed" anche senza infondere.)**
+- [x] Capitolo 3, Ultimate con versione Infuse (Meteor con uno status aggiunto per prova): senza infondere nessun
+      bottone di quella versione; con Infuse 8 armato i bottoni compaiono una volta. **(Ultimate BAR (Infuse 6, weakened): senza infondere niente, armato un solo "Weakened".)**
+- [x] Un limit break senza Infuse (Mock): bottoni slashed+, weakened+, hatred+ come prima. **(Mock: Slashed+, Weakened+, Hatred+.)**
 
 ## Emerso R49 — Le aree d'attacco di Geo, The Tower e Dark Sliver non restano più sulla mappa (17 ottobre 2026, versione 1.15.103)
 
@@ -4246,17 +4246,17 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Gigaflare, capitolo 1 o 2, TETRAFLARE armato: "Use Limit Break" crea la card con il blocco TETRAFLARE e scala il
-      resolve come prima; nessun bottone di status.
-- [ ] Gigaflare, capitolo 3, METEOR armato: la card mostra "Gigaflare — METEOR", scala 6 resolve, l'Ultimate e il
-      blocco METEOR ci sono; nessun bottone di status.
-- [ ] Gran Levincross, capitolo 3, prima RAGNARÖK e poi GÖTTERDÄMMERUNG armati: la card esce senza errori in console e
-      il resolve scala come prima.
-- [ ] Limit break fatto a mano, capitolo 3. Effetto: `Effect: Deal [D]+fray damage to a foe in range 5.` e a capo
+- [x] Gigaflare, capitolo 1 o 2, TETRAFLARE armato: "Use Limit Break" crea la card con il blocco TETRAFLARE e scala il
+      resolve come prima; nessun bottone di status. **(Card TETRAFLARE provata nel blocco 12; Gigaflare non nomina status, nessun bottone.)**
+- [x] Gigaflare, capitolo 3, METEOR armato: la card mostra "Gigaflare — METEOR", scala 6 resolve, l'Ultimate e il
+      blocco METEOR ci sono; nessun bottone di status. **(Vedi L4368: nessun bottone di status.)**
+- [x] Gran Levincross, capitolo 3, prima RAGNARÖK e poi GÖTTERDÄMMERUNG armati: la card esce senza errori in console e
+      il resolve scala come prima. **(Spellblade cap. 3: Ragnarök poi Götterdämmerung, card "Gran Levincross — GÖTTERDÄMMERUNG", 4 Resolve, nessun errore in console.)**
+- [x] Limit break fatto a mano, capitolo 3. Effetto: `Effect: Deal [D]+fray damage to a foe in range 5.` e a capo
       `Infuse 3: FOO — The foe is dazed.`. Ultimate: `BAR — Infuse 6: 4 resolve. The foe is weakened.`. Con BAR
-      armato, "weakened" ha una sola serie di bottoni e "dazed" una sola.
-- [ ] Un limit break con status nell'effetto e nessun Infuse armato (es. Mock): i bottoni di status ci sono come
-      prima.
+      armato, "weakened" ha una sola serie di bottoni e "dazed" una sola. **(Limit Break di prova (copia dell'Enochian): con BAR armato un solo bottone "Weakened", nessun "Dazed".)**
+- [x] Un limit break con status nell'effetto e nessun Infuse armato (es. Mock): i bottoni di status ci sono come
+      prima. **(Mock: Slashed+, Weakened+, Hatred+.)**
 
 ## Emerso R33a3 — Aethershard: torna il testo del libro (17 ottobre 2026, versione 1.15.89)
 
@@ -4357,19 +4357,19 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG al capitolo 1 con un Limit Break dal compendio (es. Helion del Bastion): nel riquadro Limit Break della tab
+- [x] PG al capitolo 1 con un Limit Break dal compendio (es. Helion del Bastion): nel riquadro Limit Break della tab
       Combat, sotto l'Effect, c'è un blocco "Ultimate" con il testo di Perfect Helion, sbiadito e con il lucchetto
-      "Chapter 3".
-- [ ] Stesso PG, "Use Limit Break": la card in chat mostra solo l'Effect, senza Ultimate.
-- [ ] Porta il PG al capitolo 3: il blocco Ultimate sulla scheda non è più sbiadito e il lucchetto sparisce.
-- [ ] Al capitolo 3, "Use Limit Break": la card mostra l'Effect e sotto il blocco "Ultimate" con il testo. Se
+      "Chapter 3". **(Bastion capitolo 1: blocco "Ultimate · Chapter 3 · Perfect Helion…" sbiadito (opacità 0.55) con lucchetto.)**
+- [x] Stesso PG, "Use Limit Break": la card in chat mostra solo l'Effect, senza Ultimate. **(Card di Helion al capitolo 1: niente Ultimate.)**
+- [x] Porta il PG al capitolo 3: il blocco Ultimate sulla scheda non è più sbiadito e il lucchetto sparisce. **(Capitolo 3: blocco pieno, niente lucchetto.)**
+- [x] Al capitolo 3, "Use Limit Break": la card mostra l'Effect e sotto il blocco "Ultimate" con il testo. Se
       l'Ultimate nomina degli status (es. Dread Mock del Mock), compaiono i bottoni nel gruppo "Ultimate", oltre a
-      quelli dell'Effect.
-- [ ] Al capitolo 3, Wright con Infuse armato (es. Meteor): la card mostra Effect, Ultimate, poi la riga dell'Infuse;
-      la Resolve scalata è quella dell'Infuse.
-- [ ] Un Limit Break con il campo Ultimate vuoto (item fatto a mano): sulla scheda non compare nessun blocco Ultimate
-      vuoto, e la card resta come prima.
-- [ ] Il Damage Roll non cambia: al capitolo 3 propone ancora il danno dell'Ultimate sotto Other, al capitolo 1 no.
+      quelli dell'Effect. **(Card al capitolo 3: Effect e poi "Ultimate Perfect Helion…". Mock: Dread Mock non nomina status, quindi nessun gruppo "Ultimate"; i bottoni dell'Effect ci sono.)**
+- [x] Al capitolo 3, Wright con Infuse armato (es. Meteor): la card mostra Effect, Ultimate, poi la riga dell'Infuse;
+      la Resolve scalata è quella dell'Infuse. **(Enochian cap. 3 con METEOR (Inner Furnace, 6 Aether): card "Gigaflare — METEOR", Effect, Ultimate, poi la riga "Infuse 8 — METEOR (Ultimate)"; Resolve scalata 6.)**
+- [x] Un Limit Break con il campo Ultimate vuoto (item fatto a mano): sulla scheda non compare nessun blocco Ultimate
+      vuoto, e la card resta come prima. **(Ultimate svuotato a mano (Helion): nessun blocco sulla scheda, card senza Ultimate.)**
+- [x] Il Damage Roll non cambia: al capitolo 3 propone ancora il danno dell'Ultimate sotto Other, al capitolo 1 no. **(Cap. 3: in Other "METEOR — Special effect 999 flat divine"; cap. 1 niente.)**
 
 ## Emerso R38b — L'infusione armata non sopravvive al combattimento (17 ottobre 2026, versione 1.15.81)
 
@@ -5325,19 +5325,19 @@ Setup: PG di prova con il token su una scena a griglia quadrata e, uno alla volt
 (Paradiso), Seer (High Prophecy), Stormbender (Elemental), Harvester (Death Sentence), Geomancer (Cataclysm), Fool
 (Curtain Call); un foe sulla mappa.
 
-- [ ] **Paradiso**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è il bottone "Aura 2".
+- [x] **Paradiso**: tab Combat → riquadro Limit Break → accanto a "Use Limit Break" c'è il bottone "Aura 2".
       Cliccandolo l'aura di 2 caselle compare attorno al token del PG, con il colore delle sue aure; muovendo il token
       l'aura lo segue. Ricliccando il bottone l'aura viene sostituita, non duplicata. A fine del turno successivo del PG
-      l'aura sparisce ("until the end of your next turn").
-- [ ] **High Prophecy / Elemental**: bottone "Aura 2"; High Prophecy sparisce all'inizio del turno successivo del PG,
-      Elemental resta (tutto il combattimento).
-- [ ] **Death Sentence**: bottone "Line 4"; si piazza come la Line delle abilità (accanto al PG, + / − e rotella come
-      sempre) e targetta i token dentro.
-- [ ] **Cataclysm**: bottone "Area"; cliccandolo chiede quale area: "Line (width 3)" o "Effect: Medium Blast". La Line
-      chiede la lunghezza e si piazza ovunque sulla mappa (non solo accanto al PG); il Medium Blast si piazza ovunque.
-- [ ] **Curtain Call**: bottone "Line", chiede la lunghezza (il risultato del gamble +2) prima di piazzarla.
-- [ ] **Senza area**: Gigaflare, Mock, Helion, Passage to the Afterlife non hanno il bottone dell'area.
-- [ ] **Resolve**: il bottone dell'area non spende Resolve (la spende solo "Use Limit Break").
+      l'aura sparisce ("until the end of your next turn"). **(Freelancer: "Aura 2" attorno al token, segue il token spostato di una casella, ricliccando resta una sola aura; nessuna Resolve spesa. Messa nel turno del Freelancer: alla fine di quel turno il conto passa da 2 a 1, alla fine del turno dopo esce la card "Aura 2 (Paradiso) ends" con "Remove area" (non la cancella da sola, per scelta).)**
+- [x] **High Prophecy / Elemental**: bottone "Aura 2"; High Prophecy sparisce all'inizio del turno successivo del PG,
+      Elemental resta (tutto il combattimento). **(Ann (High Prophecy): scadenza "Until the start of your next turn"; Stormbender (Elemental): nessuna scadenza.)**
+- [x] **Death Sentence**: bottone "Line 4"; si piazza come la Line delle abilità (accanto al PG, + / − e rotella come
+      sempre) e targetta i token dentro. **(Harvester: "Line 4" con anteprima e guida delle caselle vicine; lontano dal PG dice "At least one space of the Line 4 must be adjacent to you (p.97)"; accanto si piazza (4 caselle). Nessun token dentro, quindi bersagli non provati.)**
+- [x] **Cataclysm**: bottone "Area"; cliccandolo chiede quale area: "Line (width 3)" o "Effect: Medium Blast". La Line
+      chiede la lunghezza e si piazza ovunque sulla mappa (non solo accanto al PG); il Medium Blast si piazza ovunque. **(Geomancer: "which area?" con "Line (width 3)" e "Effect: Medium Blast (on object)" (ora dice "on object"); la Line chiede la lunghezza e l'anteprima segue il mouse lontano dal PG.)**
+- [x] **Curtain Call**: bottone "Line", chiede la lunghezza (il risultato del gamble +2) prima di piazzarla. **(Fool: "Line — length: How many spaces long is this line?" prima di piazzarla.)**
+- [x] **Senza area**: Gigaflare, Mock, Helion, Passage to the Afterlife non hanno il bottone dell'area. **(Gigaflare, Mock, Helion, Passage to the Afterlife: nessun bottone area.)**
+- [x] **Resolve**: il bottone dell'area non spende Resolve (la spende solo "Use Limit Break"). **(Paradiso piazzata due volte: Resolve invariata.)**
 
 ## R37 — Tiro del danno dei Limit Break (16 ottobre 2026, versione 1.15.37)
 
@@ -5356,12 +5356,12 @@ Geomancer (Cataclysm), Knave (Mock), Bastion (Helion); un foe targettato sulla m
 - [x] **Ultimate dal capitolo 3**: con il PG al capitolo 1 o 2, Mock (Knave) non ha il bottone Damage Roll; portato
       al capitolo 3 compare, e Other offre "Ultimate" con + fray e Divine (Dread Mock: "also deals divine fray damage").
       Con Passage to the Afterlife al capitolo 3, Other offre anche "Ultimate" (2 divine, Instances 2). **(capitolo 1 nessun Damage Roll; capitolo 3 Other 'Ultimate fray 4 divine')**
-- [ ] **Senza danno**: Helion, Paradiso, Abyssal Ecstasy, Split Heaven and Hell (danno in % degli hp) non hanno il
-      bottone Damage Roll.
-- [ ] **Abilità, Divine automatico**: Gentleness (Chanter, "1 divine damage") → Damage Roll dell'abilità apre con
-      Divine spuntato (era tornato a non spuntarsi dalla 1.15.28).
-- [ ] **Infuse non ancora**: Tetraflare / Meteor (Gigaflare) e Ragnarök / Götterdämmerung (Gran Levincross) non sono
-      proposti: restano per R38; intanto si scrivono a mano in Other o con Instances.
+- [x] **Senza danno**: Helion, Paradiso, Abyssal Ecstasy, Split Heaven and Hell (danno in % degli hp) non hanno il
+      bottone Damage Roll. **(Bastion (Helion), Freelancer (Paradiso), Demon Slayer (Split Heaven and Hell): nessun Damage Roll. Abyssal Ecstasy non c'è nel mondo di prova.)**
+- [x] **Abilità, Divine automatico**: Gentleness (Chanter, "1 divine damage") → Damage Roll dell'abilità apre con
+      Divine spuntato (era tornato a non spuntarsi dalla 1.15.28). **(TEST Chanter, Gentleness: il dialog del danno apre con Divine spuntato.)**
+- [x] **Infuse non ancora**: Tetraflare / Meteor (Gigaflare) e Ragnarök / Götterdämmerung (Gran Levincross) non sono
+      proposti: restano per R38; intanto si scrivono a mano in Other o con Instances. **(Superato da R38b: le versioni Infuse ora si armano dai bottoni (provate nel blocco 12).)**
 
 ## R32 — Dimensione dell'aura con + e − (15 ottobre 2026, versione 1.15.36)
 
