@@ -521,13 +521,13 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Vagabond — Warden
 
-- [ ] **Beast Master** (tratto Warden, p.168) — cosa controllare: chip Great Beast, nessun chip Beast [1.15.46]
-- [ ] **Underway** (Warden, p.170-171) — cosa controllare: chip del portale; "Teleport here"; domanda di teletrasporto accanto al portale; Bale Portal a fine turno del foe, una volta per round; "Cover? underway" con il Talent II; niente "Add walls" [1.15.45, 65, 68, 157, 161, 162, 227]
-- [ ] **Circle the Oak** (Warden, p.169) — cosa controllare: con il Talent II "Gain Evasion" su di sé; chip "fray · up to ×4" [1.15.20, 100, 144]
-- [ ] **Mist Strider** (Warden, p.169-170) — cosa controllare: solo summon Beast; seconda nuvola; Blind+ ai foe che entrano; River Guardians "2 damage + Dazed"; Consume; con il Talent II i foe dentro hanno evasion [1.15.9, 44, 70, 164, 165, 169, 191, 192]
-- [ ] **Strength of the Pack** (Warden, p.170) — cosa controllare: Aura 2 dal testo senza domanda [1.15.21]
-- [ ] **Sidhe** (Warden, p.171) — cosa controllare: area e danno del Talent II; bottone Track target [1.15.24, 25, 57, 100]
-- [ ] **Morrigan** (Warden, p.171) — cosa controllare: "you summon a massive flock" senza tooltip su summon; con DARK WING area che resta, dangerous per i foe, Cover agli alleati [1.15.24, 52, 70, 164, 191]
+- [x] **Beast Master** (tratto Warden, p.168) — cosa controllare: chip Great Beast, nessun chip Beast [1.15.46] **(chip Great Beast sul tratto, nessun chip Beast)**
+- [x] **Underway** (Warden, p.170-171) — cosa controllare: chip del portale; "Teleport here"; domanda di teletrasporto accanto al portale; Bale Portal a fine turno del foe, una volta per round; "Cover? underway" con il Talent II; niente "Add walls" [1.15.45, 65, 68, 157, 161, 162, 227] **(chip "Underway · H1"; Teleport here, domanda accanto al portale, Bale Portal, "Cover? underway" e niente "Add walls" già provati nel blocco 1 e nelle sezioni 1.15.68, 157, 162, 227)**
+- [x] **Circle the Oak** (Warden, p.169) — cosa controllare: con il Talent II "Gain Evasion" su di sé; chip "fray · up to ×4" [1.15.20, 100, 144] **(già provato nelle sezioni 1.15.20 e 1.15.144: Gain Evasion col Talent II, chip "fray · up to ×4")**
+- [x] **Mist Strider** (Warden, p.169-170) — cosa controllare: solo summon Beast; seconda nuvola; Blind+ ai foe che entrano; River Guardians "2 damage + Dazed"; Consume; con il Talent II i foe dentro hanno evasion [1.15.9, 44, 70, 164, 165, 169, 191, 192] **(solo chip Beast; seconda nuvola, Blind+, River Guardians, Consume ed evasion col Talent II già provati nei blocchi 2 e 9)**
+- [x] **Strength of the Pack** (Warden, p.170) — cosa controllare: Aura 2 dal testo senza domanda [1.15.21] **(bottone "Aura 2" piazza subito l'aura attorno al PG, senza domanda)**
+- [x] **Sidhe** (Warden, p.171) — cosa controllare: area e danno del Talent II; bottone Track target [1.15.24, 25, 57, 100] **(Talent II: bottone "Medium Blast" e "Area 2 flat" nella finestra del danno; Track target presente)**
+- [x] **Morrigan** (Warden, p.171) — cosa controllare: "you summon a massive flock" senza tooltip su summon; con DARK WING area che resta, dangerous per i foe, Cover agli alleati [1.15.24, 52, 70, 164, 191] **("you summon a massive flock" senza tooltip; tooltip solo su "allied summons" e "Summon a beast", che sono giusti; DARK WING già provata nel blocco 2)**
 
 #### Mendicant — Chanter
 
