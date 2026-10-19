@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Show in Chat di un'abilità dei foe: costo leggibile, funziona anche dal compendio (versione 1.15.260)
+
+### Esito del playtest del 18 ottobre, P30
+
+- **Costo nella card di Show in Chat**: dalla scheda di un'abilità dei foe (es. "Crimson Weapon — Ashura Burst"
+  copiata negli Items del mondo), Show in Chat metteva nell'intestazione il costo grezzo "1action" → la scheda passava
+  alla card il valore salvato così com'era, mentre le altre card lo traducono → ora passa per la stessa traduzione:
+  "1 Action", "2 Actions", "Free Action", "Interrupt 1".
+- **Show in Chat dal compendio**: aperta direttamente dal compendio, il bottone Chat non faceva nulla → non era una
+  scelta voluta: i compendi del sistema sono bloccati, la scheda è in sola lettura e Foundry spegne tutti i suoi
+  controlli, bottone Chat compreso → ora il bottone Chat resta attivo anche sulle schede in sola lettura (pubblicare
+  in chat non cambia l'oggetto). La card esce senza nome del foe e senza firma di un personaggio, come previsto per
+  un'abilità che non è su un attore.
+
 ## 19 ottobre 2026 — La parola pit ha il suo tooltip (versione 1.15.259)
 
 ### Esito del playtest del 18 ottobre, P29

@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P30 — Show in Chat di un'abilità dei foe: costo leggibile, funziona anche dal compendio (19 ottobre 2026, versione 1.15.260)
+
+Setup: solo codice (F5 basta). Compendio Foe Abilities; una sua abilità da 1 azione (es. "Crimson Weapon — Ashura
+Burst") anche copiata negli Items del mondo.
+
+- [ ] Item del mondo → scheda → Chat → l'intestazione della card dice "1 Action", non "1action".
+- [ ] Un'abilità da 2 azioni / free / interrupt → "2 Actions" / "Free Action" / "Interrupt 1".
+- [ ] Stessa abilità aperta direttamente dal compendio (senza importarla) → Chat pubblica la card.
+- [ ] Sulla scheda dal compendio gli altri campi restano non modificabili.
+- [ ] Un trait dei foe dal compendio → Chat pubblica la card del trait.
+
 ## Esito 18 ottobre, P29 — La parola pit ha il suo tooltip (19 ottobre 2026, versione 1.15.259)
 
 Setup: solo codice (F5 basta). Un PG con Massive Overhead (o un'altra abilità che nomina un pit).

@@ -148,6 +148,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       Overhead). "Pit" è un termine definito (p.89: "A pit space … Pits count as one level lower of elevation than their
       base space"): aggiungerla a `helpers/keywords.mjs` come le altre keyword di terreno. S.
       (FATTO il 19 ottobre 2026, versione 1.15.259)
+- [x] **P30 (emerso nel playtest dei fix, 19 ottobre)** — Show in Chat dalla scheda di un'abilità dei foe (es.
+      "Crimson Weapon — Ashura Burst" copiata negli Items del mondo): l'intestazione della card mostra il costo grezzo
+      "1action" invece di "1 Action". E aperta direttamente dal compendio, Show in Chat non pubblica nulla. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.260)
 - [ ] **P31 (Emerso lavorando su P28)** — "Plant loses 0 blessings (now 0)": la mote of life ha lo status Blessed ma
       nessun contatore di blessing (flag `statusCharges.blessed` assente, `getStatusCharges` dà 0), quindi
       `removeBlessings` ne toglie 0 e lo status resta. Probabilmente lo status arriva da una strada che non passa per

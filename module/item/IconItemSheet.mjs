@@ -51,7 +51,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
       const a = {
         name:        item.name,
-        cost:        system.cost ?? "",
+        cost:        abilityCostLabel(system.cost ?? ""),   // P30: "1 Action", not the raw "1action"
         tags:        (system.tags ?? []).map(formatTag).filter(Boolean),
         description: await enrichHTML(system.description),
         hitEffect:   await enrichHTML(system.hitEffect),
@@ -223,9 +223,12 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     return context;
   }
 
-  _onRender(context, options) {
+  async _onRender(context, options) {
     _log(`_onRender — item: "${this.document.name}" | type: "${this.document.type}"`);
-    super._onRender(context, options);
+    await super._onRender(context, options);
+    // P30: a read-only sheet (an item opened from a locked compendium) has every form control disabled by core,
+    // the Chat button too; posting changes nothing in the item, so it stays usable there.
+    if (!this.isEditable) for (const b of this.element.querySelectorAll('[data-action="itemShowInChat"]')) b.disabled = false;
   }
 
   /* -------------------------------------------------- */
