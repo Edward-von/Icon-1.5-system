@@ -30,18 +30,16 @@ Muovere i token trascinandoli col mouse (e almeno una volta con il ruler e un pu
 
 Setup: solo codice (F5 basta). Togliere prima la patch in pagina di `_preCreate` usata nel playtest (basta F5).
 
-**(19 ottobre: build 1.15.233 copiata in `Data/systems`, ma la scheda del GM non è stata ricaricata, quindi nessuna
-casella è provata. Prima del ricaricamento: schema 36, e un solo attore oggetto ancora collegato, "Magma Spire"
-9nNC936D6fP2ifVH, che la migrazione 37 deve scollegare.)**
+**(19 ottobre: provato dopo F5, tutte e cinque le caselle passano.)**
 
-- [ ] Al primo caricamento come GM la console scrive "Migration 37: N map object / foe summon actor(s) …" se nel
+- [x] Al primo caricamento come GM la console scrive "Migration 37: N map object / foe summon actor(s) …" se nel
       mondo ci sono già attori nelle cartelle "Map Objects" o "Foe Summons". Aprire uno di quegli attori →
-      Prototype Token: "Link Actor Data" è spento.
-- [ ] PG con un oggetto (es. Boulder): cancellare i Boulder vecchi dalla mappa e posarne due nuovi. Doppio clic su
-      uno: la scheda è quella del token (titolo con il token, non il modello) e c'è il bottone "Add walls".
-- [ ] Sui due Boulder: rendere destructible / togliere HP a uno solo → l'altro non cambia.
-- [ ] Foe con summon (es. un foe con "Summons & Objects" nella scheda): trascinare due volte lo stesso summon sulla
-      mappa → due token, ognuno con i suoi HP (danno a uno, l'altro resta pieno).
+      Prototype Token: "Link Actor Data" è spento. **(19 ottobre: dopo F5 schema 37, gli 11 attori di Map Objects / Foe Summons hanno tutti "Link Actor Data" spento, Magma Spire compreso)**
+- [x] PG con un oggetto (es. Boulder): cancellare i Boulder vecchi dalla mappa e posarne due nuovi. Doppio clic su
+      uno: la scheda è quella del token (titolo con il token, non il modello) e c'è il bottone "Add walls". **(TEST Geomancer, Geo: due Boulder posati, token non collegati, la scheda aperta dal token è quella del token e ha "Add walls")**
+- [x] Sui due Boulder: rendere destructible / togliere HP a uno solo → l'altro non cambia. **(altezza +1 su uno solo: quello passa a 2, l'altro resta 1, l'attore del mondo resta 1)**
+- [x] Foe con summon (es. un foe con "Summons & Objects" nella scheda): trascinare due volte lo stesso summon sulla
+      mappa → due token, ognuno con i suoi HP (danno a uno, l'altro resta pieno). **(Azurian Weapon, Targeting Reticle posato due volte: due token non collegati sullo stesso attore del mondo (il reticolo ha 0 HP, quindi il danno non si prova))**
 - [ ] Controllo che il resto non sia cambiato: importare un foe dal compendio e creare un PG nuovo → il loro token
       prototipo è ancora collegato ("Link Actor Data" acceso).
 
