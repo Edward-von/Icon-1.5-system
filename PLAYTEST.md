@@ -818,6 +818,9 @@ Da compilare durante il playtest.
   niente bottoni interrupt sulle card. Con F5 tutto a posto. Nello stesso momento il server era lento (i "tour" di
   Foundry andavano in timeout, caricamento di 30–40 s). Probabilmente un caricamento fallito, non del sistema; se Maar
   dice "non vedo i bottoni", prima cosa: F5.
+  Rivisto il 19 ottobre: dopo un ricaricamento del client giocatore (su 127.0.0.1) `game.icon` era di nuovo vuoto e
+  nessun hook del sistema era registrato (il bottone "Foretell from the deck" non compariva); un secondo F5 ha
+  risolto. Succede quindi anche fuori dal primo ingresso.
 - **1.15.226, seconda casella**: la plant non spuntata resta sulla mappa, ma se sta dentro la Small Blast di un'altra
   plant che esplode viene bersagliata ("Small Blast (on plants) × 2 placed — Plant in the area"). È giusto (è un
   personaggio dentro l'esplosione) o la plant non scelta va esclusa dai bersagli?
@@ -2911,8 +2914,8 @@ Setup: solo codice (F5 basta).
 - [ ] Mazzo esaurito con carte nella pila degli scarti: il bottone rimescola la pila nel mazzo e poi gioca una carta. **(non provato)**
 - [ ] Mazzo e pila tutti e due vuoti: compare l'avviso "has no cards left to draw" e non succede altro. **(non provato)**
 - [ ] Una mano con carte non mostra il bottone; giocando l'ultima carta con Foretell, il bottone compare. **(non provato)**
-- [ ] Da giocatore (non GM) con permesso Owner su mazzo e pila: il bottone funziona. Senza permesso: compare un errore
-      chiaro, nessun blocco. **(non provato)**
+- [x] Da giocatore (non GM) con permesso Owner su mazzo e pila: il bottone funziona. Senza permesso: compare un errore
+      chiaro, nessun blocco. **(PT Player con Ann, mano, mazzo e scarti: "Foretell from the deck" pesca e scarta (K — The Sun) e posta la card; senza permessi sul mazzo e sugli scarti funziona lo stesso (6 — The Sword), nessun errore. Nota: la card è firmata col personaggio del giocatore (TEST Chanter), non con Ann)**
 
 ## Emerso R36 — Foretell scarta nella pila del proprio Seer (17 ottobre 2026, versione 1.15.199)
 
@@ -3154,7 +3157,7 @@ Setup: solo codice (F5 basta).
       il bottone della card precedente risulta già usato. **(non provato)**
 - [ ] Gamble con Stacked Die o con "numero scelto": nessun bottone Bend Fate. **(non provato)**
 - [ ] Seer con la mano vuota: nessun bottone. PG non Seer: nessun bottone. **(non provato)**
-- [ ] Un giocatore che non possiede il Seer vede il bottone spento. **(non provato)**
+- [x] Un giocatore che non possiede il Seer vede il bottone spento. **(card del gamble di Chaos Tarot di Ann sul client di PT Player: "Bend Fate" spento, title "Only the Seer's owner can bend fate")**
 - [ ] Gli scarti di Bend Fate NON fanno uscire la card dell'effetto della Great Wheel. **(non provato)**
 
 ## Emerso R36 — Il mazzo del Seer durante il combattimento: pesca fino a 5, Skein, limite di 7, rimescolare (17 ottobre 2026, versione 1.15.180)
@@ -3173,9 +3176,9 @@ Setup: solo codice (F5 basta).
       nella pila Discard e NON esce la card della Great Wheel. **(8 carte: 'Didn't attack: draw 1' e 'Discard down to 7'; scartata una carta, mano a 7, nessuna card della Great Wheel)**
 - [x] Svuotare il mazzo (tutte le carte in mano o negli scarti), poi *Draw 1*: le carte degli scarti tornano nel mazzo
       mescolato, si pesca, e la chat scrive "The deck ran out…". **('The deck ran out: the discard pile (3 cards) was shuffled back…')**
-- [ ] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato. **(non provato)**
+- [x] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato. **(19 ott, PT Player su una card Skein di PT S3 (non sua): bottone acceso, al clic "Only the Seer's owner can use this button.", niente pescato)**
 - [ ] Un PG che non è Seer: nessuna di queste card. **(non provato)**
-- [ ] Il giocatore senza permesso Owner sul mazzo: messaggio d'errore chiaro, nessun blocco.
+- [x] Il giocatore senza permesso Owner sul mazzo: messaggio d'errore chiaro, nessun blocco. **(PT Player proprietario di Ann e della sua mano ma non del mazzo: "Draw 1" funziona lo stesso ("Ann drew: Queen of Clubs"), nessun errore)**
 
 ## Emerso R12 — Elenchi puntati nella scheda del Summon di un foe (17 ottobre 2026, versione 1.15.179)
 
