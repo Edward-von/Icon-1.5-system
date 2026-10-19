@@ -3853,8 +3853,8 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con un'abilità Line / Arc che resta sulla mappa: attacco con due bersagli nell'area, scegli il bersaglio
-      d'attacco, poi Show in Chat: righe Inflict divise.
+- [x] PG con un'abilità Line / Arc che resta sulla mappa: attacco con due bersagli nell'area, scegli il bersaglio
+      d'attacco, poi Show in Chat: righe Inflict divise. **(Vedi L4160: righe divise dopo l'attacco con due o più bersagli nell'area.)**
 - [ ] Sposta l'area con Shift + frecce (o trascinandola) finché il bersaglio scelto ne esce, tieni i due token come
       bersagli, Show in Chat: nessuna divisione, tutti i bottoni.
 - [ ] Se il bersaglio è ancora dentro dopo lo spostamento, le righe restano divise.
@@ -4157,13 +4157,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG, abilità d'attacco con area Line o Arc e 2+ token dentro: Roll Attack, scegli il bersaglio B nella finestra.
-      Show in Chat: B ha i bottoni della parte d'attacco, gli altri quelli dell'area.
-- [ ] Stessa abilità: ripiazza l'area a mano col bottone dell'area (B resta tra i bersagli), poi Show in Chat: nessun
-      token è indicato come bersaglio d'attacco, tutti hanno tutti i bottoni.
+- [x] PG, abilità d'attacco con area Line o Arc e 2+ token dentro: Roll Attack, scegli il bersaglio B nella finestra.
+      Show in Chat: B ha i bottoni della parte d'attacco, gli altri quelli dell'area. **(Show in Chat dopo l'attacco: Janissary (attack target) con Shattered, gli altri "(area)".)**
+- [x] Stessa abilità: ripiazza l'area a mano col bottone dell'area (B resta tra i bersagli), poi Show in Chat: nessun
+      token è indicato come bersaglio d'attacco, tutti hanno tutti i bottoni. **(Area ripiazzata a mano col bottone: Show in Chat senza bersaglio d'attacco, tutti con "Effect · attack target only" Shattered.)**
 - [ ] Stessa prova con un foe e con una legend (azione d'attacco ad area): stesso risultato.
-- [ ] Tiro d'attacco che piazza lui l'area (nessuna area prima) con 2+ token, scegli B: finestra del danno e Show in
-      Chat partono da B.
+- [x] Tiro d'attacco che piazza lui l'area (nessuna area prima) con 2+ token, scegli B: finestra del danno e Show in
+      Chat partono da B. **(Finestra del danno: Knuckle e Mechanist "AREA", Janissary bersaglio d'attacco.)**
 - [ ] Auto-hit ad area Line con 2+ token: la finestra chiede il bersaglio, scegli B, e il danno parte da B.
 - [ ] Tiro d'attacco con l'area già sulla mappa (riusata): il bersaglio scelto prima viene ancora proposto.
 - [ ] Holy Talent I o PURGATORIO: dopo l'attacco, piazza "Medium Blast (on pits)": Show in Chat tiene il bersaglio
@@ -4281,9 +4281,9 @@ Setup: solo codice (F5 basta).
 - [ ] Stessa prova con una legend: stesso risultato.
 - [ ] Azione Line / Arc: tira l'attacco e scegli B come bersaglio nel dialog, poi Show in Chat con l'area ancora sulla
       mappa: B è il bersaglio d'attacco, gli altri sono area.
-- [ ] Line / Arc piazzata a mano (bottone area, senza tirare l'attacco), poi Show in Chat: nessuna divisione, tutti i
-      bottoni con le etichette "attack target only".
-- [ ] Con l'area cancellata dalla mappa, Show in Chat non divide nulla, come prima.
+- [x] Line / Arc piazzata a mano (bottone area, senza tirare l'attacco), poi Show in Chat: nessuna divisione, tutti i
+      bottoni con le etichette "attack target only". **(Line piazzata a mano: nessuna divisione, etichette "attack target only" su tutti.)**
+- [x] Con l'area cancellata dalla mappa, Show in Chat non divide nulla, come prima. **(Area cancellata: Show in Chat non divide nulla.)**
 - [ ] Show in Chat di tratti, interrupt e round action del foe / legend: card come prima.
 - [ ] Un solo token bersagliato: card come prima, senza etichette "(attack target)" / "(area)".
 
@@ -4310,9 +4310,9 @@ Setup: solo codice (F5 basta).
       token dentro → si apre il dialog "Attack target — <abilità>" con un radio per token. Conferma → la card divide
       le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno.
 - [ ] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima.
-- [ ] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
+- [x] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
       in Chat della stessa abilità → righe divise come sulla card d'attacco. Senza area sulla mappa e con più bersagli
-      → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata.
+      → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata. **(Show in Chat con l'area ancora piazzata: righe divise come sulla card d'attacco.)**
 
 ## Emerso R42 — Wish, mastery: Unstoppable all'alleato, non a te (17 ottobre 2026, versione 1.15.85)
 
@@ -5236,7 +5236,7 @@ quelli già sulla scheda); tre foe vicini sulla mappa.
 - [x] **Blackstar**: Attack → Large Blast piazzato sui tre foe → nel dialog scegliere il foe al centro come bersaglio
       d'attacco → la card d'attacco, riquadro Inflict: prima riga quel foe con "(attack target)" e il bottone
       Shattered; le altre due righe con "(area)" e nessun Shattered. **(Knuckle (attack target) con Shattered, gli altri (area) senza)**
-- [ ] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga. **(non provato)**
+- [x] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga. **(Spellblade, Drifting Leaf: Line 6 su Knuckle, Janissary, Mechanist, bersaglio d'attacco Janissary → card "Line 6 attack: Janissary · area: Mechanist, Knuckle", Shattered solo sulla riga "Janissary (attack target)".)**
 - [ ] **Blocco Area**: un'abilità con status nel blocco Area (Heave-Ho: "Characters caught in the area are shoved 1,
       and foes become vulnerable"; o Chaos Tarot) → Vulnerable / Sealed sulle righe "(area)", non sul bersaglio
       d'attacco. **(non provato)**
