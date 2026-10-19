@@ -3100,14 +3100,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Dare 2 blessing a un PG proprio e 2 a un PG di un altro giocatore. Da giocatore, cliccare il chip Mote di
-      Symphony: la finestra elenca i due PG con il numero di blessing.
-- [ ] Scegliere 2 + 1: si possono piazzare al massimo 3 mote. Dopo il piazzamento il proprio PG ha 0 blessing (lo
+- [x] Dare 2 blessing a un PG proprio e 2 a un PG di un altro giocatore. Da giocatore, cliccare il chip Mote di
+      Symphony: la finestra elenca i due PG con il numero di blessing. **(19 ott, PT Player con TEST Chanter: la finestra elenca TEST Freelancer (2), TEST Harvester (1), TEST Sealer (2))**
+- [x] Scegliere 2 + 1: si possono piazzare al massimo 3 mote. Dopo il piazzamento il proprio PG ha 0 blessing (lo
       stato Blessed sparisce) e l'altro ne ha 1, tolta tramite il GM (serve un GM connesso). In chat compaiono le
-      righe "loses N blessings".
-- [ ] Scegliere 3 blessing ma piazzare solo 2 mote (Invio per finire prima): se ne tolgono solo 2.
-- [ ] Nessuno ha blessing: avviso, e non si piazza niente. Annulla: non si piazza e non si toglie niente.
-- [ ] Scrivere più di 4 in totale: se ne prendono 4, con un avviso.
+      righe "loses N blessings". **(Sealer 2 + Freelancer 1: "Click up to 3 spaces", 3 mote; Sealer 0 e Blessed tolto, Freelancer 2 → 1 via GM; righe "loses N blessings")**
+- [x] Scegliere 3 blessing ma piazzare solo 2 mote (Invio per finire prima): se ne tolgono solo 2. **(3 scelte, 2 mote e Invio: tolte solo 2 (Sealer 1, Freelancer 1))**
+- [x] Nessuno ha blessing: avviso, e non si piazza niente. Annulla: non si piazza e non si toglie niente. **(nessuna blessing: la finestra dice "No character has a blessing to remove" e "no mote created"; Esc al piazzamento e Cancel nella finestra non tolgono niente. Nota: con Charge spuntato e zero blessing non si piazzano nemmeno le 2 mote del Charge)**
+- [x] Scrivere più di 4 in totale: se ne prendono 4, con un avviso. **(3 + 2 scritte: avviso "only 4 blessings in all — the extra ones were left.")**
 
 ## Emerso R33 — Mote attraversata: l'esplosione va sulla mote (17 ottobre 2026, versione 1.15.184)
 
@@ -3934,12 +3934,12 @@ Setup: solo codice (F5 basta).
 
 - [x] Giocatore con Fulminate e Talent I scelto, GM connesso: marcare un foe del GM. La finestra "Aura 2 / Aura 3"
       compare al giocatore e non al GM; scegliendo Aura 3, attorno al foe compare un'aura 3 che lo segue. **(la finestra Aura 2 / Aura 3 compare al giocatore, non al GM; Aura 3 attorno al Mechanist)**
-- [ ] Stesso caso, chiudendo la finestra senza scegliere: compare un'aura 2. **(non provato)**
-- [ ] Fulminate senza Talent I, foe del GM: nessuna domanda a nessuno, compare l'aura 2. **(non provato)**
-- [ ] Il giocatore marca un personaggio suo, con Talent I: la domanda compare a lui, come prima. **(non provato)**
-- [ ] Il GM marca con un Fulminate con Talent I: la domanda compare al GM, come prima. **(non provato)**
-- [ ] Aura messa prima col bottone area, poi mark su un foe del GM: nessuna domanda e nessuna seconda aura. **(non provato)**
-- [ ] Togliere il mark (la × sul chip): sparisce anche l'aura. **(non provato)**
+- [x] Stesso caso, chiudendo la finestra senza scegliere: compare un'aura 2. **(19 ott, utente PT Player: finestra chiusa senza scegliere → Aura 2 attorno al Mechanist)**
+- [x] Fulminate senza Talent I, foe del GM: nessuna domanda a nessuno, compare l'aura 2. **(senza Talent I nessuna domanda né al giocatore né al GM, Aura 2)**
+- [x] Il giocatore marca un personaggio suo, con Talent I: la domanda compare a lui, come prima. **(PT Player marca TEST Sealer (suo): la domanda compare a lui; Aura 3 attorno al Sealer)**
+- [x] Il GM marca con un Fulminate con Talent I: la domanda compare al GM, come prima. **(il GM marca il Mechanist col Talent I: la domanda compare al GM)**
+- [x] Aura messa prima col bottone area, poi mark su un foe del GM: nessuna domanda e nessuna seconda aura. **(Aura 2 messa col bottone area sul Mechanist, poi Mark: nessuna domanda, nessuna seconda aura)**
+- [x] Togliere il mark (la × sul chip): sparisce anche l'aura. **(✕ sul chip del mark: l'aura sparisce (provato anche dal giocatore))**
 
 ## Emerso R37 — Il danno divine salta il vigor anche dalle card (17 ottobre 2026, versione 1.15.109)
 
