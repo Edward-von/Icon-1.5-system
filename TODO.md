@@ -162,6 +162,7 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P32 (emerso provando P13/P24, 19 ottobre sera)** — il tag Pierce delle abilità (Blackstar, Cryo, Bio…) non
       spuntava Pierce nella finestra del danno: armatura e Weakened venivano tolti (p.104, p.205). Ora il tag lo spunta.
       (FATTO il 19 ottobre 2026, versione 1.15.266)
+      Seguito (scelta di Edoardo): Pierce segue la casella "Combo version", Reap senza Pierce (1.15.267).
 - [x] **P33 (emerso provando P30, 19 ottobre sera)** — Show in Chat di un interrupt / round action dei foe dalla
       scheda dell'oggetto: card senza "Interrupt N" né trigger. Ora usa le card della scheda del foe.
       (FATTO il 19 ottobre 2026, versione 1.15.265)

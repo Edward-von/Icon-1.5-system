@@ -1825,6 +1825,10 @@ export class IconSheet extends BaseActorSheet {
       dealsDamage: active.dealsDamage,
       parsed,
       parsedCombo,
+      // The tag keys of the base and of the combo version, so the damage dialog's
+      // "Combo version" box can switch Pierce with the version (Reap has no Pierce, p.185).
+      baseTagKeys:  resolveAbilityTags(s, { comboMode: false }).map(t => tagKey(t)),
+      comboTagKeys: parsedCombo ? resolveAbilityTags(s, { comboMode: true }).map(t => tagKey(t)) : null,
       description:         await this._enrichAbility(desc.flavor, { keywords: false }),
       trigger:             await this._enrichAbility(trigger),
       hitEffect:           await this._enrichAbility(s.hitEffect),

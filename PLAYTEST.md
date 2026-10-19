@@ -11,6 +11,13 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Seguito di P32 — Pierce segue la casella "Combo version" (19 ottobre 2026, versione 1.15.267)
+
+Setup: solo codice (F5 basta). TEST Harvester con Sow.
+
+- [x] Damage di Sow senza combo → Pierce spuntato; accendere "Combo version" (Reap) → Pierce vuoto; spegnerla → di nuovo spuntato. **(19 ottobre sera, sì)**
+- [ ] Combo token acceso → Damage di Sow si apre con "Combo version" spuntata e Pierce vuoto. **(non provato: stessa funzione, col combo armato i tag sono già quelli di Reap)**
+
 ## Emerso nei fix — Il tag Pierce spunta Pierce nella finestra del danno (19 ottobre 2026, versione 1.15.266)
 
 Setup: solo codice (F5 basta). TEST Enochian Weakened.
@@ -18,7 +25,7 @@ Setup: solo codice (F5 basta). TEST Enochian Weakened.
 - [x] Blackstar e Lance (tag Pierce) → finestra del danno: Pierce spuntato ("no armor · from the ability's tag"), Weakened vuoto. **(19 ottobre sera, sì)**
 - [x] Pyre (senza Pierce) → Pierce vuoto, Weakened spuntato come prima. **(sì)**
 - [ ] Tirare Blackstar su un foe con armatura e premere Apply → l'armatura non viene tolta. **(non provato: il flag pierce della card e l'Apply sono quelli già provati con "N piercing damage")**
-- [ ] Sow con la combo Reap armata → Pierce spuntato dal tag della base: va tolto a mano. **(non provato)**
+- [x] Sow con la combo Reap armata → Pierce spuntato dal tag della base: va tolto a mano. **(superata dalla 1.15.267: Pierce segue la casella "Combo version" (Reap senza Pierce), vedi sezione sopra)**
 
 ## Emerso provando P30 — Show in Chat di un interrupt o di una round action dei foe (19 ottobre 2026, versione 1.15.265)
 

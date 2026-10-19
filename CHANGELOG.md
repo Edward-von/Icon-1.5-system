@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Pierce segue la casella "Combo version" (versione 1.15.267)
+
+### Seguito di P32, scelta di Edoardo
+
+- **Reap e il Pierce di Sow**: nella finestra del danno di Sow, accendendo la casella "Combo version" (Reap) Pierce
+  restava spuntato, e spegnendola su una combo armata restava vuoto → la finestra conosceva solo i tag della versione
+  con cui era stata aperta → ora la scheda le passa i tag della base e quelli della combo, e Pierce segue la casella:
+  Sow (tag Pierce) lo spunta, Reap (p.185: "attack, melee, combo", senza Pierce) no.
+
 ## 19 ottobre 2026 — Il tag Pierce spunta Pierce nella finestra del danno (versione 1.15.266)
 
 ### Emerso provando P13 e P24

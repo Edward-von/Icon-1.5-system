@@ -582,6 +582,12 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // The Pierce tag (Blackstar, Cryo, Bio…): "Ignores armor, weak, and vigor" (p.205), so the ability's damage is
   // piercing whatever the outcome, as "N piercing damage" in the text already was. Divine damage stays divine.
   const pierceTag = (ab.tags ?? []).some(t => tagKey(t) === "pierce");
+  // With both versions known (PC abilities), the "Combo version" box picks whose tags count: Sow's Pierce,
+  // not Reap's (p.185).
+  const pierceFor = (comboOn) => {
+    const keys = comboOn ? ab.comboTagKeys : ab.baseTagKeys;
+    return Array.isArray(keys) ? keys.includes("pierce") : pierceTag;
+  };
   // Reap (Sow's combo, p.185): "You can make this melee attack against the
   // target marked by Sow regardless of distance or line of sight. It also
   // gains unerring if made this way." A target carrying this ability's mark
@@ -805,7 +811,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       const type = (outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
-      const pierced = type === "piercing" || (pierceTag && type !== "divine");
+      const pierced = type === "piercing" || (pierceFor(f.elements.useCombo ? !!f.elements.useCombo.checked : comboDefault) && type !== "divine");
       if (f.elements.pierce) f.elements.pierce.checked = pierced;
       if (f.elements.weakened) f.elements.weakened.checked = attackerWeak && !pierced && type !== "divine";
       const chunk = outcome === "other" ? picked
