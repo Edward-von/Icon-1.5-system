@@ -341,6 +341,12 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
     const eff = await fromUuid(m.uuid);
     if (eff) { await eff.delete(); _log(`mark of ${abilityName} moved from ${m.targetName}`); }
   }
+  // The same tracker placed again on the same character (playtest 18 October,
+  // P16): the sweep above skips the target, so the old one is replaced here.
+  if (track) for (const m of marksOn(target).filter(m => m.sourceActorId === source.id && m.tracked && m.abilityKey === abilityKey)) {
+    const eff = await fromUuid(m.uuid);
+    if (eff) { await eff.delete(); _log(`${target.name}: tracker ${m.abilityName} from ${source.name} placed again`); }
+  }
   // One mark from this character on the target: an older one from another ability
   // is replaced. Trackers aren't marks: they don't replace, and aren't replaced.
   if (!track) for (const m of marksOn(target).filter(m => m.sourceActorId === source.id && !m.tracked)) {

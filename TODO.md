@@ -64,8 +64,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       applicazioni separate che partono tutte dagli stessi HP (Knuckle 3 ×3: tre volte "HP 40 → 37", alla fine 37
       invece di 31). Dal GM lo stesso Apply è giusto (una nota "9 damage … 3 of 3 instances"). Mandare al GM una sola
       richiesta con le istanze, o applicarle in fila. S-M.
-- [ ] **P16** — Track target ripetuto sullo stesso foe (Grand Banishment, da GM o giocatore): ogni clic aggiunge un altro
+- [x] **P16** — Track target ripetuto sullo stesso foe (Grand Banishment, da GM o giocatore): ogni clic aggiunge un altro
       chip "Janissary ✕" invece di lasciare quello che c'è (su un foe diverso il segno passa giusto). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.247)
 - [ ] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
       versioni non armate ("Shattered" di BIOTIC, "Shattered+" del Terrain Effect di MAGNABIO). Con l'infusione armata
       la card è giusta. S.

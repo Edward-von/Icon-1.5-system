@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Track target due volte sullo stesso foe: un solo segno (versione 1.15.247)
+
+### Esito del playtest del 18 ottobre, P16
+
+- **Tracker doppio**: "Track target" di Grand Banishment cliccato di nuovo sullo stesso foe (dal GM o dal giocatore)
+  aggiungeva ogni volta un altro chip "Janissary ✕", mentre su un foe diverso il segno passava giusto → la regola "un
+  segno per abilità" toglieva il segno vecchio solo dagli altri personaggi e saltava quello stesso, contando sul
+  passo successivo, che però vale solo per i mark e lascia stare i tracker → ora un tracker della stessa abilità e
+  dello stesso PG già sul bersaglio viene sostituito dal nuovo: resta un chip solo (e in chat esce di nuovo "tracks
+  Janissary", come conferma del clic). I mark e i tracker di altre abilità non cambiano.
+
 ## 19 ottobre 2026 — MAGNACRYO allunga la linea con l'Aether (versione 1.15.246)
 
 ### Esito del playtest del 18 ottobre, P13

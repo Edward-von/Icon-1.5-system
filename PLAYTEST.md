@@ -11,6 +11,18 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P16 — Track target due volte sullo stesso foe: un solo segno (19 ottobre 2026, versione 1.15.247)
+
+Setup: solo codice (F5 basta). Un PG Sealer con Grand Banishment (es. TEST Sealer), due foe sulla mappa (es.
+Janissary e Mechanist); per l'ultima casella anche il client giocatore "PT Player".
+
+- [ ] Da GM: Track target di Grand Banishment sul Janissary due volte di fila → un solo chip "Janissary ✕" sulla
+      scheda del PG e un solo effetto "Tracked — Grand Banishment" sul Janissary.
+- [ ] Poi Track target sul Mechanist → il segno passa al Mechanist (come prima), sul Janissary non resta niente.
+- [ ] Un mark di un'altra abilità dello stesso PG sul Janissary resta dov'è quando si ripete il Track target lì.
+- [ ] Da giocatore (PT Player, GM connesso): Track target sullo stesso foe due volte → "Tracker sent to the GM…" e
+      sempre un chip solo.
+
 ## Esito 18 ottobre, P13 — MAGNACRYO allunga la linea con l'Aether (19 ottobre 2026, versione 1.15.246)
 
 Setup: solo codice (F5 basta). Un PG Stormbender con Cryo e la mastery MAGNACRYO sbloccata, abbastanza Aether
