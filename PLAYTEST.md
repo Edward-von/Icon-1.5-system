@@ -35,17 +35,17 @@ dal compendio Jobs.
 Setup: solo codice (F5 basta). Le Legend già importate vanno bene (i tag sono gli stessi): Apex, Violence Demon,
 Wyrm, Keeper of the Eldflame, Falling Leaf Aesi; un foe normale, es. Scout (Pistolero).
 
-- [ ] Scheda Legend dell'Apex: i tag delle azioni si leggono "Might Of The Wild" (non "might-of-the-wild"), e
-      passando il mouse compare la spiegazione con la pagina (p.360-361).
-- [ ] Stesso controllo sulle altre Legend: Violence Demon "Blade Consume N" (p.420), Wyrm "Path Of Ruin"
-      (p.362-363), Keeper of the Eldflame "Forge Action" (p.461), Falling Leaf Aesi "Thievery" (p.485).
-- [ ] Sulla scheda Legend anche i tag comuni sono tradotti come sui foe ("Attack", "Range 4", "+1 Boon"…).
-- [ ] Scout, Show in Chat di Pistolero: la card mostra "Attack" e "Range 4" (non "attack" / "range-4"), e passando
-      il mouse sui tag compare la spiegazione.
-- [ ] Show in Chat di un'azione di una Legend (es. Apex): la card mostra i tag tradotti con la spiegazione.
-- [ ] Un'abilità del compendio Foe Abilities aperta come oggetto → Show in Chat: anche lì i tag sono tradotti.
+- [x] Scheda Legend dell'Apex: i tag delle azioni si leggono "Might Of The Wild" (non "might-of-the-wild"), e
+      passando il mouse compare la spiegazione con la pagina (p.360-361). **(19 ottobre: "might of the wild" (lettere come gli altri tag) con la spiegazione "Might of the Wild (Apex): …" al passaggio del mouse)**
+- [x] Stesso controllo sulle altre Legend: Violence Demon "Blade Consume N" (p.420), Wyrm "Path Of Ruin"
+      (p.362-363), Keeper of the Eldflame "Forge Action" (p.461), Falling Leaf Aesi "Thievery" (p.485). **(Violence Demon "blade consume 1", Wyrm "path of ruin", Keeper "forge action", Falling Leaf Aesi "thievery": tutte con la spiegazione; nessuno slug col trattino rimasto)**
+- [x] Sulla scheda Legend anche i tag comuni sono tradotti come sui foe ("Attack", "Range 4", "+1 Boon"…). **("per round 2, attack, range 2, combo 1, true strike, medium blast…", senza trattini)**
+- [x] Scout, Show in Chat di Pistolero: la card mostra "Attack" e "Range 4" (non "attack" / "range-4"), e passando
+      il mouse sui tag compare la spiegazione. **(Scout non c'è nel mondo: provato con il Knuckle, la card mostra "Range 2" con la spiegazione)**
+- [x] Show in Chat di un'azione di una Legend (es. Apex): la card mostra i tag tradotti con la spiegazione. **(Apex: "Per Round 2" con la spiegazione)**
+- [x] Un'abilità del compendio Foe Abilities aperta come oggetto → Show in Chat: anche lì i tag sono tradotti. **(Ashura Burst copiata negli Items: card con "Range 3", "Unerring", "Combo 3" e spiegazioni. Aperta direttamente dal compendio lo Show in Chat non posta niente (non so se era così anche prima). Nella testata della card il costo esce "1action")**
 - [ ] Controllo che non sia cambiato altro: sulla scheda Legend le azioni d'area mostrano ancora la loro forma, e
-      gli attacchi delle Legend partono come prima (Attack Roll / Damage).
+      gli attacchi delle Legend partono come prima (Attack Roll / Damage). **(non provato)**
 
 ## Esito 18 ottobre, P7 — Showdown: due istanze e Unerring sull'Hit (19 ottobre 2026, versione 1.15.239)
 
