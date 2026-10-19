@@ -4020,14 +4020,14 @@ Setup: solo codice (F5 basta).
       senza domande, e si muove con lui.
 - [x] Rimarca un secondo personaggio: l'aura sparisce dal primo e compare da sola sul secondo.
 - [x] Rimarca lo stesso personaggio: alla fine c'è una sola aura, e non sparisce.
-- [ ] Con il Talent I sbloccato: marcando, una finestra chiede Aura 2 / Aura 3, e l'aura ha la misura scelta.
-      Chiudendo la finestra si mette Aura 2. **(non provato)**
-- [ ] Prima metti l'aura con il bottone area (bersaglio sul personaggio), poi marca lo stesso personaggio: l'aura
-      resta una sola. Togliendo il mark, l'aura sparisce. **(non provato)**
+- [x] Con il Talent I sbloccato: marcando, una finestra chiede Aura 2 / Aura 3, e l'aura ha la misura scelta.
+      Chiudendo la finestra si mette Aura 2. **(Talent I: marcando chiede "Fulminate — aura [Aura 2/Aura 3]"; Aura 3 → aura 3 sul Knuckle. Chiusura con la X non provata.)**
+- [x] Prima metti l'aura con il bottone area (bersaglio sul personaggio), poi marca lo stesso personaggio: l'aura
+      resta una sola. Togliendo il mark, l'aura sparisce. **(Togliendo il mark l'aura sparisce (Aura 2 senza talento e Aura 3 col Talent I). La prova "aura prima col bottone" non fatta.)**
 - [x] Togli il mark a mano dal chip, oppure abbatti Fulminate, oppure chiudi il combattimento: l'aura sparisce. **(dal chip)**
 - [x] Un giocatore marca un nemico che non è suo (il mark passa dal GM): l'aura compare lo stesso; con il Talent I la
       domanda sulla misura appare al GM. **(superato dalla 1.15.110: PT Player marca il Mechanist, l'aura compare; col Talent I la domanda ora compare a chi marca (il giocatore), non al GM)**
-- [ ] Un'altra abilità con Mark che non dà aura: non compare nessuna aura. **(non provato)**
+- [x] Un'altra abilità con Mark che non dà aura: non compare nessuna aura. **(Polaris marca senza aura (solo il suo spazio).)**
 
 ## Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate (17 ottobre 2026, versione 1.15.104)
 
@@ -4397,9 +4397,9 @@ Setup: solo codice (F5 basta).
 - [x] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark. **(✕ sul chip: mark e aura spariscono)**
 - [x] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
       sparisce (quella di B si piazza a mano con il bottone area). **(il mark passa a Kelpie e l'aura di Knuckle sparisce (e quella di Kelpie arriva da sola, 1.15.105))**
-- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(non provato)**
+- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(Spellblade a 0 hp: "1 mark from TEST Spellblade end (TEST Spellblade is defeated): Fulminate on Knuckle." L'aura in quella prova non era sulla mappa (scelta Aura 2 dal dialog cliccata male), quindi la sua sparizione non è verificata.)**
 - [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark. **(non provato)**
-- [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento. **(non provato)**
+- [x] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento. **(Con Aura 3 scelta: stesso comportamento, l'aura sparisce col mark.)**
 - [x] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso. **(PT Player toglie con ✕ il mark di Fulminate sul Mechanist (foe del GM): mark tolto e aura sparita)**
 - [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
       data a un alleato restano dove sono quando si toglie un mark qualsiasi. **(non provato)**
@@ -4572,10 +4572,10 @@ Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
 - [x] **Mark e spazio insieme**: ✕ sul chip del mark nella scheda del PG → lo spazio sparisce. Rimettere il mark, poi
       selezionare lo spazio sul layer dei template e Canc (GM) → il mark sul foe finisce ("The mark … ends"). End mark sulla
       card (dal giocatore) → spariscono tutti e due. Tasto destro sul chip "Polaris · 1" (GM) → tolti anche quelli sul foe. **(End mark sulla card: spariscono tutti e due; gli altri modi non provati)**
-- [ ] **Bottone Mark**: Polaris Talent I o Party Favor con AMICO → il bottone Mark della scheda col foe targettato mette
-      anche lo spazio sul foe. **(non provato)**
-- [ ] **Creatore sconfitto**: PG con Polaris sul foe → portare il PG a 0 hp → il mark finisce (card di marks.mjs) e lo spazio
-      sparisce. Con WAKING VOID (tracker) lo spazio di Implode resta. **(non provato)**
+- [x] **Bottone Mark**: Polaris Talent I o Party Favor con AMICO → il bottone Mark della scheda col foe targettato mette
+      anche lo spazio sul foe. **(Bottone Mark di Polaris Talent I col foe bersagliato: mette anche lo spazio "Polaris (mark)" sul foe; togliendo il mark lo spazio sparisce.)**
+- [x] **Creatore sconfitto**: PG con Polaris sul foe → portare il PG a 0 hp → il mark finisce (card di marks.mjs) e lo spazio
+      sparisce. Con WAKING VOID (tracker) lo spazio di Implode resta. **(Ann a 0 hp: il mark di Polaris finisce e lo spazio sparisce. WAKING VOID non provato.)**
 - [x] **Un mark per personaggio**: Polaris sul foe, poi dallo stesso PG un'altra abilità con Mark sullo stesso foe → il
       mark Polaris viene sostituito e il suo spazio sparisce. **(Party Favor su Kelpie: il mark su Knuckle è sparito)**
 - [x] **AMICO**: Party Favor sul foe A → fine del turno del Fool: nessuna card. Fine del turno di qualcun altro → card
@@ -5409,20 +5409,20 @@ Tower; due foe sulla mappa.
 - [x] **Bottone**: nell'anteprima di Grand Banishment e di The Tower c'è **Track target** (icona segnaposto); su
       Divine Aegis (mark) c'è solo Mark target, niente Track; su un'abilità qualunque senza "that foe's turn" (es.
       Sanctify) nessuno dei due. **(Track su Grand Banishment e The Tower, solo Mark su Divine Aegis)**
-- [ ] **Senza target / due target**: Track target senza token targettato o con due → avviso "Target exactly one
-      token to track it", nessun segno. **(non provato)**
+- [x] **Senza target / due target**: Track target senza token targettato o con due → avviso "Target exactly one
+      token to track it", nessun segno. **(Senza target e con due target: "Target exactly one token to track it (hover it and press T).", nessun segno.)**
 - [x] **Track**: targettare il foe A, Track target su Grand Banishment → in chat "<PG> tracks <A> — Grand
       Banishment (a reminder, not a mark)" col testo; sotto l'abilità compare il chip "A ✕"; nel tab Conditions di A
       la riga "Tracked: Grand Banishment — from <PG>" col testo; nel pannello status del token di A la riga
       "Tracked: Grand Banishment (<PG>)". **(chat 'tracks Knuckle — Grand Banishment (a reminder, not a mark)', effetto 'Tracked — Grand Banishment')**
-- [ ] **The Tower**: Track target su The Tower → il testo del segno contiene "Area Effect: At the end of that foe's
-      turn, gamble…". **(non provato)**
+- [x] **The Tower**: Track target su The Tower → il testo del segno contiene "Area Effect: At the end of that foe's
+      turn, gamble…". **(The Tower: "Ann tracks Knuckle — The Tower (a reminder, not a mark)" con "Area Effect: At the end of that foe's turn, gamble…".)**
 - [x] **Non conta come mark**: con A tracciato da Grand Banishment, Mark target di Divine Aegis su A → il segno resta
       e il mark si aggiunge; poi Track target di nuovo su A → il mark di Divine Aegis resta. **(Implode ha aggiunto un secondo Tracked senza togliere Grand Banishment)**
 - [x] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato). **(19 ott: Track su Mechanist poi su Janissary → il chip passa a Janissary. NON VA solo il caso stesso foe due volte: due chip Janissary (anche dal GM), vedi P16)**
-- [ ] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
-      chat "The tracker Grand Banishment on B ends.". **(non provato)**
-- [ ] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta. **(non provato)**
+- [x] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
+      chat "The tracker Grand Banishment on B ends.". **(✕ sul chip: "The tracker The Tower on Knuckle ends.", effetto tolto.)**
+- [x] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta. **(Ann a 0 hp: "1 mark from Ann end (Ann is defeated): Polaris on Knuckle."; il "Tracked — The Tower" resta.)**
 - [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono. **(non provato)**
 - [x] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
       (GM connesso). **(PT Player, Grand Banishment di TEST Sealer sul Mechanist: "Tracker sent to the GM to place on Mechanist", card "tracks Mechanist", chip sulla scheda; su un altro foe il segno passa (Mechanist → Janissary). Vedi P16)**
@@ -5731,17 +5731,17 @@ almeno un foe sulla scena; tab Combat.
 Setup: un mondo con un PG Seer (Mendicant) con Polaris (va bene anche una copia aggiunta prima dell'aggiornamento);
 almeno un token di un altro personaggio sulla scena; tab Combat.
 
-- [ ] **Senza talento**: Polaris senza talento scelto → nessun bottone Mark, tag come prima (Range 5, Terrain
-      Effect, Gamble).
-- [ ] **Talent I**: scegliere il Talent I → compare la chip "Mark" evidenziata (tooltip "From Talent I: You can cause
-      one of your Polaris to follow a character…") e il bottone Mark.
-- [ ] **Marcare**: bersagliare un token (T) → bottone Mark → il personaggio riceve il mark di Polaris, che compare
-      tra i mark dell'abilità e nel tab Conditions; la ✕ lo toglie.
-- [ ] **Talent II**: passare al Talent II → la chip Mark e il bottone spariscono.
-- [ ] **Con la mastery**: Talent I + mastery Moon Silver Princess sbloccata → ci sono sia "Free Action" sia "Mark" e il
-      bottone Mark resta.
-- [ ] **Party Favor**: un PG Fool con Party Favor e la mastery Amico sbloccata → chip Mark e bottone Mark presenti;
-      senza mastery non ci sono.
+- [x] **Senza talento**: Polaris senza talento scelto → nessun bottone Mark, tag come prima (Range 5, Terrain
+      Effect, Gamble). **(Polaris senza talento: tag Range 5, Terrain Effect, Gamble; nessun bottone Mark.)**
+- [x] **Talent I**: scegliere il Talent I → compare la chip "Mark" evidenziata (tooltip "From Talent I: You can cause
+      one of your Polaris to follow a character…") e il bottone Mark. **(Talent I: chip "Mark" evidenziata con tooltip "From Talent I: You can cause one of your Polaris to follow a character as a mark" e bottone Mark.)**
+- [x] **Marcare**: bersagliare un token (T) → bottone Mark → il personaggio riceve il mark di Polaris, che compare
+      tra i mark dell'abilità e nel tab Conditions; la ✕ lo toglie. **(Knuckle bersagliato → Mark: "Ann marks Knuckle — Polaris", chip "Knuckle ✕", effetto "Marked — Polaris (Ann)"; la ✕ lo toglie ("The mark Polaris on Knuckle ends.").)**
+- [x] **Talent II**: passare al Talent II → la chip Mark e il bottone spariscono. **(Talent II: chip e bottone spariscono.)**
+- [x] **Con la mastery**: Talent I + mastery Moon Silver Princess sbloccata → ci sono sia "Free Action" sia "Mark" e il
+      bottone Mark resta. **(Talent I + mastery: "Free Action" e "Mark", bottone Mark presente.)**
+- [x] **Party Favor**: un PG Fool con Party Favor e la mastery Amico sbloccata → chip Mark e bottone Mark presenti;
+      senza mastery non ci sono. **(Party Favor (Fool): senza mastery solo "Terrain"; con Amico chip "Mark" ("From Mastery: Amico…") e bottone.)**
 - [ ] **Altre abilità con mark**: un'abilità che marca già di suo (es. Sisyphus) ha il bottone Mark come prima.
 
 ## R16 — I talenti compaiono nella card dell'attacco (15 ottobre 2026, versione 1.15.18)
