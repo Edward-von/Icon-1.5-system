@@ -3466,7 +3466,7 @@ Setup: solo codice (F5 basta).
 
 - [x] Party Favor con Amico, bersaglio a 3 spazi: "On <bersaglio>" segna senza chiedere niente. **(a 3 spazi nessuna domanda)**
 - [x] Bersaglio a 5 spazi: compare "out of range". Cancel non mette niente, Anyway mette mark e spazio. **(a 5 spazi 'out of range'; Cancel niente, Anyway mark e spazio)**
-- [ ] Polaris Talent I a 6 spazi e Implode / WAKING VOID a 7: chiede. Entro 5 e 6: non chiede. **(non provato)**
+- [x] Polaris Talent I a 6 spazi e Implode / WAKING VOID a 7: chiede. Entro 5 e 6: non chiede. **(Polaris Talent I: Stormbender a 5 marcato senza domande; Enochian a 6 → "Polaris — out of range … beyond Polaris's range 5. Put it on … anyway?". Implode/WAKING VOID: Chanter a 6 senza domande, Demon Slayer a 7 → "beyond Implode's range 6".)**
 
 ## R35c — Interrupt strani sul danno (17 ottobre 2026, versione 1.15.151)
 
@@ -4397,12 +4397,12 @@ Setup: solo codice (F5 basta).
 - [x] Togli il mark dalla ✕ sulla scheda del PG: l'aura attorno ad A sparisce dalla mappa insieme al mark. **(✕ sul chip: mark e aura spariscono)**
 - [x] Marca di nuovo A e rimetti l'aura. Ora bersaglia B → Mark con Fulminate: il mark passa a B e l'aura attorno ad A
       sparisce (quella di B si piazza a mano con il bottone area). **(il mark passa a Kelpie e l'aura di Knuckle sparisce (e quella di Kelpie arriva da sola, 1.15.105))**
-- [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(Spellblade a 0 hp: "1 mark from TEST Spellblade end (TEST Spellblade is defeated): Fulminate on Knuckle." L'aura in quella prova non era sulla mappa (scelta Aura 2 dal dialog cliccata male), quindi la sua sparizione non è verificata.)**
-- [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark. **(non provato)**
+- [x] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(Fulminate (Aura 2) sul Knuckle, Spellblade a 0 hp: mark finito e aura sparita.)**
+- [x] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark. **(L'aura di Fulminate sparisce con il mark a fine combattimento.)**
 - [x] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento. **(Con Aura 3 scelta: stesso comportamento, l'aura sparisce col mark.)**
 - [x] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso. **(PT Player toglie con ✕ il mark di Fulminate sul Mechanist (foe del GM): mark tolto e aura sparita)**
-- [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
-      data a un alleato restano dove sono quando si toglie un mark qualsiasi. **(non provato)**
+- [x] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
+      data a un alleato restano dove sono quando si toglie un mark qualsiasi. **(L'aura di Endless Battlement data alla Spellblade resta dov'è quando finisce il mark di Fulminate.)**
 
 ## Emerso R62 — Avvio del combat senza promemoria "End of round 0" (17 ottobre 2026, versione 1.15.79)
 
@@ -4585,8 +4585,8 @@ Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
 - [x] **WAKING VOID**: Implode sul foe B → card con la frase "doesn't stun the center character" → portare il foe B a 0 hp →
       card "<foe B> is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode e
       "Done: end it" (toglie lo spazio e il tracker). **(WAKING VOID: Implode sul Knuckle ("tracks Knuckle — Implode", "the implode follows Knuckle"); Knuckle a 0 hp → card "Knuckle is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode, "Large Blast on Knuckle" e "Done: end it".)**
-- [ ] **Fine combat / token cancellato**: fine combat → i mark spariscono e con loro gli spazi. Cancellare il token di un foe
-      marcato → il suo spazio sparisce. Nessun errore in console. **(non provato)**
+- [x] **Fine combat / token cancellato**: fine combat → i mark spariscono e con loro gli spazi. Cancellare il token di un foe
+      marcato → il suo spazio sparisce. Nessun errore in console. **(Combattimento di prova col Knuckle e il Janissary dentro: End Encounter → mark di Fulminate, Track della Tower, spazio Polaris e aura spariscono, nessun errore in console. Nota: si tolgono solo dai personaggi che sono in quel combattimento. Token cancellato non provato.)**
 
 ## R33c — Aree terrain effect che durano, si muovono o crescono (16 ottobre 2026, versione 1.15.70)
 
@@ -4988,9 +4988,9 @@ Grand Banishment; due foe sulla mappa.
 
 - [x] **Bottone**: nel pannello di Quaking Palm, di Sidhe e di Dark Sliver c'è **Track target**; su Grand Banishment
       c'è ancora. **(Quaking Palm, Sidhe, Dark Sliver e Grand Banishment)**
-- [ ] **Track**: targettare il foe A, Track target su Quaking Palm → in chat "<PG> tracks <A> — Quaking Palm (a
+- [x] **Track**: targettare il foe A, Track target su Quaking Palm → in chat "<PG> tracks <A> — Quaking Palm (a
       reminder, not a mark)"; chip "A ✕" sotto l'abilità; nel tab Conditions di A la riga "Tracked: Quaking Palm"; nel
-      pannello status del token di A "Tracked: Quaking Palm (<PG>)". ✕ sul chip → segno tolto. **(non provato)**
+      pannello status del token di A "Tracked: Quaking Palm (<PG>)". ✕ sul chip → segno tolto. **(Quaking Palm sul Knuckle: "TEST Geomancer tracks Knuckle — Quaking Palm (a reminder, not a mark)", chip "Knuckle ✕", nel tab Conditions del Knuckle "Tracked: Quaking Palm from TEST Geomancer ✕ End mark"; la ✕ del chip lo toglie. Pannello status del token non guardato.)**
 - [x] **Niente bottone sulle durate**: Wish (Seer), Geyser (Stormbender), Realignment (Geomancer) e Mock (Knave), che
       dicono solo "until the end of their next turn", NON hanno Track target. **(Wish, Geyser, Mock senza Track)**
 - [x] **Mark invariati**: un'abilità con Mark (es. Divine Aegis) ha solo Mark target, niente Track.
@@ -5423,7 +5423,7 @@ Tower; due foe sulla mappa.
 - [x] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
       chat "The tracker Grand Banishment on B ends.". **(✕ sul chip: "The tracker The Tower on Knuckle ends.", effetto tolto.)**
 - [x] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta. **(Ann a 0 hp: "1 mark from Ann end (Ann is defeated): Polaris on Knuckle."; il "Tracked — The Tower" resta.)**
-- [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono. **(non provato)**
+- [x] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono. **(Con il Janissary nel combattimento, End Encounter toglie il "Tracked — The Tower".)**
 - [x] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
       (GM connesso). **(PT Player, Grand Banishment di TEST Sealer sul Mechanist: "Tracker sent to the GM to place on Mechanist", card "tracks Mechanist", chip sulla scheda; su un altro foe il segno passa (Mechanist → Janissary). Vedi P16)**
 
@@ -5676,17 +5676,17 @@ avviato per la durata.
 - [x] **Alleato bersagliato**: bersagliare (T) un alleato entro 4 spazi → bottone area "Aura 1" di Endless
       Battlement → l'aura 1 compare attorno al token dell'alleato, non attorno al Bastion; la notifica dice
       "Aura 1 placed around <alleato>". **('Aura 1 placed around Ann')**
-- [ ] **L'aura segue l'alleato**: muovere l'alleato → l'aura si sposta con lui; muovere il Bastion → l'aura resta
-      ferma sull'alleato. **(non provato)**
+- [x] **L'aura segue l'alleato**: muovere l'alleato → l'aura si sposta con lui; muovere il Bastion → l'aura resta
+      ferma sull'alleato. **(Aura di Endless Battlement sulla Spellblade: spostata la Spellblade l'aura la segue; spostato il Bastion l'aura resta sulla Spellblade.)**
 - [ ] **Durata**: la notifica e il conto alla rovescia sono "until the start of your next turn" del Bastion: all'inizio
       del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area. **(non provato)**
-- [ ] **Refresh**: bersagliare un altro alleato e ripremere il bottone area → la vecchia aura sparisce, la nuova è
-      attorno al nuovo alleato. **(non provato)**
-- [ ] **Nessun bersaglio**: togliere tutti i target → bottone area → avviso "target that ally's token…" e aura attorno
-      al Bastion (come prima). **(non provato)**
-- [ ] **Più bersagli**: due alleati bersagliati → avviso "target only that ally's token…" e aura attorno al Bastion.
-- [ ] **Fuori range**: bersagliare un alleato a più di 4 spazi → avviso "beyond range 4" ma l'aura si piazza sul
-      suo token. Con la mastery Perfect Battlement sbloccata l'avviso non compare.
+- [x] **Refresh**: bersagliare un altro alleato e ripremere il bottone area → la vecchia aura sparisce, la nuova è
+      attorno al nuovo alleato. **(Ribersagliato un altro alleato e ripremuto: resta una sola aura, sul nuovo alleato.)**
+- [x] **Nessun bersaglio**: togliere tutti i target → bottone area → avviso "target that ally's token…" e aura attorno
+      al Bastion (come prima). **(Nessun bersaglio: "This aura goes on an ally: target that ally's token… Placed around you for now.", aura sul Bastion.)**
+- [x] **Più bersagli**: due alleati bersagliati → avviso "target only that ally's token…" e aura attorno al Bastion. **(Due bersagli: "This aura goes on one ally: target only that ally's token…", aura sul Bastion.)**
+- [x] **Fuori range**: bersagliare un alleato a più di 4 spazi → avviso "beyond range 4" ma l'aura si piazza sul
+      suo token. Con la mastery Perfect Battlement sbloccata l'avviso non compare. **(Alleato a 8 o 19 spazi: "… beyond range 4: the aura is not active while your ally is out of range.", aura sul suo token. Perfect Battlement non provata.)**
 - [ ] **Altre aure invariate**: Rook, Dark Knight (mastery), Gentleness con un alleato bersagliato → l'aura resta
       attorno a chi la usa, nessun avviso.
 
