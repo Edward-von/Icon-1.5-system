@@ -3437,8 +3437,8 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG linked con un token sulla scena A e uno sulla B: segnato dalla B, lo spazio va sulla B.
-- [ ] Fulminate su quel PG dalla scena B: l'aura va attorno al token della B.
+- [ ] PG linked con un token sulla scena A e uno sulla B: segnato dalla B, lo spazio va sulla B. **(non provato: non trovato un mark che mette uno spazio sul personaggio)**
+- [x] Fulminate su quel PG dalla scena B: l'aura va attorno al token della B. **(TEST Bastion con un token anche sulla Scena B: target sulla B, Mark target di Fulminate della Spellblade (Aura 2) → l'aura va sulla Scena B attorno a quel token, niente sulla scena A)**
 
 ## R33d2 — Segnare di nuovo: si sceglie quale mark resta (17 ottobre 2026, versione 1.15.154)
 
@@ -3726,8 +3726,8 @@ Setup: solo codice (F5 basta).
 
 - [x] Abilità infusa, secondo Damage Roll: scegliere Miss, un bersaglio d'attacco, Vulnerable e +2 Flat, poi cambiare
       Reroll (same use) → il dialog riaperto ha ancora Miss, lo stesso bersaglio, Vulnerable e +2. **(MAGNARIME, secondo Damage Roll: Miss, Vulnerable e +2 Flat restano dopo aver cambiato la casella (un solo bersaglio sulla scena, il bersaglio non provato).)**
-- [ ] MAGNACRYO (dadi bonus dall'Aether): passando alla versione base i dadi dell'Infuse spariscono, quelli aggiunti a
-      mano restano.
+- [x] MAGNACRYO (dadi bonus dall'Aether): passando alla versione base i dadi dell'Infuse spariscono, quelli aggiunti a
+      mano restano. **(Stormbender, MAGNACRYO con 4 Aether: primo Damage Roll con "+2 bonus dice from the Aether spent"; secondo Damage Roll (versione base) con +1 a mano → Reroll (same use) spuntato: 3 dadi (1 + 2), tolto: torna a 1)**
 - [x] Stessa prova con un Limit Break infuso. **(Gigaflare/TETRAFLARE: Crit, Vulnerable, +2 restano; riaperto "Gigaflare — TETRAFLARE" con Instances 2.)**
 
 ## Emerso R40 — L'esito Other dice da dove vengono le chip (17 ottobre 2026, versione 1.15.128)
@@ -4219,7 +4219,7 @@ Setup: solo codice (F5 basta).
 - [x] Limit Break infuso (Gigaflare, TETRAFLARE): Use Limit Break e Damage Roll infusi; un secondo Use Limit Break
       esce base e costa il resolve base. **(Use Limit Break e Damage Roll infusi (TETRAFLARE); il secondo uso esce base.)**
 - [x] Annullare il dialog del danno, poi rifare Damage Roll: resta infuso (il dialog annullato non conta). **(Blitz: dialog del danno chiuso, poi Damage Roll di nuovo: ancora infuso (nessuna casella Reroll).)**
-- [ ] Infusione con oggetto o terreno (Volcanic Geyser, Pyrospire): piazzare l'oggetto la consuma ancora come prima.
+- [x] Infusione con oggetto o terreno (Volcanic Geyser, Pyrospire): piazzare l'oggetto la consuma ancora come prima. **(Enochian con PYROSPIRE armato: piazzare la Magma Spire H3 (Pyrospire) consuma l'infusione; la Magma Spire base H1 la lascia armata)**
 - [x] Fine combattimento con infusione armata: sparisce senza rimborso (come prima). **(Vedi End Encounter qui sopra.)**
 
 ## Emerso R46 — Il danno aggiunto dalle versioni Infuse delle abilità compare in Other (17 ottobre 2026, versione 1.15.91)
@@ -4239,8 +4239,8 @@ Setup: solo codice (F5 basta).
       (per Lance anche "twice instead", Instances 2). **(sezione 3: MAGNAPYRE due chip "2 flat piercing · area"; Lance "2 flat piercing ×2 · area" → Instances 2)**
 - [x] Blitz, Rampant Nail, Bifröst e Drifting Leaf hanno il bottone Infuse sul loro blocco "Slay or Infuse" / "Infuse
       3 or Slay". Show in Chat senza nulla armato mostra quel blocco aperto come prima. **(Blitz, Rampant Nail, Bifröst e Drifting Leaf hanno il bottone; Show in Chat senza nulla armato mostra il blocco tra quelli base.)**
-- [ ] Non regressione R40: Succubus con la combo di Incubus ha ancora [D]+fray su Hit e il chip "Combo — Succubus" in
-      Other.
+- [x] Non regressione R40: Succubus con la combo di Incubus ha ancora [D]+fray su Hit e il chip "Combo — Succubus" in
+      Other. **(Incubus in versione combo: Hit [D]+fray e voce "Combo — Succubus" nei dati di danno (letto dal calcolo del danno, non dalla finestra))**
 
 ## Emerso R37 — Card del Limit Break: niente bottoni di status doppi con l'Infuse armato (17 ottobre 2026, versione 1.15.90)
 
@@ -4929,7 +4929,7 @@ sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 d
       in 1.15.60 (spende e posta subito). **(riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 già provato nella sezione 1.15.60)**
 - [x] **Abilità senza Infuse**: Show in Chat di un'abilità qualsiasi di un altro job (e di una con combo) → card
       identica a prima. **(Show in Chat di abilità senza Infuse (Chanter, Knave, combo comprese) come prima, vedi blocco 14.)**
-- [ ] **Tema chiaro**: le righe blu e il blocco "Infused" si leggono anche in tema chiaro.
+- [x] **Tema chiaro**: le righe blu e il blocco "Infused" si leggono anche in tema chiaro. **(tema chiaro: le card del sistema restano scure, le righe blu e il blocco "Infused — Infuse 6 (Mastery): MAGNABIO" si leggono bene)**
 
 ## R59 — Aether senza attacco: Stormlash e Aether Deflection (16 ottobre 2026, versione 1.15.60)
 
@@ -5742,7 +5742,7 @@ almeno un token di un altro personaggio sulla scena; tab Combat.
       bottone Mark resta. **(Talent I + mastery: "Free Action" e "Mark", bottone Mark presente.)**
 - [x] **Party Favor**: un PG Fool con Party Favor e la mastery Amico sbloccata → chip Mark e bottone Mark presenti;
       senza mastery non ci sono. **(Party Favor (Fool): senza mastery solo "Terrain"; con Amico chip "Mark" ("From Mastery: Amico…") e bottone.)**
-- [ ] **Altre abilità con mark**: un'abilità che marca già di suo (es. Sisyphus) ha il bottone Mark come prima.
+- [x] **Altre abilità con mark**: un'abilità che marca già di suo (es. Sisyphus) ha il bottone Mark come prima. **(Sisyphus (mark di suo): nel pannello c'è il bottone "Mark target" come prima)**
 
 ## R16 — I talenti compaiono nella card dell'attacco (15 ottobre 2026, versione 1.15.18)
 
@@ -5988,7 +5988,7 @@ o High Prophecy ("until the start of your next turn"); un foe Trooper (Hold the 
       come prima. **(Shieldmaster (aura di tratto, come le stance) nessun messaggio. Gran Reversa / Strength of the Pack non rifatte in combattimento.)**
 - [x] **Combo**: Bleak Mercy con COMBO ON (Sweet Torment, "until the end of your next turn, gain aura 1") → stesso
       comportamento di Rook. **(Bleak Mercy con COMBO ON: "(until the end of your next turn)", card "ends" alla fine del turno successivo del Knave.)**
-- [ ] **Undo**: tornando indietro di un turno (previous turn) il conteggio non avanza e non arriva nessun messaggio.
+- [x] **Undo**: tornando indietro di un turno (previous turn) il conteggio non avanza e non arriva nessun messaggio. **(aura con scadenza "until the end of your next turn" sul Bastion, combat temporaneo: attivazione + previous turn → conteggio fermo a 2, nessun messaggio; fine turno vera → scende a 1)**
 
 ## R2 — vigor oltre il massimo (15 ottobre 2026, versione 1.15.4)
 
