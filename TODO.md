@@ -61,6 +61,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [ ] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
       versioni non armate ("Shattered" di BIOTIC, "Shattered+" del Terrain Effect di MAGNABIO). Con l'infusione armata
       la card è giusta. S.
+- [ ] **P18** — PHANTOM BLADE (Drifting Leaf, p.226 "until the start of your next turn") scade appena inizia il round
+      dopo, prima che il Wright agisca: al nuovo round nessuno è attivo (turno vuoto, letto come "0") e il Wright è il
+      primo in `combat.turns`, quindi il codice crede che il suo turno sia già cominciato. Con i foe che agiscono per
+      primi l'interrupt illimitato non copre proprio i loro turni. Nel combattimento a fazioni l'ordine dei turni non
+      vale: serve "il Wright si è attivato in un round successivo" (activateCombatant), non l'indice. S-M.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
