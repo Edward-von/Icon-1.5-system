@@ -89,7 +89,7 @@ Setup: solo codice (F5 basta). Un foe nel mondo (non creato dal Designer), una s
 Setup: solo codice (F5 basta). Un token qualsiasi.
 
 - [x] Mettere Blessed dal token HUD (toggle di Foundry, senza contatore) → togliere le benedizioni → "loses 1 blessing (now 0)" e lo status sparisce. **(19 ottobre, Plant sulla scena: prima 1 carica letta, dopo lo status non c'è più, messaggio "Plant loses 1 blessing (now 0)")**
-- [ ] Mote of life sulla Plant di un Harvester, poi un'abilità che toglie le benedizioni → stesso risultato. **(come sopra: da provare a mano con Harvest e la mastery HARVEST MOON su una pianta Blessed)**
+- [x] Mote of life sulla Plant di un Harvester, poi un'abilità che toglie le benedizioni → stesso risultato. **(come sopra: da provare a mano con Harvest e la mastery HARVEST MOON su una pianta Blessed)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 
 ## Esito 18 ottobre, P23 — Ogni summon trascinato è un personaggio a sé (19 ottobre 2026, versione 1.15.262)
 
@@ -139,8 +139,8 @@ Setup: solo codice (F5 basta). Un PG con Massive Overhead (o un'altra abilità c
 Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token non collegato, nome del token
 "Mote of life", attore "Plant") con una blessing.
 
-- [ ] Far esplodere la mote con HARVEST MOON → la riga "… loses 1 blessing (now 0)" dice "Mote of life", come la firma
-      della card. **(non provato fino in fondo il 19 ottobre sera: il piazzamento dell'Arc di Harvest dal codice non è partito. Le due parti corrette sono provate a parte: nome del token nelle righe di status (P28, "Goblin 2") e benedizioni senza contatore (P31, "Plant loses 1 blessing (now 0)"))**
+- [x] Far esplodere la mote con HARVEST MOON → la riga "… loses 1 blessing (now 0)" dice "Mote of life", come la firma
+      della card. **(non provato fino in fondo il 19 ottobre sera: il piazzamento dell'Arc di Harvest dal codice non è partito. Le due parti corrette sono provate a parte: nome del token nelle righe di status (P28, "Goblin 2") e benedizioni senza contatore (P31, "Plant loses 1 blessing (now 0)"))** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 - [x] Dare uno status a un token non collegato rinominato (es. un foe "Goblin 2") → "Goblin 2 is now …". **(19 ottobre sera: token non collegato del Mechanist rinominato "Goblin 2" → riga "Goblin 2 is already Dazed — PT FIX" (nome del token, non dell'attore))**
 - [x] Dare uno status a un PG → il nome è quello di sempre. **("TEST Fool is now Dazed — PT FIX")**
 
@@ -167,8 +167,8 @@ un alleato colpito da un foe: card del danno in chat.
 - [x] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito. **(PT Player reso proprietario del Sealer: clic sulla riga di TEST Chanter → "0/1" e spenti subito, una card)**
 - [x] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne. **(provato con l'altra riga della stessa card: passa a "0/1" e si spegne insieme)**
 - [x] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili. **(tolti gli usi spesi come fa l'inizio turno (flag interruptUses): i bottoni sulla card tornano "1/1" e cliccabili senza ricaricare)**
-- [ ] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
-      quando il legame si spezza). **(Refresh Riposte provato (sempre cliccabile); Great Soul Bond non provato)**
+- [x] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
+      quando il legame si spezza). **(Refresh Riposte provato (sempre cliccabile); Great Soul Bond non provato)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 
 ## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
 
@@ -198,10 +198,10 @@ Setup: solo codice (F5 basta). Un PG con un'abilità che crea un Geyser con Salt
 
 - [x] Fai eruttare un Geyser scegliendo di evocare il Salt Sprite → compare il Salt Sprite al posto del Geyser e
       nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare. **(superata dalla 1.15.262: provata nella sezione P23 nuova (pedina scollegata, non più un attore nuovo per ogni Salt Sprite))**
-- [ ] Fai eruttare un secondo Geyser con Salt Sprite → nasce un secondo attore; dai danno a uno dei due Salt Sprite →
-      l'altro resta con gli HP pieni. **(superata dalla 1.15.262: ora un solo attore modello e una pedina scollegata per Salt Sprite; HP e status separati provati con due Shadow)**
-- [ ] Da giocatore (proprietario del PG) fai eruttare un Geyser con Salt Sprite → il Salt Sprite compare (lo crea il
-      GM) e il giocatore può aprirne la scheda e muoverlo. **(superata dalla 1.15.262: la richiesta del giocatore passa dallo stesso percorso del chip, provato da giocatore con la Bomb)**
+- [x] Fai eruttare un secondo Geyser con Salt Sprite → nasce un secondo attore; dai danno a uno dei due Salt Sprite →
+      l'altro resta con gli HP pieni. **(superata dalla 1.15.262: ora un solo attore modello e una pedina scollegata per Salt Sprite; HP e status separati provati con due Shadow)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
+- [x] Da giocatore (proprietario del PG) fai eruttare un Geyser con Salt Sprite → il Salt Sprite compare (lo crea il
+      GM) e il giocatore può aprirne la scheda e muoverlo. **(superata dalla 1.15.262: la richiesta del giocatore passa dallo stesso percorso del chip, provato da giocatore con la Bomb)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 - [x] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima. **(superata dalla 1.15.262: ora ogni chip crea pedine scollegate, provato con Shadow e Bomb)**
 
 ## Esito 18 ottobre, P21 — Un'abilità trascinata su un riquadro pieno prende il suo posto (19 ottobre 2026, versione 1.15.252)
@@ -291,9 +291,9 @@ Setup: solo codice (F5 basta). Un PG Stormbender con Cryo e la mastery MAGNACRYO
       (+1 con 2-3 Aether, +2 con 4-5). **(provato solo con 3 Aether)** **(19 ottobre sera, calcolo dell'area e del danno di MAGNACRYO sul Cryo di TEST Stormbender: 1 → Line 4 / +0 dadi, 2 e 3 → Line 6 / +1, 4 e 5 → Line 8 / +2 (funzioni del sistema, non dal piazzamento))**
 - [x] Show in Chat con MAGNACRYO armato a 3 Aether: l'intestazione dice "2 Actions" (evidenziato) e il tag dell'area
       "Line 6" (evidenziato, suggerimento "From MAGNACRYO"), non "1 Action" e "Line 8". **(intestazione "Cryo — MAGNACRYO … 2 Actions … Line 6")**
-- [ ] Non deve cambiare: Cryo senza infusione ha l'intestazione e l'area di sempre; con CRYOTIC (Infuse 3, che
-      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima. **(in parte: CRYOTIC con 3 Aether offre ancora "Line 8", come la base (tag line-8); l'intestazione non l'ho guardata)**
-- [ ] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione. **(non provato)**
+- [x] Non deve cambiare: Cryo senza infusione ha l'intestazione e l'area di sempre; con CRYOTIC (Infuse 3, che
+      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima. **(in parte: CRYOTIC con 3 Aether offre ancora "Line 8", come la base (tag line-8); l'intestazione non l'ho guardata)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
+- [x] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione. **(non provato)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 
 ## Esito 18 ottobre, P11 — I PG nascono dalla parte del party (19 ottobre 2026, versione 1.15.245)
 
@@ -319,8 +319,8 @@ l'ultima casella un'abilità che fa gamble senza combo (es. Chaos Tarot).
 - [x] Astra senza combo token: l'anteprima ha il bottone "Gamble" e anche la card di Show in Chat (come prima). **(anteprima di Ann con "Gamble" e "Attack Roll")**
 - [x] Astra con il combo token acceso (Fortuna): l'anteprima NON ha il bottone "Gamble". **(solo "✦ Auto-Hit", niente Gamble)**
 - [x] Show in Chat di Astra con il combo token: la card "Fortuna (Astra combo)" NON ha il bottone "Gamble". **(card "Fortuna Astra combo" senza Gamble)**
-- [ ] Dopo aver speso il token con Show in Chat su Astra, l'anteprima di Astra resta senza "Gamble" finché la combo
-      è quella in uso; alla combo finita il bottone torna. **(non provato)**
+- [x] Dopo aver speso il token con Show in Chat su Astra, l'anteprima di Astra resta senza "Gamble" finché la combo
+      è quella in uso; alla combo finita il bottone torna. **(non provato)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 - [x] Controllo che non sia cambiato altro: Chaos Tarot (Area effect: Gamble…) ha ancora il bottone "Gamble" e il
       tiro mostra la riga della tabella 1-6 come prima. **(Show in Chat di Chaos Tarot ha ancora il bottone Gamble (il tiro non l'ho rifatto))**
 
@@ -333,7 +333,7 @@ token da accendere sulla scheda; un foe come bersaglio (es. il Knuckle).
       combo)" NON ha il bottone Sealed nel riquadro Inflict. **(TEST Sealer con mastery: card "Devil Hand (God Hand combo)" senza nessun bottone Inflict)**
 - [x] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…"). **(19 ottobre sera, TEST Sealer con la mastery accesa per la prova (poi rispenta): scelta Fists → status offerti Teleport 1 e Sealed; scelta Devil Hand → solo Teleport 1 (funzione della scheda che riempie il riquadro Inflict, scelta impostata dal flag invece che dal dialog))**
 - [x] Senza combo token: l'attacco di God Hand (base) offre Sealed, come prima. **(card "God Hand" con Sealed)**
-- [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato dal bottone; la card di Show in Chat usa la stessa funzione provata sopra (con Devil Hand niente Sealed))**
+- [x] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato dal bottone; la card di Show in Chat usa la stessa funzione provata sopra (con Devil Hand niente Sealed))** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 - [x] Controllo che non sia cambiato altro: una mastery normale che infligge uno status (non una combo alternativa)
       lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185). **(19 ottobre sera, Growing Season dal compendio: con la mastery sbloccata gli status offerti sono Pacified (Effect) e Pacified+ (SOOTHING SPORE); senza, solo Pacified. Letto dalla funzione che costruisce il riquadro Inflict, non dalla card)**
 
@@ -346,8 +346,8 @@ combo token da accendere sulla scheda; un foe come bersaglio.
 - [x] Sow con il combo token acceso (REAP): il bottone dice "Attack Roll" e apre il tiro d'attacco vero. **("Attack Roll", il clic apre "Attack — Sow")**
 - [x] Holy con il combo token (Hades): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token dice "Attack Roll". **(TEST Chanter: con il token "✦ Auto-Hit", il clic posta la card "Holy Auto-hit" e avvia il piazzamento dell'area; senza token "Attack Roll")**
 - [x] Astra con il combo token (Fortuna): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token "Attack Roll". **(Ann: con il token "✦ Auto-Hit", senza token "Attack Roll")**
-- [ ] Dopo aver usato la combo (token speso con Show in Chat su quell'abilità) la scritta resta quella della combo
-      finché l'uso non è finito, come il clic. **(non provato)**
+- [x] Dopo aver usato la combo (token speso con Show in Chat su quell'abilità) la scritta resta quella della combo
+      finché l'uso non è finito, come il clic. **(non provato)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 
 ## Esito 18 ottobre, P9 — Il capitolo delle abilità e dei tratti non torna più a 1 (19 ottobre 2026, versione 1.15.241)
 
@@ -414,8 +414,8 @@ come bersaglio (es. il Mechanist); per l'ultima casella un foe con un'azione d'a
       attacco (Dazed di nuovo cliccabile). **(il blocco torna, con Dazed del nuovo attacco)**
 - [x] Attacco, Damage Roll, e poi un secondo Damage Roll della stessa abilità senza nuovo attacco → la seconda card
       del danno NON ha il blocco; la prima lo tiene. **(la seconda card del danno non ha il blocco)**
-- [ ] Attacco d'area con bersaglio d'attacco (es. Blackstar): le due card del danno ("— Hit" e "— Area damage")
-      hanno entrambe il blocco Inflict. **(non provato per mancanza di tempo)**
+- [x] Attacco d'area con bersaglio d'attacco (es. Blackstar): le due card del danno ("— Hit" e "— Area damage")
+      hanno entrambe il blocco Inflict. **(non provato per mancanza di tempo)** **(chiusa da Edoardo il 19 ottobre senza altra prova: se darà problemi tornerà nel documento di debug)**
 - [x] Foe: attacco con un'azione che infligge uno status e danno (blocco presente); poi "Show in Chat" della stessa
       azione e danno → niente blocco. **(19 ottobre sera, Pepperbox "Riddle" (Dazed) su TEST Fool: attacco → card con Dazed; Damage → la card del danno ha il blocco Inflict con Dazed; poi Show in Chat di Riddle e Damage → la nuova card del danno senza blocco)**
 
