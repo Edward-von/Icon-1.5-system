@@ -171,8 +171,8 @@ Setup: solo codice (F5 basta). Un PG con lo status Weakened e un foe bersagliato
 
 - [x] PG Weakened, tira il danno di un'abilità normale → nella finestra il chip "Weakened" è già spuntato con la
       scritta "−2 · from your Weakened status"; tirando, la card mostra il −2. **(19 ottobre, TEST Freelancer weakened, Showdown: chip spuntato con "Weakened −2 · from your Weakened status" (la card non l'ho tirata))**
-- [ ] Toglilo a mano e tira → il −2 non viene applicato. **(non provato)**
-- [ ] PG Weakened con un'abilità (o un esito) che fa danno piercing o divine → il chip "Weakened" resta vuoto. **(non provato)**
+- [x] Toglilo a mano e tira → il −2 non viene applicato. **(19 ottobre sera: TEST Enochian Weakened, Blackstar → chip spuntato "−2 · from your Weakened status"; tolta la spunta e tirato → card "2[d6]: [3,2] 5, Fray 4, 9 damage", nessun −2)**
+- [x] PG Weakened con un'abilità (o un esito) che fa danno piercing o divine → il chip "Weakened" resta vuoto. **(Soul Burn (piercing): chip Weakened vuoto, Pierce spuntato)**
 - [x] PG senza Weakened → il chip è vuoto e la scritta è solo "−2", come prima. **(senza status: chip vuoto, scritta "Weakened −2")**
 - [x] Un foe con Weakened che tira il danno dalla sua scheda → il chip è spuntato. **(Knuckle weakened, "Damage — Crushing Advance": chip spuntato)**
 
@@ -195,8 +195,8 @@ Setup: solo codice (F5 basta). Un PG con sei abilità nei sei riquadri (es. PT T
 - [x] Trascina dal compendio un'abilità nuova sul quinto riquadro (con talento / mastery a piacere) → il quinto
       riquadro mostra l'abilità nuova (con i badge giusti); quella che c'era non è più nei riquadri ma resta nella
       lista delle abilità, subito dopo le sei; gli altri cinque riquadri non cambiano. **(PT Testi, Valkyrie sul quinto riquadro: finestra Equip, poi il quinto riquadro è Valkyrie; Fairy Ring (che c'era) passa subito dopo i sei, gli altri riquadri uguali. Poi Valkyrie tolta e Fairy Ring rimessa al suo posto)**
-- [ ] Trascina dal compendio un'abilità sul primo riquadro → stessa cosa sul primo, gli altri restano al loro posto. **(non provato)**
-- [ ] Con meno di sei abilità, trascina un'abilità su un riquadro vuoto → va nel primo riquadro libero, come prima. **(non provato)**
+- [x] Trascina dal compendio un'abilità sul primo riquadro → stessa cosa sul primo, gli altri restano al loro posto. **(19 ottobre sera, copia temporanea di PT Testi: Valkyrie sul primo riquadro → primo riquadro Valkyrie, Six Hells Trigram (che c'era) subito dopo i sei, gli altri cinque uguali)**
+- [x] Con meno di sei abilità, trascina un'abilità su un riquadro vuoto → va nel primo riquadro libero, come prima. **(con 4 abilità, Sidhe lasciata sul sesto riquadro (vuoto) → va nel quinto, il primo libero (dopo la conferma "Chapter Lock"))**
 - [x] Ricarica la pagina (F5) → l'ordine dei riquadri resta quello nuovo. **(l'ordine è salvato nel sort delle abilità e resta dopo il nuovo render)**
 
 ## Esito 18 ottobre, P17 — Le infusioni non armate non portano i loro status (19 ottobre 2026, versione 1.15.251)
