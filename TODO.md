@@ -46,10 +46,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       `isAutoHit` della versione base invece della combo. Al contrario su Holy con Hades e Astra con Fortuna: il
       bottone dice "Attack Roll" ma fa l'auto-hit. S.
       (FATTO il 19 ottobre 2026, versione 1.15.242)
-- [ ] **P11 (alta)** — i PG creati nel mondo (sidebar, wizard) nascono col token ostile (`disposition -1`): le
+- [x] **P11 (alta)** — i PG creati nel mondo (sidebar, wizard) nascono col token ostile (`disposition -1`): le
       automazioni amico / nemico li trattano come foe (es. la mote di Symphony benedice il foe che la fa esplodere).
       Impostare `prototypeToken.disposition = 1` per il tipo `icon` in `IconActor._preCreate` e correggere con una
       migrazione i PG esistenti (attenzione: qualche GM potrebbe averlo cambiato apposta). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.245)
 - [x] **P12** — God Hand con la combo Devil Hand (scelta dalla mastery): la card d'attacco offre ancora "Sealed" preso
       dall'Effect della base ("Seal your foe…"), che Devil Hand sostituisce (p.192). S.
       (FATTO il 19 ottobre 2026, versione 1.15.243)

@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 38;
+export const CURRENT_SCHEMA_VERSION = 39;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1402,6 +1402,36 @@ const MIGRATIONS = {
       },
     });
     if (n) console.log(`ICON 1.5 | Migration 38: ${n} ability/trait copy/copies given back their chapter 2/3 from the jobs pack`);
+  },
+
+  /* 39 — A new actor's prototype token is HOSTILE by core default, and
+   * nothing changed it for player characters (playtest 18 October, P11): PCs
+   * made in the world were foes to every friend / foe automation. The PCs
+   * still at HOSTILE get FRIENDLY; so do their tokens already placed on a
+   * scene that are still HOSTILE (they took it from that prototype). A PC set
+   * to Neutral, or a token changed by hand to something else, is left alone.
+   * A GM who really wanted a hostile PC has to set it again. */
+  39: async () => {
+    const HOSTILE  = CONST.TOKEN_DISPOSITIONS.HOSTILE;
+    const FRIENDLY = CONST.TOKEN_DISPOSITIONS.FRIENDLY;
+    const fixed = new Set();
+    for (const actor of game.actors) {
+      if (actor.type !== "icon" || actor.prototypeToken?.disposition !== HOSTILE) continue;
+      await actor.update({ "prototypeToken.disposition": FRIENDLY });
+      fixed.add(actor.id);
+    }
+    let t = 0;
+    if (fixed.size) {
+      for (const scene of game.scenes) {
+        const updates = scene.tokens
+          .filter(td => fixed.has(td.actorId) && td.disposition === HOSTILE)
+          .map(td => ({ _id: td.id, disposition: FRIENDLY }));
+        if (!updates.length) continue;
+        await scene.updateEmbeddedDocuments("Token", updates);
+        t += updates.length;
+      }
+    }
+    if (fixed.size) console.log(`ICON 1.5 | Migration 39: ${fixed.size} player character(s) and ${t} placed token(s) turned from hostile to friendly`);
   },
 };
 

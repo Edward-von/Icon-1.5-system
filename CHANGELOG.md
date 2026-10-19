@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — I PG nascono dalla parte del party (versione 1.15.245)
+
+### Esito del playtest del 18 ottobre, P11
+
+- **PG col token ostile**: un PG creato nel mondo (dalla sidebar o col wizard) aveva il token "Hostile", e le
+  automazioni amico / nemico lo trattavano come un foe (la mote di Symphony fatta esplodere da un foe offriva di
+  benedire il foe) → Foundry dà "Hostile" a ogni token nuovo, e per i PG nessuno lo cambiava → ora un PG nuovo
+  nasce col token "Friendly". Se i dati di creazione dicono già una disposizione (una copia, un import) si tiene
+  quella. La migrazione 39 sistema i PG che ci sono già: quelli col token prototipo ancora "Hostile" passano a
+  "Friendly", e così i loro token già piazzati sulle scene che sono ancora "Hostile". Un PG messo a "Neutral", o un
+  token cambiato a mano in altro, non viene toccato. **Attenzione**: un GM che voleva davvero un PG ostile (un
+  traditore, un PG controllato dal nemico) deve rimetterlo "Hostile" a mano dopo l'aggiornamento: per la migrazione
+  "Hostile" è indistinguibile dal valore mai scelto.
+
 ## 19 ottobre 2026 — Fortuna non ha più il bottone Gamble di Astra (versione 1.15.244)
 
 ### Esito del playtest del 18 ottobre, P19

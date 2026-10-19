@@ -11,6 +11,22 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P11 — I PG nascono dalla parte del party (19 ottobre 2026, versione 1.15.245)
+
+Setup: solo codice (F5 basta), ma al primo avvio gira la migrazione 39. Prima di aggiornare annotare la
+disposizione del token prototipo di qualche PG del mondo (Prototype Token → Identity → Disposition) e dei loro
+token piazzati; per l'ultima casella un PG messo a mano a "Neutral".
+
+- [ ] Dopo F5: i PG che avevano il token prototipo "Hostile" ora l'hanno "Friendly" (console: riga "Migration 39").
+- [ ] I loro token già piazzati sulle scene che erano "Hostile" ora sono "Friendly" (bordo verde, non rosso).
+- [ ] Un PG nuovo creato dalla sidebar (Create Actor → tipo icon) ha il token prototipo "Friendly"; piazzato sulla
+      scena, il token è "Friendly".
+- [ ] Un PG creato col wizard di creazione personaggio: token "Friendly".
+- [ ] Un foe importato dal compendio, o messo con l'Encounter Designer, resta "Hostile".
+- [ ] Il PG messo a "Neutral" prima dell'aggiornamento resta "Neutral".
+- [ ] Rifare il caso del playtest: Symphony, un foe entra nella mote → Detonate: la card offre di benedire i PG,
+      non il foe.
+
 ## Esito 18 ottobre, P19 — Fortuna non ha più il bottone Gamble di Astra (19 ottobre 2026, versione 1.15.244)
 
 Setup: solo codice (F5 basta). Un PG Seer con Astra (es. Ann), il combo token da accendere sulla scheda; per

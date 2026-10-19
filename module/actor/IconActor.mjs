@@ -19,6 +19,15 @@ export class IconActor extends Actor {
    */
   async _preCreate(data, options, user) {
     await super._preCreate(data, options, user);
+    // A player character is on the party's side. The core default for a new
+    // prototype token is HOSTILE, so a PC made from the sidebar or the wizard
+    // was read as a foe by every friend / foe automation (playtest 18
+    // October, P11). Only when the data names no disposition: a copy or an
+    // import keeps the one it carries.
+    if (this.type === "icon"
+        && foundry.utils.getProperty(data, "prototypeToken.disposition") === undefined) {
+      this.updateSource({ "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.FRIENDLY });
+    }
     if (options?.iconUnlinked) {
       if (this.prototypeToken?.actorLink !== false) this.updateSource({ "prototypeToken.actorLink": false });
       return;
