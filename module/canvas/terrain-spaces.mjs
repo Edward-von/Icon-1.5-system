@@ -981,6 +981,19 @@ export function insideStatusButton(td, status, { op = "apply", ongoing = false, 
 }
 
 /**
+ * P27: the cards of an area's statuses speak as the one who placed the area (its token on the area's scene, else its
+ * actor), not as whatever token the GM has selected.
+ * @param {MeasuredTemplateDocument} doc
+ */
+function areaSpeaker(doc) {
+  const f = doc?.flags?.[NS] ?? {};
+  const token = f.tokenId ? doc.parent?.tokens?.get(f.tokenId) : null;
+  if (token) return ChatMessage.getSpeaker({ token });
+  const actor = game.actors?.get(f.actorId || terrainFlag(doc)?.creatorId);
+  return actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker();
+}
+
+/**
  * R33c2: a character moved into or out of a terrain-effect area that does something to the characters inside it
  * ("Foes inside are blinded+", Mist Strider p.169; shadow clouds p.161; Magnabio's "characters inside are
  * shattered+" p.218; Dark Wing's "allies in the area have cover" p.171; Quench's cover and "exiting the area can
@@ -994,7 +1007,7 @@ async function offerInsideEffects(td, moves) {
   const blocks = await insideBlocks(td, moves);
   if (!blocks.length) return;
   await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker({ token: td }),
+    speaker: areaSpeaker(moves[0]?.doc),
     content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
   });
 }
@@ -1015,7 +1028,7 @@ export async function offerInsideOnPlace(doc) {
   }
   if (!blocks.length) return;
   await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker(),
+    speaker: areaSpeaker(doc),
     content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
   });
 }
@@ -1044,7 +1057,7 @@ export async function offerInsideOnShift(doc, oldCells, { skip = [], only = null
   }
   if (!blocks.length) return;
   await ChatMessage.create({
-    speaker: ChatMessage.getSpeaker(),
+    speaker: areaSpeaker(doc),
     content: `<div class="icon-chat-card icon-chat-card--terrain">${blocks.join("")}</div>`,
   });
 }

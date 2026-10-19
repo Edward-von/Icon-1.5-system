@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Le card delle aree portano il nome di chi le ha messe (versione 1.15.257)
+
+### Esito del playtest del 18 ottobre, P27
+
+- **Card delle aree firmate dal creatore**: le card "is inside / is now inside / is no longer inside the area" degli
+  status delle aree (nuvole di Nocturne, Mist Strider, Tsunami, Magnabio…) uscivano col nome del token selezionato
+  dal GM (la nuvola di Nocturne firmata "TEST Warden"), e quelle "enters / leaves" col nome di chi entrava → la card
+  non diceva a Foundry chi parlava, e Foundry usava il token selezionato → ora tutte queste card sono firmate da chi
+  ha messo l'area (il suo token sulla scena, altrimenti il suo attore). Scelta estetica: anche "enters / leaves" ora
+  porta il creatore, così tutte le card di un'area hanno la stessa firma; chi entra resta scritto nel testo.
+
 ## 19 ottobre 2026 — Il bottone dell'interrupt si spegne anche sul GM (versione 1.15.256)
 
 ### Esito del playtest del 18 ottobre, P26

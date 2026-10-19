@@ -137,9 +137,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       il clic diventa "0/1" ma resta cliccabile finché non si preme Apply; sul giocatore si spegne subito. Spegnerlo
       anche sul GM appena le cariche sono 0. S.
       (FATTO il 19 ottobre 2026, versione 1.15.256)
-- [ ] **P27 (dai Dubbi, estetico)** — Le card "is inside / enters the area" degli status delle aree escono col nome del
+- [x] **P27 (dai Dubbi, estetico)** — Le card "is inside / enters the area" degli status delle aree escono col nome del
       token selezionato dal GM, non del creatore dell'area (nuvola di Nocturne firmata "TEST Warden"). Firmarle col
       creatore dell'area (flag actorId/tokenId del template), o col personaggio che entra. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.257)
 - [ ] **P28 (dai Dubbi, estetico)** — "Plant loses 0 blessings (now 0)" firmato "Mote of life": il messaggio usa il nome
       dell'attore (Plant) invece di quello del token. Usare il nome del token. S.
 - [ ] **P29 (dai Dubbi, deciso col manuale)** — keyword "pit" senza tooltip nel testo delle abilità (es. Massive

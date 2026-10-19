@@ -11,6 +11,18 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P27 — Le card delle aree portano il nome di chi le ha messe (19 ottobre 2026, versione 1.15.257)
+
+Setup: solo codice (F5 basta). Un PG con un'area che dà status a chi è dentro (es. la nuvola di Nocturne o Mist
+Strider), un altro personaggio vicino; il GM ha selezionato un terzo token.
+
+- [ ] Piazzare l'area con un personaggio già dentro → la card "… is inside the area of …" è firmata dal PG che l'ha
+      messa, non dal token selezionato dal GM.
+- [ ] Muovere un personaggio dentro e fuori dall'area → le card "enters / leaves the area" sono firmate dal creatore.
+- [ ] Spostare l'area (Shift + frecce, o Tsunami) sopra/via da un personaggio → "is now inside / is no longer inside"
+      firmata dal creatore.
+- [ ] Bottoni della card (aggiungi/togli status) funzionano come prima.
+
 ## Esito 18 ottobre, P26 — Il bottone dell'interrupt si spegne anche sul GM (19 ottobre 2026, versione 1.15.256)
 
 Setup: solo codice (F5 basta). TEST Sealer con Spirit Shrine e la mastery SPIRIT PATRONAGE (Grace of the Spirits),
