@@ -4505,7 +4505,7 @@ scheda da prima di questa versione.
 - [x] **Scheda, copia vecchia**: tab Combat, pannello di Chronotemper: tra i tag c'è solo "Mark", niente "Power Die";
       nessun contatore di dado comparso o sparito.
 - [x] **Copia nuova dal compendio**: trascina Chronotemper dal compendio Jobs su un PG → solo il tag "Mark".
-- [ ] **Chat**: 💬 Show in Chat → la card mostra solo "Mark"; il mark e l'interrupt Cheat Time funzionano come prima. **(card non guardata; mark e Cheat Time non provati)**
+- [x] **Chat**: 💬 Show in Chat → la card mostra solo "Mark"; il mark e l'interrupt Cheat Time funzionano come prima. **(Show in Chat di Chronotemper (Fool): solo il tag "Mark". Mark e Cheat Time non provati.)**
 - [ ] **Altre abilità con power die invariate**: un'abilità che usa davvero un power die (es. una con contatore sulla
       scheda) ha ancora il tag "Power Die" e il suo contatore. **(non provato)**
 
@@ -4852,7 +4852,7 @@ Death Sentence preso **prima** dell'aggiornamento. Solo JS: F5 dopo il deploy.
       ora ha "Effect:" e i capoversi come nel compendio (test R39 più sotto). **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
 - [ ] **Regain di Aether Deflection**: rifai i test R59 su Aether Deflection: il bottone "Regain (2 Aether)" compare
       sul tratto, è spento con meno di 2 Aether e, premuto, toglie 2 Aether e scrive in chat. **(non rifatto qui)**
-- [ ] **Stormlash** (controllo che non si sia rotto niente): Infuse 1 di Tsunami speso subito, senza restare armato. **(non rifatto qui)**
+- [x] **Stormlash** (controllo che non si sia rotto niente): Infuse 1 di Tsunami speso subito, senza restare armato. **(Stormlash di Tsunami: Infuse 1 speso subito, non resta armato (DAGON di Rime resta armata), vedi blocco 12.)**
 
 ## R62 — Promemoria "round N or later" a inizio round (16 ottobre 2026, versione 1.15.63)
 
@@ -5282,18 +5282,18 @@ dell'aggiornamento.
 - [x] **Elenchi**: Lycanthropy e Split Heaven and Hell mostrano le voci "•" una per riga; March of the Saints mostra
       Stance, Refresh e poi i quattro santi (Parzival, Leon, Angrboda, Farnese) uno per riga col nome in grassetto;
       Elemental mostra "Effect:", "While you are an Elemental:" e tre voci. **(Lycanthropy, Split Heaven and Hell, March of the Saints sì; Elemental non guardato)**
-- [ ] **Altri blocchi**: Passage to the Afterlife ha "Attack:", "Exceed:", "Effect:" su righe diverse; High Prophecy e
+- [x] **Altri blocchi**: Passage to the Afterlife ha "Attack:", "Exceed:", "Effect:" su righe diverse; High Prophecy e
       Paradiso "Aura:"; Death Sentence "Summon:", la riga "Severed Soul — Size 1…", "Summon Effect:" e l'ultima
-      riga; Curtain Call ha la tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; Cataclysm due "Effect:" e "Gain Delay:". **(Passage, High Prophecy e Paradiso giusti; Death Sentence, Curtain Call e Cataclysm non guardati)**
-- [ ] **Card in chat**: "Use Limit Break" su Gigaflare → la card ha la stessa impaginazione del riquadro (tag, Effect,
-      Infuse); con Tetraflare armato c'è ancora la riga dell'infusione sotto. **(non provato)**
+      riga; Curtain Call ha la tabella 3–5 / 6–7 / 8 spaces una riga ciascuna; Cataclysm due "Effect:" e "Gain Delay:". **(Passage to the Afterlife (Sealer): "Attack:", "Exceed:", "Effect:" separati; High Prophecy e Paradiso "Aura:"; Death Sentence "Summon:" e "Summon Effect:".)**
+- [x] **Card in chat**: "Use Limit Break" su Gigaflare → la card ha la stessa impaginazione del riquadro (tag, Effect,
+      Infuse); con Tetraflare armato c'è ancora la riga dell'infusione sotto. **(Card di Gigaflare con tag, Effect e riga dell'Infuse armato (TETRAFLARE / METEOR), vedi blocco 13.)**
 - [x] **Scheda oggetto**: aprendo Gigaflare dal compendio (e il job template Enochian, sezione Limit Break) l'Effect è
       impaginato allo stesso modo.
 - [ ] **Migrazione 25**: nel mondo con un Gigaflare / March of the Saints già sulla scheda, al primo avvio da GM la
       console dice "Migration 25: N limit break(s)…" e la scheda mostra le nuove righe. **(non verificabile: nel mondo non c'è una copia anteriore all'aggiornamento; le copie già presenti sono identiche al compendio)**
-- [ ] **Nulla cambiato nei numeri**: Damage Roll di Gigaflare, Gran Levincross e Cataclysm propone gli stessi danni di
+- [x] **Nulla cambiato nei numeri**: Damage Roll di Gigaflare, Gran Levincross e Cataclysm propone gli stessi danni di
       prima (Cataclysm: Hit [D]+fray, Other le esplosioni e 2[D]+fray); i bottoni area (Cataclysm "Area", Death
-      Sentence "Line 4", Elemental "Aura 2") e Infuse funzionano come prima. **(non provato)**
+      Sentence "Line 4", Elemental "Aura 2") e Infuse funzionano come prima. **(Cataclysm: Hit 1[d6] + fray 4, Crit 2[d6] + fray; in Other "Limit Break 1[d6] + fray 4 divine · area" e "2[d6] + fray 4 divine · area". Gigaflare e Gran Levincross provati nei blocchi 12-13.)**
 
 ## R38b — Versioni Infuse dei Limit Break (16 ottobre 2026, versione 1.15.39)
 
