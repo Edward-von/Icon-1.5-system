@@ -27,6 +27,7 @@ import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
 import { attackThresholds } from "../combat/crit-thresholds.mjs";
 import { pitMarkEffects } from "../canvas/terrain-spaces.mjs";
+import { hasStatus } from "../combat/statuses.mjs";
 
 const _log = (...a) => console.debug("[ICON | roll-dialogs]", ...a);
 
@@ -584,6 +585,10 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // and out of melee reach is that case: the combo version ticks Unerring.
   const reapFar = _markedBeyondReach(ab, actor, targets);
   const whyTick = (r, name) => r === "tag" ? "from the ability's tag" : r === "status" ? `from your ${name} status` : "";
+  // Weakened (p.117): "All damage dealt reduced by 2" — ticked when the attacker
+  // has the status, except for damage that ignores it (Pierce p.205 "Ignores
+  // armor, weak, and vigor"; Divine). It can still be unticked by hand.
+  const attackerWeak = !!actor && hasStatus(actor, "weakened");
 
   // Finishing Blow (Vagabond): the block triggers when the ability targets a
   // bloodied foe — at or under 50% HP (p.104). When its text grants bonus
@@ -720,7 +725,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
           <div class="icon-roll-chips">
             <label class="icon-roll-chip"><input type="checkbox" name="vulnerable"><span>Vulnerable <small>+1</small></span></label>
             <label class="icon-roll-chip" title="${autoHalf.length ? `Applied automatically on Apply for ${esc(autoHalf.join(", "))} — tick only for a target WITHOUT the status` : "Half damage. Tick for a target in cover / with resistance that has no status set; otherwise it is applied automatically on Apply"}"><input type="checkbox" name="resistance"><span>Resistance / Cover <small>½${autoHalf.length ? " · auto on Apply" : ""}</small></span></label>
-            <label class="icon-roll-chip"><input type="checkbox" name="weakened"><span>Weakened <small>−2</small></span></label>
+            <label class="icon-roll-chip"><input type="checkbox" name="weakened"><span>Weakened <small>${attackerWeak ? "−2 · from your Weakened status" : "−2"}</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Pierce (p.104): damage cannot be reduced by armor or weakened."><input type="checkbox" name="pierce"><span>Pierce <small>no armor</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Divine (p.104): damage cannot be reduced, mitigated or negated in any way except immunity — ignores armor, weakened, resistance and defiance, and bypasses vigor."><input type="checkbox" name="divine"><span>Divine <small>nothing reduces it</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="True Strike (p.104): ignores dodge, blind, evasion and stealth. On the damage card it stops Dodge cancelling a Miss / Area result."><input type="checkbox" name="trueStrike" ${ignores.trueStrike ? "checked" : ""}><span>True Strike <small>${ignores.trueStrike ? esc(whyTick(ignores.trueStrike, "True Strike")) : "ignores Dodge"}</small></span></label>
@@ -798,6 +803,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
+      if (f.elements.weakened) f.elements.weakened.checked = attackerWeak && type !== "piercing" && type !== "divine";
       const chunk = outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
       // "2 unerring damage" in the chosen outcome's text (Astral Chain's Mark
@@ -884,6 +890,8 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
     }
     syncComboChips();
     syncType();
+    // A dialog reopened by "Reroll (same use)" keeps the Weakened choice made before.
+    if (prev && f.elements.weakened) f.elements.weakened.checked = !!prev.weakened;
     update();
   });
 

@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P24 — Weakened si spunta da solo nella finestra del danno (19 ottobre 2026, versione 1.15.254)
+
+Setup: solo codice (F5 basta). Un PG con lo status Weakened e un foe bersagliato.
+
+- [ ] PG Weakened, tira il danno di un'abilità normale → nella finestra il chip "Weakened" è già spuntato con la
+      scritta "−2 · from your Weakened status"; tirando, la card mostra il −2.
+- [ ] Toglilo a mano e tira → il −2 non viene applicato.
+- [ ] PG Weakened con un'abilità (o un esito) che fa danno piercing o divine → il chip "Weakened" resta vuoto.
+- [ ] PG senza Weakened → il chip è vuoto e la scritta è solo "−2", come prima.
+- [ ] Un foe con Weakened che tira il danno dalla sua scheda → il chip è spuntato.
+
 ## Esito 18 ottobre, P23 — Ogni Salt Sprite del Geyser ha i suoi HP (19 ottobre 2026, versione 1.15.253)
 
 Setup: solo codice (F5 basta). Un PG con un'abilità che crea un Geyser con Salt Sprite (p.232), in combat.

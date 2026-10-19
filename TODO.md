@@ -124,10 +124,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       Domanda per Edoardo: vuoi i summon scollegati (HP separati per ogni copia, come dice il manuale) anche se la
       sezione "Summons" della scheda del PG va rifatta perché elenchi i token sulla mappa con i loro HP (lavoro M),
       oppure li lasciamo collegati e correggo solo il Geyser perché crei un attore nuovo per ogni Salt Sprite?
-- [ ] **P24 (dai Dubbi, deciso col manuale)** — Weakened: il chip "Weakened −2" nella finestra del danno non si spunta
+- [x] **P24 (dai Dubbi, deciso col manuale)** — Weakened: il chip "Weakened −2" nella finestra del danno non si spunta
       da solo quando chi tira ha lo status. Manuale p.117: "Weakened — All damage dealt reduced by 2"; p.205: Pierce
       "Ignores armor, weak, and vigor". Spuntarlo in automatico quando l'attaccante è weakened (non quando il danno è
       pierce), lasciandolo togliere a mano. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.254)
 - [ ] **P25 (dai Dubbi, deciso col manuale)** — Refresh Riposte: il bottone sulla card del danno compare anche quando
       l'alleato colpito non è adiacente al Knave. Riposte p.142-143: "Refresh this stance when a foe damages you or an
       adjacent ally with an ability". Mostrare il bottone solo sulla riga del Knave o di un alleato adiacente a lui. S.

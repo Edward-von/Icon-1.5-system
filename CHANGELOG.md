@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Weakened si spunta da solo nella finestra del danno (versione 1.15.254)
+
+### Esito del playtest del 18 ottobre, P24
+
+- **Weakened**: nella finestra del danno il chip "Weakened −2" restava sempre vuoto, anche quando chi tirava aveva lo
+  status, e bisognava ricordarsi di spuntarlo → la finestra non guardava gli status dell'attaccante per questo chip →
+  ora si spunta da solo quando l'attaccante è Weakened ("All damage dealt reduced by 2", p.117) e la scritta dice
+  "from your Weakened status"; resta vuoto quando il danno scelto è Pierce ("Ignores armor, weak, and vigor", p.205) o
+  Divine. Si può sempre togliere a mano; cambiando esito (Hit / Area / …) torna al valore automatico, come Unerring.
+  Con "Reroll (same use)" resta la scelta fatta prima.
+
 ## 19 ottobre 2026 — Ogni Salt Sprite del Geyser ha i suoi HP (versione 1.15.253)
 
 ### Esito del playtest del 18 ottobre, P23
