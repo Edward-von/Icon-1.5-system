@@ -557,15 +557,15 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Mendicant — Sealer
 
-- [ ] **Blessing of War** (tratto Sealer, p.191) — cosa controllare: casella Exceed col suo nome, vuota, con la frase del libro [1.15.212]
-- [ ] **God Hand** (Sealer, p.192) — cosa controllare: talenti sulla card d'attacco; con la mastery scelta Devil Hand / Fists of Heaven And Hell; aree "(target)" [1.15.18, 32, 51]
-- [ ] **Matsuri** (Sealer, p.192) — cosa controllare: bottone "Large Blast (target)"; casella BLOOD FESTIVAL spuntata al primo uso; blocco "BLOOD FESTIVAL (this use)" e +1 dado bonus [1.15.51, 189, 212, 213]
-- [ ] **Spirit Shrine** (Sealer, p.192-193) — cosa controllare: oggetto Shrine con Aura 2 e righe per altezza; bottone chat di Spirit Patronage; "Grace of the Spirits" sulla card del danno rende l'alleato immune [1.15.35, 62, 65, 66, 151]
-- [ ] **Grand Banishment** (Sealer, p.193) — cosa controllare: bottone Track target [1.15.34]
-- [ ] **Divine Aegis** (Sealer, p.193) — cosa controllare: il Talent II dà "Gain Defiance" all'alleato [1.15.43]
-- [ ] **Open the Gates** (testo; Sealer, p.194) — cosa controllare: prima riga **Special** ("This attack gains +1 boon, cannot miss…"), poi Effect, Hit, Miss, Exceed, anche in Center the Temple; casella Exceed al primo uso; BURIAL FIST dal round 4 con il dado bonus. Migrazione 29 [1.15.63, 72, 189, 212, 213, 220]
-- [ ] **Justice** (Sealer, p.194) — cosa controllare: con la mastery scelta Judgement / Gran Judicata; niente "Hit (no damage)" [1.15.32, 47, 62]
-- [ ] **Passage to the Afterlife** (Limit Break Sealer, p.191) — cosa controllare: Damage Roll con Hit ×3 e sotto Other l'Exceed e i 2 divine per alleato [1.15.37]
+- [x] **Blessing of War** (tratto Sealer, p.191) — cosa controllare: casella Exceed col suo nome, vuota, con la frase del libro [1.15.212] **(finestra d'attacco di Matsuri: casella "Blessing of War triggers all exceed effects · If they consume 3 blessings…" vuota)**
+- [ ] **God Hand** (Sealer, p.192) — cosa controllare: talenti sulla card d'attacco; con la mastery scelta Devil Hand / Fists of Heaven And Hell; aree "(target)" [1.15.18, 32, 51] **(bottone "Medium Blast (target)"; con mastery e combo token l'attacco chiede "Devil Hand / Fists Of Heaven And Hell"; Devil Hand → card "Devil Hand (God Hand combo)" con +1 boon, Teleport 1 ed esplosione. NON VA: la card offre Inflict "Sealed" con la frase della base "Seal your foe, then bless…", che Devil Hand non ha (p.192) — P12. Talenti sulla card non riprovati)**
+- [x] **Matsuri** (Sealer, p.192) — cosa controllare: bottone "Large Blast (target)"; casella BLOOD FESTIVAL spuntata al primo uso; blocco "BLOOD FESTIVAL (this use)" e +1 dado bonus [1.15.51, 189, 212, 213] **(bottone "Large Blast (target)"; casella BLOOD FESTIVAL, blocco "this use" e dado bonus già provati nelle sezioni 1.15.189, 212, 213)**
+- [x] **Spirit Shrine** (Sealer, p.192-193) — cosa controllare: oggetto Shrine con Aura 2 e righe per altezza; bottone chat di Spirit Patronage; "Grace of the Spirits" sulla card del danno rende l'alleato immune [1.15.35, 62, 65, 66, 151] **(chip "Shrine · H1"; fumetto della mastery → card "Mastery: Spirit Patronage" con Grace of the Spirits; oggetto con Aura 2 e righe per altezza e Grace sulla card del danno già provati nelle sezioni 1.15.66 e 151)**
+- [x] **Grand Banishment** (Sealer, p.193) — cosa controllare: bottone Track target [1.15.34] **(Track target presente)**
+- [x] **Divine Aegis** (Sealer, p.193) — cosa controllare: il Talent II dà "Gain Defiance" all'alleato [1.15.43] **(Talent II: Show in Chat con "Defiance" tra i Gain per gli alleati, insieme a Unstoppable e Resistance)**
+- [x] **Open the Gates** (testo; Sealer, p.194) — cosa controllare: prima riga **Special** ("This attack gains +1 boon, cannot miss…"), poi Effect, Hit, Miss, Exceed, anche in Center the Temple; casella Exceed al primo uso; BURIAL FIST dal round 4 con il dado bonus. Migrazione 29 [1.15.63, 72, 189, 212, 213, 220] **(già provato nelle sezioni 1.15.72, 189, 212, 213: Special in cima anche in Center the Temple, casella al primo uso, BURIAL FIST dal round 4 col dado bonus)**
+- [x] **Justice** (Sealer, p.194) — cosa controllare: con la mastery scelta Judgement / Gran Judicata; niente "Hit (no damage)" [1.15.32, 47, 62] **(con la mastery e il combo token Show in Chat chiede "Judgement / Gran Judicata"; Gran Judicata posta "Gran Judicata (Justice combo)"; niente Hit già provato nella sezione 1.15.47)**
+- [x] **Passage to the Afterlife** (Limit Break Sealer, p.191) — cosa controllare: Damage Roll con Hit ×3 e sotto Other l'Exceed e i 2 divine per alleato [1.15.37] **(Damage Roll: Hit/Crit/Miss [D]+fray; sotto Other "Limit Break 1[d6] + fray 4 divine ×2" (Exceed) e "Limit Break 2 flat divine")**
 
 #### Mendicant — Seer
 
@@ -778,6 +778,10 @@ Da compilare durante il playtest.
   nemico dal token si invertono: con PT S3 ostile la mote di Symphony fatta esplodere da un foe dava "Bless Knuckle"
   e "can fly 1" invece di "Fray to foes" e "Pit under". `IconActor._preCreate` imposta `actorLink` ma non la
   disposition dei PG.
+- **Sezione 3 (19 ottobre) — Devil Hand offre "Sealed".** God Hand con mastery e combo token, scelta Devil Hand,
+  attacco su Knuckle: la card "Devil Hand (God Hand combo)" ha nel riquadro Inflict il bottone Sealed con la frase
+  della base ("Seal your foe, then bless yourself or an ally in range 2."), ma l'Effect di Devil Hand è solo
+  l'esplosione (p.192). La riga 6368 del test della 1.16.6 si aspettava il contrario.
 
 ### Dubbi
 
@@ -6365,7 +6369,7 @@ Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-te
 
 - [ ] **God Hand base**: PG Mendicant con God Hand, senza combo token → attacco → nella card c'è il bottone Inflict
       **Sealed**; passando il mouse si legge la frase del manuale ("Seal your foe, then bless…").
-- [ ] **Devil Hand**: con il combo token → attacco con God Hand → la card NON offre Sealed (la combo riscrive l'Effect).
+- [ ] **Devil Hand**: con il combo token → attacco con God Hand → la card NON offre Sealed (la combo riscrive l'Effect). **(19 ottobre, sezione 3: NON VA, offre Sealed — P12)**
 - [ ] **Low Blow / The Hook**: con il combo token la card offre ancora Hatred e Slashed della versione base.
 - [ ] **Umbra / Penumbra**: con il combo token la card offre Blind; senza combo token come prima.
 - [ ] **Revenge / Indignation**: con il combo token niente Unstoppable, resta Counter.

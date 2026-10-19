@@ -46,6 +46,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       automazioni amico / nemico li trattano come foe (es. la mote di Symphony benedice il foe che la fa esplodere).
       Impostare `prototypeToken.disposition = 1` per il tipo `icon` in `IconActor._preCreate` e correggere con una
       migrazione i PG esistenti (attenzione: qualche GM potrebbe averlo cambiato apposta). S.
+- [ ] **P12** — God Hand con la combo Devil Hand (scelta dalla mastery): la card d'attacco offre ancora "Sealed" preso
+      dall'Effect della base ("Seal your foe…"), che Devil Hand sostituisce (p.192). S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
