@@ -26,7 +26,7 @@ Setup: solo codice (F5 basta). Compendio Foe Abilities.
 
 - [x] "Decurion — Discipline" (interrupt) aperta dal compendio → Chat → card con "Interrupt 1" e la riga Trigger. **(19 ottobre sera: "Decurion — Discipline · Interrupt 1", testo e trigger)**
 - [x] "Centurion — Cannon Strike" (round action) → Chat → card con "Round Action". **(sì)**
-- [ ] Un interrupt di un foe copiato negli Items del mondo, o sulla scheda di un foe → stessa card, firmata dal foe. **(non provato)**
+- [x] Un interrupt di un foe copiato negli Items del mondo, o sulla scheda di un foe → stessa card, firmata dal foe. **(19 ottobre sera: copia nel mondo → card "Interrupt 1" firmata dal GM; sulla scheda di un foe di prova → card col nome del foe, firmata dal foe)**
 
 ## Prove con due client (19 ottobre 2026 sera, versione 1.15.264)
 
@@ -409,8 +409,8 @@ come bersaglio (es. il Mechanist); per l'ultima casella un foe con un'azione d'a
       del danno NON ha il blocco; la prima lo tiene. **(la seconda card del danno non ha il blocco)**
 - [ ] Attacco d'area con bersaglio d'attacco (es. Blackstar): le due card del danno ("— Hit" e "— Area damage")
       hanno entrambe il blocco Inflict. **(non provato per mancanza di tempo)**
-- [ ] Foe: attacco con un'azione che infligge uno status e danno (blocco presente); poi "Show in Chat" della stessa
-      azione e danno → niente blocco. **(non provato: l'azione d'attacco del Knuckle (Overpower) non infligge status)**
+- [x] Foe: attacco con un'azione che infligge uno status e danno (blocco presente); poi "Show in Chat" della stessa
+      azione e danno → niente blocco. **(19 ottobre sera, Pepperbox "Riddle" (Dazed) su TEST Fool: attacco → card con Dazed; Damage → la card del danno ha il blocco Inflict con Dazed; poi Show in Chat di Riddle e Damage → la nuova card del danno senza blocco)**
 
 ## Esito 18 ottobre, P5 — Tsunami: chi viene trascinato resta dentro (19 ottobre 2026, versione 1.15.237)
 
