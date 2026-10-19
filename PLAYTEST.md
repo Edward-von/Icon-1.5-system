@@ -2852,7 +2852,7 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [x] Righteous Disdain postato dalla scheda: nell'Heroic c'è la chip "Gain vigor 4". **(sezione 3: chip promemoria presente)**
-- [ ] Un'abilità con "gain 2 vigor" ha ancora la sua chip, come prima.
+- [x] Un'abilità con "gain 2 vigor" ha ancora la sua chip, come prima. **(Gates of Hell col Talent I, Show in Chat: chip "Gain 2 vigor")**
 
 ## Emerso R35 — Niente interrupt dalla scheda se Stunned (17 ottobre 2026, versione 1.15.204)
 
@@ -2874,8 +2874,8 @@ Setup: solo codice (F5 basta).
 - [x] Clic su una casella spenta: gli usi tornano. Clic sulla prima casella accesa: scendono a 0.
 - [ ] Bottone interrupt del foe sulla card del danno: dopo il clic la scheda del foe scende di un uso. **(non provato)**
 - [x] All'inizio del turno del foe le caselline tornano tutte accese.
-- [ ] Scheda di un legend: nella riga dell'interrupt c'è il bottone chat, spende un uso e le caselline tornano accese
-      all'inizio del round. **(non provato)**
+- [x] Scheda di un legend: nella riga dell'interrupt c'è il bottone chat, spende un uso e le caselline tornano accese
+      all'inizio del round. **(Violence Demon importato: il fumetto posta la card e gli usi passano a {0:1}; il ritorno a inizio round non provato)**
 
 ## Emerso R40 — Assault Wave chiede quanti minion contano (17 ottobre 2026, versione 1.15.202)
 
@@ -2982,8 +2982,8 @@ Setup: solo codice (F5 basta).
       combattimento. Dopo il bottone "spend 2 Aether" sulla scheda torna 1/1. **(resta spento; ricarica con 2 Aether non provata)**
 - [x] PG in stance Endless Battlement, un foe attacca un alleato: il bottone Heroic Intervention compare sotto la card
       dell'attacco per il giocatore che ha quel PG (non per gli altri). **(non provato)**
-- [ ] Foe con interrupt "is targeted by an attack" (es. Violence Demon): un PG lo attacca e solo il GM vede il bottone
-      sotto la card. L'uso si spunta anche sulla scheda del foe. **(non provato)**
+- [x] Foe con interrupt "is targeted by an attack" (es. Violence Demon): un PG lo attacca e solo il GM vede il bottone
+      sotto la card. L'uso si spunta anche sulla scheda del foe. **(sezione 3: PT S3 attacca il Violence Demon, sotto la card il GM vede "Blade Parry · … 2/2". Vista dal giocatore e spunta sulla scheda non riprovate)**
 - [ ] Riposte / Dire Parry: un foe attacca un alleato e il bottone compare sulla card dell'attacco. Resta anche sulla
       card del danno come prima. **(non provato)**
 - [ ] Attacco ad area con più bersagli: i bottoni compaiono solo per il bersaglio dell'attacco scelto nella finestra. **(non provato)**
@@ -3200,11 +3200,11 @@ Setup: solo codice (F5 basta).
       nome, "2/2" e due caselline accese. **(pallini sì; l'anteprima con nome e '2/2' non guardata)**
 - [x] Clic su una casellina accesa: gli usi scendono fino a lei (es. 2/2, clic sulla seconda → 1/2). Clic su una
       spenta: gli usi tornano fino a lei.
-- [ ] Usare l'interrupt dal bottone sotto una card del danno: sulla scheda il conteggio scende di 1. **(non provato)**
+- [x] Usare l'interrupt dal bottone sotto una card del danno: sulla scheda il conteggio scende di 1. **(19 ott (sezione 3): Righteous Disdain dalla card del danno → il bottone passa a 0/1 e gli usi del Demon Slayer (flag interruptUses) scendono; Dire Parry 1/1 → 0/1)**
 - [x] Abilità con un interrupt concesso nel testo (es. Chronotemper "Cheat Time — Interrupt 1"): bottone chat accanto
       al blocco → posta la card e il contatore va a 0/1; un secondo clic avvisa "no uses left" e non posta nulla. **(Cheat Time: solo con il marchio di Chronotemper in campo (senza marchio il bottone posta e non conta); col marchio 0/1 e avviso al secondo clic)**
-- [ ] Interrupt di uno stance (Riposte, Dire Parry): la riga compare solo quando lo stance è preso; con STRONG LEFT
-      mostra "banked" fino a 3. **(non provato)**
+- [x] Interrupt di uno stance (Riposte, Dire Parry): la riga compare solo quando lo stance è preso; con STRONG LEFT
+      mostra "banked" fino a 3. **(TEST Knave senza stance: sulla card del danno di Kelpie nessun Dire Parry; in stance "Dire Parry 1/1", con Strong Left "1/3 banked" fino a 3/3 (sezione 3))**
 - [x] A inizio turno del PG le caselline tornano tutte accese. **(Justice torna piena al turno del Sealer)**
 - [x] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente. **(PT Player osservatore su TEST Harvester: Fairy Ring mostra "Spirit Away 2/2" come pallini senza azione, il clic non cambia nulla)**
 
@@ -3477,9 +3477,9 @@ Setup: solo codice (F5 basta).
 - [x] Wish su un alleato: chip "Not below 1 HP (Wish)"; un danno letale lo lascia a 1 HP. **(3 HP, 5 danni → fermo a 1 (Wish))**
 - [x] Blazing Bond: senza marchio non c'è Heartfire. Col marchio compare sulla riga dell'Enochian e su quella del
       partner marcato, non su altri alleati. Apply toglie 3 in più come armatura; con pierce non li toglie. **(Heartfire col marchio: −3 come armatura; pierce non provato)**
-- [ ] Riposte in stance con Strong Left: Dire Parry mostra "1/3 banked" sulla riga dell'alleato colpito; "Refresh
-      Riposte" porta a 2/3; a inizio turno +1; non supera 3. **(non provato)**
-- [ ] Senza mastery: "Refresh Riposte" ridà l'uso di Dire Parry (0/1 → 1/1). **(non provato)**
+- [x] Riposte in stance con Strong Left: Dire Parry mostra "1/3 banked" sulla riga dell'alleato colpito; "Refresh
+      Riposte" porta a 2/3; a inizio turno +1; non supera 3. **(sezione 3: 1/3 banked, Refresh → 2/3 → 3/3 e non oltre; a inizio turno del Knave 1 → 2)**
+- [x] Senza mastery: "Refresh Riposte" ridà l'uso di Dire Parry (0/1 → 1/1). **(sezione 3: 0/1 → 1/1)**
 
 ## R35b — Righteous Disdain dalla card del danno (17 ottobre 2026, versione 1.15.150)
 
@@ -3511,7 +3511,7 @@ Setup: solo codice (F5 basta).
 - [ ] Foe con "The knight is damaged by an ability": il GM vede il bottone, che spunta lo stesso uso della scheda del
       foe. **(non provato)**
 - [x] Il GM non vede i bottoni dei PG che hanno un giocatore; il giocatore non vede quelli dei foe. **(il GM vede solo Heave-Ho / Grace (PG senza giocatore), il giocatore non vede quelli)**
-- [ ] Un interrupt della stance (Dire Parry) compare solo mentre si è in stance. **(non provato)**
+- [x] Un interrupt della stance (Dire Parry) compare solo mentre si è in stance. **(senza stance nessun Dire Parry sulla card del danno; in stance sì)**
 
 ## R36c — Carte del Seer: bersagli e area (17 ottobre 2026, versione 1.15.148)
 
@@ -4884,18 +4884,18 @@ Junk Mage, Sniper o Barkeep), e un secondo token dello stesso foe. Solo JS: F5 d
 Setup: un PG Fool con Chronotemper, un PG Wright Spellblade con Drifting Leaf, un PG con Fairy Ring (Harvester) o
 Riposte (Knave). È JS + template: F5 dopo il deploy.
 
-- [ ] **Chronotemper, intestazione**: anteprima dell'abilità nella tab Combat → il blocco Mark finisce con "…use the
+- [x] **Chronotemper, intestazione**: anteprima dell'abilità nella tab Combat → il blocco Mark finisce con "…use the
       following interrupt:" (senza "Cheat Time — Interrupt 1." appeso) e sotto c'è il blocco "Cheat Time — Interrupt 1:
-      Trigger: The start or end of any turn other than yours." con accanto il bottone col fumetto; poi Effect.
-- [ ] **Chronotemper, card**: clic sul fumetto → card "Chronotemper" con sotto "Interrupt 1: Cheat Time", badge Fool /
-      Ch / Interrupt 1, righe Trigger ed Effect; nessuna riga Mastery con la mastery bloccata.
-- [ ] **Chronotemper con la mastery**: sblocca Revolution → la stessa card ha in fondo "★ Mastery: Revolution: You can
-      take this interrupt three times a round…".
+      Trigger: The start or end of any turn other than yours." con accanto il bottone col fumetto; poi Effect. **(sezione 3: "Mark: … use the following interrupt:" e sotto il blocco "Cheat Time — Interrupt 1: Trigger: …")**
+- [x] **Chronotemper, card**: clic sul fumetto → card "Chronotemper" con sotto "Interrupt 1: Cheat Time", badge Fool /
+      Ch / Interrupt 1, righe Trigger ed Effect; nessuna riga Mastery con la mastery bloccata. **(sezione 3: card "Chronotemper Interrupt 1: Cheat Time", badge Fool / Ch 3 / Interrupt 1, Trigger ed Effect)**
+- [x] **Chronotemper con la mastery**: sblocca Revolution → la stessa card ha in fondo "★ Mastery: Revolution: You can
+      take this interrupt three times a round…". **(sezione 3: in fondo "★ Mastery: Revolution: You can take this interrupt three times a round…")**
 - [ ] **Drifting Leaf**: fumetto accanto a "LEAF ON THE WIND — Interrupt 2" → card con sotto "Interrupt 2: Leaf on the
       Wind", Trigger, Effect, "Infuse 3 or Slay: PHANTOM BLADE — …"; con il talento I scelto c'è anche "Talent I: …its
       interrupt deals 1 piercing damage twice…", con la mastery sbloccata "★ Mastery: GREAT CYCLONE …".
-- [ ] **Fairy Ring / Riposte**: il blocco "Spirit Away — Interrupt 2" (o "Dire Parry — Interrupt 1") ha il fumetto e
-      la card ha Trigger ed Effect giusti; Riposte con la mastery aggiunge "Strong Left".
+- [x] **Fairy Ring / Riposte**: il blocco "Spirit Away — Interrupt 2" (o "Dire Parry — Interrupt 1") ha il fumetto e
+      la card ha Trigger ed Effect giusti; Riposte con la mastery aggiunge "Strong Left". **(sezione 3: blocchi "Spirit Away — Interrupt 2" e "Dire Parry — Interrupt 1" con fumetto, Trigger ed Effect giusti)**
 - [ ] **Show in Chat invariato**: Show in Chat di Chronotemper → stessi blocchi della scheda ("Cheat Time — Interrupt
       1: Trigger: …"), nessun bottone fumetto nella card.
 - [ ] **Abilità senza interrupt concesso**: le altre abilità non hanno fumetti nuovi; i fumetti di mastery e talento di
@@ -4905,28 +4905,28 @@ Riposte (Knave). È JS + template: F5 dopo il deploy.
 Setup: un PG Wright Geomancer con Bio (mastery sbloccata) e Quaking Palm, un Wright Enochian con Pyre e Lance (mastery
 sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 dopo il deploy.
 
-- [ ] **Bio senza niente armato**: Show in Chat → la card ha Effect / Hit / Miss or Area / Charge, poi due righe blu
+- [x] **Bio senza niente armato**: Show in Chat → la card ha Effect / Hit / Miss or Area / Charge, poi due righe blu
       chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO"; NON c'è più la riga "★ Mastery" col testo di Magnabio.
-      Clic su una riga → si apre e mostra il suo testo; riclic → si chiude.
+      Clic su una riga → si apre e mostra il suo testo; riclic → si chiude. **(due righe chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO", nessuna riga "★ Mastery" col testo di Magnabio)**
 - [ ] **MAGNABIO aperta**: dentro c'è "2 actions, Attack, Range 8, Large Blast." in cima, poi blocchi separati Hit /
       Miss / Area / Terrain Effect, e "Benefits from Bio talents." in corsivo in fondo.
-- [ ] **Bio con BIOTIC armato**: Infuse 3 sulla scheda → nel messaggio "infuses" il testo è etichettato come una card.
+- [x] **Bio con BIOTIC armato**: Infuse 3 sulla scheda → nel messaggio "infuses" il testo è etichettato come una card.
       Show in Chat → titolo "Bio — BIOTIC", in cima un blocco aperto "Infused — Infuse 3: BIOTIC", sotto i blocchi
-      della base aperti, in fondo la riga chiusa di MAGNABIO.
-- [ ] **Bio con MAGNABIO armato**: Infuse 6 → Show in Chat → titolo "Bio — MAGNABIO", blocco aperto della versione con
-      Hit / Miss / Area / Terrain Effect; la base è chiusa in una riga "Base version: Bio"; BIOTIC chiusa.
-- [ ] **Attacco con MAGNABIO armato**: Attack Roll di Bio sul foe → titolo "Bio — MAGNABIO", Hit "2[D]+fray." e Miss
+      della base aperti, in fondo la riga chiusa di MAGNABIO. **(messaggio "TEST Geomancer infuses Bio — BIOTIC …"; Show in Chat: titolo "Bio — BIOTIC", blocco aperto "Infused — Infuse 3: BIOTIC", MAGNABIO chiusa)**
+- [x] **Bio con MAGNABIO armato**: Infuse 6 → Show in Chat → titolo "Bio — MAGNABIO", blocco aperto della versione con
+      Hit / Miss / Area / Terrain Effect; la base è chiusa in una riga "Base version: Bio"; BIOTIC chiusa. **(titolo "Bio — MAGNABIO", blocco aperto "Infused — Infuse 6 (Mastery): MAGNABIO 2 actions, Attack, Range 8…", chiuse "Base version: Bio" e "Infuse 3: BIOTIC")**
+- [x] **Attacco con MAGNABIO armato**: Attack Roll di Bio sul foe → titolo "Bio — MAGNABIO", Hit "2[D]+fray." e Miss
       "[D]+fray." (non quelli della base), sopra righe blu con l'icona della bacchetta (riga del costo, Area, Terrain
-      Effect, "Benefits from Bio talents.").
-- [ ] **Attacco senza niente armato**: Attack Roll di Bio → card come prima (Hit / Miss della base, nessuna riga blu).
-- [ ] **Pyre / Magnapyre**: con la mastery, Show in Chat di Pyre senza armare → righe chiuse PYROTIC e MAGNAPYRE;
-      aperta MAGNAPYRE mostra due "Effect:" separati e "Comeback or Exceed:" come blocchi propri.
-- [ ] **Lance / Great Spirit Lance**: Show in Chat → riga chiusa "Infuse 6 (Mastery): GREAT SPIRIT LANCE" con Hit / Miss /
-      Area etichettati.
-- [ ] **Quaking Palm**: Show in Chat → il "Collide: Foe must save or be stunned." non è più tra i blocchi della base ma
-      dentro la riga chiusa "Infuse 3: PRIMAL BURST".
-- [ ] **Tsunami**: Show in Chat → riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 funziona come
-      in 1.15.60 (spende e posta subito).
+      Effect, "Benefits from Bio talents."). **(card "Bio — MAGNABIO" con Hit 2d6 + fray e Miss d6 + fray. Nota: la testata dice ancora "1 Action … Range 8 Small Blast" della base)**
+- [ ] **Attacco senza niente armato**: Attack Roll di Bio → card come prima (Hit / Miss della base, nessuna riga blu). **(card "Bio" con Hit d6 + fray, ma NON VA: nel riquadro Inflict ci sono anche "Shattered [Infuse 3]" (BIOTIC) e "Shattered+ [Terrain Effect]" (MAGNABIO), versioni non armate — P17)**
+- [x] **Pyre / Magnapyre**: con la mastery, Show in Chat di Pyre senza armare → righe chiuse PYROTIC e MAGNAPYRE;
+      aperta MAGNAPYRE mostra due "Effect:" separati e "Comeback or Exceed:" come blocchi propri. **(sezione 3: righe chiuse "Infuse 3: PYROTIC" e "Infuse 6 (Mastery): MAGNAPYRE")**
+- [x] **Lance / Great Spirit Lance**: Show in Chat → riga chiusa "Infuse 6 (Mastery): GREAT SPIRIT LANCE" con Hit / Miss /
+      Area etichettati. **(sezione 3: riga chiusa "Infuse 6 (Mastery): GREAT SPIRIT LANCE 2 actions, Attack, Line 10, Width 3. Hit: 2[D]+fray…")**
+- [x] **Quaking Palm**: Show in Chat → il "Collide: Foe must save or be stunned." non è più tra i blocchi della base ma
+      dentro la riga chiusa "Infuse 3: PRIMAL BURST". **(sezione 3: il Collide sta dentro la riga chiusa "Infuse 3: PRIMAL BURST")**
+- [x] **Tsunami**: Show in Chat → riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 funziona come
+      in 1.15.60 (spende e posta subito). **(riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 già provato nella sezione 1.15.60)**
 - [ ] **Abilità senza Infuse**: Show in Chat di un'abilità qualsiasi di un altro job (e di una con combo) → card
       identica a prima.
 - [ ] **Tema chiaro**: le righe blu e il blocco "Infused" si leggono anche in tema chiaro.

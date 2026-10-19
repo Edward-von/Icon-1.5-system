@@ -58,6 +58,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       richiesta con le istanze, o applicarle in fila. S-M.
 - [ ] **P16** — Track target ripetuto sullo stesso foe (Grand Banishment, da GM o giocatore): ogni clic aggiunge un altro
       chip "Janissary ✕" invece di lasciare quello che c'è (su un foe diverso il segno passa giusto). S.
+- [ ] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
+      versioni non armate ("Shattered" di BIOTIC, "Shattered+" del Terrain Effect di MAGNABIO). Con l'infusione armata
+      la card è giusta. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
