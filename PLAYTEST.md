@@ -4063,12 +4063,12 @@ Setup: solo codice (F5 basta).
 - [x] "From the last space": sono evidenziate solo le caselle libere accanto all'ultimo spazio, tranne quella che
       prosegue nel verso dell'ultimo passo dell'arco; il secondo arco si dipinge per 5 caselle (Invio o tasto destro
       lo chiudono prima). **(From the last space: evidenziate le due caselle libere ai lati dell'ultimo spazio (non quella che prosegue); il secondo arco si dipinge per 5 caselle.)**
-- [ ] "From the first space": stessa cosa partendo dal primo spazio.
-- [ ] Il secondo arco non può passare su caselle del primo arco né sulle caselle del personaggio (avviso).
+- [x] "From the first space": stessa cosa partendo dal primo spazio. **(From the first space: evidenziate le caselle libere accanto al primo spazio (sopra e a sinistra, non quella del personaggio né quella dell'arco); secondo arco di 5 caselle → un solo template "Arc 5 + Arc 5" di 10 caselle)**
+- [x] Il secondo arco non può passare su caselle del primo arco né sulle caselle del personaggio (avviso). **(clic su una casella del primo arco e su quella della Spellblade → avviso, niente dipinto. Nota: il testo dell'avviso è generico ("The first space of the arc must be in range."))**
 - [x] Il risultato è un solo template "Arc 5 + Arc 5"; i bersagli presi sono quelli di entrambi gli archi. **(Un solo template "Arc 5 + Arc 5" (10 caselle). Nessun bersaglio nell'area.)**
-- [ ] Personaggio non bloodied: la finestra dice che Comeback non si applica e il pulsante predefinito è "No
-      extension"; scelto quello, resta solo il primo arco.
-- [ ] Esc o tasto destro durante il secondo arco: resta il primo arco e l'attacco va avanti.
+- [x] Personaggio non bloodied: la finestra dice che Comeback non si applica e il pulsante predefinito è "No
+      extension"; scelto quello, resta solo il primo arco. **(Spellblade non bloodied: "Comeback: you are not bloodied, so this doesn't apply right now.", pulsante predefinito "No extension"; scelto quello resta solo l'Arc 5)**
+- [x] Esc o tasto destro durante il secondo arco: resta il primo arco e l'attacco va avanti. **(tasto destro all'inizio del secondo arco: resta il template del primo Arc 5, il piazzamento si chiude (Esc non provato, per non aprire il menu))**
 - [x] Senza mastery (Line 3): l'estensione Line 3 di R47b funziona ancora come prima. **(Senza mastery: estensione Line 3 come sopra (L4517-L4528).)**
 - [x] Con la mastery ma senza Talent II: l'Arc 5 si piazza e nessuna finestra di estensione compare. **(Mastery senza Talent II: dopo le 5 caselle nessuna finestra, template "Arc 5".)**
 
