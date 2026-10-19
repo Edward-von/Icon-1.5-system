@@ -17,18 +17,18 @@ Setup: solo codice (F5 basta). Al primo avvio la migrazione allo schema 38 gira 
 Servono Eclipse e Raging Wolf (abilità di capitolo 2) e un tratto di capitolo 3 (es. Umbral Soul o Deep Stealth),
 dal compendio Jobs.
 
-- [ ] Scheda di Eclipse aperta dal compendio Jobs (o una copia nella barra Items): il menu Chapter mostra
-      "Chapter 2", non "Chapter 1".
-- [ ] Copia di Raging Wolf su un personaggio: aprire la scheda dell'abilità, cambiare il nome di una lettera e
-      rimetterlo, chiudere → il capitolo resta 2 (riaprendo, il menu dice ancora "Chapter 2").
-- [ ] Tratto di capitolo 3 (Umbral Soul o Deep Stealth): la scheda mostra "Chapter 3" e salvarla non lo cambia.
-- [ ] Cambiare il capitolo dal menu (es. Eclipse da 2 a 3, poi di nuovo 2) → il valore scelto resta dopo la
-      chiusura e la riapertura della scheda.
-- [ ] Migrazione: una copia rovinata prima del fix (abilità del compendio di capitolo 2/3 rimasta a capitolo 1 su
+- [x] Scheda di Eclipse aperta dal compendio Jobs (o una copia nella barra Items): il menu Chapter mostra
+      "Chapter 2", non "Chapter 1". **(19 ottobre: Eclipse dal compendio, menu "Chapter 2")**
+- [x] Copia di Raging Wolf su un personaggio: aprire la scheda dell'abilità, cambiare il nome di una lettera e
+      rimetterlo, chiudere → il capitolo resta 2 (riaprendo, il menu dice ancora "Chapter 2"). **(PT Testi: la copia rovinata nel playtest era già tornata a 2 con la migrazione 38; scheda salvata → resta 2, il menu dice "Chapter 2")**
+- [x] Tratto di capitolo 3 (Umbral Soul o Deep Stealth): la scheda mostra "Chapter 3" e salvarla non lo cambia. **(provato con Bright Soul (capitolo 3): "Chapter 3", salvato resta 3)**
+- [x] Cambiare il capitolo dal menu (es. Eclipse da 2 a 3, poi di nuovo 2) → il valore scelto resta dopo la
+      chiusura e la riapertura della scheda. **(Raging Wolf 2 → 3 → 2, ogni volta il valore resta dopo chiusura e riapertura)**
+- [x] Migrazione: una copia rovinata prima del fix (abilità del compendio di capitolo 2/3 rimasta a capitolo 1 su
       un personaggio o nella barra Items) dopo l'aggiornamento torna al capitolo del compendio. Per prepararne una:
       prima dell'aggiornamento, oppure rimettendo a mano `game.settings.set("icon-system","schemaVersion",37)` e
-      portando a 1 il capitolo di una copia, poi F5.
-- [ ] La migrazione non tocca un'abilità creata a mano (nome che non c'è nel compendio) lasciata a capitolo 1.
+      portando a 1 il capitolo di una copia, poi F5. **(Raging Wolf di PT Testi messo a capitolo 1 e schema riportato a 37: dopo F5 schema 38 e Raging Wolf di nuovo a 2)**
+- [x] La migrazione non tocca un'abilità creata a mano (nome che non c'è nel compendio) lasciata a capitolo 1. **("PT FIX handmade" a capitolo 1 resta 1 (poi cancellata))**
 
 ## Esito 18 ottobre, P8 e P14 — Tag leggibili e spiegati sulle Legend e nelle card dei foe (19 ottobre 2026, versione 1.15.240)
 
