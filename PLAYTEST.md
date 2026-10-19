@@ -3261,7 +3261,7 @@ Setup: solo codice (F5 basta).
 - [x] Tre caselle, di cui una su un personaggio (Talent I): Large Blast su tutte e tre; "Stun the centres" mette
       Stunned; il mark sul personaggio finisce. **(Due caselle + una sul Janissary (Talent I): "3 spaces active … Large Blasts, +4 … stunned"; gamble 1 → "Large Blast × 3", "5 damage to all (8)", "Stun the centres (1)" dà Stunned al Janissary; "The mark Polaris on Janissary ends.")**
 - [x] A fine turno del creatore non esce nessuna card Polaris. **(Una casella Polaris, fine turno di Ann: nessuna card Polaris (solo le card Skein).)**
-- [ ] Talent II: "difficult under the centres"; con risultato 4 o più compare anche "pits instead".
+- [x] Talent II: "difficult under the centres"; con risultato 4 o più compare anche "pits instead". **(Ann con Polaris Talent II, uno spazio Polaris, Gamble (risultato 5): card con "Talent II: difficult under the centres" e "Talent II: pits instead". Risultato sotto 4 non provato)**
 - [x] Implode su una casella: a inizio turno del creatore "Activate" fa la Large Blast, poi "Failed save: stun…" per
       chi è al centro e il pit del Talent II. Con Waking Void su un personaggio non esce la card doppia. **(Implode sulla casella del Knuckle, combattimento di prova: a inizio turno dell'Enochian "Start of turn — Implode … Activate / Remove"; Activate → "Large Blast (around the space)", Shove per ciascuno e "Failed save: stun Knuckle". Talent II e Waking Void doppia non provati.)**
 
@@ -3602,7 +3602,7 @@ Setup: solo codice (F5 basta).
       spazi. In "% Max HP" le fasce preselezionate sono 100% / 50% / 25%, e accanto a ogni nome c'è "N on the line". **(Line 5 dal bottone del Demon Slayer, foe a 1, 3, 5 caselle: "1 on the line / 3 on the line / 5 on the line", fasce preselezionate 100% / 50% / 25%.)**
 - [x] Un bersaglio fuori dalla linea mostra "not on the line" e resta sulla prima opzione; cambiarla a mano funziona e
       il danno applicato è quello scelto. **(Warrior fuori: "not on the line", prima opzione; cambiato a mano a 25% prende 10.)**
-- [ ] Linea più larga (width 2-3): chi sta nelle colonne di lato alla k-esima casella prende la fascia di distanza k.
+- [x] Linea più larga (width 2-3): chi sta nelle colonne di lato alla k-esima casella prende la fascia di distanza k. **(controllato con la funzione che misura la distanza (distanceInArea), non dalla finestra: linea larga 3 dal Knave, Mechanist alla casella 1 → 1, Boulder nella colonna di lato alla casella 2 → 2, Bastion alla casella 3 → 3)**
 - [x] Un Legend nella linea: niente indicazione di distanza, resta "Legend: 25%". **(Master nella lista: "Legend: 25% → 25", nessuna distanza.)**
 - [x] Senza linea sulla mappa il dialog è come prima. **(Senza linea il dialog è come prima (nessuna indicazione).)**
 - [x] Gigantas Crusher (failed / successful save): il dialog non cambia. **(Il dialog di Gigantas Crusher è invariato.)**
@@ -5633,10 +5633,10 @@ tab Combat.
 
 - [x] **Bottone senza combo**: senza combo token, Sow ha il bottone area "Arc 4". **(Sow senza combo: "Arc 4".)**
 - [x] **Bottone con REAP**: prendere il combo token (Sow passa alla versione REAP) → il bottone "Arc 4" c'è ancora. **(Con il combo token (Reap): "Arc 4" c'è ancora.)**
-- [ ] **Arco dal bersaglio**: bersagliare (T) un solo foe a 4 spazi → premere "Arc 4" → il primo spazio si può
+- [x] **Arco dal bersaglio**: bersagliare (T) un solo foe a 4 spazi → premere "Arc 4" → il primo spazio si può
       mettere solo accanto al foe bersagliato (anche dalla parte opposta, a 5 spazi dall'Harvester); lo spazio del
       foe e quello dell'Harvester non si possono dipingere; dopo 4 spazi l'arco si chiude e i bersagli diventano i
-      token dentro l'arco.
+      token dentro l'arco. **(TEST Harvester (mastery sbloccata per la prova), bersaglio la Plant a 4 spazi: primo spazio accanto all'Harvester, lo spazio della Plant e quello dell'Harvester → avviso; primo spazio dietro la Plant (5 spazi dall'Harvester) accettato; dopo 4 spazi l'arco si chiude e il bersaglio diventa TEST Freelancer, che sta nell'arco)**
 - [x] **Senza bersaglio**: togliere i bersagli e premere "Arc 4" → avviso "This area is drawn from your target…" e
       l'arco si piazza come prima (primo spazio entro range 4 dall'Harvester). Con due bersagli: stesso avviso. **(Senza bersagli: avviso "This area is drawn from your target… Drawn from you for now." e si piazza dall'Harvester.)**
 - [x] **Il tiro d'attacco tiene il bersaglio**: senza archi sulla mappa, bersagliare un foe e premere l'attacco di
