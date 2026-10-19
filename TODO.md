@@ -113,6 +113,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       Sprite (HP separati, summoner = creatore del Geyser). Nota: scollegare tutti i summon del compendio richiede di
       rifare la sezione "Summons" della scheda del PG perché elenchi i token sulla mappa (lavoro M, non fatto).
       Regola (p.95-96, "Summons are characters"): ogni summon posato è un personaggio a sé, quindi HP separati.
+      (RIFATTO il 19 ottobre 2026 sera, versione 1.15.262, scelta di Edoardo: tutti i summon del chip sono pedine
+      scollegate di un attore modello per PG; la sezione Summons della scheda elenca le pedine sulla scena.)
       Cosa ho visto nel codice (19 ottobre): l'attore condiviso nasce solo da `summonInSpace` (il Salt Sprite del
       Geyser, che riusa l'attore già importato) e quando si trascina più volte lo stesso summon dalla barra degli
       attori. Dal chip della scheda Foundry importa ogni volta un attore nuovo (HP separati, ma la lista degli attori

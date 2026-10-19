@@ -14,6 +14,7 @@ import { applyStatus, removeStatus, hasStatus, getStatusCharges,
 import { saveRoll } from "../../dice/rolls.mjs";
 import { mergeLiveArrayElements } from "../../helpers/form-arrays.mjs";
 import { foeSummonDragData } from "../foe-summons.mjs";
+import { packSummonDragData } from "../pack-summons.mjs";
 import { clockDragData } from "../../canvas/clock-tokens.mjs";
 import { mapObjectDragData } from "../../canvas/map-objects.mjs";
 
@@ -261,9 +262,8 @@ export class BaseActorSheet extends HandlebarsApplicationMixin(DocumentSheetV2) 
         }
         const chip = ev.target?.closest?.("[data-summon-uuid]");
         if (!chip) return;
-        ev.dataTransfer?.setData("text/plain", JSON.stringify({
-          type: "Actor", uuid: chip.dataset.summonUuid,
-        }));
+        // One token per drop, each with its own HP, this sheet's actor as summoner (P23, p.95-96).
+        ev.dataTransfer?.setData("text/plain", JSON.stringify(packSummonDragData(this.document, chip.dataset.summonUuid)));
         ev.dataTransfer.effectAllowed = "copy";
         this._log?.(`summon drag — "${chip.dataset.summonName}"`);
       });

@@ -885,10 +885,9 @@ export async function eruptObject(actor) {
 
 /**
  * Summon a creature of the summons pack on a space (Geyser: "After the geyser is removed, summon a Salt Sprite in its
- * space", p.232). Every summon is a character of its own (p.95-96), so each one gets its own world actor imported
- * from the pack (playtest 18 October, P23: reusing the imported actor made every Salt Sprite share one HP pool). The
- * actor stays linked and names the geyser's creator as summoner, so it shows in the Summons list of that PC's sheet.
- * A player's request goes to the active GM, who checks that they own the creator.
+ * space", p.232). Every summon is a character of its own (p.95-96): pack-summons.mjs puts an unlinked token of the
+ * creator's Salt Sprite actor there, so each one has its own HP (playtest 18 October, P23) and shows in the Summons
+ * list of the creator's sheet. A player's request goes to the active GM, who checks that they own the creator.
  */
 async function summonInSpace(data, { requester = null } = {}) {
   if (!game.user.isGM) {
@@ -896,28 +895,13 @@ async function summonInSpace(data, { requester = null } = {}) {
     game.socket.emit(SOCKET, { type: "objectSummon", userId: game.user.id, data });
     return;
   }
-  const scene = game.scenes.get(data.sceneId);
-  if (!scene) return;
   if (requester && !game.actors.get(data.creatorId)?.testUserPermission?.(requester, "OWNER")) {
     console.warn(`[ICON | MapObjects] ${requester.name} doesn't own the creator — ${data.name} not summoned`);
     return;
   }
-  const { loadSummonIndex } = await import("../helpers/summons.mjs");
-  const entry = (await loadSummonIndex()).find(e => e.uuid === data.uuid);
-  if (!entry) return;
-  const src = await fromUuid(entry.uuid);
-  if (!src) return;
-  const actorData = game.actors.fromCompendium(src);
-  const creator = game.actors.get(data.creatorId);
-  if (creator && actorData.type === "summon") {
-    foundry.utils.setProperty(actorData, "system.summonerActorId", creator.id);
-    actorData.ownership = foundry.utils.mergeObject(actorData.ownership ?? {}, foundry.utils.deepClone(creator.ownership ?? {}));
-  }
-  const actor = await Actor.create(actorData);
-  if (!actor) return;
-  const td = await actor.getTokenDocument({ x: data.x, y: data.y });
-  await scene.createEmbeddedDocuments("Token", [td.toObject()]);
-  _log(`summoned "${actor.name}" at ${data.x},${data.y}`);
+  const { placePackSummon } = await import("../actor/pack-summons.mjs");
+  const tok = await placePackSummon({ sceneId: data.sceneId, x: data.x, y: data.y, uuid: data.uuid, summonerId: data.creatorId ?? "" });
+  if (tok) _log(`summoned "${tok.name}" at ${data.x},${data.y}`);
 }
 
 /* -------------------------------------------------- */

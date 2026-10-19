@@ -25,6 +25,7 @@ import { exceedTriggers, noteFirstUseThisCombat, exceedExtraBlocks, noteExceedBo
 import { abilityGambles, rollGamble } from "../../combat/gamble.mjs";
 import { IconActor } from "../IconActor.mjs";
 import { loadSummonIndex, summonsForAbility, summonsForTrait } from "../../helpers/summons.mjs";
+import { summonTokensOf } from "../pack-summons.mjs";
 import { objectChips, confirmAttackAllowed, mapObjectFlag } from "../../canvas/map-objects.mjs";
 import { terrainChips, placeTerrainFromChip, removeTerrainOfChip } from "../../canvas/terrain-spaces.mjs";
 import { characterSpecOf, markRangeConfirmed } from "../../canvas/follow-marks.mjs";
@@ -857,19 +858,37 @@ export class IconSheet extends BaseActorSheet {
       context.actionsList.sort((a, b) => b.rating - a.rating || a.label.localeCompare(b.label));
     }
 
-    // Summons attached to this PC (summon actors whose summonerActorId points
-    // here). Players had no way to reach them from their own sheet.
-    context.summons = (game.actors?.contents ?? [])
-      .filter(a => a.type === "summon" && a.system?.summonerActorId === actor.id)
-      .map(a => ({
-        id:    a.id,
-        name:  a.name,
-        img:   a.img,
-        source: a.system?.sourceAbilityName ?? "",
-        hp:    a.system?.hp?.value ?? null,
-        hpMax: a.system?.hp?.max ?? null,
-        onScene: !!canvas?.scene?.tokens?.some(t => t.actorId === a.id),
-      }));
+    // Summons attached to this PC. Players had no way to reach them from their
+    // own sheet. The copies on this scene come first, one per token with its own
+    // HP (P23: dragged summons and objects are unlinked tokens of a world actor
+    // that only holds the starting stats). Then the linked summon actors (made
+    // by hand, or before P23), which are the summon themselves.
+    const tokens = summonTokensOf(actor);
+    const shown = new Set(tokens.map(t => t.actorId));
+    context.summons = [
+      ...tokens.map(t => ({
+        id:      t.actorId,
+        tokenId: t.id,
+        name:    t.name,
+        img:     t.texture?.src || t.actor?.img,
+        source:  t.actor?.system?.sourceAbilityName ?? "",
+        hp:      t.actor?.system?.hp?.value ?? null,
+        hpMax:   t.actor?.system?.hp?.max ?? null,
+        onScene: true,
+      })),
+      ...(game.actors?.contents ?? [])
+        .filter(a => a.type === "summon" && a.system?.summonerActorId === actor.id && !shown.has(a.id)
+          && !a.getFlag("icon-system", "packSummon") && !a.getFlag("icon-system", "mapObject"))
+        .map(a => ({
+          id:    a.id,
+          name:  a.name,
+          img:   a.img,
+          source: a.system?.sourceAbilityName ?? "",
+          hp:    a.system?.hp?.value ?? null,
+          hpMax: a.system?.hp?.max ?? null,
+          onScene: !!canvas?.scene?.tokens?.some(t => t.actorId === a.id),
+        })),
+    ];
 
     // Vigor ticks (one per point up to vigor.max = VIT). Vigor over the
     // maximum (Gran Reversa's Mastery, p.202) adds extra "over" ticks.
@@ -4082,10 +4101,12 @@ export class IconSheet extends BaseActorSheet {
     });
   }
 
-  /** Open the sheet of a summon attached to this PC. */
+  /** Open the sheet of a summon attached to this PC; a copy on the map is also selected. */
   static async #onOpenSummon(event, target) {
-    const summon = game.actors?.get(target.dataset.actorId);
-    _log(`openSummon — id: "${target.dataset.actorId}" | found: ${!!summon}`);
+    const td = target.dataset.tokenId ? canvas?.scene?.tokens?.get(target.dataset.tokenId) : null;
+    const summon = td?.actor ?? game.actors?.get(target.dataset.actorId);
+    _log(`openSummon — id: "${target.dataset.actorId}" | token: "${target.dataset.tokenId ?? ""}" | found: ${!!summon}`);
+    if (td?.object && td.isOwner) td.object.control({ releaseOthers: true });
     summon?.sheet.render(true);
   }
 

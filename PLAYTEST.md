@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P23 — Ogni summon trascinato è un personaggio a sé (19 ottobre 2026, versione 1.15.262)
+
+Setup: solo codice (F5 basta). Un PG con un summon sulla scheda (Shade → Shadow, Fool → Bomb), un giocatore che lo
+possiede collegato in un'altra finestra.
+
+- [x] GM: trascinare due volte il chip del summon sulla mappa → due pedine scollegate, un solo attore "Shadow" nella cartella "Summons". **(19 ottobre, TEST Shade: due Shadow, `actorLink` false, un attore nella cartella Summons, disposizione amica)**
+- [x] Blessed su una delle due → l'altra non lo ha. **(sì: la prima Blessed 1, la seconda niente)**
+- [x] Scheda del PG → sezione Summons: due voci "on scene"; clic su una → la pedina viene selezionata e si apre la sua scheda. **(sì)**
+- [x] Cancellare una pedina → la sezione Summons scende a una voce senza riaprire la scheda. **(sì)**
+- [x] Giocatore (PT Player, proprietario di TEST Chanter): trascinare la Bomb → la piazza il GM, la pedina è del giocatore e compare nella sua sezione Summons. **(sì, dal client 127.0.0.1)**
+- [x] Giocatore che non possiede il summoner → avviso, niente pedina. **(sì: "Only the GM, or a player who owns the summoner…")**
+- [ ] Geyser → erupt → "summon a Salt Sprite": una pedina scollegata del Salt Sprite del creatore, che compare nella sua sezione Summons. **(non provato: stesso percorso del chip, provato sopra)**
+
 ## Esito 18 ottobre, P22 — Eternal Imperium una volta sola (19 ottobre 2026, versione 1.15.261)
 
 Setup: dati del compendio Legends cambiati: copiare il pack con Foundry chiuso, poi importare di nuovo i Dread Lords

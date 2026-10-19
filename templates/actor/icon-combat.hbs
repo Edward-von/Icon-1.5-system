@@ -556,7 +556,7 @@
       <h3 class="icon-section__title">Summons <small>(click to open)</small></h3>
       <div class="icon-summon-list">
         {{#each summons as |sm|}}
-          <button type="button" class="icon-summon-chip" data-action="openSummon" data-actor-id="{{sm.id}}"
+          <button type="button" class="icon-summon-chip" data-action="openSummon" data-actor-id="{{sm.id}}"{{#if sm.tokenId}} data-token-id="{{sm.tokenId}}"{{/if}}
                   title="Open {{sm.name}}{{#if sm.source}} — from {{sm.source}}{{/if}}">
             <img src="{{sm.img}}" alt="">
             <span class="icon-summon-chip__name">{{sm.name}}</span>

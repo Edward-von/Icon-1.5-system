@@ -1,5 +1,22 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Ogni summon trascinato è un personaggio a sé (versione 1.15.262)
+
+### Esito del playtest del 18 ottobre, P23 (scelta di Edoardo: tutti i summon separati)
+
+- **Summon con status e HP in comune**: trascinando due volte lo stesso summon dal chip di un'abilità, le copie
+  potevano finire sullo stesso attore del mondo (sempre per il Salt Sprite del Geyser, e trascinando dalla barra degli
+  attori), mentre il manuale dice che ogni summon è un personaggio (p.95-96) → ora il chip del summon sulla scheda del
+  PG mette sulla mappa una pedina scollegata per ogni trascinamento: un solo attore "modello" per PG e summon, nella
+  cartella "Summons", col PG come summoner e i giocatori del PG come proprietari; ogni pedina ha HP e status suoi.
+  Anche il Salt Sprite del Geyser passa di lì. La lista degli attori non si riempie più di copie.
+- **Trascinamento da giocatore**: prima un giocatore poteva posare un summon solo se aveva il permesso di creare
+  attori → ora la richiesta va al GM collegato, che controlla che il giocatore possieda il PG.
+- **Sezione "Summons" della scheda del PG**: elencava gli attori del mondo, con gli HP del modello → ora elenca le
+  pedine dei summon presenti sulla scena, ciascuna con i suoi HP; il clic seleziona la pedina e apre la sua scheda.
+  La lista si aggiorna da sola quando un summon viene posato, tolto o ferito. Restano in lista anche i summon
+  collegati fatti a mano o prima di questa versione.
+
 ## 19 ottobre 2026 — Dread Lords: Eternal Imperium una volta sola nella card di round (versione 1.15.261)
 
 ### Esito del playtest del 18 ottobre, P22
