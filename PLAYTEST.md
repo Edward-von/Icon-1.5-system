@@ -586,7 +586,7 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 - [x] **Inner Furnace** (tratto Enochian, p.208) — cosa controllare: una volta per round "Sacrifice N hp" per −2 Aether; annullare rimborsa e non lo sblocca due volte; a fine combattimento gli hp non tornano [1.15.76, 81, 113] **(MAGNAPYRE con "Sacrifice 10 hp": hp 40 → 30, Aether 6 → 2; ripremendo il bottone armato tornano hp e Aether e Inner Furnace si libera. Una volta per round e fine combattimento non riprovati)**
 - [x] **Soulfire** (tratto Enochian, p.208) — cosa controllare: da bloodied crit 18+ / exceed 13+, a 1 hp 15+ / 10+ [1.15.75] **(già provato nella sezione 1.15.75)**
-- [ ] **Phoenix Rage** (tratto Enochian, p.208) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(non provato: serve il round 5; la card dei round funziona per Drifting Leaf al round 4, sezione 1.15.63)**
+- [x] **Phoenix Rage** (tratto Enochian, p.208) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(card "Round 5" con la riga del tratto, provato con PT S3 in combattimento il 19 ottobre)**
 - [ ] **Elden Rune** (Enochian, p.209) — cosa controllare: la runa va sotto il token; "End of the scene?" a fine combattimento; Teleport del Talent I; Infuse −1 del Talent II; scelta Arkenrune; +3 al range; GREAT RUNE dà il bottone Shattered [1.15.51, 69, 175, 197, 223] **(con la mastery il chip chiede "Elden Rune / Arkenrune" e la runa va sotto il token; sulla runa range +3 (6 → 9) al piazzamento e nella finestra; Talent II: Infuse 3 di Pyre costa 2, "−1, to a minimum of 1"; Talent I: "Teleport to Elden Rune" da 3 spazi; GREAT RUNE: card "your attacks also shatter…", chip nella finestra e secondo bottone Shattered sulla card. Non provati: Arkenrune sugli alleati e "End of the scene?". Nota: con Inner Furnace sulla runa il dialog propone di pagare 0 Aether)**
 - [x] **Pyre** (Enochian, p.209) — cosa controllare: righe chiuse PYROTIC e MAGNAPYRE nella card; esplosioni di MAGNAPYRE sotto Other [1.15.48, 49, 61, 91, 108] **(Show in Chat: righe chiuse "Infuse 3: PYROTIC" e "Infuse 6 (Mastery): MAGNAPYRE"; MAGNAPYRE armato → Other con due chip "2 flat piercing · area")**
 - [x] **Lance** (Enochian, p.209-210) — cosa controllare: riga chiusa GREAT SPIRIT LANCE con Hit / Miss / Area; "twice instead" con Instances 2 sotto Other [1.15.42, 48, 49, 61, 91, 108] **(riga chiusa "Infuse 6 (Mastery): GREAT SPIRIT LANCE"; armata → Other con "2 flat piercing · area" e "2 flat piercing ×2 · area", che mette Instances 2 e Pierce)**
@@ -600,7 +600,7 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Wright — Geomancer
 
-- [ ] **Orogenic Rage** (tratto Geomancer, p.217) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(non provato: serve il round 5)**
+- [x] **Orogenic Rage** (tratto Geomancer, p.217) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(card "Round 5" con la riga del tratto, provato con PT S3 in combattimento il 19 ottobre)**
 - [x] **Stone Double** (tratto Geomancer, p.217) — cosa controllare: chip "Statue · H1" sul tratto [1.15.65] **(chip "Statue · H1" sul tratto)**
 - [ ] **Bio** (Geomancer, p.218) — cosa controllare: righe chiuse BIOTIC / MAGNABIO nella card; danno di MAGNABIO 2[D]+fray; Shattered+ a chi è nella nuvola; "To dangerous" e "Boil" dei talenti [1.15.42, 48, 49, 61, 69, 70, 164, 175] **(card con righe chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO"; MAGNABIO armato: Hit 2[d6]+fray, Area 1[d6]+fray; Shattered+ nella nuvola già provato. "To dangerous" e "Boil" non provati)**
 - [x] **Dragon Dive** (Geomancer, p.218) — cosa controllare: niente "Hit (no damage)", Area 2 piercing; BOULDER KICK sotto Other [1.15.47, 51, 91] **(Area 2 flat con Pierce, niente Hit; BOULDER KICK armato → Other con "Infuse 3 — BOULDER KICK 2 flat piercing ×2 · area")**
@@ -617,7 +617,7 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 - [x] **Conqueror's Edge** (tratto Spellblade, p.224) — cosa controllare: Infuse −1 con un foe entro range 2 [1.15.76] **(già provato nella sezione 1.15.76; oggi GRAM di Nothung con Knuckle a 1 spazio costava 2)**
 - [x] **Aether Deflection** (tratto Spellblade, p.224) — cosa controllare: "Regain (2 Aether)"; bottone "when targeted" sotto la card d'attacco; resistenza sulla card del danno [1.15.60, 64, 195, 206, 218, 230] **(sul tratto "Aether 0" e bottone "Regain (2 Aether)"; bottone "when targeted" e resistenza sulla card del danno già provati nel blocco 4)**
-- [ ] **Storm Hilt Rage** (tratto Spellblade, p.224) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(non provato: serve il round 5)**
+- [x] **Storm Hilt Rage** (tratto Spellblade, p.224) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(card "Round 5" con la riga del tratto, provato con PT S3 in combattimento il 19 ottobre)**
 - [x] **Blitz** (Spellblade, p.225) — cosa controllare: chip "Effect — 1st" / "2nd"; bottone Infuse di GRAN BLITZ; GUNGNIR area che resta con "1 piercing to all inside" [1.15.70, 91, 99, 100, 127, 165] **(bottone "Slay or Infuse 3"; chip 1st / 2nd e GUNGNIR già provati nelle sezioni 1.15.127 e 165)**
 - [x] **Nothung** (Spellblade, p.225) — cosa controllare: bottone "Slay or Infuse 3"; GRAM sotto Other; con EXCALIBUR il danno diventa divine; card "Nothung — GRAM" [1.15.48, 91, 99, 100, 144] **(bottone "Slay or Infuse 3"; sotto Other "Effect 1 flat divine · up to ×4" e "GRAM 1 flat divine ×2 · area" (EXCALIBUR sbloccata); armato → Show in Chat "Nothung — GRAM" con "Infused — Slay or Infuse 3: GRAM")**
 - [x] **RUINÖS** (versione "Infuse 3 or Slay" di Rampant Nail, Spellblade, p.227) — cosa controllare: il blocco "Slay or Infuse" ha il bottone Infuse [1.15.91] **(bottone "Infuse 3 or Slay" sul pannello di Rampant Nail)**
@@ -631,18 +631,18 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Wright — Stormbender
 
-- [ ] **Selkie** (tratto Stormbender, p.232) — cosa controllare: chip del summon Selkie [1.15.46]
-- [ ] **Pelagic Rage** (tratto Stormbender, p.232) — cosa controllare: bottone Aura 2; promemoria "Round 5" [1.15.23, 63]
-- [ ] **Geyser** (Stormbender, p.234) — cosa controllare: Erupt guidato e Salt Sprite piazzato; il Talent I alza l'altezza a inizio turno; Volcanic Geyser dangerous sotto i foe; cover per chi ci sta sopra [1.15.52, 65, 66, 67, 68, 69, 157, 228]
-- [ ] **Tsunami** (Stormbender, p.233) — cosa controllare: piazzata contro un bordo della mappa; "Move 4" e "Drag them with it"; STORMLASH spesa subito; LEGENDARY STORM dal round 4 [1.15.60, 70, 164, 166, 191]
-- [ ] **Rime** (Stormbender, p.233) — cosa controllare: DAGON dà "Pit · 1"; MAGNARIME Arc che cresce con l'Aether e danno sotto Other; Reroll (same use) [1.15.49, 52, 69, 91, 108]
-- [ ] **Gust** (Stormbender, p.234) — cosa controllare: "Collide: Burst 1 (target)"; con NORTHSOUL fino a 3 aree [1.15.51, 70]
-- [ ] **Heave-Ho** (testo; Stormbender, p.234) — cosa controllare: ordine Trigger, Effect, Area, Collide ("Summon a salt sprite"). Migrazione 26 [1.15.42, 45, 54, 69]
-- [ ] **Cryo** (Stormbender, p.234) — cosa controllare: CRYOTIC Hit e Area fray; MAGNACRYO Attack Roll con dadi bonus dall'Aether; promemoria del Talent I al round 4 [1.15.42, 48, 49, 61, 63, 69]
-- [ ] **Waterspout** (Stormbender, p.235) — cosa controllare: chip e frecce di spostamento; HURRICANE Grow; difficult lasciato con il Talent II; risucchio, "Spit them out" e Place; Shove del Talent I [1.15.52, 70, 167, 191, 207, 232]
-- [ ] **Deepwrath** (Stormbender, p.235) — cosa controllare: "Create watery pit", "Drag under"; boon e dado bonus nel pit; Shattered+ e Remove Shattered; DARKTIDE; controllo del range del Mark [1.15.69, 170, 196, 198, 210]
-- [ ] **Eye of the Storm** (testo; Stormbender, p.236) — cosa controllare: corsivo solo "A storm of vigorous thunder … the center remains calm."; poi Special, Area ([D]), Effect, Infuse 3: AEONCLOUD; AEONCLOUD Area [D]+fray. Migrazione 27 [1.15.48, 51, 55, 65, 69]
-- [ ] **Elemental** (testo; Limit Break Stormbender, p.232) — cosa controllare: "Effect:", "While you are an Elemental:" e tre voci; bottone Aura 2 che resta tutto il combattimento. Migrazione 25 [1.15.38, 40]
+- [x] **Selkie** (tratto Stormbender, p.232) — cosa controllare: chip del summon Selkie [1.15.46] **(chip Selkie sul tratto)**
+- [x] **Pelagic Rage** (tratto Stormbender, p.232) — cosa controllare: bottone Aura 2; promemoria "Round 5" [1.15.23, 63] **(bottone "Aura 2" sul tratto; riga nella card "Round 5")**
+- [x] **Geyser** (Stormbender, p.234) — cosa controllare: Erupt guidato e Salt Sprite piazzato; il Talent I alza l'altezza a inizio turno; Volcanic Geyser dangerous sotto i foe; cover per chi ci sta sopra [1.15.52, 65, 66, 67, 68, 69, 157, 228] **(già provato nel blocco 1 e nelle sezioni 1.15.66-69, 157, 228)**
+- [x] **Tsunami** (Stormbender, p.233) — cosa controllare: piazzata contro un bordo della mappa; "Move 4" e "Drag them with it"; STORMLASH spesa subito; LEGENDARY STORM dal round 4 [1.15.60, 70, 164, 166, 191] **(già provato nel blocco 2 e nella sezione 1.15.164 (Stormlash); LEGENDARY STORM compare nella card "Round 4")**
+- [x] **Rime** (Stormbender, p.233) — cosa controllare: DAGON dà "Pit · 1"; MAGNARIME Arc che cresce con l'Aether e danno sotto Other; Reroll (same use) [1.15.49, 52, 69, 91, 108] **(Infuse 3 = DAGON: armato compare "Pit · 1"; MAGNARIME con 4 Aether → area "Arc 8, range 6" e sotto Other "MAGNARIME (4 Aether) 1 flat piercing ×2 · area". Reroll non provato)**
+- [x] **Gust** (Stormbender, p.234) — cosa controllare: "Collide: Burst 1 (target)"; con NORTHSOUL fino a 3 aree [1.15.51, 70] **(scelta "Line 3" / "Collide: Burst 1 (target)"; NORTHSOUL già provato nella sezione 1.15.70)**
+- [x] **Heave-Ho** (testo; Stormbender, p.234) — cosa controllare: ordine Trigger, Effect, Area, Collide ("Summon a salt sprite"). Migrazione 26 [1.15.42, 45, 54, 69] **(già provato nella sezione 1.15.54)**
+- [x] **Cryo** (Stormbender, p.234) — cosa controllare: CRYOTIC Hit e Area fray; MAGNACRYO Attack Roll con dadi bonus dall'Aether; promemoria del Talent I al round 4 [1.15.42, 48, 49, 61, 63, 69] **(CRYOTIC già provato nella sezione 1.15.61; MAGNACRYO con 3 Aether: card "Cryo — MAGNACRYO" e nel danno "+1 bonus die from the Aether spent"; riga del Talent I nella card "Round 4". Nota: l'area resta "Line 4" anche con 3 Aether, mentre il testo dice +2 di lunghezza ogni 2 Aether (Line 6) — P13)**
+- [x] **Waterspout** (Stormbender, p.235) — cosa controllare: chip e frecce di spostamento; HURRICANE Grow; difficult lasciato con il Talent II; risucchio, "Spit them out" e Place; Shove del Talent I [1.15.52, 70, 167, 191, 207, 232] **(già provato nel blocco 2 e nelle sezioni 1.15.167, 191, 207, 232)**
+- [x] **Deepwrath** (Stormbender, p.235) — cosa controllare: "Create watery pit", "Drag under"; boon e dado bonus nel pit; Shattered+ e Remove Shattered; DARKTIDE; controllo del range del Mark [1.15.69, 170, 196, 198, 210] **(già provato nel blocco 9 e nelle sezioni 1.15.170, 196, 198, 210)**
+- [x] **Eye of the Storm** (testo; Stormbender, p.236) — cosa controllare: corsivo solo "A storm of vigorous thunder … the center remains calm."; poi Special, Area ([D]), Effect, Infuse 3: AEONCLOUD; AEONCLOUD Area [D]+fray. Migrazione 27 [1.15.48, 51, 55, 65, 69] **(già provato nella sezione 1.15.55)**
+- [x] **Elemental** (testo; Limit Break Stormbender, p.232) — cosa controllare: "Effect:", "While you are an Elemental:" e tre voci; bottone Aura 2 che resta tutto il combattimento. Migrazione 25 [1.15.38, 40] **("Effect:", "While you are an Elemental:" e tre voci col pallino; bottone "Aura 2" piazza un'aura senza scadenza)**
 
 #### Limit Break degli altri job
 
@@ -782,6 +782,10 @@ Da compilare durante il playtest.
   attacco su Knuckle: la card "Devil Hand (God Hand combo)" ha nel riquadro Inflict il bottone Sealed con la frase
   della base ("Seal your foe, then bless yourself or an ally in range 2."), ma l'Effect di Devil Hand è solo
   l'esplosione (p.192). La riga 6368 del test della 1.16.6 si aspettava il contrario.
+- **Sezione 3 (19 ottobre) — MAGNACRYO non allunga la linea.** Cryo con MAGNACRYO infuso a 3 Aether: il dado bonus
+  c'è (+1 ogni 2 Aether), ma la scelta dell'area dice "Infuse X (3 Aether): Line 4". Il testo (p.234) dice "Increase
+  line length by 2 and attack deals bonus damage for every two aether spent", quindi Line 6. La card intanto dice
+  "1 ACTION … Line 8" nella testata, presa dalla base.
 
 ### Dubbi
 
