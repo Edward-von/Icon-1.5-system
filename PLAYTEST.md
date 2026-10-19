@@ -3903,7 +3903,7 @@ Setup: solo codice (F5 basta).
       hp, ma una nuova infusione nel round 2 non offre più Inner Furnace.
 - [ ] Armare con Inner Furnace e annullare nello stesso round, senza altri usi: tornano Aether e hp, e Inner Furnace
       si può usare di nuovo in quel round (come prima).
-- [ ] Fuori combattimento: armare con Inner Furnace e annullare: hp e Aether tornano, Inner Furnace resta disponibile.
+- [x] Fuori combattimento: armare con Inner Furnace e annullare: hp e Aether tornano, Inner Furnace resta disponibile. **(sezione 3 (PT S3 fuori combattimento): MAGNAPYRE con Sacrifice 10 hp, annullando tornano hp 40 e Aether 6, flag innerFurnace tolto)**
 
 ## Emerso R38b — PHANTOM BLADE resta attiva fino al tuo turno successivo (17 ottobre 2026, versione 1.15.112)
 
@@ -4106,12 +4106,12 @@ Setup: solo codice (F5 basta).
 
 - [ ] Wright con Nothung, niente armato: Show in Chat mostra "Slay or Infuse 3: GRAM — After the ability resolves…"
       tra i blocchi base, una volta, senza riquadro "Infused".
-- [ ] Infuse 3 su GRAM, poi Show in Chat: titolo "Nothung — GRAM", riquadro "Infused — Slay or Infuse 3: GRAM" in
-      cima, e la riga "Slay or Infuse 3" non compare più tra i blocchi base. Hit, Miss or Area e i due Effect restano.
+- [x] Infuse 3 su GRAM, poi Show in Chat: titolo "Nothung — GRAM", riquadro "Infused — Slay or Infuse 3: GRAM" in
+      cima, e la riga "Slay or Infuse 3" non compare più tra i blocchi base. Hit, Miss or Area e i due Effect restano. **(sezione 3: titolo "Nothung — GRAM" con "Infused — Slay or Infuse 3: GRAM" in cima)**
 - [ ] Stessa prova con Blitz e GRAN BLITZ ("Repeat the first effect").
 - [ ] Con GRAM armato, Attack Roll: un solo blocco "Slay or Infuse 3: GRAM" sopra Hit.
 - [ ] Annullare l'infusione (prima di usarla), poi Show in Chat: il blocco torna tra quelli base.
-- [ ] Un'abilità con Infuse normale (Bio con BIOTIC / MAGNABIO) si comporta come prima, armata e non.
+- [x] Un'abilità con Infuse normale (Bio con BIOTIC / MAGNABIO) si comporta come prima, armata e non. **(Bio — BIOTIC e Bio — MAGNABIO in chat come previsto (vedi blocco 4))**
 
 ## Emerso R49 — L'area di Holy non resta più sulla mappa (17 ottobre 2026, versione 1.15.98)
 
@@ -4226,17 +4226,17 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Rime con la Mastery sbloccata: Damage Roll senza infusione → in Other non c'è MAGNARIME. Arma Infuse X con 4
+- [x] Rime con la Mastery sbloccata: Damage Roll senza infusione → in Other non c'è MAGNARIME. Arma Infuse X con 4
       Aether, poi Damage Roll → in Other c'è "Infuse X — MAGNARIME (4 Aether)" con 1 piercing e Instances 2. Con 1
-      Aether la scelta non compare.
-- [ ] Dragon Dive: arma BOULDER KICK, poi Damage Roll → in Other c'è "Infuse 3 — BOULDER KICK", 2 piercing, Instances
-      2. Area resta 2 piercing.
-- [ ] Soul Burn: arma INCANDIUS, poi Damage Roll → in Other c'è "Infuse 4 — INCANDIUS", 1 piercing.
+      Aether la scelta non compare. **(sezione 3: armata con 4 Aether, Other "Infuse X — MAGNARIME (4 Aether) 1 flat piercing ×2 · area")**
+- [x] Dragon Dive: arma BOULDER KICK, poi Damage Roll → in Other c'è "Infuse 3 — BOULDER KICK", 2 piercing, Instances
+      2. Area resta 2 piercing. **(sezione 3: "Infuse 3 — BOULDER KICK 2 flat piercing ×2 · area"; Area resta 2 flat con Pierce)**
+- [x] Soul Burn: arma INCANDIUS, poi Damage Roll → in Other c'è "Infuse 4 — INCANDIUS", 1 piercing. **(sezione 3: "Infuse 4 — INCANDIUS 1 flat piercing")**
 - [ ] Nothung: nel pannello c'è il bottone "Slay or Infuse 3": spende 3 Aether, si arma e un secondo clic restituisce
       l'Aether. Anche senza nulla armato, in Other c'è "Slay or Infuse 3 — GRAM", 1 piercing, Instances 2.
-- [ ] Nothung con EXCALIBUR sbloccata: la scelta GRAM in Other parte con Divine spuntato al posto di Pierce.
-- [ ] Pyre con MAGNAPYRE armato e Lance con GREAT SPIRIT LANCE armato: in Other ci sono le esplosioni da 2 piercing
-      (per Lance anche "twice instead", Instances 2).
+- [x] Nothung con EXCALIBUR sbloccata: la scelta GRAM in Other parte con Divine spuntato al posto di Pierce. **(sezione 3: "GRAM 1 flat divine ×2 · area")**
+- [x] Pyre con MAGNAPYRE armato e Lance con GREAT SPIRIT LANCE armato: in Other ci sono le esplosioni da 2 piercing
+      (per Lance anche "twice instead", Instances 2). **(sezione 3: MAGNAPYRE due chip "2 flat piercing · area"; Lance "2 flat piercing ×2 · area" → Instances 2)**
 - [ ] Blitz, Rampant Nail, Bifröst e Drifting Leaf hanno il bottone Infuse sul loro blocco "Slay or Infuse" / "Infuse
       3 or Slay". Show in Chat senza nulla armato mostra quel blocco aperto come prima.
 - [ ] Non regressione R40: Succubus con la combo di Incubus ha ancora [D]+fray su Hit e il chip "Combo — Succubus" in
@@ -4456,7 +4456,7 @@ Break Split Heaven and Hell (Demon Slayer), Paradiso (Freelancer) e Lycanthropy 
 Setup: solo codice (F5 basta). Un PG Wright Spellblade (tratto Conqueror's Edge) e un PG Wright Enochian (tratto Inner
 Furnace) con Aether 6, i loro token sulla scena, un foe ostile, un combat avviato.
 
-- [ ] **Senza tratti**: un Wright qualsiasi preme "Infuse 3" → paga 3 come prima, nessun dialog, nessuna riga in più. **(non provato)**
+- [x] **Senza tratti**: un Wright qualsiasi preme "Infuse 3" → paga 3 come prima, nessun dialog, nessuna riga in più. **(TEST Stormbender (senza Inner Furnace né Conqueror's Edge), Infuse 3 di Rime: paga 3 senza dialog)**
 - [x] **Conqueror's Edge, foe vicino**: foe a 2 spazi dallo Spellblade → "Infuse 3" toglie 2 Aether; la card dice
       "2 Aether spent" e sotto "Conqueror's Edge: −1, a foe is in range 2". **(Nothung Infuse 3: '2 Aether spent', 'Conqueror's Edge: −1, a foe is in range 2')**
 - [x] **Conqueror's Edge, foe lontano**: foe a 3+ spazi (o nessun token del PG sulla scena) → paga 3. **(foe a 6: paga 3)**
@@ -4472,7 +4472,7 @@ Furnace) con Aether 6, i loro token sulla scena, un foe ostile, un combat avviat
       Infuse nello stesso round il dialog ricompare.
 - [ ] **Entrambi i tratti** (aggiungi a mano Conqueror's Edge all'Enochian), foe in range 2: "Infuse 3" con Sacrifice
       → paga 0, con le due righe in card.
-- [ ] **Infuse X** (es. Ätherwand) con i tratti → chiede quanto, paga esattamente quello, nessuno sconto né dialog.
+- [x] **Infuse X** (es. Ätherwand) con i tratti → chiede quanto, paga esattamente quello, nessuno sconto né dialog. **(sezione 3: Spellblade con Conqueror's Edge, Ätherwand Infuse X con 2 → paga 2, nessuno sconto)**
 - [ ] **Limit Break**: "Infuse 6" di Gigaflare con Conqueror's Edge e foe vicino → paga 5.
 
 ## R63 — Soglie di crit / exceed variabili: Soulfire, Arenheir, a mano (17 ottobre 2026, versione 1.15.75)
@@ -4944,8 +4944,8 @@ Aether. È JS + template: F5 dopo il deploy.
 - [ ] **Senza Aether**: a 0 Aether clicca Stormlash → avviso "Infuse 1 needs 1 Aether", nessun messaggio in chat. **(non provato)**
 - [x] **Altre infusioni invariate**: Infuse 3 di Rime si arma come prima (bottone "armed", ricliccare restituisce
       l'Aether, tirando Rime la versione si consuma). **(Infuse 3 si arma e si annulla restituendo l'Aether (Cryo, Nothung))**
-- [ ] **Aether Deflection**: nella riga del tratto c'è "Aether N" e il bottone "Regain (2 Aether)"; con 3 Aether
-      cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)". **(non provato)**
+- [x] **Aether Deflection**: nella riga del tratto c'è "Aether N" e il bottone "Regain (2 Aether)"; con 3 Aether
+      cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)". **("Aether 0 / Regain (2 Aether)" sul tratto; Regain 6 → 4 → 2 → 0, l'uso torna 1/1)**
 - [x] **Aether insufficiente**: con 1 Aether il bottone è spento; su una scheda di un altro giocatore (solo
       osservatore) è spento. **(su TEST Enochian in sola lettura tutti i bottoni Infuse sono spenti (la parte "1 Aether" non riprovata qui))**
 
@@ -5129,13 +5129,13 @@ Setup: PG di prova Wright con Ätherwand (Spellblade) e Rime (Stormbender), dal 
 solo codice); Aether a 6; il token del PG sulla mappa e un foe.
 
 - [ ] **Ätherwand senza Infuse**: bottone area → piazza direttamente la Line 3 (range 4), come prima.
-- [ ] **Ätherwand, ÄTHERSTURM**: Infuse X con 2 Aether → bottone area → finestra "which area?" con prima "Infuse X (2
+- [x] **Ätherwand, ÄTHERSTURM**: Infuse X con 2 Aether → bottone area → finestra "which area?" con prima "Infuse X (2
       Aether): Line 5", poi "Text: Line 3". Scegliendo la prima la linea è lunga 5. Con 5 Aether la linea è Line 6
-      (massimo +3).
+      (massimo +3). **(sezione 3: "Infuse X (2 Aether): Line 5" e "Text: Line 3")**
 - [ ] **Rime senza mastery armata**: mastery sbloccata ma MAGNARIME non armata → bottone area: solo Line 6, nessun
       "Mastery: Arc 4".
-- [ ] **Rime, MAGNARIME**: Infuse X con 2 Aether → bottone area: prima scelta "Infuse X (2 Aether): Arc 6" (range 6),
-      poi Line 6. Con 4 Aether: Arc 8. Anche l'Attack Roll, senza area già sulla mappa, propone la stessa scelta.
+- [x] **Rime, MAGNARIME**: Infuse X con 2 Aether → bottone area: prima scelta "Infuse X (2 Aether): Arc 6" (range 6),
+      poi Line 6. Con 4 Aether: Arc 8. Anche l'Attack Roll, senza area già sulla mappa, propone la stessa scelta. **(sezione 3 con 4 Aether: "Infuse X (4 Aether): Arc 8, range 6" e "Line 6")**
 - [ ] **Forme fisse (non devono cambiare)**: Bio con BIOTIC armato offre "Infuse 3: Medium Blast" (range 8) come
       prima scelta e la Small Blast base subito dopo; Cryo con CRYOTIC piazza la Line 8 come prima.
 
@@ -5146,12 +5146,12 @@ compendio Jobs o già sulla scheda (è solo codice); Aether a 6; un foe sulla ma
 
 - [x] **Cryo, CRYOTIC**: Infuse 3 → Damage: Hit "fray", Area "fray" (non più 1). Il titolo della card è "Cryo —
       CRYOTIC". Disarmato di nuovo (secondo click, Aether restituito) il tiro torna a 1. **(CRYOTIC: Hit fray 4, Area fray 4; disarmato torna a 1 flat (Aether restituito); il titolo della card non controllato)**
-- [ ] **Cryo, MAGNACRYO**: mastery sbloccata, Infuse X con 4 Aether → il bottone dice Attack Roll (non Auto-Hit);
+- [x] **Cryo, MAGNACRYO**: mastery sbloccata, Infuse X con 4 Aether → il bottone dice Attack Roll (non Auto-Hit);
       Damage: Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray, Bonus dice già a 2 con la nota "MAGNACRYO: +2 bonus dice
-      from the Aether spent". Con 3 Aether i dadi bonus sono 1. **(non provato)**
-- [ ] **Bio, MAGNABIO**: mastery sbloccata, Infuse 6 → Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray. Con BIOTIC
-      (Infuse 3) il danno resta quello base ([D]+fray / fray / fray). **(non provato)**
-- [ ] **Geo, MAGNAGEO**: Infuse 6 → Area [D]+fray (non solo fray), Miss [D]+fray. **(non provato)**
+      from the Aether spent". Con 3 Aether i dadi bonus sono 1. **(sezione 3 (3 Aether): bottone "Attack Roll", card "Cryo — MAGNACRYO", Damage con "+1 bonus die from the Aether spent". Vedi P13 per la lunghezza della linea)**
+- [x] **Bio, MAGNABIO**: mastery sbloccata, Infuse 6 → Hit 2[D]+fray, Miss [D]+fray, Area [D]+fray. Con BIOTIC
+      (Infuse 3) il danno resta quello base ([D]+fray / fray / fray). **(MAGNABIO: Hit 2[d6]+fray, Area 1[d6]+fray, Miss d6+fray sulla card)**
+- [x] **Geo, MAGNAGEO**: Infuse 6 → Area [D]+fray (non solo fray), Miss [D]+fray. **(sezione 3: Area 1[d6] + fray 4, Miss 1[d6] + fray 4)**
 - [ ] **Eye of the Storm, AEONCLOUD**: Infuse 3 → Area [D]+fray (base [D]). **(non provato)**
 - [ ] **Nothung, EXCALIBUR**: mastery sbloccata e Talent I scelto → Damage → Other: il chip del Talent I dice "1
       divine"; sceglierlo spunta Divine (non Pierce). Senza mastery dice "1 piercing" e spunta Pierce.
@@ -5308,10 +5308,10 @@ poi al capitolo 3.
       e su Hit ha Instances 2, Divine spuntato; la card applica il danno due volte. Senza infusione: Instances 1.
 - [ ] **Tetraflare nella card**: con Tetraflare armato, "Use Limit Break" spende 4 Resolve e la card dice "uses
       Gigaflare — TETRAFLARE!" con sotto la riga "Infuse 6 — TETRAFLARE (Limit Break): Deal [D]+fray twice instead.".
-- [ ] **Meteor, capitolo 3**: compare anche "Infuse 8 — METEOR"; cliccandolo con 6 Aether esce l'avviso "needs 8
-      Aether" e niente viene speso. Damage Roll → in Other c'è "METEOR — Special effect" con 999 divine.
-- [ ] **Gran Levincross, capitolo 1-2**: bottone "Slay or Infuse 3 — RAGNARÖK"; Damage Roll → Other propone
-      "Slay or Infuse 3 — RAGNARÖK" ([D]+fray divine) anche senza infusione (lo attiva lo Slay).
+- [x] **Meteor, capitolo 3**: compare anche "Infuse 8 — METEOR"; cliccandolo con 6 Aether esce l'avviso "needs 8
+      Aether" e niente viene speso. Damage Roll → in Other c'è "METEOR — Special effect" con 999 divine. **(19 ott (sezione 3): al capitolo 3 bottone "Infuse 8 — METEOR"; con 6 Aether il clic non arma niente (avviso non catturato); in Other "METEOR — Special effect 999 flat divine")**
+- [x] **Gran Levincross, capitolo 1-2**: bottone "Slay or Infuse 3 — RAGNARÖK"; Damage Roll → Other propone
+      "Slay or Infuse 3 — RAGNARÖK" ([D]+fray divine) anche senza infusione (lo attiva lo Slay). **(sezione 3: bottone presente; senza infusione Other propone "Slay or Infuse 3 — RAGNARÖK 1[d6] + fray 4 divine")**
 - [ ] **Götterdämmerung, capitolo 3**: bottone "Infuse 6 — GÖTTERDÄMMERUNG"; armato, Damage Roll → Other propone
       anche 2[D]+fray divine; disarmato non lo propone. Il danno Hit resta [D]+fray (non dice "instead").
 - [ ] **Una sola infusione**: con Ragnarök armato, cliccare Götterdämmerung restituisce i 3 Aether di Ragnarök e
