@@ -451,13 +451,13 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Stalwart — Demon Slayer
 
-- [ ] **Comet** (Demon Slayer, p.128) — cosa controllare: chip "Thrown Weapon"; domanda "cannot attack" con Roll anyway; Pick up (anche a inizio turno e passando accanto); aura Rampart che segue l'arma; foe che volano o si teletrasportano rifiutati, a piedi domanda "dash?"; tag Medium Blast con tooltip [1.15.7, 47, 65, 66, 68, 158, 161, 163, 229]
-- [ ] **Righteous Disdain** (Demon Slayer, p.128-129) — cosa controllare: sulla card del danno aggiunge la riga del Demon Slayer, tutte e due con resistenza ½; con Shirahadori si ferma a 1 HP; bottone "Heroic: gain 4 vigor" una volta sola; chip "Gain vigor 4" [1.15.149, 150, 186, 205]
-- [ ] **Draken Cross** (Demon Slayer, p.128) — cosa controllare: "fray again" del Talent I e i 2 divine di Dark Wind Devil Blade come scelte rapide sotto Other; niente "Gain True Strike" [1.15.27, 130]
-- [ ] **Demon Cutter** (Demon Slayer, p.128) — cosa controllare: negli attacchi ad area l'Inflict va solo sul bersaglio d'attacco [1.15.42]
-- [ ] **Gates of Hell** (Demon Slayer, p.129) — cosa controllare: con la mastery chip "Afterimage" (dangerous solo per i foe) e bottone Flash Step che porta il token sull'afterimage libero [1.15.69, 70, 175]
-- [ ] **Six Hells Trigram** (Demon Slayer, p.129) — cosa controllare: "summon" nel testo in corsivo senza tooltip [1.15.8]
-- [ ] **Wicked Sheath** (Demon Slayer, p.130) — cosa controllare: con il Talent II il tiro del danno propone l'Area (2) [1.15.25]
+- [x] **Comet** (Demon Slayer, p.128) — cosa controllare: chip "Thrown Weapon"; domanda "cannot attack" con Roll anyway; Pick up (anche a inizio turno e passando accanto); aura Rampart che segue l'arma; foe che volano o si teletrasportano rifiutati, a piedi domanda "dash?"; tag Medium Blast con tooltip [1.15.7, 47, 65, 66, 68, 158, 161, 163, 229] **(dalla scheda: chip "Thrown Weapon · H1", tag Medium Blast con tooltip; domanda cannot attack, Pick up, rampart e foe in volo/teleport già provati nel blocco 1)**
+- [x] **Righteous Disdain** (Demon Slayer, p.128-129) — cosa controllare: sulla card del danno aggiunge la riga del Demon Slayer, tutte e due con resistenza ½; con Shirahadori si ferma a 1 HP; bottone "Heroic: gain 4 vigor" una volta sola; chip "Gain vigor 4" [1.15.149, 150, 186, 205] **(Kelpie su TEST Spellblade, 14 danni: riga del Demon Slayer con Resistance ½ e "Not below 1 HP (Shirahadori)"; Apply → "7 damage … stopped at 1 HP (Shirahadori) — HP 3 → 1"; "Heroic: gain 4 vigor" porta il vigor 0 → 4 e poi resta spento; chip promemoria "Gain vigor 4" nella card dalla scheda. Il GM vede il bottone solo se il PG non ha un giocatore, come previsto)**
+- [x] **Draken Cross** (Demon Slayer, p.128) — cosa controllare: "fray again" del Talent I e i 2 divine di Dark Wind Devil Blade come scelte rapide sotto Other; niente "Gain True Strike" [1.15.27, 130] **(sotto Other le chip "Talent I fray 4 · area" e "Mastery 2 flat divine · area"; la seconda imposta 2 fissi, area e Divine; niente "Gain True Strike")**
+- [x] **Demon Cutter** (Demon Slayer, p.128) — cosa controllare: negli attacchi ad area l'Inflict va solo sul bersaglio d'attacco [1.15.42] **(attacco su Knuckle e Janissary: Slashed solo su "Knuckle (attack target)", "Janissary (area)" senza status)**
+- [x] **Gates of Hell** (Demon Slayer, p.129) — cosa controllare: con la mastery chip "Afterimage" (dangerous solo per i foe) e bottone Flash Step che porta il token sull'afterimage libero [1.15.69, 70, 175] **(chip "Afterimage · 1"; card "Afterimage — dangerous terrain for foes" con Remove e Flash Step; Flash Step porta il token sull'afterimage e lo toglie, come a p.129)**
+- [x] **Six Hells Trigram** (Demon Slayer, p.129) — cosa controllare: "summon" nel testo in corsivo senza tooltip [1.15.8] **("summon" nel corsivo, senza tooltip)**
+- [x] **Wicked Sheath** (Demon Slayer, p.130) — cosa controllare: con il Talent II il tiro del danno propone l'Area (2) [1.15.25] **(con il Talent II la finestra ha "Area 2 flat"; selezionato di partenza resta Hit)**
 
 #### Stalwart — Colossus
 
@@ -2824,7 +2824,7 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Righteous Disdain postato dalla scheda: nell'Heroic c'è la chip "Gain vigor 4".
+- [x] Righteous Disdain postato dalla scheda: nell'Heroic c'è la chip "Gain vigor 4". **(sezione 3: chip promemoria presente)**
 - [ ] Un'abilità con "gain 2 vigor" ha ancora la sua chip, come prima.
 
 ## Emerso R35 — Niente interrupt dalla scheda se Stunned (17 ottobre 2026, versione 1.15.204)
@@ -3463,8 +3463,8 @@ Setup: solo codice (F5 basta).
 - [x] Apply sulle due righe: il danno è dimezzato dopo l'armatura e la nota dice "halved (Righteous Disdain)". **(7 → 4 su tutte e due, 'halved (Righteous Disdain)')**
 - [ ] Bersaglio già in Cover: dimezza una volta sola. **(non provato)**
 - [ ] Danno divine: nessun dimezzamento. **(non provato)**
-- [ ] Con la mastery sbloccata e HP bassi: il Demon Slayer si ferma a 1 HP e la nota dice "stopped at 1 HP
-      (Shirahadori)". **(non provato)**
+- [x] Con la mastery sbloccata e HP bassi: il Demon Slayer si ferma a 1 HP e la nota dice "stopped at 1 HP
+      (Shirahadori)". **(provato nella sezione 3: HP 3 → 1)**
 - [x] Card postata dal GM e bottone premuto da un giocatore: la card si aggiorna (scrive il GM); senza GM collegato
       esce un avviso. **(premuto dal giocatore, card aggiornata)**
 - [x] Secondo clic sulla stessa card: avviso "already changed". **(dopo il clic il bottone è spento (0/1))**
