@@ -16,27 +16,27 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 Setup: solo codice (F5 basta). Un PG Sealer con Grand Banishment (es. TEST Sealer), due foe sulla mappa (es.
 Janissary e Mechanist); per l'ultima casella anche il client giocatore "PT Player".
 
-- [ ] Da GM: Track target di Grand Banishment sul Janissary due volte di fila → un solo chip "Janissary ✕" sulla
-      scheda del PG e un solo effetto "Tracked — Grand Banishment" sul Janissary.
-- [ ] Poi Track target sul Mechanist → il segno passa al Mechanist (come prima), sul Janissary non resta niente.
-- [ ] Un mark di un'altra abilità dello stesso PG sul Janissary resta dov'è quando si ripete il Track target lì.
+- [x] Da GM: Track target di Grand Banishment sul Janissary due volte di fila → un solo chip "Janissary ✕" sulla
+      scheda del PG e un solo effetto "Tracked — Grand Banishment" sul Janissary. **(TEST Sealer, due clic sul Janissary: un solo chip "Janissary ✕" e un solo "Tracked — Grand Banishment")**
+- [x] Poi Track target sul Mechanist → il segno passa al Mechanist (come prima), sul Janissary non resta niente. **(il segno passa al Mechanist, sul Janissary non resta niente)**
+- [ ] Un mark di un'altra abilità dello stesso PG sul Janissary resta dov'è quando si ripete il Track target lì. **(non provato)**
 - [ ] Da giocatore (PT Player, GM connesso): Track target sullo stesso foe due volte → "Tracker sent to the GM…" e
-      sempre un chip solo.
+      sempre un chip solo. **(non provato)**
 
 ## Esito 18 ottobre, P13 — MAGNACRYO allunga la linea con l'Aether (19 ottobre 2026, versione 1.15.246)
 
 Setup: solo codice (F5 basta). Un PG Stormbender con Cryo e la mastery MAGNACRYO sbloccata, abbastanza Aether
 (almeno 5), in un combattimento.
 
-- [ ] Infuse X MAGNACRYO con 3 Aether: la scelta dell'area dice "Infuse X (Mastery) (3 Aether): Line 6" (non Line 4)
-      e il template piazzato è lungo 6.
+- [x] Infuse X MAGNACRYO con 3 Aether: la scelta dell'area dice "Infuse X (Mastery) (3 Aether): Line 6" (non Line 4)
+      e il template piazzato è lungo 6. **(TEST Stormbender: dopo la correzione 5d8360c (il testo del pack dice "Increase line length", senza "the") la scelta dice "Infuse X (3 Aether): Line 6". Prima della correzione diceva ancora Line 4)**
 - [ ] Con 1 Aether: Line 4; con 2 Aether: Line 6; con 4 Aether: Line 8. Il dado bonus del danno resta come prima
-      (+1 con 2-3 Aether, +2 con 4-5).
-- [ ] Show in Chat con MAGNACRYO armato a 3 Aether: l'intestazione dice "2 Actions" (evidenziato) e il tag dell'area
-      "Line 6" (evidenziato, suggerimento "From MAGNACRYO"), non "1 Action" e "Line 8".
+      (+1 con 2-3 Aether, +2 con 4-5). **(provato solo con 3 Aether)**
+- [x] Show in Chat con MAGNACRYO armato a 3 Aether: l'intestazione dice "2 Actions" (evidenziato) e il tag dell'area
+      "Line 6" (evidenziato, suggerimento "From MAGNACRYO"), non "1 Action" e "Line 8". **(intestazione "Cryo — MAGNACRYO … 2 Actions … Line 6")**
 - [ ] Non deve cambiare: Cryo senza infusione ha l'intestazione e l'area di sempre; con CRYOTIC (Infuse 3, che
-      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima.
-- [ ] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione.
+      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima. **(non provato)**
+- [ ] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione. **(non provato)**
 
 ## Esito 18 ottobre, P11 — I PG nascono dalla parte del party (19 ottobre 2026, versione 1.15.245)
 
@@ -44,15 +44,15 @@ Setup: solo codice (F5 basta), ma al primo avvio gira la migrazione 39. Prima di
 disposizione del token prototipo di qualche PG del mondo (Prototype Token → Identity → Disposition) e dei loro
 token piazzati; per l'ultima casella un PG messo a mano a "Neutral".
 
-- [ ] Dopo F5: i PG che avevano il token prototipo "Hostile" ora l'hanno "Friendly" (console: riga "Migration 39").
-- [ ] I loro token già piazzati sulle scene che erano "Hostile" ora sono "Friendly" (bordo verde, non rosso).
-- [ ] Un PG nuovo creato dalla sidebar (Create Actor → tipo icon) ha il token prototipo "Friendly"; piazzato sulla
-      scena, il token è "Friendly".
-- [ ] Un PG creato col wizard di creazione personaggio: token "Friendly".
-- [ ] Un foe importato dal compendio, o messo con l'Encounter Designer, resta "Hostile".
-- [ ] Il PG messo a "Neutral" prima dell'aggiornamento resta "Neutral".
+- [x] Dopo F5: i PG che avevano il token prototipo "Hostile" ora l'hanno "Friendly" (console: riga "Migration 39"). **(19 ottobre: PT Testi e i quattro Yeokin da Hostile a Friendly, schema 39)**
+- [x] I loro token già piazzati sulle scene che erano "Hostile" ora sono "Friendly" (bordo verde, non rosso). **(token di PT Testi messo apposta Hostile: dopo F5 è Friendly (poi tolto))**
+- [x] Un PG nuovo creato dalla sidebar (Create Actor → tipo icon) ha il token prototipo "Friendly"; piazzato sulla
+      scena, il token è "Friendly". **(Actor.create tipo icon: prototipo Friendly, token Friendly)**
+- [ ] Un PG creato col wizard di creazione personaggio: token "Friendly". **(non provato)**
+- [x] Un foe importato dal compendio, o messo con l'Encounter Designer, resta "Hostile". **(foe importato: Hostile)**
+- [x] Il PG messo a "Neutral" prima dell'aggiornamento resta "Neutral". **("Actor (3)" messo a Neutral prima di F5: resta Neutral (poi rimesso Friendly))**
 - [ ] Rifare il caso del playtest: Symphony, un foe entra nella mote → Detonate: la card offre di benedire i PG,
-      non il foe.
+      non il foe. **(non provato)**
 
 ## Esito 18 ottobre, P19 — Fortuna non ha più il bottone Gamble di Astra (19 ottobre 2026, versione 1.15.244)
 
