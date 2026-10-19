@@ -40,8 +40,8 @@ Setup: solo codice (F5 basta). Togliere prima la patch in pagina di `_preCreate`
 - [x] Sui due Boulder: rendere destructible / togliere HP a uno solo → l'altro non cambia. **(altezza +1 su uno solo: quello passa a 2, l'altro resta 1, l'attore del mondo resta 1)**
 - [x] Foe con summon (es. un foe con "Summons & Objects" nella scheda): trascinare due volte lo stesso summon sulla
       mappa → due token, ognuno con i suoi HP (danno a uno, l'altro resta pieno). **(Azurian Weapon, Targeting Reticle posato due volte: due token non collegati sullo stesso attore del mondo (il reticolo ha 0 HP, quindi il danno non si prova))**
-- [ ] Controllo che il resto non sia cambiato: importare un foe dal compendio e creare un PG nuovo → il loro token
-      prototipo è ancora collegato ("Link Actor Data" acceso).
+- [x] Controllo che il resto non sia cambiato: importare un foe dal compendio e creare un PG nuovo → il loro token
+      prototipo è ancora collegato ("Link Actor Data" acceso). **(foe importato dal compendio e PG nuovo: "Link Actor Data" acceso su tutti e due)**
 
 ## Piano del playtest del 18 ottobre 2026 (versioni 1.15.2 – 1.15.232)
 
