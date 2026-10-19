@@ -29,47 +29,47 @@ Setup: solo codice (F5 basta). TEST Sealer con Spirit Shrine e la mastery SPIRIT
 un alleato colpito da un foe: card del danno in chat.
 
 - [ ] Dal GM (TEST Sealer senza proprietario giocatore), clic su "Grace of the Spirits · TEST Sealer 1/1" → il
-      bottone diventa "0/1" ed è subito spento, prima di premere Apply; l'alleato ha il chip Immune.
-- [ ] Doppio clic veloce sul bottone → un solo uso speso (una sola card dell'interrupt), il bottone resta spento.
-- [ ] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito.
-- [ ] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne.
-- [ ] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili.
+      bottone diventa "0/1" ed è subito spento, prima di premere Apply; l'alleato ha il chip Immune. **(non provato: Grace of the Spirits era già a 0/1 e non sono riuscito a ridargli l'uso dal codice)**
+- [ ] Doppio clic veloce sul bottone → un solo uso speso (una sola card dell'interrupt), il bottone resta spento. **(non provato (vedi sopra))**
+- [ ] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito. **(non provato)**
+- [ ] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne. **(non provato)**
+- [ ] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili. **(non provato)**
 - [ ] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
-      quando il legame si spezza).
+      quando il legame si spezza). **(non provato)**
 
 ## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
 
 Setup: solo codice (F5 basta). Un Knave in stance Riposte, due alleati (uno adiacente al Knave, uno lontano), un foe
 che fa un'abilità con danno su tutti e tre (o tre danni separati).
 
-- [ ] Sulla card del danno, riga del Knave → c'è "Refresh Riposte".
-- [ ] Riga dell'alleato adiacente al Knave (anche in diagonale) → c'è "Refresh Riposte".
-- [ ] Riga dell'alleato a 2 o più caselle dal Knave → niente "Refresh Riposte" (gli altri interrupt, es. Dire Parry,
-      restano come prima).
-- [ ] Il bottone sull'alleato adiacente funziona come prima (ridà l'uso di Dire Parry e posta la card di refresh).
+- [ ] Sulla card del danno, riga del Knave → c'è "Refresh Riposte". **(non provato (il Knave non era tra i colpiti))**
+- [x] Riga dell'alleato adiacente al Knave (anche in diagonale) → c'è "Refresh Riposte". **(Knave in stance Riposte, Knuckle colpisce TEST Sealer (a 2 caselle) e TEST Fool (adiacente): "Refresh Riposte · TEST Knave" solo sulla riga del Fool)**
+- [x] Riga dell'alleato a 2 o più caselle dal Knave → niente "Refresh Riposte" (gli altri interrupt, es. Dire Parry,
+      restano come prima). **(riga del Sealer senza Refresh Riposte; Dire Parry c'è su tutte e due le righe come prima)**
+- [ ] Il bottone sull'alleato adiacente funziona come prima (ridà l'uso di Dire Parry e posta la card di refresh). **(non provato)**
 
 ## Esito 18 ottobre, P24 — Weakened si spunta da solo nella finestra del danno (19 ottobre 2026, versione 1.15.254)
 
 Setup: solo codice (F5 basta). Un PG con lo status Weakened e un foe bersagliato.
 
-- [ ] PG Weakened, tira il danno di un'abilità normale → nella finestra il chip "Weakened" è già spuntato con la
-      scritta "−2 · from your Weakened status"; tirando, la card mostra il −2.
-- [ ] Toglilo a mano e tira → il −2 non viene applicato.
-- [ ] PG Weakened con un'abilità (o un esito) che fa danno piercing o divine → il chip "Weakened" resta vuoto.
-- [ ] PG senza Weakened → il chip è vuoto e la scritta è solo "−2", come prima.
-- [ ] Un foe con Weakened che tira il danno dalla sua scheda → il chip è spuntato.
+- [x] PG Weakened, tira il danno di un'abilità normale → nella finestra il chip "Weakened" è già spuntato con la
+      scritta "−2 · from your Weakened status"; tirando, la card mostra il −2. **(19 ottobre, TEST Freelancer weakened, Showdown: chip spuntato con "Weakened −2 · from your Weakened status" (la card non l'ho tirata))**
+- [ ] Toglilo a mano e tira → il −2 non viene applicato. **(non provato)**
+- [ ] PG Weakened con un'abilità (o un esito) che fa danno piercing o divine → il chip "Weakened" resta vuoto. **(non provato)**
+- [x] PG senza Weakened → il chip è vuoto e la scritta è solo "−2", come prima. **(senza status: chip vuoto, scritta "Weakened −2")**
+- [x] Un foe con Weakened che tira il danno dalla sua scheda → il chip è spuntato. **(Knuckle weakened, "Damage — Crushing Advance": chip spuntato)**
 
 ## Esito 18 ottobre, P23 — Ogni Salt Sprite del Geyser ha i suoi HP (19 ottobre 2026, versione 1.15.253)
 
 Setup: solo codice (F5 basta). Un PG con un'abilità che crea un Geyser con Salt Sprite (p.232), in combat.
 
 - [ ] Fai eruttare un Geyser scegliendo di evocare il Salt Sprite → compare il Salt Sprite al posto del Geyser e
-      nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare.
+      nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare. **(non provato per mancanza di tempo)**
 - [ ] Fai eruttare un secondo Geyser con Salt Sprite → nasce un secondo attore; dai danno a uno dei due Salt Sprite →
-      l'altro resta con gli HP pieni.
+      l'altro resta con gli HP pieni. **(non provato)**
 - [ ] Da giocatore (proprietario del PG) fai eruttare un Geyser con Salt Sprite → il Salt Sprite compare (lo crea il
-      GM) e il giocatore può aprirne la scheda e muoverlo.
-- [ ] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima.
+      GM) e il giocatore può aprirne la scheda e muoverlo. **(non provato)**
+- [ ] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima. **(non provato)**
 
 ## Esito 18 ottobre, P21 — Un'abilità trascinata su un riquadro pieno prende il suo posto (19 ottobre 2026, versione 1.15.252)
 
