@@ -3646,8 +3646,8 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] Con sei abilità equipaggiate, trascina un'altra abilità sul quinto riquadro: prende il posto della quinta e la
-      prima resta dov'è. **(non provato (trascinamento HTML5))**
-- [ ] Trascinare su un riquadro vuoto funziona come prima. **(non provato)**
+      prima resta dov'è. **(bug P21: Valkyrie sul quinto riquadro pieno → finestra Equip e talento/mastery giusti, ma l'abilità va in fondo alla lista e i riquadri restano uguali (i riquadri seguono l'ordine delle abilità, non equippedAbilities))**
+- [x] Trascinare su un riquadro vuoto funziona come prima. **(PG nuovo senza abilità, Cryo sul terzo riquadro vuoto con Talent I + mastery → compare nel primo riquadro con TI ★, come prima)**
 
 ## Emerso playtest 1.15.1 — Gli usi dei kit contano anche con clic rapidissimi (17 ottobre 2026, versione 1.15.136)
 
@@ -3790,8 +3790,8 @@ Setup: solo codice (F5 basta).
       "Interrupt 1", non più "1action". **('1 Action', '2 Actions', 'Interrupt 3 ★')**
 - [x] Catapult con la mastery: il riquadro dice "Interrupt 3", come il badge del pannello; passando il mouse compare
       la spiegazione. **(tooltip 'From Mastery: Mangonel: Catapult becomes Interrupt 3…')**
-- [ ] Il riquadro risponde ancora come prima al clic (apre / chiude il pannello), al doppio clic (apre la scheda) e al
-      trascinamento. **(non provato)**
+- [x] Il riquadro risponde ancora come prima al clic (apre / chiude il pannello), al doppio clic (apre la scheda) e al
+      trascinamento. **(clic apre / richiude il pannello, doppio clic apre la scheda dell'abilità; il drop sul riquadro funziona (vedi P21 per il riquadro pieno))**
 
 ## Emerso R5 — Spiegazioni per gli ultimi tag grigi dei foe (17 ottobre 2026, versione 1.15.122)
 
@@ -4411,13 +4411,13 @@ Setup: solo codice (F5 basta).
 - [x] Un PG con la relic Paleblood (rango I) entra in un combat, poi Begin Combat: in chat NON compare nessuna card
       "End of round 0" né "Tick the Paleblood die up by 1". **(nessuna 'End of round 0' all'avvio (senza Paleblood))**
 - [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
-      round 1).
+      round 1). **(combat temporaneo con la sola Spellblade: all'avvio nessuna card (non c'è niente al round 1); non provato con qualcosa che si attiva al round 1)**
 - [x] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
       una volta sola, insieme al promemoria R62 del round 2. **(Card "End of round 2" con Paleblood I (una sola), insieme al promemoria del round successivo.)**
 - [x] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round. **("End of round 3" al passaggio 3 → 4; con Previous Round nessuna card di fine round.)**
 - [ ] Riserve dell'Encounter Designer previste a fine round 2: al passaggio al round 3 arriva al GM "Reserves due —
-      end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
-- [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
+      end of round 2"; all'avvio del combat non arriva nessuna card delle riserve. **(non provato (nessuna riserva dell'Encounter Designer preparata))**
+- [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima. **(Spellblade attivata al round 1: nessuna card, ma non ha relic con promemoria "start" / "first-turn"; non provato con una relic che li ha (es. Byrax rango III))**
 
 ## Emerso R33b — Il clic destro che chiude la scelta di uno spazio non apre più l'HUD del token (17 ottobre 2026, versione 1.15.78)
 
@@ -4871,13 +4871,13 @@ Junk Mage, Sniper o Barkeep), e un secondo token dello stesso foe. Solo JS: F5 d
 - [x] **Round 5, tratto**: Next Round → card "Round 5" con "Storm Hilt Rage: At the start of round 5 and for the rest
       of combat…". Al round 6 niente righe dei PG. **(Round 4 → 5 (alle 11:08): card "Round 5" con "TEST Spellblade — Storm Hilt Rage: At the start of round 5…"; dal 6 al 9 nessuna riga dei PG.)**
 - [x] **Indietro e avanti**: Previous Round dal 5 al 4, poi Next Round → la card del round 5 NON esce di nuovo. **(Riportato a round 4 con il 5 già segnato, Next Round: nessuna card del round 5 ripetuta.)**
-- [ ] **Due GM**: con un secondo GM (o assistente) connesso, al nuovo round esce una sola card per pubblico.
+- [ ] **Due GM**: con un secondo GM (o assistente) connesso, al nuovo round esce una sola card per pubblico. **(non provato: serve un secondo GM connesso)**
 - [x] **Talento**: PG Wright con Cryo e il talento I scelto → al round 4 "Cryo (Talent I) (now active): At round 4 or
       later, this ability generates +1 Aether when used."; col talento II scelto, solo la riga del II. **(Card del round 4 di stamattina: "PT S3 — Cryo (Talent I) (now active) At round 4 or later…".)**
 - [x] **Relic**: PG con Conquering King al rank I → al round 5 "Conquering King I (now active): Invoke (Round 5+): All
       abilities deal bonus damage."; al round 7 niente, finché non è al rank II. **(PT S3 ha Conquering King al rank II: card del round 7 "Conquering King II (now active)". Rank I non provato.)**
-- [ ] **Legend**: Dread Lords in combat → al round 3 e al round 6 la card al GM nomina Eternal Imperium; al 4 e al 5 no.
-- [ ] **Sconfitto**: un foe segnato defeated prima del round 3 non dà righe.
+- [x] **Legend**: Dread Lords in combat → al round 3 e al round 6 la card al GM nomina Eternal Imperium; al 4 e al 5 no. **(combat temporaneo con Dread Lords: card al GM al round 3 e al 6 con Eternal Imperium, niente al 4 e al 5. Nota: la card ha due righe di Eternal Imperium (una "At the start of this round…", una "At round 3 and every three rounds…"), vedi P22)**
+- [x] **Sconfitto**: un foe segnato defeated prima del round 3 non dà righe. **(Junk Mage segnato defeated dall'inizio: nessuna sua riga al round 3)**
 
 ## R61 — Interrupt concessi in chat da soli (16 ottobre 2026, versione 1.15.62)
 
@@ -5065,9 +5065,9 @@ Geyser e Massive Overhead (mastery sbloccata), dal compendio Jobs o già sulla s
       nella descrizione): tooltip Summon presente come prima. **(Umbra "Finishing Blow: [Summon] a shadow" e Dark Sliver "[summon] a plant" con il tooltip. La mastery di Dark Sliver (mote of life) non era sbloccata.)**
 - [x] **Geyser** ("Summon a height 1 geyser object"): niente tooltip Summon sul verbo (il chip del tag "summon" resta). **(Geyser: "Summon a height 1 geyser object" senza tooltip sul verbo; chip "Geyser · H1" e "Salt Sprite".)**
 - [x] **Massive Overhead**: mastery "Blood Rush:" senza tooltip su Rush; il bottone 💬 della mastery in chat uguale. **(Massive Overhead con mastery: "Blood Rush:" senza tooltip su Rush, sia nell'anteprima sia nella card del 💬.)**
-- [ ] **Non devono cambiare**: un foe che evoca (es. Arachnid Demon, "Chaos Cocoon") e un trofeo (Soul Gem, "summon 3
+- [x] **Non devono cambiare**: un foe che evoca (es. Arachnid Demon, "Chaos Cocoon") e un trofeo (Soul Gem, "summon 3
       Relict Husks") tengono il tooltip su summon; un talento che inizia con "Slay:" o "Comeback:" ha ancora il tooltip
-      sull'etichetta.
+      sull'etichetta. **(Arachnid Demon ("summons a cocoon", "summon two natals"…) e Soul Gem ("summon 3 Relict Husks", "allied summons") col tooltip su summon; Intimidate col Talent I "Comeback: Rush 2 instead." ha il tooltip su Comeback)**
 
 ## R49 — Aree di Slay, Finishing Blow, Exceed e Collide; aree "centered on them" (16 ottobre 2026, versione 1.15.51)
 
@@ -5180,11 +5180,11 @@ nell'intestazione del tratto, nella tab dei tratti.
 
 - [x] **Bound Spirit**: chip Astral Seraph; trascinarlo sulla mappa crea il token del seraph. **(Bound Spirit: Astral Seraph)**
 - [x] **Beast Master**: chip Great Beast, nessun chip Beast. **(Beast Master: Great Beast, niente Beast)**
-- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token. **(Nessun PG di prova con Selkie.)**
+- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token. **(PG temporaneo con Selkie: chip Selkie presente; trascinamento sulla mappa non provato)**
 - [x] **Cheap Trick**: chip Bomb. **(Cheap Trick: Bomb)**
 - [x] **Darkside**: chip Shadow. **(Darkside: Shadow)**
-- [ ] **Meld / Umbral Soul**: nessun chip. **(Nessun PG di prova con Meld / Umbral Soul.)**
-- [ ] **Tratto bloccato**: un tratto di capitolo più alto di quello del PG (lucchetto "Locked") non mostra il chip.
+- [x] **Meld / Umbral Soul**: nessun chip. **(PG temporaneo: Meld e Umbral Soul senza chip)**
+- [x] **Tratto bloccato**: un tratto di capitolo più alto di quello del PG (lucchetto "Locked") non mostra il chip. **(Selkie portato a capitolo 3 su un PG di capitolo 1: tratto "Locked", nessun chip)**
 - [x] **Abilità (non devono cambiare)**: Umbra ha ancora il chip Shadow, Cavaliere il chip Bomb (R43). **(Umbra: chip Shadow; Cavaliere: chip Bomb.)**
 
 ## R43 — Summon solo sulle abilità che lo creano (16 ottobre 2026, versione 1.15.45)
@@ -5953,19 +5953,19 @@ Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiunge
 Setup: un PG con meno di sei abilità (capitolo alto, o da GM) e il compendio delle abilità aperto accanto alla scheda,
 tab Combat.
 
-- [ ] **Drop su un riquadro**: trascinare un'abilità con talenti (es. Rook) su un riquadro "Drop ability here" → la
-      finestra "Equip: …" compare come prima; scegliendo Talent I e la mastery, il riquadro mostra TI e ★. **(non provato (trascinamento))**
-- [ ] **Drop fuori dai riquadri**: trascinare un'altra abilità con talenti nello spazio tra i riquadri, sul titolo
+- [x] **Drop su un riquadro**: trascinare un'abilità con talenti (es. Rook) su un riquadro "Drop ability here" → la
+      finestra "Equip: …" compare come prima; scegliendo Talent I e la mastery, il riquadro mostra TI e ★. **(drop simulato su riquadro: finestra "Equip: Cryo", Talent I + mastery → riquadro con TI ★)**
+- [x] **Drop fuori dai riquadri**: trascinare un'altra abilità con talenti nello spazio tra i riquadri, sul titolo
       della sezione o in un altro punto della scheda → compare la stessa finestra; dopo "Equip" l'abilità va nel primo
-      riquadro libero con i badge scelti. **(non provato)**
-- [ ] **Annulla**: chiudere la finestra con la X → l'abilità NON viene aggiunta. **(non provato)**
-- [ ] **Tante di fila**: aggiungere 4-5 abilità una dopo l'altra il più velocemente possibile, lasciandole dove
-      capita → ognuna chiede talento/mastery; nessuna arriva senza la finestra. **(non provato)**
-- [ ] **Drop mentre la finestra è aperta**: con la finestra della precedente ancora aperta, lasciare un'altra abilità
+      riquadro libero con i badge scelti. **(drop sulla sezione abilità, fuori dai riquadri → stessa finestra; dopo Equip l'abilità c'è col talento scelto)**
+- [x] **Annulla**: chiudere la finestra con la X → l'abilità NON viene aggiunta. **(X sulla finestra → nessuna abilità aggiunta (31 oggetti prima e dopo))**
+- [x] **Tante di fila**: aggiungere 4-5 abilità una dopo l'altra il più velocemente possibile, lasciandole dove
+      capita → ognuna chiede talento/mastery; nessuna arriva senza la finestra. **(cinque abilità di fila (Cryo, Righteous Disdain, Demon Claw, Dark Knight, Umbral Echo): ognuna ha chiesto la finestra, tutte con Talent II)**
+- [x] **Drop mentre la finestra è aperta**: con la finestra della precedente ancora aperta, lasciare un'altra abilità
       fuori dai riquadri → notifica "The previous item is still being added…", la seconda non viene aggiunta; chiusa la
-      prima, rilasciandola funziona.
-- [ ] **Abilità senza talenti**: un'abilità senza talenti né mastery (se ce n'è una) o un tratto/reliquia → aggiunti
-      subito, nessuna finestra.
+      prima, rilasciandola funziona. **(con la finestra di Valkyrie aperta, drop fuori dai riquadri → "The previous item is still being added: finish that first…", nulla aggiunto; dopo funziona. Nota: su un PG di capitolo 1 un'abilità di capitolo 3 apre prima "Chapter Lock", che blocca gli altri drop finché non si risponde)**
+- [x] **Abilità senza talenti**: un'abilità senza talenti né mastery (se ce n'è una) o un tratto/reliquia → aggiunti
+      subito, nessuna finestra. **(reliquia Mercy trascinata → aggiunta subito, nessuna finestra)**
 
 ## R3 — avviso in chat quando un'aura scade (15 ottobre 2026, versione 1.15.5)
 

@@ -77,6 +77,18 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       con Remove non arriva mai (provato 19 ottobre: Elden Rune + Arkenrune + GREAT RUNE, End Encounter → mappa vuota,
       nessuna card). Escludere i template con `flags.icon-system.lasting` / terrain (e lasciare la decisione alla
       card), come fa già il cambio turno. S.
+- [ ] **P21 (media)** — Abilità trascinata su un riquadro pieno: non prende il posto di quella che c'era. I sei
+      riquadri di `icon-combat.hbs` mostrano le prime sei abilità in ordine di `sort` (`context.abilityItems`);
+      `#onDropAbilitySlot` scrive l'id in `system.combat.equippedAbilities[slot]`, ma quel campo non lo legge nessuno.
+      Provato 19 ottobre: PT Testi con sei riquadri pieni, Valkyrie sul quinto con Talent I + mastery → l'abilità
+      arriva sulla scheda (talento e mastery giusti) ma in fondo alla lista, i riquadri restano uguali. Il fix della
+      1.15.137 (numero del riquadro) era giusto ma senza effetto visibile. Da decidere: usare `equippedAbilities` per
+      i riquadri, oppure al drop spostare il `sort` dell'abilità nuova al posto di quella del riquadro. S/M.
+- [ ] **P22 (bassa)** — Card di round dei Dread Lords: al round 3 e al 6 Eternal Imperium compare due volte, con due
+      testi diversi ("(Round 3, 6, etc) At the start of this round, all three Lords use their Round actions
+      simultaneously." e "(Round 3, 6, etc) At round 3 and every three rounds thereafter…"). Probabilmente il dato è
+      sia in un tratto sia in un'azione del pack `foes-legend`: tenerne uno. Provato 19 ottobre con un combat
+      temporaneo. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
