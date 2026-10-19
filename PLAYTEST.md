@@ -3216,8 +3216,8 @@ Setup: solo codice (F5 basta).
       cliccandola l'abilità esce dal riquadro. **((la scheda parte bloccata: sbloccata compaiono 4 ×))**
 - [x] Con il lucchetto chiuso ("Locked") la × sparisce dai riquadri.
 - [x] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×. **(sulle schede in sola lettura (TEST Knave, Fool, Enochian, Harvester) nessun bottone ×)**
-- [ ] Con un'abilità combo in un riquadro: COMBO OFF, il badge fulmine è spento; spunta COMBO ON, il badge sul
-      riquadro si accende. **(non provato)**
+- [x] Con un'abilità combo in un riquadro: COMBO OFF, il badge fulmine è spento; spunta COMBO ON, il badge sul
+      riquadro si accende. **(Chanter: COMBO OFF badge fulmine spento; COMBO ON il badge diventa "combo-active" su Symphony, Holy, Pandaemonium.)**
 
 ## R33b2 — Le caselle di terreno guardano anche gli spazi attraversati (17 ottobre 2026, versione 1.15.176)
 
@@ -3520,8 +3520,8 @@ Setup: solo codice (F5 basta).
 - [x] Bersagliare un alleato e giocare un 4: la card mostra "Foretold on: <nome>" e il bottone dell'area. **('4 — The Ewer' con 'Place Small Blast (target)' e Blessed)**
 - [x] Cliccare il bottone: il small blast si centra sull'alleato anche se è lontano; restano bersagliati solo gli
       alleati nell'area (un avviso dice quanti foe sono stati esclusi); Blessed li benedice. **(Small Blast (target) sulla Spellblade)**
-- [ ] Giocare la carta senza bersagli: la card dice di bersagliare l'alleato; bersagliarlo, poi cliccare il bottone:
-      funziona. **(non provato)**
+- [x] Giocare la carta senza bersagli: la card dice di bersagliare l'alleato; bersagliarlo, poi cliccare il bottone:
+      funziona. **(Senza bersagli: "No ally was targeted: target the ally, then use the buttons."; bersagliata la Spellblade, "Place Small Blast (target)" piazza l'area.)**
 - [ ] Con una wild card toccata dal blast, viene offerta l'esplosione. **(non provato)**
 
 ## R36b — Carte del Seer giocate in chat (17 ottobre 2026, versione 1.15.147)
@@ -3533,8 +3533,8 @@ Setup: solo codice (F5 basta).
 - [x] Cliccare Evasion: l'alleato bersagliato la riceve e scade all'inizio del suo turno successivo. **(la Spellblade ha Evasion; la scadenza non controllata)**
 - [ ] Con due pile senza "Discard" nel nome, la ruota apre la finestra di Foundry per scegliere la pila. **(non provato)**
 - [ ] Il Play normale di Foundry verso una pila posta la stessa card. **(non provato)**
-- [ ] Senza token selezionato né personaggio assegnato, la card dice di selezionare il token del Seer. **(non provato)**
-- [ ] Controllare i promemoria di 2, 3, 5, 8, 9, 10, J e K. **(non provato)**
+- [x] Senza token selezionato né personaggio assegnato, la card dice di selezionare il token del Seer. **(Senza token del Seer selezionato: "Select the Seer's token (or set your character) before playing a card to get its Gain buttons.")**
+- [x] Controllare i promemoria di 2, 3, 5, 8, 9, 10, J e K. **(Con Ann selezionata e la Spellblade bersagliata: 2 dash 3, 3 teleport adiacente, 5 +2 curses, 8 unstoppable/immune, J +1 boon come promemoria; 9 Gain Pacified + "Cured after…", 10 Gain Stealth + promemoria, K Gain Counter e Sturdy.)**
 
 ## R36a — Carte del Seer: l'effetto su ogni carta (17 ottobre 2026, versione 1.15.146)
 
@@ -3805,11 +3805,11 @@ Setup: solo codice (F5 basta).
 - [x] Churn Baron: "4 Assets" su Problem Solver spiega il dado Assets. **(Churn Baron Assets ok)**
 - [x] Violence Demon "Blade Consume 3", Pale Man "Gaze Target Only", Falling Leaf Aesi "Thievery", Wyrm "Path Of
       Ruin", Keeper of the Eldflame "Forge Action": ognuno ha la sua spiegazione. **(Pale Man ok; Violence Demon, Falling Leaf Aesi, Wyrm, Keeper senza spiegazione (vedi Esito))**
-- [ ] "Burst 2 Self" (Summer Flame Aesi) e "Burst 1 Target" (Head Lopper): spiegazione del burst, non più grigio.
-- [ ] Dread Lords → Dark Grip, "Range 4+": spiega "a range 4 o più lontano".
+- [ ] "Burst 2 Self" (Summer Flame Aesi) e "Burst 1 Target" (Head Lopper): spiegazione del burst, non più grigio. **(Summer Flame Aesi "burst-2-self", Head Lopper "burst-1-target": sulle schede legend i tag sono ancora slug senza spiegazione (stesso problema di P8).)**
+- [ ] Dread Lords → Dark Grip, "Range 4+": spiega "a range 4 o più lontano". **(Dread Lords: "range-4+" grezzo e senza spiegazione (P8).)**
 - [ ] Il blocco "Area Effect:" nella card di un'abilità ora ha il tooltip anche sul titolo: controllare che non
       disturbi.
-- [ ] "Range 3", "Burst 2", "+1 Boon" hanno ancora la spiegazione di prima.
+- [x] "Range 3", "Burst 2", "+1 Boon" hanno ancora la spiegazione di prima. **(Foe normali (Knuckle, Mechanist, Pepperbox, Wisp, Fire Dancer): Range 3, +1 Boon, Small Blast, Mark… tutti con la spiegazione.)**
 
 ## Emerso R8 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (17 ottobre 2026, versione 1.15.121)
 
@@ -4412,9 +4412,9 @@ Setup: solo codice (F5 basta).
       "End of round 0" né "Tick the Paleblood die up by 1". **(nessuna 'End of round 0' all'avvio (senza Paleblood))**
 - [ ] Sempre all'avvio, il promemoria di round R62 del round 1 compare come prima (se nel combat qualcosa si attiva al
       round 1).
-- [ ] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
-      una volta sola, insieme al promemoria R62 del round 2.
-- [ ] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round.
+- [x] Si spendono tutte le attivazioni e si passa al round 2: compare "End of round 1" con il promemoria Paleblood,
+      una volta sola, insieme al promemoria R62 del round 2. **(Card "End of round 2" con Paleblood I (una sola), insieme al promemoria del round successivo.)**
+- [x] Round 2 → 3: compare "End of round 2". Con Previous Round non compare nessun promemoria di fine round. **("End of round 3" al passaggio 3 → 4; con Previous Round nessuna card di fine round.)**
 - [ ] Riserve dell'Encounter Designer previste a fine round 2: al passaggio al round 3 arriva al GM "Reserves due —
       end of round 2"; all'avvio del combat non arriva nessuna card delle riserve.
 - [ ] Nel round 1, quando si attiva il primo PG, "Start of turn" e "First turn of combat" compaiono come prima.
@@ -4868,14 +4868,14 @@ Junk Mage, Sniper o Barkeep), e un secondo token dello stesso foe. Solo JS: F5 d
       CYCLONE) (now active): At round 4 or later, Drifting Leaf's infuse is always active.", senza il nome della mastery
       ripetuto nel testo; NESSUNA riga di Massive Overhead (mastery bloccata). In un combat nuovo, con la mastery
       sbloccata, la riga di Massive Overhead c'è. **(round 4: card pubblica Drifting Leaf GREAT CYCLONE)**
-- [ ] **Round 5, tratto**: Next Round → card "Round 5" con "Storm Hilt Rage: At the start of round 5 and for the rest
-      of combat…". Al round 6 niente righe dei PG.
-- [ ] **Indietro e avanti**: Previous Round dal 5 al 4, poi Next Round → la card del round 5 NON esce di nuovo.
+- [x] **Round 5, tratto**: Next Round → card "Round 5" con "Storm Hilt Rage: At the start of round 5 and for the rest
+      of combat…". Al round 6 niente righe dei PG. **(Round 4 → 5 (alle 11:08): card "Round 5" con "TEST Spellblade — Storm Hilt Rage: At the start of round 5…"; dal 6 al 9 nessuna riga dei PG.)**
+- [x] **Indietro e avanti**: Previous Round dal 5 al 4, poi Next Round → la card del round 5 NON esce di nuovo. **(Riportato a round 4 con il 5 già segnato, Next Round: nessuna card del round 5 ripetuta.)**
 - [ ] **Due GM**: con un secondo GM (o assistente) connesso, al nuovo round esce una sola card per pubblico.
-- [ ] **Talento**: PG Wright con Cryo e il talento I scelto → al round 4 "Cryo (Talent I) (now active): At round 4 or
-      later, this ability generates +1 Aether when used."; col talento II scelto, solo la riga del II.
-- [ ] **Relic**: PG con Conquering King al rank I → al round 5 "Conquering King I (now active): Invoke (Round 5+): All
-      abilities deal bonus damage."; al round 7 niente, finché non è al rank II.
+- [x] **Talento**: PG Wright con Cryo e il talento I scelto → al round 4 "Cryo (Talent I) (now active): At round 4 or
+      later, this ability generates +1 Aether when used."; col talento II scelto, solo la riga del II. **(Card del round 4 di stamattina: "PT S3 — Cryo (Talent I) (now active) At round 4 or later…".)**
+- [x] **Relic**: PG con Conquering King al rank I → al round 5 "Conquering King I (now active): Invoke (Round 5+): All
+      abilities deal bonus damage."; al round 7 niente, finché non è al rank II. **(PT S3 ha Conquering King al rank II: card del round 7 "Conquering King II (now active)". Rank I non provato.)**
 - [ ] **Legend**: Dread Lords in combat → al round 3 e al round 6 la card al GM nomina Eternal Imperium; al 4 e al 5 no.
 - [ ] **Sconfitto**: un foe segnato defeated prima del round 3 non dà righe.
 
@@ -5943,10 +5943,10 @@ Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiunge
 - [x] **Catapult con la mastery**: spuntare la mastery → il badge del costo diventa "Interrupt 3", evidenziato, con
       tooltip "From Mastery: Catapult becomes Interrupt 3" + la regola; nessun tag "Interrupt 3" a parte. Stesso nella
       card Show in Chat. Togliendo la mastery torna "Interrupt 1". **(badge 'Interrupt 3' con 'From Mastery: Mangonel…')**
-- [ ] **Altro interrupt**: un'abilità interrupt qualsiasi di un altro job (es. una con "Interrupt 1" già tra i tag) →
-      il numero sta solo sul badge del costo, con il tooltip.
+- [x] **Altro interrupt**: un'abilità interrupt qualsiasi di un altro job (es. una con "Interrupt 1" già tra i tag) →
+      il numero sta solo sul badge del costo, con il tooltip. **(Sturmreiten: in chat il badge "Interrupt 1" ha il tooltip; tra i tag solo "Line 3", nessun "Interrupt".)**
 - [ ] **Abilità normali**: un'abilità da 1 o 2 azioni → badge del costo come prima, senza tooltip; tag invariati.
-- [ ] **Foe**: un foe con un'azione "Small Blast" o "Medium Blast" o "Terrain Effect" → il tag ha il tooltip.
+- [x] **Foe**: un foe con un'azione "Small Blast" o "Medium Blast" o "Terrain Effect" → il tag ha il tooltip. **(Pepperbox / Wisp: "Small Blast" con spiegazione.)**
 
 ## R4 — talento e mastery chiesti per ogni abilità trascinata (15 ottobre 2026, versione 1.15.6)
 
