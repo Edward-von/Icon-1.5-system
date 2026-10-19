@@ -2605,10 +2605,10 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Symphony, turno normale, 2 blessing tolte e casella Charge non spuntata → si piazzano al massimo 2 mote e si
-      perdono 2 blessing. **(non provato)**
+- [x] Symphony, turno normale, 2 blessing tolte e casella Charge non spuntata → si piazzano al massimo 2 mote e si
+      perdono 2 blessing. **(Due blessing tolte (Freelancer e Harvester), Charge non spuntata: due mote, card "Blessings removed: TEST Freelancer 1, TEST Harvester 1". (Blessed rimessi a mano dopo la prova.))**
 - [ ] Turno slow nel tracker (bottone Slow attivo): la casella Charge è già spuntata; 2 blessing tolte → si piazzano
-      fino a 4 mote, si perdono solo 2 blessing; la card dice "Charge: +2 more spaces, no blessing for them". **(non provato)**
+      fino a 4 mote, si perdono solo 2 blessing; la card dice "Charge: +2 more spaces, no blessing for them". **(Charge spuntata a mano senza togliere blessing: card "Charge: +2 more spaces, no blessing for them". Il turno slow nel tracker non provato.)**
 - [x] Nessun personaggio con blessing: la finestra si apre comunque e dice che nessuno ne ha; con Charge spuntato si
       piazzano 2 mote, senza Charge non viene creato nessun mote. **(nessuno con blessing (Sealer ignorato): con Charge 'Click up to 2 spaces', card 'Charge: +2 more spaces, no blessing for them')**
 - [x] Charge spuntato a mano in un turno normale (per Songweave): funziona come nel turno slow. **(Charge spuntato a mano in un turno normale)**
@@ -3116,13 +3116,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazzare una mote di Symphony, poi trascinare un token di un foe lungo un percorso che passa sopra la mote e
+- [x] Piazzare una mote di Symphony, poi trascinare un token di un foe lungo un percorso che passa sopra la mote e
       finisce più in là. Nella card "passes through", il tooltip di Detonate dice "as they passed through it (on its
-      space)".
-- [ ] Cliccare Detonate: la Small Blast è centrata sulla casella della mote, non su quella d'arrivo. La card
-      dell'esplosione dice "Centred on its space: … passed through it and moved on".
-- [ ] Sempre con il foe: il pulsante dice "Pit where <nome> passed" e il pit compare sulla casella della mote.
-- [ ] Un token che si ferma sopra la mote: la blast è centrata su di lui come prima.
+      space)". **(Tooltip di Detonate: "small blast centred on Battle Demon as they passed through it (on its space); the space is removed" (con la toppa di P2).)**
+- [x] Cliccare Detonate: la Small Blast è centrata sulla casella della mote, non su quella d'arrivo. La card
+      dell'esplosione dice "Centred on its space: … passed through it and moved on". **(Detonate: Small Blast sulla casella della mote; card "Centred on its space: Battle Demon passed through it and moved on" (con la toppa di P2).)**
+- [x] Sempre con il foe: il pulsante dice "Pit where <nome> passed" e il pit compare sulla casella della mote. **(Bottone "Pit where Battle Demon passed": il pit compare sulla casella della mote.)**
+- [x] Un token che si ferma sopra la mote: la blast è centrata su di lui come prima. **(Battle Demon fermo sulla mote: Detonate fa la Small Blast centrata su di lui.)**
 
 ## Emerso R49 — HARVEST MOON riconosce la mote of life (17 ottobre 2026, versione 1.15.183)
 
@@ -3223,11 +3223,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Trascinare un token con il ruler attraverso una casella Dangerous e fermarlo oltre: compare la domanda "passed
-      through … Take 2 damage", una volta sola nel turno.
-- [ ] Attraversare una mote di Symphony senza fermarsi: la card dice "passes through" e ha Detonate.
-- [ ] Attraversare un Difficult: avviso "crosses difficult terrain … +1".
-- [ ] Teletrasporto (blink) sopra le stesse caselle: nessuna domanda e nessuna card.
+- [x] Trascinare un token con il ruler attraverso una casella Dangerous e fermarlo oltre: compare la domanda "passed
+      through … Take 2 damage", una volta sola nel turno. **(Con la toppa di P2: attraversata una casella Dangerous → "Battle Demon passed through a dangerous terrain space … Take 2 piercing damage …? Only once a turn" con Take 2 damage / Not this time.)**
+- [x] Attraversare una mote di Symphony senza fermarsi: la card dice "passes through" e ha Detonate. **(Con la toppa di P2 in pagina (copia di `_movement` in `movement`): il Battle Demon che passa sulla mote dà "passes through the Mote (Symphony)" con Detonate. Senza la toppa nessuna card (P2).)**
+- [x] Attraversare un Difficult: avviso "crosses difficult terrain … +1". **(Attraversato un Difficult: "Battle Demon crosses difficult terrain (Difficult): exiting costs +1 space of movement (p.89).")**
+- [x] Teletrasporto (blink) sopra le stesse caselle: nessuna domanda e nessuna card. **(Teletrasporto (blink) sopra la casella Dangerous: nessuna domanda, nessuna card.)**
 - [ ] Attraversare un'area con status "inside" senza fermarsi: nessun bottone status.
 
 ## R33b2 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (17 ottobre 2026, versione 1.15.175)
@@ -4671,10 +4671,10 @@ e CSS: F5 dopo il deploy.
       dopo chiede di nuovo. "Not this time" → niente danno. Da giocatore su un foe che non possiede: il danno passa dal GM. **(vedi blocchi 1-2 (dangerous con domanda, una volta per turno))**
 - [ ] **Only for foes**: Gates of Hell mastery → "Afterimage · 1" (solo spazi liberi: su un token → avviso). Un alleato che ci
       entra: nessuna domanda; un foe: la domanda del dangerous. **(non provato)**
-- [ ] **Mote**: Symphony → "Mote · 4": uno spazio accanto a una mote già messa → avviso "can't be adjacent"; su un token →
+- [x] **Mote**: Symphony → "Mote · 4": uno spazio accanto a una mote già messa → avviso "can't be adjacent"; su un token →
       avviso "isn't free". Un personaggio trascinato su una mote → card "<nome> enters the Mote (Symphony)" con la frase
       "Any character that enters an affected space … detonates the mote …" e Remove. Un personaggio che inizia il turno su una
-      mote → card "Start of <nome>'s turn" (una sola, dal GM). **(non provato)**
+      mote → card "Start of <nome>'s turn" (una sola, dal GM). **(Symphony "Mote · 4": accanto a una mote "Motes can't be adjacent to each other or overlap."; su un token "That space isn't free: pick an empty one."; il Battle Demon spostato sulla mote → card "Battle Demon enters the Mote (Symphony)" con Detonate / Remove.)**
 - [ ] **Mine**: Party Favor → "Mine · 1" su uno spazio libero; un personaggio ci entra → card con "When any character enters
       the space, the mine explodes …" e la tabella del gamble; Remove la toglie. **(non provato)**
 - [x] **Elden Rune**: clic sul chip → la runa compare da sola sotto il token del PG, senza clic sulla mappa. Un alleato che ci
