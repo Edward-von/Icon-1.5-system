@@ -2842,10 +2842,10 @@ Setup: solo codice (F5 basta).
 - [x] Un foe attacca lo Spellblade con un'abilità: sulla card d'attacco lo Spellblade usa Aether Deflection. Poi il
       foe tira il danno: sulla riga dello Spellblade c'è la chip della resistenza (Aether Deflection) e Apply dimezza
       il danno.
-- [ ] Un altro bersaglio della stessa card non ha la chip. **(non provato (un solo bersaglio))**
+- [x] Un altro bersaglio della stessa card non ha la chip. **(19 ott: Kelpie (avvicinato a 1 spazio) attacca TEST Spellblade, Aether Deflection usata, danno su Spellblade e TEST Knave: "Resistance ½ (Aether Deflection)" solo sulla riga della Spellblade. Nota: il GM vede il bottone solo togliendo il giocatore "Giocatore" dai proprietari della Spellblade)**
 - [x] L'attacco dopo, con la stessa abilità ma senza usare Aether Deflection: la card del danno non ha più la chip.
-- [ ] Danno divine: la chip c'è ma Apply non dimezza (il divine non si dimezza, p.104). **(non provato)**
-- [ ] Se il danno è stato tirato prima di premere Aether Deflection, quella card non cambia (va applicato a mano). **(non provato)**
+- [x] Danno divine: la chip c'è ma Apply non dimezza (il divine non si dimezza, p.104). **(danno con Divine: chip "Resistance ½ (Aether Deflection)" presente, Apply "5 damage applied" senza dimezzare)**
+- [x] Se il danno è stato tirato prima di premere Aether Deflection, quella card non cambia (va applicato a mano). **(card del danno tirata prima di premere il bottone: nessuna chip, anche ridisegnata dopo)**
 
 ## Emerso R35 — Chip vigor anche per "gain vigor N" (17 ottobre 2026, versione 1.15.205)
 
