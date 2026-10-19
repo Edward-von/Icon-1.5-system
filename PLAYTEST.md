@@ -496,16 +496,16 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Vagabond — Freelancer
 
-- [ ] **Aether Shot** (tratto Freelancer, p.155) — cosa controllare: casella Exceed spuntata ai round 3 e 6, +1 dado bonus nella finestra del danno [1.15.212, 213]
-- [ ] **Bound Spirit** (tratto Freelancer, p.155) — cosa controllare: chip del summon Astral Seraph [1.15.46]
-- [ ] **Astral Chain** (Freelancer, p.156) — cosa controllare: chip "Mark 2 unerring" sotto Other che spunta Unerring [1.15.100, 127]
-- [ ] **Trick Shot** (Freelancer, p.156) — cosa controllare: la chip del Talent II spunta Unerring [1.15.127]
-- [ ] **Exorcism** (Freelancer, p.156) — cosa controllare: area e danno del Talent II, area centrata sul bersaglio [1.15.24, 25, 51]
-- [ ] **Ace** (Freelancer, p.157) — cosa controllare: bottone area del Talent I, centrata sul bersaglio [1.15.24, 51]
-- [ ] **Deus Ex Machina** (Freelancer, p.157) — cosa controllare: un solo blocco "Divine Intervention — Interrupt" con bottone chat [1.15.62]
-- [ ] **Showdown** (Freelancer, p.157) — cosa controllare: Track target; Damage "2 unerring"; con QUENCH lo smoke va da solo sul PG e resta; Cover entrando, Stealth uscendo [1.15.24, 34, 70, 100, 164, 191]
-- [ ] **Soul Shot** (Freelancer, p.158) — cosa controllare: scelta "Exceed / Finishing Blow: Large Blast (target)"; casella Exceed vuota con la frase del libro [1.15.42, 51, 212]
-- [ ] **Warding Bolts** (Freelancer, p.158) — cosa controllare: con Phantom Bolts scelta "Mastery: Aura 2" attorno al PG; Damage con "unerring" [1.15.50, 100, 127]
+- [x] **Aether Shot** (tratto Freelancer, p.155) — cosa controllare: casella Exceed spuntata ai round 3 e 6, +1 dado bonus nella finestra del danno [1.15.212, 213] **(round 3: casella spuntata, card con "Aether Shot (this use)" e l'Exceed; Damage dopo l'attacco con Bonus dice 1 e "Aether Shot: +1 bonus die (this use, from the attack)"; round 4 casella vuota)**
+- [x] **Bound Spirit** (tratto Freelancer, p.155) — cosa controllare: chip del summon Astral Seraph [1.15.46] **(chip Astral Seraph sul tratto)**
+- [x] **Astral Chain** (Freelancer, p.156) — cosa controllare: chip "Mark 2 unerring" sotto Other che spunta Unerring [1.15.100, 127] **(già provato nella sezione 1.15.127: chip "Mark 2 unerring" spunta Unerring)**
+- [x] **Trick Shot** (Freelancer, p.156) — cosa controllare: la chip del Talent II spunta Unerring [1.15.127] **(con il Talent II compare Damage Roll; chip "Talent II 2 flat unerring" spunta Unerring)**
+- [x] **Exorcism** (Freelancer, p.156) — cosa controllare: area e danno del Talent II, area centrata sul bersaglio [1.15.24, 25, 51] **(Talent II: bottone "Large Blast (target)" centrato su Knuckle; danno Hit 2 / Area 2 con Unerring dal tag)**
+- [x] **Ace** (Freelancer, p.157) — cosa controllare: bottone area del Talent I, centrata sul bersaglio [1.15.24, 51] **(Talent I: bottone "Medium Blast (target)" centrato su Knuckle. Nota: piazzare un'area toglie i bersagli, quindi la seconda area "target" di fila chiede di bersagliare di nuovo)**
+- [x] **Deus Ex Machina** (Freelancer, p.157) — cosa controllare: un solo blocco "Divine Intervention — Interrupt" con bottone chat [1.15.62] **(un solo blocco "Divine Intervention — Interrupt 1" con un fumetto)**
+- [ ] **Showdown** (Freelancer, p.157) — cosa controllare: Track target; Damage "2 unerring"; con QUENCH lo smoke va da solo sul PG e resta; Cover entrando, Stealth uscendo [1.15.24, 34, 70, 100, 164, 191] **(Track target c'è; con QUENCH "Small Blast (self)" centrata sul PG e "It stays on the map"; Cover/Stealth già provati nella sezione 1.15.164. NON VA: Damage propone "Hit 2 flat" con Instances 1 (P7) e Unerring NON spuntato)**
+- [x] **Soul Shot** (Freelancer, p.158) — cosa controllare: scelta "Exceed / Finishing Blow: Large Blast (target)"; casella Exceed vuota con la frase del libro [1.15.42, 51, 212] **(bottone area: "Base: Line 3", "Exceed / Finishing Blow: Large Blast (target)" e con il Talent II "Line 6"; casella Exceed vuota con la frase già provata nella sezione 1.15.212)**
+- [ ] **Warding Bolts** (Freelancer, p.158) — cosa controllare: con Phantom Bolts scelta "Mastery: Aura 2" attorno al PG; Damage con "unerring" [1.15.50, 100, 127] **(Phantom Bolts: "Mastery: Aura 2" piazzata attorno al PG; chip "Talent I 2 flat unerring" spunta Unerring. NON VA: l'Hit "2 flat" del testo base ("2 unerring damage") non spunta Unerring, vedi P7)**
 
 #### Vagabond — Shade
 
@@ -760,6 +760,8 @@ Da compilare durante il playtest.
 - **1.15.100, settima casella — Showdown non porta le 2 istanze.** Damage di Showdown (Freelancer): Hit "2 flat" con
   Instances 1. Il testo dice "they take 2 unerring damage from you twice" e il test si aspetta "Showdown 2 ×2".
   (Warding Bolts: Hit 2 flat, come previsto.)
+  Sezione 3 (19 ottobre): oltre alle istanze, né Showdown né Warding Bolts spuntano Unerring sull'Hit "2 flat",
+  anche se il testo dice "2 unerring damage"; le chip di Other con "unerring" invece lo spuntano.
 - **1.15.14, quinta casella — salvare la scheda di un'abilità riporta il capitolo a 1.** Eclipse e Raging Wolf
   (capitolo 2): aperta la scheda dell'item e salvata senza cambiare niente, il capitolo diventa 1. Il menu
   "Chapter" non mostra mai il valore salvato: in `IconItemSheet.mjs` `chapterChoices` ha chiavi di testo ("2")
