@@ -3558,7 +3558,7 @@ Setup: solo codice (F5 basta).
       ×3". **(Flak Blast: 'Effect 1 flat piercing ×3'; Torpedo vedi 1.15.101)**
 - [x] Razer, Aether Split: solo l'esito Area da 2, nessuna chip doppia. **(Razer è una legend: solo Area 2, nessuna chip)**
 - [x] Basic Mob, Rabble: chip "2 · up to ×3" e Instances con tetto 3. **(chip 'Effect 2 flat · up to ×3', il + si ferma a 3)**
-- [ ] Una legend con damageMode impostato a mano (hit / hit-miss): il dialog usa ancora i valori impostati. **(non provato)**
+- [ ] Una legend con damageMode impostato a mano (hit / hit-miss): il dialog usa ancora i valori impostati. **(19 ott, Razer, azione Swat (senza danno nel testo) con damageMode "hit-miss" scritto a mano: compare il bottone Damage in più, ma la finestra offre solo "Hit no damage" e Other, niente Miss. Da capire se è quello che ci si aspetta)**
 
 ## Emerso R40 — Danno "fino a N volte": la chip lo dice e Instances si ferma a N (17 ottobre 2026, versione 1.15.144)
 
@@ -3569,7 +3569,7 @@ Setup: solo codice (F5 basta).
 - [x] Quaking Palm (p.221) e Nothung (p.225): chip "1 piercing · up to ×4", stesso comportamento. **(Quaking Palm e Nothung uguali)**
 - [x] Shotgun Trooper, Double Barrel, esito Area: Instances parte da 1 e si ferma a 3; tornando a un esito senza
       tetto, Instances torna fino a 10. **(Area: da 1, fermo a 3; Other torna fino a 10)**
-- [ ] Scrivere a mano 9 in Instances con il tetto 4: la card applica 4 istanze. **(non provato)**
+- [x] Scrivere a mano 9 in Instances con il tetto 4: la card applica 4 istanze. **(Circle the Oak, chip "up to ×4", 9 scritto a mano: la card dice "4 damage, 4 times" e Apply 4 ×4. Nota: l'anteprima nella finestra mostra ancora "× 9 instances")**
 - [x] Chastise (×3) e Blitz: invariati. **(Chastise ×3 e Blitz invariati)**
 
 ## Emerso R14 — Il danno che un foe infligge a se stesso non è più proposto (17 ottobre 2026, versione 1.15.143)
@@ -3877,10 +3877,10 @@ Setup: solo codice (F5 basta).
       delle foe (band, bersagli, esiti a bottoni). **(Great Beast con summoner Warden)**
 - [x] Le formule mostrate usano il [D] e il fray del summoner. **([D] d6 e fray 4 del Warden)**
 - [x] L'esito "Other" c'è: dadi / fisso / fray scritti a mano finiscono sulla card del danno. **(Other c'è)**
-- [ ] Pierce, Divine e True Strike spuntati compaiono sulla card e valgono quando si preme Apply. **(non provato)**
+- [x] Pierce, Divine e True Strike spuntati compaiono sulla card e valgono quando si preme Apply. **(Great Beast (summon di TEST Warden): finestra "Damage — Warden" con [D] d6 e fray 4 del Warden; spuntati Pierce, Divine e True Strike la card dice "Divine — nothing reduces this damage" e Apply su Knuckle (ARM 2, vigor 3) fa 2 → HP)**
 - [x] Hit c'è sempre; Crit / Miss / Area compaiono solo se il testo dell'azione li prevede. **(solo Hit (2 flat) e Other)**
 - [x] Annullare la finestra non manda niente in chat. **(chiusa senza card)**
-- [ ] Summon senza summoner collegato: la finestra si apre lo stesso e usa le statistiche del summon. **(non provato)**
+- [x] Summon senza summoner collegato: la finestra si apre lo stesso e usa le statistiche del summon. **(summonerActorId vuoto: la finestra si apre con fray 0 e d6)**
 
 ## Emerso R19 — Aure dei foe senza numero (17 ottobre 2026, versione 1.15.114)
 
@@ -4350,8 +4350,8 @@ Setup: solo codice (F5 basta).
 - [x] Nello stesso dialogo scegliere **Other**: c'è il chip "Combo — Succubus" con "3 flat". Cliccarlo: Fixed damage =
       3, Dice 0, niente Fray, niente Area. Roll Damage: la card dice 3 danni con l'etichetta della combo. **(Fixed 3, Dice 0, niente Fray né Area; il tiro non fatto)**
 - [x] Senza combo token: Damage Roll su Incubus dà [D]+fray su Hit come prima.
-- [ ] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
-      Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima. **(non provato)**
+- [x] Controllo che il resto non cambi: Death Blossom con Flying Sleeves armata tira ancora 2[D]+fray su Hit; Holy →
+      Hades resta auto-hit con fray su Hit e su Area; Pandaemonium → Purgatorio uguale a prima. **(Death Blossom con combo: Hit 2[d6]+fray e "Combo version 2[d6] + fray 4" spuntata; Holy (Hades): "Hit no damage" + "Combo version fray 4" spuntata; Pandaemonium (Purgatorio): Hit 1[d6]+fray + Combo version. Nota: per Hades e Purgatorio nessun esito Area nella finestra)**
 
 ## Emerso R37 — L'Ultimate dei Limit Break compare su scheda e card (17 ottobre 2026, versione 1.15.82)
 
@@ -5584,12 +5584,12 @@ dell'aggiornamento), i loro token e due o tre token foe su una scena, uno con lo
 - [x] **Draken Cross**: sbloccare Dark Wind Devil Blade → Other → scelta rapida "Mastery 2 flat divine · area" → spunta
       Divine; il tiro dà 2. Con Talent I scelto c'è anche "Talent I fray N · area" (fray damage again). **('Mastery 2 flat divine · area' e 'Talent I fray 4 · area')**
 - [x] **Mastery bloccata**: togliere la mastery → in Other non c'è più la sua scelta rapida (restano i campi liberi).
-- [ ] **Campi liberi**: Other senza scelta rapida, Dice 1 + Fray → l'anteprima mostra "1[d…] + fray N" e il tiro
-      corrisponde; card "… — Other damage". **(non provato)**
-- [ ] **Dodge**: Other con Area effect spuntato su un foe con Dodge → al momento di Apply è immune (chip "Dodge —
-      immune"); senza Area effect il danno passa. **(non provato)**
-- [ ] **Hit / Area invariati**: su Harvest, Hit e Area tirano come prima (2[D]+fray e fray), con due foe bersagliati
-      la finestra chiede ancora il bersaglio dell'attacco. **(non provato)**
+- [x] **Campi liberi**: Other senza scelta rapida, Dice 1 + Fray → l'anteprima mostra "1[d…] + fray N" e il tiro
+      corrisponde; card "… — Other damage". **(anteprima "1[d6] + fray 4", tiro 1 + 4 = 5, card "Circle the Oak — Other damage")**
+- [x] **Dodge**: Other con Area effect spuntato su un foe con Dodge → al momento di Apply è immune (chip "Dodge —
+      immune"); senza Area effect il danno passa. **(Kelpie (Dodge), 5 fissi: con Area effect chip "Dodge — immune" e "no damage"; senza Area effect "5 damage applied, HP 56 → 51" (HP poi rimessi))**
+- [x] **Hit / Area invariati**: su Harvest, Hit e Area tirano come prima (2[D]+fray e fray), con due foe bersagliati
+      la finestra chiede ancora il bersaglio dell'attacco. **(Harvest: Hit 2[d6]+fray, Area fray; con Knuckle e Janissary la finestra separa bersaglio d'attacco e "AREA")**
 - [x] **Foe / legend**: bottone danno di un'azione foe e di una legend → c'è Other con i soli campi liberi e il tiro
       funziona. **(Other sui foe (Kelpie ecc.))**
 - [x] **Danno solo da talento**: Rot con Talent II scelto ("take 2 piercing damage") → c'è il bottone Damage Roll e in
@@ -5616,14 +5616,14 @@ suo token e due o tre token foe su una scena; tab Combat.
 - [x] **Mastery sbloccata**: sbloccare Giant Kicker su Dropkick → premere il bottone del danno di Dropkick → nella
       finestra ci sono Hit, Crit e **Area**; Area mostra "fray N" e il tiro esce con la sola fray. **(Hit, Crit e Area fray 4)**
 - [x] **Hit invariato**: nella stessa finestra Hit mostra ancora "1[d…] + fray N".
-- [ ] **Bersaglio dell'attacco**: con due o più foe bersagliati la finestra chiede quale è il bersaglio dell'attacco
-      ("the others get a separate Area roll"). **(non provato)**
+- [x] **Bersaglio dell'attacco**: con due o più foe bersagliati la finestra chiede quale è il bersaglio dell'attacco
+      ("the others get a separate Area roll"). **(Dropkick su Knuckle e Janissary: "Hit / Crit / Miss go to the attack target, the others get a separate Area roll", Janissary segnato AREA)**
 - [x] **Mastery bloccata**: togliere la mastery → la finestra torna a Hit e Crit, niente Area. **(senza mastery: Hit, Crit, Other)**
-- [ ] **Altre abilità con la stessa causa**: Sow con Spectral Scythe sbloccata → Area "2 flat", e scegliendo Area si
+- [x] **Altre abilità con la stessa causa**: Sow con Spectral Scythe sbloccata → Area "2 flat", e scegliendo Area si
       spunta Pierce; Upheaval con Talent I scelto → il bottone Damage c'è e Area mostra "2 flat"; senza talento il
-      bottone Damage non c'è. **(non provato)**
-- [ ] **Invariati**: Harvest e Draken Cross con la mastery sbloccata mostrano la stessa Area di prima (Fray); God Hand
-      con la mastery sbloccata non ha l'opzione Area. **(non provato)**
+      bottone Damage non c'è. **(Sow con mastery: Area "2 flat" e scegliendo Area si spunta Pierce; Upheaval col Talent I: Damage e Area "2 flat"; senza talento nessun bottone Damage)**
+- [x] **Invariati**: Harvest e Draken Cross con la mastery sbloccata mostrano la stessa Area di prima (Fray); God Hand
+      con la mastery sbloccata non ha l'opzione Area. **(Harvest e Draken Cross con mastery: Area "fray 4"; God Hand con mastery: nessuna Area)**
 
 ## R20 — L'Arc 4 della mastery di Sow si piazza dal bersaglio (15 ottobre 2026, versione 1.15.24)
 
