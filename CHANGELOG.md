@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Un'abilità trascinata su un riquadro pieno prende il suo posto (versione 1.15.252)
+
+### Esito del playtest del 18 ottobre, P21
+
+- **Riquadro pieno**: trascinando un'abilità su uno dei sei riquadri già occupati, l'abilità arrivava sulla scheda ma
+  in fondo alla lista e i riquadri restavano uguali → i riquadri mostrano le prime sei abilità nell'ordine della
+  scheda, mentre il drop scriveva il numero del riquadro in un campo a parte che nessuno leggeva → ora il drop cambia
+  l'ordine: l'abilità nuova va nel riquadro dove la lasci e quella che c'era scende subito dopo le sei (resta sulla
+  scheda, fuori dai riquadri). Se l'abilità trascinata era già in un altro riquadro della stessa scheda, le due si
+  scambiano. Ho scelto questa strada (invece di leggere il vecchio campo) perché nei mondi già in
+  uso quel campo contiene dati vecchi che avrebbero rimescolato i riquadri.
+
 ## 19 ottobre 2026 — Le infusioni non armate non portano i loro status (versione 1.15.251)
 
 ### Esito del playtest del 18 ottobre, P17

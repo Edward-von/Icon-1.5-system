@@ -5117,6 +5117,8 @@ export class IconSheet extends BaseActorSheet {
     const config = await promptAbilityConfig(item);
     if (config === null) { _log(`dropAbilitySlot — cancelled by user`); return; }
 
+    // The slots as the player saw them when dropping (before a new ability is added).
+    const shown = this.document.items.filter(i => i.type === "ability").sort((a, b) => a.sort - b.sort).map(i => i.id);
     let embedded = item.parent?.id === this.document.id ? item : null;
     if (!embedded) {
       _log(`dropAbilitySlot — embedding "${item.name}" (talent: ${config.talent}, mastered: ${config.mastered})`);
@@ -5135,12 +5137,32 @@ export class IconSheet extends BaseActorSheet {
       });
     }
 
-    const slotIdx  = Number(slot.dataset.slot);
-    const equipped = foundry.utils.deepClone(this.document.system.combat.equippedAbilities);
-    while (equipped.length <= slotIdx) equipped.push(null);
-    equipped[slotIdx] = embedded.id;
-    _log(`dropAbilitySlot — assigned "${embedded.name}" (${embedded.id}) to slot ${slotIdx}`);
-    await this.document.update({ "system.combat.equippedAbilities": equipped });
+    // The six slots show the first six abilities in `sort` order
+    // (context.abilityItems), so the slot is taken by moving the dropped
+    // ability there (P21). The one it displaces goes right after the six,
+    // unslotted; when the dropped one was in another slot, the two swap.
+    // system.combat.equippedAbilities is not read for this.
+    const slotIdx = Number(slot.dataset.slot);
+    const order = [...shown];
+    if (!order.includes(embedded.id)) order.push(embedded.id);   // new: after the others (an empty slot is the next free one)
+    const was = order.indexOf(embedded.id);
+    const displaced = order[slotIdx];
+    if (displaced && displaced !== embedded.id) {
+      if (was < 6) {                       // both slotted: swap
+        order[was] = displaced;
+        order[slotIdx] = embedded.id;
+      } else {                             // from outside the six: it takes the slot, the other goes right after the six
+        order.splice(was, 1);
+        order[slotIdx] = embedded.id;
+        order.splice(Math.min(6, order.length), 0, displaced);
+      }
+    }
+    // Fresh, distinct sort values: abilities from the compendium often all share
+    // sort 0, so a new one could otherwise land anywhere among them.
+    const updates = order.map((id, n) => ({ _id: id, sort: (n + 1) * CONST.SORT_INTEGER_DENSITY }))
+      .filter(u => this.document.items.get(u._id) && this.document.items.get(u._id).sort !== u.sort);
+    _log(`dropAbilitySlot — "${embedded.name}" in slot ${slotIdx}${displaced && displaced !== embedded.id ? `, "${this.document.items.get(displaced)?.name}" moved out` : ""}`);
+    if (updates.length) await this.document.updateEmbeddedDocuments("Item", updates);
   }
 
 }

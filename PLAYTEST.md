@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P21 — Un'abilità trascinata su un riquadro pieno prende il suo posto (19 ottobre 2026, versione 1.15.252)
+
+Setup: solo codice (F5 basta). Un PG con sei abilità nei sei riquadri (es. PT Testi), il compendio Jobs aperto.
+
+- [ ] Trascina dal compendio un'abilità nuova sul quinto riquadro (con talento / mastery a piacere) → il quinto
+      riquadro mostra l'abilità nuova (con i badge giusti); quella che c'era non è più nei riquadri ma resta nella
+      lista delle abilità, subito dopo le sei; gli altri cinque riquadri non cambiano.
+- [ ] Trascina dal compendio un'abilità sul primo riquadro → stessa cosa sul primo, gli altri restano al loro posto.
+- [ ] Con meno di sei abilità, trascina un'abilità su un riquadro vuoto → va nel primo riquadro libero, come prima.
+- [ ] Ricarica la pagina (F5) → l'ordine dei riquadri resta quello nuovo.
+
 ## Esito 18 ottobre, P17 — Le infusioni non armate non portano i loro status (19 ottobre 2026, versione 1.15.251)
 
 Setup: solo codice (F5 basta). Un PG Wright Geomancer con Bio (con la mastery MAGNABIO sbloccata) e un po' di Aether,
