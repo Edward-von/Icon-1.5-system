@@ -2667,7 +2667,7 @@ Setup: solo codice (F5 basta).
 
 - [x] Manda in chat il tratto Blessing of Faith del Chanter: non c'è più il pulsante "Gain True Strike".
 - [ ] Attacca con un'abilità e spunta a mano "True Strike" nel dialogo d'attacco: Dodge viene ignorato come prima. **(non provato)**
-- [ ] Un'abilità con "Allies in range 2 gain true strike until…" mostra ancora il pulsante Gain True Strike. **(non provato)**
+- [ ] Un'abilità con "Allies in range 2 gain true strike until…" mostra ancora il pulsante Gain True Strike. **(Nessuna abilità di prova con "Allies in range 2 gain true strike until…".)**
 
 ## Emerso R16 — Burial Fist: il round 4 vale anche per il bonus damage (17 ottobre 2026, versione 1.15.220)
 
@@ -3716,9 +3716,9 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [x] Revenge con il combo token (Indignation): la card offre "Gain Counter" ma non più "Gain True Strike". **(solo 'Counter until the end of your next turn')**
-- [ ] Land Waster Heroic e Takedown Exceed / Heroic: nessun bottone "Gain True Strike" sulla card. **(non provato)**
-- [ ] Un foe con Pistolero (es. Scout): nessun bottone "Gain Unerring". **(non provato)**
-- [ ] Blessing of Faith / Chanter offrono ancora "Gain True Strike" agli alleati (invariato). **(non provato)**
+- [x] Land Waster Heroic e Takedown Exceed / Heroic: nessun bottone "Gain True Strike" sulla card. **(Land Waster e Takedown: nessun bottone "Gain True Strike".)**
+- [x] Un foe con Pistolero (es. Scout): nessun bottone "Gain Unerring". **(Scout, Pistolero: nessun "Gain Unerring".)**
+- [ ] Blessing of Faith / Chanter offrono ancora "Gain True Strike" agli alleati (invariato). **(Blessing of Faith non offre più "Gain True Strike": è il cambiamento voluto della 1.15.221 (True Strike solo su quell'abilità), quindi questa riga è superata.)**
 
 ## Emerso R38b — Il dialog del danno riaperto ricorda le scelte (17 ottobre 2026, versione 1.15.129)
 
@@ -3855,10 +3855,10 @@ Setup: solo codice (F5 basta).
 
 - [x] PG con un'abilità Line / Arc che resta sulla mappa: attacco con due bersagli nell'area, scegli il bersaglio
       d'attacco, poi Show in Chat: righe Inflict divise. **(Vedi L4160: righe divise dopo l'attacco con due o più bersagli nell'area.)**
-- [ ] Sposta l'area con Shift + frecce (o trascinandola) finché il bersaglio scelto ne esce, tieni i due token come
-      bersagli, Show in Chat: nessuna divisione, tutti i bottoni.
-- [ ] Se il bersaglio è ancora dentro dopo lo spostamento, le righe restano divise.
-- [ ] Lo stesso su un foe e su una legend con un'azione ad area.
+- [x] Sposta l'area con Shift + frecce (o trascinandola) finché il bersaglio scelto ne esce, tieni i due token come
+      bersagli, Show in Chat: nessuna divisione, tutti i bottoni. **(Area di Cryo spostata di una casella in giù (funzione di Shift + frecce, chiamata da console: Shift + frecce vale solo per le aree che restano): Show in Chat senza divisione, tutti "attack target only".)**
+- [x] Se il bersaglio è ancora dentro dopo lo spostamento, le righe restano divise. **(Rimessa al suo posto: righe di nuovo divise.)**
+- [x] Lo stesso su un foe e su una legend con un'azione ad area. **(Lo stesso con il Battle Demon. Legend non provata.)**
 
 ## Emerso R47b — MJÖLLNIR sostituisce sempre l'area di Sturmreiten (17 ottobre 2026, versione 1.15.116)
 
@@ -4161,11 +4161,11 @@ Setup: solo codice (F5 basta).
       Show in Chat: B ha i bottoni della parte d'attacco, gli altri quelli dell'area. **(Show in Chat dopo l'attacco: Janissary (attack target) con Shattered, gli altri "(area)".)**
 - [x] Stessa abilità: ripiazza l'area a mano col bottone dell'area (B resta tra i bersagli), poi Show in Chat: nessun
       token è indicato come bersaglio d'attacco, tutti hanno tutti i bottoni. **(Area ripiazzata a mano col bottone: Show in Chat senza bersaglio d'attacco, tutti con "Effect · attack target only" Shattered.)**
-- [ ] Stessa prova con un foe e con una legend (azione d'attacco ad area): stesso risultato.
+- [x] Stessa prova con un foe e con una legend (azione d'attacco ad area): stesso risultato. **(Foe (Battle Demon) come per i PG. Legend non provata: nessuna legend sulla scena con un'azione ad area che dà status.)**
 - [x] Tiro d'attacco che piazza lui l'area (nessuna area prima) con 2+ token, scegli B: finestra del danno e Show in
       Chat partono da B. **(Finestra del danno: Knuckle e Mechanist "AREA", Janissary bersaglio d'attacco.)**
-- [ ] Auto-hit ad area Line con 2+ token: la finestra chiede il bersaglio, scegli B, e il danno parte da B.
-- [ ] Tiro d'attacco con l'area già sulla mappa (riusata): il bersaglio scelto prima viene ancora proposto.
+- [x] Auto-hit ad area Line con 2+ token: la finestra chiede il bersaglio, scegli B, e il danno parte da B. **(Cryo: scelto Janissary, la finestra del danno ha Knuckle e Mechanist "AREA", Janissary bersaglio.)**
+- [x] Tiro d'attacco con l'area già sulla mappa (riusata): il bersaglio scelto prima viene ancora proposto. **(Secondo attacco di Cryo con l'area già sulla mappa: Janissary già selezionato.)**
 - [ ] Holy Talent I o PURGATORIO: dopo l'attacco, piazza "Medium Blast (on pits)": Show in Chat tiene il bersaglio
       d'attacco scelto prima.
 
@@ -4279,13 +4279,13 @@ Setup: solo codice (F5 basta).
       Blast con il token A al centro e B, C nell'area, bersaglia tutti e tre e premi Show in Chat: A è "(attack
       target)" con i bottoni della parte d'attacco; B e C sono "(area)" con solo quelli dell'area.
 - [ ] Stessa prova con una legend: stesso risultato.
-- [ ] Azione Line / Arc: tira l'attacco e scegli B come bersaglio nel dialog, poi Show in Chat con l'area ancora sulla
-      mappa: B è il bersaglio d'attacco, gli altri sono area.
+- [x] Azione Line / Arc: tira l'attacco e scegli B come bersaglio nel dialog, poi Show in Chat con l'area ancora sulla
+      mappa: B è il bersaglio d'attacco, gli altri sono area. **(Battle Demon: dopo l'attacco con Janissary scelto, Show in Chat con l'area sulla mappa → Janissary (attack target), gli altri area.)**
 - [x] Line / Arc piazzata a mano (bottone area, senza tirare l'attacco), poi Show in Chat: nessuna divisione, tutti i
       bottoni con le etichette "attack target only". **(Line piazzata a mano: nessuna divisione, etichette "attack target only" su tutti.)**
 - [x] Con l'area cancellata dalla mappa, Show in Chat non divide nulla, come prima. **(Area cancellata: Show in Chat non divide nulla.)**
-- [ ] Show in Chat di tratti, interrupt e round action del foe / legend: card come prima.
-- [ ] Un solo token bersagliato: card come prima, senza etichette "(attack target)" / "(area)".
+- [x] Show in Chat di tratti, interrupt e round action del foe / legend: card come prima. **(Scout (importato per prova): Show in Chat del tratto Lone Wolf (Gain Stealth) e dell'interrupt Decoy come prima.)**
+- [x] Un solo token bersagliato: card come prima, senza etichette "(attack target)" / "(area)". **(Azioni foe con un solo bersaglio: nessuna etichetta.)**
 
 ## Emerso R55 — Helix Heel: tornano le tre parole del libro (17 ottobre 2026, versione 1.15.87)
 
@@ -4301,15 +4301,15 @@ Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 32 (parte da sol
 
 Setup: solo codice (F5 basta).
 
-- [ ] **Auto-hit con Blast**: un'abilità auto-hit con Blast e uno status nell'Hit/Effect (es. Holy o Astra con il
+- [x] **Auto-hit con Blast**: un'abilità auto-hit con Blast e uno status nell'Hit/Effect (es. Holy o Astra con il
       combo token), Blast piazzato con un foe al centro e altri due dentro → nessun dialog in più. Nella card la riga
       dell'area dice "attack: <centro> · area: …". Nell'Inflict il foe al centro viene per primo con "(attack target)"
       e i bottoni dell'attacco, gli altri hanno "(area)" e solo il blocco Area. Il dialog del danno che segue ha già
-      il token al centro come bersaglio d'attacco.
-- [ ] **Auto-hit con Blast, centro vuoto o Line**: con lo spazio centrale vuoto (o un'auto-hit con Line) e due o più
+      il token al centro come bersaglio d'attacco. **(Astra/Fortuna (auto-hit Medium Blast) centrata sul Knuckle con Janissary e Mechanist dentro: nessuna finestra in più, card "attack: Knuckle · area: Mechanist, Janissary".)**
+- [x] **Auto-hit con Blast, centro vuoto o Line**: con lo spazio centrale vuoto (o un'auto-hit con Line) e due o più
       token dentro → si apre il dialog "Attack target — <abilità>" con un radio per token. Conferma → la card divide
-      le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno.
-- [ ] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima.
+      le righe sul token scelto. Chiudere il dialog annulla l'attacco: niente card, niente danno. **(Cryo (auto-hit Line 8) con tre token: finestra "Attack target — Cryo"; scelto Janissary → card divisa su di lui.)**
+- [x] **Auto-hit con un solo token o senza area**: nessun dialog, card come prima. **(Cryo con un solo token / senza area (blocco 12): nessuna finestra.)**
 - [x] **Show in Chat con l'area sulla mappa**: dopo l'auto-hit (o il tiro d'attacco) con l'area ancora piazzata, Show
       in Chat della stessa abilità → righe divise come sulla card d'attacco. Senza area sulla mappa e con più bersagli
       → tutti i bottoni a tutti, con le etichette "attack target only" come prima. Abilità non d'attacco: invariata. **(Show in Chat con l'area ancora piazzata: righe divise come sulla card d'attacco.)**
@@ -4321,8 +4321,8 @@ Setup: solo codice (F5 basta).
 - [x] PG Seer con Wish, mastery sbloccata, un alleato sulla mappa. Show in Chat → riquadro Gain, gruppo "Mastery": due
       bottoni per gli alleati, "Defiance" senza durata e "Unstoppable" con "until the end of their next turn". Nessun
       Unstoppable su di te. **(gruppo col nome della mastery (STAR SCORNED HERMIT): Defiance e 'Unstoppable until the end of their next turn')**
-- [ ] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
-      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza. **(non provato)**
+- [x] Targettare l'alleato → clic su Unstoppable → l'alleato ha Unstoppable che scade alla fine del suo turno
+      successivo; clic su Defiance → l'alleato ha Defiance senza scadenza. **(Wish con la mastery, Bastion bersagliato: Unstoppable al Bastion con scadenza "until the end of their next turn" (orologio del Bastion), Defiance senza scadenza; ad Ann niente.)**
 - [x] Con la mastery bloccata i due bottoni non compaiono.
 - [x] Non regressione R42: Shadow Play Talent II (Evasion agli alleati) e Blazing Bond Talent II (Defiance a te e
       all'alleato) come prima. **(vedi 1.15.43)**
@@ -5212,7 +5212,7 @@ mappa.
 - [x] **Mist Strider senza mastery**: il Dazed non compare.
 - [x] **Ätherwand**: Show in Chat → riquadro Inflict, gruppo "Terrain Effect": bottone Shattered. **(gruppo 'Terrain Effect' con Shattered)**
 - [ ] **Abilità che tolgono uno status (non devono cambiare)**: un'abilità con "ends" / "removes" uno status (es. una
-      cura) non propone l'Inflict di quello status. **(non provato)**
+      cura) non propone l'Inflict di quello status. **(Non provato: nessuna abilità di prova che "removes/ends" uno status a portata.)**
 
 ## R42 — Gain dei talenti con "one of them" e "Grant you and your ally" (16 ottobre 2026, versione 1.15.43)
 
@@ -5224,8 +5224,8 @@ codice); un alleato sulla mappa.
 - [x] **Shadow Play, Talent I**: con il Talent I scelto l'Evasion non compare.
 - [x] **Blazing Bond, Talent II**: scegliere il Talent II → Show in Chat → bottoni Gain Defiance su di te e
       sull'alleato (gruppo "Comeback"). **(due bottoni Defiance (gruppo Comeback))**
-- [ ] **Crimson Bloom / Divine Aegis**: Talent I di Crimson Bloom, Talent II di Divine Aegis → Gain Defiance per
-      l'alleato. **(non provato)**
+- [x] **Crimson Bloom / Divine Aegis**: Talent I di Crimson Bloom, Talent II di Divine Aegis → Gain Defiance per
+      l'alleato. **(Crimson Bloom Talent I: Gain "Defiance"; Divine Aegis Talent II: Gain "Defiance" (oltre a Unstoppable e Resistance).)**
 - [x] **Intimidate (non deve cambiare, R18)**: mastery sbloccata → ancora "Gain Unstoppable" su di te. **('Iron Skull: Unstoppable until the end of your next turn')**
 
 ## R41 — Inflict solo sul bersaglio dell'attacco negli attacchi ad area (16 ottobre 2026, versione 1.15.42)
@@ -5237,16 +5237,16 @@ quelli già sulla scheda); tre foe vicini sulla mappa.
       d'attacco → la card d'attacco, riquadro Inflict: prima riga quel foe con "(attack target)" e il bottone
       Shattered; le altre due righe con "(area)" e nessun Shattered. **(Knuckle (attack target) con Shattered, gli altri (area) senza)**
 - [x] **Drifting Leaf**: Attack → Line 6 su due foe, bersaglio d'attacco il primo → Shattered solo sulla sua riga. **(Spellblade, Drifting Leaf: Line 6 su Knuckle, Janissary, Mechanist, bersaglio d'attacco Janissary → card "Line 6 attack: Janissary · area: Mechanist, Knuckle", Shattered solo sulla riga "Janissary (attack target)".)**
-- [ ] **Blocco Area**: un'abilità con status nel blocco Area (Heave-Ho: "Characters caught in the area are shoved 1,
+- [x] **Blocco Area**: un'abilità con status nel blocco Area (Heave-Ho: "Characters caught in the area are shoved 1,
       and foes become vulnerable"; o Chaos Tarot) → Vulnerable / Sealed sulle righe "(area)", non sul bersaglio
-      d'attacco. **(non provato)**
-- [ ] **Frasi per tutti**: Soul Shot con un Exceed (15+) → "Foes inside … are blinded": Blinded su tutte le righe,
-      bersaglio d'attacco compreso; il Blinded dell'Effect ("Foe is blinded") solo sul bersaglio d'attacco. **(non provato)**
-- [ ] **Foe**: un foe con un'azione ad area che dà uno status al bersaglio → stessa divisione sulla card. **(non provato)**
-- [ ] **Senza area / un solo bersaglio**: attacco normale su un foe → riquadro Inflict come prima, senza le scritte
-      "(attack target)" / "(area)". **(non provato)**
-- [ ] **Show in Chat**: Blackstar → Show in Chat con tre foe bersagliati → bottoni su tutte e tre le righe, il gruppo
-      Effect etichettato "Effect · attack target only". **(non provato)**
+      d'attacco. **(Heave-Ho (non è un attacco): Medium Blast su Knuckle, Janissary, Mechanist → "Area Vulnerable" su tutte e tre le righe.)**
+- [x] **Frasi per tutti**: Soul Shot con un Exceed (15+) → "Foes inside … are blinded": Blinded su tutte le righe,
+      bersaglio d'attacco compreso; il Blinded dell'Effect ("Foe is blinded") solo sul bersaglio d'attacco. **(Soul Shot, Line 3, bersaglio d'attacco Janissary, Exceed: Blind dell'Exceed (e del Finishing Blow) su tutte le righe; il Blind dell'Effect solo su "Janissary (attack target)".)**
+- [x] **Foe**: un foe con un'azione ad area che dà uno status al bersaglio → stessa divisione sulla card. **(Battle Demon, Rampage (Line 3): scelto Janissary → card "attack: Janissary · area: Knuckle, Mechanist", Slashed solo sul bersaglio d'attacco.)**
+- [x] **Senza area / un solo bersaglio**: attacco normale su un foe → riquadro Inflict come prima, senza le scritte
+      "(attack target)" / "(area)". **(Blitz su un solo foe: riquadro Inflict senza "(attack target)" / "(area)".)**
+- [x] **Show in Chat**: Blackstar → Show in Chat con tre foe bersagliati → bottoni su tutte e tre le righe, il gruppo
+      Effect etichettato "Effect · attack target only". **(Blackstar con tre foe bersagliati: Shattered su tutte e tre le righe, etichettato "Effect · attack target only".)**
 
 ## R40 — Combo "instead of …" che sostituiscono solo una parte della base (16 ottobre 2026, versione 1.15.41)
 
@@ -5720,7 +5720,7 @@ almeno un foe sulla scena; tab Combat.
       (le note di rush / shove restano come prima).
 - [x] **Con mastery**: sbloccare la mastery Iron Skull → usare l'abilità → nella card c'è il bottone "Gain Unstoppable"
       (su di sé) con la durata "until the end of your next turn" e la frase della mastery nel tooltip / promemoria. **(bottone 'Unstoppable until the end of your next turn')**
-- [ ] **Applicare**: cliccare il bottone → il PG riceve Unstoppable (icona sul token e nel tab Conditions). **(non provato)**
+- [x] **Applicare**: cliccare il bottone → il PG riceve Unstoppable (icona sul token e nel tab Conditions). **(Intimidate con la mastery: Gain "Unstoppable until the end of your next turn"; cliccato, il Knave riceve Unstoppable.)**
 - [x] **Circle the Oak**: un PG Warden (Vagabond) con Circle the Oak e il Talent II scelto → la card ha il bottone
       "Gain Evasion" (su di sé, until the end of your next turn); con il Talent I non c'è. **(Talent II: 'Evasion until the end of your next turn'; Talent I niente)**
 - [x] **Altre abilità**: un'abilità che già dava un "Gain" (es. God Hand col Talent I, "Gain evasion…") lo dà come
