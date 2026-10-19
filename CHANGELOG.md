@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Tactics Aura: il rampart lo ignorano gli alleati, non chi ha l'aura (versione 1.15.235)
+
+### Esito del playtest del 18 ottobre, P3
+
+- **Il Mechanist non passa più accanto alla Thrown Weapon senza domanda**: i foe con il tratto Tactics Aura
+  (Mechanist, Decurion, Legatus, Artillerist, Sergeant, Evocatus) venivano trattati come immuni al rampart → il
+  controllo cercava nei tratti le parole "ignore … rampart" e trovava "Allies ignore engagement and rampart effects
+  while in the aura", che però vale per gli alleati: il manuale dice che un alleato è "un personaggio alleato
+  diverso da te" (p.92), quindi chi ha l'aura non è coperto, anche se l'aura in generale tocca anche chi la porta
+  (p.173) → ora le frasi che parlano di "allies" non rendono immune chi ha il tratto. In più, come dice il tratto
+  (p.391), un altro foe che si muove accanto al rampart restando dentro l'aura (raggio 1 da chi la porta) non viene
+  fermato né interrogato; se anche un solo passo accanto al rampart cade fuori dall'aura, il controllo resta.
+
 ## 19 ottobre 2026 — Il percorso del movimento viene di nuovo letto (versione 1.15.234)
 
 ### Esito del playtest del 18 ottobre, P2

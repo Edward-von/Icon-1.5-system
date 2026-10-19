@@ -1126,17 +1126,37 @@ function rampartAlreadyCleared(td) {
   return c.turn ? c.turn === turnKey() : Date.now() - c.at < 60000;
 }
 
+/** The "Name: text" of each trait of an actor (the foe's trait list and its trait items), tags stripped. */
+function traitTexts(actor) {
+  const strip = (s) => String(s ?? "").replace(/<[^>]+>/g, " ");
+  const list = Array.isArray(actor?.system?.traits) ? actor.system.traits : [];
+  return [
+    ...list.map(t => `${t?.name ?? ""}: ${strip(t?.description)}`),
+    ...(actor?.items ?? []).filter(i => i.type === "trait").map(i => `${i.name}: ${strip(i.system?.description)}`),
+  ];
+}
+const RAMPART_IGNORE = /\b(?:immune to|ignores?)\b[^.]{0,40}\brampart\b/i;
+
 /**
  * Does this foe ignore rampart? "Unstoppable … movement ignores engagement and rampart" (p.104), and foe traits such
- * as "Hovering: Immune to rampart" or "Slip: Movement ignores rampart".
+ * as "Hovering: Immune to rampart" or "Slip: Movement ignores rampart". A sentence about allies ("Tactics Aura: Aura 1.
+ * Allies ignore engagement and rampart effects while in the aura", p.391) doesn't count: an ally is "an allied
+ * character other than you" (p.92), so the aura's owner isn't covered — see tacticsAuraSize.
  */
 function ignoresRampart(actor) {
   if (!actor) return false;
   if (actor.statuses?.has?.("unstoppable")) return true;
-  const re = /\b(?:immune to|ignores?)\b[^.]{0,40}\brampart\b/i;
-  const traits = Array.isArray(actor.system?.traits) ? actor.system.traits : [];
-  if (traits.some(t => re.test(`${t?.name ?? ""}: ${String(t?.description ?? "").replace(/<[^>]+>/g, " ")}`))) return true;
-  return (actor.items ?? []).some(i => i.type === "trait" && re.test(`${i.name}: ${String(i.system?.description ?? "").replace(/<[^>]+>/g, " ")}`));
+  return traitTexts(actor).some(text => text.split(/\.\s+/).some(s => RAMPART_IGNORE.test(s) && !/\ballies\b/i.test(s)));
+}
+
+/** Size of an aura in which this actor's allies ignore rampart (Tactics Aura, p.391), or 0. */
+function tacticsAuraSize(actor) {
+  for (const text of traitTexts(actor)) {
+    if (!text.split(/\.\s+/).some(s => /\ballies\b/i.test(s) && RAMPART_IGNORE.test(s))) continue;
+    const size = Number(text.match(/\baura\s+(\d+)/i)?.[1]);
+    if (size > 0) return size;
+  }
+  return 0;
 }
 
 /**
@@ -1149,7 +1169,8 @@ function ignoresRampart(actor) {
  *   - any other action: the system can't tell a dash from a walk, so the move is held and the user who moved it is
  *     asked; "normal move or rush" (rush makes it unstoppable, p.88, p.104) lets it go on, "dash" leaves it where it
  *     was. The answer stands for that foe until the turn changes (a minute out of combat).
- * Unstoppable foes, and traits that ignore or are immune to rampart, aren't checked.
+ * Unstoppable foes, traits that ignore or are immune to rampart, and steps taken inside another foe's Tactics Aura
+ * (p.391) aren't checked.
  * @returns {boolean|void}  false to refuse the move
  */
 function rampartCheck(td, movement, options) {
@@ -1169,6 +1190,13 @@ function rampartCheck(td, movement, options) {
     const path = movePath(td, origin, { passed: { waypoints: ways } }, before, after);
     const near = ramparts.find(o => { const oc = cellsOf(o); return path.some(f => gapBetween(f, oc) === 1); });
     if (!near || ignoresRampart(td.actor)) return;
+    // Tactics Aura of another foe (p.391): every step next to a rampart is taken inside the aura → no rampart.
+    const auras = scene.tokens.filter(t => t.id !== td.id && !mapObjectFlag(t) && t.actor && isHostile(t))
+      .map(t => ({ cells: cellsOf(t), size: tacticsAuraSize(t.actor) })).filter(a => a.size > 0);
+    if (auras.length) {
+      const hot = path.filter(f => ramparts.some(o => gapBetween(f, cellsOf(o)) === 1));
+      if (hot.every(f => auras.some(a => gapBetween(f, a.cells) <= a.size))) return;
+    }
     const name = objectSheetInfo(near.actor)?.name ?? near.name;
     const rule = "foes cannot enter or exit a rampart space by dashing, flying or teleporting (p.117)";
     const actions = ways.map(w => w.action);

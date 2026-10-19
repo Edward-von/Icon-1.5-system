@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P3 — Tactics Aura e rampart (19 ottobre 2026, versione 1.15.235)
+
+Setup: solo codice (F5 basta). Comet con la Thrown Weapon a terra (spazi accanto con rampart), un Mechanist (o un
+altro foe con Tactics Aura) e un secondo foe senza tratti sul rampart (es. Warrior). Muovere trascinando.
+
+- [ ] Il Mechanist da solo entra (o esce) in uno spazio accanto all'arma → arriva la domanda "Is this a dash?"
+      (prima passava senza domanda); in volo o con un teleport viene rifiutato con l'avviso.
+- [ ] Il Warrior, con il Mechanist adiacente, entra in uno spazio accanto all'arma che è anche entro 1 dal
+      Mechanist → nessuna domanda, si muove (anche in volo).
+- [ ] Il Warrior entra in uno spazio accanto all'arma lontano dal Mechanist (fuori dall'aura) → domanda come prima.
+- [ ] Controllo che il resto non sia cambiato: War Balloon (Hovering) e Artillery (Slip) passano ancora senza
+      domanda; un foe unstoppable passa senza domanda.
+
 ## Esito 18 ottobre, P2 — Il percorso del movimento viene letto (19 ottobre 2026, versione 1.15.234)
 
 Setup: solo codice (F5 basta). Togliere prima l'hook in pagina che copiava `_movement` in `movement` (basta F5).

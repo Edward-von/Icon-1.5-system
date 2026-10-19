@@ -26,7 +26,7 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P2 (alta)** — gli hook `updateToken` leggono `options.movement`, ma Foundry 13.351 passa `options._movement`:
       "passed through" di Comet / Megamushroom / terreni attraversati non scatta mai (`map-objects.mjs:1491`,
       `terrain-spaces.mjs:1897`). S. (FATTO il 19 ottobre 2026, versione 1.15.234)
-- [ ] **P3** — `ignoresRampart` prende per immuni i foe con Tactics Aura (vale per gli alleati nell'aura). S.
+- [x] **P3** — `ignoresRampart` prende per immuni i foe con Tactics Aura (vale per gli alleati nell'aura). S. (FATTO il 19 ottobre 2026, versione 1.15.235)
 - [ ] **P4** — Comet "you cannot attack" non blocca l'attacco base della scheda (solo gli attacchi delle abilità). S.
 - [ ] **P5** — Tsunami "Drag them with it": dopo il trascinamento arriva la domanda del dangerous (non deve), e un
       solo movimento produce tre card (fuori / dentro / dangerous). M.
