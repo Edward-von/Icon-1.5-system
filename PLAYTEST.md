@@ -2499,7 +2499,7 @@ Setup: solo codice (F5 basta).
       l'abilità e scegli Replace): arriva la card "… is gone — place the characters inside back" con i bottoni Place. **(provato con Remove sulla card)**
 - [x] Il bottone "Spit them out now" sulla card di risucchio crea subito la card di sputo (utile fuori dal
       combattimento).
-- [ ] Un giocatore che non è il creatore vede i bottoni grigi. **(da giocatore, blocco 18)**
+- [x] Un giocatore che non è il creatore vede i bottoni grigi. **(sul client di PT Player i bottoni della card del waterspout (Suck in, Spit them out) sono grigi)**
 
 ## Emerso status sulla card del danno — I bottoni Inflict anche sulla card del danno (17 ottobre 2026, versione 1.15.231)
 
@@ -2999,8 +2999,8 @@ Setup: solo codice (F5 basta).
 - [ ] Un personaggio in diagonale rispetto al centro: si muove in diagonale e si ferma alla distanza minima.
 - [ ] Un muro fra un personaggio e il centro: lo shove si ferma davanti al muro.
 - [ ] Un personaggio già accanto al centro occupato: notifica "can't get any closer", nessun movimento.
-- [ ] Un giocatore (proprietario di chi ha usato Implode) clicca lo shove di un foe: notifica "ask the GM to click";
-      il GM lo fa con lo stesso bottone.
+- [x] Un giocatore (proprietario di chi ha usato Implode) clicca lo shove di un foe: notifica "ask the GM to click";
+      il GM lo fa con lo stesso bottone. **(PT Player proprietario di TEST Enochian clicca "Shove Janissary": avviso "ask the GM to click"; il GM con lo stesso bottone sposta Janissary di 2 verso il centro)**
 
 ## Emerso R33 — Ätherwand: shattered a fine turno dentro l'area (17 ottobre 2026, versione 1.15.193)
 
@@ -3290,13 +3290,13 @@ Setup: solo codice (F5 basta).
 
 - [x] Marcare un foe con Deepwrath: a inizio del suo turno la card ha "Create watery pit"; il clic crea il pit sotto
       di lui e il clic destro sul chip Pit lo toglie. **('Create watery pit' sulla card di inizio turno, il pit compare)**
-- [ ] Il foe finisce il turno in un pit e c'è un altro pit libero entro 3: il GM clicca "Drag under" e poi quel pit,
-      il token ci va. Un pit occupato, troppo lontano o quello di partenza viene rifiutato. **(non provato)**
-- [ ] Con DARKTIDE sbloccata, il foe marcato si muove nel suo turno: compare la domanda "Leave it", solo la prima
-      volta nel turno. **(non provato)**
-- [ ] Con DARKTIDE: un alleato marcato entra in terreno dangerous e non c'è nessuna domanda (solo un avviso); un foe
-      marcato riceve la domanda "Take 3 damage". **(non provato)**
-- [ ] Un giocatore senza permessi sul foe clicca "Drag under": compare l'avviso "ask the GM". **(non provato)**
+- [x] Il foe finisce il turno in un pit e c'è un altro pit libero entro 3: il GM clicca "Drag under" e poi quel pit,
+      il token ci va. Un pit occupato, troppo lontano o quello di partenza viene rifiutato. **(19 ott: Knuckle marcato da Deepwrath finisce il turno nel pit → card "Drag under"; il GM clicca il pit di partenza ("Pick another pit, not the one they are in"), una casella senza pit ("Pick a pit space"), poi il pit libero a 2 spazi: Knuckle ci va, card "dragged under and comes up in another pit". Pit occupato e troppo lontano non provati)**
+- [x] Con DARKTIDE sbloccata, il foe marcato si muove nel suo turno: compare la domanda "Leave it", solo la prima
+      volta nel turno. **(il mark va rimesso dopo lo sblocco; al primo spostamento nel suo turno domanda "Leave it / Not now"; Leave it crea un dangerous dove era; secondo spostamento nello stesso turno nessuna domanda)**
+- [x] Con DARKTIDE: un alleato marcato entra in terreno dangerous e non c'è nessuna domanda (solo un avviso); un foe
+      marcato riceve la domanda "Take 3 damage". **(TEST Knave marcato: solo l'avviso "immune to dangerous terrain (Deepwrath, DARKTIDE)"; foe marcato: domanda "Take 3 damage" (2, +1 DARKTIDE). Nota: il testo dice "left a dangerous terrain space" quando nello stesso passo esce da un dangerous ed entra in un altro)**
+- [x] Un giocatore senza permessi sul foe clicca "Drag under": compare l'avviso "ask the GM". **(PT Player (proprietario dello Stormbender, non di Knuckle): "Only the GM or the owner of Knuckle can move them: ask the GM to click.")**
 
 ## R33c2 — Mist Strider: consumare una nuvola (17 ottobre 2026, versione 1.15.169)
 
@@ -3304,7 +3304,7 @@ Setup: solo codice (F5 basta).
 
 - [x] Mist Strider con due nuvole: a inizio turno card con due bottoni Consume; il clic toglie quella nuvola e
       ingrigisce l'altro.
-- [ ] Il giocatore che non possiede la nuvola riceve l'avviso. **(da giocatore, blocco 18)**
+- [x] Il giocatore che non possiede la nuvola riceve l'avviso. **(PT Player clicca "Consume this cloud" di TEST Warden: "Only the one who placed it or the GM can consume it.")**
 
 ## R33c2 — Bifröst HEIMDALL, Ätherwand Talent I e HELLERWIND (17 ottobre 2026, versione 1.15.168)
 
@@ -3357,7 +3357,7 @@ Setup: solo codice (F5 basta).
 - [x] Dark Wing: un alleato entra → bottone Cover; un foe non riceve niente.
 - [x] Quench: entrando → Cover; uscendo → "Remove Cover" e "gains Stealth".
 - [x] Tsunami con Talent II: un foe entra → riga "+1 curse on saves while inside", senza bottone.
-- [ ] Il bottone di un foe è grigio per il giocatore e attivo per il GM. **(da giocatore, blocco 18)**
+- [x] Il bottone di un foe è grigio per il giocatore e attivo per il GM. **(card "Battle Demon enters the area of Mist Strider": "Blind+ to Battle Demon" grigio per PT Player, attivo per il GM)**
 
 ## R33a5 — Bottone Pick up a inizio turno per Comet (17 ottobre 2026, versione 1.15.163)
 
@@ -3365,7 +3365,7 @@ Setup: solo codice (F5 basta).
 
 - [x] Il creatore di Comet inizia il turno accanto alla Thrown Weapon: la card ha "Pick up" e il clic toglie l'arma (e
       la sua aura rampart).
-- [ ] Un altro giocatore che preme il bottone riceve "Only … can pick it up". **(da giocatore, blocco 18)**
+- [x] Un altro giocatore che preme il bottone riceve "Only … can pick it up". **(PT Player preme "Pick up" sulla card di inizio turno di TEST Demon Slayer: "Only TEST Demon Slayer can pick it up.")**
 - [x] Premuto quando l'arma non c'è già più: messaggio "no longer on the map". **(messaggio 'That object is no longer on the map.')**
 
 ## R33a5 — Bale Portal: foe spinti e una volta per round (17 ottobre 2026, versione 1.15.162)
