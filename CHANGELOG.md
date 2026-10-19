@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Show in Chat di un interrupt o di una round action dei foe dalla loro scheda (versione 1.15.265)
+
+### Emerso provando P30
+
+- **Interrupt e round action senza costo nella card**: dalla scheda di un'abilità dei foe di tipo interrupt (es.
+  "Decurion — Discipline") o round action (es. "Centurion — Cannon Strike"), Show in Chat pubblicava la card delle
+  azioni normali, senza "Interrupt 1" e senza il trigger, o senza "Round Action" → per questi due tipi il campo del
+  costo è vuoto (il limite e il round stanno in campi a parte), e la scheda dell'oggetto usava sempre la card delle
+  azioni → ora usa le stesse card della scheda del foe: "Interrupt N" col Trigger, "Round Action" (o "Round Action —
+  Round N+"). Vale anche aperta dal compendio.
+
 ## 19 ottobre 2026 — Encounter Designer: "riusa gli attori del mondo" (versione 1.15.264)
 
 ### Richiesta in sospeso (Maar: sì, serve)

@@ -2,7 +2,8 @@
  * IconItemSheet — ApplicationV2 sheet for all ICON item types.
  * Renders type-specific fields via conditional HBS blocks.
  */
-import { enrichHTML, enrichAbilityDescription, enrichLimitBreakText, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
+import { enrichHTML, enrichAbilityDescription, enrichLimitBreakText, postNpcTraitCard, postNpcInterruptCard,
+         postNpcRoundActionCard, abilityCostLabel } from "../helpers/enrich.mjs";
 import { TROPHY_UNITS } from "../data/item/TrophyData.mjs";
 import { formatTag } from "../helpers/rule-tooltips.mjs";
 
@@ -47,6 +48,16 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
     const actor  = item.parent instanceof Actor ? item.parent : null;
     const system = item.system ?? {};
     _log(`itemShowInChat — "${item.name}" (${item.type})`);
+    // An interrupt or a round action gets the card the foe sheet posts for it: "Interrupt N" and its trigger,
+    // "Round Action — Round N+" (their cost field is empty, so the action card showed no cost at all).
+    if (item.type === "foe-ability" && system.abilityType === "interrupt") {
+      await postNpcInterruptCard(actor, { name: item.name, limit: system.interruptLimit, trigger: system.trigger, description: system.description });
+      return;
+    }
+    if (item.type === "foe-ability" && system.abilityType === "round-action") {
+      await postNpcRoundActionCard(actor, { name: item.name, roundNumber: system.roundNumber, description: system.description });
+      return;
+    }
     if (item.type === "foe-ability" && system.abilityType !== "trait") {
       const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
       const a = {

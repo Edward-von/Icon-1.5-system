@@ -11,6 +11,14 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Emerso provando P30 — Show in Chat di un interrupt o di una round action dei foe (19 ottobre 2026, versione 1.15.265)
+
+Setup: solo codice (F5 basta). Compendio Foe Abilities.
+
+- [x] "Decurion — Discipline" (interrupt) aperta dal compendio → Chat → card con "Interrupt 1" e la riga Trigger. **(19 ottobre sera: "Decurion — Discipline · Interrupt 1", testo e trigger)**
+- [x] "Centurion — Cannon Strike" (round action) → Chat → card con "Round Action". **(sì)**
+- [ ] Un interrupt di un foe copiato negli Items del mondo, o sulla scheda di un foe → stessa card, firmata dal foe. **(non provato)**
+
 ## Prove con due client (19 ottobre 2026 sera, versione 1.15.264)
 
 Le voci "da provare con un secondo client" del TODO, rifatte con il GM (localhost), un giocatore (PT Player su
@@ -95,11 +103,11 @@ Setup: dati del compendio Legends cambiati: copiare il pack con Foundry chiuso, 
 Setup: solo codice (F5 basta). Compendio Foe Abilities; una sua abilità da 1 azione (es. "Crimson Weapon — Ashura
 Burst") anche copiata negli Items del mondo.
 
-- [ ] Item del mondo → scheda → Chat → l'intestazione della card dice "1 Action", non "1action".
-- [ ] Un'abilità da 2 azioni / free / interrupt → "2 Actions" / "Free Action" / "Interrupt 1".
-- [ ] Stessa abilità aperta direttamente dal compendio (senza importarla) → Chat pubblica la card.
-- [ ] Sulla scheda dal compendio gli altri campi restano non modificabili.
-- [ ] Un trait dei foe dal compendio → Chat pubblica la card del trait.
+- [x] Item del mondo → scheda → Chat → l'intestazione della card dice "1 Action", non "1action". **(19 ottobre sera: copia nel mondo di "Crimson Weapon — Ashura Burst" → card "1 Action")**
+- [x] Un'abilità da 2 azioni / free / interrupt → "2 Actions" / "Free Action" / "Interrupt 1". **("Great Boulder Hob — Ancient Geo" → "2 Actions", "Mayfly spirit — Spirit Away" → "Free Action"; l'interrupt non aveva il costo → corretto nella 1.15.265 ("Interrupt 1" col trigger))**
+- [x] Stessa abilità aperta direttamente dal compendio (senza importarla) → Chat pubblica la card. **(dal compendio Chat pubblica la card "Crimson Weapon — Ashura Burst · 1 Action")**
+- [x] Sulla scheda dal compendio gli altri campi restano non modificabili. **(0 campi modificabili, solo il bottone Chat attivo)**
+- [x] Un trait dei foe dal compendio → Chat pubblica la card del trait. **("Collector — Slip" dal compendio → card del trait)**
 
 ## Esito 18 ottobre, P29 — La parola pit ha il suo tooltip (19 ottobre 2026, versione 1.15.259)
 
