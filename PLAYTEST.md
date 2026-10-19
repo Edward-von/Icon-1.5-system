@@ -31,12 +31,12 @@ Setup: solo codice (F5 basta). Un PG Enochian con Elden Rune (anche con la maste
 un combat avviato sulla scena; se possibile anche un altro terrain effect (es. un pit o un'area dangerous) e un'area
 normale (blast) sulla mappa.
 
-- [ ] Piazza un'Elden Rune (e un'Arkenrune / la GREAT RUNE) e l'altro terrain effect, poi "End Encounter" e conferma
-      → le rune restano sulla mappa; il blast e gli altri terrain effect (pit, dangerous…) spariscono.
-- [ ] Subito dopo arriva al GM (whisper) la card "End of the scene?" con le rune elencate e il bottone Remove /
-      Remove all.
-- [ ] Remove sulla card → le rune spariscono dalla mappa, il bottone si spegne.
-- [ ] Controllo: senza nessuna rune sulla mappa, End Encounter → mappa pulita e nessuna card "End of the scene?".
+- [x] Piazza un'Elden Rune (e un'Arkenrune / la GREAT RUNE) e l'altro terrain effect, poi "End Encounter" e conferma
+      → le rune restano sulla mappa; il blast e gli altri terrain effect (pit, dangerous…) spariscono. **(19 ottobre: combat temporaneo, Elden Rune del TEST Enochian + una Dangerous; End Encounter → resta solo l'Elden Rune)**
+- [x] Subito dopo arriva al GM (whisper) la card "End of the scene?" con le rune elencate e il bottone Remove /
+      Remove all. **(whisper "End of the scene? 1 space of Elden Rune last until the end of the scene. Remove")**
+- [x] Remove sulla card → le rune spariscono dalla mappa, il bottone si spegne. **(la runa sparisce, il bottone si spegne)**
+- [x] Controllo: senza nessuna rune sulla mappa, End Encounter → mappa pulita e nessuna card "End of the scene?". **(solo una Dangerous: mappa pulita, nessuna card)**
 
 ## Esito 18 ottobre, P18 — PHANTOM BLADE dura fino al turno dopo del Wright (19 ottobre 2026, versione 1.15.249)
 
@@ -44,12 +44,12 @@ Setup: solo codice (F5 basta). Un PG Wright con Drifting Leaf e abbastanza Aethe
 con il Wright e i foe.
 
 - [ ] Round 1: attiva il Wright, arma "Infuse 3 or Slay: PHANTOM BLADE" su Drifting Leaf e usa l'abilità (card,
-      attacco) → la versione infusa è in gioco; chiudi il turno del Wright.
+      attacco) → la versione infusa è in gioco; chiudi il turno del Wright. **(non provato per mancanza di tempo)**
 - [ ] Nuovo round con i foe che agiscono per primi: a inizio round (nessuno attivo) e durante i turni dei foe
-      PHANTOM BLADE risulta ancora in gioco (scheda / card dell'interrupt con usi illimitati).
-- [ ] Attiva il Wright → in quel momento l'infusione viene tolta (sulla scheda non è più armata).
+      PHANTOM BLADE risulta ancora in gioco (scheda / card dell'interrupt con usi illimitati). **(non provato)**
+- [ ] Attiva il Wright → in quel momento l'infusione viene tolta (sulla scheda non è più armata). **(non provato)**
 - [ ] Controllo: un'infusione normale (senza "until the start of your next turn", es. un'altra abilità Infuse) usata
-      in un turno non resta in gioco nel turno di un altro combattente, come prima.
+      in un turno non resta in gioco nel turno di un altro combattente, come prima. **(non provato)**
 
 ## Esito 18 ottobre, P15 — Danno ×N da giocatore: le istanze si sommano (19 ottobre 2026, versione 1.15.248)
 
@@ -58,11 +58,11 @@ sulla mappa (es. Janissary, HP pieni, senza armatura o con armatura nota).
 
 - [ ] Da giocatore: attacco con Instances ×3 (es. Knuckle, 3 di danno) sul foe, Apply → il bottone dice "→ Sent to
       GM", e in chat arriva UNA sola nota "Damage Applied": "9 damage applied … 3 of 3 instances: 3 + 3 + 3 — HP 40 →
-      31" (con armatura: armatura tolta da ciascuna istanza).
-- [ ] Gli HP del foe sulla scheda sono davvero scesi di tutte le istanze (40 → 31), non di una sola.
-- [ ] Da giocatore: danno normale (1 istanza) su un foe non suo → una nota sola come prima.
-- [ ] Da GM: lo stesso Apply ×3 → stessa nota unica, HP giusti (come prima).
-- [ ] Da giocatore: Apply ×N su un mob → in chat "N hits", i colpi del mob scendono di N.
+      31" (con armatura: armatura tolta da ciascuna istanza). **(non provato: il client del giocatore (127.0.0.1) quel pomeriggio non caricava il sistema (due file "failed to fetch" al caricamento))**
+- [ ] Gli HP del foe sulla scheda sono davvero scesi di tutte le istanze (40 → 31), non di una sola. **(non provato (vedi sopra))**
+- [ ] Da giocatore: danno normale (1 istanza) su un foe non suo → una nota sola come prima. **(non provato (vedi sopra))**
+- [x] Da GM: lo stesso Apply ×3 → stessa nota unica, HP giusti (come prima). **(Showdown 2 ×2 dal GM sul Mechanist: una nota "4 damage applied 2 of 2 instances: 2 + 2 — HP 40 → 36")**
+- [ ] Da giocatore: Apply ×N su un mob → in chat "N hits", i colpi del mob scendono di N. **(non provato (vedi sopra))**
 
 ## Esito 18 ottobre, P16 — Track target due volte sullo stesso foe: un solo segno (19 ottobre 2026, versione 1.15.247)
 
