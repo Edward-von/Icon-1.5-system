@@ -89,7 +89,7 @@ Setup: solo codice (F5 basta). Un foe nel mondo (non creato dal Designer), una s
 Setup: solo codice (F5 basta). Un token qualsiasi.
 
 - [x] Mettere Blessed dal token HUD (toggle di Foundry, senza contatore) → togliere le benedizioni → "loses 1 blessing (now 0)" e lo status sparisce. **(19 ottobre, Plant sulla scena: prima 1 carica letta, dopo lo status non c'è più, messaggio "Plant loses 1 blessing (now 0)")**
-- [ ] Mote of life sulla Plant di un Harvester, poi un'abilità che toglie le benedizioni → stesso risultato. **(non provato col flusso completo della mote: provato il caso che lo rompeva)**
+- [ ] Mote of life sulla Plant di un Harvester, poi un'abilità che toglie le benedizioni → stesso risultato. **(come sopra: da provare a mano con Harvest e la mastery HARVEST MOON su una pianta Blessed)**
 
 ## Esito 18 ottobre, P23 — Ogni summon trascinato è un personaggio a sé (19 ottobre 2026, versione 1.15.262)
 
@@ -140,7 +140,7 @@ Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token
 "Mote of life", attore "Plant") con una blessing.
 
 - [ ] Far esplodere la mote con HARVEST MOON → la riga "… loses 1 blessing (now 0)" dice "Mote of life", come la firma
-      della card.
+      della card. **(non provato fino in fondo il 19 ottobre sera: il piazzamento dell'Arc di Harvest dal codice non è partito. Le due parti corrette sono provate a parte: nome del token nelle righe di status (P28, "Goblin 2") e benedizioni senza contatore (P31, "Plant loses 1 blessing (now 0)"))**
 - [x] Dare uno status a un token non collegato rinominato (es. un foe "Goblin 2") → "Goblin 2 is now …". **(19 ottobre sera: token non collegato del Mechanist rinominato "Goblin 2" → riga "Goblin 2 is already Dazed — PT FIX" (nome del token, non dell'attore))**
 - [x] Dare uno status a un PG → il nome è quello di sempre. **("TEST Fool is now Dazed — PT FIX")**
 
@@ -308,8 +308,8 @@ token piazzati; per l'ultima casella un PG messo a mano a "Neutral".
 - [x] Un PG creato col wizard di creazione personaggio: token "Friendly". **(19 ottobre sera: il wizard lavora su un PG già creato (non crea l'attore); un PG nuovo creato senza disposizione nasce Friendly (1) e collegato)**
 - [x] Un foe importato dal compendio, o messo con l'Encounter Designer, resta "Hostile". **(foe importato: Hostile)**
 - [x] Il PG messo a "Neutral" prima dell'aggiornamento resta "Neutral". **("Actor (3)" messo a Neutral prima di F5: resta Neutral (poi rimesso Friendly))**
-- [ ] Rifare il caso del playtest: Symphony, un foe entra nella mote → Detonate: la card offre di benedire i PG,
-      non il foe. **(non provato)**
+- [x] Rifare il caso del playtest: Symphony, un foe entra nella mote → Detonate: la card offre di benedire i PG,
+      non il foe. **(19 ottobre sera: mote di Symphony (TEST Chanter) sulla mappa, il Kelpie ci entra → Detonate → "the mote explodes — Kelpie in the area… Fray (4) to foes (1), Pit under Kelpie": niente benedizione al foe (nessun PG era nell'esplosione))**
 
 ## Esito 18 ottobre, P19 — Fortuna non ha più il bottone Gamble di Astra (19 ottobre 2026, versione 1.15.244)
 
