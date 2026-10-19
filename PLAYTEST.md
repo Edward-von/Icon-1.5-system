@@ -213,14 +213,14 @@ Setup: solo codice (F5 basta). Un PG con sei abilità nei sei riquadri (es. PT T
 Setup: solo codice (F5 basta). Un PG Wright Geomancer con Bio (con la mastery MAGNABIO sbloccata) e un po' di Aether,
 un foe come bersaglio.
 
-- [ ] Bio senza niente infuso, attacco (o auto-hit) sul foe → nel riquadro Inflict c'è solo lo "Shattered" dell'Effect
-      ("Attack target is shattered"), niente Shattered di BIOTIC né Shattered+ del Terrain Effect di MAGNABIO. **(non provato: dal sistema di prova il clic su Bio ha avviato il piazzamento dell'area, la card d'attacco non è uscita)**
+- [x] Bio senza niente infuso, attacco (o auto-hit) sul foe → nel riquadro Inflict c'è solo lo "Shattered" dell'Effect
+      ("Attack target is shattered"), niente Shattered di BIOTIC né Shattered+ del Terrain Effect di MAGNABIO. **(19 ottobre sera, TEST Geomancer, stessa funzione che riempie il riquadro Inflict della card: senza infusione solo "Shattered" dell'Effect)**
 - [x] Stessa cosa con Show in Chat di Bio senza infusione. **(19 ottobre, TEST Geomancer: un solo bottone "Shattered" (prima c'erano anche quelli di BIOTIC e MAGNABIO))**
-- [ ] Arma Infuse 3: BIOTIC, poi attacca → c'è anche lo Shattered di BIOTIC ("shatters all characters inside"), non
-      quello di MAGNABIO. **(non provato)**
-- [ ] Arma Infuse 6 (Mastery): MAGNABIO, poi attacca → c'è lo Shattered+ del Terrain Effect, non lo Shattered di
-      BIOTIC. **(non provato)**
-- [ ] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima. **(non riprovato dopo questo fix (la prova di God Hand con P12 era sulla 1.15.244))**
+- [x] Arma Infuse 3: BIOTIC, poi attacca → c'è anche lo Shattered di BIOTIC ("shatters all characters inside"), non
+      quello di MAGNABIO. **(BIOTIC armata: Shattered dell'Effect + Shattered di "Infuse 3", niente Shattered+)**
+- [x] Arma Infuse 6 (Mastery): MAGNABIO, poi attacca → c'è lo Shattered+ del Terrain Effect, non lo Shattered di
+      BIOTIC. **(MAGNABIO armata: Shattered dell'Effect + Shattered+ del Terrain Effect, niente Shattered di BIOTIC)**
+- [x] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima. **(God Hand di TEST Sealer: Teleport 1, Sealed, Gain 3 vigor, come dal compendio)**
 
 ## Esito 18 ottobre, P20 — End Encounter lascia le rune che durano fino a fine scena (19 ottobre 2026, versione 1.15.250)
 
@@ -327,8 +327,8 @@ token da accendere sulla scheda; un foe come bersaglio (es. il Knuckle).
 - [ ] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…"). **(non provato: dopo la prima scelta il sistema ripropone Devil Hand senza chiedere di nuovo)**
 - [x] Senza combo token: l'attacco di God Hand (base) offre Sealed, come prima. **(card "God Hand" con Sealed)**
 - [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato)**
-- [ ] Controllo che non sia cambiato altro: una mastery normale che infligge uno status (non una combo alternativa)
-      lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185). **(non provato)**
+- [x] Controllo che non sia cambiato altro: una mastery normale che infligge uno status (non una combo alternativa)
+      lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185). **(19 ottobre sera, Growing Season dal compendio: con la mastery sbloccata gli status offerti sono Pacified (Effect) e Pacified+ (SOOTHING SPORE); senza, solo Pacified. Letto dalla funzione che costruisce il riquadro Inflict, non dalla card)**
 
 ## Esito 18 ottobre, P10 — Il bottone d'attacco segue la combo armata (19 ottobre 2026, versione 1.15.242)
 
