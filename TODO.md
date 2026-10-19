@@ -89,7 +89,7 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       simultaneously." e "(Round 3, 6, etc) At round 3 and every three rounds thereafter…"). Probabilmente il dato è
       sia in un tratto sia in un'azione del pack `foes-legend`: tenerne uno. Provato 19 ottobre con un combat
       temporaneo. S.
-- [ ] **Emerso lavorando su P1** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
+- [ ] **P23 (Emerso lavorando su P1)** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
       `fromCompendium`) sono costruiti con `actorLink: false` (`build-summons-pack.mjs:50`), ma restano linkati: un
       attore per summon nel mondo, condiviso da tutte le copie posate. Da decidere se più copie dello stesso summon
       debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S.

@@ -15,6 +15,10 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 Setup: solo codice (F5 basta). Togliere prima la patch in pagina di `_preCreate` usata nel playtest (basta F5).
 
+**(19 ottobre: build 1.15.233 copiata in `Data/systems`, ma la scheda del GM non è stata ricaricata, quindi nessuna
+casella è provata. Prima del ricaricamento: schema 36, e un solo attore oggetto ancora collegato, "Magma Spire"
+9nNC936D6fP2ifVH, che la migrazione 37 deve scollegare.)**
+
 - [ ] Al primo caricamento come GM la console scrive "Migration 37: N map object / foe summon actor(s) …" se nel
       mondo ci sono già attori nelle cartelle "Map Objects" o "Foe Summons". Aprire uno di quegli attori →
       Prototype Token: "Link Actor Data" è spento.
