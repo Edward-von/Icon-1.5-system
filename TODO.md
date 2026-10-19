@@ -50,8 +50,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       automazioni amico / nemico li trattano come foe (es. la mote di Symphony benedice il foe che la fa esplodere).
       Impostare `prototypeToken.disposition = 1` per il tipo `icon` in `IconActor._preCreate` e correggere con una
       migrazione i PG esistenti (attenzione: qualche GM potrebbe averlo cambiato apposta). S.
-- [ ] **P12** — God Hand con la combo Devil Hand (scelta dalla mastery): la card d'attacco offre ancora "Sealed" preso
+- [x] **P12** — God Hand con la combo Devil Hand (scelta dalla mastery): la card d'attacco offre ancora "Sealed" preso
       dall'Effect della base ("Seal your foe…"), che Devil Hand sostituisce (p.192). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.243)
 - [ ] **P13** — Cryo con MAGNACRYO: l'area resta "Line 4" qualunque sia l'Aether infuso; il testo (p.234) aggiunge +2 di
       lunghezza ogni 2 Aether (come fa già per il dado bonus). S.
 - [x] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",

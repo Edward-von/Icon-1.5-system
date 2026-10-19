@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Devil Hand non offre più Sealed (versione 1.15.243)
+
+### Esito del playtest del 18 ottobre, P12
+
+- **Inflict sulla card di Devil Hand**: God Hand con la mastery sbloccata e il combo token, scegliendo Devil Hand,
+  la card d'attacco offriva il bottone "Sealed" con la frase "Seal your foe, then bless yourself or an ally in
+  range 2" → la frase non veniva dalla base (quella era già tolta correttamente, perché Devil Hand riscrive tutta
+  l'abilità), ma dal testo della mastery FISTS OF HEAVEN AND HELL, che contiene per intero l'altra combo e veniva
+  letto come se fosse sempre in gioco → ora una mastery che aggiunge solo una combo alternativa non porta i suoi
+  status da sola: contano solo quando quella combo è la scelta. Devil Hand (p.192: Teleport 1, attacco, esplosione,
+  Exceed) non offre più Sealed; Fists of Heaven and Hell lo offre ancora (il suo Effect sigilla); la base God Hand
+  offre Sealed dal proprio Effect, come prima. Vale anche per la card di Show in Chat. Il test vecchio della 1.16.6
+  in PLAYTEST ("la card NON offre Sealed") era già scritto secondo il manuale e resta valido.
+
 ## 19 ottobre 2026 — Il bottone d'attacco segue la combo armata (versione 1.15.242)
 
 ### Esito del playtest del 18 ottobre, P10

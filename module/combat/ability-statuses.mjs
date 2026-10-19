@@ -33,7 +33,7 @@
  * GM relay) lives in inflict-status.mjs.
  */
 
-import { comboReplacesBase, masteryGainsBothEffects } from "../helpers/ability-blocks.mjs";
+import { comboReplacesBase, masteryGainsBothEffects, alternateCombo } from "../helpers/ability-blocks.mjs";
 
 /* -------------------------------------------------- */
 /*  Status vocabulary                                  */
@@ -645,7 +645,11 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   const talent = Number(s.talentSelected ?? 0);
   if (talent === 1) add(s.talent1, "Talent I");
   if (talent === 2) add(s.talent2, "Talent II");
-  if (s.masteryUnlocked) add(s.mastery, "Mastery");
+  // A mastery that only adds an alternate combo (God Hand's FISTS OF HEAVEN AND
+  // HELL, p.192) is not in play by itself: its statuses come in through
+  // comboEffect when that combo is the one chosen (withActiveCombo). Reading it
+  // here put Fists' "Seal your foe" on Devil Hand's card, and on the base's.
+  if (s.masteryUnlocked && !alternateCombo(s)) add(s.mastery, "Mastery");
   return _dedupe(out);
 }
 
