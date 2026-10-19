@@ -473,15 +473,15 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 #### Stalwart — Knave
 
 - [x] **Boiling Blood** (testo; Knave, p.138) — cosa controllare: il corsivo finisce con "…before expiring." senza "Defy Death —"; Trigger "You are defeated."; l'Effect comincia con "Defy Death — You fight on, …". Migrazione 36 [1.15.121] **(è del Colossus, non del Knave: p.138 è ancora il capitolo 3 del Colossus. Corsivo finisce con "…before expiring.", Trigger "You are defeated.", Effect "Defy Death — You fight on, …"; ok)**
-- [ ] **Provoke** (Knave, p.142) — cosa controllare: il danno proposto è 2 (non l'1 piercing "to you"), Pierce non spuntato [1.15.16, 17, 144]
-- [ ] **Riposte** (Knave, p.142-143) — cosa controllare: bottone Gamble con le cariche di Vigilance; blocco "Dire Parry — Interrupt 1" con bottone chat; con Strong Left riserva fino a 3; "Refresh Riposte" [1.15.29, 62, 151]
-- [ ] **Revenge** (Knave, p.142) — cosa controllare: Indignation sostituisce solo l'Effect (barrato solo quello); "armor" nel corsivo senza tooltip; niente "Gain True Strike" [1.15.3, 8, 130, 139]
-- [ ] **Low Blow** (Knave, p.142) — cosa controllare: con The Hook la base non è barrata e la combo si aggiunge sotto [1.15.3, 139]
-- [ ] **Spite** (Knave, p.141) — cosa controllare: la Hatred+ dura "until the end of your next turn" [1.15.2]
-- [ ] **Strongarm** (Knave, p.143) — cosa controllare: Instances ×N e chip "up to ×N" con il tetto [1.15.28, 144]
-- [ ] **Dark Knight** (Knave, p.143) — cosa controllare: con la mastery tag "Aura 1" e bottone area; "Hatred" nel nome della mastery senza tooltip [1.15.2, 21, 52]
-- [ ] **Intimidate** (Knave, p.144) — cosa controllare: con Iron Skull bottone "Gain Unstoppable" su di sé fino alla fine del turno successivo [1.15.20]
-- [ ] **Bleak Mercy** (Knave, p.144) — cosa controllare: Sweet Torment sostituisce solo l'Effect; Aura 1 con avviso di scadenza; con Painkiller l'aura non scade [1.15.3, 5, 21, 132, 139]
+- [x] **Provoke** (Knave, p.142) — cosa controllare: il danno proposto è 2 (non l'1 piercing "to you"), Pierce non spuntato [1.15.16, 17, 144] **(già provato nella sezione 1.15.144: danno 2, Pierce non spuntato)**
+- [x] **Riposte** (Knave, p.142-143) — cosa controllare: bottone Gamble con le cariche di Vigilance; blocco "Dire Parry — Interrupt 1" con bottone chat; con Strong Left riserva fino a 3; "Refresh Riposte" [1.15.29, 62, 151] **(Gamble sulla scheda; blocco "Dire Parry — Interrupt 1" con fumetto. TEST Knave in stance, Kelpie colpisce TEST Sealer: senza mastery Dire Parry 1/1 → 0/1 dopo l'uso, "Refresh Riposte" lo riporta a 1/1. Con Strong Left "1/3 banked", Refresh porta a 2/3 e 3/3, poi resta 3/3; a inizio turno del Knave 1 → 2. Vedi Dubbi: Refresh offerto anche con alleato non adiacente)**
+- [x] **Revenge** (Knave, p.142) — cosa controllare: Indignation sostituisce solo l'Effect (barrato solo quello); "armor" nel corsivo senza tooltip; niente "Gain True Strike" [1.15.3, 8, 130, 139] **(con il combo token è barrato solo l'Effect, tag True Strike in più; "armor" nel corsivo senza tooltip; niente "Gain True Strike")**
+- [x] **Low Blow** (Knave, p.142) — cosa controllare: con The Hook la base non è barrata e la combo si aggiunge sotto [1.15.3, 139] **(con il combo token nulla barrato, riquadro COMBO "The Hook" sotto, tag Range 2)**
+- [x] **Spite** (Knave, p.141) — cosa controllare: la Hatred+ dura "until the end of your next turn" [1.15.2] **(Show in Chat del tratto: bottone "Hatred+ until the end of your next turn")**
+- [x] **Strongarm** (Knave, p.143) — cosa controllare: Instances ×N e chip "up to ×N" con il tetto [1.15.28, 144] **(Hit "2 flat", Instances parte da 1 e il + si ferma a 3. La scritta "up to ×N" esce solo sulle chip di Other, qui il danno è su Hit: va bene)**
+- [x] **Dark Knight** (Knave, p.143) — cosa controllare: con la mastery tag "Aura 1" e bottone area; "Hatred" nel nome della mastery senza tooltip [1.15.2, 21, 52] **(senza mastery solo Stance; con la mastery tag "Aura 1" e bottone; "Infectious Hatred" senza tooltip)**
+- [x] **Intimidate** (Knave, p.144) — cosa controllare: con Iron Skull bottone "Gain Unstoppable" su di sé fino alla fine del turno successivo [1.15.20] **(già provato nella sezione 1.15.20: bottone "Gain Unstoppable" con Iron Skull)**
+- [x] **Bleak Mercy** (Knave, p.144) — cosa controllare: Sweet Torment sostituisce solo l'Effect; Aura 1 con avviso di scadenza; con Painkiller l'aura non scade [1.15.3, 5, 21, 132, 139] **(con il combo token barrato solo l'Effect, chip Aura 1; aura piazzata "until the end of your next turn": alla fine del turno successivo card "Aura 1 (Bleak Mercy) ends" con Remove. Con Painkiller la notifica non dice la durata e dopo due turni nessuna card)**
 
 #### Vagabond — Fool
 
@@ -804,6 +804,9 @@ Da compilare durante il playtest.
   il nome dell'attore (Plant) invece di quello del token rinominato. Solo estetico.
 - **Bottone interrupt dopo l'uso**: sul client del GM "Grace of the Spirits · TEST Sealer" dopo il clic diventa "0/1"
   ma resta cliccabile finché non si preme Apply; sul giocatore invece il bottone si spegne subito. Da controllare.
+- **Refresh Riposte anche lontano**: sulla card del danno "Refresh Riposte · TEST Knave" compare anche quando l'alleato
+  colpito (TEST Sealer, a 2 spazi) non è adiacente al Knave. Il testo dice "when a foe damages you or an adjacent
+  ally": il bottone dovrebbe comparire solo sulla riga del Knave o di un alleato adiacente?
 
 ---
 
