@@ -2639,7 +2639,7 @@ Setup: solo codice (F5 basta).
 - [x] Sempre sulla runa, apri il dialogo d'attacco di un'abilità con range: tra i chip automatici c'è "Elden Rune:
       standing in your Elden Rune: range +3 (…), p.209". Se esci dalla runa il chip sparisce. **(Dialogo d'attacco di Pyre sulla runa: chip "Elden Rune: standing in your Elden Rune: range +3 (6 → 9), p.209". Uscita dalla runa non provata.)**
 - [ ] Mark su un personaggio (es. Polaris range 5, o il bottone Mark) con il bersaglio a 7 caselle: stando sulla runa
-      non chiede nulla. Con il bersaglio a 9 caselle chiede "out of range", indica range 8 e la nota della runa.
+      non chiede nulla. Con il bersaglio a 9 caselle chiede "out of range", indica range 8 e la nota della runa. **(non provato: Mark con il bersaglio a 7 e 9 caselle stando sulla runa)**
 - [x] Talent II selezionato, sulla runa: infondi un'abilità con Infuse 3. La card mostra "−1, to a minimum of 1" e si
       spendono 2 Aether. **(Talent II sulla runa, Infuse 3 di Pyre (pagato senza Inner Furnace): "2 Aether spent", riga "Elden Rune Talent II: standing in your Elden Rune: −1, to a minimum of 1".)**
 - [x] Mastery sbloccata: il chip della runa chiede "which rune?". Scegli Arkenrune: copre una small blast. Un alleato
@@ -2649,7 +2649,7 @@ Setup: solo codice (F5 basta).
 - [x] Stando in quella runa fai un attacco: nel dialogo c'è il chip Great Rune. Sulla card, nella riga del bersaglio
       principale, c'è il bottone Shattered (con un'area, solo sulla riga dell'attack target). Fuori dalla runa, o in
       una runa normale senza GREAT RUNE, il bottone non c'è. **(Attacco di Pyre stando nella GREAT RUNE: chip "Great Rune: standing in your Elden Rune…" nel dialogo e bottone "Shattered" sulla riga del Knuckle.)**
-- [ ] Alleato in un'Arkenrune piazzata con GREAT RUNE: anche i suoi attacchi ricevono il bottone Shattered.
+- [ ] Alleato in un'Arkenrune piazzata con GREAT RUNE: anche i suoi attacchi ricevono il bottone Shattered. **(non provato: serve un'Arkenrune piazzata con GREAT RUNE armata e un attacco di un alleato)**
 
 ## Emerso R37 — applyDamagePipeline accetta danno pierce e divine (17 ottobre 2026, versione 1.15.222)
 
@@ -3000,7 +3000,7 @@ Setup: solo codice (F5 basta).
 - [x] Cliccare prima quello più vicino, poi quello dietro di lui sulla stessa linea: il secondo si ferma accanto al
       primo. **(Mechanist spinto per primo nel centro vuoto, poi il Knave dietro di lui: "shoved 0 spaces … collides with Mechanist".)**
 - [x] Un personaggio in diagonale rispetto al centro: si muove in diagonale e si ferma alla distanza minima. **(PT S3 in diagonale (2 caselle): va in diagonale e si ferma accanto al Knuckle.)**
-- [ ] Un muro fra un personaggio e il centro: lo shove si ferma davanti al muro.
+- [ ] Un muro fra un personaggio e il centro: lo shove si ferma davanti al muro. **(non provato: serve un muro sulla scena fra un personaggio e il centro di Implode)**
 - [ ] Un personaggio già accanto al centro occupato: notifica "can't get any closer", nessun movimento. **(Knave già accanto al centro occupato: nessun movimento, ma invece della notifica "can't get any closer" esce la card "shoved 0 spaces towards the centre … collides with Knuckle". Probabilmente voluto dalla 1.15.209 (collisione segnalata): da confermare.)**
 - [x] Un giocatore (proprietario di chi ha usato Implode) clicca lo shove di un foe: notifica "ask the GM to click";
       il GM lo fa con lo stesso bottone. **(PT Player proprietario di TEST Enochian clicca "Shove Janissary": avviso "ask the GM to click"; il GM con lo stesso bottone sposta Janissary di 2 verso il centro)**
@@ -4167,7 +4167,7 @@ Setup: solo codice (F5 basta).
 - [x] Auto-hit ad area Line con 2+ token: la finestra chiede il bersaglio, scegli B, e il danno parte da B. **(Cryo: scelto Janissary, la finestra del danno ha Knuckle e Mechanist "AREA", Janissary bersaglio.)**
 - [x] Tiro d'attacco con l'area già sulla mappa (riusata): il bersaglio scelto prima viene ancora proposto. **(Secondo attacco di Cryo con l'area già sulla mappa: Janissary già selezionato.)**
 - [ ] Holy Talent I o PURGATORIO: dopo l'attacco, piazza "Medium Blast (on pits)": Show in Chat tiene il bersaglio
-      d'attacco scelto prima.
+      d'attacco scelto prima. **(non provato: serve un attacco di Holy (Talent I o PURGATORIO) con pit nell'area)**
 
 ## Emerso R39 — Split Heaven and Hell e Lycanthropy con le parole del libro (17 ottobre 2026, versione 1.15.94)
 
@@ -4191,7 +4191,7 @@ Setup: solo codice (F5 basta).
       (on pits)": compare un solo template "Medium Blast (on pits) × 2" con una Medium Blast centrata su ciascun pit,
       e l'area di Hades resta sulla mappa. **(Holy Talent I con Hades: due pit dentro l'area → "Talent I: Medium Blast (on pits)" fa un solo template "× 2" (14 caselle), "placed — Warrior in the area".)**
 - [ ] Un token che sta in tutte e due le esplosioni è bersagliato una volta sola; il messaggio "… placed — X, Y in the
-      area" lo nomina una volta.
+      area" lo nomina una volta. **(non provato: serve un token dentro due esplosioni di pit di Holy)**
 - [x] Un pit fuori dall'area di Hades non esplode. **(I pit fuori dall'area non esplodono.)**
 - [x] Nessun pit dentro l'area: avviso "No pit inside this ability's area: nothing explodes." e nessun template. **(Nessun pit nell'area: "No pit inside this ability's area: nothing explodes.", nessun template.)**
 - [x] Area dell'abilità non ancora sulla mappa: avviso "place this ability's area first…" e non succede nulla. **(Holy Talent I senza area: "place this ability's area first (its attack), then the pits' blasts.")**
