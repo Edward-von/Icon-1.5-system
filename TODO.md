@@ -154,10 +154,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       "Crimson Weapon — Ashura Burst" copiata negli Items del mondo): l'intestazione della card mostra il costo grezzo
       "1action" invece di "1 Action". E aperta direttamente dal compendio, Show in Chat non pubblica nulla. S.
       (FATTO il 19 ottobre 2026, versione 1.15.260)
-- [ ] **P31 (Emerso lavorando su P28)** — "Plant loses 0 blessings (now 0)": la mote of life ha lo status Blessed ma
+- [x] **P31 (Emerso lavorando su P28)** — "Plant loses 0 blessings (now 0)": la mote of life ha lo status Blessed ma
       nessun contatore di blessing (flag `statusCharges.blessed` assente, `getStatusCharges` dà 0), quindi
       `removeBlessings` ne toglie 0 e lo status resta. Probabilmente lo status arriva da una strada che non passa per
       `adjustStatusCharges` (pack o applyStatus diretto). Da guardare: contare 1 quando lo status c'è senza contatore. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.263)
 - [x] **Dubbi del playtest, decisi col manuale** (19 ottobre 2026): Weakened → P24; Refresh Riposte → P25; interrupt
       0/1 sul GM → P26; nomi sulle card delle aree → P27; nome della mote → P28; keyword pit → P29. Restano come sono:
       copertura dell'Underway (gli oggetti danno copertura, p.95; il portale toglie solo l'obstruction, p.170);

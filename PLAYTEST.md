@@ -11,6 +11,13 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Emerso nei fix, P31 — Togliere le benedizioni funziona anche senza contatore (19 ottobre 2026, versione 1.15.263)
+
+Setup: solo codice (F5 basta). Un token qualsiasi.
+
+- [x] Mettere Blessed dal token HUD (toggle di Foundry, senza contatore) → togliere le benedizioni → "loses 1 blessing (now 0)" e lo status sparisce. **(19 ottobre, Plant sulla scena: prima 1 carica letta, dopo lo status non c'è più, messaggio "Plant loses 1 blessing (now 0)")**
+- [ ] Mote of life sulla Plant di un Harvester, poi un'abilità che toglie le benedizioni → stesso risultato. **(non provato col flusso completo della mote: provato il caso che lo rompeva)**
+
 ## Esito 18 ottobre, P23 — Ogni summon trascinato è un personaggio a sé (19 ottobre 2026, versione 1.15.262)
 
 Setup: solo codice (F5 basta). Un PG con un summon sulla scheda (Shade → Shadow, Fool → Bomb), un giocatore che lo

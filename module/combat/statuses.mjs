@@ -384,9 +384,18 @@ async function _removeStatus(actor, statusId) {
  */
 export const STACKABLE_STATUSES = new Set(["blessed", "power-die", "vigilance", "bonus-damage", "marked"]);
 
-/** Read the charge count of a stackable status from the actor's flag. */
+/**
+ * Read the charge count of a stackable status from the actor's flag.
+ * A stackable status on the actor with no count (put there by the token HUD's
+ * core toggle, a pack actor's own effect, an older world) counts as 1: the
+ * Plant summoned by a mote of life was Blessed with 0 blessings, so taking
+ * them took none and the status stayed (playtest 18 October, P31).
+ * Marks are left as they are: their count is the number of markers.
+ */
 export function getStatusCharges(actor, statusId) {
-  return actor?.getFlag?.("icon-system", "statusCharges")?.[statusId] ?? 0;
+  const n = actor?.getFlag?.("icon-system", "statusCharges")?.[statusId] ?? 0;
+  if (n > 0 || statusId === "marked" || !STACKABLE_STATUSES.has(statusId)) return n;
+  return actor && hasStatus(actor, statusId) ? 1 : 0;
 }
 
 /**

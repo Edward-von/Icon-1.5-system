@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Togliere le benedizioni funziona anche senza contatore (versione 1.15.263)
+
+### Emerso nel playtest dei fix, P31
+
+- **"Plant loses 0 blessings (now 0)"**: la Plant della mote of life aveva lo status Blessed ma togliere le
+  benedizioni ne toglieva 0 e lo status restava → lo status era stato messo da una strada che non scrive il contatore
+  (il toggle del token HUD di Foundry, l'effetto già presente su un attore del compendio, un mondo vecchio), e il
+  sistema leggeva "0 benedizioni" → ora uno status a cariche (Blessed, power die, vigilance, bonus damage) presente
+  senza contatore vale 1. Il messaggio diventa "loses 1 blessing (now 0)" e lo status sparisce. I Marked restano
+  contati come prima (il numero è quello dei marcatori).
+
 ## 19 ottobre 2026 — Ogni summon trascinato è un personaggio a sé (versione 1.15.262)
 
 ### Esito del playtest del 18 ottobre, P23 (scelta di Edoardo: tutti i summon separati)
