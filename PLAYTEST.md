@@ -2801,8 +2801,8 @@ Setup: solo codice (F5 basta).
 
 - [x] Nemico marchiato da Deepwrath con Talent II, dentro un pit, con Shattered+: cancella il pit dalla card o con
       Canc. Arriva una card con il bottone "Remove Shattered". **(cancellato il pit (Canc): card 'Remove Shattered')**
-- [ ] Stessa prova con un nemico in volo (elevazione > 0) o senza marchio: nessuna card. **(non provato)**
-- [ ] Nemico su due pit sovrapposti: ne togli uno solo, nessuna card, perché è ancora dentro un pit. **(non provato)**
+- [x] Stessa prova con un nemico in volo (elevazione > 0) o senza marchio: nessuna card. **(Knuckle in volo (elevazione 1): pit creato e tolto sotto di lui, nessuna card.)**
+- [x] Nemico su due pit sovrapposti: ne togli uno solo, nessuna card, perché è ancora dentro un pit. **(Due pit sovrapposti con Shattered+: tolto il primo nessuna card; tolto il secondo "Knuckle is no longer inside a pit…".)**
 
 ## Emerso R33 — Lo shove di Implode bloccato segnala la collisione (17 ottobre 2026, versione 1.15.209)
 
@@ -2960,14 +2960,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Deepwrath Talent I: marca un alleato, mettilo su un pit (a terra) e fagli tirare un salvezza dalla
-      scheda: nel risultato si legge "+N (…, Deepwrath: in a pit)" e il boon è contato. Fuori dal pit niente boon. **(non provato)**
-- [ ] Stesso alleato nel pit: un foe più in alto lo attacca. La finestra di attacco non dà boon di altezza e mostra
-      "No height advantage vs … (Deepwrath)". Un alleato più in alto invece li prende ancora. **(non provato)**
+- [x] PG con Deepwrath Talent I: marca un alleato, mettilo su un pit (a terra) e fagli tirare un salvezza dalla
+      scheda: nel risultato si legge "+N (…, Deepwrath: in a pit)" e il boon è contato. Fuori dal pit niente boon. **(Deepwrath Talent I, Spellblade marcata dentro un pit: tiro salvezza "d20 7 +4 (Deepwrath: in a pit)"; fuori dal pit nessun boon.)**
+- [x] Stesso alleato nel pit: un foe più in alto lo attacca. La finestra di attacco non dà boon di altezza e mostra
+      "No height advantage vs … (Deepwrath)". Un alleato più in alto invece li prende ancora. **(Knuckle che attacca la Spellblade nel pit: "No height advantage vs TEST Spellblade (Deepwrath): marked, inside a pit". L'alleato più in alto non provato.)**
 - [x] Deepwrath Talent II: marca un foe, mettilo su un pit, aprigli contro la finestra del danno: "Bonus dice" parte a
       1 e c'è la nota "marked, inside a pit — +1 bonus die". Con "Reroll (same use)" il dado non raddoppia. **(Bonus dice 1 con 'marked, inside a pit — +1 bonus die')**
-- [ ] Foe marcato (Talent II) che entra trascinandosi in un pit: card con "Shattered+ to …". Il click dà Shattered+.
-      Quando esce dal pit, card con "Remove Shattered". **(non provato)**
+- [x] Foe marcato (Talent II) che entra trascinandosi in un pit: card con "Shattered+ to …". Il click dà Shattered+.
+      Quando esce dal pit, card con "Remove Shattered". **(Talent II, Knuckle marcato che entra in un pit: card "Knuckle is now inside a pit… Shattered+ to Knuckle"; il clic dà Shattered; uscendo card "Remove Shattered". Nota: creare un secondo pit sotto chi è già dentro fa uscire di nuovo la card "now inside".)**
 - [x] Bottone "Create pit" a inizio turno del foe marcato (Talent II): dopo il pit arriva anche la card Shattered+. **(dopo 'Create watery pit' arriva la card Shattered+)**
 - [ ] Senza talento selezionato, o con il Talent I su un foe: nessuno di questi effetti. **(non provato)**
 
@@ -3248,8 +3248,8 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [x] Un PG attacca un foe in un pit, alla stessa elevazione: il dialog mostra "Height advantage Δ1". **('Height advantage Δ1: +1 boon')**
-- [ ] Il PG nel pit attacca un foe fuori: "+1 curse". **(non provato)**
-- [ ] Un token che vola (elevazione 1 o più) sopra un pit non perde il livello. **(non provato)**
+- [x] Il PG nel pit attacca un foe fuori: "+1 curse". **(Spellblade nel pit che attacca il Knuckle: "Height disadvantage Δ1: +1 curse".)**
+- [x] Un token che vola (elevazione 1 o più) sopra un pit non perde il livello. **(Spellblade in volo (elevazione 1) sopra il pit: "Height advantage Δ1: +1 boon", non perde il livello.)**
 - [x] Uscire da una casella Difficult mostra l'avviso. **(avvisi 'leaves / crosses difficult terrain')**
 
 ## R33b2 — Polaris e Implode si attivano dalle card (17 ottobre 2026, versione 1.15.173)
