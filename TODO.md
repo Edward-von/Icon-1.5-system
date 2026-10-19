@@ -107,7 +107,19 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [ ] **P23 (Emerso lavorando su P1)** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
       `fromCompendium`) sono costruiti con `actorLink: false` (`build-summons-pack.mjs:50`), ma restano linkati: un
       attore per summon nel mondo, condiviso da tutte le copie posate. Da decidere se più copie dello stesso summon
-      debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S.
+      debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S. **(in attesa di risposta)**
+      Regola (p.95-96, "Summons are characters"): ogni summon posato è un personaggio a sé, quindi HP separati.
+      Cosa ho visto nel codice (19 ottobre): l'attore condiviso nasce solo da `summonInSpace` (il Salt Sprite del
+      Geyser, che riusa l'attore già importato) e quando si trascina più volte lo stesso summon dalla barra degli
+      attori. Dal chip della scheda Foundry importa ogni volta un attore nuovo (HP separati, ma la lista degli attori
+      si riempie di copie). Però la sezione "Summons" della scheda del PG legge proprio l'attore del mondo: mostra
+      "HP x/y" dell'attore e il clic apre la sua scheda; e il summoner si collega trascinando il PG sulla scheda del
+      summon. Con i token scollegati quella sezione mostrerebbe gli HP del modello (sempre pieni) e aprirebbe il
+      modello, non il summon sulla mappa; e un summoner impostato dalla scheda del token non comparirebbe nella
+      lista. Per questo non ho cambiato niente.
+      Domanda per Edoardo: vuoi i summon scollegati (HP separati per ogni copia, come dice il manuale) anche se la
+      sezione "Summons" della scheda del PG va rifatta perché elenchi i token sulla mappa con i loro HP (lavoro M),
+      oppure li lasciamo collegati e correggo solo il Geyser perché crei un attore nuovo per ogni Salt Sprite?
 - [ ] **P24 (dai Dubbi, deciso col manuale)** — Weakened: il chip "Weakened −2" nella finestra del danno non si spunta
       da solo quando chi tira ha lo status. Manuale p.117: "Weakened — All damage dealt reduced by 2"; p.205: Pierce
       "Ignores armor, weak, and vigor". Spuntarlo in automatico quando l'attaccante è weakened (non quando il danno è
