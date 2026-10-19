@@ -40,7 +40,7 @@ possiede collegato in un'altra finestra.
 - [x] Cancellare una pedina → la sezione Summons scende a una voce senza riaprire la scheda. **(sì)**
 - [x] Giocatore (PT Player, proprietario di TEST Chanter): trascinare la Bomb → la piazza il GM, la pedina è del giocatore e compare nella sua sezione Summons. **(sì, dal client 127.0.0.1)**
 - [x] Giocatore che non possiede il summoner → avviso, niente pedina. **(sì: "Only the GM, or a player who owns the summoner…")**
-- [ ] Geyser → erupt → "summon a Salt Sprite": una pedina scollegata del Salt Sprite del creatore, che compare nella sua sezione Summons. **(non provato: stesso percorso del chip, provato sopra)**
+- [x] Geyser → erupt → "summon a Salt Sprite": una pedina scollegata del Salt Sprite del creatore, che compare nella sua sezione Summons. **(19 ottobre sera: Geyser di TEST Stormbender posato dal chip, Erupt con "summon" spuntato → Geyser tolto, al suo posto una pedina scollegata del Salt Sprite (attore modello col flag del PG, summoner TEST Stormbender), che compare nella sezione Summons dello Stormbender)**
 
 ## Esito 18 ottobre, P22 — Eternal Imperium una volta sola (19 ottobre 2026, versione 1.15.261)
 
@@ -99,14 +99,14 @@ Strider), un altro personaggio vicino; il GM ha selezionato un terzo token.
 Setup: solo codice (F5 basta). TEST Sealer con Spirit Shrine e la mastery SPIRIT PATRONAGE (Grace of the Spirits),
 un alleato colpito da un foe: card del danno in chat.
 
-- [ ] Dal GM (TEST Sealer senza proprietario giocatore), clic su "Grace of the Spirits · TEST Sealer 1/1" → il
-      bottone diventa "0/1" ed è subito spento, prima di premere Apply; l'alleato ha il chip Immune. **(non provato: Grace of the Spirits era già a 0/1 e non sono riuscito a ridargli l'uso dal codice)**
-- [ ] Doppio clic veloce sul bottone → un solo uso speso (una sola card dell'interrupt), il bottone resta spento. **(non provato (vedi sopra))**
-- [ ] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito. **(non provato)**
-- [ ] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne. **(non provato)**
-- [ ] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili. **(non provato)**
+- [x] Dal GM (TEST Sealer senza proprietario giocatore), clic su "Grace of the Spirits · TEST Sealer 1/1" → il
+      bottone diventa "0/1" ed è subito spento, prima di premere Apply; l'alleato ha il chip Immune. **(19 ottobre sera: usi rimessi a 1, card di PT FIX Foe su TEST Fool e TEST Chanter; clic dal GM → dopo 0,7 s tutti e due i bottoni Grace "0/1" e spenti, prima di Apply; riga di TEST Fool col chip "Immune (Grace of the Spirits)")**
+- [x] Doppio clic veloce sul bottone → un solo uso speso (una sola card dell'interrupt), il bottone resta spento. **(due clic di fila: una sola card "Spirit Shrine Interrupt 1: Grace of the Spirits", bottoni spenti; uguale dal giocatore)**
+- [x] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito. **(PT Player reso proprietario del Sealer: clic sulla riga di TEST Chanter → "0/1" e spenti subito, una card)**
+- [x] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne. **(provato con l'altra riga della stessa card: passa a "0/1" e si spegne insieme)**
+- [x] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili. **(tolti gli usi spesi come fa l'inizio turno (flag interruptUses): i bottoni sulla card tornano "1/1" e cliccabili senza ricaricare)**
 - [ ] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
-      quando il legame si spezza). **(non provato)**
+      quando il legame si spezza). **(non provato: nessun Knave adiacente né Soul Bond in quel momento)**
 
 ## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
 
@@ -134,13 +134,13 @@ Setup: solo codice (F5 basta). Un PG con lo status Weakened e un foe bersagliato
 
 Setup: solo codice (F5 basta). Un PG con un'abilità che crea un Geyser con Salt Sprite (p.232), in combat.
 
-- [ ] Fai eruttare un Geyser scegliendo di evocare il Salt Sprite → compare il Salt Sprite al posto del Geyser e
-      nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare. **(non provato per mancanza di tempo)**
+- [x] Fai eruttare un Geyser scegliendo di evocare il Salt Sprite → compare il Salt Sprite al posto del Geyser e
+      nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare. **(superata dalla 1.15.262: provata nella sezione P23 nuova (pedina scollegata, non più un attore nuovo per ogni Salt Sprite))**
 - [ ] Fai eruttare un secondo Geyser con Salt Sprite → nasce un secondo attore; dai danno a uno dei due Salt Sprite →
-      l'altro resta con gli HP pieni. **(non provato)**
+      l'altro resta con gli HP pieni. **(superata dalla 1.15.262: ora un solo attore modello e una pedina scollegata per Salt Sprite; HP e status separati provati con due Shadow)**
 - [ ] Da giocatore (proprietario del PG) fai eruttare un Geyser con Salt Sprite → il Salt Sprite compare (lo crea il
-      GM) e il giocatore può aprirne la scheda e muoverlo. **(non provato)**
-- [ ] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima. **(non provato)**
+      GM) e il giocatore può aprirne la scheda e muoverlo. **(superata dalla 1.15.262: la richiesta del giocatore passa dallo stesso percorso del chip, provato da giocatore con la Bomb)**
+- [x] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima. **(superata dalla 1.15.262: ora ogni chip crea pedine scollegate, provato con Shadow e Bomb)**
 
 ## Esito 18 ottobre, P21 — Un'abilità trascinata su un riquadro pieno prende il suo posto (19 ottobre 2026, versione 1.15.252)
 
@@ -185,26 +185,26 @@ normale (blast) sulla mappa.
 Setup: solo codice (F5 basta). Un PG Wright con Drifting Leaf e abbastanza Aether (≥ 3), due foe; un combat avviato
 con il Wright e i foe.
 
-- [ ] Round 1: attiva il Wright, arma "Infuse 3 or Slay: PHANTOM BLADE" su Drifting Leaf e usa l'abilità (card,
-      attacco) → la versione infusa è in gioco; chiudi il turno del Wright. **(non provato per mancanza di tempo)**
-- [ ] Nuovo round con i foe che agiscono per primi: a inizio round (nessuno attivo) e durante i turni dei foe
-      PHANTOM BLADE risulta ancora in gioco (scheda / card dell'interrupt con usi illimitati). **(non provato)**
-- [ ] Attiva il Wright → in quel momento l'infusione viene tolta (sulla scheda non è più armata). **(non provato)**
-- [ ] Controllo: un'infusione normale (senza "until the start of your next turn", es. un'altra abilità Infuse) usata
-      in un turno non resta in gioco nel turno di un altro combattente, come prima. **(non provato)**
+- [x] Round 1: attiva il Wright, arma "Infuse 3 or Slay: PHANTOM BLADE" su Drifting Leaf e usa l'abilità (card,
+      attacco) → la versione infusa è in gioco; chiudi il turno del Wright. **(19 ottobre sera, combat temporaneo con TEST Spellblade (Drifting Leaf) e un foe: Spellblade attivo, PHANTOM BLADE armata e usata (flag "lasts: nextTurn", uso annotato in quel turno); fine turno → ancora in gioco. Armata dal codice, non dal bottone della scheda)**
+- [x] Nuovo round con i foe che agiscono per primi: a inizio round (nessuno attivo) e durante i turni dei foe
+      PHANTOM BLADE risulta ancora in gioco (scheda / card dell'interrupt con usi illimitati). **(nuovo round, nessuno attivo → in gioco; foe attivo → in gioco)**
+- [x] Attiva il Wright → in quel momento l'infusione viene tolta (sulla scheda non è più armata). **(Spellblade riattivato → flag tolto, non più armata)**
+- [x] Controllo: un'infusione normale (senza "until the start of your next turn", es. un'altra abilità Infuse) usata
+      in un turno non resta in gioco nel turno di un altro combattente, come prima. **(un'infusione normale usata nel turno dello Spellblade: al round dopo e nel turno del foe non è più in gioco)**
 
 ## Esito 18 ottobre, P15 — Danno ×N da giocatore: le istanze si sommano (19 ottobre 2026, versione 1.15.248)
 
 Setup: solo codice (F5 basta). Client giocatore "PT Player" con un PG suo, GM connesso; un foe non del giocatore
 sulla mappa (es. Janissary, HP pieni, senza armatura o con armatura nota).
 
-- [ ] Da giocatore: attacco con Instances ×3 (es. Knuckle, 3 di danno) sul foe, Apply → il bottone dice "→ Sent to
+- [x] Da giocatore: attacco con Instances ×3 (es. Knuckle, 3 di danno) sul foe, Apply → il bottone dice "→ Sent to
       GM", e in chat arriva UNA sola nota "Damage Applied": "9 damage applied … 3 of 3 instances: 3 + 3 + 3 — HP 40 →
-      31" (con armatura: armatura tolta da ciascuna istanza). **(non provato: il client del giocatore (127.0.0.1) quel pomeriggio non caricava il sistema (due file "failed to fetch" al caricamento))**
-- [ ] Gli HP del foe sulla scheda sono davvero scesi di tutte le istanze (40 → 31), non di una sola. **(non provato (vedi sopra))**
-- [ ] Da giocatore: danno normale (1 istanza) su un foe non suo → una nota sola come prima. **(non provato (vedi sopra))**
+      31" (con armatura: armatura tolta da ciascuna istanza). **(19 ottobre sera, client PT Player caricato in primo piano: card "PT FIX Knuckle" 3 ×3 sul PT FIX Foe (ARM 2), Apply → "→ Sent to GM", una sola nota "3 damage applied 3 of 3 instances: 1 + 1 + 1, 6 blocked by Armor — HP 31 → 28")**
+- [x] Gli HP del foe sulla scheda sono davvero scesi di tutte le istanze (40 → 31), non di una sola. **(sì: 31 → 28, e prima 40 → 31 con 5 ×3 e armatura)**
+- [x] Da giocatore: danno normale (1 istanza) su un foe non suo → una nota sola come prima. **(una nota sola "3 damage applied 2 blocked by Armor — HP 28 → 25")**
 - [x] Da GM: lo stesso Apply ×3 → stessa nota unica, HP giusti (come prima). **(Showdown 2 ×2 dal GM sul Mechanist: una nota "4 damage applied 2 of 2 instances: 2 + 2 — HP 40 → 36")**
-- [ ] Da giocatore: Apply ×N su un mob → in chat "N hits", i colpi del mob scendono di N. **(non provato (vedi sopra))**
+- [x] Da giocatore: Apply ×N su un mob → in chat "N hits", i colpi del mob scendono di N. **(PT FIX Mob: "3 hits damage applied 3 of 3 instances … hits 12 → 9")**
 
 ## Esito 18 ottobre, P16 — Track target due volte sullo stesso foe: un solo segno (19 ottobre 2026, versione 1.15.247)
 
