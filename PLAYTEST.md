@@ -16,10 +16,10 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 Setup: dati del compendio Legends cambiati: copiare il pack con Foundry chiuso, poi importare di nuovo i Dread Lords
 (la copia già nel mondo non cambia).
 
-- [ ] Dread Lords importati di nuovo, combat temporaneo, round 3 → nella card di round Eternal Imperium compare una
-      volta sola ("At the start of this round, all three Lords use their Round actions simultaneously").
-- [ ] Scheda dei Dread Lords → Phases: un solo paragrafo, che finisce con "At round 3 and every three rounds
-      thereafter, the Lords use Eternal Imperium."; l'azione di round Eternal Imperium c'è ancora.
+- [x] Dread Lords importati di nuovo, combat temporaneo, round 3 → nella card di round Eternal Imperium compare una
+      volta sola ("At the start of this round, all three Lords use their Round actions simultaneously"). **(19 ottobre, pack copiato con Foundry chiuso, Dread Lords importati di nuovo, round 3: una sola voce "Eternal Imperium (Round 3, 6, etc) At the start of this round…"; sotto resta la riga "Phases: At round 3 and every three rounds thereafter, the Lords use Eternal Imperium." (è il richiamo della regola, non un doppione))**
+- [x] Scheda dei Dread Lords → Phases: un solo paragrafo, che finisce con "At round 3 and every three rounds
+      thereafter, the Lords use Eternal Imperium."; l'azione di round Eternal Imperium c'è ancora. **(nel compendio un solo paragrafo Phases con la frase finale, l'azione di round Eternal Imperium c'è)**
 
 ## Esito 18 ottobre, P30 — Show in Chat di un'abilità dei foe: costo leggibile, funziona anche dal compendio (19 ottobre 2026, versione 1.15.260)
 
