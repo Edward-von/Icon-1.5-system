@@ -3865,8 +3865,8 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [x] Sturmreiten con MJÖLLNIR sbloccata: il bottone area piazza subito un Arc 5, senza la domanda "which area?". **(Sturmreiten con MJÖLLNIR: subito "Paint the Arc 5…", nessuna domanda.)**
-- [ ] Lo stesso dal tiro d'attacco: nessuna domanda, si piazza l'Arc 5.
-- [ ] Con il Talent II e in comeback, dopo l'Arc 5 viene offerto il secondo Arc 5.
+- [ ] Lo stesso dal tiro d'attacco: nessuna domanda, si piazza l'Arc 5. **(Sturmreiten è un interrupt senza tiro d'attacco: sulla scheda non c'è Attack Roll, quindi la prova non si applica.)**
+- [x] Con il Talent II e in comeback, dopo l'Arc 5 viene offerto il secondo Arc 5. **(Con Talent II e in comeback, dopo l'Arc 5 viene offerto il secondo (vedi L4061).)**
 - [x] Senza la mastery, Sturmreiten piazza ancora la Line 3. **(Senza la mastery: "Click to place the Line 3…".)**
 
 ## Emerso R23 — Danno dei summon con la finestra condivisa (17 ottobre 2026, versione 1.15.115)
@@ -4058,19 +4058,19 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Sturmreiten con MJÖLLNIR sbloccata e Talent II selezionato, personaggio bloodied: dopo aver dipinto l'Arc 5
-      compare la finestra "Arc 5 — another Arc 5?" con il testo del Talent II.
-- [ ] "From the last space": sono evidenziate solo le caselle libere accanto all'ultimo spazio, tranne quella che
+- [x] Sturmreiten con MJÖLLNIR sbloccata e Talent II selezionato, personaggio bloodied: dopo aver dipinto l'Arc 5
+      compare la finestra "Arc 5 — another Arc 5?" con il testo del Talent II. **(MJÖLLNIR + Talent II, bloodied: dopo le 5 caselle dell'Arc 5 "Sturmreiten — another Arc 5?" con il testo del Talent II.)**
+- [x] "From the last space": sono evidenziate solo le caselle libere accanto all'ultimo spazio, tranne quella che
       prosegue nel verso dell'ultimo passo dell'arco; il secondo arco si dipinge per 5 caselle (Invio o tasto destro
-      lo chiudono prima).
+      lo chiudono prima). **(From the last space: evidenziate le due caselle libere ai lati dell'ultimo spazio (non quella che prosegue); il secondo arco si dipinge per 5 caselle.)**
 - [ ] "From the first space": stessa cosa partendo dal primo spazio.
 - [ ] Il secondo arco non può passare su caselle del primo arco né sulle caselle del personaggio (avviso).
-- [ ] Il risultato è un solo template "Arc 5 + Arc 5"; i bersagli presi sono quelli di entrambi gli archi.
+- [x] Il risultato è un solo template "Arc 5 + Arc 5"; i bersagli presi sono quelli di entrambi gli archi. **(Un solo template "Arc 5 + Arc 5" (10 caselle). Nessun bersaglio nell'area.)**
 - [ ] Personaggio non bloodied: la finestra dice che Comeback non si applica e il pulsante predefinito è "No
       extension"; scelto quello, resta solo il primo arco.
 - [ ] Esc o tasto destro durante il secondo arco: resta il primo arco e l'attacco va avanti.
 - [ ] Senza mastery (Line 3): l'estensione Line 3 di R47b funziona ancora come prima.
-- [ ] Con la mastery ma senza Talent II: l'Arc 5 si piazza e nessuna finestra di estensione compare.
+- [x] Con la mastery ma senza Talent II: l'Arc 5 si piazza e nessuna finestra di estensione compare. **(Mastery senza Talent II: dopo le 5 caselle nessuna finestra, template "Arc 5".)**
 
 ## Emerso R33a3 — Aethershard senza bottone danno (17 ottobre 2026, versione 1.15.101)
 
@@ -4514,22 +4514,22 @@ scheda da prima di questa versione.
 Setup: scena a griglia quadrata, un PG Spellblade con Sturmreiten (capitolo 2) e il Talent II scelto, qualche foe sparso
 attorno al PG.
 
-- [ ] **Domanda dopo la prima Line**: bottone area di Sturmreiten → piazza la Line 3 → si apre "Sturmreiten — another
-      Line 3?" con il testo del Talent II e i bottoni From the first space / From the last space / No extension.
-- [ ] **Dal primo spazio**: From the first space → caselle evidenziate accanto al primo spazio della Line (non quella
+- [x] **Domanda dopo la prima Line**: bottone area di Sturmreiten → piazza la Line 3 → si apre "Sturmreiten — another
+      Line 3?" con il testo del Talent II e i bottoni From the first space / From the last space / No extension. **(Line 3 accanto alla Spellblade → "Sturmreiten — another Line 3?" con il testo del Talent II e From the first space / From the last space / No extension.)**
+- [x] **Dal primo spazio**: From the first space → caselle evidenziate accanto al primo spazio della Line (non quella
       dentro la Line); si clicca una di esse e la seconda Line 3 parte da lì, allontanandosi dal primo spazio.
-      Anche la direzione opposta alla prima Line (prolungamento all'indietro) è permessa.
-- [ ] **Dall'ultimo spazio**: From the last space → solo le due caselle ai lati dell'ultimo spazio (la stessa direzione
-      della prima Line e quella che torna indietro sono escluse); cliccandone un'altra compare l'avviso.
-- [ ] **Rotella**: durante la seconda Line, girarla con la rotella → la preview diventa chiara e il clic dà l'avviso "The
-      extra Line 3 goes away from …"; rimessa nella direzione giusta si piazza.
-- [ ] **Un solo template**: alla fine sulla mappa c'è un solo template con le due Line unite (bordo unico), la notifica
-      dice "Line 3 + Line 3 placed — …" e sono targettati i personaggi di entrambe le Line.
-- [ ] **No / Esc**: "No extension" o Esc durante la seconda Line → resta solo la prima Line, targettata come prima.
-- [ ] **Comeback**: PG non bloodied → nella domanda c'è la riga "Comeback: you are not bloodied…" e il bottone di default
-      è No extension; da bloodied la riga sparisce e il default è From the first space.
-- [ ] **Senza talento**: tolto il Talent II, Sturmreiten piazza la Line 3 senza nessuna domanda; con la mastery
-      (Arc 5) nessuna domanda.
+      Anche la direzione opposta alla prima Line (prolungamento all'indietro) è permessa. **(From the first space: evidenziate le caselle sopra e sotto il primo spazio; cliccata quella sopra, la seconda Line sale allontanandosi. Nota: durante il disegno della seconda Line la prima non si vede sulla mappa (ricompare nel template finale).)**
+- [x] **Dall'ultimo spazio**: From the last space → solo le due caselle ai lati dell'ultimo spazio (la stessa direzione
+      della prima Line e quella che torna indietro sono escluse); cliccandone un'altra compare l'avviso. **(From the last space: evidenziate solo le due caselle ai lati dell'ultimo spazio; il clic nella direzione della prima Line dà un avviso.)**
+- [x] **Rotella**: durante la seconda Line, girarla con la rotella → la preview diventa chiara e il clic dà l'avviso "The
+      extra Line 3 goes away from …"; rimessa nella direzione giusta si piazza. **(Con la rotella la preview ruota; il clic dà "The extra Line 3 goes away from the last space of the first line, in a different direction (mouse wheel rotates it)."; rimessa dritta si piazza.)**
+- [x] **Un solo template**: alla fine sulla mappa c'è un solo template con le due Line unite (bordo unico), la notifica
+      dice "Line 3 + Line 3 placed — …" e sono targettati i personaggi di entrambe le Line. **(Un solo template "Line 3 + Line 3" (6 caselle), notifica "Line 3 + Line 3 placed — no one in the area.")**
+- [x] **No / Esc**: "No extension" o Esc durante la seconda Line → resta solo la prima Line, targettata come prima. **("No extension": resta solo la Line 3 (3 caselle).)**
+- [x] **Comeback**: PG non bloodied → nella domanda c'è la riga "Comeback: you are not bloodied…" e il bottone di default
+      è No extension; da bloodied la riga sparisce e il default è From the first space. **(Non bloodied: riga "Comeback: you are not bloodied, so this doesn't apply right now." e default No extension; bloodied (15 hp): riga sparita e default From the first space.)**
+- [x] **Senza talento**: tolto il Talent II, Sturmreiten piazza la Line 3 senza nessuna domanda; con la mastery
+      (Arc 5) nessuna domanda. **(Senza Talent II, con la mastery: Arc 5 senza domande (vedi L4073).)**
 - [ ] **Altre Line invariate**: un'altra abilità con una Line (es. Helix Heel, Ätherwand) si piazza come prima.
 
 ## R34 — Open the Gates: lo Special davanti alle due versioni (16 ottobre 2026, versione 1.15.72)
