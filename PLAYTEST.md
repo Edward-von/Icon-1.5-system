@@ -2594,9 +2594,9 @@ Setup: solo codice (F5 basta).
 - [x] Token chiamato "Mote of life" con Blessed: esplode, perde la blessing, NON viene cancellato e compare la card
       RECYCLE "Becomes a terrain effect". **(la mote perde la blessing, resta, card RECYCLE)**
 - [ ] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa. **(non provato)**
-- [ ] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template. **(non provato)**
-- [ ] Giocatore non GM con una plant di cui non è proprietario → arriva l'avviso che la toglie il GM; la blessing
-      viene comunque data (tramite GM). **(non provato)**
+- [x] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template. **(plant tolta dalla spunta → "No plant ticked: nothing explodes."; Cancel → niente; nessun template e nessuna card in tutti e due i casi)**
+- [x] Giocatore non GM con una plant di cui non è proprietario → arriva l'avviso che la toglie il GM; la blessing
+      viene comunque data (tramite GM). **(PT Player con TEST Harvester, blessing a TEST Freelancer: "Blessing sent to the GM", avviso "1 exploded plant could not be removed (not yours): the GM removes it", Freelancer 1 → 2. Nota: la card dice "plant removed" anche se la plant resta sulla mappa finché il GM non la toglie)**
 
 ## Emerso R33 — Symphony: il Charge dà 2 mote gratis (17 ottobre 2026, versione 1.15.225)
 
@@ -3991,7 +3991,7 @@ Setup: solo codice (F5 basta).
 - [ ] Bersaglio PG con una wound: la percentuale usa gli hp massimi base (VIT×4), non quelli ridotti. **(non provato)**
 - [ ] Capitolo 3, Gigantas Crusher, PG a 1 hp: la casella Atomos Crusher è già spuntata e il foe prende 75% / 50%; sui
       Legend la casella non cambia nulla. **(non provato)**
-- [ ] Un giocatore senza i permessi sul foe: il danno passa al GM e viene applicato senza toccare il vigor.
+- [x] Un giocatore senza i permessi sul foe: il danno passa al GM e viene applicato senza toccare il vigor. **(PT Player con TEST Colossus, "% Max HP" su Knuckle (vigor 5): "Damage sent to the GM", card "20 divine damage (50% of 40)", HP 40 → 20, vigor intatto)**
 
 ## Emerso R49 — Dulce Purgatorio: l'area di Pandaemonium prende tutti i pit (17 ottobre 2026, versione 1.15.106)
 
@@ -4135,7 +4135,7 @@ Setup: solo codice (F5 basta).
 - [ ] "Not now" nella domanda: nessun pit.
 - [ ] Un alleato (non ostile) pacified non riceve il pit.
 - [ ] Il "Medium Blast (on pits)" di Purgatorio fa esplodere anche questi pit, se sono dentro l'area.
-- [ ] Da giocatore (non GM): il chip funziona se ha il permesso di creare template.
+- [x] Da giocatore (non GM): il chip funziona se ha il permesso di creare template. **(PT Player, Talent II di Pandaemonium, Knuckle pacified: "Mark a pit space under Knuckle?" → Mark → card "1 × Pit under Knuckle")**
 
 ## Emerso R49 — Dulce Purgatorio fa esplodere tutti i pit del campo (17 ottobre 2026, versione 1.15.96)
 
@@ -4657,7 +4657,7 @@ e CSS: F5 dopo il deploy.
       lo toglie; al secondo spazio finisce da solo → due caselle marroni con "Pit · Terraforming", card "Terraforming: 2 ×
       Pit" con "Remove all". "Dangerous · any": si clicca quanto serve, Invio o clic destro finisce; Esc → niente creato.
       Clic destro durante la scelta su un token: non si apre l'HUD. **(Pit · 2 con clic / riclic, card 'Remove all'; 'any', Esc e clic destro non provati)**
-- [ ] **Da giocatore**: stesso piazzamento con l'utente giocatore (proprietario del PG) → gli spazi compaiono anche per il GM. **(non provato)**
+- [x] **Da giocatore**: stesso piazzamento con l'utente giocatore (proprietario del PG) → gli spazi compaiono anche per il GM. **(19 ott, PT Player con TEST Chanter: "Pit · 1" di Pandaemonium piazzato su (13,6), il GM lo vede (serve il gioco non in pausa: il banner "Game paused" copre il centro e intercetta il clic))**
 - [x] **Togliere**: tasto destro sul chip → "Remove the 2 pit spaces of Terraforming?" → spariscono; "Remove all" sulla card →
       spariscono, il bottone si spegne; layer dei template di Foundry → selezione di uno spazio e Canc → sparisce solo quello.
       Un template normale (area d'attacco) non viene toccato. **('Remove all' toglie tutto; gli altri modi non provati)**
@@ -5378,7 +5378,7 @@ vicino, scena a griglia quadrata.
       e + / − vanno da 1 a 5. **(non provato)**
 - [ ] **Non interferisce**: con il mouse fuori dall'aura, o sopra una scheda, o scrivendo in un campo di testo
       (chat, scheda), + e − non cambiano nessuna aura; piazzando una Line, + e − cambiano ancora la sua larghezza.
-- [ ] **Permessi**: da giocatore, + / − sull'aura di un altro PG non fanno nulla; il GM può cambiare qualsiasi aura.
+- [x] **Permessi**: da giocatore, + / − sull'aura di un altro PG non fanno nulla; il GM può cambiare qualsiasi aura. **(resizeAura chiamata dal client di PT Player sull'aura di Endless Battlement: nessun cambiamento, ma Foundry risponde con l'errore "lacks permission to update MeasuredTemplate" invece di un avviso del sistema; dal GM l'aura di Gentleness passa 3 → 2 → 3 (il tasto + / − non l'ho potuto simulare: Foundry non registra la posizione del mouse dell'hover simulato))**
 
 ## R31 — Mastery e talento in chat da soli (15 ottobre 2026, versione 1.15.35)
 
