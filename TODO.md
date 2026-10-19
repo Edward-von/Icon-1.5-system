@@ -68,9 +68,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P16** — Track target ripetuto sullo stesso foe (Grand Banishment, da GM o giocatore): ogni clic aggiunge un altro
       chip "Janissary ✕" invece di lasciare quello che c'è (su un foe diverso il segno passa giusto). S.
       (FATTO il 19 ottobre 2026, versione 1.15.247)
-- [ ] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
+- [x] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
       versioni non armate ("Shattered" di BIOTIC, "Shattered+" del Terrain Effect di MAGNABIO). Con l'infusione armata
       la card è giusta. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.251)
 - [x] **P18** — PHANTOM BLADE (Drifting Leaf, p.226 "until the start of your next turn") scade appena inizia il round
       dopo, prima che il Wright agisca: al nuovo round nessuno è attivo (turno vuoto, letto come "0") e il Wright è il
       primo in `combat.turns`, quindi il codice crede che il suo turno sia già cominciato. Con i foe che agiscono per

@@ -1708,6 +1708,22 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * The statuses an ability's text inflicts this use (abilityStatusEntries),
+   * without the Infuse versions that aren't armed: "only one infuse effect can
+   * trigger at a time" (p.204), so with nothing armed Bio's BIOTIC ("shatters
+   * all characters inside") and its Mastery MAGNABIO ("shattered+") don't
+   * happen (P17). The armed version's statuses stay, as for the Limit Break.
+   */
+  _abilityStatusEntries(item, { comboMode = false } = {}) {
+    const sys = this._comboSystem(item);
+    const f = armedInfusion(this.document);
+    const armed = f && f.itemId === item?.id ? String(f.label ?? "") : "";
+    const fromMastery = masteryInfusion(sys)[0]?.label ?? "";
+    return abilityStatusEntries({ ...sys, description: withoutUnarmedInfusions(sys.description, { armed }) },
+      { comboMode, sourceName: this.document.name, masteryOff: !!fromMastery && armed !== fromMastery });
+  }
+
+  /**
    * An unlocked mastery that adds an alternate combo ("You can choose this
    * ability or Fleet when you spend a token", p.177): while the combo is armed,
    * ask once which combo this use is, and remember it (flag comboChoice) for
@@ -1941,7 +1957,7 @@ export class IconSheet extends BaseActorSheet {
       targeted = (placed ? cardTargets.filter(t => centreId && t.tokenId === centreId) : cardTargets)
         .filter(t => t.actorUuid !== this.document.uuid);
     }
-    const statusHtml = statusBlockHtml(abilityStatusEntries(sys, { comboMode, sourceName: this.document.name }), { source: this.document, abilityName: ab.name, targets: cardTargets, attackTargetId });
+    const statusHtml = statusBlockHtml(this._abilityStatusEntries(item, { comboMode }), { source: this.document, abilityName: ab.name, targets: cardTargets, attackTargetId });
 
     // Combo version: the blocks are rebuilt with the combo text merged in, so
     // an ability whose combo only ADDS something (Low Blow / The Hook) still
@@ -2770,7 +2786,7 @@ export class IconSheet extends BaseActorSheet {
     // combo text replaces the normal one on the card and for the statuses, and
     // ab.tags / ab.isAutoHit already come from the combo version (_getAbilityDetail).
     const comboArmed = ab.comboArmed;
-    const statusEntries = abilityStatusEntries(this._comboSystem(this.document.items.get(itemId)), { comboMode: comboArmed, sourceName: this.document.name });
+    const statusEntries = this._abilityStatusEntries(this.document.items.get(itemId), { comboMode: comboArmed });
     // GREAT RUNE (Elden Rune's Infuse 3, p.209): "your attacks also shatter their main target while standing in this
     // rune" — a Shattered button for the attack target, on top of the ability's own.
     try {

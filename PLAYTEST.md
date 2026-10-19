@@ -11,6 +11,20 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P17 — Le infusioni non armate non portano i loro status (19 ottobre 2026, versione 1.15.251)
+
+Setup: solo codice (F5 basta). Un PG Wright Geomancer con Bio (con la mastery MAGNABIO sbloccata) e un po' di Aether,
+un foe come bersaglio.
+
+- [ ] Bio senza niente infuso, attacco (o auto-hit) sul foe → nel riquadro Inflict c'è solo lo "Shattered" dell'Effect
+      ("Attack target is shattered"), niente Shattered di BIOTIC né Shattered+ del Terrain Effect di MAGNABIO.
+- [ ] Stessa cosa con Show in Chat di Bio senza infusione.
+- [ ] Arma Infuse 3: BIOTIC, poi attacca → c'è anche lo Shattered di BIOTIC ("shatters all characters inside"), non
+      quello di MAGNABIO.
+- [ ] Arma Infuse 6 (Mastery): MAGNABIO, poi attacca → c'è lo Shattered+ del Terrain Effect, non lo Shattered di
+      BIOTIC.
+- [ ] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima.
+
 ## Esito 18 ottobre, P20 — End Encounter lascia le rune che durano fino a fine scena (19 ottobre 2026, versione 1.15.250)
 
 Setup: solo codice (F5 basta). Un PG Enochian con Elden Rune (anche con la mastery ARKENRUNE e Infuse 3: GREAT RUNE),

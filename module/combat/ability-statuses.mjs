@@ -608,7 +608,7 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
 /* -------------------------------------------------- */
 
 /** Entries for a PC ability item (system data), honouring unlocked talents / mastery and the combo version. */
-export function abilityStatusEntries(system, { comboMode = false, sourceName = "" } = {}) {
+export function abilityStatusEntries(system, { comboMode = false, sourceName = "", masteryOff = false } = {}) {
   const s = system ?? {};
   const opts = { sourceName };
   const out = [];
@@ -649,7 +649,10 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   // HELL, p.192) is not in play by itself: its statuses come in through
   // comboEffect when that combo is the one chosen (withActiveCombo). Reading it
   // here put Fists' "Seal your foe" on Devil Hand's card, and on the base's.
-  if (s.masteryUnlocked && !alternateCombo(s)) add(s.mastery, "Mastery");
+  // masteryOff: the mastery is an Infuse version that isn't armed (MAGNABIO,
+  // p.218), so its statuses don't happen this use (P17; the caller strips the
+  // unarmed Infuse blocks of the description the same way).
+  if (s.masteryUnlocked && !masteryOff && !alternateCombo(s)) add(s.mastery, "Mastery");
   return _dedupe(out);
 }
 

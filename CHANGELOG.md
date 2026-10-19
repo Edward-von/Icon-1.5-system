@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Le infusioni non armate non portano i loro status (versione 1.15.251)
+
+### Esito del playtest del 18 ottobre, P17
+
+- **Status delle infusioni non armate**: attaccando con Bio senza niente infuso, il riquadro Inflict offriva anche lo
+  "Shattered" di BIOTIC (Infuse 3) e lo "Shattered+" del Terrain Effect di MAGNABIO (la mastery) → il sistema leggeva
+  gli status da tutto il testo dell'abilità, comprese le versioni Infuse che quell'uso non ha pagato → ora le versioni
+  Infuse non armate (del testo dell'abilità e della mastery quando è un'infusione) non contano per i bottoni Inflict;
+  quella armata sì. È la stessa regola già usata per il Limit Break: "only one infuse effect can trigger at a time"
+  (p.204). Vale per la card d'attacco / auto-hit e per Show in Chat. Le versioni "Slay or Infuse" restano, perché lo
+  Slay può farle scattare anche senza Aether.
+
 ## 19 ottobre 2026 — End Encounter lascia le rune che durano fino a fine scena (versione 1.15.250)
 
 ### Esito del playtest del 18 ottobre, P20
