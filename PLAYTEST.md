@@ -531,17 +531,17 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Mendicant — Chanter
 
-- [ ] **Blessing of Faith** (tratto Chanter, p.176) — cosa controllare: niente bottone "Gain True Strike" (è un promemoria sull'abilità) [1.15.221, 225]
-- [ ] **Felicity** (Chanter, p.177) — cosa controllare: Fleet sostituisce la base; con la mastery si sceglie Fleet o Fantasia [1.15.3, 32]
-- [ ] **Holy** (Chanter, p.177) — cosa controllare: "Talent I: Medium Blast (on pits)"; la Medium Blast di Hades sparisce al turno dopo, il pit resta; MAGNASANCTI resta [1.15.3, 69, 93, 98]
-- [ ] **Pandaemonium** (Chanter, p.177-178) — cosa controllare: Purgatorio fa esplodere i pit (tutti con DULCE PURGATORIO); area "Medium Blast + all pits"; chip "Pits under pacified foes" del Talent II; i due chip dei pit indipendenti [1.15.3, 93, 96, 97, 106, 118]
-- [ ] **Symphony** (Chanter, p.178-179) — cosa controllare: chip Mote (non adiacenti); Detonate; finestra delle blessing da togliere; Charge "+2 more spaces"; bottone chat della mastery Crescendo [1.15.35, 51, 69, 172, 184, 185, 225]
-- [ ] **Dervish** (Chanter, p.178) — cosa controllare: Aura 1 col Talent I e con Dawn; con la mastery card "Dervish + Dawn" e base non barrata [1.15.3, 5, 21, 33, 139]
-- [ ] **Aria** (Chanter, p.178) — cosa controllare: Small, Medium e Large Blast "(self)" centrate sul Chanter senza clic [1.15.51, 84]
-- [ ] **Gentleness** (Chanter, p.179) — cosa controllare: Divine già spuntato nel danno; + / − sull'aura da 1 a 3 con la mastery [1.15.17, 36]
-- [ ] **Chastise** (Chanter, p.179-180) — cosa controllare: Charism sostituisce la base; chip "1 divine ×3" sotto Other con Instances 3 [1.15.3, 27, 28, 51, 100, 127]
-- [ ] **Monogatari** (Chanter, p.179) — cosa controllare: i sei racconti su sei righe numerate [1.15.13]
-- [ ] **March of the Saints** (testo; Limit Break Chanter, p.176) — cosa controllare: Stance, Refresh, poi i quattro santi uno per riga col nome in grassetto. Migrazione 25 [1.15.40]
+- [x] **Blessing of Faith** (tratto Chanter, p.176) — cosa controllare: niente bottone "Gain True Strike" (è un promemoria sull'abilità) [1.15.221, 225] **(già provato nella sezione 1.15.221: niente "Gain True Strike")**
+- [x] **Felicity** (Chanter, p.177) — cosa controllare: Fleet sostituisce la base; con la mastery si sceglie Fleet o Fantasia [1.15.3, 32] **(con il combo token la base è tutta barrata (combo completa, voluto dalla 1.15.139); con la mastery Show in Chat chiede "Fleet / Fantasia" e Fantasia posta "Fantasia (Felicity combo)". Nota: barrata anche la riga della mastery FANTASIA)**
+- [ ] **Holy** (Chanter, p.177) — cosa controllare: "Talent I: Medium Blast (on pits)"; la Medium Blast di Hades sparisce al turno dopo, il pit resta; MAGNASANCTI resta [1.15.3, 69, 93, 98] **(Talent I: scelta "Talent I: Medium Blast (on pits)" e "Mastery: Small Blast"; con Hades tag Medium Blast, True Strike, Autohit e card AUTO-HIT, ma il bottone dice "Attack Roll" (vedi P10). Sparizione della blast di Hades e pit che resta non riprovati qui)**
+- [ ] **Pandaemonium** (Chanter, p.177-178) — cosa controllare: Purgatorio fa esplodere i pit (tutti con DULCE PURGATORIO); area "Medium Blast + all pits"; chip "Pits under pacified foes" del Talent II; i due chip dei pit indipendenti [1.15.3, 93, 96, 97, 106, 118] **(Talent II: due chip "Pit · 1" e "Pits under pacified foes"; con la combo l'area offre "Combo: Medium Blast (on pits)" e "Charge: Large Blast". Esplosione dei pit con DULCE PURGATORIO non riprovata qui)**
+- [x] **Symphony** (Chanter, p.178-179) — cosa controllare: chip Mote (non adiacenti); Detonate; finestra delle blessing da togliere; Charge "+2 more spaces"; bottone chat della mastery Crescendo [1.15.35, 51, 69, 172, 184, 185, 225] **(chip "Mote · 4"; finestra "whose blessings?" con le blessing dei PG e la casella Charge "+2 more motes"; mote adiacente rifiutata ("can't be adjacent"); card "2 × Mote" con la blessing tolta; foe che entra → Detonate → "Small Blast (on Knuckle)", "Fray (4) to foes" e "Pit under Knuckle"; fumetto della mastery Crescendo. Vedi P11: con un PG dal token ostile la card dava "Bless Knuckle" al foe)**
+- [x] **Dervish** (Chanter, p.178) — cosa controllare: Aura 1 col Talent I e con Dawn; con la mastery card "Dervish + Dawn" e base non barrata [1.15.3, 5, 21, 33, 139] **(Talent I: tag e bottone "Aura 1"; con la combo Dawn tag Aura 1; con la mastery niente barrato e Show in Chat posta "Dervish + Dawn")**
+- [x] **Aria** (Chanter, p.178) — cosa controllare: Small, Medium e Large Blast "(self)" centrate sul Chanter senza clic [1.15.51, 84] **(scelta "Small / Medium / Large Blast (self)": Small e Large piazzate subito centrate sul token)**
+- [x] **Gentleness** (Chanter, p.179) — cosa controllare: Divine già spuntato nel danno; + / − sull'aura da 1 a 3 con la mastery [1.15.17, 36] **(già provato nelle sezioni 1.15.17 e 36: Divine spuntato, + / − da 1 a 3)**
+- [x] **Chastise** (Chanter, p.179-180) — cosa controllare: Charism sostituisce la base; chip "1 divine ×3" sotto Other con Instances 3 [1.15.3, 27, 28, 51, 100, 127] **(già provato nelle sezioni 1.15.27, 100, 127: Charism sostituisce la base, "1 flat divine ×3" con Instances 3)**
+- [x] **Monogatari** (Chanter, p.179) — cosa controllare: i sei racconti su sei righe numerate [1.15.13] **(già provato nella sezione 1.15.13: sei righe)**
+- [x] **March of the Saints** (testo; Limit Break Chanter, p.176) — cosa controllare: Stance, Refresh, poi i quattro santi uno per riga col nome in grassetto. Migrazione 25 [1.15.40] **(Stance, Refresh, poi Parzival, Leon, Angrboda, Farnese uno per riga col pallino)**
 
 #### Mendicant — Harvester
 
@@ -770,6 +770,14 @@ Da compilare durante il playtest.
 - **1.15.120, prima casella — con REAP armato il bottone di Sow dice ancora "✦ Auto-Hit".** Il tiro è giusto (si
   apre la finestra d'attacco vera di Reap), sbaglia solo la scritta: l'anteprima usa `parsed.isAutoHit` della
   versione base invece di quella della combo (`IconSheet.mjs`, riga 527 circa).
+  Sezione 3: lo stesso al contrario su Holy con Hades armato (tag Autohit, card AUTO-HIT giusta, ma il bottone dice
+  "Attack Roll").
+- **Sezione 3 (19 ottobre) — i PG creati nel mondo nascono col token ostile.** Un attore `icon` nuovo (sidebar o
+  wizard) ha `prototypeToken.disposition = -1` (provato: `Actor.create({type:"icon"})` → −1); nel mondo "test" sono
+  ostili PT S3, PT Testi, i quattro "Yeokin" e "Actor (3)", amici solo i TEST. Le automazioni che leggono amico /
+  nemico dal token si invertono: con PT S3 ostile la mote di Symphony fatta esplodere da un foe dava "Bless Knuckle"
+  e "can fly 1" invece di "Fray to foes" e "Pit under". `IconActor._preCreate` imposta `actorLink` ma non la
+  disposition dei PG.
 
 ### Dubbi
 
@@ -3603,12 +3611,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bleak Mercy con il segnalino combo: è barrato solo l'Effect, Hit / Miss / Slay no; senza segnalino non è barrato
-      niente.
-- [ ] Revenge (Indignation): come sopra.
-- [ ] Incubus (Succubus): è barrato solo il Mark.
-- [ ] Umbra (Penumbra): è barrato solo l'Effect del teleport, non l'altro Effect.
-- [ ] Low Blow (The Hook): non è barrato niente.
+- [x] Bleak Mercy con il segnalino combo: è barrato solo l'Effect, Hit / Miss / Slay no; senza segnalino non è barrato
+      niente. **(sezione 3)**
+- [x] Revenge (Indignation): come sopra. **(sezione 3)**
+- [x] Incubus (Succubus): è barrato solo il Mark. **(sezione 3)**
+- [x] Umbra (Penumbra): è barrato solo l'Effect del teleport, non l'altro Effect. **(sezione 3)**
+- [x] Low Blow (The Hook): non è barrato niente. **(sezione 3)**
 - [ ] God Hand (Devil Hand, combo completa): tutto barrato come prima.
 
 ## Emerso R16 — Talento nella card auto-hit (17 ottobre 2026, versione 1.15.138)
