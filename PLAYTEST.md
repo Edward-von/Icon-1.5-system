@@ -485,14 +485,14 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Vagabond — Fool
 
-- [ ] **Curse of Chaos** (tratto Fool, p.149) — cosa controllare: un foe che attacca il Fool da 3+ caselle ha la casella "Defender has evasion" [1.15.59]
-- [ ] **Stack Dice** (tratto Fool, p.149 e p.152) — cosa controllare: bottone Use (posta "gamble result is 6"), al capitolo 3 due dadi (0/2), opzione Stacked Die nel gamble senza doppio scalo [1.15.29, 53, 58]
-- [ ] **Cheap Trick** (tratto Fool, p.149) — cosa controllare: chip del summon Bomb sul tratto [1.15.46]
-- [ ] **Death** (Fool, p.150) — cosa controllare: scelta "Slay / Finishing Blow: Large Blast (target)" centrata sul bersaglio; l'attacco piazza solo la Line 6; Slay del Talent II sulla card auto-hit [1.15.51, 138]
-- [ ] **Cavaliere** (Fool, p.150) — cosa controllare: chip summon Bomb [1.15.45]
-- [ ] **Diablo** (Fool, p.151) — cosa controllare: Inflict solo sul bersaglio d'attacco [1.15.42]
-- [ ] **Party Favor** (Fool, p.151) — cosa controllare: chip Mine e Detonate (gamble + Medium Blast); con AMICO tag e bottone Mark, "On a character", controllo del range, una sola card Detonate in chat, testo del mark preso da Amico [1.15.19, 69, 71, 131, 152, 156, 172, 198]
-- [ ] **Chronotemper** (testo; Fool, p.152) — cosa controllare: tra i tag solo "Mark" (niente "Power Die"); blocco "Cheat Time — Interrupt 1" con bottone chat, riga della mastery Revolution. Migrazione 30 [1.15.62, 74]
+- [x] **Curse of Chaos** (tratto Fool, p.149) — cosa controllare: un foe che attacca il Fool da 3+ caselle ha la casella "Defender has evasion" [1.15.59] **(Kelpie attacca PT S3 da 8 spazi: la casella "Defender has evasion" c'è ma va spuntata a mano, come dice il suo tooltip; spuntata → "Evasion: PT S3 rolls 1d6", card "evaded (4+) — the attack misses them". Non si spunta da sola: va bene così?)**
+- [x] **Stack Dice** (tratto Fool, p.149 e p.152) — cosa controllare: bottone Use (posta "gamble result is 6"), al capitolo 3 due dadi (0/2), opzione Stacked Die nel gamble senza doppio scalo [1.15.29, 53, 58] **(già provato nelle sezioni 1.15.29, 53, 58: Use, due dadi al capitolo 3, Stacked Die nel gamble senza doppio scalo)**
+- [x] **Cheap Trick** (tratto Fool, p.149) — cosa controllare: chip del summon Bomb sul tratto [1.15.46] **(già provato nella sezione 1.15.46: chip Bomb)**
+- [x] **Death** (Fool, p.150) — cosa controllare: scelta "Slay / Finishing Blow: Large Blast (target)" centrata sul bersaglio; l'attacco piazza solo la Line 6; Slay del Talent II sulla card auto-hit [1.15.51, 138] **(bottone area: "Line 6" e "Slay / Finishing Blow: Large Blast (target)", la seconda centrata su Knuckle; Auto-Hit piazza subito la Line 6 senza domanda; Slay del Talent II già provato nella sezione 1.15.138)**
+- [x] **Cavaliere** (Fool, p.150) — cosa controllare: chip summon Bomb [1.15.45] **(chip Bomb)**
+- [x] **Diablo** (Fool, p.151) — cosa controllare: Inflict solo sul bersaglio d'attacco [1.15.42] **(Knuckle e Janissary bersagliati: Blind solo su "Knuckle (attack target)", Janissary (area) senza)**
+- [x] **Party Favor** (Fool, p.151) — cosa controllare: chip Mine e Detonate (gamble + Medium Blast); con AMICO tag e bottone Mark, "On a character", controllo del range, una sola card Detonate in chat, testo del mark preso da Amico [1.15.19, 69, 71, 131, 152, 156, 172, 198] **(chip "Mine · 1" → "On a space" → card "1 × Mine"; Ann entra nella casella → card "enters the Mine" con Detonate e Remove; Detonate apre il gamble e poi piazza "Medium Blast (on the mine)" centrata sulla mine, che sparisce. Amico, range e card Detonate unica già provati nel blocco 8)**
+- [x] **Chronotemper** (testo; Fool, p.152) — cosa controllare: tra i tag solo "Mark" (niente "Power Die"); blocco "Cheat Time — Interrupt 1" con bottone chat, riga della mastery Revolution. Migrazione 30 [1.15.62, 74] **(tag solo "Mark"; blocco "Cheat Time — Interrupt 1" con fumetto: la card ha in fondo "★ Mastery: Revolution…"; testo uguale a p.152)**
 
 #### Vagabond — Freelancer
 
