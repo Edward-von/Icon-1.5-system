@@ -4117,12 +4117,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Chanter con Holy, combo armata (Hades): si piazza la Medium Blast e si crea il pit sotto il bersaglio.
-      All'inizio del turno successivo del PG la Medium Blast sparisce e il pit resta.
-- [ ] Holy con Talent I: nello stesso turno, dopo Hades, "Medium Blast (on pits)" trova ancora l'area e i pit al suo
-      interno.
-- [ ] Holy con MAGNASANCTI sbloccata: la Small Blast terrain effect resta sulla mappa dopo il turno, come prima.
-- [ ] Holy senza combo: nessuna area resta.
+- [x] Chanter con Holy, combo armata (Hades): si piazza la Medium Blast e si crea il pit sotto il bersaglio.
+      All'inizio del turno successivo del PG la Medium Blast sparisce e il pit resta. **(Combattimento di prova: Hades (Medium Blast) e un pit dentro; all'inizio del turno successivo del Chanter la Medium Blast sparisce, il pit resta.)**
+- [x] Holy con Talent I: nello stesso turno, dopo Hades, "Medium Blast (on pits)" trova ancora l'area e i pit al suo
+      interno. **(Nello stesso turno "Talent I: Medium Blast (on pits)" trova l'area e il pit ("× 1").)**
+- [x] Holy con MAGNASANCTI sbloccata: la Small Blast terrain effect resta sulla mappa dopo il turno, come prima. **(Holy con MAGNASANCTI: la Small Blast "Terrain" (lasting) resta dopo il turno successivo. Nota: piazzarla ha tolto il pit creato per prova con lo stesso abilityKey di Holy.)**
+- [x] Holy senza combo: nessuna area resta. **(Holy senza combo e senza mastery: nessun bottone area, quindi nessuna area resta.)**
 
 ## Emerso R49 — Pit sotto i foe pacified (Pandaemonium Talent II) (17 ottobre 2026, versione 1.15.97)
 
@@ -4199,7 +4199,7 @@ Setup: solo codice (F5 basta).
 - [x] Pandaemonium con la combo Purgatorio armata: stessa prova con "Combo: Medium Blast (on pits)". **(Pandaemonium con Purgatorio: "Combo: Medium Blast (on pits)" come sopra.)**
 - [x] Tiro d'attacco di Hades o di Purgatorio senza area sulla mappa: la scelta dell'area non propone "(on pits)" e
       l'attacco piazza la sua Medium Blast come prima. **(Tiro d'attacco di Hades senza area: nessuna scelta "(on pits)", "Click to place the Medium Blast".)**
-- [ ] Al turno successivo dell'utente l'esplosione sparisce come un'area normale, e i pit restano.
+- [x] Al turno successivo dell'utente l'esplosione sparisce come un'area normale, e i pit restano. **(L'esplosione sui pit sparisce all'inizio del turno successivo come la Medium Blast; il pit resta.)**
 
 ## Emerso R38b — L'infusione si consuma con l'uso dell'abilità (17 ottobre 2026, versione 1.15.92)
 
@@ -4664,7 +4664,7 @@ e CSS: F5 dopo il deploy.
 - [x] **Togliere**: tasto destro sul chip → "Remove the 2 pit spaces of Terraforming?" → spariscono; "Remove all" sulla card →
       spariscono, il bottone si spegne; layer dei template di Foundry → selezione di uno spazio e Canc → sparisce solo quello.
       Un template normale (area d'attacco) non viene toccato. **('Remove all' toglie tutto; gli altri modi non provati)**
-- [ ] **Restano**: gli spazi non spariscono all'inizio del turno successivo del PG (le aree d'attacco sì). **(non provato)**
+- [x] **Restano**: gli spazi non spariscono all'inizio del turno successivo del PG (le aree d'attacco sì). **(Il pit (spazio di terreno) non sparisce all'inizio del turno successivo, l'area d'attacco sì.)**
 - [x] **Dangerous terrain**: trascina il foe dentro uno spazio dangerous → domanda "Dangerous terrain … Take 2 piercing
       damage, ignoring armor and vigor?"; "Take 2 damage" → card "Damage Applied", 2 hp in meno anche col vigor pieno e
       l'armatura. In combattimento, nello stesso turno, uscire o entrare in un altro spazio dangerous non chiede più; al turno
