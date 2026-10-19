@@ -3441,11 +3441,11 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con due abilità che segnano, stesso bersaglio: la seconda chiede. "Replaces it" toglie la vecchia, "Keep"
-      lascia la vecchia e non mette la nuova.
-- [ ] Giocatore che non possiede il bersaglio: la domanda la vede il giocatore, non il GM.
-- [ ] Stessa abilità due volte, mark con stack, Track target: nessuna domanda.
-- [ ] Amico su un personaggio che ha già un mark del Fool, "Keep": niente spazio sulla mappa.
+- [x] PG con due abilità che segnano, stesso bersaglio: la seconda chiede. "Replaces it" toglie la vecchia, "Keep"
+      lascia la vecchia e non mette la nuova. **(19 ott, TEST Shade: Harrow poi Incubus su Basic Mob → "Mark Basic Mob again — which stays?"; Keep lascia Harrow, "Incubus replaces it" mette Incubus e toglie Harrow)**
+- [x] Giocatore che non possiede il bersaglio: la domanda la vede il giocatore, non il GM. **(la domanda compare a PT Player (proprietario di TEST Shade), al GM nessuna finestra)**
+- [x] Stessa abilità due volte, mark con stack, Track target: nessuna domanda. **(Incubus una seconda volta sullo stesso foe: nessuna domanda; Track di Grand Banishment: nessuna domanda (ma vedi P16: il tracker si duplica))**
+- [x] Amico su un personaggio che ha già un mark del Fool, "Keep": niente spazio sulla mappa. **(TEST Fool: Chronotemper su se stesso, poi Party Favor (Amico) → domanda; Keep → nessuno spazio Party Favor sulla mappa, resta Chronotemper)**
 
 ## R33d2 — Implode su un personaggio: la large blast con un clic (17 ottobre 2026, versione 1.15.153)
 
@@ -5416,13 +5416,13 @@ Tower; due foe sulla mappa.
       turn, gamble…". **(non provato)**
 - [x] **Non conta come mark**: con A tracciato da Grand Banishment, Mark target di Divine Aegis su A → il segno resta
       e il mark si aggiunge; poi Track target di nuovo su A → il mark di Divine Aegis resta. **(Implode ha aggiunto un secondo Tracked senza togliere Grand Banishment)**
-- [ ] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato). **(non provato)**
+- [x] **Uno per abilità**: Track target di Grand Banishment sul foe B → il segno passa da A a B (chip aggiornato). **(19 ott: Track su Mechanist poi su Janissary → il chip passa a Janissary. NON VA solo il caso stesso foe due volte: due chip Janissary (anche dal GM), vedi P16)**
 - [ ] **Rimozione**: ✕ sul chip (o "End mark" nel tab Conditions di B, o ✕ nel pannello status) → segno tolto, in
       chat "The tracker Grand Banishment on B ends.". **(non provato)**
 - [ ] **Sconfitta del PG**: PG a 0 HP → i suoi mark finiscono, il segno tracciato resta. **(non provato)**
 - [ ] **Fine combattimento**: terminare il combattimento → anche i segni tracciati spariscono. **(non provato)**
-- [ ] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
-      (GM connesso). **(non provato)**
+- [x] **Giocatore senza permessi sul foe**: da giocatore, Track target → "Tracker sent to the GM…" e il segno compare
+      (GM connesso). **(PT Player, Grand Banishment di TEST Sealer sul Mechanist: "Tracker sent to the GM to place on Mechanist", card "tracks Mechanist", chip sulla scheda; su un altro foe il segno passa (Mechanist → Janissary). Vedi P16)**
 
 ## R29 — Dervish: base e combo insieme con la mastery (15 ottobre 2026, versione 1.15.33)
 
