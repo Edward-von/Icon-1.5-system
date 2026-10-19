@@ -3142,8 +3142,8 @@ Setup: solo codice (F5 basta).
       blast, Shift + freccia destra: spuntone e blast si spostano insieme di 1 casella.
 - [x] Mouse sul centro (sopra la blast), Shift + freccia su: si spostano tutte e due, la blast resta centrata sullo
       spuntone.
-- [ ] Spostare un personaggio dentro la blast dopo lo spostamento: compare l'avviso di terreno pericoloso nelle
-      caselle nuove, non in quelle vecchie. **(non provato)**
+- [x] Spostare un personaggio dentro la blast dopo lo spostamento: compare l'avviso di terreno pericoloso nelle
+      caselle nuove, non in quelle vecchie. **(Spuntone spostato di una casella (funzione di Shift + frecce): la blast lo segue; il Janissary che entra in una casella nuova riceve la domanda del dangerous, in quella vecchia no. (Col Knuckle non usciva più la domanda perché vale una volta per turno.))**
 - [x] Rimuovere lo spuntone: sparisce anche la blast, come prima.
 
 ## Emerso R36 — Bend Fate dalla card del gamble (17 ottobre 2026, versione 1.15.181)
@@ -3615,11 +3615,11 @@ Setup: solo codice (F5 basta).
       nail)" avvisa "place the nail first" e non piazza nulla.
 - [x] Piazzare lo spuntone (Aura 2), poi "Small Blast (on nail)": la croce di 5 caselle compare centrata sullo
       spuntone senza clic sulla mappa, e lo spuntone resta.
-- [ ] Un foe che entra nella blast riceve il messaggio del terreno dangerous. **(non provato)**
-- [ ] Ripiazzare la blast: la vecchia sparisce, lo spuntone resta. **(non provato)**
+- [x] Un foe che entra nella blast riceve il messaggio del terreno dangerous. **(Rampant Nail Talent I: piazzato lo spuntone (Aura 2 terrain effect) e la "Small Blast (on nail)" dangerous; il Knuckle che entra nella blast riceve la domanda "entered a dangerous terrain space (Dangerous, Rampant Nail)".)**
+- [x] Ripiazzare la blast: la vecchia sparisce, lo spuntone resta. **(Ripiazzata la blast: ne resta una sola, lo spuntone resta.)**
 - [x] Togliere lo spuntone (Remove area o Canc), e in un'altra prova piazzarne uno nuovo: in tutti e due i casi la
       blast sparisce (serve un GM connesso). **(tolto lo spuntone (Canc), la blast sparisce)**
-- [ ] A inizio turno del PG la blast non viene cancellata. **(non provato)**
+- [x] A inizio turno del PG la blast non viene cancellata. **(Combattimento di prova: a inizio turno della Spellblade la blast non viene cancellata.)**
 
 ## Emerso R1 — Barrato solo il blocco sostituito dalla combo (17 ottobre 2026, versione 1.15.139)
 
