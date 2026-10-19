@@ -3237,11 +3237,11 @@ Setup: solo codice (F5 basta).
 - [ ] Elden Rune piazzata, poi si chiude il combat: il GM riceve "End of the scene?" con Remove. **(NON VA: come L2957, la Elden Rune sparisce a fine combattimento e il GM non riceve "End of the scene?" (P20).)**
 - [x] Gates of Hell con mastery: la card dell'afterimage ha "Flash Step"; cliccando un afterimage libero il token ci
       va e l'afterimage sparisce. Uno occupato viene rifiutato e il bottone resta usabile. **(Card con "Flash Step": con l'afterimage occupata "no afterimage of yours with nobody on it" e il bottone resta; libera → "TEST Demon Slayer takes the place of an afterimage (free action)", il token ci va e l'afterimage sparisce.)**
-- [ ] Bio Talent I con l'area già piazzata: "To dangerous" chiede quante caselle (pit, difficult, oggetti propri) e le
-      rende dangerous; senza area compare un avviso.
-- [ ] Bio Talent II: "Boil" elenca chi è dentro o accanto al dangerous nell'area e dà 2 danni dopo la conferma.
-- [ ] Terraforming: "Clear terrain", poi si cliccano caselle difficult o dangerous nell'area: le caselle singole
-      spariscono, le aree più grandi perdono solo quelle caselle.
+- [x] Bio Talent I con l'area già piazzata: "To dangerous" chiede quante caselle (pit, difficult, oggetti propri) e le
+      rende dangerous; senza area compare un avviso. **(Bio Talent I: senza area "Place the area of Bio first…"; con la Small Blast sopra un pit e un difficult: "Make 2 spaces inside the area (pits, difficult terrain, your objects) dangerous terrain?" → due caselle Dangerous.)**
+- [x] Bio Talent II: "Boil" elenca chi è dentro o accanto al dangerous nell'area e dà 2 danni dopo la conferma. **(Bio Talent II, Mechanist nell'area accanto ai dangerous: "2 dangerous spaces boil: 2 piercing damage to Mechanist?" → Deal 2 damage: 40 → 38.)**
+- [x] Terraforming: "Clear terrain", poi si cliccano caselle difficult o dangerous nell'area: le caselle singole
+      spariscono, le aree più grandi perdono solo quelle caselle. **(Terraforming: senza area avviso; con il Burst 2 (target) piazzato, "Clear terrain" e clic sulle caselle: Difficult e Dangerous spariscono, il Pit resta. Aree di più caselle non provate.)**
 
 ## R33b2 — Il pit conta come un livello più in basso (17 ottobre 2026, versione 1.15.174)
 
