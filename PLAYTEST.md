@@ -113,10 +113,10 @@ Burst") anche copiata negli Items del mondo.
 
 Setup: solo codice (F5 basta). Un PG con Massive Overhead (o un'altra abilità che nomina un pit).
 
-- [ ] Passare il mouse su "pit" nel testo di Massive Overhead (scheda e card in chat) → tooltip con la regola di p.89.
-- [ ] Un testo con "pits" → anche lì il tooltip.
-- [ ] Nessun tooltip a metà di parole come "spit" o "pitch".
-- [ ] Reference → Movement & Positioning: c'è la voce "Pit".
+- [x] Passare il mouse su "pit" nel testo di Massive Overhead (scheda e card in chat) → tooltip con la regola di p.89. **(19 ottobre sera: scheda di PT Testi, nel testo delle abilità "pit" ha il tooltip "Pit: A pit space is just what it sounds like…" (scheda; la card in chat usa lo stesso arricchimento))**
+- [x] Un testo con "pits" → anche lì il tooltip. **("Pits are deep." → tooltip Pit)**
+- [x] Nessun tooltip a metà di parole come "spit" o "pitch". **("spits" e "pitch-black" senza tooltip)**
+- [x] Reference → Movement & Positioning: c'è la voce "Pit". **(Quick Guide → Glossary → Movement & Positioning: voce "Pit")**
 
 ## Esito 18 ottobre, P28 — Le righe di status usano il nome del token (19 ottobre 2026, versione 1.15.258)
 
@@ -125,8 +125,8 @@ Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token
 
 - [ ] Far esplodere la mote con HARVEST MOON → la riga "… loses 1 blessing (now 0)" dice "Mote of life", come la firma
       della card.
-- [ ] Dare uno status a un token non collegato rinominato (es. un foe "Goblin 2") → "Goblin 2 is now …".
-- [ ] Dare uno status a un PG → il nome è quello di sempre.
+- [x] Dare uno status a un token non collegato rinominato (es. un foe "Goblin 2") → "Goblin 2 is now …". **(19 ottobre sera: token non collegato del Mechanist rinominato "Goblin 2" → riga "Goblin 2 is already Dazed — PT FIX" (nome del token, non dell'attore))**
+- [x] Dare uno status a un PG → il nome è quello di sempre. **("TEST Fool is now Dazed — PT FIX")**
 
 ## Esito 18 ottobre, P27 — Le card delle aree portano il nome di chi le ha messe (19 ottobre 2026, versione 1.15.257)
 
@@ -152,18 +152,18 @@ un alleato colpito da un foe: card del danno in chat.
 - [x] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne. **(provato con l'altra riga della stessa card: passa a "0/1" e si spegne insieme)**
 - [x] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili. **(tolti gli usi spesi come fa l'inizio turno (flag interruptUses): i bottoni sulla card tornano "1/1" e cliccabili senza ricaricare)**
 - [ ] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
-      quando il legame si spezza). **(non provato: nessun Knave adiacente né Soul Bond in quel momento)**
+      quando il legame si spezza). **(Refresh Riposte provato (sempre cliccabile); Great Soul Bond non provato)**
 
 ## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
 
 Setup: solo codice (F5 basta). Un Knave in stance Riposte, due alleati (uno adiacente al Knave, uno lontano), un foe
 che fa un'abilità con danno su tutti e tre (o tre danni separati).
 
-- [ ] Sulla card del danno, riga del Knave → c'è "Refresh Riposte". **(non provato (il Knave non era tra i colpiti))**
+- [x] Sulla card del danno, riga del Knave → c'è "Refresh Riposte". **(19 ottobre sera: TEST Knave in stance Riposte, card di PT FIX Foe su Knave, TEST Fool (adiacente) e TEST Chanter (lontano): "Refresh Riposte · TEST Knave" sulle righe del Knave e del Fool, non su quella del Chanter)**
 - [x] Riga dell'alleato adiacente al Knave (anche in diagonale) → c'è "Refresh Riposte". **(Knave in stance Riposte, Knuckle colpisce TEST Sealer (a 2 caselle) e TEST Fool (adiacente): "Refresh Riposte · TEST Knave" solo sulla riga del Fool)**
 - [x] Riga dell'alleato a 2 o più caselle dal Knave → niente "Refresh Riposte" (gli altri interrupt, es. Dire Parry,
       restano come prima). **(riga del Sealer senza Refresh Riposte; Dire Parry c'è su tutte e due le righe come prima)**
-- [ ] Il bottone sull'alleato adiacente funziona come prima (ridà l'uso di Dire Parry e posta la card di refresh). **(non provato)**
+- [x] Il bottone sull'alleato adiacente funziona come prima (ridà l'uso di Dire Parry e posta la card di refresh). **(Dire Parry a 0/1 → clic su Refresh Riposte nella riga del Fool → Dire Parry 1/1 e card "TEST Knave refreshes Riposte…"; il bottone resta cliccabile)**
 
 ## Esito 18 ottobre, P24 — Weakened si spunta da solo nella finestra del danno (19 ottobre 2026, versione 1.15.254)
 
