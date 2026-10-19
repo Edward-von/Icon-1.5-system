@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — PHANTOM BLADE dura fino al turno dopo del Wright (versione 1.15.249)
+
+### Esito del playtest del 18 ottobre, P18
+
+- **PHANTOM BLADE**: l'interrupt illimitato di Drifting Leaf ("Until the start of your next turn, this interrupt has
+  unlimited uses", p.227) spariva appena iniziava il round dopo, prima che il Wright agisse, e quindi non copriva i
+  turni dei foe che agivano per primi → il codice cercava "il prossimo turno del Wright" con l'ordine dei turni
+  della lista del combattimento, ma qui si gioca a fazioni (p.87): l'ordine della lista non dice chi agisce dopo, e
+  a inizio round, con nessuno attivo, il turno vuoto veniva letto come se fosse già quello del Wright → ora
+  l'infusione usata resta valida per tutto il combattimento finché il Wright non si attiva di nuovo: è l'inizio del
+  suo turno (attivazione dal tracker) a toglierla. Nessun altro effetto "fino al tuo prossimo turno" usava l'ordine
+  dei turni: gli status e le aure contano già le attivazioni.
+
 ## 19 ottobre 2026 — Danno ×N da giocatore: le istanze si sommano (versione 1.15.248)
 
 ### Esito del playtest del 18 ottobre, P15

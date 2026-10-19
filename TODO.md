@@ -71,11 +71,12 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [ ] **P17** — attacco di un'abilità Infuse senza niente armato (Bio): il riquadro Inflict offre anche gli status delle
       versioni non armate ("Shattered" di BIOTIC, "Shattered+" del Terrain Effect di MAGNABIO). Con l'infusione armata
       la card è giusta. S.
-- [ ] **P18** — PHANTOM BLADE (Drifting Leaf, p.226 "until the start of your next turn") scade appena inizia il round
+- [x] **P18** — PHANTOM BLADE (Drifting Leaf, p.226 "until the start of your next turn") scade appena inizia il round
       dopo, prima che il Wright agisca: al nuovo round nessuno è attivo (turno vuoto, letto come "0") e il Wright è il
       primo in `combat.turns`, quindi il codice crede che il suo turno sia già cominciato. Con i foe che agiscono per
       primi l'interrupt illimitato non copre proprio i loro turni. Nel combattimento a fazioni l'ordine dei turni non
       vale: serve "il Wright si è attivato in un round successivo" (activateCombatant), non l'indice. S-M.
+      (FATTO il 19 ottobre 2026, versione 1.15.249)
 - [x] **P19** — Astra → Fortuna (Ann, Seer): la card della combo ha il bottone "Gamble" della base. Il tag `gamble`
       è solo tra i tag di Astra (Fortuna: attack, range-5, medium-blast, autohit, combo) e il gamble è un effetto
       della base (p.~148, "Area effect: Gamble"); `abilityGambles` legge il sistema base anche quando esce la combo

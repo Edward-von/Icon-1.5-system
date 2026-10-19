@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P18 — PHANTOM BLADE dura fino al turno dopo del Wright (19 ottobre 2026, versione 1.15.249)
+
+Setup: solo codice (F5 basta). Un PG Wright con Drifting Leaf e abbastanza Aether (≥ 3), due foe; un combat avviato
+con il Wright e i foe.
+
+- [ ] Round 1: attiva il Wright, arma "Infuse 3 or Slay: PHANTOM BLADE" su Drifting Leaf e usa l'abilità (card,
+      attacco) → la versione infusa è in gioco; chiudi il turno del Wright.
+- [ ] Nuovo round con i foe che agiscono per primi: a inizio round (nessuno attivo) e durante i turni dei foe
+      PHANTOM BLADE risulta ancora in gioco (scheda / card dell'interrupt con usi illimitati).
+- [ ] Attiva il Wright → in quel momento l'infusione viene tolta (sulla scheda non è più armata).
+- [ ] Controllo: un'infusione normale (senza "until the start of your next turn", es. un'altra abilità Infuse) usata
+      in un turno non resta in gioco nel turno di un altro combattente, come prima.
+
 ## Esito 18 ottobre, P15 — Danno ×N da giocatore: le istanze si sommano (19 ottobre 2026, versione 1.15.248)
 
 Setup: solo codice (F5 basta). Client giocatore "PT Player" con un PG suo, GM connesso; un foe non del giocatore

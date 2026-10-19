@@ -264,26 +264,36 @@ export async function infuseVersionHtml(version, { enrich = escapeHTML, armed = 
  * (noteInfusionStep) only counts within the combat turn it was used in: its
  * damage and area are rolled and placed then, and the next turn it is spent.
  * A version that lasts "until the start of your next turn" (PHANTOM BLADE,
- * Drifting Leaf p.227) stays in play through the other turns until then.
+ * Drifting Leaf p.227) stays in play through the other turns of that combat,
+ * until expireInfusionAtTurnStart clears it when the actor next activates.
  */
 export function armedInfusion(actor) {
   const f = actor?.getFlag?.(NS, "infused");
   if (!f || !f.itemId) return null;
-  if (f.used && !_sameTurn(f.used, _turnKey()) && !(f.lasts === "nextTurn" && _beforeOwnNextTurn(actor, f.used))) return null;
+  if (f.used && !_sameTurn(f.used, _turnKey()) && !(f.lasts === "nextTurn" && _sameCombat(f.used))) return null;
   return f;
 }
 
-/** True while the combat that `used` was noted in hasn't reached the actor's next turn yet. */
-function _beforeOwnNextTurn(actor, used) {
+/** True while the combat that `used` was noted in is still the one running. */
+function _sameCombat(used) {
   const c = globalThis.game?.combat;
-  if (!c?.started || !used?.combatId || c.id !== used.combatId) return false;
-  const own = (c.turns ?? []).map((t, i) => (t.actor === actor || t.actorId === actor.id) ? i : -1).filter(i => i >= 0);
-  if (!own.length) return false;
-  const r = Number(used.round) || 0, t = Number(used.turn) || 0;
-  const later = own.find(i => i > t);
-  const next = later !== undefined ? { round: r, turn: later } : { round: r + 1, turn: own[0] };
-  const round = Number(c.round) || 0, turn = Number(c.turn) || 0;
-  return round < next.round || (round === next.round && turn < next.turn);
+  return !!c?.started && !!used?.combatId && c.id === used.combatId;
+}
+
+/**
+ * The actor's turn starts (the active GM, from the combat hook): a used
+ * infusion that lasts "until the start of your next turn" (PHANTOM BLADE,
+ * p.227) ends now. Combat is faction based (p.87): who acts next isn't fixed
+ * by the order of `combat.turns`, so the end is the actor's next activation,
+ * not a turn index (P18). A use noted in this very turn stays.
+ */
+export async function expireInfusionAtTurnStart(combat, actor) {
+  const f = actor?.getFlag?.(NS, "infused");
+  if (!f?.used || f.lasts !== "nextTurn") return false;
+  const now = combat?.started ? { combatId: combat.id, round: Number(combat.round) || 0, turn: Number(combat.turn) || 0 } : null;
+  if (_sameTurn(f.used, now)) return false;
+  _log(`"${f.label}" lasted until the start of ${actor.name}'s next turn: cleared`);
+  return clearInfusion(actor);
 }
 
 /** The steps of one use, in order: the area button is not one (it can come at any point). */

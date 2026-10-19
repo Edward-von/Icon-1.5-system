@@ -48,6 +48,7 @@ import { waterspoutTurnStart, waterspoutTurnEnd } from "../canvas/waterspout.mjs
 import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
 import { wheelCombatStart, wheelTurnStart, wheelTurnEnd } from "./wheel-of-fate.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
+import { expireInfusionAtTurnStart } from "../helpers/infuse.mjs";
 
 /* ================================================== */
 /*  Constants                                          */
@@ -952,6 +953,9 @@ export function registerCombatHooks() {
           catch (err) { console.warn("[ICON | IconCombat] status expiry (start) failed", err); }
           try { await tickAuraExpiry(current.actor, "start"); }
           catch (err) { console.warn("[ICON | IconCombat] aura expiry (start) failed", err); }
+          // An infusion "until the start of your next turn" (PHANTOM BLADE, p.227) ends here (P18).
+          try { await expireInfusionAtTurnStart(combat, current.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] infusion expiry (start) failed", err); }
           // Objects that grow at the start of their creator's turn (Geyser Talent I, p.232; R33a3).
           try { await growObjectsAtTurnStart(current.actor); }
           catch (err) { console.warn("[ICON | IconCombat] object growth failed", err); }
