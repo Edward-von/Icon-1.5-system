@@ -16,7 +16,7 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 Setup: solo codice (F5 basta). TEST Harvester con Sow.
 
 - [x] Damage di Sow senza combo → Pierce spuntato; accendere "Combo version" (Reap) → Pierce vuoto; spegnerla → di nuovo spuntato. **(19 ottobre sera, sì)**
-- [ ] Combo token acceso → Damage di Sow si apre con "Combo version" spuntata e Pierce vuoto. **(non provato: stessa funzione, col combo armato i tag sono già quelli di Reap)**
+- [x] Combo token acceso → Damage di Sow si apre con "Combo version" spuntata e Pierce vuoto. **(combo token acceso su TEST Harvester → Damage di Sow: "Combo version" spuntata, Pierce vuoto (token poi rispento))**
 
 ## Emerso nei fix — Il tag Pierce spunta Pierce nella finestra del danno (19 ottobre 2026, versione 1.15.266)
 
@@ -24,7 +24,7 @@ Setup: solo codice (F5 basta). TEST Enochian Weakened.
 
 - [x] Blackstar e Lance (tag Pierce) → finestra del danno: Pierce spuntato ("no armor · from the ability's tag"), Weakened vuoto. **(19 ottobre sera, sì)**
 - [x] Pyre (senza Pierce) → Pierce vuoto, Weakened spuntato come prima. **(sì)**
-- [ ] Tirare Blackstar su un foe con armatura e premere Apply → l'armatura non viene tolta. **(non provato: il flag pierce della card e l'Apply sono quelli già provati con "N piercing damage")**
+- [x] Tirare Blackstar su un foe con armatura e premere Apply → l'armatura non viene tolta. **(19 ottobre sera: Blackstar sul Warrior (ARM 2), card "Pierce — target Armor ignored", Apply 16 → "16 damage applied — HP 40 → 24" (poi HP rimessi a 40))**
 - [x] Sow con la combo Reap armata → Pierce spuntato dal tag della base: va tolto a mano. **(superata dalla 1.15.267: Pierce segue la casella "Combo version" (Reap senza Pierce), vedi sezione sopra)**
 
 ## Emerso provando P30 — Show in Chat di un interrupt o di una round action dei foe (19 ottobre 2026, versione 1.15.265)
@@ -65,9 +65,9 @@ originali; qui il riepilogo.
       client del giocatore con il tema chiaro di Foundry non si è caricato in tempo, vedi sotto.)
 - [x] **"Riduci animazioni"**: con la preferenza del sistema operativo simulata, Quick Guide → Areas: 12 clip ferme con
       i comandi del player; senza, partono da sole.
-- [ ] **Tasti ← → e ✕ dei tour**: non provato (la ✕ cliccata dal codice non chiudeva il fumetto: da riprovare a mano
-      con il mouse prima di pensare a un bug).
-- [ ] **Area split, dialog**: i pallini del bersaglio d'attacco e la ✕ nel dialog del danno, da provare a mano.
+- [x] **Tasti ← → e ✕ dei tour**: non provato (la ✕ cliccata dal codice non chiudeva il fumetto: da riprovare a mano
+      con il mouse prima di pensare a un bug). **(col mouse e la tastiera veri: Next → passo 2, → passo 3, ← passo 2, ✕ chiude il fumetto (il tour resta "in corso" per il Resume, come in Foundry))**
+- [x] **Area split, dialog**: i pallini del bersaglio d'attacco e la ✕ nel dialog del danno, da provare a mano. **(Blackstar su Warrior, Mechanist, Wisp: tre righe con il pallino (il primo scelto); ✕ sul Warrior → sparisce dalla lista e non è più bersagliato, il pallino passa al Mechanist; card "Hit" al Mechanist e "Area damage" al Wisp, niente Warrior)**
 
 Nota sul client giocatore: aperto in una scheda in secondo piano, a volte Chrome non scarica tutti i file del sistema
 (`game.icon` assente, i bottoni delle card non rispondono) o resta fermo sul caricamento della mappa. Non è un errore
@@ -6921,8 +6921,8 @@ sulla scena dentro l'area.
 - [ ] **Area senza danno**: un'abilità ad area il cui Area effect non fa danno → con Hit esce una sola card, col solo
       bersaglio d'attacco; il suggerimento sopra la lista lo dice.
 - [ ] **Esito Area scelto a mano**: card unica "Area damage" con tutti i foe rimasti nella lista.
-- [ ] **✕ nel dialog del danno**: ✕ su un foe → sparisce dalla lista e non è più bersagliato sulla mappa; la card che
-      esce non ha il bottone Apply per lui. Togliendo il bersaglio d'attacco, il pallino passa al primo rimasto.
+- [x] **✕ nel dialog del danno**: ✕ su un foe → sparisce dalla lista e non è più bersagliato sulla mappa; la card che
+      esce non ha il bottone Apply per lui. Togliendo il bersaglio d'attacco, il pallino passa al primo rimasto. **(vedi sopra: ✕ sul bersaglio d'attacco → riga tolta, bersaglio tolto dalla mappa, pallino sul primo rimasto, nessun Apply per lui nelle card)**
 - [ ] **Attacco singolo**: un'abilità senza area con un solo bersaglio → dialog del danno come prima (niente pallini),
       card con quel bersaglio.
 - [ ] **Togliere l'area**: 🗑 area sulla card dell'attacco (o Delete sul template) → i foe che erano dentro non sono più
