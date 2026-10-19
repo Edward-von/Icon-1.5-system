@@ -600,18 +600,18 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Wright — Geomancer
 
-- [ ] **Orogenic Rage** (tratto Geomancer, p.217) — cosa controllare: promemoria nella card "Round 5" [1.15.63]
-- [ ] **Stone Double** (tratto Geomancer, p.217) — cosa controllare: chip "Statue · H1" sul tratto [1.15.65]
-- [ ] **Bio** (Geomancer, p.218) — cosa controllare: righe chiuse BIOTIC / MAGNABIO nella card; danno di MAGNABIO 2[D]+fray; Shattered+ a chi è nella nuvola; "To dangerous" e "Boil" dei talenti [1.15.42, 48, 49, 61, 69, 70, 164, 175]
-- [ ] **Dragon Dive** (Geomancer, p.218) — cosa controllare: niente "Hit (no damage)", Area 2 piercing; BOULDER KICK sotto Other [1.15.47, 51, 91]
-- [ ] **Geo** (Geomancer, p.218-219) — cosa controllare: MAGNAGEO Area [D]+fray; chip Boulder; l'Arc 6 non resta [1.15.48, 49, 61, 65, 103]
-- [ ] **Helix Heel** (testo; Geomancer, p.219) — cosa controllare: niente corsivo, tre blocchi Effect; il secondo dice "…you can keep extending the line by 3 spaces this way each time, but can only extend it once per object."; scelta "Burst 1 (on object)". Migrazioni 28 e 32 [1.15.56, 66, 67, 87]
-- [ ] **Terraforming** (Geomancer, p.219) — cosa controllare: chip "Pit · 2", "Difficult · 3", Boulder; bottone "Clear terrain" [1.15.65, 69, 175]
-- [ ] **Obsidian Flesh** (Geomancer, p.219) — cosa controllare: danno del Talent II (2 piercing) [1.15.25]
-- [ ] **Midas** (Geomancer, p.220) — cosa controllare: area del Talent II sul bersaglio; chip dell'oggetto [1.15.51, 65]
-- [ ] **Realignment** (Geomancer, p.220) — cosa controllare: chip "up to ×N"; nessun Track target [1.15.57, 144]
-- [ ] **Quaking Palm** (Geomancer, p.221) — cosa controllare: Track target; il Collide sta dentro la riga PRIMAL BURST; chip "1 piercing · up to ×4" [1.15.51, 57, 61, 100, 144]
-- [ ] **Cataclysm** (testo; Limit Break Geomancer, p.217) — cosa controllare: due "Effect:" e "Gain Delay:"; esplosioni sotto Other; bottone Area con Line o Medium Blast. Migrazione 25 [1.15.37, 38, 40]
+- [ ] **Orogenic Rage** (tratto Geomancer, p.217) — cosa controllare: promemoria nella card "Round 5" [1.15.63] **(non provato: serve il round 5)**
+- [x] **Stone Double** (tratto Geomancer, p.217) — cosa controllare: chip "Statue · H1" sul tratto [1.15.65] **(chip "Statue · H1" sul tratto)**
+- [ ] **Bio** (Geomancer, p.218) — cosa controllare: righe chiuse BIOTIC / MAGNABIO nella card; danno di MAGNABIO 2[D]+fray; Shattered+ a chi è nella nuvola; "To dangerous" e "Boil" dei talenti [1.15.42, 48, 49, 61, 69, 70, 164, 175] **(card con righe chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO"; MAGNABIO armato: Hit 2[d6]+fray, Area 1[d6]+fray; Shattered+ nella nuvola già provato. "To dangerous" e "Boil" non provati)**
+- [x] **Dragon Dive** (Geomancer, p.218) — cosa controllare: niente "Hit (no damage)", Area 2 piercing; BOULDER KICK sotto Other [1.15.47, 51, 91] **(Area 2 flat con Pierce, niente Hit; BOULDER KICK armato → Other con "Infuse 3 — BOULDER KICK 2 flat piercing ×2 · area")**
+- [x] **Geo** (Geomancer, p.218-219) — cosa controllare: MAGNAGEO Area [D]+fray; chip Boulder; l'Arc 6 non resta [1.15.48, 49, 61, 65, 103] **(MAGNAGEO armato: Area 1[d6] + fray 4; chip "Boulder · H1"; Arc 6 che non resta già provato nella sezione 1.15.103)**
+- [x] **Helix Heel** (testo; Geomancer, p.219) — cosa controllare: niente corsivo, tre blocchi Effect; il secondo dice "…you can keep extending the line by 3 spaces this way each time, but can only extend it once per object."; scelta "Burst 1 (on object)". Migrazioni 28 e 32 [1.15.56, 66, 67, 87] **(già provato nelle sezioni 1.15.56, 66, 87)**
+- [ ] **Terraforming** (Geomancer, p.219) — cosa controllare: chip "Pit · 2", "Difficult · 3", Boulder; bottone "Clear terrain" [1.15.65, 69, 175] **(chip "Pit · 2", "Difficult · 3", "Boulder · H1" e bottone "Clear terrain" presenti; il funzionamento di Clear terrain non provato)**
+- [x] **Obsidian Flesh** (Geomancer, p.219) — cosa controllare: danno del Talent II (2 piercing) [1.15.25] **(Talent II: bottoni "Burst 1" e Damage Roll con "Area 2 flat" e Pierce spuntato)**
+- [x] **Midas** (Geomancer, p.220) — cosa controllare: area del Talent II sul bersaglio; chip dell'oggetto [1.15.51, 65] **(Talent II: bottone "Burst 1 (target)"; chip "Statue · H1")**
+- [x] **Realignment** (Geomancer, p.220) — cosa controllare: chip "up to ×N"; nessun Track target [1.15.57, 144] **(Hit "fray 4" con Pierce, Instances si ferma a 4 ("to a maximum of four times"); nessun Track target)**
+- [x] **Quaking Palm** (Geomancer, p.221) — cosa controllare: Track target; il Collide sta dentro la riga PRIMAL BURST; chip "1 piercing · up to ×4" [1.15.51, 57, 61, 100, 144] **(Track target; nella card il "Collide: Foe must save or be stunned." sta dentro la riga chiusa "Infuse 3: PRIMAL BURST"; chip "up to ×4" già provato nella sezione 1.15.144)**
+- [x] **Cataclysm** (testo; Limit Break Geomancer, p.217) — cosa controllare: due "Effect:" e "Gain Delay:"; esplosioni sotto Other; bottone Area con Line o Medium Blast. Migrazione 25 [1.15.37, 38, 40] **(due "Effect:" e "Gain Delay:"; bottone "Area" con "Line (width 3)" e "Effect: Medium Blast (on object)"; esplosioni sotto Other già provate nella sezione 1.15.37)**
 
 #### Wright — Spellblade
 
