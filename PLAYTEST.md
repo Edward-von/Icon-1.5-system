@@ -11,6 +11,22 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P5 — Tsunami: chi viene trascinato resta dentro (19 ottobre 2026, versione 1.15.237)
+
+Setup: solo codice (F5 basta). Un PG con Tsunami (meglio con Talent II, "+1 curse on saves") piazzata, un foe
+(es. il Mechanist) dentro, un altro foe fuori, sulla linea dove la Tsunami arriva.
+
+- [ ] Move 4 → la card della Tsunami dice "In it when it moved: Mechanist" con "Drag them with it"; NON arriva la
+      card "Mechanist is no longer inside … no longer has +1 curse".
+- [ ] "Drag them with it" → "Drag them": il Mechanist si sposta di 4 con l'area e non arriva nessuna domanda
+      "Dangerous terrain", né la card "enters the area". In chat resta una sola card per il movimento.
+- [ ] Il foe che stava fuori e che la Tsunami copre dopo il movimento riceve ancora la card "is now inside
+      the area" (lui non è trascinato).
+- [ ] Con due foe dentro, nella finestra "Drag with the area" togliere la spunta a uno → solo quello resta
+      indietro e solo per lui arriva la card "is no longer inside"; l'altro viene trascinato senza card.
+- [ ] Muovere a mano il Mechanist dentro un altro terreno pericoloso (non la Tsunami) → la domanda del dangerous
+      arriva come prima.
+
 ## Esito 18 ottobre, P4 — Comet: anche l'attacco base chiede "you cannot attack" (19 ottobre 2026, versione 1.15.236)
 
 Setup: solo codice (F5 basta). Un PG Comet con la Thrown Weapon a terra sulla scena, e un bersaglio.

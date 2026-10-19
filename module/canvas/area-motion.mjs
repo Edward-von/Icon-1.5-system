@@ -195,12 +195,15 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
     catch (err) { console.warn("[ICON | AreaMotion] could not move the blast on the nail", err); }
   }
   // The statuses of an area for who is inside (blinded+, cover…; R33c2): the characters it now covers or left behind.
+  // P5 (playtest 18 October): with a "dragged with it" text the characters inside are not told they left it — they go
+  // with it ("Drag them with it" below); only the ones left behind then get that card (dragTokens).
+  const dragging = !!rules?.motion?.drag && inside.length;
   if (terrainFlag(doc)?.inside?.length) {
-    try { await offerInsideOnShift(doc, oldCells); } catch (err) { console.warn("[ICON | AreaMotion] inside-area check failed", err); }
+    try { await offerInsideOnShift(doc, oldCells, { skip: dragging ? inside.map(t => t.id) : [] }); } catch (err) { console.warn("[ICON | AreaMotion] inside-area check failed", err); }
   }
   const how = `${n} space${n > 1 ? "s" : ""} ${edge ? `toward ${d.edge}` : d.word}${n < steps ? ` (stopped at the edge of the map, ${steps} asked)` : ""}`;
   _log(`${name} moved ${how}`);
-  const drag = !!rules?.motion?.drag && inside.length;
+  const drag = dragging;
   if (quiet && !drag && !vacated.length) {
     ui.notifications.info(`${name} moved ${how}.${inside.length ? ` It was over ${inside.map(t => t.name).join(", ")}: they stay where they are.` : ""}`, { console: false });
     return n;
@@ -210,7 +213,7 @@ export async function moveArea(doc, dir, steps, { quiet = false, edge = false } 
     lines.push(`<p>In it when it moved: ${esc(inside.map(t => t.name).join(", "))}.</p>`);
     if (drag) {
       lines.push(`<p><small>"Any non-flying characters in Tsunami when it moves are dragged with it, shoving them. If they are blocked by obstructions, they collide which could cause Tsunami to move on without them." (p.233)</small></p>`);
-      lines.push(`<div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaDrag" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(inside.map(t => t.id).join(","))}" data-dir="${dir}" data-steps="${n}" title="Ask which ones, then move them by the same spaces"><i class="fa-solid fa-person-walking-arrow-right"></i> Drag them with it</button></div>`);
+      lines.push(`<div><button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaDrag" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-token-ids="${esc(inside.map(t => t.id).join(","))}" data-dir="${dir}" data-steps="${n}" title="Ask which ones, then move them by the same spaces"><i class="fa-solid fa-person-walking-arrow-right"></i> Drag them with it</button></div>`);
     }
   }
   if (vacated.length) {
@@ -253,8 +256,12 @@ async function leaveTerrainOnVacated(doc, kind, list) {
   return true;
 }
 
-/** "Drag them with it": the characters ticked move by the area's spaces (the ones this user may move). */
-async function dragTokens(scene, ids, dir, steps) {
+/**
+ * "Drag them with it": the characters ticked move by the area's spaces (the ones this user may move). They stayed
+ * inside the whole time: the move tells the token hooks which area carried them (`iconDragArea`), so that area's
+ * dangerous terrain and "enters the area" card don't fire (P5). The ones left unticked are now outside it.
+ */
+async function dragTokens(scene, ids, dir, steps, templateId = "") {
   const d = DIRS[dir];
   const tds = ids.map(id => scene.tokens.get(id)).filter(Boolean);
   if (!d || !tds.length) { ui.notifications.info("No one left to drag."); return; }
@@ -273,7 +280,14 @@ async function dragTokens(scene, ids, dir, steps) {
   const others = picked.filter(t => !t.isOwner);
   const size = scene.grid.size;
   if (mine.length) {
-    await scene.updateEmbeddedDocuments("Token", mine.map(t => ({ _id: t.id, x: t.x + d.dj * steps * size, y: t.y + d.di * steps * size })), { iconObjectMove: true });
+    await scene.updateEmbeddedDocuments("Token", mine.map(t => ({ _id: t.id, x: t.x + d.dj * steps * size, y: t.y + d.di * steps * size })), { iconObjectMove: true, iconDragArea: templateId });
+  }
+  // The ones left behind (flying, blocked): the area moved without them — its "no longer inside" offers now.
+  const area = templateId ? scene.templates.get(templateId) : null;
+  const left = tds.filter(t => !picked.includes(t)).map(t => t.id);
+  if (area && left.length && terrainFlag(area)?.inside?.length) {
+    const oldCells = (area.flags[NS].cells ?? []).map(c => ({ i: c.i - d.di * steps, j: c.j - d.dj * steps }));
+    try { await offerInsideOnShift(area, oldCells, { only: left }); } catch (err) { console.warn("[ICON | AreaMotion] inside-area check failed", err); }
   }
   if (others.length) ui.notifications.warn(`Ask the GM to move ${others.map(t => t.name).join(", ")}: you can't move them.`);
 }
@@ -588,7 +602,7 @@ export function registerAreaMotion() {
         if (!scene) { ui.notifications.warn("That scene is gone."); return; }
         try {
           if (ds.action === "iconAreaDrag") {
-            await dragTokens(scene, String(ds.tokenIds ?? "").split(",").filter(Boolean), ds.dir, Number(ds.steps) || 0);
+            await dragTokens(scene, String(ds.tokenIds ?? "").split(",").filter(Boolean), ds.dir, Number(ds.steps) || 0, ds.templateId ?? "");
             return;
           }
           const doc = scene.templates.get(ds.templateId);

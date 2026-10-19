@@ -876,7 +876,7 @@ function turnKey() {
  * waypoints of the move): a space only passed through is entered and exited.
  * @param {object|null} movement  Foundry's movement data of this update (options._movement[id]: Foundry 13 puts it under the underscored key)
  */
-async function offerTerrainOnMove(td, prev, to, movement = null) {
+async function offerTerrainOnMove(td, prev, to, movement = null, { carriedBy = "" } = {}) {
   const scene = td.parent;
   if (!scene || !td.actor) return;
   const before = cellsOf(td, prev);
@@ -890,6 +890,8 @@ async function offerTerrainOnMove(td, prev, to, movement = null) {
   const reminders = [];
   const inside = [];
   for (const { doc, f, keys } of terrainOn(scene)) {
+    // P5: the area that dragged the character with it (Tsunami, p.233): it never left it, nothing is entered.
+    if (carriedBy && doc.id === carriedBy) continue;
     const was = touches(before, keys), now = touches(after, keys);
     const crossed = !was && !now && mid.some(fp => touches(fp, keys));
     if (was === now && !crossed) continue;
@@ -1023,8 +1025,9 @@ export async function offerInsideOnPlace(doc) {
  * offers for those it now covers and no longer covers, as if they had walked in or out. One card, on a click.
  * @param {MeasuredTemplateDocument} doc  the area, already at its new cells
  * @param {Array<{i:number, j:number}>} oldCells  its cells before the move
+ * @param {{skip?: string[], only?: string[]}} [opts]  token ids left out (dragged with it) / the only ones looked at
  */
-export async function offerInsideOnShift(doc, oldCells) {
+export async function offerInsideOnShift(doc, oldCells, { skip = [], only = null } = {}) {
   const f = terrainFlag(doc);
   const scene = doc?.parent;
   if (!f?.inside?.length || !scene) return;
@@ -1032,7 +1035,7 @@ export async function offerInsideOnShift(doc, oldCells) {
   const after = new Set((doc.flags[NS].cells ?? []).map(cellKey));
   const blocks = [];
   for (const td of scene.tokens) {
-    if (!td.actor || isMapObject(td)) continue;
+    if (!td.actor || isMapObject(td) || skip.includes(td.id) || (only && !only.includes(td.id))) continue;
     const cells = cellsOf(td);
     const was = touches(cells, before), now = touches(cells, after);
     if (was === now) continue;
@@ -1894,7 +1897,7 @@ export function registerTerrainSpaceHooks() {
     // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet.
     if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options._movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
+    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options._movement?.[tokenDoc.id] ?? null, { carriedBy: options.iconDragArea ?? "" }).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });
   // RECYCLE (Dark Sliver's mastery, p.187): "A mote of life is a plant, but becomes a terrain effect when its blessing
   // is removed": its Blessed status gone, a card with the button that turns its space into that terrain effect.

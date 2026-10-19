@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Tsunami: chi viene trascinato resta dentro, niente dangerous (versione 1.15.237)
+
+### Esito del playtest del 18 ottobre, P5
+
+- **Tsunami "Drag them with it"**: con il Mechanist dentro, la Tsunami si muoveva di 4 e uscivano tre card per un
+  solo movimento ("non è più dentro, niente +1 curse", poi dopo il trascinamento "entra nell'area" e la domanda
+  "entered a dangerous terrain space, take 2 piercing damage") → l'area si spostava prima da sola, quindi per il
+  sistema il Mechanist ne era uscito; poi il trascinamento era trattato come un movimento normale, cioè come se
+  fosse rientrato a piedi nel terreno pericoloso → ora chi era dentro quando la Tsunami si muove non riceve la card
+  "non è più dentro" (va con lei), e il trascinamento dice al sistema quale area lo sta portando: per quell'area
+  niente domanda del dangerous, niente promemoria del difficult e niente card "entra". Il testo dice che i
+  personaggi "are dragged with it" (p.233): restano dentro per tutto il tempo. Chi nella finestra "Drag with the
+  area" viene tolto dalla lista (vola, o è bloccato e collide) resta indietro: per lui, e solo per lui, arriva la
+  card "non è più dentro". Le altre aree e i terreni attraversati durante il trascinamento contano come prima.
+
 ## 19 ottobre 2026 — Comet: anche l'attacco base chiede "you cannot attack" (versione 1.15.236)
 
 ### Esito del playtest del 18 ottobre, P4
