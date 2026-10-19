@@ -509,15 +509,15 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Vagabond — Shade
 
-- [ ] **Darkside** (tratto Shade, p.161) — cosa controllare: chip del summon Shadow [1.15.46]
-- [ ] **Umbra** (Shade, p.162) — cosa controllare: Penumbra sostituisce solo l'Effect del teletrasporto (barrato solo quello); chip Shadow dal Finishing Blow [1.15.41, 45, 139]
-- [ ] **Harrow** (Shade, p.162) — cosa controllare: nessun chip Shadow; chip degli spazi di terreno [1.15.45, 69]
-- [ ] **Death Blossom** (Shade, p.162) — cosa controllare: "Flying" di Flying Sleeves senza tooltip; con la combo niente barrato [1.15.52, 69, 139]
-- [ ] **Nightmare** (Shade, p.162) — cosa controllare: Aura 2 dal testo senza domanda; avviso all'inizio del turno successivo [1.15.5, 21]
-- [ ] **Nocturne** (Shade, p.161 e p.163) — cosa controllare: nessun summon; le shadow cloud restano; Blind+ a chi entra, il Shade è immune [1.15.45, 51, 70, 164]
-- [ ] **Shadow Play** (Shade, p.163) — cosa controllare: con il Talent II "Gain Evasion" agli alleati; nessun chip Shadow [1.15.43, 45]
-- [ ] **Assassinate** (Shade, p.163) — cosa controllare: Track target; nessun chip Shadow [1.15.34, 45]
-- [ ] **Incubus** (Shade, p.164) — cosa controllare: Succubus toglie blocco, tag e bottone Mark; Hit resta [D]+fray; "Combo — Succubus 3" sotto Other solo con "Combo version"; "Mark 2" sotto Other senza combo [1.15.41, 83, 100, 125, 126, 128, 139]
+- [x] **Darkside** (tratto Shade, p.161) — cosa controllare: chip del summon Shadow [1.15.46] **(chip Shadow sul tratto)**
+- [x] **Umbra** (Shade, p.162) — cosa controllare: Penumbra sostituisce solo l'Effect del teletrasporto (barrato solo quello); chip Shadow dal Finishing Blow [1.15.41, 45, 139] **(con il combo token è barrato solo "You may teleport 3 before the attack."; chip Shadow presente)**
+- [x] **Harrow** (Shade, p.162) — cosa controllare: nessun chip Shadow; chip degli spazi di terreno [1.15.45, 69] **(nessun chip Shadow; con il Talent II compare "Pit · 1")**
+- [x] **Death Blossom** (Shade, p.162) — cosa controllare: "Flying" di Flying Sleeves senza tooltip; con la combo niente barrato [1.15.52, 69, 139] **(con il combo token nulla barrato, area Arc 4; "Flying Sleeves" e "flying sleeves" senza tooltip)**
+- [x] **Nightmare** (Shade, p.162) — cosa controllare: Aura 2 dal testo senza domanda; avviso all'inizio del turno successivo [1.15.5, 21] **(bottone "Aura 2" piazza subito l'aura, notifica "Until the start of your next turn"; card "Aura 2 (Nightmare) ends" all'inizio del turno successivo, non prima)**
+- [x] **Nocturne** (Shade, p.161 e p.163) — cosa controllare: nessun summon; le shadow cloud restano; Blind+ a chi entra, il Shade è immune [1.15.45, 51, 70, 164] **(nessun chip summon; "Small Blast (target)" su Knuckle con "It stays on the map"; Blind+ e Shade immune già provati nella sezione 1.15.164)**
+- [x] **Shadow Play** (Shade, p.163) — cosa controllare: con il Talent II "Gain Evasion" agli alleati; nessun chip Shadow [1.15.43, 45] **(già provato nelle sezioni 1.15.43 e 45: Gain Evasion col Talent II, nessun chip)**
+- [x] **Assassinate** (Shade, p.163) — cosa controllare: Track target; nessun chip Shadow [1.15.34, 45] **(Track target presente, nessun chip Shadow)**
+- [x] **Incubus** (Shade, p.164) — cosa controllare: Succubus toglie blocco, tag e bottone Mark; Hit resta [D]+fray; "Combo — Succubus 3" sotto Other solo con "Combo version"; "Mark 2" sotto Other senza combo [1.15.41, 83, 100, 125, 126, 128, 139] **(con il combo token: Mark barrato, spariti tag Mark e bottone Mark; Hit resta 1[d6] + fray; "Combo version" spuntata. Chip Succubus solo con Combo version e "Mark 2" senza combo già provati nelle sezioni 1.15.125-128)**
 
 #### Vagabond — Warden
 
