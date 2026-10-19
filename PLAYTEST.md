@@ -4069,7 +4069,7 @@ Setup: solo codice (F5 basta).
 - [ ] Personaggio non bloodied: la finestra dice che Comeback non si applica e il pulsante predefinito è "No
       extension"; scelto quello, resta solo il primo arco.
 - [ ] Esc o tasto destro durante il secondo arco: resta il primo arco e l'attacco va avanti.
-- [ ] Senza mastery (Line 3): l'estensione Line 3 di R47b funziona ancora come prima.
+- [x] Senza mastery (Line 3): l'estensione Line 3 di R47b funziona ancora come prima. **(Senza mastery: estensione Line 3 come sopra (L4517-L4528).)**
 - [x] Con la mastery ma senza Talent II: l'Arc 5 si piazza e nessuna finestra di estensione compare. **(Mastery senza Talent II: dopo le 5 caselle nessuna finestra, template "Arc 5".)**
 
 ## Emerso R33a3 — Aethershard senza bottone danno (17 ottobre 2026, versione 1.15.101)
@@ -4338,8 +4338,8 @@ Setup: solo codice (F5 basta).
 - [x] Ripeti con Large Blast (self): stessa cosa, area più grande, sempre centrata sul Chanter; la Medium di prima
       viene sostituita. **(Large sostituisce la Medium)**
 - [x] Small Blast (self) funziona ancora come prima. **(Aria "Small Blast (self)" come prima.)**
-- [ ] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
-      si piazza ancora a mano nella sua portata. **(non provato)**
+- [x] Controllo: un'area a distanza che cresce con la Charge (es. Pandaemonium "Charge: Increase area to Large Blast")
+      si piazza ancora a mano nella sua portata. **(Pandaemonium, "Charge: Large Blast": "Click to place the Large Blast…", a mano nella portata.)**
 
 ## Emerso R40 — Il danno di Succubus resta [D]+fray su Hit, i 3 danni ai marcati vanno sotto Other (17 ottobre 2026, versione 1.15.83)
 
@@ -4530,7 +4530,7 @@ attorno al PG.
       è No extension; da bloodied la riga sparisce e il default è From the first space. **(Non bloodied: riga "Comeback: you are not bloodied, so this doesn't apply right now." e default No extension; bloodied (15 hp): riga sparita e default From the first space.)**
 - [x] **Senza talento**: tolto il Talent II, Sturmreiten piazza la Line 3 senza nessuna domanda; con la mastery
       (Arc 5) nessuna domanda. **(Senza Talent II, con la mastery: Arc 5 senza domande (vedi L4073).)**
-- [ ] **Altre Line invariate**: un'altra abilità con una Line (es. Helix Heel, Ätherwand) si piazza come prima.
+- [x] **Altre Line invariate**: un'altra abilità con una Line (es. Helix Heel, Ätherwand) si piazza come prima. **(Ätherwand: Line 3 come prima (blocco 12).)**
 
 ## R34 — Open the Gates: lo Special davanti alle due versioni (16 ottobre 2026, versione 1.15.72)
 
@@ -5092,11 +5092,11 @@ PG sulla mappa, due foe e un alleato.
       token bersagliato. **(God Hand con Devil Hand armata, Knuckle bersagliato: bottone "Medium Blast (target)" → "placed — … in the area", centrata sul Knuckle senza clic. Ace / Exorcism non provati (Exorcism ha "Large Blast (target)" col Talent II, vedi sopra).)**
 - [x] **Token grande**: con un foe 2×2 bersagliato, la Large Blast di Death chiede di cliccare uno dei suoi spazi come
       centro (fuori → avviso "The centre space …"). **(Death, Large Blast (target) col Bale Troll 2×2: clic fuori → avviso "The centre space of the Large Blast (target) must be adjacent to you." (il testo parla di "adjacent to you", non dello spazio del bersaglio: da rivedere); clic su una casella del Troll → "Large Blast (target) placed — Junk Mage, Bale Troll in the area".)**
-- [ ] **Elden Rune** con la mastery: "Mastery: Small Blast" si piazza cliccando lo spazio del PG (la runa è sotto di
+- [x] **Elden Rune** con la mastery: "Mastery: Small Blast" si piazza cliccando lo spazio del PG (la runa è sotto di
       te), come prima. **Eye of the Storm**: la mastery crea un oggetto (aethercloud, resta in R33); con AEONCLOUD armato
-      il bottone offre la Large Blast (R47).
-- [ ] **Non devono cambiare**: Holy Talent I e Pandaemonium combo (blast "centered on" pit: a mano), Geyser (a mano),
-      Land Waster (ora "Heroic: Burst 2 (target)", a mano come prima), Rook, Fulminate.
+      il bottone offre la Large Blast (R47). **(Elden Rune con la mastery: bottone "Small Blast" che si piazza a mano. Eye of the Storm con AEONCLOUD armato: "Infuse 3: Large Blast" / "Medium Blast". L'oggetto aethercloud della mastery non provato.)**
+- [x] **Non devono cambiare**: Holy Talent I e Pandaemonium combo (blast "centered on" pit: a mano), Geyser (a mano),
+      Land Waster (ora "Heroic: Burst 2 (target)", a mano come prima), Rook, Fulminate. **(Holy Talent I / Pandaemonium combo "(on pits)", Land Waster "Heroic: Burst 2 (target)", Rook, Fulminate come sopra.)**
 
 ## R48 — Aure scritte nel testo: in alternativa, sul personaggio marcato, attorno a un terrain effect (16 ottobre 2026, versione 1.15.50)
 
@@ -5112,11 +5112,11 @@ un foe.
       avviso "beyond range 6". **(Fulminate: bottone "Aura 2"; senza bersaglio avviso "This aura goes on another character: target that character's token…", aura attorno al PG. Col bersaglio vedi blocco 8.)**
 - [x] **Fulminate con i talenti**: con Talent I scelto la finestra offre anche "Talent I: Aura 3"; con Talent II
       "Talent II: Aura 1". Mouse sopra l'aura piazzata, + / − la allargano o restringono. **(Talent I: la finestra offre "Aura 2 / Aura 3" (blocco 8).)**
-- [ ] **Rampant Nail**: bottone area → "Aura 2 (terrain effect)": si muove un'anteprima 5×5, il range 3 è in blu; il
+- [x] **Rampant Nail**: bottone area → "Aura 2 (terrain effect)": si muove un'anteprima 5×5, il range 3 è in blu; il
       clic con il centro fuori dal range dà l'avviso "The centre space … within range 3"; dentro il range l'aura resta
       ferma lì, anche dopo l'inizio del turno successivo e se il PG si muove. Usarla di nuovo sostituisce la prima. Con
       Talent I scelto la finestra offre anche "Talent I: Small Blast". Mouse sopra e + / −: non cambia (non è un'aura
-      su un token).
+      su un token). **(Rampant Nail: "which area?" con "Text: Aura 2 (terrain effect)"; anteprima 5×5 con il range in blu; centro fuori → "The centre space of the Aura 2 (terrain effect) must be within range 3."; dentro → "Aura 2 (terrain effect)" di 25 caselle.)**
 - [x] **Rook, Heroic**: bottone area → "which area?" con "Aura 1" e "Heroic: Aura 2"; entrambe attorno al PG e con la
       scadenza "until the end of your next turn". **(Rook: "Aura 1" e "Heroic: Aura 2".)**
 - [x] **Land Waster**: bottone area / Attack Roll → scelta tra "Burst 1" e "Heroic: Burst 2 (target)". **(Land Waster: "Burst 1" e "Heroic: Burst 2 (target)".)**
@@ -5663,9 +5663,9 @@ Setup: un mondo con un PG Bastion (Stalwart) con il tratto Shieldmaster e un PG 
 - [x] **Ripremere**: premere di nuovo il bottone → la vecchia aura sparisce, ne resta una sola. **(Ripremuto: resta una sola aura.)**
 - [x] **Pelagic Rage**: sulla scheda dello Stormbender il tratto ha il bottone "Aura 2" → piazza un'aura 2 attorno al
       suo token (il "round 5" del testo lo decide il giocatore: il bottone c'è sempre). **(Pelagic Rage (Stormbender): bottone "Aura 2".)**
-- [ ] **Tratto bloccato**: con un PG di capitolo più basso di quello del tratto (badge "Locked") → niente bottone.
-- [ ] **Altri tratti invariati**: i tratti senza aura (es. Sea Legs, Dash on the Rocks) non hanno il bottone; le aure
-      delle abilità (Rook, Endless Battlement sull'alleato) funzionano come prima.
+- [x] **Tratto bloccato**: con un PG di capitolo più basso di quello del tratto (badge "Locked") → niente bottone. **(Pelagic Rage portato per prova al capitolo 3 con lo Stormbender al capitolo 1: badge "Locked", niente bottone.)**
+- [x] **Altri tratti invariati**: i tratti senza aura (es. Sea Legs, Dash on the Rocks) non hanno il bottone; le aure
+      delle abilità (Rook, Endless Battlement sull'alleato) funzionano come prima. **(Tratti senza aura (Aether Deflection, Conqueror's Edge, Storm Hilt Rage, Inner Furnace, Soulfire): nessun bottone; Shieldmaster e Pelagic Rage sì.)**
 
 ## R19b — L'aura di Endless Battlement va sull'alleato (15 ottobre 2026, versione 1.15.22)
 
@@ -5687,8 +5687,8 @@ avviato per la durata.
 - [x] **Più bersagli**: due alleati bersagliati → avviso "target only that ally's token…" e aura attorno al Bastion. **(Due bersagli: "This aura goes on one ally: target only that ally's token…", aura sul Bastion.)**
 - [x] **Fuori range**: bersagliare un alleato a più di 4 spazi → avviso "beyond range 4" ma l'aura si piazza sul
       suo token. Con la mastery Perfect Battlement sbloccata l'avviso non compare. **(Alleato a 8 o 19 spazi: "… beyond range 4: the aura is not active while your ally is out of range.", aura sul suo token. Perfect Battlement non provata.)**
-- [ ] **Altre aure invariate**: Rook, Dark Knight (mastery), Gentleness con un alleato bersagliato → l'aura resta
-      attorno a chi la usa, nessun avviso.
+- [x] **Altre aure invariate**: Rook, Dark Knight (mastery), Gentleness con un alleato bersagliato → l'aura resta
+      attorno a chi la usa, nessun avviso. **(Rook (Knave bersagliato), Dark Knight con mastery (Bastion bersagliato), Gentleness (Knave bersagliato): l'aura resta attorno a chi la usa, nessun avviso.)**
 
 ## R19 — Le aure scritte nel testo danno il tag e l'area (15 ottobre 2026, versione 1.15.21)
 
@@ -5700,7 +5700,7 @@ griglia quadrata; tab Combat.
 - [x] **Dervish Talent I**: scegliere il Talent I → compare la chip "Aura 1" evidenziata (tooltip "From Talent I: …")
       e il bottone area "Aura 1" → cliccarlo → aura 1 attorno al token di chi la usa, senza domande sulla dimensione,
       con la durata "until the start of your next turn". Con il Talent II non c'è. **(Talent I: chip "Aura 1" evidenziata e bottone; l'aura va attorno al Chanter con "until the start of your next turn".)**
-- [ ] **Dervish DAWN**: armare la combo → chip "Aura 1" e bottone area; l'aura dura fino alla fine del turno dopo.
+- [x] **Dervish DAWN**: armare la combo → chip "Aura 1" e bottone area; l'aura dura fino alla fine del turno dopo. **(Dervish con COMBO ON (Dawn): chip "Aura 1" evidenziata e bottone; aura "(until the end of your next turn)".)**
 - [x] **Dark Knight**: mastery bloccata → niente aura; sbloccarla → chip "Aura 1" (From Mastery) e bottone area →
       aura 1 attorno al token, senza scadenza. **(Dark Knight: mastery bloccata niente; sbloccata chip "Aura 1" e aura attorno al Knave senza scadenza.)**
 - [x] **Bleak Mercy**: senza combo nessuna aura; armare Sweet Torment → chip "Aura 1" (From Combo) e bottone area →
