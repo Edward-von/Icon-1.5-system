@@ -11,6 +11,21 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P1 — Oggetti e summon dei foe non collegati (19 ottobre 2026, versione 1.15.233)
+
+Setup: solo codice (F5 basta). Togliere prima la patch in pagina di `_preCreate` usata nel playtest (basta F5).
+
+- [ ] Al primo caricamento come GM la console scrive "Migration 37: N map object / foe summon actor(s) …" se nel
+      mondo ci sono già attori nelle cartelle "Map Objects" o "Foe Summons". Aprire uno di quegli attori →
+      Prototype Token: "Link Actor Data" è spento.
+- [ ] PG con un oggetto (es. Boulder): cancellare i Boulder vecchi dalla mappa e posarne due nuovi. Doppio clic su
+      uno: la scheda è quella del token (titolo con il token, non il modello) e c'è il bottone "Add walls".
+- [ ] Sui due Boulder: rendere destructible / togliere HP a uno solo → l'altro non cambia.
+- [ ] Foe con summon (es. un foe con "Summons & Objects" nella scheda): trascinare due volte lo stesso summon sulla
+      mappa → due token, ognuno con i suoi HP (danno a uno, l'altro resta pieno).
+- [ ] Controllo che il resto non sia cambiato: importare un foe dal compendio e creare un PG nuovo → il loro token
+      prototipo è ancora collegato ("Link Actor Data" acceso).
+
 ## Piano del playtest del 18 ottobre 2026 (versioni 1.15.2 – 1.15.232)
 
 Dall'ultimo playtest (1.15.1, 13 ottobre) sono uscite 231 versioni mai provate in Foundry. Questo piano dice cosa

@@ -9,10 +9,20 @@ export class IconActor extends Actor {
    * Ensure every NEW actor's prototype token is linked by default.
    * Existing actors are not touched (use game.icon.linkAllTokens() to
    * migrate them manually from the console).
+   *
+   * Callers that want one actor behind many separate tokens (map objects,
+   * foe summons) pass `{ iconUnlinked: true }` in the create options. The
+   * data alone can't say so: every compendium actor carries
+   * `prototypeToken.actorLink: false` (the core default), and imported
+   * foes must still come out linked.
    * @override
    */
   async _preCreate(data, options, user) {
     await super._preCreate(data, options, user);
+    if (options?.iconUnlinked) {
+      if (this.prototypeToken?.actorLink !== false) this.updateSource({ "prototypeToken.actorLink": false });
+      return;
+    }
     if (this.prototypeToken?.actorLink !== true) {
       this.updateSource({ "prototypeToken.actorLink": true });
     }

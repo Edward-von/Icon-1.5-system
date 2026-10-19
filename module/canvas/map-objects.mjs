@@ -361,7 +361,7 @@ export async function placeMapObject(data, { requester = null } = {}) {
   let actor = game.actors.find(a => a.type === "summon" && mapObjectFlag(a)?.key === key);
   if (!actor) {
     const folder = await objectFolder();
-    actor = await Actor.create(objectActorData(owner, item, obj, key, folder.id));
+    actor = await Actor.create(objectActorData(owner, item, obj, key, folder.id), { iconUnlinked: true });
     _log(`created world actor "${actor.name}" (${actor.id})`);
   }
   if (old.length) await scene.deleteEmbeddedDocuments("Token", old);

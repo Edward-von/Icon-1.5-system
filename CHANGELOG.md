@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Oggetti della mappa e summon dei foe di nuovo "non collegati" (versione 1.15.233)
+
+### Esito del playtest del 18 ottobre, P1
+
+- **Ogni copia di un oggetto ha di nuovo il suo token**: un Boulder (o un altro oggetto della mappa) e un summon
+  trascinato dalla scheda di un foe venivano creati "linked", cioè tutte le copie sulla mappa erano lo stesso
+  attore: altezza, destructible e HP condivisi, e la scheda aperta dal token era quella del modello nella cartella,
+  quindi il bottone "Add walls" non compariva mai → il sistema, quando nasce un attore nuovo, collega sempre il suo
+  token (serve per PG e foe importati) e lo faceva anche su questi due, che chiedono il contrario → ora chi crea
+  oggetti e summon dei foe lo dice esplicitamente al momento della creazione, e solo in quel caso il token resta non
+  collegato. Non si poteva usare il semplice "actorLink: false" scritto nei dati, come proposto nel playtest: ogni
+  foe del compendio ce l'ha già scritto (è il valore di base di Foundry), e così anche i foe importati sarebbero
+  usciti scollegati. Migrazione 37: gli attori di oggetti e summon dei foe già presenti nel mondo (cartelle "Map
+  Objects" e "Foe Summons") vengono scollegati; i token già posati sulla mappa restano come sono e vanno cancellati
+  e posati di nuovo. Solo codice.
+
 ## 17 ottobre 2026 — Waterspout: risucchia i personaggi e li risputa (versione 1.15.232)
 
 ### Round di debug del 15 ottobre, voce emersa su R33

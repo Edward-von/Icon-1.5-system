@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 36;
+export const CURRENT_SCHEMA_VERSION = 37;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1348,6 +1348,24 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 36: ${n} copy/copies of Boiling Blood with "Defy Death" moved from the flavour text to the Effect (p.138)`);
+  },
+
+  /* 37 — Map objects and foe summons are one world actor behind many tokens,
+   * each token with its own hp (p.89). IconActor._preCreate linked their
+   * prototype token anyway (playtest 18 October, P1), so every copy shared
+   * the actor and the token sheet was the template's (no "Add walls"). The
+   * actors already created keep being reused: unlink their prototype. Tokens
+   * already placed are left as they are (delete and place them again). */
+  37: async () => {
+    let n = 0;
+    for (const actor of game.actors) {
+      if (actor.type !== "summon" || actor.prototypeToken?.actorLink !== true) continue;
+      const f = actor.flags?.["icon-system"] ?? {};
+      if (!f.mapObject && !f.foeSummon) continue;
+      await actor.update({ "prototypeToken.actorLink": false });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 37: ${n} map object / foe summon actor(s) given an unlinked prototype token`);
   },
 };
 

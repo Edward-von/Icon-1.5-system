@@ -92,7 +92,7 @@ export async function placeFoeSummon(data, { requester = null } = {}) {
   let actor = game.actors.find(a => a.type === "summon" && a.getFlag("icon-system", "foeSummon") === key);
   if (!actor) {
     const folder = await summonFolder();
-    actor = await Actor.create(summonActorData(owner, sm, key, folder.id));
+    actor = await Actor.create(summonActorData(owner, sm, key, folder.id), { iconUnlinked: true });
     _log(`place — created world actor "${actor.name}" (${actor.id}) in "${FOLDER_NAME}"`);
   }
 

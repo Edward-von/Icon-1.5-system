@@ -20,9 +20,9 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18 ottobre 2026". Un punto per volta.
 
-- [ ] **P1 (alta, blocca gli oggetti)** — `IconActor._preCreate` forza `prototypeToken.actorLink = true` anche sugli
+- [x] **P1 (alta, blocca gli oggetti)** — `IconActor._preCreate` forza `prototypeToken.actorLink = true` anche sugli
       attori che chiedono `false` (oggetti della mappa, summon dei foe): le copie di un oggetto condividono un attore
-      e la scheda del token è quella del template (niente "Add walls"). S.
+      e la scheda del token è quella del template (niente "Add walls"). S. (FATTO il 19 ottobre 2026, versione 1.15.233)
 - [ ] **P2 (alta)** — gli hook `updateToken` leggono `options.movement`, ma Foundry 13.351 passa `options._movement`:
       "passed through" di Comet / Megamushroom / terreni attraversati non scatta mai (`map-objects.mjs:1491`,
       `terrain-spaces.mjs:1897`). S.
@@ -89,6 +89,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       simultaneously." e "(Round 3, 6, etc) At round 3 and every three rounds thereafter…"). Probabilmente il dato è
       sia in un tratto sia in un'azione del pack `foes-legend`: tenerne uno. Provato 19 ottobre con un combat
       temporaneo. S.
+- [ ] **Emerso lavorando su P1** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
+      `fromCompendium`) sono costruiti con `actorLink: false` (`build-summons-pack.mjs:50`), ma restano linkati: un
+      attore per summon nel mondo, condiviso da tutte le copie posate. Da decidere se più copie dello stesso summon
+      debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
