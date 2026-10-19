@@ -4891,15 +4891,15 @@ Riposte (Knave). È JS + template: F5 dopo il deploy.
       Ch / Interrupt 1, righe Trigger ed Effect; nessuna riga Mastery con la mastery bloccata. **(sezione 3: card "Chronotemper Interrupt 1: Cheat Time", badge Fool / Ch 3 / Interrupt 1, Trigger ed Effect)**
 - [x] **Chronotemper con la mastery**: sblocca Revolution → la stessa card ha in fondo "★ Mastery: Revolution: You can
       take this interrupt three times a round…". **(sezione 3: in fondo "★ Mastery: Revolution: You can take this interrupt three times a round…")**
-- [ ] **Drifting Leaf**: fumetto accanto a "LEAF ON THE WIND — Interrupt 2" → card con sotto "Interrupt 2: Leaf on the
+- [x] **Drifting Leaf**: fumetto accanto a "LEAF ON THE WIND — Interrupt 2" → card con sotto "Interrupt 2: Leaf on the
       Wind", Trigger, Effect, "Infuse 3 or Slay: PHANTOM BLADE — …"; con il talento I scelto c'è anche "Talent I: …its
-      interrupt deals 1 piercing damage twice…", con la mastery sbloccata "★ Mastery: GREAT CYCLONE …".
+      interrupt deals 1 piercing damage twice…", con la mastery sbloccata "★ Mastery: GREAT CYCLONE …". **(Drifting Leaf: fumetto sul blocco dell'interrupt → card "Interrupt 2: Leaf on the Wind" con Trigger, Effect, "Infuse 3 or Slay: PHANTOM BLADE — …" e "★ Mastery: GREAT CYCLONE" (mastery sbloccata). Talent I non provato.)**
 - [x] **Fairy Ring / Riposte**: il blocco "Spirit Away — Interrupt 2" (o "Dire Parry — Interrupt 1") ha il fumetto e
       la card ha Trigger ed Effect giusti; Riposte con la mastery aggiunge "Strong Left". **(sezione 3: blocchi "Spirit Away — Interrupt 2" e "Dire Parry — Interrupt 1" con fumetto, Trigger ed Effect giusti)**
-- [ ] **Show in Chat invariato**: Show in Chat di Chronotemper → stessi blocchi della scheda ("Cheat Time — Interrupt
-      1: Trigger: …"), nessun bottone fumetto nella card.
-- [ ] **Abilità senza interrupt concesso**: le altre abilità non hanno fumetti nuovi; i fumetti di mastery e talento di
-      R31 funzionano come prima.
+- [x] **Show in Chat invariato**: Show in Chat di Chronotemper → stessi blocchi della scheda ("Cheat Time — Interrupt
+      1: Trigger: …"), nessun bottone fumetto nella card. **(Show in Chat di Chronotemper: blocchi "Cheat Time — Interrupt 1: Trigger…", nessun bottone fumetto nella card.)**
+- [x] **Abilità senza interrupt concesso**: le altre abilità non hanno fumetti nuovi; i fumetti di mastery e talento di
+      R31 funzionano come prima. **(Le altre abilità della Spellblade hanno solo i fumetti di mastery/talento, nessun fumetto di interrupt.)**
 
 
 Setup: un PG Wright Geomancer con Bio (mastery sbloccata) e Quaking Palm, un Wright Enochian con Pyre e Lance (mastery
@@ -4908,8 +4908,8 @@ sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 d
 - [x] **Bio senza niente armato**: Show in Chat → la card ha Effect / Hit / Miss or Area / Charge, poi due righe blu
       chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO"; NON c'è più la riga "★ Mastery" col testo di Magnabio.
       Clic su una riga → si apre e mostra il suo testo; riclic → si chiude. **(due righe chiuse "Infuse 3: BIOTIC" e "Infuse 6 (Mastery): MAGNABIO", nessuna riga "★ Mastery" col testo di Magnabio)**
-- [ ] **MAGNABIO aperta**: dentro c'è "2 actions, Attack, Range 8, Large Blast." in cima, poi blocchi separati Hit /
-      Miss / Area / Terrain Effect, e "Benefits from Bio talents." in corsivo in fondo.
+- [x] **MAGNABIO aperta**: dentro c'è "2 actions, Attack, Range 8, Large Blast." in cima, poi blocchi separati Hit /
+      Miss / Area / Terrain Effect, e "Benefits from Bio talents." in corsivo in fondo. **(MAGNABIO aperta: "2 actions, Attack, Range 8, Large Blast." in cima, poi Hit / Miss / Area / Terrain Effect separati e "Benefits from Bio talents." in fondo (corsivo non verificato).)**
 - [x] **Bio con BIOTIC armato**: Infuse 3 sulla scheda → nel messaggio "infuses" il testo è etichettato come una card.
       Show in Chat → titolo "Bio — BIOTIC", in cima un blocco aperto "Infused — Infuse 3: BIOTIC", sotto i blocchi
       della base aperti, in fondo la riga chiusa di MAGNABIO. **(messaggio "TEST Geomancer infuses Bio — BIOTIC …"; Show in Chat: titolo "Bio — BIOTIC", blocco aperto "Infused — Infuse 3: BIOTIC", MAGNABIO chiusa)**
@@ -4927,8 +4927,8 @@ sbloccata), almeno 6 Aether; un foe come bersaglio. È JS + template + CSS: F5 d
       dentro la riga chiusa "Infuse 3: PRIMAL BURST". **(sezione 3: il Collide sta dentro la riga chiusa "Infuse 3: PRIMAL BURST")**
 - [x] **Tsunami**: Show in Chat → riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 funziona come
       in 1.15.60 (spende e posta subito). **(riga chiusa "Infuse 1: STORMLASH (Free Action)"; il bottone Infuse 1 già provato nella sezione 1.15.60)**
-- [ ] **Abilità senza Infuse**: Show in Chat di un'abilità qualsiasi di un altro job (e di una con combo) → card
-      identica a prima.
+- [x] **Abilità senza Infuse**: Show in Chat di un'abilità qualsiasi di un altro job (e di una con combo) → card
+      identica a prima. **(Show in Chat di abilità senza Infuse (Chanter, Knave, combo comprese) come prima, vedi blocco 14.)**
 - [ ] **Tema chiaro**: le righe blu e il blocco "Infused" si leggono anche in tema chiaro.
 
 ## R59 — Aether senza attacco: Stormlash e Aether Deflection (16 ottobre 2026, versione 1.15.60)
