@@ -104,10 +104,14 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       simultaneously." e "(Round 3, 6, etc) At round 3 and every three rounds thereafter…"). Probabilmente il dato è
       sia in un tratto sia in un'azione del pack `foes-legend`: tenerne uno. Provato 19 ottobre con un combat
       temporaneo. S.
-- [ ] **P23 (Emerso lavorando su P1)** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
+- [x] **P23 (Emerso lavorando su P1)** — i summon del compendio `summons` (posati dal chip di `map-objects.mjs:891` con
       `fromCompendium`) sono costruiti con `actorLink: false` (`build-summons-pack.mjs:50`), ma restano linkati: un
       attore per summon nel mondo, condiviso da tutte le copie posate. Da decidere se più copie dello stesso summon
-      debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S. **(in attesa di risposta)**
+      debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.253) Esito: deciso in assenza di Edoardo per la via prudente. I summon
+      del compendio restano collegati; solo il Geyser (`summonInSpace`) importa ora un attore nuovo per ogni Salt
+      Sprite (HP separati, summoner = creatore del Geyser). Nota: scollegare tutti i summon del compendio richiede di
+      rifare la sezione "Summons" della scheda del PG perché elenchi i token sulla mappa (lavoro M, non fatto).
       Regola (p.95-96, "Summons are characters"): ogni summon posato è un personaggio a sé, quindi HP separati.
       Cosa ho visto nel codice (19 ottobre): l'attore condiviso nasce solo da `summonInSpace` (il Salt Sprite del
       Geyser, che riusa l'attore già importato) e quando si trascina più volte lo stesso summon dalla barra degli

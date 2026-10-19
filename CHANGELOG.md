@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Ogni Salt Sprite del Geyser ha i suoi HP (versione 1.15.253)
+
+### Esito del playtest del 18 ottobre, P23
+
+- **Salt Sprite del Geyser**: quando un Geyser erutta e evoca il suo Salt Sprite, il sistema riusava l'attore del
+  Salt Sprite già importato nel mondo, così tutte le copie sulla mappa avevano gli stessi HP (colpirne una le
+  feriva tutte) → il manuale dice che ogni summon è un personaggio a sé (p.95-96) → ora ogni Salt Sprite evocato dal
+  Geyser è un attore nuovo, importato dal compendio, con i suoi HP; ha come summoner il creatore del Geyser (compare
+  nella sezione Summons della sua scheda) e gli stessi proprietari, così il giocatore lo può usare. Gli altri summon
+  del compendio restano collegati come prima: scollegarli tutti vorrebbe dire rifare la sezione Summons della scheda
+  del PG (che legge l'attore del mondo), lavoro non fatto. Scelta prudente presa in assenza di Edoardo.
+
 ## 19 ottobre 2026 — Un'abilità trascinata su un riquadro pieno prende il suo posto (versione 1.15.252)
 
 ### Esito del playtest del 18 ottobre, P21
