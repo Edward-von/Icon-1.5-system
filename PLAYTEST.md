@@ -11,6 +11,15 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Emerso nei fix — Il tag Pierce spunta Pierce nella finestra del danno (19 ottobre 2026, versione 1.15.266)
+
+Setup: solo codice (F5 basta). TEST Enochian Weakened.
+
+- [x] Blackstar e Lance (tag Pierce) → finestra del danno: Pierce spuntato ("no armor · from the ability's tag"), Weakened vuoto. **(19 ottobre sera, sì)**
+- [x] Pyre (senza Pierce) → Pierce vuoto, Weakened spuntato come prima. **(sì)**
+- [ ] Tirare Blackstar su un foe con armatura e premere Apply → l'armatura non viene tolta. **(non provato: il flag pierce della card e l'Apply sono quelli già provati con "N piercing damage")**
+- [ ] Sow con la combo Reap armata → Pierce spuntato dal tag della base: va tolto a mano. **(non provato)**
+
 ## Emerso provando P30 — Show in Chat di un interrupt o di una round action dei foe (19 ottobre 2026, versione 1.15.265)
 
 Setup: solo codice (F5 basta). Compendio Foe Abilities.
@@ -260,9 +269,9 @@ Janissary e Mechanist); per l'ultima casella anche il client giocatore "PT Playe
 - [x] Da GM: Track target di Grand Banishment sul Janissary due volte di fila → un solo chip "Janissary ✕" sulla
       scheda del PG e un solo effetto "Tracked — Grand Banishment" sul Janissary. **(TEST Sealer, due clic sul Janissary: un solo chip "Janissary ✕" e un solo "Tracked — Grand Banishment")**
 - [x] Poi Track target sul Mechanist → il segno passa al Mechanist (come prima), sul Janissary non resta niente. **(il segno passa al Mechanist, sul Janissary non resta niente)**
-- [ ] Un mark di un'altra abilità dello stesso PG sul Janissary resta dov'è quando si ripete il Track target lì. **(non provato)**
-- [ ] Da giocatore (PT Player, GM connesso): Track target sullo stesso foe due volte → "Tracker sent to the GM…" e
-      sempre un chip solo. **(non provato)**
+- [x] Un mark di un'altra abilità dello stesso PG sul Janissary resta dov'è quando si ripete il Track target lì. **(19 ottobre sera: mark di prova "PT FIX Other" di TEST Sealer sul Janissary, poi Track target di Grand Banishment due volte → il mark di prova resta, un solo "Tracked — Grand Banishment")**
+- [x] Da giocatore (PT Player, GM connesso): Track target sullo stesso foe due volte → "Tracker sent to the GM…" e
+      sempre un chip solo. **(PT Player (proprietario del Sealer) due volte → "Tracker sent to the GM to place on "Janissary"." e sul Janissary sempre un solo "Tracked — Grand Banishment" (il chip sulla scheda non l'ho contato: era nel pannello chiuso))**
 
 ## Esito 18 ottobre, P13 — MAGNACRYO allunga la linea con l'Aether (19 ottobre 2026, versione 1.15.246)
 

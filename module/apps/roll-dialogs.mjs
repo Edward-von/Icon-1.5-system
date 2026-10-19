@@ -21,7 +21,7 @@
  */
 import { getActorStatusMods, getTagRollMods } from "../combat/status-modifiers.mjs";
 import { hatredDamageHint, marksBy } from "../combat/marks.mjs";
-import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasionThreshold, hasSureEvasion, gridDistance, tokenOf } from "../combat/defenses.mjs";
+import { defenseChipsHtml, defenseProfile, ignoresEvasion, attackIgnores, evasionThreshold, hasSureEvasion, gridDistance, tokenOf, tagKey } from "../combat/defenses.mjs";
 import { escapeHTML as esc } from "../helpers/enrich.mjs";
 import { IconActor } from "../actor/IconActor.mjs";
 import { areaFromTags } from "../canvas/area-templates.mjs";
@@ -579,6 +579,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
   // start ticked, so Apply ignores Dodge / Cover / Aetherwall without the
   // player having to remember (the checkbox can still be unticked).
   const ignores = attackIgnores(actor, ab.tags ?? []);
+  // The Pierce tag (Blackstar, Cryo, Bio…): "Ignores armor, weak, and vigor" (p.205), so the ability's damage is
+  // piercing whatever the outcome, as "N piercing damage" in the text already was. Divine damage stays divine.
+  const pierceTag = (ab.tags ?? []).some(t => tagKey(t) === "pierce");
   // Reap (Sow's combo, p.185): "You can make this melee attack against the
   // target marked by Sow regardless of distance or line of sight. It also
   // gains unerring if made this way." A target carrying this ability's mark
@@ -726,7 +729,7 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
             <label class="icon-roll-chip"><input type="checkbox" name="vulnerable"><span>Vulnerable <small>+1</small></span></label>
             <label class="icon-roll-chip" title="${autoHalf.length ? `Applied automatically on Apply for ${esc(autoHalf.join(", "))} — tick only for a target WITHOUT the status` : "Half damage. Tick for a target in cover / with resistance that has no status set; otherwise it is applied automatically on Apply"}"><input type="checkbox" name="resistance"><span>Resistance / Cover <small>½${autoHalf.length ? " · auto on Apply" : ""}</small></span></label>
             <label class="icon-roll-chip"><input type="checkbox" name="weakened"><span>Weakened <small>${attackerWeak ? "−2 · from your Weakened status" : "−2"}</small></span></label>
-            <label class="icon-roll-chip icon-roll-chip--type" title="Pierce (p.104): damage cannot be reduced by armor or weakened."><input type="checkbox" name="pierce"><span>Pierce <small>no armor</small></span></label>
+            <label class="icon-roll-chip icon-roll-chip--type" title="Pierce (p.104): damage cannot be reduced by armor or weakened."><input type="checkbox" name="pierce"><span>Pierce <small>${pierceTag ? "no armor · from the ability's tag" : "no armor"}</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Divine (p.104): damage cannot be reduced, mitigated or negated in any way except immunity — ignores armor, weakened, resistance and defiance, and bypasses vigor."><input type="checkbox" name="divine"><span>Divine <small>nothing reduces it</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="True Strike (p.104): ignores dodge, blind, evasion and stealth. On the damage card it stops Dodge cancelling a Miss / Area result."><input type="checkbox" name="trueStrike" ${ignores.trueStrike ? "checked" : ""}><span>True Strike <small>${ignores.trueStrike ? esc(whyTick(ignores.trueStrike, "True Strike")) : "ignores Dodge"}</small></span></label>
             <label class="icon-roll-chip icon-roll-chip--type" title="Unerring (p.104): ignores cover and aetherwall. On Apply neither the target's Cover nor its Aetherwall halves the damage."><input type="checkbox" name="unerring" ${ignores.unerring ? "checked" : ""}><span>Unerring <small>${ignores.unerring ? esc(whyTick(ignores.unerring, "Unerring")) : "ignores Cover / Aetherwall"}</small></span></label>
@@ -802,8 +805,9 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
       const type = (outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
-      if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
-      if (f.elements.weakened) f.elements.weakened.checked = attackerWeak && type !== "piercing" && type !== "divine";
+      const pierced = type === "piercing" || (pierceTag && type !== "divine");
+      if (f.elements.pierce) f.elements.pierce.checked = pierced;
+      if (f.elements.weakened) f.elements.weakened.checked = attackerWeak && !pierced && type !== "divine";
       const chunk = outcome === "other" ? picked
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
       // "2 unerring damage" in the chosen outcome's text (Astral Chain's Mark

@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Il tag Pierce spunta Pierce nella finestra del danno (versione 1.15.266)
+
+### Emerso provando P13 e P24
+
+- **Abilità col tag Pierce trattate come danno normale**: Blackstar, Lance, Cryo, Bio, Blitz, Sow e le altre abilità
+  con il tag "Pierce" aprivano la finestra del danno con Pierce vuoto (e, con l'attaccante Weakened, il −2
+  spuntato), quindi all'Apply l'armatura del bersaglio veniva tolta → il manuale dice che pierce "Ignores armor, weak,
+  and vigor" (p.205) e "cannot be reduced by armor or weakened" (p.104), ma la finestra spuntava Pierce solo quando il
+  testo diceva "N piercing damage", mentre True Strike e Unerring li leggeva già anche dai tag → ora anche il tag
+  Pierce spunta Pierce (scritta "no armor · from the ability's tag") per ogni esito, e il Weakened resta vuoto. Il
+  danno divine resta divine. Si può sempre togliere a mano. Nota: con la combo armata vale il tag della base (Reap,
+  la combo di Sow, nel libro non ha Pierce: lì va tolto a mano).
+
 ## 19 ottobre 2026 — Show in Chat di un interrupt o di una round action dei foe dalla loro scheda (versione 1.15.265)
 
 ### Emerso provando P30
