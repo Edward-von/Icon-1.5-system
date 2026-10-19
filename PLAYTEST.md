@@ -3653,10 +3653,10 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Kit con "5 fire stones": tre clic rapidissimi → 3 usi spesi (non 1). **(non provato)**
-- [ ] Clic rapidi alternati su due oggetti diversi dello stesso kit → tutti contati, nessuno perso. **(non provato)**
-- [ ] "−" cliccato due volte di fila in fretta → restituisce 2 usi. **(non provato)**
-- [ ] Shift + clic → impostare il numero di usi funziona ancora; finiti gli usi un clic fa tornare l'oggetto. **(non provato)**
+- [x] Kit con "5 fire stones": tre clic rapidissimi → 3 usi spesi (non 1). **(Kit Brave di "Actor", "3 arkentech light gems": tre clic rapidissimi → 3 usi spesi.)**
+- [x] Clic rapidi alternati su due oggetti diversi dello stesso kit → tutti contati, nessuno perso. **(Clic alternati veloci su gems e mappa: gems 2, mappa 1, nessuno perso.)**
+- [x] "−" cliccato due volte di fila in fretta → restituisce 2 usi. **("−" due volte di fila: da 3 spesi a 1.)**
+- [x] Shift + clic → impostare il numero di usi funziona ancora; finiti gli usi un clic fa tornare l'oggetto. **(Shift + clic: "Uses — 3 arkentech light gems: How many uses…" e il numero si imposta; finiti gli usi, un clic riporta l'oggetto a 0 spesi.)**
 
 ## Emerso R1 — Reap da lontano guadagna Unerring (17 ottobre 2026, versione 1.15.135)
 
@@ -3807,8 +3807,8 @@ Setup: solo codice (F5 basta).
       Ruin", Keeper of the Eldflame "Forge Action": ognuno ha la sua spiegazione. **(Pale Man ok; Violence Demon, Falling Leaf Aesi, Wyrm, Keeper senza spiegazione (vedi Esito))**
 - [ ] "Burst 2 Self" (Summer Flame Aesi) e "Burst 1 Target" (Head Lopper): spiegazione del burst, non più grigio. **(Summer Flame Aesi "burst-2-self", Head Lopper "burst-1-target": sulle schede legend i tag sono ancora slug senza spiegazione (stesso problema di P8).)**
 - [ ] Dread Lords → Dark Grip, "Range 4+": spiega "a range 4 o più lontano". **(Dread Lords: "range-4+" grezzo e senza spiegazione (P8).)**
-- [ ] Il blocco "Area Effect:" nella card di un'abilità ora ha il tooltip anche sul titolo: controllare che non
-      disturbi.
+- [x] Il blocco "Area Effect:" nella card di un'abilità ora ha il tooltip anche sul titolo: controllare che non
+      disturbi. **(Card di Holy: il titolo "Area effect" ha il tooltip, il testo resta leggibile.)**
 - [x] "Range 3", "Burst 2", "+1 Boon" hanno ancora la spiegazione di prima. **(Foe normali (Knuckle, Mechanist, Pepperbox, Wisp, Fire Dancer): Range 3, +1 Boon, Small Blast, Mark… tutti con la spiegazione.)**
 
 ## Emerso R8 — Boiling Blood: "Defy Death" non resta più appeso al testo di colore (17 ottobre 2026, versione 1.15.121)
@@ -5057,14 +5057,14 @@ F5 dopo il deploy.
 Setup: PG di prova (Warden e Shade) con Morrigan, Death Blossom (combo), Umbra, Dark Sliver (mastery sbloccata),
 Geyser e Massive Overhead (mastery sbloccata), dal compendio Jobs o già sulla scheda (è solo codice). F5 dopo il deploy.
 
-- [ ] **Morrigan** (anteprima abilità e Show in Chat): "you summon a massive flock" senza tooltip sulla parola summon;
-      "allied summons in range" con il tooltip Summon; il Collide "Summon a beast" con il tooltip.
-- [ ] **Death Blossom**, riquadro combo: "Flying Sleeves:" senza tooltip su Flying; "allied summon in the area" con
-      il tooltip. Stessa cosa aprendo la scheda item dal compendio.
-- [ ] **Umbra** (Finishing Blow "Summon a shadow"), **Dark Sliver** (mastery "summon a mote of life", e "summon a plant"
-      nella descrizione): tooltip Summon presente come prima.
-- [ ] **Geyser** ("Summon a height 1 geyser object"): niente tooltip Summon sul verbo (il chip del tag "summon" resta).
-- [ ] **Massive Overhead**: mastery "Blood Rush:" senza tooltip su Rush; il bottone 💬 della mastery in chat uguale.
+- [x] **Morrigan** (anteprima abilità e Show in Chat): "you summon a massive flock" senza tooltip sulla parola summon;
+      "allied summons in range" con il tooltip Summon; il Collide "Summon a beast" con il tooltip. **(Morrigan: "you summon a massive flock" senza tooltip sul verbo; "allied [summons]" con il tooltip; il Collide ha "Summon" col tooltip.)**
+- [x] **Death Blossom**, riquadro combo: "Flying Sleeves:" senza tooltip su Flying; "allied summon in the area" con
+      il tooltip. Stessa cosa aprendo la scheda item dal compendio. **(Death Blossom: "COMBO: Flying Sleeves:" senza tooltip su Flying; "allied [summon]" con il tooltip. Scheda item dal compendio non riaperta.)**
+- [x] **Umbra** (Finishing Blow "Summon a shadow"), **Dark Sliver** (mastery "summon a mote of life", e "summon a plant"
+      nella descrizione): tooltip Summon presente come prima. **(Umbra "Finishing Blow: [Summon] a shadow" e Dark Sliver "[summon] a plant" con il tooltip. La mastery di Dark Sliver (mote of life) non era sbloccata.)**
+- [x] **Geyser** ("Summon a height 1 geyser object"): niente tooltip Summon sul verbo (il chip del tag "summon" resta). **(Geyser: "Summon a height 1 geyser object" senza tooltip sul verbo; chip "Geyser · H1" e "Salt Sprite".)**
+- [x] **Massive Overhead**: mastery "Blood Rush:" senza tooltip su Rush; il bottone 💬 della mastery in chat uguale. **(Massive Overhead con mastery: "Blood Rush:" senza tooltip su Rush, sia nell'anteprima sia nella card del 💬.)**
 - [ ] **Non devono cambiare**: un foe che evoca (es. Arachnid Demon, "Chaos Cocoon") e un trofeo (Soul Gem, "summon 3
       Relict Husks") tengono il tooltip su summon; un talento che inizia con "Slay:" o "Comeback:" ha ancora il tooltip
       sull'etichetta.
@@ -5180,12 +5180,12 @@ nell'intestazione del tratto, nella tab dei tratti.
 
 - [x] **Bound Spirit**: chip Astral Seraph; trascinarlo sulla mappa crea il token del seraph. **(Bound Spirit: Astral Seraph)**
 - [x] **Beast Master**: chip Great Beast, nessun chip Beast. **(Beast Master: Great Beast, niente Beast)**
-- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token. **(non provato (Selkie non sulla scheda))**
+- [ ] **Selkie**: chip Selkie; trascinarlo sulla mappa crea il token. **(Nessun PG di prova con Selkie.)**
 - [x] **Cheap Trick**: chip Bomb. **(Cheap Trick: Bomb)**
 - [x] **Darkside**: chip Shadow. **(Darkside: Shadow)**
-- [ ] **Meld / Umbral Soul**: nessun chip. **(non provato)**
+- [ ] **Meld / Umbral Soul**: nessun chip. **(Nessun PG di prova con Meld / Umbral Soul.)**
 - [ ] **Tratto bloccato**: un tratto di capitolo più alto di quello del PG (lucchetto "Locked") non mostra il chip.
-- [ ] **Abilità (non devono cambiare)**: Umbra ha ancora il chip Shadow, Cavaliere il chip Bomb (R43).
+- [x] **Abilità (non devono cambiare)**: Umbra ha ancora il chip Shadow, Cavaliere il chip Bomb (R43). **(Umbra: chip Shadow; Cavaliere: chip Bomb.)**
 
 ## R43 — Summon solo sulle abilità che lo creano (16 ottobre 2026, versione 1.15.45)
 
@@ -5196,11 +5196,11 @@ dell'abilità e nella card di Show in Chat.
 - [x] **Harrow**: nessun chip Shadow (pannello e card), con qualunque talento scelto. **(Harrow nessun chip)**
 - [x] **Shadow Play**: nessun chip Shadow. **(Shadow Play nessun chip)**
 - [x] **Umbra**: chip Shadow presente (dal Finishing Blow); trascinarlo sulla mappa crea il token. **(Umbra: Shadow)**
-- [ ] **Umbral Echo**: chip Shadow presente. **(non provato (Umbral Echo non sulla scheda))**
+- [ ] **Umbral Echo**: chip Shadow presente. **(Nessun PG di prova con Umbral Echo.)**
 - [x] **Harvest**: chip Thrall, nessun chip Plant. **(Harvest: Thrall, niente Plant)**
 - [x] **Cavaliere**: chip Bomb. **(Cavaliere: Bomb)**
-- [ ] **Non devono cambiare**: Nightmare (Shadow), Gravebirth (Plant e Thrall), Chaos Tarot (Wild Card e Master Card),
-      Raging Wolf ancora senza Beast (R7).
+- [x] **Non devono cambiare**: Nightmare (Shadow), Gravebirth (Plant e Thrall), Chaos Tarot (Wild Card e Master Card),
+      Raging Wolf ancora senza Beast (R7). **(Nightmare: Shadow; Gravebirth: Plant e Thrall; Chaos Tarot: Wild Card e Master Card; Raging Wolf: nessun summon.)**
 
 ## R42b — Inflict per gli status dati a chi "finisce il turno" in un'area (16 ottobre 2026, versione 1.15.44)
 
@@ -5911,7 +5911,7 @@ evoca davvero (Apex o Strength of the Pack del Warden, Carnevale del Fool, Sow d
 - [x] **Mist Strider**: propone solo "Beast", non più "Shadow". **(Mist Strider solo Beast)**
 - [x] **Abilità che evocano davvero**: Apex / Strength of the Pack propongono ancora "Beast", Carnevale "Bomb", Sow
       "Thrall"; trascinare il summon sulla mappa funziona come prima. **(Apex / Strength of the Pack: Beast; Sow: Thrall)**
-- [ ] **Show in Chat** di Raging Wolf: nessun summon sulla card. **(non provato)**
+- [x] **Show in Chat** di Raging Wolf: nessun summon sulla card. **(Show in Chat di Raging Wolf: nessun summon sulla card (solo Slashed / Unstoppable).)**
 
 ## R6 — testo di colore delle abilità senza tooltip delle keyword (15 ottobre 2026, versione 1.15.8)
 
@@ -5938,14 +5938,14 @@ Setup: un PG con Dropkick, Comet e Catapult (Stalwart; da GM si possono aggiunge
 - [x] **Dropkick**: nell'anteprima dell'abilità il tag "Sacrifice" non è più grigio; passandoci sopra compare la regola
       del Sacrifice (p.103). Show in Chat → stesso tag con tooltip nella card. **(Dropkick: tooltip Sacrifice)**
 - [x] **Comet**: "Medium Blast" non è più grigio e ha il tooltip (3×3, 9 spazi); "Object" e "Range 3" come prima. **(Comet: 'Medium Blast: the 3×3 block … (p.98)')**
-- [ ] **Catapult senza mastery**: il badge del costo "Interrupt 1" in cima all'anteprima e alla card in chat ha il
-      tooltip della regola degli interrupt; nessun tag "Interrupt" tra i tag. **(non provato)**
+- [x] **Catapult senza mastery**: il badge del costo "Interrupt 1" in cima all'anteprima e alla card in chat ha il
+      tooltip della regola degli interrupt; nessun tag "Interrupt" tra i tag. **(Catapult senza mastery: badge "Interrupt 1" con tooltip sia nell'anteprima sia nella card; nessun tag "Interrupt".)**
 - [x] **Catapult con la mastery**: spuntare la mastery → il badge del costo diventa "Interrupt 3", evidenziato, con
       tooltip "From Mastery: Catapult becomes Interrupt 3" + la regola; nessun tag "Interrupt 3" a parte. Stesso nella
       card Show in Chat. Togliendo la mastery torna "Interrupt 1". **(badge 'Interrupt 3' con 'From Mastery: Mangonel…')**
 - [x] **Altro interrupt**: un'abilità interrupt qualsiasi di un altro job (es. una con "Interrupt 1" già tra i tag) →
       il numero sta solo sul badge del costo, con il tooltip. **(Sturmreiten: in chat il badge "Interrupt 1" ha il tooltip; tra i tag solo "Line 3", nessun "Interrupt".)**
-- [ ] **Abilità normali**: un'abilità da 1 o 2 azioni → badge del costo come prima, senza tooltip; tag invariati.
+- [x] **Abilità normali**: un'abilità da 1 o 2 azioni → badge del costo come prima, senza tooltip; tag invariati. **(Blitz: badge "1 Action" senza tooltip, tag invariati.)**
 - [x] **Foe**: un foe con un'azione "Small Blast" o "Medium Blast" o "Terrain Effect" → il tag ha il tooltip. **(Pepperbox / Wisp: "Small Blast" con spiegazione.)**
 
 ## R4 — talento e mastery chiesti per ogni abilità trascinata (15 ottobre 2026, versione 1.15.6)
