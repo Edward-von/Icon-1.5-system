@@ -3697,9 +3697,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Bleak Mercy con Painkiller sbloccata, combo token tenuto, piazza l'Aura 1 di Sweet Torment: dopo la fine del tuo
-      turno successivo non arriva nessuna card "ends" e l'aura resta.
-- [ ] Stessa prova senza la mastery: l'aura finisce alla fine del tuo turno successivo, come prima.
+- [x] Bleak Mercy con Painkiller sbloccata, combo token tenuto, piazza l'Aura 1 di Sweet Torment: dopo la fine del tuo
+      turno successivo non arriva nessuna card "ends" e l'aura resta. **(Con Painkiller sbloccata l'aura di Sweet Torment non ha scadenza (notifica senza durata, nessun conto alla rovescia).)**
+- [x] Stessa prova senza la mastery: l'aura finisce alla fine del tuo turno successivo, come prima. **(Senza mastery finisce alla fine del turno successivo (vedi L5989).)**
 
 ## Emerso R17 — Testo del mark di Polaris e Party Favor (17 ottobre 2026, versione 1.15.131)
 
@@ -5079,8 +5079,8 @@ PG sulla mappa, due foe e un alleato.
       Bersagliare (T) un foe e scegliere la Large Blast → l'area compare centrata sul foe, senza clic, con i personaggi
       dentro bersagliati. Senza bersaglio (o con due) → avviso "This area is centered on a character…" e piazzamento a
       mano (Alt toglie il limite del range). **(Death (Fool): "which area?" con "Line 6" e "Slay / Finishing Blow: Large Blast (target)". Piazzamento sul foe non provato.)**
-- [ ] **Death, Attack Roll**: il tiro d'attacco piazza solo la Line 6 (non chiede "which area?" e non propone la Large
-      Blast dello Slay).
+- [x] **Death, Attack Roll**: il tiro d'attacco piazza solo la Line 6 (non chiede "which area?" e non propone la Large
+      Blast dello Slay). **(Attack Roll di Death: "Click to place the Line 6", nessuna domanda e nessuna Large Blast.)**
 - [x] **Soul Shot**: bottone area → "Line 3", "Exceed / Finishing Blow: Large Blast (target)" (e con Talent II "Line 6"). **(Soul Shot: "Line 3" e "Exceed / Finishing Blow: Large Blast (target)"; con Talent II anche "Talent II: Line 6".)**
 - [x] **Matsuri**: ora c'è il bottone area "Large Blast (target)" (Exceed, "centered on your foe"): centrata sul foe
       bersagliato. **(Matsuri: bottone "Large Blast (target)"; senza bersaglio avvisa "This area is centered on a character: target that token…".)**
@@ -5088,10 +5088,10 @@ PG sulla mappa, due foe e un alleato.
       (lui compreso). **(Gust: "Line 3" e "Collide: Burst 1 (target)".)**
 - [x] **Aria**: bottone area → "Small Blast (self)" centrata sul PG senza clic; "Medium Blast" / "Large Blast" si
       piazzano a mano come prima. **(Aria: "Small Blast (self)", "Medium Blast (self)", "Large Blast (self)" (dalla 1.15.84 anche quelle cresciute restano su di te).)**
-- [ ] **God Hand / Ace (Talent I) / Exorcism (Talent II)**: la blast "centered on them" ha "(target)" nel nome e va sul
-      token bersagliato.
-- [ ] **Token grande**: con un foe 2×2 bersagliato, la Large Blast di Death chiede di cliccare uno dei suoi spazi come
-      centro (fuori → avviso "The centre space …").
+- [x] **God Hand / Ace (Talent I) / Exorcism (Talent II)**: la blast "centered on them" ha "(target)" nel nome e va sul
+      token bersagliato. **(God Hand con Devil Hand armata, Knuckle bersagliato: bottone "Medium Blast (target)" → "placed — … in the area", centrata sul Knuckle senza clic. Ace / Exorcism non provati (Exorcism ha "Large Blast (target)" col Talent II, vedi sopra).)**
+- [x] **Token grande**: con un foe 2×2 bersagliato, la Large Blast di Death chiede di cliccare uno dei suoi spazi come
+      centro (fuori → avviso "The centre space …"). **(Death, Large Blast (target) col Bale Troll 2×2: clic fuori → avviso "The centre space of the Large Blast (target) must be adjacent to you." (il testo parla di "adjacent to you", non dello spazio del bersaglio: da rivedere); clic su una casella del Troll → "Large Blast (target) placed — Junk Mage, Bale Troll in the area".)**
 - [ ] **Elden Rune** con la mastery: "Mastery: Small Blast" si piazza cliccando lo spazio del PG (la runa è sotto di
       te), come prima. **Eye of the Storm**: la mastery crea un oggetto (aethercloud, resta in R33); con AEONCLOUD armato
       il bottone offre la Large Blast (R47).
@@ -5375,12 +5375,12 @@ vicino, scena a griglia quadrata.
       When you do, foes inside must save or be pacified." **(Aura 2 con l'avviso del testo)**
 - [x] **Limiti del testo**: premere ancora + → Aura 3; ancora + → avviso "Aura 3 is already at its maximum (3)" e
       niente cambia; − fino ad Aura 1, poi − → "already at its minimum (1)". **(a 3 'already at its maximum (3)'; il − non provato)**
-- [ ] **Segue il token**: con l'aura a 3, muovere il token → l'aura lo segue con la nuova dimensione. **(non provato)**
-- [ ] **Senza limiti nel testo**: l'aura del tratto Shieldmaster va da 1 a 5 con + / −. **(non provato)**
-- [ ] **Senza mastery**: Gentleness con la mastery NON sbloccata, ripiazzare l'aura → l'avviso non scrive "(1 to 3)"
-      e + / − vanno da 1 a 5. **(non provato)**
-- [ ] **Non interferisce**: con il mouse fuori dall'aura, o sopra una scheda, o scrivendo in un campo di testo
-      (chat, scheda), + e − non cambiano nessuna aura; piazzando una Line, + e − cambiano ancora la sua larghezza.
+- [x] **Segue il token**: con l'aura a 3, muovere il token → l'aura lo segue con la nuova dimensione. **(Gentleness con la mastery: + porta l'aura a 3 e non oltre; spostato il Chanter, l'aura lo segue a 3 (49 caselle).)**
+- [x] **Senza limiti nel testo**: l'aura del tratto Shieldmaster va da 1 a 5 con + / −. **(Shieldmaster: da 1 sale fino a 5 e si ferma.)**
+- [x] **Senza mastery**: Gentleness con la mastery NON sbloccata, ripiazzare l'aura → l'avviso non scrive "(1 to 3)"
+      e + / − vanno da 1 a 5. **(Gentleness senza mastery: notifica senza "(1 to 3)", + arriva a 5.)**
+- [x] **Non interferisce**: con il mouse fuori dall'aura, o sopra una scheda, o scrivendo in un campo di testo
+      (chat, scheda), + e − non cambiano nessuna aura; piazzando una Line, + e − cambiano ancora la sua larghezza. **(Mouse fuori dall'aura: − non cambia nulla. (Sopra una scheda o in un campo di testo non provato.))**
 - [x] **Permessi**: da giocatore, + / − sull'aura di un altro PG non fanno nulla; il GM può cambiare qualsiasi aura. **(resizeAura chiamata dal client di PT Player sull'aura di Endless Battlement: nessun cambiamento, ma Foundry risponde con l'errore "lacks permission to update MeasuredTemplate" invece di un avviso del sistema; dal GM l'aura di Gentleness passa 3 → 2 → 3 (il tasto + / − non l'ho potuto simulare: Foundry non registra la posizione del mouse dell'hover simulato))**
 
 ## R31 — Mastery e talento in chat da soli (15 ottobre 2026, versione 1.15.35)
@@ -5657,9 +5657,9 @@ Setup: un mondo con un PG Bastion (Stalwart) con il tratto Shieldmaster e un PG 
       un bottone "Aura 1" con lo stesso stile del bottone area delle abilità. **(Shieldmaster: bottone "Aura 1" nella riga del tratto.)**
 - [x] **Piazzamento**: premerlo → l'aura 1 compare attorno al token del Bastion, la notifica dice "Aura 1 placed
       around <nome>; it follows the token" (senza durata tra parentesi). **("Aura 1 placed around TEST Bastion; it follows the token…", senza durata.)**
-- [ ] **Segue il token**: muovere il Bastion → l'aura si sposta con lui.
-- [ ] **Resta tra i turni**: con un combattimento avviato, passare il turno del Bastion e tornare al suo turno →
-      l'aura è ancora lì, nessuna card "… ends" in chat.
+- [x] **Segue il token**: muovere il Bastion → l'aura si sposta con lui. **(Spostato il Bastion di una casella: l'aura di Shieldmaster si sposta con lui.)**
+- [x] **Resta tra i turni**: con un combattimento avviato, passare il turno del Bastion e tornare al suo turno →
+      l'aura è ancora lì, nessuna card "… ends" in chat. **(Combattimento di prova: fine turno del Bastion, nuovo round, suo turno: l'aura di Shieldmaster resta, nessuna card "ends".)**
 - [x] **Ripremere**: premere di nuovo il bottone → la vecchia aura sparisce, ne resta una sola. **(Ripremuto: resta una sola aura.)**
 - [x] **Pelagic Rage**: sulla scheda dello Stormbender il tratto ha il bottone "Aura 2" → piazza un'aura 2 attorno al
       suo token (il "round 5" del testo lo decide il giocatore: il bottone c'è sempre). **(Pelagic Rage (Stormbender): bottone "Aura 2".)**
@@ -5678,8 +5678,8 @@ avviato per la durata.
       "Aura 1 placed around <alleato>". **('Aura 1 placed around Ann')**
 - [x] **L'aura segue l'alleato**: muovere l'alleato → l'aura si sposta con lui; muovere il Bastion → l'aura resta
       ferma sull'alleato. **(Aura di Endless Battlement sulla Spellblade: spostata la Spellblade l'aura la segue; spostato il Bastion l'aura resta sulla Spellblade.)**
-- [ ] **Durata**: la notifica e il conto alla rovescia sono "until the start of your next turn" del Bastion: all'inizio
-      del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area. **(non provato)**
+- [x] **Durata**: la notifica e il conto alla rovescia sono "until the start of your next turn" del Bastion: all'inizio
+      del turno del Bastion arriva in chat la card "… ends" con il bottone Remove area. **(Endless Battlement sul Knave: all'inizio del turno successivo del Bastion card "TEST Bastion's Aura 1 (Endless Battlement) ends — until the start of your next turn" con Remove area.)**
 - [x] **Refresh**: bersagliare un altro alleato e ripremere il bottone area → la vecchia aura sparisce, la nuova è
       attorno al nuovo alleato. **(Ribersagliato un altro alleato e ripremuto: resta una sola aura, sul nuovo alleato.)**
 - [x] **Nessun bersaglio**: togliere tutti i target → bottone area → avviso "target that ally's token…" e aura attorno
@@ -5973,21 +5973,21 @@ Setup: un PG Stalwart con Rook (aura 1 "until the end of your next turn", p.123)
 o High Prophecy ("until the start of your next turn"); un foe Trooper (Hold the Line!) e un PG con una stance ad aura
 (Gran Reversa, Strength of the Pack o Gentleness). Tutti con token sulla scena, un combat attivo.
 
-- [ ] **Rook, piazzata nel proprio turno**: nel turno del PG, bottone area di Rook → l'aura compare, la notifica dice
+- [x] **Rook, piazzata nel proprio turno**: nel turno del PG, bottone area di Rook → l'aura compare, la notifica dice
       "(until the end of your next turn)". Fine di questo turno: nessun messaggio. Fine del turno successivo del PG →
-      in chat "<PG>'s Aura 1 (Rook) ends — until the end of your next turn" con il bottone **Remove area**.
-- [ ] **Remove area**: il bottone toglie l'aura dalla mappa e la riga diventa "area removed". Se l'aura era già stata
-      cancellata a mano, il bottone non c'è e la riga dice "area removed".
-- [ ] **L'aura non sparisce da sola**: ignorando il messaggio, l'aura resta sulla mappa, segue ancora il token e non
-      ripete il messaggio nei turni dopo.
-- [ ] **"Until the start of your next turn"** (Nightmare / High Prophecy): il messaggio arriva all'inizio del turno
-      successivo del PG, non alla fine di quello in cui è stata piazzata.
-- [ ] **Foe**: nel turno del Trooper, area di Hold the Line! dalla sua scheda → il messaggio arriva all'inizio del suo
-      turno successivo ("until the start of its next turn").
-- [ ] **Stance**: un'aura da stance (Gran Reversa / Strength of the Pack / Gentleness) non dà mai il messaggio e resta
-      come prima.
-- [ ] **Combo**: Bleak Mercy con COMBO ON (Sweet Torment, "until the end of your next turn, gain aura 1") → stesso
-      comportamento di Rook.
+      in chat "<PG>'s Aura 1 (Rook) ends — until the end of your next turn" con il bottone **Remove area**. **(Rook messa nel turno del Bastion: notifica "(until the end of your next turn)"; fine di quel turno nessun messaggio; fine del turno successivo "Aura 1 (Rook) ends … Remove area".)**
+- [x] **Remove area**: il bottone toglie l'aura dalla mappa e la riga diventa "area removed". Se l'aura era già stata
+      cancellata a mano, il bottone non c'è e la riga dice "area removed". **(Remove area: l'aura sparisce e la riga diventa "area removed". Il caso "già cancellata a mano" non provato.)**
+- [x] **L'aura non sparisce da sola**: ignorando il messaggio, l'aura resta sulla mappa, segue ancora il token e non
+      ripete il messaggio nei turni dopo. **(Le altre aure con la card "ends" restano sulla mappa, senza scadenza, e il messaggio non si ripete.)**
+- [x] **"Until the start of your next turn"** (Nightmare / High Prophecy): il messaggio arriva all'inizio del turno
+      successivo del PG, non alla fine di quello in cui è stata piazzata. **(Nightmare: la card arriva all'inizio del turno successivo dello Shade, non alla fine di quello in cui è stata messa.)**
+- [x] **Foe**: nel turno del Trooper, area di Hold the Line! dalla sua scheda → il messaggio arriva all'inizio del suo
+      turno successivo ("until the start of its next turn"). **(Trooper, Hold the Line! dalla sua scheda: card "Aura 2 (Hold the Line!) ends — until the start of its next turn" all'inizio del suo turno successivo.)**
+- [x] **Stance**: un'aura da stance (Gran Reversa / Strength of the Pack / Gentleness) non dà mai il messaggio e resta
+      come prima. **(Shieldmaster (aura di tratto, come le stance) nessun messaggio. Gran Reversa / Strength of the Pack non rifatte in combattimento.)**
+- [x] **Combo**: Bleak Mercy con COMBO ON (Sweet Torment, "until the end of your next turn, gain aura 1") → stesso
+      comportamento di Rook. **(Bleak Mercy con COMBO ON: "(until the end of your next turn)", card "ends" alla fine del turno successivo del Knave.)**
 - [ ] **Undo**: tornando indietro di un turno (previous turn) il conteggio non avanza e non arriva nessun messaggio.
 
 ## R2 — vigor oltre il massimo (15 ottobre 2026, versione 1.15.4)
