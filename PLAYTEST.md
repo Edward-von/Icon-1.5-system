@@ -3280,12 +3280,12 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Piazzare il brand di Eclipse e passare il turno: a inizio del turno del creatore esce la card. Con un
-      personaggio sopra, il bottone dà 2 danni e Sealed e il brand sparisce.
-- [ ] Senza nessuno sopra: "Explode" disegna la Large Blast sul brand e bersaglia chi è dentro; la card che segue ha
-      "2 divine damage to all" e "Dangerous under foes"; il brand sparisce.
-- [ ] Con Talent I: "Talent I: fiery pit" crea un pit dangerous al centro e sigilla chi è adiacente.
-- [ ] Con THE HELM sbloccata: dopo il clic il brand resta; "End the effect" lo toglie.
+- [x] Piazzare il brand di Eclipse e passare il turno: a inizio del turno del creatore esce la card. Con un
+      personaggio sopra, il bottone dà 2 danni e Sealed e il brand sparisce. **(Brand di Eclipse con il Knuckle sopra, inizio turno di Ann (combattimento di prova): "Knuckle stands on the brand: 2 divine damage and sealed"; il bottone toglie 2 hp, dà Sealed e il brand sparisce.)**
+- [x] Senza nessuno sopra: "Explode" disegna la Large Blast sul brand e bersaglia chi è dentro; la card che segue ha
+      "2 divine damage to all" e "Dangerous under foes"; il brand sparisce. **(Senza nessuno sopra: "nobody stands on the brand: it explodes" → Explode: "Large Blast (on the brand)", bersagliati quelli dentro, card con "2 divine damage to all (4)" e "Dangerous under foes (2)"; il brand sparisce.)**
+- [x] Con Talent I: "Talent I: fiery pit" crea un pit dangerous al centro e sigilla chi è adiacente. **(Talent I: "Talent I: fiery pit" crea "Fiery pit" dangerous al centro e sigilla chi è accanto (Janissary, PT S3, Knuckle).)**
+- [x] Con THE HELM sbloccata: dopo il clic il brand resta; "End the effect" lo toglie. **(THE HELM: la card dice "the effect may stay instead"; dopo Explode il brand resta; "End the effect" lo toglie.)**
 
 ## R33b2 — Deepwrath crea e usa i pit dalle card (17 ottobre 2026, versione 1.15.170)
 
