@@ -338,10 +338,10 @@ export function infusedAreas(text, spent = 0, baseArea = null) {
   let plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
   plain = plain.replace(/\b(line|arc|burst) (\d+),? plus one (?:space )?(?:per|for every) aether infused/gi,
     (_m, kind, size) => `${kind} ${Number(size) + n}`);
-  // MAGNACRYO (Cryo p.234): "2 actions, Line 4 … Increase the line length by 2
+  // MAGNACRYO (Cryo p.234): "2 actions, Line 4 … Increase line length by 2
   // and attack deals bonus damage for every two aether spent": the same step
   // as the bonus dice (infusedAbilityDamage), so Line 6 at 2-3 Aether.
-  const grow = /\bincrease the (line|arc|burst) (?:length|size) by (\d+)\b[^.]*?\bfor every (\d+|one|two|three|four) aether\b/i.exec(plain);
+  const grow = /\bincrease (?:the )?(line|arc|burst) (?:length|size) by (\d+)\b[^.]*?\bfor every (\d+|one|two|three|four) aether\b/i.exec(plain);
   if (grow) {
     const every = Number(grow[3]) || { one: 1, two: 2, three: 3, four: 4 }[grow[3].toLowerCase()] || 1;
     const add = Number(grow[2]) * Math.floor(n / every);
