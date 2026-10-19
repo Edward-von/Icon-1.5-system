@@ -15,12 +15,12 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 Setup: solo codice (F5 basta). Un PG Comet con la Thrown Weapon a terra sulla scena, e un bersaglio.
 
-- [ ] Scheda → Combat → Basic Actions → Light Attack (d20) → arriva la domanda "Light Attack — you cannot attack"
-      (prima tirava senza domanda); Cancel ferma il tiro, nessuna card in chat.
-- [ ] Stessa cosa con Heavy Attack: domanda "Heavy Attack — you cannot attack"; "Roll anyway" apre il solito
-      dialog dell'attacco e tira.
-- [ ] Un attacco di abilità (es. Draken Cross) chiede ancora come prima (stesso testo e bottoni).
-- [ ] Raccolta l'arma (Pick up) → Light Attack, Heavy Attack e l'abilità tirano senza domanda.
+- [x] Scheda → Combat → Basic Actions → Light Attack (d20) → arriva la domanda "Light Attack — you cannot attack"
+      (prima tirava senza domanda); Cancel ferma il tiro, nessuna card in chat. **(19 ottobre, TEST Demon Slayer con la Thrown Weapon a terra: "Light Attack — you cannot attack"; Cancel → nessuna finestra, nessun messaggio)**
+- [x] Stessa cosa con Heavy Attack: domanda "Heavy Attack — you cannot attack"; "Roll anyway" apre il solito
+      dialog dell'attacco e tira. **("Heavy Attack — you cannot attack"; Roll anyway apre "Attack — Heavy Attack")**
+- [x] Un attacco di abilità (es. Draken Cross) chiede ancora come prima (stesso testo e bottoni). **("Draken Cross — you cannot attack", stesso testo di prima)**
+- [x] Raccolta l'arma (Pick up) → Light Attack, Heavy Attack e l'abilità tirano senza domanda. **(arma tolta: Light e Heavy aprono subito la finestra d'attacco, Draken Cross non chiede niente)**
 
 ## Esito 18 ottobre, P3 — Tactics Aura e rampart (19 ottobre 2026, versione 1.15.235)
 
