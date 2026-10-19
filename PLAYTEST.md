@@ -3271,8 +3271,8 @@ Setup: solo codice (F5 basta).
 
 - [x] Un foe entra in una mote: "Detonate" fa la Small Blast su di lui e toglie la mote; la card dopo ha "Fray (N) to
       foes" e "Pit under <foe>". **(Warrior entra nella mote: Detonate → Small Blast (on Warrior), card con 'Fray (4) to foes' e 'Pit under Warrior')**
-- [ ] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1". **(non provato)**
-- [ ] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card. **(non provato)**
+- [x] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1". **(Spellblade che inizia il turno su una mote (combattimento di prova): "starts their turn on the Mote (Symphony)" con Detonate; esplosione con "TEST Spellblade can fly 1", bottone "Bless TEST Spellblade".)**
+- [x] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card. **(Talent I: la prima esplosione dice "First of this ability's motes set off this turn", la seconda nello stesso turno "Number 2 of this ability's motes set off this turn".)**
 - [x] Un personaggio entra nella mine di Party Favor: Detonate apre il gamble, poi la Medium Blast sulla casella, poi
       la mine sparisce. Chiudendo il gamble non succede niente. **(Detonate apre "Gamble — Party Favor"; chiuso con la X non succede nulla; rifatto e tirato (5) → "Medium Blast (on the mine)", la mine sparisce. Nota: la card del gamble non mostra la riga "4–5" della tabella (le righe "1–3 / 4–5 / 6" a intervallo non vengono lette).)**
 
