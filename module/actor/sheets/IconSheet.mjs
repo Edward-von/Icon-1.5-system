@@ -459,6 +459,10 @@ export class IconSheet extends BaseActorSheet {
       // Same test as the attack / Show in Chat buttons; context.comboActive is
       // only set further down, so reading it here was always false.
       const comboArmed = this._comboArmed(a);
+      // The version the attack button will use: the combo's own attack line
+      // while it is armed (REAP rolls, Hades / Fortuna auto-hit), the same
+      // choice _getAbilityDetail makes, so the button label matches the roll.
+      const active = comboArmed && parsedCombo ? parsedCombo : parsed;
       // Interrupt uses changed by a talent / mastery go on the cost badge (Catapult → Interrupt 3).
       const { tags, ...cost } = resolveAbilityCost(s, resolveAbilityTags(s, { comboMode: comboArmed }));
       return {
@@ -523,8 +527,8 @@ export class IconSheet extends BaseActorSheet {
         // dealsDamage includes the combo version so combo-only damage still
         // gets a Damage button, and the talent / mastery damage that only the
         // dialog's "Other" outcome rolls.
-        isAttack:    parsed.isAttack,
-        isAutoHit:   parsed.isAutoHit,
+        isAttack:    active.isAttack,
+        isAutoHit:   active.isAutoHit,
         dealsDamage: parsed.dealsDamage || !!parsedCombo?.dealsDamage || !!parsed.extras?.length,
         description:         await this._enrichAbility(desc.flavor, { keywords: false }),
         trigger:             await this._enrichAbility(trigger),

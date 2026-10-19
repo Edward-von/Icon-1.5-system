@@ -11,6 +11,18 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P10 — Il bottone d'attacco segue la combo armata (19 ottobre 2026, versione 1.15.242)
+
+Setup: solo codice (F5 basta). Un PG Harvester con Sow, un Chanter con Holy, un Seer con Astra (es. Ann), il
+combo token da accendere sulla scheda; un foe come bersaglio.
+
+- [ ] Sow senza combo token: il bottone dell'anteprima dice "✦ Auto-Hit" e fa l'auto-hit (come prima).
+- [ ] Sow con il combo token acceso (REAP): il bottone dice "Attack Roll" e apre il tiro d'attacco vero.
+- [ ] Holy con il combo token (Hades): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token dice "Attack Roll".
+- [ ] Astra con il combo token (Fortuna): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token "Attack Roll".
+- [ ] Dopo aver usato la combo (token speso con Show in Chat su quell'abilità) la scritta resta quella della combo
+      finché l'uso non è finito, come il clic.
+
 ## Esito 18 ottobre, P9 — Il capitolo delle abilità e dei tratti non torna più a 1 (19 ottobre 2026, versione 1.15.241)
 
 Setup: solo codice (F5 basta). Al primo avvio la migrazione allo schema 38 gira da sola (console: "Migration 38").

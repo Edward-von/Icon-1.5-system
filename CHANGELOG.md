@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Il bottone d'attacco segue la combo armata (versione 1.15.242)
+
+### Esito del playtest del 18 ottobre, P10
+
+- **Bottone d'attacco nell'anteprima di un'abilità con la combo armata**: Sow con REAP armato mostrava "✦ Auto-Hit"
+  ma apriva il tiro d'attacco vero; al contrario Holy con Hades e Astra con Fortuna mostravano "Attack Roll" e poi
+  facevano l'auto-hit → la scritta del bottone leggeva sempre la riga d'attacco della versione base, mentre il
+  clic usava già quella della combo → ora anche la scritta usa la combo quando è armata: REAP ("On hit: [D]+fray.
+  Miss: Fray", p.185) dice "Attack Roll", Hades ("Autohit: Fray damage", p.177) e Fortuna ("Auto hit: [D]+fray",
+  p.201) dicono "✦ Auto-Hit". Senza combo armata non cambia niente.
+
 ## 19 ottobre 2026 — Il capitolo delle abilità e dei tratti non torna più a 1 (versione 1.15.241)
 
 ### Esito del playtest del 18 ottobre, P9
