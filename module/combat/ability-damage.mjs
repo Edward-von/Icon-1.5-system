@@ -39,10 +39,12 @@ function parseChunk(text) {
   // Repeated damage (p.92: "Some damage is listed as X, Y times […] roll
   // [D] once, then apply the total damage three separate times"): "1 divine
   // damage three times" (Chastise), "3 damage, three times", "deals [D]
-  // twice", "deal [D]+fray two more times" (Passage to the Afterlife's Exceed).
+  // twice", "deal [D]+fray two more times" (Passage to the Afterlife's Exceed),
+  // "they take 2 unerring damage from you twice" (Showdown p.157: who deals
+  // it may sit between the damage and the count).
   // Each instance takes armor, vulnerable and weakened on its own
   // (p.92, p.109), so the damage card applies them one by one.
-  const timesMatch = lower.match(/(?:\bdamage|\[d\]|\bfray)\s*,?\s*(once|twice|thrice|(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:more\s+)?times)\b/);
+  const timesMatch = lower.match(/(?:\bdamage|\[d\]|\bfray)(?:\s+from\s+(?:you|it|them|(?:the\s+)?[a-z]+))?\s*,?\s*(once|twice|thrice|(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:more\s+)?times)\b/);
   const WORDS = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10 };
   const times = !timesMatch ? 1
     : timesMatch[1] === "once" ? 1 : timesMatch[1] === "twice" ? 2 : timesMatch[1] === "thrice" ? 3
@@ -56,7 +58,11 @@ function parseChunk(text) {
   // later "gains 2 vigor …, up to three times" is not read.
   const maxMatch = lower.match(/\bdamage\b[^.]*?\b(?:up\s+to|to|for)\s+(?:a\s+)?(?:maximum\s+of\s+)?(\d+|two|three|four|five|six|seven|eight|nine|ten)\s+times\b/);
   const maxTimes = maxMatch ? (Number(maxMatch[1]) || WORDS[maxMatch[1]] || 0) : 0;
-  return { mult, fray: includesFray, flat, type, times, ...(maxTimes > 1 ? { maxTimes } : {}) };
+  // "2 unerring damage" (Showdown p.157, Warding Bolts p.158, Astral Chain's
+  // Mark p.156): the damage ignores cover and aetherwall (p.104), so the
+  // damage dialog starts with Unerring ticked for that outcome.
+  const unerring = /\bunerring\s+damage\b/.test(lower);
+  return { mult, fray: includesFray, flat, type, times, ...(maxTimes > 1 ? { maxTimes } : {}), ...(unerring ? { unerring } : {}) };
 }
 
 /**

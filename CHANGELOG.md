@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Showdown: due istanze e Unerring sull'Hit (versione 1.15.239)
+
+### Esito del playtest del 18 ottobre, P7
+
+- **Showdown e Warding Bolts nella finestra del danno**: Showdown ("they take 2 unerring damage from you twice",
+  p.157) proponeva Hit "2" con Instances 1, e sia Showdown sia Warding Bolts ("taking 2 unerring damage", p.158)
+  lasciavano la casella Unerring vuota sull'Hit → il lettore del testo riconosceva "twice" solo subito dopo la
+  parola "damage" (qui in mezzo c'è "from you"), e la scritta "unerring damage" spuntava Unerring solo per le righe
+  di Other, non per Hit / Miss / Area → ora "damage from you twice" (o "from the …") conta come 2 istanze, e
+  qualunque esito il cui testo dice "N unerring damage" apre con Unerring spuntato (p.104). Controllati tutti i
+  testi dei compendi jobs e foe-abilities: cambiano solo Showdown (Hit 2 ×2, Unerring), Warding Bolts (Unerring) e
+  Gunwright — Tactical Reload dei foe ("2 unerring damage as an area effect", Unerring). Solo codice.
+
 ## 19 ottobre 2026 — Show in Chat apre un nuovo uso: niente Inflict del vecchio attacco (versione 1.15.238)
 
 ### Esito del playtest del 18 ottobre, P6

@@ -32,8 +32,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       solo movimento produce tre card (fuori / dentro / dangerous). M. (FATTO il 19 ottobre 2026, versione 1.15.237)
 - [x] **P6** — Inflict sulla card del danno: dopo uno "Show in Chat" la card del danno si aggancia ancora al vecchio
       attacco della stessa abilità e mostra i suoi bottoni. S-M. (FATTO il 19 ottobre 2026, versione 1.15.238)
-- [ ] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1; e sull'Hit "2 flat"
+- [x] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1; e sull'Hit "2 flat"
       di Showdown e Warding Bolts la casella Unerring non si spunta (le chip di Other sì). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.239)
 - [ ] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
       escono come slug grezzi senza spiegazione; sui foe le spiegazioni della 1.15.122 ci sono. S.
 - [ ] **P9** — scheda di un'abilità / tratto: il menu Chapter non mostra il valore salvato (chiavi "2" contro il

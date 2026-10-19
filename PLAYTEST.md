@@ -11,6 +11,21 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P7 — Showdown: due istanze e Unerring sull'Hit (19 ottobre 2026, versione 1.15.239)
+
+Setup: solo codice (F5 basta). Un PG Freelancer con Showdown e Warding Bolts (es. dal compendio jobs), un foe
+come bersaglio; per l'ultima casella un PG con Astral Chain.
+
+- [ ] Showdown → Damage Roll: la finestra apre su Hit "2" con **Instances 2** e la formula "(2) × 2 instances";
+      la casella **Unerring** è spuntata.
+- [ ] Warding Bolts → Damage Roll: Hit "2", Instances 1, **Unerring** spuntato.
+- [ ] Nella finestra di Showdown, passare a Crit e poi tornare su Hit: Unerring resta spuntato su entrambi.
+- [ ] Applicare il danno di Showdown a un foe in cover: 2 istanze da 2, la cover non dimezza (card del danno con
+      Unerring).
+- [ ] Controllo che non sia cambiato altro: un'abilità senza "unerring" (es. un attacco base) apre con Unerring vuoto
+      e Instances 1; Astral Chain → Other "Mark" spunta ancora Unerring, e tornando su Hit si toglie.
+- [ ] Foe Gunwright, azione Showdown: Instances 3 (come prima), Unerring vuoto; Tactical Reload: Unerring spuntato.
+
 ## Esito 18 ottobre, P6 — Show in Chat apre un nuovo uso, niente Inflict del vecchio attacco (19 ottobre 2026, versione 1.15.238)
 
 Setup: solo codice (F5 basta). TEST Fool con Cavaliere (o un PG con un attacco che infligge uno status), un foe

@@ -798,19 +798,20 @@ export async function promptDamageMods(ab, combat, { comboDefault = false, actor
                   : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit)?.type ?? "";
       if (f.elements.divine) f.elements.divine.checked = type === "divine";
       if (f.elements.pierce) f.elements.pierce.checked = type === "piercing";
-      // "2 unerring damage" (Astral Chain's Mark p.156) ticks Unerring; the
-      // other outcomes go back to the tag / status default.
+      const chunk = outcome === "other" ? picked
+                  : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
+      // "2 unerring damage" in the chosen outcome's text (Astral Chain's Mark
+      // p.156, Showdown p.157) ticks Unerring; the others go back to the tag /
+      // status default.
       // Reap against Sow's marked foe out of reach gains unerring (p.185).
       const comboOn = f.elements.useCombo ? !!f.elements.useCombo.checked : comboDefault;
       const reap = comboOn && reapFar.length && outcome !== "other";
       if (f.elements.unerring) {
-        f.elements.unerring.checked = !!ignores.unerring || !!reap || (outcome === "other" && !!picked?.unerring);
+        f.elements.unerring.checked = !!ignores.unerring || !!reap || !!chunk?.unerring;
         const small = f.elements.unerring.closest("label")?.querySelector("small");
         if (small && !ignores.unerring) small.textContent = reap ? `${reapFar.join(", ")} marked, out of reach (p.185)` : "ignores Cover / Aetherwall";
       }
       // Same for the number of instances written in the text ("three times").
-      const chunk = outcome === "other" ? picked
-                  : outcome === "miss" ? src.miss : outcome === "area" ? src.area : src.hit;
       // "Up to a maximum of four times" (Circle the Oak, Nothung): the count
       // depends on the situation, so Instances starts at 1 and stops at the ceiling.
       if (f.elements.instances) {
