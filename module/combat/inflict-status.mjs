@@ -541,18 +541,20 @@ async function _apply({ target, source, statusId, ongoing, label, abilityName, s
 
 /** Apply on a client that owns the target (or the GM), with a chat note. */
 export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "", expiry = null, remove = 0 }) {
+  // P28: an unlinked token (a mote of life, a plant) goes by its token's name, as the card's speaker does.
+  const who = target?.token?.name || target?.name || "";
   // Blessings taken away (Symphony "Remove up to four blessings from characters anywhere", p.178): one charge each.
   if (statusId === "blessed" && remove > 0) {
     const had = getStatusCharges(target, "blessed");
     const next = await adjustStatusCharges(target, "blessed", -Math.min(remove, had));
-    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> loses <strong>${had - next}</strong> blessing${had - next === 1 ? "" : "s"} (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
+    await _chat(target, `<strong>${escapeHTML(who)}</strong> loses <strong>${had - next}</strong> blessing${had - next === 1 ? "" : "s"} (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
     return;
   }
   // A blessing is a token: each one given is one more Blessed charge (p.172),
   // spent for +1 boon on a save.
   if (statusId === "blessed") {
     const next = await adjustStatusCharges(target, "blessed", 1);
-    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> gains a <strong>blessing</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
+    await _chat(target, `<strong>${escapeHTML(who)}</strong> gains a <strong>blessing</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}</small>`);
     return;
   }
   // A PC keeps Vigilance on the Stalwart tracker ("gain vigilance +1"): add a
@@ -560,7 +562,7 @@ export async function applyStatusDirect({ target, statusId, ongoing = false, lab
   if (target?.type === "icon" && statusId === "vigilance") {
     const amount = Number(/\+(\d+)/.exec(label)?.[1] ?? 1);   // "Vigilance +2" from the ability text
     const next = await gainPcVigilance(target, amount);
-    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> gains <strong>Vigilance +${amount}</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+    await _chat(target, `<strong>${escapeHTML(who)}</strong> gains <strong>Vigilance +${amount}</strong> (now ${next}) <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
     return;
   }
   const already = hasStatus(target, statusId);
@@ -570,11 +572,11 @@ export async function applyStatusDirect({ target, statusId, ongoing = false, lab
     const wasOngoing = effect?.getFlag("icon-system", "ongoing") ?? false;
     if (ongoing && effect && !wasOngoing) await toggleOngoing(effect);
     if (expiry && effect) await effect.setFlag("icon-system", "expiry", expiry);
-    await _chat(target, `<strong>${escapeHTML(target.name)}</strong> ${ongoing && !wasOngoing ? `is now <strong>${escapeHTML(label)}</strong> (upgraded to ongoing)` : `is already <strong>${escapeHTML(label || statusId)}</strong>`} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+    await _chat(target, `<strong>${escapeHTML(who)}</strong> ${ongoing && !wasOngoing ? `is now <strong>${escapeHTML(label)}</strong> (upgraded to ongoing)` : `is already <strong>${escapeHTML(label || statusId)}</strong>`} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
     return;
   }
   await applyStatus(target, statusId, ongoing, expiry ? { flags: { expiry } } : {});
-  await _chat(target, `<strong>${escapeHTML(target.name)}</strong> is now <strong>${escapeHTML(label || statusId)}</strong>${expiry ? ` ${escapeHTML(expiry.text)}` : ""} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
+  await _chat(target, `<strong>${escapeHTML(who)}</strong> is now <strong>${escapeHTML(label || statusId)}</strong>${expiry ? ` ${escapeHTML(expiry.text)}` : ""} <small>— ${escapeHTML(abilityName || "effect")}${sourceName ? ` (${escapeHTML(sourceName)})` : ""}${note ? `, ${escapeHTML(note)}` : ""}</small>`);
 }
 
 /**

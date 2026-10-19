@@ -11,6 +11,16 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P28 — Le righe di status usano il nome del token (19 ottobre 2026, versione 1.15.258)
+
+Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token non collegato, nome del token
+"Mote of life", attore "Plant") con una blessing.
+
+- [ ] Far esplodere la mote con HARVEST MOON → la riga "… loses 1 blessing (now 0)" dice "Mote of life", come la firma
+      della card.
+- [ ] Dare uno status a un token non collegato rinominato (es. un foe "Goblin 2") → "Goblin 2 is now …".
+- [ ] Dare uno status a un PG → il nome è quello di sempre.
+
 ## Esito 18 ottobre, P27 — Le card delle aree portano il nome di chi le ha messe (19 ottobre 2026, versione 1.15.257)
 
 Setup: solo codice (F5 basta). Un PG con un'area che dà status a chi è dentro (es. la nuvola di Nocturne o Mist

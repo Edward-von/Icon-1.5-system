@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Le righe di status usano il nome del token (versione 1.15.258)
+
+### Esito del playtest del 18 ottobre, P28
+
+- **Nome del token nelle righe di status**: "Plant loses 0 blessings (now 0)" era firmato "Mote of life" ma nel testo
+  diceva "Plant" → la riga usava il nome dell'attore (l'attore base dei token non collegati, come le plant e le mote of
+  life), mentre la firma usa quello del token → ora le righe "gains / loses a blessing", "is now …", "is already …",
+  "gains Vigilance" usano il nome del token quando il personaggio è un token non collegato; per i PG e gli attori
+  collegati non cambia nulla.
+
 ## 19 ottobre 2026 — Le card delle aree portano il nome di chi le ha messe (versione 1.15.257)
 
 ### Esito del playtest del 18 ottobre, P27
