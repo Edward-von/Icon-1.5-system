@@ -16,6 +16,7 @@ import { promptGamble } from "../apps/roll-dialogs.mjs";
 import { enrichHTML, rollTableRow, abilityCostLabel } from "../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost } from "../helpers/rule-tooltips.mjs";
 import { tagKey } from "./defenses.mjs";
+import { comboReplacesBase } from "../helpers/ability-blocks.mjs";
 import { isSeer, seerHand, pickHandCards, seerDiscard, buttonUsed, markButtonUsed, markDone, WHEEL_PAGE } from "./wheel-of-fate.mjs";
 
 const _log = (...a) => console.debug("[ICON | gamble]", ...a);
@@ -27,25 +28,39 @@ const renderTemplate = (path, data) =>
  * The texts of the ability that are in play: its own blocks, the selected
  * talent, the unlocked mastery and the combo version. In reading order — the
  * first one with a 1-6 table gives the row printed on the card.
+ *
+ * `comboMode` says which version is in play: true = the combo (a complete
+ * combo ability like Astra's FORTUNA, p.201, replaces every base block, so the
+ * base's "Gamble, then deal that much damage again" is not part of it; talents
+ * and mastery apply to all versions), false = the base alone, null = both
+ * texts, as before (the gamble roll itself, which doesn't know the version).
  */
-function _activeTexts(s) {
+function _activeTexts(s, comboMode = null) {
   const sel = Number(s.talentSelected ?? 0);
-  return [
+  const comboOnly = comboMode === true && comboReplacesBase(s.comboEffect, s);
+  const base = comboOnly ? [] : [
     s.interruptTrigger, s.description, s.hitEffect, s.missEffect, s.areaEffect,
     s.chargeEffect, s.heroicEffect, s.exceedEffect, s.collideEffect, s.slayEffect,
     s.critEffect, s.finishingBlowEffect, s.comebackEffect,
+  ];
+  return [
+    ...base,
     sel === 1 ? s.talent1 : "", sel === 2 ? s.talent2 : "",
     s.masteryUnlocked ? s.mastery : "",
-    s.isCombo ? s.comboEffect : "",
+    s.isCombo && comboMode !== false ? s.comboEffect : "",
   ].map(t => String(t ?? "")).filter(t => t.trim());
 }
 
-/** Does this ability gamble? Its "gamble" tag, or the word in a text in play. */
-export function abilityGambles(system, tags = null) {
+/**
+ * Does this ability gamble? Its "gamble" tag, or the word in a text in play.
+ * Pass the tags of the version in play and `comboMode` (see _activeTexts), so
+ * the combo's card doesn't get the base's Gamble button (Fortuna, P19).
+ */
+export function abilityGambles(system, tags = null, { comboMode = null } = {}) {
   const s = system ?? {};
-  const list = tags ?? resolveAbilityTags(s);
+  const list = tags ?? resolveAbilityTags(s, { comboMode: comboMode === true });
   if (list.some(t => tagKey(t) === "gamble")) return true;
-  return _activeTexts(s).some(t => /\bgambl(?:e|es|ed|ing)\b/i.test(t));
+  return _activeTexts(s, comboMode).some(t => /\bgambl(?:e|es|ed|ing)\b/i.test(t));
 }
 
 /**

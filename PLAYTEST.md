@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P19 — Fortuna non ha più il bottone Gamble di Astra (19 ottobre 2026, versione 1.15.244)
+
+Setup: solo codice (F5 basta). Un PG Seer con Astra (es. Ann), il combo token da accendere sulla scheda; per
+l'ultima casella un'abilità che fa gamble senza combo (es. Chaos Tarot).
+
+- [ ] Astra senza combo token: l'anteprima ha il bottone "Gamble" e anche la card di Show in Chat (come prima).
+- [ ] Astra con il combo token acceso (Fortuna): l'anteprima NON ha il bottone "Gamble".
+- [ ] Show in Chat di Astra con il combo token: la card "Fortuna (Astra combo)" NON ha il bottone "Gamble".
+- [ ] Dopo aver speso il token con Show in Chat su Astra, l'anteprima di Astra resta senza "Gamble" finché la combo
+      è quella in uso; alla combo finita il bottone torna.
+- [ ] Controllo che non sia cambiato altro: Chaos Tarot (Area effect: Gamble…) ha ancora il bottone "Gamble" e il
+      tiro mostra la riga della tabella 1-6 come prima.
+
 ## Esito 18 ottobre, P12 — Devil Hand non offre più Sealed (19 ottobre 2026, versione 1.15.243)
 
 Setup: solo codice (F5 basta). Un PG Sealer con God Hand e la mastery FISTS OF HEAVEN AND HELL sbloccata, il combo

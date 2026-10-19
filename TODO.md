@@ -72,10 +72,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       primo in `combat.turns`, quindi il codice crede che il suo turno sia già cominciato. Con i foe che agiscono per
       primi l'interrupt illimitato non copre proprio i loro turni. Nel combattimento a fazioni l'ordine dei turni non
       vale: serve "il Wright si è attivato in un round successivo" (activateCombatant), non l'indice. S-M.
-- [ ] **P19** — Astra → Fortuna (Ann, Seer): la card della combo ha il bottone "Gamble" della base. Il tag `gamble`
+- [x] **P19** — Astra → Fortuna (Ann, Seer): la card della combo ha il bottone "Gamble" della base. Il tag `gamble`
       è solo tra i tag di Astra (Fortuna: attack, range-5, medium-blast, autohit, combo) e il gamble è un effetto
       della base (p.~148, "Area effect: Gamble"); `abilityGambles` legge il sistema base anche quando esce la combo
       (IconSheet `_getAbilityDetail`, `canGamble`). S.
+      (FATTO il 19 ottobre 2026, versione 1.15.244)
 - [ ] **P20 (alta)** — "End Encounter" cancella tutti i template del sistema sulla scena, anche i terrain effect che
       devono restare (p.96): Elden Rune, Arkenrune, pit, mote, brand… `IconCombat` a fine combattimento chiama
       `deleteAreaTemplates({ scene })` senza filtro, e `deleteAreaTemplates` prende ogni template con `cells`. Di

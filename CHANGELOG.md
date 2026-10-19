@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Fortuna non ha più il bottone Gamble di Astra (versione 1.15.244)
+
+### Esito del playtest del 18 ottobre, P19
+
+- **Bottone Gamble con la combo armata**: Astra con il combo token (Fortuna) aveva ancora il bottone "Gamble",
+  sull'anteprima e sulla card di Show in Chat → i tag erano già quelli di Fortuna (senza "gamble"), ma il controllo
+  cercava anche la parola "Gamble" nei testi e leggeva l'Effect della base ("Foe explodes in a medium blast… Gamble,
+  then deal that much damage again", p.201), che Fortuna sostituisce per intero (Range 5, Medium Blast, auto hit,
+  Area Effect, Summon) → ora con una combo completa armata contano solo il testo della combo, il talento scelto e la
+  mastery (che valgono per tutte le versioni); con la combo spenta conta solo la base (prima veniva letto sempre
+  anche il testo della combo). Una combo scritta come modifica della base ("Gains…", "As above, but…") continua a
+  tenere i testi della base. Il tiro del gamble in sé non cambia. Causa diversa da P10 e P12 (lì erano la scritta del
+  bottone d'attacco e gli status della mastery), stesso tipo di difetto: un pezzo letto dalla versione sbagliata.
+
 ## 19 ottobre 2026 — Devil Hand non offre più Sealed (versione 1.15.243)
 
 ### Esito del playtest del 18 ottobre, P12

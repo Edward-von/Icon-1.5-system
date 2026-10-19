@@ -487,7 +487,7 @@ export class IconSheet extends BaseActorSheet {
         canStance:   tags.some(t => tagKey(t) === "stance"),
         stanceOn:    IconActor.stancesOf(actor).includes(a.name),
         // Gamble button (p.148): "gamble" tag, or the word in a text in play
-        canGamble:   abilityGambles(s, tags),
+        canGamble:   abilityGambles(s, tags, { comboMode: comboArmed }),
         // Summons this ability names: draggable straight onto the map
         summons:     summonsForAbility(s, s.jobName),
         // Objects this ability puts on the map (R33a): draggable chips too
@@ -1770,7 +1770,7 @@ export class IconSheet extends BaseActorSheet {
       altComboMark: _altComboMark(item.system),
       canStance:   tags.some(t => tagKey(t) === "stance"),
       stanceOn:    IconActor.stancesOf(this.document).includes(item.name),
-      canGamble:   abilityGambles(s, tags),
+      canGamble:   abilityGambles(s, tags, { comboMode: combo }),
       actorUuid:   this.document.uuid,
       summons:     summonsForAbility(s, s.jobName),
       infusions,
