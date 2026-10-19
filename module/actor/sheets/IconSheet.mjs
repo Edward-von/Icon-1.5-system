@@ -1863,7 +1863,25 @@ export class IconSheet extends BaseActorSheet {
       rows.push(`<details class="icon-infuse-version icon-infuse-version--base"><summary>Base version: ${escapeHTML(ab.name)}</summary>${blocksHtml}</details>`);
     }
     for (const v of versions) if (v !== armedVersion) rows.push(await infuseVersionHtml(v, { enrich }));
+    // A complete version has its own cost and area ("MAGNACRYO — 2 actions,
+    // Line 4, Attack", Cryo p.234): the card's header says those, not the
+    // base's "1 Action … Line 8" (playtest 18 October, P13). The area is the
+    // one placed, already grown by the Aether spent (infusedAreas).
+    const head = {};
+    if (whole) {
+      const from = `From ${armed.name || armed.label}`;
+      const acts = /^(\d+)\s+actions?\b/i.exec(infuseVersionParts(armedVersion.text).lead);
+      if (acts) Object.assign(head, { cost: abilityCostLabel(acts[1] === "1" ? "1action" : `${acts[1]}actions`), costUpgraded: true, costTooltip: from });
+      const area = infusedAreas(armedVersion.text, armedInfusion(this.document)?.spent ?? 0)[0];
+      if (area?.label && ab.tags?.length) {
+        const isArea = (t) => { const a = areaFromTags([t]); return !!a && a.kind !== "aura"; };
+        const at = ab.tags.findIndex(isArea);
+        const tag = { label: area.label, raw: area.label.toLowerCase().replace(/\s+/g, "-"), upgraded: true, tooltip: from };
+        head.tags = at < 0 ? [...ab.tags, tag] : ab.tags.flatMap((t, k) => k === at ? [tag] : isArea(t) ? [] : [t]);
+      }
+    }
     return {
+      ...head,
       blocks:             whole ? [] : base,
       name:               armed?.name ? `${ab.name} — ${armed.name}` : ab.name,
       infuseArmedHtml:    armedVersion ? await infuseVersionHtml(armedVersion, { enrich, armed: true, spent: armedInfusion(this.document)?.spent ?? 0 }) : "",

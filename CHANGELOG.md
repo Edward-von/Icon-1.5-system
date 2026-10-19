@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — MAGNACRYO allunga la linea con l'Aether (versione 1.15.246)
+
+### Esito del playtest del 18 ottobre, P13
+
+- **Linea di MAGNACRYO**: Cryo con la mastery MAGNACRYO infusa a 3 Aether offriva l'area "Infuse X (3 Aether): Line
+  4", e l'intestazione della card diceva ancora "1 Action … Line 8" della base → il testo ("2 actions, Line 4 …
+  Increase the line length by 2 and attack deals bonus damage for every two aether spent", p.234) veniva letto solo
+  per il dado bonus, non per la lunghezza; l'intestazione restava sempre quella dell'abilità base → ora la linea
+  cresce di 2 ogni 2 Aether spesi, con lo stesso conteggio del dado bonus: Line 4 con 0-1 Aether, Line 6 con 2-3,
+  Line 8 con 4-5. Con una versione infusa completa armata (quelle che scrivono il proprio costo, come MAGNACRYO,
+  MAGNABIO, MAGNAGEO), l'intestazione della card di Show in Chat mostra il costo della versione ("2 Actions") e la
+  sua area già allungata ("Line 6"), evidenziati con il suggerimento "From MAGNACRYO"; gli altri tag restano quelli
+  dell'abilità.
+
 ## 19 ottobre 2026 — I PG nascono dalla parte del party (versione 1.15.245)
 
 ### Esito del playtest del 18 ottobre, P11

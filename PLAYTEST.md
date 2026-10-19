@@ -11,6 +11,21 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P13 — MAGNACRYO allunga la linea con l'Aether (19 ottobre 2026, versione 1.15.246)
+
+Setup: solo codice (F5 basta). Un PG Stormbender con Cryo e la mastery MAGNACRYO sbloccata, abbastanza Aether
+(almeno 5), in un combattimento.
+
+- [ ] Infuse X MAGNACRYO con 3 Aether: la scelta dell'area dice "Infuse X (Mastery) (3 Aether): Line 6" (non Line 4)
+      e il template piazzato è lungo 6.
+- [ ] Con 1 Aether: Line 4; con 2 Aether: Line 6; con 4 Aether: Line 8. Il dado bonus del danno resta come prima
+      (+1 con 2-3 Aether, +2 con 4-5).
+- [ ] Show in Chat con MAGNACRYO armato a 3 Aether: l'intestazione dice "2 Actions" (evidenziato) e il tag dell'area
+      "Line 6" (evidenziato, suggerimento "From MAGNACRYO"), non "1 Action" e "Line 8".
+- [ ] Non deve cambiare: Cryo senza infusione ha l'intestazione e l'area di sempre; con CRYOTIC (Infuse 3, che
+      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima.
+- [ ] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione.
+
 ## Esito 18 ottobre, P11 — I PG nascono dalla parte del party (19 ottobre 2026, versione 1.15.245)
 
 Setup: solo codice (F5 basta), ma al primo avvio gira la migrazione 39. Prima di aggiornare annotare la
