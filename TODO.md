@@ -93,9 +93,30 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       `fromCompendium`) sono costruiti con `actorLink: false` (`build-summons-pack.mjs:50`), ma restano linkati: un
       attore per summon nel mondo, condiviso da tutte le copie posate. Da decidere se più copie dello stesso summon
       debbano avere HP separati (allora passare `{ iconUnlinked: true }` anche lì). S.
-- [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
-      dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
-      Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
+- [ ] **P24 (dai Dubbi, deciso col manuale)** — Weakened: il chip "Weakened −2" nella finestra del danno non si spunta
+      da solo quando chi tira ha lo status. Manuale p.117: "Weakened — All damage dealt reduced by 2"; p.205: Pierce
+      "Ignores armor, weak, and vigor". Spuntarlo in automatico quando l'attaccante è weakened (non quando il danno è
+      pierce), lasciandolo togliere a mano. S.
+- [ ] **P25 (dai Dubbi, deciso col manuale)** — Refresh Riposte: il bottone sulla card del danno compare anche quando
+      l'alleato colpito non è adiacente al Knave. Riposte p.142-143: "Refresh this stance when a foe damages you or an
+      adjacent ally with an ability". Mostrare il bottone solo sulla riga del Knave o di un alleato adiacente a lui. S.
+- [ ] **P26 (dai Dubbi)** — Bottone interrupt dopo l'uso: sul client del GM "Grace of the Spirits · TEST Sealer" dopo
+      il clic diventa "0/1" ma resta cliccabile finché non si preme Apply; sul giocatore si spegne subito. Spegnerlo
+      anche sul GM appena le cariche sono 0. S.
+- [ ] **P27 (dai Dubbi, estetico)** — Le card "is inside / enters the area" degli status delle aree escono col nome del
+      token selezionato dal GM, non del creatore dell'area (nuvola di Nocturne firmata "TEST Warden"). Firmarle col
+      creatore dell'area (flag actorId/tokenId del template), o col personaggio che entra. S.
+- [ ] **P28 (dai Dubbi, estetico)** — "Plant loses 0 blessings (now 0)" firmato "Mote of life": il messaggio usa il nome
+      dell'attore (Plant) invece di quello del token. Usare il nome del token. S.
+- [ ] **P29 (dai Dubbi, deciso col manuale)** — keyword "pit" senza tooltip nel testo delle abilità (es. Massive
+      Overhead). "Pit" è un termine definito (p.89: "A pit space … Pits count as one level lower of elevation than their
+      base space"): aggiungerla a `helpers/keywords.mjs` come le altre keyword di terreno. S.
+- [x] **Dubbi del playtest, decisi col manuale** (19 ottobre 2026): Weakened → P24; Refresh Riposte → P25; interrupt
+      0/1 sul GM → P26; nomi sulle card delle aree → P27; nome della mote → P28; keyword pit → P29. Restano come sono:
+      copertura dell'Underway (gli oggetti danno copertura, p.95; il portale toglie solo l'obstruction, p.170);
+      Aethershard copertura + pierce (il pierce ignora armor, weak e vigor, p.205, non la copertura, p.92); plant non
+      scelta dentro l'esplosione di Harvest Moon (è un personaggio nell'area, p.186). Collegamento col server e client
+      giocatore senza sistema: non dipendono dal sistema.
 
 ---
 
