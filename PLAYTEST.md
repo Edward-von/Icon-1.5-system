@@ -3845,7 +3845,7 @@ Setup: solo codice (F5 basta).
 
 - [ ] Pandaemonium con il Talent II: metti il pit della combo e quelli sotto i foe pacified. Clic destro sul chip
       della combo: va via solo il suo pit.
-- [ ] Clic destro sul chip "Pits under pacified foes": vanno via solo i pit sotto i foe.
+- [x] Clic destro sul chip "Pits under pacified foes": vanno via solo i pit sotto i foe. **(Clic destro sul chip "Pits under pacified foes": finestra "Pit — remove", i due pit spariscono. (Nessun pit della combo presente, quindi "solo quelli" non verificato.))**
 - [ ] I pit sotto i foe messi con una versione precedente si tolgono dal chip della combo (gruppo vecchio), non da
       quello del Talent II.
 
@@ -4128,15 +4128,15 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Pandaemonium con il Talent II scelto: nella scheda ci sono due chip, "Pit · 1" (combo) e "Pits under pacified
-      foes". Con il Talent I o nessun talento c'è solo "Pit · 1".
-- [ ] Due foe pacified e uno no sulla scena: clic su "Pits under pacified foes" → la domanda nomina solo i due
-      pacified → "Mark" mette un pit sotto ciascuno e in chat arriva la card con "Remove all", che li toglie.
-- [ ] Rifare il clic con i pit già presenti: avviso "Every pacified foe already has a pit under them", nessun pit
-      doppio.
-- [ ] Nessun foe pacified: avviso "No pacified foe on this scene".
-- [ ] "Not now" nella domanda: nessun pit.
-- [ ] Un alleato (non ostile) pacified non riceve il pit.
+- [x] Pandaemonium con il Talent II scelto: nella scheda ci sono due chip, "Pit · 1" (combo) e "Pits under pacified
+      foes". Con il Talent I o nessun talento c'è solo "Pit · 1". **(Pandaemonium: Talent II → "Pit · 1" e "Pits under pacified foes"; nessun talento o Talent I → solo "Pit · 1".)**
+- [x] Due foe pacified e uno no sulla scena: clic su "Pits under pacified foes" → la domanda nomina solo i due
+      pacified → "Mark" mette un pit sotto ciascuno e in chat arriva la card con "Remove all", che li toglie. **(Knuckle e Janissary pacified (e il Bastion alleato): la domanda nomina solo i due foe; "Mark" mette due pit.)**
+- [x] Rifare il clic con i pit già presenti: avviso "Every pacified foe already has a pit under them", nessun pit
+      doppio. **(Secondo clic: "Every pacified foe already has a pit under them.", nessun pit doppio.)**
+- [x] Nessun foe pacified: avviso "No pacified foe on this scene". **(Nessun foe pacified: "No pacified foe on this scene.")**
+- [x] "Not now" nella domanda: nessun pit. **("Not now": nessun pit.)**
+- [x] Un alleato (non ostile) pacified non riceve il pit. **(Il Bastion (alleato) pacified non è nominato e non riceve il pit.)**
 - [ ] Il "Medium Blast (on pits)" di Purgatorio fa esplodere anche questi pit, se sono dentro l'area.
 - [x] Da giocatore (non GM): il chip funziona se ha il permesso di creare template. **(PT Player, Talent II di Pandaemonium, Knuckle pacified: "Mark a pit space under Knuckle?" → Mark → card "1 × Pit under Knuckle")**
 
@@ -4148,7 +4148,7 @@ Setup: solo codice (F5 basta).
       "Medium Blast (on pits)" mette una Medium Blast su ognuno, e l'etichetta dice "× N" col numero giusto.
 - [ ] Stessa prova senza aver piazzato prima l'area di Pandaemonium: le esplosioni partono lo stesso, senza l'avviso
       "place this ability's area first".
-- [ ] Nessun pit sulla scena, con la Mastery: avviso "No pit on the battlefield: nothing explodes."
+- [x] Nessun pit sulla scena, con la Mastery: avviso "No pit on the battlefield: nothing explodes." **(Pandaemonium con DULCE PURGATORIO e combo: "Combo: Medium Blast (on pits)" senza pit → "No pit on the battlefield: nothing explodes.")**
 - [ ] Mastery non sbloccata: esplodono solo i pit dentro l'area, e senza area compare ancora l'avviso di piazzarla
       prima.
 - [ ] Holy (Talent I): continua a far esplodere solo i pit dentro l'area.
@@ -4194,7 +4194,7 @@ Setup: solo codice (F5 basta).
       area" lo nomina una volta.
 - [ ] Un pit fuori dall'area di Hades non esplode.
 - [ ] Nessun pit dentro l'area: avviso "No pit inside this ability's area: nothing explodes." e nessun template.
-- [ ] Area dell'abilità non ancora sulla mappa: avviso "place this ability's area first…" e non succede nulla.
+- [x] Area dell'abilità non ancora sulla mappa: avviso "place this ability's area first…" e non succede nulla. **(Holy Talent I senza area: "place this ability's area first (its attack), then the pits' blasts.")**
 - [ ] Ripeti l'esplosione: quella vecchia viene sostituita, l'area dell'abilità e i pit restano.
 - [ ] Pandaemonium con la combo Purgatorio armata: stessa prova con "Combo: Medium Blast (on pits)".
 - [ ] Tiro d'attacco di Hades o di Purgatorio senza area sulla mappa: la scelta dell'area non propone "(on pits)" e
@@ -4681,8 +4681,8 @@ e CSS: F5 dopo il deploy.
       entra: niente; un foe che entra o esce → card "A foe can scrub out an Elden Rune …". **(la runa va da sola sotto il token; foe che entra → card 'A foe can scrub out…')**
 - [ ] **Replace**: un'abilità con "lasts until this ability is used again" che crea spazi (se non ce n'è nessuna nel gruppo,
       saltare) → al secondo uso "Replace / Keep both". **(non provato)**
-- [ ] **Infuse**: Rime senza Infuse → nessun chip pit; Infuse 3 DAGON armato → "Pit · 1" (fonte "Dagon"); piazzato → l'Infuse
-      non è più armato. Con MAGNARIME sbloccata → "Pit · any". **(non provato)**
+- [x] **Infuse**: Rime senza Infuse → nessun chip pit; Infuse 3 DAGON armato → "Pit · 1" (fonte "Dagon"); piazzato → l'Infuse
+      non è più armato. Con MAGNARIME sbloccata → "Pit · any". **(Rime senza Infuse: nessun chip pit; con DAGON armato chip "Pit · 1". Piazzamento non provato.)**
 - [x] **Blood Grove**: Talent II → chip "Area +2". Senza l'area sulla mappa → avviso "Place the area of Blood Grove first". Con
       la medium blast piazzata: clic su uno spazio non adiacente → avviso; due spazi adiacenti (il secondo può essere accanto al
       primo nuovo) → l'area cresce, card "the area grows by 2 spaces (11 in all)". **(vedi 1.15.70)**
