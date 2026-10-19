@@ -375,8 +375,8 @@ Wyrm, Keeper of the Eldflame, Falling Leaf Aesi; un foe normale, es. Scout (Pist
       il mouse sui tag compare la spiegazione. **(Scout non c'è nel mondo: provato con il Knuckle, la card mostra "Range 2" con la spiegazione)**
 - [x] Show in Chat di un'azione di una Legend (es. Apex): la card mostra i tag tradotti con la spiegazione. **(Apex: "Per Round 2" con la spiegazione)**
 - [x] Un'abilità del compendio Foe Abilities aperta come oggetto → Show in Chat: anche lì i tag sono tradotti. **(Ashura Burst copiata negli Items: card con "Range 3", "Unerring", "Combo 3" e spiegazioni. Aperta direttamente dal compendio lo Show in Chat non posta niente (non so se era così anche prima). Nella testata della card il costo esce "1action")**
-- [ ] Controllo che non sia cambiato altro: sulla scheda Legend le azioni d'area mostrano ancora la loro forma, e
-      gli attacchi delle Legend partono come prima (Attack Roll / Damage). **(non provato)**
+- [x] Controllo che non sia cambiato altro: sulla scheda Legend le azioni d'area mostrano ancora la loro forma, e
+      gli attacchi delle Legend partono come prima (Attack Roll / Damage). **(19 ottobre sera, Razer: le azioni d'area mostrano "Medium Blast" fra i tag; "Roll attack" apre "Attack — Raze" e il bottone del danno apre "Damage — Raze")**
 
 ## Esito 18 ottobre, P7 — Showdown: due istanze e Unerring sull'Hit (19 ottobre 2026, versione 1.15.239)
 
@@ -391,7 +391,7 @@ come bersaglio; per l'ultima casella un PG con Astral Chain.
       Unerring). **(Mechanist con "Cover? boulder": Apply 2 ×2 → "4 damage applied 2 of 2 instances: 2 + 2", la cover non dimezza)**
 - [x] Controllo che non sia cambiato altro: un'abilità senza "unerring" (es. un attacco base) apre con Unerring vuoto
       e Instances 1; Astral Chain → Other "Mark" spunta ancora Unerring, e tornando su Hit si toglie. **(danno del Light Attack: Unerring vuoto, Instances 1; Astral Chain su Other, chip "Mark 2 flat unerring" → Unerring spuntato, tornando su Hit si toglie)**
-- [ ] Foe Gunwright, azione Showdown: Instances 3 (come prima), Unerring vuoto; Tactical Reload: Unerring spuntato. **(non provato: nessun Gunwright nel mondo)**
+- [x] Foe Gunwright, azione Showdown: Instances 3 (come prima), Unerring vuoto; Tactical Reload: Unerring spuntato. **(19 ottobre sera: Gunwright importato dal compendio (copia temporanea): Showdown → Instances 3, Unerring vuoto; Tactical Reload → Unerring spuntato)**
 
 ## Esito 18 ottobre, P6 — Show in Chat apre un nuovo uso, niente Inflict del vecchio attacco (19 ottobre 2026, versione 1.15.238)
 
