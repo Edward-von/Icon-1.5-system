@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Encounter Designer — "riusa gli attori del mondo" (19 ottobre 2026, versione 1.15.264)
+
+Setup: solo codice (F5 basta). Un foe nel mondo (non creato dal Designer), una scena con un combat attivo.
+
+- [x] Designer → sorgente World → aggiungere il foe ×2 → casella "reuse world actors" accesa → Deploy: nessun attore nuovo, nessuna cartella, due pedine scollegate "Nome 1" / "Nome 2" nel combat. **(19 ottobre, Battle Demon ×2: 0 attori nuovi, 0 cartelle, due pedine scollegate nel combat attivo)**
+- [x] Ferire la prima → la seconda e l'attore del mondo restano pieni. **(25/40, 40/40, attore 40)**
+- [x] Elite acceso, ×1 → pedina scollegata con 80 HP ed Elite; l'attore del mondo non è Elite. **(sì)**
+- [x] Con più combat sulla scena il deploy usa quello attivo. **(prima del fix aveva attivato un combat vecchio della scena; corretto e rimesso il combat principale)**
+- [ ] Casella spenta → comportamento di prima (copie in "Encounter: …"). **(non provato: codice invariato su quel ramo)**
+- [ ] Foe del mondo ×1, nessuna modifica, prototipo collegato → la pedina è collegata all'attore. **(non provato: il foe di prova ha il prototipo scollegato)**
+
 ## Emerso nei fix, P31 — Togliere le benedizioni funziona anche senza contatore (19 ottobre 2026, versione 1.15.263)
 
 Setup: solo codice (F5 basta). Un token qualsiasi.

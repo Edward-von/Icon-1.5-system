@@ -121,6 +121,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       filters:    { search: "", faction: "", cls: "", src: "pack", allChapters: false },
       picks:      [],
       addParty:   true,          // deploy: add the party's scene tokens to the combat
+      reuseWorld: false,         // deploy: a foe picked from the World places tokens of that actor, no copy
     };
   }
 
@@ -358,6 +359,8 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       canDeploy: !!canvas?.scene && picks.length > 0 && !this._busy,
       sceneName: canvas?.scene?.name ?? "",
       addParty: this.enc.addParty,
+      reuseWorld: !!this.enc.reuseWorld,
+      hasWorldPicks: this.enc.picks.some(p => p.src === "world"),
     };
   }
 
@@ -447,6 +450,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     });
     el.addEventListener("change", ev => {
       if (ev.target.name === "addParty") this.enc.addParty = !!ev.target.checked;
+      if (ev.target.name === "reuseWorld") this.enc.reuseWorld = !!ev.target.checked;
     });
   }
 
@@ -773,7 +777,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
    * "Warrior 2"…) so each token tracks its own HP, with the Elite template,
    * mob member count and Legend HP scaling applied for the current party.
    */
-  async #buildActorData(folderId) {
+  async #buildActorData(folderId, { reuseWorld = false } = {}) {
     const players = this.players;
     const docs = [];
     for (const p of this.enc.picks) {
@@ -823,6 +827,16 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         data.flags["icon-system"] = { ...(data.flags["icon-system"] ?? {}),
           encounter: { name: this.enc.name.trim() || "Encounter", reserve: p.reserve, source: p.uuid },
           ...(p.titan && p.type === "foe" && p.cls !== "mob" ? { extraTurns: 1 } : {}) };
+        // "Reuse world actors": a foe picked from the World is not copied. Its tokens stand for the
+        // actor itself; what this encounter changes (Elite, Titan, mob size, Legend HP) goes on the token.
+        if (reuseWorld && p.src === "world" && !src.pack) {
+          const change = foundry.utils.diffObject(src.toObject().system, sys);
+          const flags = p.titan && p.type === "foe" && p.cls !== "mob" ? { "icon-system": { extraTurns: 1 } } : null;
+          const same = foundry.utils.isEmpty(change) && !flags;
+          docs.push({ reuse: src, name: data.name, linked: count === 1 && same && !!src.prototypeToken?.actorLink,
+            delta: { ...(same ? {} : { system: change }), ...(flags ? { flags } : {}) }, reserve: p.reserve, size: p.size });
+          continue;
+        }
         docs.push({ data, reserve: p.reserve, size: p.size });
       }
     }
@@ -840,9 +854,10 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     this._busy = true; this.#refresh(["footer"]);
     try {
       const folder = await this.#createFolder();
-      const docs = await this.#buildActorData(folder.id);
-      const actors = await Actor.createDocuments(docs.map(d => d.data));
-      ui.notifications.info(`${actors.length} actor(s) created in "${folder.name}".`);
+      const docs = await this.#buildActorData(folder.id, { reuseWorld: !!this.enc.reuseWorld });
+      const actors = await Actor.createDocuments(docs.filter(d => d.data).map(d => d.data));
+      const kept = docs.length - actors.length;
+      ui.notifications.info(`${actors.length} actor(s) created in "${folder.name}"${kept ? ` (${kept} from the World reused, not copied)` : ""}.`);
       await this.#postCard(this.#cardContext({ folderName: folder.name }));
     } catch (err) {
       console.error("ICON 1.5 | Encounter Designer: create actors failed", err);
@@ -873,8 +888,10 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
     this._busy = true; this.#refresh(["footer"]);
     try {
       const folder = await this.#createFolder();
-      const docs   = await this.#buildActorData(folder.id);
-      const actors = await Actor.createDocuments(docs.map(d => d.data));
+      const docs   = await this.#buildActorData(folder.id, { reuseWorld: !!this.enc.reuseWorld });
+      const made   = await Actor.createDocuments(docs.filter(d => d.data).map(d => d.data));
+      const actors = docs.map(d => d.reuse ?? made.shift());
+      if (!docs.some(d => d.data)) await folder.delete();   // every foe reused: no empty folder left behind
 
       /* --- Token layout: rows of 6 cells starting at the view centre --- */
       const grid   = scene.grid.size;
@@ -889,7 +906,10 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
         if (col + size > 6) { col = 0; row += 1; }
         const x = origin.x + col * grid;
         const y = origin.y + row * grid * 2;   // leave a free row between rows (size-2 tokens)
-        const td = await actor.getTokenDocument({ x, y, hidden: !!meta.reserve });
+        // A reused World actor: its own token when nothing changes, else an unlinked one with the changes (P23-style
+        // separate HP for every body).
+        const extra = meta.reuse && !meta.linked ? { actorLink: false, name: meta.name, delta: meta.delta } : {};
+        const td = await actor.getTokenDocument({ x, y, hidden: !!meta.reserve, ...extra });
         const obj = td.toObject();
         obj.flags ??= {};
         obj.flags["icon-system"] = { ...(obj.flags["icon-system"] ?? {}), encounterReserve: meta.reserve || 0 };
@@ -915,7 +935,7 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
       if (toAdd.length) await combat.createEmbeddedDocuments("Combatant", toAdd);
 
       const reserveTokens = tokens.filter(tok => tok.getFlag("icon-system", "encounterReserve"));
-      await this.#postCard(this.#cardContext({ reserveTokens, sceneId: scene.id, deployed: true, folderName: folder.name }));
+      await this.#postCard(this.#cardContext({ reserveTokens, sceneId: scene.id, deployed: true, folderName: docs.some(d => d.data) ? folder.name : "" }));
       ui.notifications.info(`Deployed ${tokens.length} token(s) on "${scene.name}"${reserveTokens.length ? ` (${reserveTokens.length} hidden in reserve)` : ""}.`);
     } catch (err) {
       console.error("ICON 1.5 | Encounter Designer: deploy failed", err);
@@ -927,7 +947,10 @@ export class EncounterDesigner extends HandlebarsApplicationMixin(ApplicationV2)
 
   /** Find or create the Combat of a scene (same shims as the token-HUD toggle in icon.mjs). */
   static async ensureCombat(scene) {
-    let combat = game.combats.find(c => c.scene?.id === scene.id);
+    // The combat being viewed first: a scene with several old combats kept the first one ever made.
+    let combat = (game.combat?.scene?.id === scene.id ? game.combat : null)
+      ?? game.combats.find(c => c.scene?.id === scene.id && c.active)
+      ?? game.combats.find(c => c.scene?.id === scene.id);
     if (!combat) combat = await Combat.create({ scene: scene.id, active: true });
     if (!combat) throw new Error("Combat.create returned nothing");
     if (!combat.active) { try { await combat.activate(); } catch (err) { console.warn("ICON 1.5 | Could not activate combat:", err); } }

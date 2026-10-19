@@ -1883,7 +1883,7 @@ removed when you are defeated"), Terrain effects p.96 ("passive effects that mod
 - nessuno
 - nessuno
 - nessuno
-- [ ] **Emerso lavorando su R33c2 — Waterspout, resto** (S): GREAT WATERSPOUT (Infuse 2, risucchiare oggetti) resta a
+- [x] **Emerso lavorando su R33c2 — Waterspout, resto** (S) (CHIUSO il 19 ottobre 2026: Edoardo lo considera finito): GREAT WATERSPOUT (Infuse 2, risucchiare oggetti) resta a
       mano; il token nascosto dentro lo spout occupa ancora il suo spazio sulla mappa; il turno di chi è dentro non
       viene saltato da solo (solo un promemoria).
 
@@ -2575,8 +2575,9 @@ vanno pianificate come blocchi a sé. Le dimensioni sono stime (S/M/L/XL come in
       - [x] **Titan Armament** dei Jotunn (p.448: +1 punto, +50% HP, un turno in più) come opzione per riga. (S)
       - [x] **Riserve automatiche**: a fine round 2/3 il tracker propone "Reveal reserves" (oggi solo dal bottone
             sulla card in chat). (S/M)
-      - [ ] Deploy con "riusa gli attori del mondo" (oggi i foe presi dalla sorgente World vengono comunque
+      - [x] Deploy con "riusa gli attori del mondo" (oggi i foe presi dalla sorgente World vengono comunque
             copiati in un nuovo attore per corpo). Chiedere a Maar se serve. (S)
+            (FATTO il 19 ottobre 2026, versione 1.15.264, casella "reuse world actors")
       - [x] Nilfling (Jotunn, Ch1 skirmisher 28 HP) non è Elite nel pack `foes` mentre gli altri Jotunn lo sono:
             verificato il 9 settembre 2026 (Sessione 13) sul manuale p.449 ("Thinblood: doesn't have the elite trait"): il pack è giusto.
       - [x] (FATTO il 13 ottobre 2026, 1.20.0, Sessione E) Token dei foe: tutto il pack usa `mystery-man.svg`; se Maar vuole icone per classe/fazione, serve una

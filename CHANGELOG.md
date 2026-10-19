@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Encounter Designer: "riusa gli attori del mondo" (versione 1.15.264)
+
+### Richiesta in sospeso (Maar: sì, serve)
+
+- **Foe del mondo copiati a ogni deploy**: un foe preso dalla sorgente World veniva comunque copiato in un attore
+  nuovo per ogni corpo, in una cartella "Encounter: …" → nuova casella "reuse world actors" in fondo al Designer
+  (compare solo se nell'incontro c'è un foe del mondo): accesa, quei foe non vengono copiati; si posano pedine
+  dell'attore del mondo. Se l'incontro non cambia niente e il foe è uno solo, la pedina è quella normale
+  dell'attore; se cambia qualcosa (Elite, Titan Armament, mob, HP della Legend) o i corpi sono più di uno, le pedine
+  sono scollegate e le modifiche stanno sulla pedina, ognuna con i suoi HP: l'attore del mondo resta com'era. Se
+  tutti i foe sono riusati non resta una cartella vuota. Anche il bottone "Actors" salta i foe riusati.
+- **Deploy nel combat sbagliato** (emerso provando): con più combat vecchi sulla stessa scena, il deploy aggiungeva i
+  foe al primo combat mai creato e lo rendeva attivo → ora usa il combat che si sta guardando, poi uno attivo della
+  scena, e solo alla fine il primo.
+
 ## 19 ottobre 2026 — Togliere le benedizioni funziona anche senza contatore (versione 1.15.263)
 
 ### Emerso nel playtest dei fix, P31
