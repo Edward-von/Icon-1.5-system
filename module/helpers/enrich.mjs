@@ -456,10 +456,14 @@ function _abilityCardFlags(actor, name) {
  */
 export async function postNpcActionCard(actor, action, { statusHtml = "" } = {}) {
   const renderTemplate = foundry.applications.handlebars?.renderTemplate ?? globalThis.renderTemplate;
+  // Loaded here, not at the top: rule-tooltips → ability-blocks → enrich is an
+  // import cycle, and ability-blocks reads SECTION_LABELS while it loads.
+  const { formatTag } = await import("./rule-tooltips.mjs");
   const a = {
     name:        action?.name ?? "Action",
     cost:        NPC_COST_LABELS[action?.cost] ?? action?.cost ?? "",
-    tags:        (action?.tags ?? []).filter(t => t && t.trim()),
+    // { label, tooltip } chips, as on the foe sheet ("range-4" → "Range 4" with its rule)
+    tags:        (action?.tags ?? []).map(formatTag).filter(Boolean),
     description: await enrichHTML(action?.description),
     hitEffect:   await enrichHTML(action?.hitEffect),
     missEffect:  await enrichHTML(action?.missEffect),

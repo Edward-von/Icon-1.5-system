@@ -35,8 +35,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1; e sull'Hit "2 flat"
       di Showdown e Warding Bolts la casella Unerring non si spunta (le chip di Other sì). S.
       (FATTO il 19 ottobre 2026, versione 1.15.239)
-- [ ] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
+- [x] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
       escono come slug grezzi senza spiegazione; sui foe le spiegazioni della 1.15.122 ci sono. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.240)
 - [ ] **P9** — scheda di un'abilità / tratto: il menu Chapter non mostra il valore salvato (chiavi "2" contro il
       numero 2 in `icon-eq`), quindi ogni salvataggio riporta il capitolo 2 o 3 a 1. Controllare anche le copie già
       rovinate nei mondi. S.
@@ -51,8 +52,9 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       dall'Effect della base ("Seal your foe…"), che Devil Hand sostituisce (p.192). S.
 - [ ] **P13** — Cryo con MAGNACRYO: l'area resta "Line 4" qualunque sia l'Aether infuso; il testo (p.234) aggiunge +2 di
       lunghezza ogni 2 Aether (come fa già per il dado bonus). S.
-- [ ] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",
+- [x] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",
       "range-4"), sulla scheda invece "Attack", "Range 4". Parente di P8. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.240)
 - [ ] **P15 (alta)** — un giocatore che preme Apply su un danno con Instances ×N a un foe non suo: il GM riceve N
       applicazioni separate che partono tutte dagli stessi HP (Knuckle 3 ×3: tre volte "HP 40 → 37", alla fine 37
       invece di 31). Dal GM lo stesso Apply è giusto (una nota "9 damage … 3 of 3 instances"). Mandare al GM una sola

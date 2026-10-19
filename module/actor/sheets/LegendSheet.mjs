@@ -21,6 +21,7 @@ import { parseAbilityDamage as _parseAbilityDamage } from "../../combat/ability-
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { REFERENCE_CONTROL, onShowReferenceControl } from "../../apps/reference.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
+import { formatTag } from "../../helpers/rule-tooltips.mjs";
 import { interruptsOf, interruptLeft, interruptUsesView, spendUse, setInterruptLeft } from "../../combat/damage-interrupts.mjs";
 import { comboView, noteComboUse, setComboNext } from "../../combat/foe-combo.mjs";
 import { applyFoeTemplate, removeFoeTemplate } from "../foe-templates.mjs";
@@ -183,6 +184,9 @@ export class LegendSheet extends BaseActorSheet {
         name:        a.name ?? "",
         cost:        a.cost ?? "1action",
         tags:        a.tags ?? [],
+        // Display chips with prettified label + rule tooltip, same as FoeSheet
+        // ("might-of-the-wild" → "Might Of The Wild" with its rule, p.360-361).
+        tagChips:    (a.tags ?? []).map(formatTag).filter(Boolean),
         areaLabel:   abilityArea(a.tags, [a.description, a.hitEffect, a.missEffect, a.areaEffect].join(" "))?.label ?? "",
         // ^ the shape is usually in the header tags; when it is only in the
         //   prose (as for several terrain actions) the text is read too.

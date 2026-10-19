@@ -7,7 +7,7 @@
   </div>
   {{#if a.tags.length}}
     <div class="icon-chat-card__tags">
-      {{#each a.tags as |tag|}}<span class="icon-tag icon-tag--small">{{tag}}</span>{{/each}}
+      {{#each a.tags as |tag|}}<span class="icon-tag icon-tag--small"{{#if tag.tooltip}} data-tooltip="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>{{/each}}
     </div>
   {{/if}}
   {{#if a.description}}<div class="icon-chat-card__desc">{{{a.description}}}</div>{{/if}}

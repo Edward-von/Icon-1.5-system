@@ -11,6 +11,23 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P8 e P14 — Tag leggibili e spiegati sulle Legend e nelle card dei foe (19 ottobre 2026, versione 1.15.240)
+
+Setup: solo codice (F5 basta). Le Legend già importate vanno bene (i tag sono gli stessi): Apex, Violence Demon,
+Wyrm, Keeper of the Eldflame, Falling Leaf Aesi; un foe normale, es. Scout (Pistolero).
+
+- [ ] Scheda Legend dell'Apex: i tag delle azioni si leggono "Might Of The Wild" (non "might-of-the-wild"), e
+      passando il mouse compare la spiegazione con la pagina (p.360-361).
+- [ ] Stesso controllo sulle altre Legend: Violence Demon "Blade Consume N" (p.420), Wyrm "Path Of Ruin"
+      (p.362-363), Keeper of the Eldflame "Forge Action" (p.461), Falling Leaf Aesi "Thievery" (p.485).
+- [ ] Sulla scheda Legend anche i tag comuni sono tradotti come sui foe ("Attack", "Range 4", "+1 Boon"…).
+- [ ] Scout, Show in Chat di Pistolero: la card mostra "Attack" e "Range 4" (non "attack" / "range-4"), e passando
+      il mouse sui tag compare la spiegazione.
+- [ ] Show in Chat di un'azione di una Legend (es. Apex): la card mostra i tag tradotti con la spiegazione.
+- [ ] Un'abilità del compendio Foe Abilities aperta come oggetto → Show in Chat: anche lì i tag sono tradotti.
+- [ ] Controllo che non sia cambiato altro: sulla scheda Legend le azioni d'area mostrano ancora la loro forma, e
+      gli attacchi delle Legend partono come prima (Attack Roll / Damage).
+
 ## Esito 18 ottobre, P7 — Showdown: due istanze e Unerring sull'Hit (19 ottobre 2026, versione 1.15.239)
 
 Setup: solo codice (F5 basta). Un PG Freelancer con Showdown e Warding Bolts (es. dal compendio jobs), un foe

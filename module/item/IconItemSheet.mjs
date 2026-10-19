@@ -4,6 +4,7 @@
  */
 import { enrichHTML, enrichAbilityDescription, enrichLimitBreakText, postNpcTraitCard, abilityCostLabel } from "../helpers/enrich.mjs";
 import { TROPHY_UNITS } from "../data/item/TrophyData.mjs";
+import { formatTag } from "../helpers/rule-tooltips.mjs";
 
 const { HandlebarsApplicationMixin, DocumentSheetV2 } = foundry.applications.api;
 
@@ -51,7 +52,7 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       const a = {
         name:        item.name,
         cost:        system.cost ?? "",
-        tags:        (system.tags ?? []).filter(t => t && t.trim()),
+        tags:        (system.tags ?? []).map(formatTag).filter(Boolean),
         description: await enrichHTML(system.description),
         hitEffect:   await enrichHTML(system.hitEffect),
         missEffect:  await enrichHTML(system.missEffect),

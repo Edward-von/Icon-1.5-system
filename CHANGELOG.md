@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Tag leggibili e spiegati sulle Legend e nelle card dei foe (versione 1.15.240)
+
+### Esito del playtest del 18 ottobre, P8 e P14
+
+- **Tag delle schede Legend**: sulle Legend (Apex, Violence Demon, Wyrm, Keeper of the Eldflame, Falling Leaf Aesi)
+  i tag delle azioni uscivano come slug grezzi ("might-of-the-wild", "blade-consume-2") senza niente al passaggio
+  del mouse → la scheda Legend stampava il tag così com'è salvato, invece di passarlo dallo stesso traduttore della
+  scheda dei foe; le spiegazioni c'erano già dalla 1.15.122 (Might of the Wild p.360-361, Blade consume p.420, Path
+  of Ruin p.362-363, Forge action p.461, Thievery p.485) → ora la scheda Legend mostra "Might Of The Wild",
+  "Blade Consume 2", "Range 4"… con la spiegazione al passaggio del mouse, come i foe.
+- **Tag nella card "Show in Chat" delle azioni dei foe e delle Legend**: la card mostrava "attack", "range-4" in
+  minuscolo e senza spiegazione, mentre la scheda diceva "Attack", "Range 4" → la card usava i tag grezzi → ora
+  usa lo stesso traduttore: stessi nomi della scheda e la spiegazione al passaggio del mouse (anche per le abilità
+  da foe aperte come oggetto e mandate in chat). Solo codice.
+
 ## 19 ottobre 2026 — Showdown: due istanze e Unerring sull'Hit (versione 1.15.239)
 
 ### Esito del playtest del 18 ottobre, P7
