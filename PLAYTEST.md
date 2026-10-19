@@ -20,8 +20,8 @@ come bersaglio; per l'ultima casella un PG con Astral Chain.
       la casella **Unerring** è spuntata. **(19 ottobre, TEST Freelancer sul Mechanist: Hit "2 flat", Instances 2, Unerring spuntato; card "2 ×2 … 2 damage, 2 times", flag unerring nella card)**
 - [x] Warding Bolts → Damage Roll: Hit "2", Instances 1, **Unerring** spuntato. **(Hit "2 flat", Instances 1, Unerring spuntato)**
 - [x] Nella finestra di Showdown, passare a Crit e poi tornare su Hit: Unerring resta spuntato su entrambi. **(Showdown non ha Crit (solo Hit e Other): passando a Other Unerring si toglie, tornando su Hit si rispunta)**
-- [ ] Applicare il danno di Showdown a un foe in cover: 2 istanze da 2, la cover non dimezza (card del danno con
-      Unerring). **(non provato: il bottone Apply della card non risponde quando la card è fuori dalla chat (sidebar chiusa))**
+- [x] Applicare il danno di Showdown a un foe in cover: 2 istanze da 2, la cover non dimezza (card del danno con
+      Unerring). **(Mechanist con "Cover? boulder": Apply 2 ×2 → "4 damage applied 2 of 2 instances: 2 + 2", la cover non dimezza)**
 - [x] Controllo che non sia cambiato altro: un'abilità senza "unerring" (es. un attacco base) apre con Unerring vuoto
       e Instances 1; Astral Chain → Other "Mark" spunta ancora Unerring, e tornando su Hit si toglie. **(danno del Light Attack: Unerring vuoto, Instances 1; Astral Chain su Other, chip "Mark 2 flat unerring" → Unerring spuntato, tornando su Hit si toglie)**
 - [ ] Foe Gunwright, azione Showdown: Instances 3 (come prima), Unerring vuoto; Tactical Reload: Unerring spuntato. **(non provato: nessun Gunwright nel mondo)**
