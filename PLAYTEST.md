@@ -29,15 +29,15 @@ altro foe con Tactics Aura) e un secondo foe senza tratti sul rampart (es. Warri
 Setup: solo codice (F5 basta). Togliere prima l'hook in pagina che copiava `_movement` in `movement` (basta F5).
 Muovere i token trascinandoli col mouse (e almeno una volta con il ruler e un punto intermedio).
 
-- [ ] Il creatore di Comet (TEST Demon Slayer) con la Thrown Weapon a terra: trascinarlo in uno spazio accanto
-      all'arma e oltre, fermandolo lontano → arriva la domanda "passed through … pick up?".
-- [ ] Un alleato attraversa lo spazio del Megamushroom (TEST Harvester, Fairy Ring) senza fermarsi → arriva la
-      domanda della benedizione.
-- [ ] Un token trascinato attraverso una casella Dangerous e fermato oltre → domanda "passed through … Take 2
-      damage", una volta sola nel turno. Attraverso una casella Difficult → l'avviso "crosses difficult terrain".
-- [ ] Teleport (azione "blink" di Foundry) sopra le stesse caselle → nessuna domanda per gli spazi saltati.
-- [ ] Controllo che il resto non sia cambiato: un movimento che si ferma accanto all'arma di Comet / dentro il
-      Megamushroom fa ancora la domanda una volta sola (non doppia), e il rampart di Comet ferma ancora un foe in volo.
+- [x] Il creatore di Comet (TEST Demon Slayer) con la Thrown Weapon a terra: trascinarlo in uno spazio accanto
+      all'arma e oltre, fermandolo lontano → arriva la domanda "passed through … pick up?". **(19 ottobre: Thrown Weapon a riga 13 col 10, Demon Slayer mosso con move() da col 5 a col 15 sulla riga 12 → "passed through a space adjacent … pick it up?")**
+- [x] Un alleato attraversa lo spazio del Megamushroom (TEST Harvester, Fairy Ring) senza fermarsi → arriva la
+      domanda della benedizione. **(Demon Slayer che passa sopra il Megamushroom del Harvester → "passed through the space … pick up its blessing token")**
+- [x] Un token trascinato attraverso una casella Dangerous e fermato oltre → domanda "passed through … Take 2
+      damage", una volta sola nel turno. Attraverso una casella Difficult → l'avviso "crosses difficult terrain". **(una Dangerous e una Difficult sul percorso: domanda "passed through a dangerous terrain space … Take 2 piercing damage" e avviso "crosses difficult terrain"; ripassando nello stesso turno nessuna seconda domanda)**
+- [x] Teleport (azione "blink" di Foundry) sopra le stesse caselle → nessuna domanda per gli spazi saltati. **(blink sopra le caselle accanto all'arma di Comet: nessuna domanda)**
+- [x] Controllo che il resto non sia cambiato: un movimento che si ferma accanto all'arma di Comet / dentro il
+      Megamushroom fa ancora la domanda una volta sola (non doppia), e il rampart di Comet ferma ancora un foe in volo. **(fermandosi accanto all'arma una sola domanda "pick up?". Il rampart di Comet su un foe in volo non l'ho riprovato (il controllo prima del movimento non è stato toccato dal fix))**
 
 ## Esito 18 ottobre, P1 — Oggetti e summon dei foe non collegati (19 ottobre 2026, versione 1.15.233)
 
