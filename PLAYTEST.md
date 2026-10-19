@@ -11,6 +11,20 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P26 — Il bottone dell'interrupt si spegne anche sul GM (19 ottobre 2026, versione 1.15.256)
+
+Setup: solo codice (F5 basta). TEST Sealer con Spirit Shrine e la mastery SPIRIT PATRONAGE (Grace of the Spirits),
+un alleato colpito da un foe: card del danno in chat.
+
+- [ ] Dal GM (TEST Sealer senza proprietario giocatore), clic su "Grace of the Spirits · TEST Sealer 1/1" → il
+      bottone diventa "0/1" ed è subito spento, prima di premere Apply; l'alleato ha il chip Immune.
+- [ ] Doppio clic veloce sul bottone → un solo uso speso (una sola card dell'interrupt), il bottone resta spento.
+- [ ] Da giocatore (proprietario del Sealer) → come prima: "0/1" e spento subito.
+- [ ] Se c'è un'altra card del danno in chat con lo stesso bottone del Sealer → anche quello passa a "0/1" e si spegne.
+- [ ] All'inizio del turno del Sealer (usi che tornano) → i suoi bottoni sulle card tornano "1/1" e cliccabili.
+- [ ] Refresh Riposte e Great Soul Bond si comportano come prima (Refresh sempre cliccabile; Soul Bond si spegne
+      quando il legame si spezza).
+
 ## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
 
 Setup: solo codice (F5 basta). Un Knave in stance Riposte, due alleati (uno adiacente al Knave, uno lontano), un foe

@@ -671,15 +671,51 @@ function _bindButtons(message, html) {
     btn.addEventListener("click", async (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
+      // One press at a time: a second press while the first is still running
+      // would be refused and turn the button back on (playtest 18 October, P26).
+      if (btn.dataset.iconBusy) return;
+      btn.dataset.iconBusy = "true";
       btn.disabled = true;
-      const ok = await useDamageInterrupt(message, btn.dataset);
-      if (!ok) { btn.disabled = false; return; }
-      // The owner's counts changed: rewrite every button of theirs on this card.
-      html.querySelectorAll(`[data-action="damageInterrupt"][data-owner-uuid="${CSS.escape(btn.dataset.ownerUuid)}"]`)
-        .forEach(b => _refreshButton(b));
+      try {
+        await useDamageInterrupt(message, btn.dataset);
+      } finally {
+        delete btn.dataset.iconBusy;
+        // Pressed or refused, the button shows what the flags say: a refused
+        // press never turns on a button with no uses left.
+        _refreshButton(btn);
+        refreshInterruptButtons(btn.dataset.ownerUuid, html);
+      }
     });
   });
 }
+
+/**
+ * Rewrite the uses of every interrupt button of one character: on the card
+ * pressed (`root`, rendered off-screen or not) and on every card on screen —
+ * the chat log, its pop-out, the chat notifications. Actor flags don't
+ * re-render a chat card, and on the GM the card being changed (Grace of the
+ * Spirits, Wish…) is re-rendered while the press is still running (P26).
+ */
+export function refreshInterruptButtons(ownerUuid, root = null) {
+  if (!ownerUuid) return;
+  const sel = `[data-action="damageInterrupt"][data-owner-uuid="${CSS.escape(ownerUuid)}"]`;
+  const seen = new Set();
+  for (const scope of [root, document].filter(Boolean)) {
+    scope.querySelectorAll(sel).forEach(b => {
+      if (seen.has(b) || b.dataset.iconBusy) return;
+      seen.add(b);
+      _refreshButton(b);
+    });
+  }
+}
+
+// A use spent or given back anywhere (a card's button, the sheet's tick
+// boxes, the turn start) shows on every interrupt button of that character.
+Hooks.on("updateActor", (actor, changed) => {
+  if (!foundry.utils.hasProperty(changed ?? {}, `flags.${FLAG_NS}`)) return;
+  try { refreshInterruptButtons(actor.uuid); }
+  catch (err) { console.warn("ICON 1.5 | interrupt buttons refresh failed:", err); }
+});
 
 /** Re-read one button's uses after a click (actor flags don't re-render a chat card). */
 function _refreshButton(btn) {
@@ -688,7 +724,7 @@ function _refreshButton(btn) {
   const it = owner ? interruptsOf(owner).find(i => i.key === btn.dataset.key) : null;
   if (!it) { btn.disabled = true; return; }
   if (it.kind === "refresh") { btn.disabled = false; return; }
-  if (it.kind === "soulbond") { btn.disabled = true; return; }   // the bond snapped
+  if (it.kind === "soulbond") { btn.disabled = false; return; }  // the bond still holds (snapped: `it` is gone)
   const { left, max } = interruptLeft(owner, it);
   const small = btn.querySelector("small");
   if (small) small.textContent = ` · ${owner.name} ${left}/${max}${it.bankMax ? " banked" : ""}`;

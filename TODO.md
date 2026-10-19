@@ -133,9 +133,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       l'alleato colpito non è adiacente al Knave. Riposte p.142-143: "Refresh this stance when a foe damages you or an
       adjacent ally with an ability". Mostrare il bottone solo sulla riga del Knave o di un alleato adiacente a lui. S.
       (FATTO il 19 ottobre 2026, versione 1.15.255)
-- [ ] **P26 (dai Dubbi)** — Bottone interrupt dopo l'uso: sul client del GM "Grace of the Spirits · TEST Sealer" dopo
+- [x] **P26 (dai Dubbi)** — Bottone interrupt dopo l'uso: sul client del GM "Grace of the Spirits · TEST Sealer" dopo
       il clic diventa "0/1" ma resta cliccabile finché non si preme Apply; sul giocatore si spegne subito. Spegnerlo
       anche sul GM appena le cariche sono 0. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.256)
 - [ ] **P27 (dai Dubbi, estetico)** — Le card "is inside / enters the area" degli status delle aree escono col nome del
       token selezionato dal GM, non del creatore dell'area (nuvola di Nocturne firmata "TEST Warden"). Firmarle col
       creatore dell'area (flag actorId/tokenId del template), o col personaggio che entra. S.

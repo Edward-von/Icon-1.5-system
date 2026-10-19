@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Il bottone dell'interrupt si spegne anche sul GM (versione 1.15.256)
+
+### Esito del playtest del 18 ottobre, P26
+
+- **Bottone interrupt a 0 usi**: sul client del GM, dopo il clic su "Grace of the Spirits · TEST Sealer" il bottone
+  diceva "0/1" ma restava cliccabile finché non si premeva Apply (sul giocatore si spegneva subito) → lo stato del
+  bottone veniva aggiornato solo sulla copia della card che si era cliccata, e un clic rifiutato (per esempio un
+  secondo clic mentre il primo era ancora in corso) riaccendeva il bottone senza guardare gli usi rimasti; sul GM la
+  card viene anche ridisegnata a metà del clic, perché Grace of the Spirits la modifica → ora: un solo clic alla
+  volta per bottone; alla fine del clic, riuscito o rifiutato, il bottone si accende o spegne secondo gli usi rimasti;
+  e ogni volta che cambiano gli usi di un personaggio (bottone, tick sulla scheda, inizio turno) si aggiornano tutti
+  i suoi bottoni interrupt su tutte le card visibili (chat, pop-out, notifiche). Effetto in più: quando gli usi
+  tornano all'inizio del turno, i bottoni sulle card vecchie si riaccendono da soli.
+
 ## 19 ottobre 2026 — Refresh Riposte solo per gli alleati adiacenti al Knave (versione 1.15.255)
 
 ### Esito del playtest del 18 ottobre, P25
