@@ -2953,7 +2953,7 @@ Setup: solo codice (F5 basta).
 - [x] Mastery sbloccata: clicca il chip della rune e scegli "Arkenrune": compare un'area small blast. Piazzane
       un'altra: la prima sparisce. Un foe che ci entra non fa comparire il promemoria "scrub out". La Elden Rune
       normale invece lo fa ancora. **(Seconda Arkenrune: la prima sparisce (ne resta una). Il Mechanist che entra nell'Arkenrune: nessun promemoria "scrub out". (L'Arkenrune si centra sempre sull'Enochian, dove si clicca non conta.))**
-- [ ] Un alleato Wright in piedi nell'Arkenrune di un Enochian con il Talent II: il suo Infuse costa 1 in meno.
+- [x] Un alleato Wright in piedi nell'Arkenrune di un Enochian con il Talent II: il suo Infuse costa 1 in meno. **(Elden Rune dell'Enochian con Talent II e mastery → Arkenrune (small blast); lo Stormbender (Wright) dentro: Infuse 3 di Cryo spende 2 Aether, card "Elden Rune Talent II: standing in TEST Enochian's Arkenrune: −1, to a minimum of 1")**
 - [ ] Fine del combattimento: la card "End of the scene?" elenca anche l'Arkenrune. **(NON VA: End Encounter cancella le rune (anche l'Arkenrune) e la card "End of the scene?" non arriva. Bug P20 in TODO.)**
 
 ## Emerso R33 — I talenti di Deepwrath funzionano dentro i pit (17 ottobre 2026, versione 1.15.196)
@@ -3228,7 +3228,7 @@ Setup: solo codice (F5 basta).
 - [x] Attraversare una mote di Symphony senza fermarsi: la card dice "passes through" e ha Detonate. **(Con la toppa di P2 in pagina (copia di `_movement` in `movement`): il Battle Demon che passa sulla mote dà "passes through the Mote (Symphony)" con Detonate. Senza la toppa nessuna card (P2).)**
 - [x] Attraversare un Difficult: avviso "crosses difficult terrain … +1". **(Attraversato un Difficult: "Battle Demon crosses difficult terrain (Difficult): exiting costs +1 space of movement (p.89).")**
 - [x] Teletrasporto (blink) sopra le stesse caselle: nessuna domanda e nessuna card. **(Teletrasporto (blink) sopra la casella Dangerous: nessuna domanda, nessuna card.)**
-- [ ] Attraversare un'area con status "inside" senza fermarsi: nessun bottone status.
+- [x] Attraversare un'area con status "inside" senza fermarsi: nessun bottone status. **(casella difficult con status "inside" (slowed): il Warrior che ci passa sopra senza fermarsi ha solo l'avviso del difficult, nessun bottone; fermandosi dentro arriva "Inside: slowed" col bottone (con la toppa di P2))**
 
 ## R33b2 — Rune a fine scena, Flash Step, Bio e Terraforming sul terreno (17 ottobre 2026, versione 1.15.175)
 
@@ -3709,7 +3709,7 @@ Setup: solo codice (F5 basta).
       Talent I, e lo spazio Polaris segue il personaggio. **(solo la frase del Talent I)**
 - [x] Party Favor con Amico sbloccata: stessa cosa, con il testo di Amico, e la card Detonate alla fine dei turni dopo
       il tuo. **(testo di Amico)**
-- [ ] Un'abilità con un vero blocco "Mark:" (es. Sisyphus) mostra ancora il suo testo. **(non provato)**
+- [x] Un'abilità con un vero blocco "Mark:" (es. Sisyphus) mostra ancora il suo testo. **(Sisyphus: il pannello mostra ancora "Mark: Mark a character in range. While marked, note their starting position…")**
 
 ## Emerso R1 — "Gains True Strike" non è più uno status (17 ottobre 2026, versione 1.15.130)
 
@@ -4275,10 +4275,10 @@ Setup: pack aggiornato (deploy con Foundry chiuso) + migrazione 33 (parte da sol
 
 Setup: solo codice (F5 basta).
 
-- [ ] Foe con un'azione d'attacco Blast che infligge uno status in parte sul colpo e in parte sull'area. Piazza il
+- [x] Foe con un'azione d'attacco Blast che infligge uno status in parte sul colpo e in parte sull'area. Piazza il
       Blast con il token A al centro e B, C nell'area, bersaglia tutti e tre e premi Show in Chat: A è "(attack
-      target)" con i bottoni della parte d'attacco; B e C sono "(area)" con solo quelli dell'area.
-- [ ] Stessa prova con una legend: stesso risultato.
+      target)" con i bottoni della parte d'attacco; B e C sono "(area)" con solo quelli dell'area. **(Junk Mage, Scrapstorm (Hit: vulnerable, Area: fray) piazzata sul Knave con il Mechanist nell'area, tutti e due bersagliati: Knave "(attack target)" con Vulnerable, Mechanist "(area)" senza bottoni. Nota: il Knave ha due bottoni Vulnerable ("Hit" e "On hit") per lo stesso effetto)**
+- [ ] Stessa prova con una legend: stesso risultato. **(non provato con una legend)**
 - [x] Azione Line / Arc: tira l'attacco e scegli B come bersaglio nel dialog, poi Show in Chat con l'area ancora sulla
       mappa: B è il bersaglio d'attacco, gli altri sono area. **(Battle Demon: dopo l'attacco con Janissary scelto, Show in Chat con l'area sulla mappa → Janissary (attack target), gli altri area.)**
 - [x] Line / Arc piazzata a mano (bottone area, senza tirare l'attacco), poi Show in Chat: nessuna divisione, tutti i
