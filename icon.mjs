@@ -61,7 +61,7 @@ import { narrativeRoll, combatRoll, saveRoll, damageRoll } from "./module/dice/r
 /* -------------------------------------------------- */
 /*  Combat utilities (damage, status, vigor, wounds)  */
 /* -------------------------------------------------- */
-import { applyDamagePipeline, applyDamageToActor, addVigor, clearVigor,
+import { applyDamagePipeline, applyDamageToActor, applyDamageInstances, addVigor, clearVigor,
          applyWound, recoverAction, postCombatHeal } from "./module/combat/damage.mjs";
 import { registerStatuses, applyStatus, removeStatus,
          toggleOngoing, hasStatus }                 from "./module/combat/statuses.mjs";
@@ -896,59 +896,28 @@ Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
       }
 
       // All deduction rules (armor before ½, mob hits, vigor before HP, wound
-      // on a PC reaching 0) live in applyDamageToActor — the same code path
-      // used by applyDamagePipeline and the GM socket relay.
-      let result;
-      const results = [];
+      // on a PC reaching 0) live in applyDamageToActor; applyDamageInstances
+      // deals the instances in sequence with one summary note, or sends ONE
+      // request to the GM for a target this user doesn't own (P15).
+      let result, results;
       try {
-        for (let i = 0; i < instances; i++) {
-          result = await applyDamageToActor(actor, amount, {
-            applyArmor:  !pierce && !divine,
-            half,
-            halfReason,
-            ignoreVigor: divine,
-            chatConfirm: instances === 1,
-            minHp:       mods.minHp,
-            minHpReason: mods.minHpReason,
-            // "as if by armor" (Heartfire): only where armor counts, so not pierce / divine
-            extraArmor:  mods.reduce,
-            extraArmorReason: mods.reduceReason,
-          });
-          if (!result?.ok) break;
-          results.push(result);
-          // A defeated PC (wound) or a foe / mob at 0 takes no further instances.
-          if (result.woundApplied || result.fallen || (!result.relayed && !result.isMob && result.hpAfter === 0)) break;
-        }
+        const out = await applyDamageInstances(actor, amount, instances, {
+          applyArmor:  !pierce && !divine,
+          half,
+          halfReason,
+          ignoreVigor: divine,
+          minHp:       mods.minHp,
+          minHpReason: mods.minHpReason,
+          // "as if by armor" (Heartfire): only where armor counts, so not pierce / divine
+          extraArmor:  mods.reduce,
+          extraArmorReason: mods.reduceReason,
+        });
+        if (!out) return;
+        ({ result, results } = out);
       } catch (err) {
         console.error("ICON 1.5 | Apply Damage failed:", err);
         ui.notifications.error(`Failed to apply damage to "${actor.name}".`);
         return;
-      }
-      if (!results.length) return;
-      if (instances > 1) {
-        // One summary note for all the instances instead of one per instance.
-        result = { ...results[0], applied: results.reduce((a, r) => a + (r.applied ?? 0), 0) };
-        if (!result.relayed) {
-          const esc = foundry.utils.escapeHTML;
-          const each = results.map(r => r.isMob ? "1 hit" : String(r.applied)).join(" + ");
-          const last = results[results.length - 1];
-          const after = last.isMob ? `hits ${results[0].mob?.hitsBefore ?? "?"} → ${last.mob?.hitsAfter ?? "?"}`
-                                   : `HP ${results[0].hpBefore} → ${last.hpAfter}`;
-          const armorBlocked = results.reduce((a, r) => a + (r.armorBlocked ?? 0), 0);
-          const vigor = results.reduce((a, r) => a + (r.vigorAbsorbed ?? 0), 0);
-          const notes = [`${results.length} of ${instances} instances: ${each}`];
-          if (armorBlocked > 0) notes.push(`${armorBlocked} blocked by Armor`);
-          if (half) notes.push(halfReason && halfReason !== "manual ½" ? `each halved (${esc(halfReason)})` : "each halved");
-          if (vigor > 0) notes.push(`${vigor} absorbed by Vigor`);
-          if (results.length < instances) notes.push("stopped: the target is down");
-          await ChatMessage.create({
-            speaker: { alias: "Damage Applied" },
-            content: `<div class="icon-chat-card icon-chat-card--apply">
-                        <strong>${esc(actor.name)}</strong>: <strong>${last.isMob ? `${results.length} hit${results.length > 1 ? "s" : ""}` : result.applied}</strong> damage applied
-                        <br><small>${notes.join(", ")} — ${after}</small>
-                      </div>`,
-          });
-        }
       }
 
       // Visual feedback on the button

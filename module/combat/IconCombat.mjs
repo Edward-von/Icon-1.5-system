@@ -35,7 +35,10 @@ import { handleInflictSocket, handleInflictUsedSocket } from "./inflict-status.m
 import { handlePromptSocket } from "./remote-prompt.mjs";
 import { handleCardModSocket } from "./damage-card-mods.mjs";
 import { bankInterruptsAtTurnStart } from "./damage-interrupts.mjs";
-import { clearVigor, postCombatHeal, applyDamageToActor } from "./damage.mjs";
+import { clearVigor, postCombatHeal, applyDamageInstances } from "./damage.mjs";
+
+/** GM side: relayed damage requests, applied one after the other (P15). */
+let _damageRelayQueue = Promise.resolve();
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
@@ -813,13 +816,17 @@ export function registerCombatHooks() {
         if (!actor) return;
         const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false, minHp = 0, minHpReason = "",
                 extraArmor = 0, extraArmorReason = "" } = data.options ?? {};
-        await applyDamageToActor(actor, data.amount, {
+        // Socket messages are handled concurrently: queue the damage requests
+        // so each one reads the HP the previous one left (P15). The instances
+        // of a repeated damage arrive as ONE request and are dealt in sequence.
+        const run = () => applyDamageInstances(actor, data.amount, data.instances ?? 1, {
           applyArmor, half, halfReason: String(halfReason ?? "").slice(0, 60), ignoreVigor: !!ignoreVigor,
           minHp: Math.min(99, Number(minHp) || 0), minHpReason: String(minHpReason ?? "").slice(0, 60),
           extraArmor: Math.min(99, Number(extraArmor) || 0), extraArmorReason: String(extraArmorReason ?? "").slice(0, 60),
-          chatConfirm: true,
           allowRelay:  false,
         });
+        _damageRelayQueue = _damageRelayQueue.then(run, run);
+        await _damageRelayQueue;
       } else if (data?.type === "markEffect") {
         /* A player marks / un-marks an actor they don't own, or gains Hatred
          * on a shared actor — the active GM writes the effect. */

@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Danno ×N da giocatore: le istanze si sommano (versione 1.15.248)
+
+### Esito del playtest del 18 ottobre, P15
+
+- **Instances ×N da giocatore**: un giocatore che premeva Apply su un danno ripetuto (Knuckle 3 ×3) contro un foe
+  non suo faceva arrivare al GM tre note "HP 40 → 37" e il foe finiva a 37 invece di 31 → il bottone mandava al GM
+  una richiesta per ogni istanza, e il GM le lavorava tutte nello stesso momento, ognuna partendo dagli HP di prima
+  → ora parte una sola richiesta con il numero di istanze, il GM le applica una dopo l'altra (armatura e ½ su
+  ciascuna, p.92) e scrive una nota sola, uguale a quella che esce quando preme Apply il GM ("9 damage applied … 3
+  of 3 instances"). In più il GM mette in fila tutte le richieste di danno dei giocatori: due Apply quasi insieme
+  sullo stesso foe non si sovrascrivono più.
+
 ## 19 ottobre 2026 — Track target due volte sullo stesso foe: un solo segno (versione 1.15.247)
 
 ### Esito del playtest del 18 ottobre, P16

@@ -60,10 +60,11 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",
       "range-4"), sulla scheda invece "Attack", "Range 4". Parente di P8. S.
       (FATTO il 19 ottobre 2026, versione 1.15.240)
-- [ ] **P15 (alta)** — un giocatore che preme Apply su un danno con Instances ×N a un foe non suo: il GM riceve N
+- [x] **P15 (alta)** — un giocatore che preme Apply su un danno con Instances ×N a un foe non suo: il GM riceve N
       applicazioni separate che partono tutte dagli stessi HP (Knuckle 3 ×3: tre volte "HP 40 → 37", alla fine 37
       invece di 31). Dal GM lo stesso Apply è giusto (una nota "9 damage … 3 of 3 instances"). Mandare al GM una sola
       richiesta con le istanze, o applicarle in fila. S-M.
+      (FATTO il 19 ottobre 2026, versione 1.15.248)
 - [x] **P16** — Track target ripetuto sullo stesso foe (Grand Banishment, da GM o giocatore): ogni clic aggiunge un altro
       chip "Janissary ✕" invece di lasciare quello che c'è (su un foe diverso il segno passa giusto). S.
       (FATTO il 19 ottobre 2026, versione 1.15.247)

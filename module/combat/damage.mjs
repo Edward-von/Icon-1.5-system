@@ -335,6 +335,92 @@ export async function applyDamageToActor(actor, amount, {
   };
 }
 
+/**
+ * Repeated damage ("3 damage, three times", p.92): the same amount applied
+ * `instances` times IN SEQUENCE through applyDamageToActor (armor and the ½
+ * come off each), stopping once the target is down, with one summary note
+ * when there is more than one instance. Used by the damage-card Apply button
+ * and by the GM socket relay.
+ *
+ * A player without ownership sends ONE request carrying the instance count:
+ * relaying each instance on its own let the GM process them concurrently,
+ * all starting from the same HP (P15).
+ *
+ * @param {Actor}  actor
+ * @param {number} amount
+ * @param {number} [instances=1]
+ * @param {object} [opts]  The applyDamageToActor options (chatConfirm is decided here).
+ * @returns {Promise<{result: object, results: object[]}|null>} `result` is the
+ *   first instance's breakdown with `applied` summed over the instances.
+ */
+export async function applyDamageInstances(actor, amount, instances = 1, opts = {}) {
+  instances = Math.min(10, Math.max(1, Math.floor(Number(instances) || 1)));
+  if (!actor) return null;
+  amount = Math.max(0, Number(amount) || 0);
+
+  if (!actor.isOwner && !game.user.isGM) {
+    if (opts.allowRelay === false) {
+      ui.notifications.warn(`You don't have permission to apply damage to "${actor.name}".`);
+      return null;
+    }
+    if (!game.users.activeGM) {
+      ui.notifications.warn("No GM is connected — damage can't be applied right now.");
+      return null;
+    }
+    if (amount <= 0) return null;
+    const { applyArmor = false, half = false, halfReason = "", ignoreVigor = false, minHp = 0, minHpReason = "",
+            extraArmor = 0, extraArmorReason = "" } = opts;
+    game.socket.emit(SOCKET, {
+      type:      "applyDamage",
+      actorUuid: actor.uuid,
+      amount,
+      instances,
+      options:   { applyArmor, half, halfReason, ignoreVigor, minHp, minHpReason, extraArmor, extraArmorReason },
+    });
+    ui.notifications.info(`Damage sent to the GM to apply to "${actor.name}".`);
+    const relayed = {
+      ok: true, relayed: true, isMob: false, applied: 0, armorBlocked: 0, vigorAbsorbed: 0,
+      hpBefore: 0, hpAfter: 0, hpLost: 0, woundApplied: false, fallen: false, mob: null,
+    };
+    return { result: relayed, results: [relayed] };
+  }
+
+  const results = [];
+  let result = null;
+  for (let i = 0; i < instances; i++) {
+    result = await applyDamageToActor(actor, amount, { ...opts, chatConfirm: instances === 1 });
+    if (!result?.ok) break;
+    results.push(result);
+    // A defeated PC (wound) or a foe / mob at 0 takes no further instances.
+    if (result.woundApplied || result.fallen || (!result.isMob && result.hpAfter === 0)) break;
+  }
+  if (!results.length) return null;
+  if (instances === 1) return { result: results[0], results };
+
+  // One summary note for all the instances instead of one per instance.
+  result = { ...results[0], applied: results.reduce((a, r) => a + (r.applied ?? 0), 0) };
+  const { half = false, halfReason = "" } = opts;
+  const each = results.map(r => r.isMob ? "1 hit" : String(r.applied)).join(" + ");
+  const last = results[results.length - 1];
+  const after = last.isMob ? `hits ${results[0].mob?.hitsBefore ?? "?"} → ${last.mob?.hitsAfter ?? "?"}`
+                           : `HP ${results[0].hpBefore} → ${last.hpAfter}`;
+  const armorBlocked = results.reduce((a, r) => a + (r.armorBlocked ?? 0), 0);
+  const vigor = results.reduce((a, r) => a + (r.vigorAbsorbed ?? 0), 0);
+  const notes = [`${results.length} of ${instances} instances: ${each}`];
+  if (armorBlocked > 0) notes.push(`${armorBlocked} blocked by Armor`);
+  if (half) notes.push(halfReason && halfReason !== "manual ½" ? `each halved (${escapeHTML(halfReason)})` : "each halved");
+  if (vigor > 0) notes.push(`${vigor} absorbed by Vigor`);
+  if (results.length < instances) notes.push("stopped: the target is down");
+  await ChatMessage.create({
+    speaker: { alias: "Damage Applied" },
+    content: `<div class="icon-chat-card icon-chat-card--apply">
+                <strong>${escapeHTML(actor.name)}</strong>: <strong>${last.isMob ? `${results.length} hit${results.length > 1 ? "s" : ""}` : result.applied}</strong> damage applied
+                <br><small>${notes.join(", ")} — ${after}</small>
+              </div>`,
+  });
+  return { result, results };
+}
+
 /* ================================================== */
 /*  Wound System                                       */
 /* ================================================== */

@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P15 — Danno ×N da giocatore: le istanze si sommano (19 ottobre 2026, versione 1.15.248)
+
+Setup: solo codice (F5 basta). Client giocatore "PT Player" con un PG suo, GM connesso; un foe non del giocatore
+sulla mappa (es. Janissary, HP pieni, senza armatura o con armatura nota).
+
+- [ ] Da giocatore: attacco con Instances ×3 (es. Knuckle, 3 di danno) sul foe, Apply → il bottone dice "→ Sent to
+      GM", e in chat arriva UNA sola nota "Damage Applied": "9 damage applied … 3 of 3 instances: 3 + 3 + 3 — HP 40 →
+      31" (con armatura: armatura tolta da ciascuna istanza).
+- [ ] Gli HP del foe sulla scheda sono davvero scesi di tutte le istanze (40 → 31), non di una sola.
+- [ ] Da giocatore: danno normale (1 istanza) su un foe non suo → una nota sola come prima.
+- [ ] Da GM: lo stesso Apply ×3 → stessa nota unica, HP giusti (come prima).
+- [ ] Da giocatore: Apply ×N su un mob → in chat "N hits", i colpi del mob scendono di N.
+
 ## Esito 18 ottobre, P16 — Track target due volte sullo stesso foe: un solo segno (19 ottobre 2026, versione 1.15.247)
 
 Setup: solo codice (F5 basta). Un PG Sealer con Grand Banishment (es. TEST Sealer), due foe sulla mappa (es.
