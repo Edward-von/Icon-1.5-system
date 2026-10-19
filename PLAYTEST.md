@@ -3235,8 +3235,8 @@ Setup: solo codice (F5 basta).
 Setup: solo codice (F5 basta).
 
 - [ ] Elden Rune piazzata, poi si chiude il combat: il GM riceve "End of the scene?" con Remove.
-- [ ] Gates of Hell con mastery: la card dell'afterimage ha "Flash Step"; cliccando un afterimage libero il token ci
-      va e l'afterimage sparisce. Uno occupato viene rifiutato e il bottone resta usabile.
+- [x] Gates of Hell con mastery: la card dell'afterimage ha "Flash Step"; cliccando un afterimage libero il token ci
+      va e l'afterimage sparisce. Uno occupato viene rifiutato e il bottone resta usabile. **(Card con "Flash Step": con l'afterimage occupata "no afterimage of yours with nobody on it" e il bottone resta; libera → "TEST Demon Slayer takes the place of an afterimage (free action)", il token ci va e l'afterimage sparisce.)**
 - [ ] Bio Talent I con l'area già piazzata: "To dangerous" chiede quante caselle (pit, difficult, oggetti propri) e le
       rende dangerous; senza area compare un avviso.
 - [ ] Bio Talent II: "Boil" elenca chi è dentro o accanto al dangerous nell'area e dà 2 danni dopo la conferma.
@@ -3273,8 +3273,8 @@ Setup: solo codice (F5 basta).
       foes" e "Pit under <foe>". **(Warrior entra nella mote: Detonate → Small Blast (on Warrior), card con 'Fray (4) to foes' e 'Pit under Warrior')**
 - [ ] Un alleato comincia il turno su una mote: Detonate, poi "Bless <alleato>" e la nota "can fly 1". **(non provato)**
 - [ ] Con Talent I o II: la seconda mote esplosa nello stesso turno lo segnala sulla card. **(non provato)**
-- [ ] Un personaggio entra nella mine di Party Favor: Detonate apre il gamble, poi la Medium Blast sulla casella, poi
-      la mine sparisce. Chiudendo il gamble non succede niente. **(non provato)**
+- [x] Un personaggio entra nella mine di Party Favor: Detonate apre il gamble, poi la Medium Blast sulla casella, poi
+      la mine sparisce. Chiudendo il gamble non succede niente. **(Detonate apre "Gamble — Party Favor"; chiuso con la X non succede nulla; rifatto e tirato (5) → "Medium Blast (on the mine)", la mine sparisce. Nota: la card del gamble non mostra la riga "4–5" della tabella (le righe "1–3 / 4–5 / 6" a intervallo non vengono lette).)**
 
 ## R33b2 — Eclipse esplode da una card (17 ottobre 2026, versione 1.15.171)
 
@@ -3837,7 +3837,7 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Nessun test: cambia solo un commento nel codice.
+- [x] Nessun test: cambia solo un commento nel codice. **(Nessun test (solo un commento nel codice).)**
 
 ## Emerso R49 — I due chip dei pit di Pandaemonium non si cancellano a vicenda (17 ottobre 2026, versione 1.15.118)
 
@@ -4669,14 +4669,14 @@ e CSS: F5 dopo il deploy.
       damage, ignoring armor and vigor?"; "Take 2 damage" → card "Damage Applied", 2 hp in meno anche col vigor pieno e
       l'armatura. In combattimento, nello stesso turno, uscire o entrare in un altro spazio dangerous non chiede più; al turno
       dopo chiede di nuovo. "Not this time" → niente danno. Da giocatore su un foe che non possiede: il danno passa dal GM. **(vedi blocchi 1-2 (dangerous con domanda, una volta per turno))**
-- [ ] **Only for foes**: Gates of Hell mastery → "Afterimage · 1" (solo spazi liberi: su un token → avviso). Un alleato che ci
-      entra: nessuna domanda; un foe: la domanda del dangerous. **(non provato)**
+- [x] **Only for foes**: Gates of Hell mastery → "Afterimage · 1" (solo spazi liberi: su un token → avviso). Un alleato che ci
+      entra: nessuna domanda; un foe: la domanda del dangerous. **(Gates of Hell con mastery: "Afterimage · 1"; su un token "That space isn't free"; su una casella libera "Afterimage dangerous terrain for foes". La Sealer (alleata) ci entra: nessuna domanda; il Knuckle: "Knuckle entered a dangerous terrain space (Afterimage, Gates of Hell). Take 2 piercing damage…".)**
 - [x] **Mote**: Symphony → "Mote · 4": uno spazio accanto a una mote già messa → avviso "can't be adjacent"; su un token →
       avviso "isn't free". Un personaggio trascinato su una mote → card "<nome> enters the Mote (Symphony)" con la frase
       "Any character that enters an affected space … detonates the mote …" e Remove. Un personaggio che inizia il turno su una
       mote → card "Start of <nome>'s turn" (una sola, dal GM). **(Symphony "Mote · 4": accanto a una mote "Motes can't be adjacent to each other or overlap."; su un token "That space isn't free: pick an empty one."; il Battle Demon spostato sulla mote → card "Battle Demon enters the Mote (Symphony)" con Detonate / Remove.)**
-- [ ] **Mine**: Party Favor → "Mine · 1" su uno spazio libero; un personaggio ci entra → card con "When any character enters
-      the space, the mine explodes …" e la tabella del gamble; Remove la toglie. **(non provato)**
+- [x] **Mine**: Party Favor → "Mine · 1" su uno spazio libero; un personaggio ci entra → card con "When any character enters
+      the space, the mine explodes …" e la tabella del gamble; Remove la toglie. **(Party Favor "Mine · 1" ("On a space") su una casella libera; il Fool ci entra → card "TEST Fool enters the Mine (Party Favor)" con la tabella del gamble, Detonate e Remove.)**
 - [x] **Elden Rune**: clic sul chip → la runa compare da sola sotto il token del PG, senza clic sulla mappa. Un alleato che ci
       entra: niente; un foe che entra o esce → card "A foe can scrub out an Elden Rune …". **(la runa va da sola sotto il token; foe che entra → card 'A foe can scrub out…')**
 - [ ] **Replace**: un'abilità con "lasts until this ability is used again" che crea spazi (se non ce n'è nessuna nel gruppo,
@@ -4688,7 +4688,7 @@ e CSS: F5 dopo il deploy.
       primo nuovo) → l'area cresce, card "the area grows by 2 spaces (11 in all)". **(vedi 1.15.70)**
 - [ ] **Volcanic Geyser**: Erupt con "Place them now" e un foe nella medium blast → dopo averlo piazzato, domanda "Volcanic
       Geyser — dangerous terrain: mark a dangerous space under <foe>?" → "Mark" → spazio rosso dove è atterrato, card con
-      Remove. Un alleato piazzato non lo riceve. Erupt senza "Place them now" → nessuna domanda. **(non provato)**
+      Remove. Un alleato piazzato non lo riceve. Erupt senza "Place them now" → nessuna domanda. **(Nessun PG di prova con Volcanic Geyser.)**
 - [ ] **Tratto**: un tratto con uno spazio nel testo (se il PG ne ha uno) mostra il chip nella riga del tratto; tratto di un
       capitolo non sbloccato → niente chip. **(non provato)**
 
