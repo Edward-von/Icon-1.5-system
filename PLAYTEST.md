@@ -2596,7 +2596,7 @@ Setup: solo codice (F5 basta).
       "Harvest Moon (p.186): …". **(Freelancer +1 Blessed, plant tolta, riga 'Harvest Moon (p.186)')**
 - [x] Token chiamato "Mote of life" con Blessed: esplode, perde la blessing, NON viene cancellato e compare la card
       RECYCLE "Becomes a terrain effect". **(la mote perde la blessing, resta, card RECYCLE)**
-- [ ] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa. **(non provato)**
+- [x] Megamushroom: esplode, la blessing va a chi è stato scelto e l'oggetto resta sulla mappa. **(Megamushroom: "blessing to TEST Harvester (the Megamushroom stays)", l'oggetto resta. Il Freelancer non era nel range 3 quindi la scelta offriva solo l'Harvester.)**
 - [x] Nessuna plant spuntata, oppure Cancel → nessuna esplosione e nessun template. **(plant tolta dalla spunta → "No plant ticked: nothing explodes."; Cancel → niente; nessun template e nessuna card in tutti e due i casi)**
 - [x] Giocatore non GM con una plant di cui non è proprietario → arriva l'avviso che la toglie il GM; la blessing
       viene comunque data (tramite GM). **(PT Player con TEST Harvester, blessing a TEST Freelancer: "Blessing sent to the GM", avviso "1 exploded plant could not be removed (not yours): the GM removes it", Freelancer 1 → 2. Nota: la card dice "plant removed" anche se la plant resta sulla mappa finché il GM non la toglie)**
@@ -2793,7 +2793,7 @@ Setup: solo codice (F5 basta).
       card ha il bottone Remove. **(terrain 'Mote of life' sulla casella, token tolto, card con Remove)**
 - [x] Muovi un alleato dentro la casella: arriva l'offerta di Regeneration. Quando esce arriva l'offerta di toglierla.
       Un nemico che entra non riceve niente. **(alleato che entra: offerta Regeneration; uscita e nemico non provati)**
-- [ ] Togli Blessed a un token che non si chiama "Mote of life": nessuna card. **(non provato)**
+- [x] Togli Blessed a un token che non si chiama "Mote of life": nessuna card. **(Tolto Blessed al Freelancer: nessuna card.)**
 
 ## Emerso R33 — Pit tolto sotto un nemico marchiato da Deepwrath: card per togliere Shattered (17 ottobre 2026, versione 1.15.210)
 
@@ -3130,9 +3130,9 @@ Setup: solo codice (F5 basta).
 
 - [x] Harvester con HARVEST MOON e Dark Sliver con RECYCLE: evocare una Plant dal pack e rinominare il token "Mote of
       life". Piazzare l'area dell'abilità sopra la mote, poi il chip "on plants": la Small Blast va sulla mote. **(la mote rinominata è riconosciuta)**
-- [ ] Un token qualsiasi chiamato "Mote of life" (anche creato a mano) viene riconosciuto; un token "Mote" o "Life"
-      no. **(non provato)**
-- [ ] Senza piante nell'area, l'avviso cita anche i token "Mote of life". **(non provato)**
+- [x] Un token qualsiasi chiamato "Mote of life" (anche creato a mano) viene riconosciuto; un token "Mote" o "Life"
+      no. **(Token "Mote of life" creato a mano (da un Tick) riconosciuto tra le plant; un token "Mote" no.)**
+- [x] Senza piante nell'area, l'avviso cita anche i token "Mote of life". **(Arc 6 senza plant: "No plant inside this ability's area (only Plants from the summons pack, Megamushrooms and tokens named 'Mote of life' are recognised)…".)**
 
 ## Emerso R49 — La blast del Rampant Nail segue lo spuntone (17 ottobre 2026, versione 1.15.182)
 
@@ -3588,11 +3588,11 @@ Setup: solo codice (F5 basta).
       fatto a mano; piazzare l'Arc 6 di Harvest passando sulle tre. **(due Plant del pack + la mote nell'Arc 6)**
 - [x] Bottone area, "Mastery: Small Blast (on plants)": compaiono le croci solo sulle due Plant del pack, l'etichetta
       dice "× 2", l'Arc resta, le Plant non sono tra i bersagli. **('Small Blast (on plants) × 2', l'Arc resta)**
-- [ ] Un foe vicino a tutte e due le plant appare una volta sola tra i bersagli. **(non provato)**
+- [x] Un foe vicino a tutte e due le plant appare una volta sola tra i bersagli. **(Battle Demon accanto a due plant: un solo bersaglio ("Small Blast (on plants) × 3 placed — TEST Freelancer, Battle Demon, Mote").)**
 - [x] Senza l'Arc sulla mappa compare l'avviso "place this ability's area first"; con l'Arc ma senza plant dentro,
       l'avviso "No plant inside this ability's area". **(senza Arc: 'place this ability's area first')**
-- [ ] Un Megamushroom dentro l'Arc esplode come una plant. **(non provato)**
-- [ ] Il tiro d'attacco di Harvest non propone la Small Blast (on plants) come area dell'attacco. **(non provato)**
+- [x] Un Megamushroom dentro l'Arc esplode come una plant. **(Megamushroom (piazzato da codice con la funzione del trascinamento) dentro l'Arc: esplode come una plant.)**
+- [x] Il tiro d'attacco di Harvest non propone la Small Blast (on plants) come area dell'attacco. **(Tiro d'attacco di Harvest: piazza subito l'Arc 6, nessuna "Small Blast (on plants)".)**
 
 ## Emerso R37 — Split Heaven and Hell: fascia di distanza misurata sulla linea (17 ottobre 2026, versione 1.15.141)
 
