@@ -2624,11 +2624,11 @@ Setup: solo codice (F5 basta).
 - [x] Scegli Bounce: le 4 caselle accanto a quella finale sono evidenziate; disegna la seconda line 3 in una direzione
       a scelta (rotella per ruotarla) → un unico template con le due line, etichetta "Line 3 + Line 3", i bersagli
       comprendono chi sta su tutte e due. **(un solo template 'Line 3 + Line 3'; i bersagli non controllati (area vuota))**
-- [ ] Scegli No bounce → resta solo la prima line. **(non provato)**
+- [x] Scegli No bounce → resta solo la prima line. **(19 ott, TEST Spellblade: Line 3 da (5,5) che finisce sul Boulder → "Bifröst — bounce?" → No bounce → un solo template "Line 3" di 3 caselle)**
 - [x] Line che NON finisce su un oggetto → nessuna domanda.
-- [ ] Senza la mastery sbloccata → nessuna domanda anche se finisce su un oggetto. **(non provato)**
-- [ ] Con HEIMDALL (seconda area che non può sovrapporsi) e Talent II (crescita a fine round) il template con il
-      rimbalzo si comporta come una sola area. **(non provato)**
+- [x] Senza la mastery sbloccata → nessuna domanda anche se finisce su un oggetto. **(stessa line con la mastery bloccata: nessuna domanda, "Line 3")**
+- [x] Con HEIMDALL (seconda area che non può sovrapporsi) e Talent II (crescita a fine round) il template con il
+      rimbalzo si comporta come una sola area. **(Talent II e Bounce: un solo template "Line 3 + Line 3" di 6 caselle; a fine round una sola card "End of round 4 — Bifröst" con un solo "Add 2 spaces". HEIMDALL non riprovato)**
 
 ## Emerso R33 — Elden Rune: +3 al range sulla runa e GREAT RUNE che frantuma (17 ottobre 2026, versione 1.15.223)
 
@@ -3025,7 +3025,7 @@ Setup: solo codice (F5 basta).
       il nome della nuvola; tirando esce il d6 di evasion. **(spunta automatica e d6 di evasion ok; la chip col nome della nuvola non l'ho vista nel dialogo)**
 - [x] Lo stesso foe fuori dalla nuvola: niente spunta automatica.
 - [x] Un PG che attacca da dentro la nuvola: niente spunta (vale solo per i foe).
-- [ ] Senza Talent II (Talent I selezionato): nessuna nota e nessuna spunta. **(non provato)**
+- [ ] Senza Talent II (Talent I selezionato): nessuna nota e nessuna spunta. **(non verificabile così: la nuvola già sulla mappa era stata piazzata col Talent II e la regola resta salvata nella nuvola (col Talent I scelto dopo, l'attacco del Battle Demon dentro mostra ancora "Inside Mist Strider: all characters count as having evasion"); una nuvola nuova col Talent I non sono riuscito a piazzarla)**
 
 ## Emerso R33 — Area spostata sopra i personaggi: offerta degli status (17 ottobre 2026, versione 1.15.191)
 
