@@ -70,6 +70,13 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       è solo tra i tag di Astra (Fortuna: attack, range-5, medium-blast, autohit, combo) e il gamble è un effetto
       della base (p.~148, "Area effect: Gamble"); `abilityGambles` legge il sistema base anche quando esce la combo
       (IconSheet `_getAbilityDetail`, `canGamble`). S.
+- [ ] **P20 (alta)** — "End Encounter" cancella tutti i template del sistema sulla scena, anche i terrain effect che
+      devono restare (p.96): Elden Rune, Arkenrune, pit, mote, brand… `IconCombat` a fine combattimento chiama
+      `deleteAreaTemplates({ scene })` senza filtro, e `deleteAreaTemplates` prende ogni template con `cells`. Di
+      conseguenza l'hook `deleteCombat` → `spacesAtSceneEnd` non trova più le rune e la card GM "End of the scene?"
+      con Remove non arriva mai (provato 19 ottobre: Elden Rune + Arkenrune + GREAT RUNE, End Encounter → mappa vuota,
+      nessuna card). Escludere i template con `flags.icon-system.lasting` / terrain (e lasciare la decisione alla
+      card), come fa già il cambio turno. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.

@@ -2634,21 +2634,21 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG Enochian con Elden Rune: piazza la runa sotto di sé, poi usa un'abilità d'area con Range 6. Il piazzamento
-      deve accettare il centro fino a 9 caselle e mostrare l'avviso "range +3 (6 → 9)".
-- [ ] Sempre sulla runa, apri il dialogo d'attacco di un'abilità con range: tra i chip automatici c'è "Elden Rune:
-      standing in your Elden Rune: range +3 (…), p.209". Se esci dalla runa il chip sparisce.
+- [x] PG Enochian con Elden Rune: piazza la runa sotto di sé, poi usa un'abilità d'area con Range 6. Il piazzamento
+      deve accettare il centro fino a 9 caselle e mostrare l'avviso "range +3 (6 → 9)". **(Enochian sulla sua Elden Rune, Pyre (Range 6): notifica "Pyre — Elden Rune: standing in your Elden Rune: range +3 (6 → 9), p.209." prima del piazzamento. Il centro a 9 caselle non provato.)**
+- [x] Sempre sulla runa, apri il dialogo d'attacco di un'abilità con range: tra i chip automatici c'è "Elden Rune:
+      standing in your Elden Rune: range +3 (…), p.209". Se esci dalla runa il chip sparisce. **(Dialogo d'attacco di Pyre sulla runa: chip "Elden Rune: standing in your Elden Rune: range +3 (6 → 9), p.209". Uscita dalla runa non provata.)**
 - [ ] Mark su un personaggio (es. Polaris range 5, o il bottone Mark) con il bersaglio a 7 caselle: stando sulla runa
       non chiede nulla. Con il bersaglio a 9 caselle chiede "out of range", indica range 8 e la nota della runa.
-- [ ] Talent II selezionato, sulla runa: infondi un'abilità con Infuse 3. La card mostra "−1, to a minimum of 1" e si
-      spendono 2 Aether.
-- [ ] Mastery sbloccata: il chip della runa chiede "which rune?". Scegli Arkenrune: copre una small blast. Un alleato
-      che sta nell'Arkenrune ha +3 al range nel dialogo d'attacco; un nemico no.
-- [ ] Infondi GREAT RUNE (Infuse 3) su Elden Rune, poi clicca il chip della runa: la card del piazzamento mostra
-      "Great Rune: your attacks also shatter…" e l'infusione armata sparisce.
-- [ ] Stando in quella runa fai un attacco: nel dialogo c'è il chip Great Rune. Sulla card, nella riga del bersaglio
+- [x] Talent II selezionato, sulla runa: infondi un'abilità con Infuse 3. La card mostra "−1, to a minimum of 1" e si
+      spendono 2 Aether. **(Talent II sulla runa, Infuse 3 di Pyre (pagato senza Inner Furnace): "2 Aether spent", riga "Elden Rune Talent II: standing in your Elden Rune: −1, to a minimum of 1".)**
+- [x] Mastery sbloccata: il chip della runa chiede "which rune?". Scegli Arkenrune: copre una small blast. Un alleato
+      che sta nell'Arkenrune ha +3 al range nel dialogo d'attacco; un nemico no. **(Mastery: il chip chiede "Elden Rune — which rune?" [Elden Rune / Arkenrune]; Arkenrune = small blast di 5 caselle, card "can't be scrubbed out; its benefits also extend to allies". +3 al range per un alleato non provato.)**
+- [x] Infondi GREAT RUNE (Infuse 3) su Elden Rune, poi clicca il chip della runa: la card del piazzamento mostra
+      "Great Rune: your attacks also shatter…" e l'infusione armata sparisce. **(GREAT RUNE infusa su Elden Rune, poi chip della runa: card "Great Rune: your attacks also shatter their main target while standing in this rune.", l'infusione non è più armata.)**
+- [x] Stando in quella runa fai un attacco: nel dialogo c'è il chip Great Rune. Sulla card, nella riga del bersaglio
       principale, c'è il bottone Shattered (con un'area, solo sulla riga dell'attack target). Fuori dalla runa, o in
-      una runa normale senza GREAT RUNE, il bottone non c'è.
+      una runa normale senza GREAT RUNE, il bottone non c'è. **(Attacco di Pyre stando nella GREAT RUNE: chip "Great Rune: standing in your Elden Rune…" nel dialogo e bottone "Shattered" sulla riga del Knuckle.)**
 - [ ] Alleato in un'Arkenrune piazzata con GREAT RUNE: anche i suoi attacchi ricevono il bottone Shattered.
 
 ## Emerso R37 — applyDamagePipeline accetta danno pierce e divine (17 ottobre 2026, versione 1.15.222)
@@ -2948,13 +2948,13 @@ Setup: solo codice (F5 basta).
 - [ ] Enochian con Elden Rune e Talent I: piazza una rune, allontanati di 2-3 caselle e clicca "Teleport to Elden
       Rune": puoi scegliere solo la tua rune libera entro 3, il token ci va sopra e arriva la card. Oltre 3, o su una
       rune occupata, c'è un avviso.
-- [ ] Talent II: in piedi sulla tua rune, fai l'Infuse 3 di un'altra abilità: si pagano 2 Aether e la card dice "−1,
-      to a minimum of 1". Un Infuse 1 resta 1. Fuori dalla rune si paga il prezzo pieno.
-- [ ] Mastery sbloccata: clicca il chip della rune e scegli "Arkenrune": compare un'area small blast. Piazzane
+- [x] Talent II: in piedi sulla tua rune, fai l'Infuse 3 di un'altra abilità: si pagano 2 Aether e la card dice "−1,
+      to a minimum of 1". Un Infuse 1 resta 1. Fuori dalla rune si paga il prezzo pieno. **(Vedi L2643: 2 Aether e la riga del −1. Infuse 1 e il prezzo fuori dalla runa non provati.)**
+- [x] Mastery sbloccata: clicca il chip della rune e scegli "Arkenrune": compare un'area small blast. Piazzane
       un'altra: la prima sparisce. Un foe che ci entra non fa comparire il promemoria "scrub out". La Elden Rune
-      normale invece lo fa ancora.
+      normale invece lo fa ancora. **(Seconda Arkenrune: la prima sparisce (ne resta una). Il Mechanist che entra nell'Arkenrune: nessun promemoria "scrub out". (L'Arkenrune si centra sempre sull'Enochian, dove si clicca non conta.))**
 - [ ] Un alleato Wright in piedi nell'Arkenrune di un Enochian con il Talent II: il suo Infuse costa 1 in meno.
-- [ ] Fine del combattimento: la card "End of the scene?" elenca anche l'Arkenrune.
+- [ ] Fine del combattimento: la card "End of the scene?" elenca anche l'Arkenrune. **(NON VA: End Encounter cancella le rune (anche l'Arkenrune) e la card "End of the scene?" non arriva. Bug P20 in TODO.)**
 
 ## Emerso R33 — I talenti di Deepwrath funzionano dentro i pit (17 ottobre 2026, versione 1.15.196)
 
@@ -3234,7 +3234,7 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Elden Rune piazzata, poi si chiude il combat: il GM riceve "End of the scene?" con Remove.
+- [ ] Elden Rune piazzata, poi si chiude il combat: il GM riceve "End of the scene?" con Remove. **(NON VA: come L2957, la Elden Rune sparisce a fine combattimento e il GM non riceve "End of the scene?" (P20).)**
 - [x] Gates of Hell con mastery: la card dell'afterimage ha "Flash Step"; cliccando un afterimage libero il token ci
       va e l'afterimage sparisce. Uno occupato viene rifiutato e il bottone resta usabile. **(Card con "Flash Step": con l'afterimage occupata "no afterimage of yours with nobody on it" e il bottone resta; libera → "TEST Demon Slayer takes the place of an afterimage (free action)", il token ci va e l'afterimage sparisce.)**
 - [ ] Bio Talent I con l'area già piazzata: "To dangerous" chiede quante caselle (pit, difficult, oggetti propri) e le
