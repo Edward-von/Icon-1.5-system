@@ -99,7 +99,7 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       1.15.137 (numero del riquadro) era giusto ma senza effetto visibile. Da decidere: usare `equippedAbilities` per
       i riquadri, oppure al drop spostare il `sort` dell'abilità nuova al posto di quella del riquadro. S/M.
       (FATTO il 19 ottobre 2026, versione 1.15.252)
-- [ ] **P22 (bassa)** — Card di round dei Dread Lords: al round 3 e al 6 Eternal Imperium compare due volte, con due
+- [x] **P22 (bassa)** (FATTO il 19 ottobre 2026, versione 1.15.261) — Card di round dei Dread Lords: al round 3 e al 6 Eternal Imperium compare due volte, con due
       testi diversi ("(Round 3, 6, etc) At the start of this round, all three Lords use their Round actions
       simultaneously." e "(Round 3, 6, etc) At round 3 and every three rounds thereafter…"). Probabilmente il dato è
       sia in un tratto sia in un'azione del pack `foes-legend`: tenerne uno. Provato 19 ottobre con un combat

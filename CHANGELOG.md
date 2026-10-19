@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Dread Lords: Eternal Imperium una volta sola nella card di round (versione 1.15.261)
+
+### Esito del playtest del 18 ottobre, P22
+
+- **Eternal Imperium doppio**: al round 3 e al 6 la card di round dei Dread Lords mostrava Eternal Imperium due volte, con
+  due testi diversi → nel compendio Legends c'era sia come azione di round sia come seconda "fase", mentre il manuale
+  (p.341) ha un solo paragrafo Phases che finisce con "At round 3 and every three rounds thereafter, the Lords use
+  Eternal Imperium" e poi Eternal Imperium come azione → quella frase torna nel paragrafo Phases e la fase doppia è
+  tolta; l'azione di round resta. Solo dati del compendio: i Dread Lords già importati nei mondi non cambiano, vanno
+  importati di nuovo.
+
 ## 19 ottobre 2026 — Show in Chat di un'abilità dei foe: costo leggibile, funziona anche dal compendio (versione 1.15.260)
 
 ### Esito del playtest del 18 ottobre, P30
