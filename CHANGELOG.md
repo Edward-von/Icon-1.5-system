@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — La parola pit ha il suo tooltip (versione 1.15.259)
+
+### Esito del playtest del 18 ottobre, P29
+
+- **Tooltip di "pit"**: nel testo delle abilità (es. Massive Overhead, "creates a pit under its target") la parola
+  "pit" non aveva il tooltip, mentre "difficult terrain" e "dangerous terrain" sì → "pit" mancava dall'elenco delle
+  parole chiave e dal glossario del Reference → ora c'è, con la regola di p.89: "A pit space is just what it sounds
+  like, but could also be deep water, mud, etc. Pits count as one level lower of elevation than their base space".
+  Vale anche per "pits"; non si attiva dentro altre parole ("spit", "pitch", "pitfall"). La voce compare anche nel
+  glossario del Reference, sezione Movement & Positioning.
+
 ## 19 ottobre 2026 — Le righe di status usano il nome del token (versione 1.15.258)
 
 ### Esito del playtest del 18 ottobre, P28

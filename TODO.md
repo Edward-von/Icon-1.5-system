@@ -144,9 +144,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P28 (dai Dubbi, estetico)** — "Plant loses 0 blessings (now 0)" firmato "Mote of life": il messaggio usa il nome
       dell'attore (Plant) invece di quello del token. Usare il nome del token. S.
       (FATTO il 19 ottobre 2026, versione 1.15.258)
-- [ ] **P29 (dai Dubbi, deciso col manuale)** — keyword "pit" senza tooltip nel testo delle abilità (es. Massive
+- [x] **P29 (dai Dubbi, deciso col manuale)** — keyword "pit" senza tooltip nel testo delle abilità (es. Massive
       Overhead). "Pit" è un termine definito (p.89: "A pit space … Pits count as one level lower of elevation than their
       base space"): aggiungerla a `helpers/keywords.mjs` come le altre keyword di terreno. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.259)
 - [ ] **P31 (Emerso lavorando su P28)** — "Plant loses 0 blessings (now 0)": la mote of life ha lo status Blessed ma
       nessun contatore di blessing (flag `statusCharges.blessed` assente, `getStatusCharges` dà 0), quindi
       `removeBlessings` ne toglie 0 e lo status resta. Probabilmente lo status arriva da una strada che non passa per

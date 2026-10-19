@@ -98,6 +98,7 @@ export const GLOSSARY = [
       ["Engagement", "Exiting a space adjacent to a foe costs +1 space of movement."],
       ["Difficult Terrain", "Costs +1 space of movement to exit."],
       ["Dangerous Terrain", "Entering or exiting deals 2 piercing damage (once per turn)."],
+      ["Pit", "A pit space is just what it sounds like, but could also be deep water, mud, etc. Pits count as one level lower of elevation than their base space (p.89)."],
       ["Obstruction", "A space a character can't normally enter. By default: foes, terrain, and objects."],
       ["Elevation (Height)", "Moving up costs +1 space to enter per level of difference in elevation."],
       ["Line of Sight", "Being able to see and interact with a space. If there's any ambiguity, draw a line between the spaces to check."],

@@ -78,6 +78,7 @@ const KEYWORDS = [
   { re: /line of sight/i,                     term: "Line of Sight" },
   { re: /difficult terrain/i,                 term: "Difficult Terrain" },
   { re: /dangerous terrain/i,                 term: "Dangerous Terrain" },
+  { re: /pits?/i,                             term: "Pit" },   // P29: bounded, so not "spit" / "pitch"
   { re: /elevation/i,                         term: "Elevation (Height)" },
   // ---- Ability keywords ----
   { re: /terrain effect/i,                    term: "Terrain Effect" },

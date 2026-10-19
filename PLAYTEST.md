@@ -11,6 +11,15 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P29 — La parola pit ha il suo tooltip (19 ottobre 2026, versione 1.15.259)
+
+Setup: solo codice (F5 basta). Un PG con Massive Overhead (o un'altra abilità che nomina un pit).
+
+- [ ] Passare il mouse su "pit" nel testo di Massive Overhead (scheda e card in chat) → tooltip con la regola di p.89.
+- [ ] Un testo con "pits" → anche lì il tooltip.
+- [ ] Nessun tooltip a metà di parole come "spit" o "pitch".
+- [ ] Reference → Movement & Positioning: c'è la voce "Pit".
+
 ## Esito 18 ottobre, P28 — Le righe di status usano il nome del token (19 ottobre 2026, versione 1.15.258)
 
 Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token non collegato, nome del token
