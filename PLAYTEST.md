@@ -11,6 +11,18 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P23 — Ogni Salt Sprite del Geyser ha i suoi HP (19 ottobre 2026, versione 1.15.253)
+
+Setup: solo codice (F5 basta). Un PG con un'abilità che crea un Geyser con Salt Sprite (p.232), in combat.
+
+- [ ] Fai eruttare un Geyser scegliendo di evocare il Salt Sprite → compare il Salt Sprite al posto del Geyser e
+      nella lista degli attori c'è un attore Salt Sprite nuovo; nella sezione Summons della scheda del PG compare.
+- [ ] Fai eruttare un secondo Geyser con Salt Sprite → nasce un secondo attore; dai danno a uno dei due Salt Sprite →
+      l'altro resta con gli HP pieni.
+- [ ] Da giocatore (proprietario del PG) fai eruttare un Geyser con Salt Sprite → il Salt Sprite compare (lo crea il
+      GM) e il giocatore può aprirne la scheda e muoverlo.
+- [ ] Un summon trascinato dal chip della scheda (non Geyser) si comporta come prima.
+
 ## Esito 18 ottobre, P21 — Un'abilità trascinata su un riquadro pieno prende il suo posto (19 ottobre 2026, versione 1.15.252)
 
 Setup: solo codice (F5 basta). Un PG con sei abilità nei sei riquadri (es. PT Testi), il compendio Jobs aperto.
@@ -34,7 +46,7 @@ un foe come bersaglio.
       quello di MAGNABIO. **(non provato)**
 - [ ] Arma Infuse 6 (Mastery): MAGNABIO, poi attacca → c'è lo Shattered+ del Terrain Effect, non lo Shattered di
       BIOTIC. **(non provato)**
-- [x] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima. **(God Hand base provata con P12 dopo questo commit: offre Sealed)**
+- [ ] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima. **(non riprovato dopo questo fix (la prova di God Hand con P12 era sulla 1.15.244))**
 
 ## Esito 18 ottobre, P20 — End Encounter lascia le rune che durano fino a fine scena (19 ottobre 2026, versione 1.15.250)
 
