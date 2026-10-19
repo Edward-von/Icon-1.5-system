@@ -40,8 +40,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       numero 2 in `icon-eq`), quindi ogni salvataggio riporta il capitolo 2 o 3 a 1. Controllare anche le copie già
       rovinate nei mondi. S.
 - [ ] **P10** — Sow con REAP armato: il bottone dice "✦ Auto-Hit" ma apre il tiro d'attacco vero; l'anteprima usa
-      `isAutoHit` della versione base invece della combo. Al contrario su Holy con Hades: il bottone dice "Attack
-      Roll" ma fa l'auto-hit. S.
+      `isAutoHit` della versione base invece della combo. Al contrario su Holy con Hades e Astra con Fortuna: il
+      bottone dice "Attack Roll" ma fa l'auto-hit. S.
 - [ ] **P11 (alta)** — i PG creati nel mondo (sidebar, wizard) nascono col token ostile (`disposition -1`): le
       automazioni amico / nemico li trattano come foe (es. la mote di Symphony benedice il foe che la fa esplodere).
       Impostare `prototypeToken.disposition = 1` per il tipo `icon` in `IconActor._preCreate` e correggere con una

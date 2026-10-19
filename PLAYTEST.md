@@ -569,18 +569,18 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Mendicant — Seer
 
-- [ ] **Bend Fate** (tratto Seer, p.199) — cosa controllare: bottone sulla card del gamble (scarta carte, +1d6 per carta, una riga di tabella per risultato); non è nel tooltip di "Set the number" [1.15.29, 181, 219]
-- [ ] **Wheel of Fate / Skein / Foretell** (tratti Seer, p.199) — cosa controllare: "Draw up to 5" all'avvio, "Draw 1" e "Discard down to 7"; lo scarto va nella pila del proprio Seer; "Foretell from the deck" con la mano vuota [1.15.146, 147, 148, 180, 199, 200]
-- [ ] **The Great Wheel** (carte del Seer, p.199) — cosa controllare: sotto il nome di ogni carta il suo effetto (A The World … K The Sun); la carta giocata posta la card con i bottoni; il 4 piazza la small blast sull'alleato [1.15.146, 147, 148]
-- [ ] **Chaos Tarot** (testo; Seer, p.201) — cosa controllare: tabella del gamble a sei righe, poi "Summon: Then, summon a wild card in the area." e basta, senza il blocco del Wild Card. Migrazione 22 [1.15.12, 13, 42, 47, 69]
-- [ ] **Sleight of Hand** (testo; Seer, p.201) — cosa controllare: Attack, "Effect: Your foe is pacified.", Area Effect, "Effect: Summon a wild card in range 2 of your foe.", senza "Wild Card — Size 1" né "Summon Effect". Migrazione 22 [1.15.12, 42]
-- [ ] **Astra** (Seer, p.201) — cosa controllare: con Fortuna card con "Combo — Fortuna", Hit [D]+fray, Area e Summon, senza la base [1.15.3, 65, 100]
-- [ ] **Polaris** (Seer, p.202) — cosa controllare: Talent I dà tag e bottone Mark, "On a character", controllo del range 5; card a fine turno degli altri con Gamble, blast unite, Stun e difficult / pits del Talent II [1.15.19, 65, 69, 71, 131, 152, 173, 198]
-- [ ] **Gran Reversa** (Seer, p.202) — cosa controllare: il vigor può superare il massimo; blocco "Reverse Fate — Interrupt 1" con bottone chat [1.15.4, 11, 62]
-- [ ] **Eclipse** (testo; Seer, p.203) — cosa controllare: dopo "…standing in that space:" due righe "If there is, …" / "If there isn't, …", poi "Then, end the effect." a capo; chip Brand e card a inizio turno con Explode. Migrazione 23 [1.15.14, 69, 171]
-- [ ] **Wish** (Seer, p.203) — cosa controllare: con la mastery Defiance e Unstoppable all'alleato (non a te); bottone sulla card del danno "Not below 1 HP" [1.15.43, 85, 149, 151]
-- [ ] **The Tower** (testo; Seer, p.203) — cosa controllare: mastery Superbolide "…they take double damage from Eclipse's meteor effect, and the effect also ignores defiance."; Track target; il meteorite resta, l'area no. Migrazione 24 [1.15.15, 34, 65, 103]
-- [ ] **High Prophecy** (Limit Break Seer, p.199) — cosa controllare: bottone Aura 2, sparisce all'inizio del turno successivo [1.15.5, 38]
+- [x] **Bend Fate** (tratto Seer, p.199) — cosa controllare: bottone sulla card del gamble (scarta carte, +1d6 per carta, una riga di tabella per risultato); non è nel tooltip di "Set the number" [1.15.29, 181, 219] **(già provato nel blocco 15, sezioni 1.15.181 e 219)**
+- [x] **Wheel of Fate / Skein / Foretell** (tratti Seer, p.199) — cosa controllare: "Draw up to 5" all'avvio, "Draw 1" e "Discard down to 7"; lo scarto va nella pila del proprio Seer; "Foretell from the deck" con la mano vuota [1.15.146, 147, 148, 180, 199, 200] **(già provato nel blocco 15, sezioni 1.15.180, 199, 200; oggi in più: le card "Skein — start/end of turn" escono anche per PT S3 e, senza mano, spiegano come chiamarla)**
+- [x] **The Great Wheel** (carte del Seer, p.199) — cosa controllare: sotto il nome di ogni carta il suo effetto (A The World … K The Sun); la carta giocata posta la card con i bottoni; il 4 piazza la small blast sull'alleato [1.15.146, 147, 148] **(già provato nel blocco 15, sezioni 1.15.146-148)**
+- [x] **Chaos Tarot** (testo; Seer, p.201) — cosa controllare: tabella del gamble a sei righe, poi "Summon: Then, summon a wild card in the area." e basta, senza il blocco del Wild Card. Migrazione 22 [1.15.12, 13, 42, 47, 69] **(già provato nella sezione 1.15.12)**
+- [x] **Sleight of Hand** (testo; Seer, p.201) — cosa controllare: Attack, "Effect: Your foe is pacified.", Area Effect, "Effect: Summon a wild card in range 2 of your foe.", senza "Wild Card — Size 1" né "Summon Effect". Migrazione 22 [1.15.12, 42] **(già provato nella sezione 1.15.12)**
+- [x] **Astra** (Seer, p.201) — cosa controllare: con Fortuna card con "Combo — Fortuna", Hit [D]+fray, Area e Summon, senza la base [1.15.3, 65, 100] **(con il combo token Show in Chat posta "Fortuna (Astra combo)" con "Combo — Fortuna": Hit [D]+fray, Area, Summon e la mastery, senza la base. Come Holy: tag Autohit ma bottone "Attack Roll", vedi P10)**
+- [x] **Polaris** (Seer, p.202) — cosa controllare: Talent I dà tag e bottone Mark, "On a character", controllo del range 5; card a fine turno degli altri con Gamble, blast unite, Stun e difficult / pits del Talent II [1.15.19, 65, 69, 71, 131, 152, 173, 198] **(due caselle Polaris col Talent II: a fine turno del Seer nessuna card; a fine turno della Spellblade card con Gamble; gamble 3 → "Medium Blast × 2 (on the Polaris spaces)", "5 damage to all (3)", "Talent II: difficult under the centres", niente pit sotto 4. Mark, On a character e range già provati nel blocco 8)**
+- [x] **Gran Reversa** (Seer, p.202) — cosa controllare: il vigor può superare il massimo; blocco "Reverse Fate — Interrupt 1" con bottone chat [1.15.4, 11, 62] **(blocco "Reverse Fate — Interrupt 1" con fumetto; vigor oltre il massimo già provato nella sezione 1.15.4)**
+- [x] **Eclipse** (testo; Seer, p.203) — cosa controllare: dopo "…standing in that space:" due righe "If there is, …" / "If there isn't, …", poi "Then, end the effect." a capo; chip Brand e card a inizio turno con Explode. Migrazione 23 [1.15.14, 69, 171] **(testo già provato nella sezione 1.15.14; chip "Brand · 1"; a inizio turno del Seer card "nobody stands on the brand" con Explode e End the effect; Explode piazza "Large Blast (on the brand)" e la card "2 divine damage to all"; con THE HELM il brand resta)**
+- [x] **Wish** (Seer, p.203) — cosa controllare: con la mastery Defiance e Unstoppable all'alleato (non a te); bottone sulla card del danno "Not below 1 HP" [1.15.43, 85, 149, 151] **(già provato nelle sezioni 1.15.85, 149, 151)**
+- [x] **The Tower** (testo; Seer, p.203) — cosa controllare: mastery Superbolide "…they take double damage from Eclipse's meteor effect, and the effect also ignores defiance."; Track target; il meteorite resta, l'area no. Migrazione 24 [1.15.15, 34, 65, 103] **(già provato nelle sezioni 1.15.15, 34, 103)**
+- [x] **High Prophecy** (Limit Break Seer, p.199) — cosa controllare: bottone Aura 2, sparisce all'inizio del turno successivo [1.15.5, 38] **(bottone "Aura 2" del Limit Break; notifica "Until the start of your next turn"; all'inizio del turno successivo card "Aura 2 (High Prophecy) ends" con Remove)**
 
 #### Wright — Enochian
 
@@ -770,7 +770,7 @@ Da compilare durante il playtest.
 - **1.15.120, prima casella — con REAP armato il bottone di Sow dice ancora "✦ Auto-Hit".** Il tiro è giusto (si
   apre la finestra d'attacco vera di Reap), sbaglia solo la scritta: l'anteprima usa `parsed.isAutoHit` della
   versione base invece di quella della combo (`IconSheet.mjs`, riga 527 circa).
-  Sezione 3: lo stesso al contrario su Holy con Hades armato (tag Autohit, card AUTO-HIT giusta, ma il bottone dice
+  Sezione 3: lo stesso al contrario su Holy con Hades armato e su Astra con Fortuna (tag Autohit, card AUTO-HIT giusta, ma il bottone dice
   "Attack Roll").
 - **Sezione 3 (19 ottobre) — i PG creati nel mondo nascono col token ostile.** Un attore `icon` nuovo (sidebar o
   wizard) ha `prototypeToken.disposition = -1` (provato: `Actor.create({type:"icon"})` → −1); nel mondo "test" sono
