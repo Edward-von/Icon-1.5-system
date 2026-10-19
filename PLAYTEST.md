@@ -2516,8 +2516,8 @@ Setup: solo codice (F5 basta).
       resta bloccato anche lui. **(F5: bloccati su entrambe; Gain non provato)**
 - [x] Abilità auto-hit con uno status: card auto-hit e poi la card del danno in automatico, ed entrambe hanno i
       bottoni, che si bloccano insieme. **(Chastise (auto-hit): blocco su tutte e due, si bloccano insieme)**
-- [ ] Giocatore che clicca sulla card d'attacco di un altro (o sulla copia nella card del danno): lo status passa dal
-      GM e il bottone risulta "→ GM" su tutte e due le card, anche sul client del GM. **(da giocatore, blocco 18)**
+- [x] Giocatore che clicca sulla card d'attacco di un altro (o sulla copia nella card del danno): lo status passa dal
+      GM e il bottone risulta "→ GM" su tutte e due le card, anche sul client del GM. **(19 ott, PT Player su una card d'attacco di TEST Colossus: "Stunned sent to the GM", il bottone diventa "→ GM" sulla card d'attacco e sulla copia nella card del danno, anche sul client del GM; Knuckle è Stunned)**
 - [ ] Foe/Legend/Summon: attacco con uno status, poi danno, e il blocco compare anche lì. **(non provato)**
 - [ ] Attacco d'area con bersaglio d'attacco scelto: entrambe le card del danno (attacco e Area) mostrano le righe
       "attack target" e "area" come la card d'attacco. **(non provato)**
@@ -3093,8 +3093,8 @@ Setup: solo codice (F5 basta).
       Disdain. La card postata mostra il bottone "Heroic: gain 4 vigor".
 - [x] Premere il bottone: il vigor del Demon Slayer sale di 4 (fino alla VIT), compare l'avviso "vigor X → Y" e il
       bottone si spegne. **(vigor 0 → 4, avviso, bottone spento)**
-- [ ] F5: il bottone di quella card resta spento. Un giocatore che non possiede il Demon Slayer vede il bottone
-      spento. **(non provato)**
+- [x] F5: il bottone di quella card resta spento. Un giocatore che non possiede il Demon Slayer vede il bottone
+      spento. **(il bottone "Heroic: gain 4 vigor" delle due card premute resta spento su un client appena caricato; PT Player (non proprietario del Demon Slayer) lo vede spento)**
 
 ## Emerso R33 — Symphony toglie davvero le blessing (17 ottobre 2026, versione 1.15.185)
 
@@ -3203,7 +3203,7 @@ Setup: solo codice (F5 basta).
 - [ ] Interrupt di uno stance (Riposte, Dire Parry): la riga compare solo quando lo stance è preso; con STRONG LEFT
       mostra "banked" fino a 3. **(non provato)**
 - [x] A inizio turno del PG le caselline tornano tutte accese. **(Justice torna piena al turno del Sealer)**
-- [ ] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente. **(da giocatore, blocco 18)**
+- [x] Un giocatore che vede la scheda senza poterla modificare vede il conteggio ma cliccare non cambia niente. **(PT Player osservatore su TEST Harvester: Fairy Ring mostra "Spirit Away 2/2" come pallini senza azione, il clic non cambia nulla)**
 
 ## Emerso R5 — La × e il badge combo tornano sui riquadri delle abilità (17 ottobre 2026, versione 1.15.177)
 
@@ -3212,7 +3212,7 @@ Setup: solo codice (F5 basta).
 - [x] Scheda PG, tab Combat, abilità sbloccate (lucchetto aperto): su ogni riquadro pieno compare la × in angolo;
       cliccandola l'abilità esce dal riquadro. **((la scheda parte bloccata: sbloccata compaiono 4 ×))**
 - [x] Con il lucchetto chiuso ("Locked") la × sparisce dai riquadri.
-- [ ] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×. **(non provato)**
+- [x] Un giocatore che vede la scheda di un altro senza poterla modificare non vede la ×. **(sulle schede in sola lettura (TEST Knave, Fool, Enochian, Harvester) nessun bottone ×)**
 - [ ] Con un'abilità combo in un riquadro: COMBO OFF, il badge fulmine è spento; spunta COMBO ON, il badge sul
       riquadro si accende. **(non provato)**
 
@@ -3952,8 +3952,8 @@ Setup: solo codice (F5 basta).
       prima. **(Fire Dancer pierce: armor ignorata, vigor assorbe)**
 - [x] Stesso bersaglio, card normale: l'armor blocca e il vigor assorbe, come prima. **(Wisp: armor blocca)**
 - [ ] Card divine con più istanze ("x3"): nessuna istanza tocca il vigor. **(non provato)**
-- [ ] Un giocatore che non possiede il bersaglio clicca Apply su una card divine: il danno va al GM e anche lì il
-      vigor non assorbe nulla. **(da giocatore, blocco 18)**
+- [x] Un giocatore che non possiede il bersaglio clicca Apply su una card divine: il danno va al GM e anche lì il
+      vigor non assorbe nulla. **(PT Player preme Apply su una card divine 3 ×3 a Knuckle con 5 vigor: il danno va al GM e il vigor non assorbe nulla (ma vedi P15))**
 - [ ] Una card divine da un'abilità di un foe o di una Legend: anche queste saltano il vigor. **(non provato)**
 
 ## Emerso R38b — Danno rilanciato di un uso infuso: "Reroll (same use)" (17 ottobre 2026, versione 1.15.108)
@@ -4022,8 +4022,8 @@ Setup: solo codice (F5 basta).
 - [ ] Prima metti l'aura con il bottone area (bersaglio sul personaggio), poi marca lo stesso personaggio: l'aura
       resta una sola. Togliendo il mark, l'aura sparisce. **(non provato)**
 - [x] Togli il mark a mano dal chip, oppure abbatti Fulminate, oppure chiudi il combattimento: l'aura sparisce. **(dal chip)**
-- [ ] Un giocatore marca un nemico che non è suo (il mark passa dal GM): l'aura compare lo stesso; con il Talent I la
-      domanda sulla misura appare al GM. **(non provato)**
+- [x] Un giocatore marca un nemico che non è suo (il mark passa dal GM): l'aura compare lo stesso; con il Talent I la
+      domanda sulla misura appare al GM. **(superato dalla 1.15.110: PT Player marca il Mechanist, l'aura compare; col Talent I la domanda ora compare a chi marca (il giocatore), non al GM)**
 - [ ] Un'altra abilità con Mark che non dà aura: non compare nessuna aura. **(non provato)**
 
 ## Emerso R37 — Card del Limit Break: niente status dalle versioni Infuse non armate (17 ottobre 2026, versione 1.15.104)
@@ -4397,7 +4397,7 @@ Setup: solo codice (F5 basta).
 - [ ] Mark + aura su A, poi porta il PG a 0 hp: il mark finisce e l'aura sparisce. **(non provato)**
 - [ ] Mark + aura su A, poi fine del combattimento: anche qui l'aura sparisce con il mark. **(non provato)**
 - [ ] Con i talenti attivi, scegli "Aura 3" o "Aura 1": stesso comportamento. **(non provato)**
-- [ ] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso. **(non provato)**
+- [x] Da giocatore (non GM), con un GM connesso: il mark si toglie via GM e l'aura sparisce lo stesso. **(PT Player toglie con ✕ il mark di Fulminate sul Mechanist (foe del GM): mark tolto e aura sparita)**
 - [ ] Non deve cambiare niente: un'aura propria (es. Phantom Bolts Aura 2 attorno a sé) o l'aura di Endless Battlement
       data a un alleato restano dove sono quando si toglie un mark qualsiasi. **(non provato)**
 
@@ -4943,8 +4943,8 @@ Aether. È JS + template: F5 dopo il deploy.
       l'Aether, tirando Rime la versione si consuma). **(Infuse 3 si arma e si annulla restituendo l'Aether (Cryo, Nothung))**
 - [ ] **Aether Deflection**: nella riga del tratto c'è "Aether N" e il bottone "Regain (2 Aether)"; con 3 Aether
       cliccalo → Aether a 1, in chat "<nome> spends 2 Aether to regain the use of Aether Deflection (1 Aether left)". **(non provato)**
-- [ ] **Aether insufficiente**: con 1 Aether il bottone è spento; su una scheda di un altro giocatore (solo
-      osservatore) è spento.
+- [x] **Aether insufficiente**: con 1 Aether il bottone è spento; su una scheda di un altro giocatore (solo
+      osservatore) è spento. **(su TEST Enochian in sola lettura tutti i bottoni Infuse sono spenti (la parte "1 Aether" non riprovata qui))**
 
 ## R58 — Casella "Defender has evasion" nella finestra dell'attacco (16 ottobre 2026, versione 1.15.59)
 
@@ -4976,7 +4976,7 @@ Setup: PG Fool con il tratto Stack Dice (uno al capitolo 3 per avere 2 dadi). È
 - [x] **Capitolo 3**: con "2/2" Use → "1/2", di nuovo Use → "0/2"; due messaggi in chat. **(a 2/2 Use → 1/2 → 0/2)**
 - [x] **Niente doppio scalo**: con "1/1" usa la finestra Gamble di un'abilità e scegli "Stacked Die" → risultato 6 e
       scheda a "0/1" (una sola volta); nessun messaggio extra di Use. **(dal gamble: 6, un solo scalo, nessun messaggio di Use)**
-- [ ] **Player senza permessi**: sulla scheda di un PG altrui (solo osservatore) Use è spento. **(non provato)**
+- [x] **Player senza permessi**: sulla scheda di un PG altrui (solo osservatore) Use è spento. **(PT Player osservatore su TEST Fool: Use di Stack Dice spento. Nota: i pallini di Stacked Dice restano cliccabili e il clic dà l'errore di Foundry "lacks permission to update Actor" (valore invariato))**
 
 ## R56 — Track target su Quaking Palm, Sidhe e Dark Sliver (16 ottobre 2026, versione 1.15.57)
 
@@ -5536,8 +5536,8 @@ Combat, anteprima dell'abilità aperta.
       e nessun dado tirato. **(non provato)**
 - [ ] **Tabella 1-6**: su un'abilità con tabella numerata, Gamble → sotto il risultato la card mostra la riga di quel
       numero.
-- [ ] **Card Show in Chat**: Show in Chat di Riposte → la card ha in fondo il bottone dorato Gamble, che apre la stessa
-      finestra. Da un altro utente che non possiede il PG il bottone è disattivato.
+- [x] **Card Show in Chat**: Show in Chat di Riposte → la card ha in fondo il bottone dorato Gamble, che apre la stessa
+      finestra. Da un altro utente che non possiede il PG il bottone è disattivato. **(Show in Chat di Riposte dal GM: sul client di PT Player (non proprietario di TEST Knave) il bottone Gamble è disattivato)**
 - [ ] **Dice So Nice** (se attivo): il tiro mostra i dadi 3D; con Stacked Die o numero fissato non parte nessuna
       animazione.
 
@@ -5565,7 +5565,7 @@ più due token bersaglio: uno con Armor 2 (o un PG con armatura) e uno con lo st
 - [ ] **Other**: esito Other, Fixed damage 1, Divine, Instances 3 (Chastise, p.179) → card "1 damage, 3 times",
       Apply ignora l'armor e dà 3. **(non provato)**
 - [ ] **Giocatore senza permessi**: un giocatore che applica ×3 a un foe → al GM arrivano 3 applicazioni (3 note in
-      chat dal lato del GM), il bottone dice "→ Sent to GM". **(da giocatore, blocco 18)**
+      chat dal lato del GM), il bottone dice "→ Sent to GM". **(NON VA (P15): PT Player applica 3 ×3 a Knuckle → al GM arrivano 3 applicazioni e il bottone dice "→ Sent to GM", ma tutte e tre partono da HP 40 ("HP 40 → 37"): Knuckle perde 3 invece di 9. Dal GM lo stesso Apply fa "9 damage … HP 40 → 31")**
 
 ## R23 — Opzione "Other" nel tiro del danno per il danno delle mastery (15 ottobre 2026, versione 1.15.27)
 

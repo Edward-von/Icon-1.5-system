@@ -52,6 +52,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       lunghezza ogni 2 Aether (come fa già per il dado bonus). S.
 - [ ] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",
       "range-4"), sulla scheda invece "Attack", "Range 4". Parente di P8. S.
+- [ ] **P15 (alta)** — un giocatore che preme Apply su un danno con Instances ×N a un foe non suo: il GM riceve N
+      applicazioni separate che partono tutte dagli stessi HP (Knuckle 3 ×3: tre volte "HP 40 → 37", alla fine 37
+      invece di 31). Dal GM lo stesso Apply è giusto (una nota "9 damage … 3 of 3 instances"). Mandare al GM una sola
+      richiesta con le istanze, o applicarle in fila. S-M.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
