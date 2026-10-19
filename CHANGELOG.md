@@ -1,5 +1,18 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Il percorso del movimento viene di nuovo letto (versione 1.15.234)
+
+### Esito del playtest del 18 ottobre, P2
+
+- **Gli spazi attraversati contano davvero**: il creatore di Comet che passava accanto all'arma e si fermava
+  lontano non riceveva la domanda "passed through … pick up?", un alleato che attraversava il Megamushroom senza
+  fermarsi non riceveva la benedizione, e le caselle di terreno (dangerous, difficult, segni) attraversate non
+  davano nessun avviso → il sistema cercava il percorso del movimento in un posto (`options.movement`) dove Foundry
+  13.351 non lo mette: Foundry lo passa in `options._movement` (con gli stessi dati, `passed.waypoints`), quindi il
+  sistema vedeva solo la partenza e l'arrivo → ora i due controlli dopo il movimento (oggetti della mappa e caselle di
+  terreno) leggono il percorso da `options._movement`. Il controllo del rampart di Comet prima del movimento usava
+  già i dati giusti e non cambia.
+
 ## 19 ottobre 2026 — Oggetti della mappa e summon dei foe di nuovo "non collegati" (versione 1.15.233)
 
 ### Esito del playtest del 18 ottobre, P1

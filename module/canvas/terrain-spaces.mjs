@@ -874,7 +874,7 @@ function turnKey() {
  * After a token moved (by this user): dangerous terrain entered or left, named marks entered (or left, when the text
  * says "entering or exiting"). The spaces crossed on the way count too (R33b2: map-objects.mjs movePath, Foundry's
  * waypoints of the move): a space only passed through is entered and exited.
- * @param {object|null} movement  Foundry's movement data of this update (options.movement[id])
+ * @param {object|null} movement  Foundry's movement data of this update (options._movement[id]: Foundry 13 puts it under the underscored key)
  */
 async function offerTerrainOnMove(td, prev, to, movement = null) {
   const scene = td.parent;
@@ -1894,7 +1894,7 @@ export function registerTerrainSpaceHooks() {
     // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet.
     if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
+    offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options._movement?.[tokenDoc.id] ?? null).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });
   // RECYCLE (Dark Sliver's mastery, p.187): "A mote of life is a plant, but becomes a terrain effect when its blessing
   // is removed": its Blessed status gone, a card with the button that turns its space into that terrain effect.

@@ -11,6 +11,21 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P2 — Il percorso del movimento viene letto (19 ottobre 2026, versione 1.15.234)
+
+Setup: solo codice (F5 basta). Togliere prima l'hook in pagina che copiava `_movement` in `movement` (basta F5).
+Muovere i token trascinandoli col mouse (e almeno una volta con il ruler e un punto intermedio).
+
+- [ ] Il creatore di Comet (TEST Demon Slayer) con la Thrown Weapon a terra: trascinarlo in uno spazio accanto
+      all'arma e oltre, fermandolo lontano → arriva la domanda "passed through … pick up?".
+- [ ] Un alleato attraversa lo spazio del Megamushroom (TEST Harvester, Fairy Ring) senza fermarsi → arriva la
+      domanda della benedizione.
+- [ ] Un token trascinato attraverso una casella Dangerous e fermato oltre → domanda "passed through … Take 2
+      damage", una volta sola nel turno. Attraverso una casella Difficult → l'avviso "crosses difficult terrain".
+- [ ] Teleport (azione "blink" di Foundry) sopra le stesse caselle → nessuna domanda per gli spazi saltati.
+- [ ] Controllo che il resto non sia cambiato: un movimento che si ferma accanto all'arma di Comet / dentro il
+      Megamushroom fa ancora la domanda una volta sola (non doppia), e il rampart di Comet ferma ancora un foe in volo.
+
 ## Esito 18 ottobre, P1 — Oggetti e summon dei foe non collegati (19 ottobre 2026, versione 1.15.233)
 
 Setup: solo codice (F5 basta). Togliere prima la patch in pagina di `_preCreate` usata nel playtest (basta F5).

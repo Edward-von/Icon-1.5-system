@@ -1005,7 +1005,7 @@ export async function relocateObject(actor) {
  *   Underway (p.168)     a character (not a foe) came next to a portal: teleport to another one?
  * (Comet's rampart is checked before the move instead: rampartCheck.)
  * The spaces crossed count too (movePath: Foundry's waypoints of the move); the Underway question only where it ends.
- * @param {object|null} movement  Foundry's movement data of this update (options.movement[id]), for its actions
+ * @param {object|null} movement  Foundry's movement data of this update (options._movement[id]: Foundry 13 puts it under the underscored key), for its actions
  */
 async function offerMoveTriggers(td, prev, to, movement = null, { elevationMoved = false } = {}) {
   const scene = td.parent;
@@ -1488,7 +1488,7 @@ export function registerMapObjectHooks() {
     if (!("x" in changed || "y" in changed) || mapObjectFlag(tokenDoc)) return;
     if (!tokenDoc.parent?.tokens?.some(t => mapObjectFlag(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
-    offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options.movement?.[tokenDoc.id] ?? null, { elevationMoved: "elevation" in changed }).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
+    offerMoveTriggers(tokenDoc, options.iconPrevPos, to, options._movement?.[tokenDoc.id] ?? null, { elevationMoved: "elevation" in changed }).catch(err => console.warn("[ICON | MapObjects] movement offers failed", err));
   });
 
   // R33a5: the Pick up button of the start-of-turn card (Comet "or start your turn there", p.128).
