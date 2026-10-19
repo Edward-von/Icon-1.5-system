@@ -149,12 +149,12 @@ Setup: solo codice (F5 basta). Un Seer con HARVEST MOON, una mote of life (token
 Setup: solo codice (F5 basta). Un PG con un'area che dà status a chi è dentro (es. la nuvola di Nocturne o Mist
 Strider), un altro personaggio vicino; il GM ha selezionato un terzo token.
 
-- [ ] Piazzare l'area con un personaggio già dentro → la card "… is inside the area of …" è firmata dal PG che l'ha
-      messa, non dal token selezionato dal GM.
-- [ ] Muovere un personaggio dentro e fuori dall'area → le card "enters / leaves the area" sono firmate dal creatore.
-- [ ] Spostare l'area (Shift + frecce, o Tsunami) sopra/via da un personaggio → "is now inside / is no longer inside"
-      firmata dal creatore.
-- [ ] Bottoni della card (aggiungi/togli status) funzionano come prima.
+- [x] Piazzare l'area con un personaggio già dentro → la card "… is inside the area of …" è firmata dal PG che l'ha
+      messa, non dal token selezionato dal GM. **(19 ottobre sera: Mist Strider di TEST Warden (Small Blast) piazzata sopra il Battle Demon → "Battle Demon is inside the area of Mist Strider" firmata TEST Warden)**
+- [x] Muovere un personaggio dentro e fuori dall'area → le card "enters / leaves the area" sono firmate dal creatore. **(con il Mechanist selezionato dal GM: "Battle Demon enters the area…" e "…leaves the area…" firmate TEST Warden)**
+- [x] Spostare l'area (Shift + frecce, o Tsunami) sopra/via da un personaggio → "is now inside / is no longer inside"
+      firmata dal creatore. **(area spostata di 2 (la stessa funzione di Shift + frecce) sopra il Battle Demon → "is now inside the area" firmata TEST Warden)**
+- [x] Bottoni della card (aggiungi/togli status) funzionano come prima. **("Blind+ to Battle Demon" → Blind messo; uscendo "Remove Blind" → tolto)**
 
 ## Esito 18 ottobre, P26 — Il bottone dell'interrupt si spegne anche sul GM (19 ottobre 2026, versione 1.15.256)
 
