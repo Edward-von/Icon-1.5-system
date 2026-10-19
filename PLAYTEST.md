@@ -2945,9 +2945,9 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Enochian con Elden Rune e Talent I: piazza una rune, allontanati di 2-3 caselle e clicca "Teleport to Elden
+- [x] Enochian con Elden Rune e Talent I: piazza una rune, allontanati di 2-3 caselle e clicca "Teleport to Elden
       Rune": puoi scegliere solo la tua rune libera entro 3, il token ci va sopra e arriva la card. Oltre 3, o su una
-      rune occupata, c'è un avviso.
+      rune occupata, c'è un avviso. **(Talent I: la Elden Rune si crea sotto l'Enochian; spostato di 2 caselle, "Teleport to Elden Rune" → "teleport up to 3 spaces into a Elden Rune", clic sulla runa → "TEST Enochian teleports into a Elden Rune (free action)" e il token ci va. Runa occupata (il Great Beast era sotto) → "Pick a Elden Rune of Elden Rune." Oltre 3 non provato. Nota: testi "a Elden Rune" / "Pick a Elden Rune of Elden Rune" un po' storti.)**
 - [x] Talent II: in piedi sulla tua rune, fai l'Infuse 3 di un'altra abilità: si pagano 2 Aether e la card dice "−1,
       to a minimum of 1". Un Infuse 1 resta 1. Fuori dalla rune si paga il prezzo pieno. **(Vedi L2643: 2 Aether e la riga del −1. Infuse 1 e il prezzo fuori dalla runa non provati.)**
 - [x] Mastery sbloccata: clicca il chip della rune e scegli "Arkenrune": compare un'area small blast. Piazzane
@@ -3847,7 +3847,7 @@ Setup: solo codice (F5 basta).
       della combo: va via solo il suo pit. **(Talent II: pit sotto il Knuckle pacified e pit della combo; clic destro sul chip "Pit · 1" della combo: va via solo il suo pit, quello del pacified resta.)**
 - [x] Clic destro sul chip "Pits under pacified foes": vanno via solo i pit sotto i foe. **(Clic destro sul chip "Pits under pacified foes": finestra "Pit — remove", i due pit spariscono. (Nessun pit della combo presente, quindi "solo quelli" non verificato.))**
 - [ ] I pit sotto i foe messi con una versione precedente si tolgono dal chip della combo (gruppo vecchio), non da
-      quello del Talent II.
+      quello del Talent II. **(Non verificabile: nel mondo non ci sono pit messi con una versione precedente.)**
 
 ## Emerso R41 — Bersaglio d'attacco ricordato solo se è ancora nell'area (17 ottobre 2026, versione 1.15.117)
 
