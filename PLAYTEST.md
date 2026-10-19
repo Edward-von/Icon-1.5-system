@@ -461,18 +461,18 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Stalwart — Colossus
 
-- [ ] **Gigaton Whip** (Colossus, p.137) — cosa controllare: la card d'attacco mostra Effect, Collide "They take fray damage" e, con IZUNA DROP, il blocco "Collide — Izuna Drop"; nella finestra del danno "Collide · fray" oppure "Izuna Drop · fray ×2" [1.15.190, 214]
-- [ ] **Raging Wolf** (testo; Colossus, p.137) — cosa controllare: ordine Special, Comeback, Heroic, Special; le tre soglie del Comeback ("Bloodied:", "25% or lower:", "1 hp or lower:") su righe separate; nessun summon Beast. Migrazione 23 [1.15.9, 14]
-- [ ] **Massive Overhead** (testo; Colossus, p.136) — cosa controllare: niente corsivo, si apre con "Effect: End your turn…" e poi "Special Effect: If your target was already in a pit…"; "Rush" di Blood Rush senza tooltip. Migrazione 20 [1.15.10, 51, 52, 65, 69]
-- [ ] **Upheaval** (Colossus, p.136) — cosa controllare: danno del Talent I (2), chip Boulder, chip "Pillar · H2" solo con la mastery [1.15.25, 65, 67]
-- [ ] **Dropkick** (Colossus, p.136) — cosa controllare: tag Sacrifice con tooltip; con Giant Kicker il danno propone l'Area (fray) [1.15.7, 25, 69]
-- [ ] **Takedown** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno; niente "Gain True Strike" sull'Exceed / Heroic [1.15.69, 130]
-- [ ] **Valkyrie** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno [1.15.69]
-- [ ] **Pulverize** (tratto Colossus, p.135) — cosa controllare: casella "Pulverize" nella finestra dell'attacco, spuntata da 2 livelli più in alto [1.15.212]
+- [x] **Gigaton Whip** (Colossus, p.137) — cosa controllare: la card d'attacco mostra Effect, Collide "They take fray damage" e, con IZUNA DROP, il blocco "Collide — Izuna Drop"; nella finestra del danno "Collide · fray" oppure "Izuna Drop · fray ×2" [1.15.190, 214] **(senza mastery: card con Effect "Shove 2" e Collide "…They take fray damage."; sotto Other "Collide fray 4". Con IZUNA DROP: blocco "Collide — Izuna Drop (Mastery, replaces the normal collide)" al posto del Collide, Inflict Weakened + Stunned, chip "Collide — Izuna Drop fray 4 ×2". Nota: il libro ha il refuso "then and catch", da noi "then catch")**
+- [x] **Raging Wolf** (testo; Colossus, p.137) — cosa controllare: ordine Special, Comeback, Heroic, Special; le tre soglie del Comeback ("Bloodied:", "25% or lower:", "1 hp or lower:") su righe separate; nessun summon Beast. Migrazione 23 [1.15.9, 14] **(ordine Special, Comeback, Heroic, Special; tre soglie su righe separate; nessun summon; parole uguali al libro)**
+- [x] **Massive Overhead** (testo; Colossus, p.136) — cosa controllare: niente corsivo, si apre con "Effect: End your turn…" e poi "Special Effect: If your target was already in a pit…"; "Rush" di Blood Rush senza tooltip. Migrazione 20 [1.15.10, 51, 52, 65, 69] **(niente corsivo, "Effect: End your turn…" poi "Special Effect: If your target was already in a pit…"; "Blood Rush" senza tooltip)**
+- [x] **Upheaval** (Colossus, p.136) — cosa controllare: danno del Talent I (2), chip Boulder, chip "Pillar · H2" solo con la mastery [1.15.25, 65, 67] **(Talent I: Damage Roll con "Area 2 flat" e bottone Small Blast; chip Boulder · H1; "Pillar · H2" solo con la mastery, che porta anche il range a 5)**
+- [x] **Dropkick** (Colossus, p.136) — cosa controllare: tag Sacrifice con tooltip; con Giant Kicker il danno propone l'Area (fray) [1.15.7, 25, 69] **(tag Sacrifice con tooltip; con Giant Kicker tag True Strike e Line 4 e la finestra del danno ha "Area fray 4")**
+- [x] **Takedown** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno; niente "Gain True Strike" sull'Exceed / Heroic [1.15.69, 130] **(chip "Pit · 1"; nessun "Gain True Strike" né sulla scheda né sulla card)**
+- [x] **Valkyrie** (Colossus, p.136) — cosa controllare: chip degli spazi di terreno [1.15.69] **(chip "Pit · 1")**
+- [x] **Pulverize** (tratto Colossus, p.135) — cosa controllare: casella "Pulverize" nella finestra dell'attacco, spuntata da 2 livelli più in alto [1.15.212] **(casella presente; dislivello 1 non spuntata, dislivello 2 spuntata)**
 
 #### Stalwart — Knave
 
-- [ ] **Boiling Blood** (testo; Knave, p.138) — cosa controllare: il corsivo finisce con "…before expiring." senza "Defy Death —"; Trigger "You are defeated."; l'Effect comincia con "Defy Death — You fight on, …". Migrazione 36 [1.15.121]
+- [x] **Boiling Blood** (testo; Knave, p.138) — cosa controllare: il corsivo finisce con "…before expiring." senza "Defy Death —"; Trigger "You are defeated."; l'Effect comincia con "Defy Death — You fight on, …". Migrazione 36 [1.15.121] **(è del Colossus, non del Knave: p.138 è ancora il capitolo 3 del Colossus. Corsivo finisce con "…before expiring.", Trigger "You are defeated.", Effect "Defy Death — You fight on, …"; ok)**
 - [ ] **Provoke** (Knave, p.142) — cosa controllare: il danno proposto è 2 (non l'1 piercing "to you"), Pierce non spuntato [1.15.16, 17, 144]
 - [ ] **Riposte** (Knave, p.142-143) — cosa controllare: bottone Gamble con le cariche di Vigilance; blocco "Dire Parry — Interrupt 1" con bottone chat; con Strong Left riserva fino a 3; "Refresh Riposte" [1.15.29, 62, 151]
 - [ ] **Revenge** (Knave, p.142) — cosa controllare: Indignation sostituisce solo l'Effect (barrato solo quello); "armor" nel corsivo senza tooltip; niente "Gain True Strike" [1.15.3, 8, 130, 139]
