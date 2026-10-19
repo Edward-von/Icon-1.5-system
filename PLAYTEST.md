@@ -657,12 +657,12 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Reliquie
 
-- [ ] **Arenheir** (reliquia, p.252) — cosa controllare: crit / exceed −1, −2, −3 secondo il round col rango III; l'Aspect abbassa il crit dopo ogni critico fino a 15+; casella Exceed del rango II sotto il 25% hp [1.15.63, 75, 212]
-- [ ] **Paleblood** (reliquia, p.252) — cosa controllare: niente "End of round 0" all'avvio del combattimento; casella Exceed vuota con la frase [1.15.79, 212]
-- [ ] **Silver Rabbit** (reliquia, p.250) — cosa controllare: "Set the number" nel gamble, il tooltip nomina solo Silver Rabbit III e Golden Mask [1.15.29, 219]
-- [ ] **Conquering King** (reliquia, p.250-252) — cosa controllare: card "Round 5" al rango I, nulla al round 7 finché non è al rango II [1.15.63]
-- [ ] **Domain e Skipjack** (reliquie, p.250-252) — cosa controllare: le righe "Round N" a inizio round quando si accendono [1.15.63]
-- [ ] **Golden Mask** (p.340) — cosa controllare: "Set the number" nel gamble [1.15.29, 219]
+- [x] **Arenheir** (reliquia, p.252) — cosa controllare: crit / exceed −1, −2, −3 secondo il round col rango III; l'Aspect abbassa il crit dopo ogni critico fino a 15+; casella Exceed del rango II sotto il 25% hp [1.15.63, 75, 212] **(rango III: crit/exceed 19/14 al round 1, 18/13 al round 3, 17/12 al round 5; casella "Arenheir II" spuntata con Knuckle a 10/40 hp, vuota a 30/40. L'Aspect dopo ogni critico non provato)**
+- [x] **Paleblood** (reliquia, p.252) — cosa controllare: niente "End of round 0" all'avvio del combattimento; casella Exceed vuota con la frase [1.15.79, 212] **(casella "Paleblood I triggers all exceed effects · When the die is 4…" vuota con la frase; niente "End of round 0" già provato nella sezione 1.15.79)**
+- [x] **Silver Rabbit** (reliquia, p.250) — cosa controllare: "Set the number" nel gamble, il tooltip nomina solo Silver Rabbit III e Golden Mask [1.15.29, 219] **(già provato nella sezione 1.15.219: il tooltip nomina solo Silver Rabbit III e Golden Mask)**
+- [x] **Conquering King** (reliquia, p.250-252) — cosa controllare: card "Round 5" al rango I, nulla al round 7 finché non è al rango II [1.15.63] **(rango I: riga "Conquering King I" nella card "Round 5", niente al round 7; rango II: riga "Conquering King II" al round 7)**
+- [x] **Domain e Skipjack** (reliquie, p.250-252) — cosa controllare: le righe "Round N" a inizio round quando si accendono [1.15.63] **(il "Round 4+" è solo nell'Aspect: all'Aspect righe "Domain Aspect" e "Skipjack Aspect" nella card "Round 4"; al rango I nessuna riga, giusto)**
+- [x] **Golden Mask** (p.340) — cosa controllare: "Set the number" nel gamble [1.15.29, 219] **(già provato nella sezione 1.15.219)**
 
 #### Foe, legend e summon (compendio)
 
