@@ -3843,8 +3843,8 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Pandaemonium con il Talent II: metti il pit della combo e quelli sotto i foe pacified. Clic destro sul chip
-      della combo: va via solo il suo pit.
+- [x] Pandaemonium con il Talent II: metti il pit della combo e quelli sotto i foe pacified. Clic destro sul chip
+      della combo: va via solo il suo pit. **(Talent II: pit sotto il Knuckle pacified e pit della combo; clic destro sul chip "Pit · 1" della combo: va via solo il suo pit, quello del pacified resta.)**
 - [x] Clic destro sul chip "Pits under pacified foes": vanno via solo i pit sotto i foe. **(Clic destro sul chip "Pits under pacified foes": finestra "Pit — remove", i due pit spariscono. (Nessun pit della combo presente, quindi "solo quelli" non verificato.))**
 - [ ] I pit sotto i foe messi con una versione precedente si tolgono dal chip della combo (gruppo vecchio), non da
       quello del Talent II.
@@ -4003,14 +4003,14 @@ Setup: solo codice (F5 basta).
 - [x] PG con Pandaemonium e DULCE PURGATORIO sbloccata, due o tre pit sulla scena lontani dal punto scelto, combo NON
       armata. Bottone dell'area → Medium Blast: un solo template che copre il blast e tutti i pit, nome "Medium Blast
       + all pits", tra i bersagli anche i token sui pit. **(Tre pit sulla scena (uno sotto il Knuckle, uno sotto il Kelpie, uno libero), Pandaemonium con DULCE PURGATORIO, combo spenta: Medium Blast → un solo template "Medium Blast + all pits", "placed — Kelpie, Knuckle in the area".)**
-- [ ] Come sopra ma dal tiro d'attacco, senza area già sulla mappa: stesso risultato; chi sta su un pit dentro il
-      blast compare una volta sola.
+- [x] Come sopra ma dal tiro d'attacco, senza area già sulla mappa: stesso risultato; chi sta su un pit dentro il
+      blast compare una volta sola. **(Tiro d'attacco senza area sulla mappa, due pit: template "Medium Blast + all pits"; il Kelpie sul pit dentro il blast compare una volta sola nella finestra del bersaglio.)**
 - [x] Charge (Large Blast): anche il blast grande prende tutti i pit. **(Charge: "Large Blast + all pits".)**
-- [ ] Senza pit sulla scena: area normale, nome senza "+ all pits".
+- [x] Senza pit sulla scena: area normale, nome senza "+ all pits". **(Senza pit sulla scena, mastery sbloccata: area "Medium Blast" (9 caselle), senza "+ all pits".)**
 - [x] Mastery non sbloccata: l'area non prende i pit fuori dal blast. **(Mastery bloccata: l'area resta "Medium Blast" di 9 caselle.)**
 - [x] Combo armata (Purgatorio): l'area dell'attacco NON prende i pit; "Medium Blast (on pits)" fa ancora esplodere
       tutti i pit. **(Combo armata con la mastery: l'area dell'attacco è "Medium Blast" (9 caselle, niente pit); "Combo: Medium Blast (on pits)" fa esplodere tutti i pit.)**
-- [ ] Altre abilità con Mastery sbloccata (es. Holy con MAGNASANCTI): nessun cambiamento.
+- [x] Altre abilità con Mastery sbloccata (es. Holy con MAGNASANCTI): nessun cambiamento. **(Holy con MAGNASANCTI: Small Blast terrain come prima, nessun "+ all pits" (vedi L4124).)**
 
 ## Emerso R48 — L'aura di Fulminate arriva da sola con il mark (17 ottobre 2026, versione 1.15.105)
 
@@ -4137,7 +4137,7 @@ Setup: solo codice (F5 basta).
 - [x] Nessun foe pacified: avviso "No pacified foe on this scene". **(Nessun foe pacified: "No pacified foe on this scene.")**
 - [x] "Not now" nella domanda: nessun pit. **("Not now": nessun pit.)**
 - [x] Un alleato (non ostile) pacified non riceve il pit. **(Il Bastion (alleato) pacified non è nominato e non riceve il pit.)**
-- [ ] Il "Medium Blast (on pits)" di Purgatorio fa esplodere anche questi pit, se sono dentro l'area.
+- [x] Il "Medium Blast (on pits)" di Purgatorio fa esplodere anche questi pit, se sono dentro l'area. **(Con DULCE PURGATORIO e combo: "Medium Blast (on pits) × 1" fa esplodere anche il pit messo sotto il foe pacified.)**
 - [x] Da giocatore (non GM): il chip funziona se ha il permesso di creare template. **(PT Player, Talent II di Pandaemonium, Knuckle pacified: "Mark a pit space under Knuckle?" → Mark → card "1 × Pit under Knuckle")**
 
 ## Emerso R49 — Dulce Purgatorio fa esplodere tutti i pit del campo (17 ottobre 2026, versione 1.15.96)
