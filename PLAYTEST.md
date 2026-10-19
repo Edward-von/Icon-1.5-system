@@ -11,6 +11,44 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Prove con due client (19 ottobre 2026 sera, versione 1.15.264)
+
+Le voci "da provare con un secondo client" del TODO, rifatte con il GM (localhost), un giocatore (PT Player su
+127.0.0.1) e, per le prove con due GM, un secondo Gamemaster su [::1]. Le caselle sono spuntate anche nelle sezioni
+originali; qui il riepilogo.
+
+- [x] **Summon di un foe da un giocatore co-GM**: PT Player proprietario del Junk Mage trascina la Scrap Turret → la
+      piazza il GM nel punto del drop; un foe non suo → avviso.
+- [x] **Mock da giocatore**: Weakened+ e Hatred+ "until the end of their next turn" su un foe non suo → applicati dal
+      GM con la durata.
+- [x] **Bless da giocatore**: Blessed su un alleato non suo (TEST Fool) → arriva dal GM, 1 carica.
+- [x] **Gain vigilance da giocatore su un alleato**: TEST Bastion 0 → 1, chat "TEST Bastion gains Vigilance +1 (now 1)".
+- [x] **Power die lato giocatore**: dalla scheda di TEST Chanter "+ Die" (PT FIX die d8 a 3), + → 4, − → 3, tiro 1d8
+      in chat col nome e i tick, ✕ lo scarta.
+- [x] **Danno ×N da giocatore** (P15): vedi la sezione P15, tutte le caselle spuntate.
+- [x] **Interrupt da giocatore** (P26): vedi la sezione P26.
+- [x] **Due GM collegati**: un solo save di fine turno per status (foe e PG), un solo annuncio di fase della legend,
+      Start Combat dal secondo GM con Party Resolve 0 e Next Round a 1 (non 2).
+- [x] **Slow turn / "NPC picks next"**: dopo la slow turn di un PG il round 2 dice "NPC PICKS NEXT" col tooltip di
+      p.87; il PG può agire lo stesso.
+- [x] **Danno diviso degli attacchi ad area**: Blackstar su tre foe → card "Hit" al solo bersaglio d'attacco (con il
+      dado bonus) e card "Area damage" agli altri due (senza); con Miss, "Miss (fray only)" + "Area damage". Provato
+      chiamando la funzione della card: le caselle del dialog (pallini, ✕) restano da provare a mano.
+- [x] **Tour da giocatore**: First Steps con 7 passi, House Rules assente dalla lista ("ICON 1.5 [3]") e con l'avviso
+      "This tour is for the GM only." da console, `startTour("combat")` riparte dal passo 0.
+- [x] **Guida in tema chiaro**: con la finestra della guida in tema chiaro il sistema tiene il suo stile scuro: le
+      clip, la riga oro "Origin and attack space" e i testi si leggono. (Tema chiaro messo sulla sola finestra: il
+      client del giocatore con il tema chiaro di Foundry non si è caricato in tempo, vedi sotto.)
+- [x] **"Riduci animazioni"**: con la preferenza del sistema operativo simulata, Quick Guide → Areas: 12 clip ferme con
+      i comandi del player; senza, partono da sole.
+- [ ] **Tasti ← → e ✕ dei tour**: non provato (la ✕ cliccata dal codice non chiudeva il fumetto: da riprovare a mano
+      con il mouse prima di pensare a un bug).
+- [ ] **Area split, dialog**: i pallini del bersaglio d'attacco e la ✕ nel dialog del danno, da provare a mano.
+
+Nota sul client giocatore: aperto in una scheda in secondo piano, a volte Chrome non scarica tutti i file del sistema
+(`game.icon` assente, i bottoni delle card non rispondono) o resta fermo sul caricamento della mappa. Non è un errore
+del sistema: con la scheda in primo piano durante il caricamento tutto funziona.
+
 ## Encounter Designer — "riusa gli attori del mondo" (19 ottobre 2026, versione 1.15.264)
 
 Setup: solo codice (F5 basta). Un foe nel mondo (non creato dal Designer), una scena con un combat attivo.
@@ -2781,7 +2819,7 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
       Character Sheet, Combat, House Rules) e tre per i giocatori; console senza errori `Tour "..." failed to register`.
 - [x] **First Steps** da GM: tutti i 9 passi; il libro 📖 nei controlli token viene evidenziato, la sidebar si
       apre da sola su Actors, Compendium, Combat, Chat; il passo "Encounter Designer" evidenzia il bottone.
-- [ ] **First Steps** da giocatore: i passi "Encounter Designer" e "House rules" non compaiono (7 passi invece di 9).
+- [x] **First Steps** da giocatore: i passi "Encounter Designer" e "House rules" non compaiono (7 passi invece di 9). **(19 ottobre sera, client PT Player: il tour First Steps ha 7 passi)**
 - [ ] **First Steps** con la sidebar chiusa e senza scena attiva: nessun passo blocca il tour (quelli senza
       bersaglio compaiono al centro dello schermo).
 - [ ] **The Character Sheet** in un mondo senza PG: il tour non si avvia (bottone non attivo o avviso "Create a
@@ -2796,13 +2834,13 @@ esistenti (in console "Migration 17: N clock(s) given a stable id" se ce n'erano
 - [x] **Fine First Steps**: Foundry propone di continuare con il tour della scheda.
 - [ ] **Guida di benvenuto** (❔ Guide in Notes → Character Management): bottone **Take the tour** avvia First Steps;
       **Got it** chiude come prima.
-- [ ] **Macro/console**: `game.icon.startTour("combat")` riparte da capo il tour Combat.
+- [x] **Macro/console**: `game.icon.startTour("combat")` riparte da capo il tour Combat. **(da PT Player: startTour("combat") parte dal passo 0; dopo un passo avanti, rilanciato riparte da 0)**
 - [x] **House Rules** da GM: si apre Configure Settings direttamente sulla sezione ICON 1.5; i passi evidenziano
       una per una le tre impostazioni (Party Resolve +1, Dust to heal Burdens, Heroic / Routine).
 - [ ] **House Rules** con Configure Settings già aperto su un'altra sezione (es. Core): il tour passa da solo a
       ICON 1.5.
-- [ ] **House Rules** da giocatore: non compare in Settings → Tours; `game.icon.startTour("house-rules")` mostra
-      l'avviso "This tour is for the GM only."
+- [x] **House Rules** da giocatore: non compare in Settings → Tours; `game.icon.startTour("house-rules")` mostra
+      l'avviso "This tour is for the GM only." **(da PT Player: Settings → Tours mostra "ICON 1.5 [3]" (niente House Rules); `game.icon.startTour("house-rules")` → "This tour is for the GM only.")**
 - [x] **First Steps** da GM: il passo "House rules" sta prima di "Next steps" e rimanda al tour House Rules.
 
 ## Quick Guide: aree, FAQ, bottone (1 ottobre 2026, versione 1.11.0)
@@ -6513,7 +6551,7 @@ Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-te
 - [ ] **Gain con durata** (controllo di regressione): un'abilità con "gain evasion until the start of your next
       turn" → applicata, sparisce all'inizio del turno successivo del PG.
 - [ ] **Hatred normale**: Taunt ("gains hatred of you") → finisce a fine turno del foe come prima.
-- [ ] **Relay**: da giocatore, Mock su un foe che non possiede → il GM la applica, con la durata.
+- [x] **Relay**: da giocatore, Mock su un foe che non possiede → il GM la applica, con la durata. **(da PT Player (TEST Chanter): Weakened+ e Hatred+ "until the end of their next turn" su PT FIX Foe → arrivano al GM e la applica con la durata (expiry "end", 1 turno, testo giusto))**
 
 **E2 — Attacco ad area senza 📐**
 - [ ] Draken Cross con Talent II (più aree possibili): senza aver usato 📐, premere ⚔ → si apre la stessa finestra
@@ -6544,8 +6582,8 @@ Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-te
       l'omino grigio. Un oggetto (Bonfire) → fuoco. Trascinare un summon dal compendio Summons (Beast) → zampa.
 - [ ] Macro "ICON: Copy Foe Summons" (compendio ICON Macros): un foe importato prima della 1.8.0 senza summon →
       la macro lo elenca, conferma → il foe ha la sezione Summons. Rilanciata → "already has its summons".
-- [ ] Giocatore proprietario di un foe (co-GM): trascina il chip di un summon sulla mappa → "sent to the GM", il GM
-      lo piazza nel punto giusto. Un giocatore che non possiede il foe → avviso, niente.
+- [x] Giocatore proprietario di un foe (co-GM): trascina il chip di un summon sulla mappa → "sent to the GM", il GM
+      lo piazza nel punto giusto. Un giocatore che non possiede il foe → avviso, niente. **(19 ottobre sera, PT Player reso proprietario del Junk Mage: chip Scrap Turret trascinato dal giocatore → piazzato dal GM nella casella del drop (pedina scollegata); Bale Troll non suo → "Only the GM, or a player who owns this foe, can place its summons.")**
 
 **E8 — Template**
 - [ ] Legend Jotunn (es. Thannir): trascinare "Titan Armament" da Foe Templates → chip "Special" sotto le statistiche,
@@ -6658,9 +6696,9 @@ Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-te
 
 ## Chi apre il round dopo le slow turn (12 ottobre 2026, versione 1.17.8)
 
-- [ ] **Round 2 dopo una slow turn**: chiudere il round 1 con la slow turn di un PG → Next Round → il tracker dice
-      "NPC PICKS NEXT"; il mouse sopra l'indicatore spiega la regola (p.87).
-- [ ] **Solo consiglio**: nello stesso momento cliccare il pallino di un PG → il PG agisce normalmente.
+- [x] **Round 2 dopo una slow turn**: chiudere il round 1 con la slow turn di un PG → Next Round → il tracker dice
+      "NPC PICKS NEXT"; il mouse sopra l'indicatore spiega la regola (p.87). **(19 ottobre sera, combat temporaneo: round 1 foe, poi TEST Fool in slow turn chiude il round → Next Round → "NPC PICKS NEXT", tooltip "The round opens with the side opposite… (p.87)")**
+- [x] **Solo consiglio**: nello stesso momento cliccare il pallino di un PG → il PG agisce normalmente. **(nello stesso momento attivato TEST Fool → agisce normalmente)**
 
 ## Campi nelle finestre staccate con PopOut! (12 ottobre 2026, versione 1.17.7)
 
@@ -6810,12 +6848,12 @@ Dopo il deploy: chiudere Foundry prima della copia (cambiano i pack foes, foe-te
 
 Preparazione: due utenti con ruolo Gamemaster (o GM + Assistant GM) collegati allo stesso mondo, in due schede.
 
-- [ ] **Save di fine turno una volta sola**: un foe e un PG con uno status salvabile (es. Weakened) → fine del loro
-      turno → in chat UN solo save per status (prima ne uscivano due). Con la Hatred normale: un solo "ends".
-- [ ] **Fase delle legend**: una legend che passa alla fase successiva → un solo annuncio in chat.
-- [ ] **Start dal GM assistente**: il GM assistente preme Start Combat → la Party Resolve parte da 0 e i promemoria
-      "Start of combat" delle reliquie escono una volta.
-- [ ] **Un solo GM**: con un GM solo, i save di fine turno escono come prima.
+- [x] **Save di fine turno una volta sola**: un foe e un PG con uno status salvabile (es. Weakened) → fine del loro
+      turno → in chat UN solo save per status (prima ne uscivano due). Con la Hatred normale: un solo "ends". **(19 ottobre sera, due GM collegati (localhost + [::1]): PT FIX Foe e TEST Fool Weakened in un combat temporaneo; fine turno di ciascuno → un solo "Save vs Weakened" per status)**
+- [x] **Fase delle legend**: una legend che passa alla fase successiva → un solo annuncio in chat. **(dal secondo GM la legend Master passa alla fase II → un solo annuncio "Master — Phase II" in chat)**
+- [x] **Start dal GM assistente**: il GM assistente preme Start Combat → la Party Resolve parte da 0 e i promemoria
+      "Start of combat" delle reliquie escono una volta. **(il secondo GM (Gamemaster, non assistente) crea il combat e preme Start: Party Resolve 0, nessun promemoria doppio (nessuna reliquia "start of combat" nel party di prova); Next Round → Party Resolve 1, non 2)**
+- [x] **Un solo GM**: con un GM solo, i save di fine turno escono come prima. **(con un GM solo (tutto il resto della serata) i save di fine turno escono una volta)**
 
 ## Vigilance, dado più alto (12 ottobre 2026, versione 1.16.4)
 
@@ -6854,8 +6892,8 @@ sulla scena dentro l'area.
 
 - [ ] **Bersaglio d'attacco nel dialog del danno**: attacco ad area → nel dialog dell'attacco scegliere il secondo foe
       → tirare. Poi 💥 danno: il dialog elenca i tre foe con i pallini, e quello scelto prima è già selezionato.
-- [ ] **Hit diviso**: esito Hit → in chat due card: "… — Hit" con il solo bersaglio d'attacco, e "… — Area damage"
-      con gli altri due (senza i dadi bonus). Con Miss: Miss al bersaglio d'attacco, Area agli altri.
+- [x] **Hit diviso**: esito Hit → in chat due card: "… — Hit" con il solo bersaglio d'attacco, e "… — Area damage"
+      con gli altri due (senza i dadi bonus). Con Miss: Miss al bersaglio d'attacco, Area agli altri. **(19 ottobre sera, Blackstar di TEST Enochian su Warrior, Mechanist, Wisp con bersaglio d'attacco Mechanist e 1 dado bonus: "Blackstar — Hit" col solo Mechanist (3d6 tieni 2), "Blackstar — Area damage" con Warrior e Wisp (1[d6], senza dado bonus); con Miss: "Miss (fray only)" al Mechanist e Area agli altri due. Provato chiamando la funzione della card, non dal dialog)**
 - [ ] **Area senza danno**: un'abilità ad area il cui Area effect non fa danno → con Hit esce una sola card, col solo
       bersaglio d'attacco; il suggerimento sopra la lista lo dice.
 - [ ] **Esito Area scelto a mano**: card unica "Area damage" con tutti i foe rimasti nella lista.

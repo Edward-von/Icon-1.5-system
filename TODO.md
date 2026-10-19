@@ -2370,15 +2370,18 @@ Già fatti: kit migliori (Sessione D; il conteggio usi è E10), tab Narrative de
       contano come uno; servirebbe un blocco per oggetto finché l'aggiornamento non è fatto.
 (FATTO il 17 ottobre 2026, versione 1.15.136: le modifiche a un kit (uso, Shift + clic, "−") fanno la fila e ognuna
       rilegge il kit dopo il salvataggio della precedente. Solo codice.)
-- [ ] **Da provare con un secondo client**: summon piazzati da un giocatore co-GM, Mock e Bless da giocatore, due GM
+- [x] **Da provare con un secondo client**: summon piazzati da un giocatore co-GM, Mock e Bless da giocatore, due GM
       collegati, slow turn / "NPC picks next", danno diviso degli attacchi ad area, tour guidati.
+      (PROVATO il 19 ottobre 2026 sera con GM + giocatore + secondo GM: tutto a posto; restano da fare a mano il dialog
+      del danno ad area (pallini, ✕) e i tasti dei tour. Vedi PLAYTEST "Prove con due client".)
 
 ## Playtest locale del 2 ottobre 2026 (versioni 1.12.1–1.14.0) — FATTO, correzioni nella 1.14.1
 
 - [x] **Gain vigilance**: il lettore del testo non riconosceva "Gain +1 vigilance" / "vigilance +1" (S, fatto).
 - [x] **Nome lungo di un power die** nascondeva la dimensione (S, fatto).
-- [ ] Da provare con un secondo client: Gain vigilance da giocatore su un alleato, controlli lato giocatore dei
+- [x] Da provare con un secondo client: Gain vigilance da giocatore su un alleato, controlli lato giocatore dei
       power die; tema chiaro della guida e "riduci animazioni" (S, playtest).
+      (PROVATO il 19 ottobre 2026 sera: tutto a posto, vedi PLAYTEST "Prove con due client".)
 
 ## Richiesta di Maar — status doppioni dei tracker (ricevuta il 2 ottobre 2026) — FATTA il 2 ottobre 2026 (versione 1.14.0)
 
