@@ -66,6 +66,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       primo in `combat.turns`, quindi il codice crede che il suo turno sia già cominciato. Con i foe che agiscono per
       primi l'interrupt illimitato non copre proprio i loro turni. Nel combattimento a fazioni l'ordine dei turni non
       vale: serve "il Wright si è attivato in un round successivo" (activateCombatant), non l'indice. S-M.
+- [ ] **P19** — Astra → Fortuna (Ann, Seer): la card della combo ha il bottone "Gamble" della base. Il tag `gamble`
+      è solo tra i tag di Astra (Fortuna: attack, range-5, medium-blast, autohit, combo) e il gamble è un effetto
+      della base (p.~148, "Area effect: Gamble"); `abilityGambles` legge il sistema base anche quando esce la combo
+      (IconSheet `_getAbilityDetail`, `canGamble`). S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.

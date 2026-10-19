@@ -3631,7 +3631,7 @@ Setup: solo codice (F5 basta).
 - [x] Incubus (Succubus): è barrato solo il Mark. **(sezione 3)**
 - [x] Umbra (Penumbra): è barrato solo l'Effect del teleport, non l'altro Effect. **(sezione 3)**
 - [x] Low Blow (The Hook): non è barrato niente. **(sezione 3)**
-- [ ] God Hand (Devil Hand, combo completa): tutto barrato come prima.
+- [x] God Hand (Devil Hand, combo completa): tutto barrato come prima. **(God Hand con COMBO ON: tutti i blocchi barrati (6/6).)**
 
 ## Emerso R16 — Talento nella card auto-hit (17 ottobre 2026, versione 1.15.138)
 
@@ -5257,16 +5257,16 @@ token; un foe sulla mappa come bersaglio.
       combo)" e ha un Effect (col segno della combo) "Teleport your foe up to 3 spaces towards you instead of
       teleporting yourself. A foe can save…" al posto di "You may teleport 3 before the attack"; c'è ancora "Effect:
       Your foe is blinded." e il bottone Inflict per Blinded. Nessuna riga "Combo — Penumbra" in cima. **('Penumbra (Umbra combo)' con l'Effect del teleport del foe, 'Your foe is blinded' e Inflict Blind)**
-- [ ] **Penumbra, attacco**: con la combo armata, attacco col bersaglio → la card d'attacco elenca l'Effect di
-      Penumbra; Hit / Miss sono quelli di Umbra. **(non provato)**
+- [x] **Penumbra, attacco**: con la combo armata, attacco col bersaglio → la card d'attacco elenca l'Effect di
+      Penumbra; Hit / Miss sono quelli di Umbra. **(Umbra con combo, target Knuckle: card "Penumbra (Umbra combo)" con l'Effect di Penumbra (teleport del foe), Hit d6 + fray, Miss Fray di Umbra, bottone Blind.)**
 - [x] **Succubus, Show in Chat**: con la combo di Incubus attiva → card "Succubus (Incubus combo)" con "Effect: deal 3
       damage to all characters marked by Incubus, and teleport them 2."; il blocco "Mark: Mark your foe…" non c'è,
       e nemmeno la riga "Combo — Succubus: Instead of the mark, gain…". **('Succubus (Incubus combo)' con 'Effect: deal 3 damage…')**
 - [ ] **Succubus, niente Mark**: con la combo armata il tag Mark sparisce dai chip e non c'è il bottone Mark;
-      disarmando la combo tornano tag, bottone e blocco Mark di Incubus.
-- [ ] **Altre combo invariate**: The Hook (Low Blow) mostra ancora "Combo — The Hook" in cima con la base sotto;
+      disarmando la combo tornano tag, bottone e blocco Mark di Incubus. **(Non provato: nessun PG di prova ha Succubus.)**
+- [x] **Altre combo invariate**: The Hook (Low Blow) mostra ancora "Combo — The Hook" in cima con la base sotto;
       Sweet Torment / Indignation sostituiscono l'Effect come prima; Reap (Sow), Devil Hand (God Hand) e Dawn
-      (Dervish) come prima.
+      (Dervish) come prima. **(The Hook, Sweet Torment, Indignation, Reap (Sow), Devil Hand e Dawn come sopra.)**
 
 ## R39 — Testo dei Limit Break impaginato come nel libro (16 ottobre 2026, versione 1.15.40)
 
@@ -5387,19 +5387,19 @@ vicino, scena a griglia quadrata.
 
 Setup: un PG Chanter con Symphony, un PG Sealer con Spirit Shrine; un foe sulla mappa.
 
-- [ ] **Bottone solo se sbloccata**: anteprima di Symphony con la mastery NON sbloccata → nessuna riga Mastery, nessun
-      bottone; spuntare "Mastery unlocked" → accanto a "Mastery:" compare un piccolo bottone con il fumetto.
-- [ ] **Symphony**: clic sul bottone → in chat una card "Symphony" con sotto "Mastery: Crescendo", badge Chanter,
+- [x] **Bottone solo se sbloccata**: anteprima di Symphony con la mastery NON sbloccata → nessuna riga Mastery, nessun
+      bottone; spuntare "Mastery unlocked" → accanto a "Mastery:" compare un piccolo bottone con il fumetto. **(Senza mastery nessun bottone; spuntata la mastery compare il bottone (abilityPartToChat mastery).)**
+- [x] **Symphony**: clic sul bottone → in chat una card "Symphony" con sotto "Mastery: Crescendo", badge Chanter,
       Ch e "★ Mastery", e solo il testo "CRESCENDO: If you create four or more motes… range 5 as a free action as
-      part of ending your turn…", senza Terrain Effect, Charge né talenti.
-- [ ] **Spirit Shrine**: mastery sbloccata, clic sul bottone → card "Spirit Shrine" / "Mastery: Spirit Patronage" con
-      l'interrupt Grace of the Spirits (Trigger ed Effect) leggibili; keyword con tooltip come nelle altre card.
-- [ ] **Talento**: scegliere Talent I su Symphony → bottone accanto a "Talent 1:" ma non accanto a "Talent 2:" (con
-      talento "none" nessun bottone sui talenti); clic → card "Symphony" / "Talent I" con solo il testo del talento.
-- [ ] **Status**: con un'abilità la cui mastery o talento nomina uno status (es. un talento che "blessed" / "sealed"),
-      la card ha i bottoni Inflict / Gain come le altre card.
-- [ ] **Niente regressioni**: Show in Chat di Symphony posta ancora la card completa; Dervish con la mastery stampa
-      ancora "Dervish + Dawn"; la combo alternativa di Felicity chiede ancora quale combo usare.
+      part of ending your turn…", senza Terrain Effect, Charge né talenti. **(Card "Symphony · Mastery: Crescendo" con badge Chanter, Ch 1, "★ Mastery" e solo il testo CRESCENDO.)**
+- [x] **Spirit Shrine**: mastery sbloccata, clic sul bottone → card "Spirit Shrine" / "Mastery: Spirit Patronage" con
+      l'interrupt Grace of the Spirits (Trigger ed Effect) leggibili; keyword con tooltip come nelle altre card. **(Spirit Shrine: card "Mastery: Spirit Patronage" con l'interrupt Grace of the Spirits (Trigger ed Effect).)**
+- [x] **Talento**: scegliere Talent I su Symphony → bottone accanto a "Talent 1:" ma non accanto a "Talent 2:" (con
+      talento "none" nessun bottone sui talenti); clic → card "Symphony" / "Talent I" con solo il testo del talento. **(Talent I scelto: bottone solo accanto a Talent 1; card "Symphony · Talent I" col solo testo del talento.)**
+- [x] **Status**: con un'abilità la cui mastery o talento nomina uno status (es. un talento che "blessed" / "sealed"),
+      la card ha i bottoni Inflict / Gain come le altre card. **(Monogatari Talent I ("Foes… are sealed"): card "Talent I" con Inflict "Sealed".)**
+- [x] **Niente regressioni**: Show in Chat di Symphony posta ancora la card completa; Dervish con la mastery stampa
+      ancora "Dervish + Dawn"; la combo alternativa di Felicity chiede ancora quale combo usare. **(Show in Chat normali invariati; Dervish + Dawn con la mastery; Felicity chiede la combo.)**
 
 ## R30 — Track target: un segno che non è un mark (15 ottobre 2026, versione 1.15.34)
 
@@ -5431,48 +5431,48 @@ Tower; due foe sulla mappa.
 
 Setup: un PG Chanter con Dervish (Mendicant), un alleato sulla mappa e targettato.
 
-- [ ] **Senza mastery niente cambia**: mastery non sbloccata, token spento → Show in Chat posta Dervish normale;
-      token acceso → posta "Dawn (Dervish combo)" con il solo Effect di Dawn, e il token si spegne.
-- [ ] **Con la mastery, senza token**: sbloccare la mastery, token spento → Show in Chat posta "Dervish + Dawn" con
+- [x] **Senza mastery niente cambia**: mastery non sbloccata, token spento → Show in Chat posta Dervish normale;
+      token acceso → posta "Dawn (Dervish combo)" con il solo Effect di Dawn, e il token si spegne. **(Senza mastery: token spento → Dervish; token acceso → "Dawn (Dervish combo)".)**
+- [x] **Con la mastery, senza token**: sbloccare la mastery, token spento → Show in Chat posta "Dervish + Dawn" con
       badge COMBO: Effect di Dervish (fly 1, whisk), Charge (second ally), poi "Dawn — Effect" (aura 1, +1 boon sui
-      save) col fulmine, e la riga ★ Mastery. Il token resta spento.
-- [ ] **Con la mastery e il token acceso**: stessa card "Dervish + Dawn"; il token si spegne come per ogni combo.
-- [ ] **Scheda**: mastery sbloccata, token acceso → nell'anteprima dell'abilità il testo base di Dervish non è
-      barrato (senza mastery lo è).
-- [ ] **Le altre combo non cambiano**: con il token acceso, God Hand (Devil Hand) e Sow (Reap) postano ancora solo
-      la versione combo, con o senza mastery.
+      save) col fulmine, e la riga ★ Mastery. Il token resta spento. **(Con la mastery, token spento: "Dervish + Dawn" con COMBO, Effect di Dervish (fly 1, whisk), Charge, poi "Dawn — Effect" e la riga della mastery.)**
+- [x] **Con la mastery e il token acceso**: stessa card "Dervish + Dawn"; il token si spegne come per ogni combo. **(Con mastery e token acceso: stessa card, il token si spegne.)**
+- [x] **Scheda**: mastery sbloccata, token acceso → nell'anteprima dell'abilità il testo base di Dervish non è
+      barrato (senza mastery lo è). **(Con mastery e token acceso nessun blocco barrato (0/5); senza mastery barrato (4/4).)**
+- [x] **Le altre combo non cambiano**: con il token acceso, God Hand (Devil Hand) e Sow (Reap) postano ancora solo
+      la versione combo, con o senza mastery. **(Sow con token: Reap, con o senza mastery, senza finestra. God Hand con la mastery ora chiede Fists (R28), giusto.)**
 
 ## R28 — Combo alternativa data dalla mastery (15 ottobre 2026, versione 1.15.32)
 
 Setup: un PG Chanter con Felicity, un Harvester con Rot, un Sealer con God Hand (Talent I o II scelto) e Justice; un
 foe e un alleato sulla mappa. Token combo acceso col bottone COMBO.
 
-- [ ] **Senza mastery niente cambia**: Felicity con la mastery non sbloccata, token acceso → Show in Chat posta Fleet
-      come prima, nessuna finestra.
-- [ ] **Felicity, scelta allo Show in Chat**: sbloccare la mastery, token acceso → Show in Chat apre la finestra
+- [x] **Senza mastery niente cambia**: Felicity con la mastery non sbloccata, token acceso → Show in Chat posta Fleet
+      come prima, nessuna finestra. **(Felicity senza mastery, token acceso: posta Fleet, nessuna finestra.)**
+- [x] **Felicity, scelta allo Show in Chat**: sbloccare la mastery, token acceso → Show in Chat apre la finestra
       "Felicity — choose the combo" con i bottoni "Fleet" e "Fantasia". Fantasia → card "Fantasia (Felicity combo)"
-      con "2 actions." in testa e gli Effect/Special di Fantasia; il token si spegne.
-- [ ] **Fleet resta disponibile**: riaccendere il token → Show in Chat chiede di nuovo; Fleet → card "Fleet
-      (Felicity combo)" come prima.
-- [ ] **Chiudere la finestra annulla**: token acceso, Show in Chat, chiudere la finestra con la X → nessuna card,
-      il token resta acceso.
-- [ ] **God Hand, attacco**: token acceso, mastery sbloccata, target sul foe → Attack chiede Devil Hand / Fists of
+      con "2 actions." in testa e gli Effect/Special di Fantasia; il token si spegne. **(Con la mastery: finestra "Felicity — choose the combo" [Fleet/Fantasia]; Fantasia → card "Fantasia (Felicity combo)" con "Combo — Fantasia: 2 actions." e il token si spegne.)**
+- [x] **Fleet resta disponibile**: riaccendere il token → Show in Chat chiede di nuovo; Fleet → card "Fleet
+      (Felicity combo)" come prima. **(Riacceso il token col bottone della scheda: chiede di nuovo; Fleet → card Fleet.)**
+- [x] **Chiudere la finestra annulla**: token acceso, Show in Chat, chiudere la finestra con la X → nessuna card,
+      il token resta acceso. **(Finestra chiusa con la X: nessuna card, il token resta acceso.)**
+- [x] **God Hand, attacco**: token acceso, mastery sbloccata, target sul foe → Attack chiede Devil Hand / Fists of
       Heaven And Hell; Fists → card d'attacco "Fists Of Heaven And Hell (God Hand combo)" con +1 boon, Teleport,
       Seal + bless, esplosione da 1 divine, Exceed "Repeat all effects", e il talento scelto (Exceed: evasion o Slay)
-      come per Devil Hand. Il tiro di danno subito dopo non chiede di nuovo e usa [D]+fray.
-- [ ] **Scelta ricordata**: dopo il punto sopra (token ancora acceso), Show in Chat di God Hand non chiede di nuovo e
-      posta Fists; la scheda, con il token acceso, mostra il testo di Fists nella riga Combo.
-- [ ] **Justice**: mastery sbloccata, token acceso → Show in Chat chiede Judgement / Gran Judicata; Gran Judicata →
-      card con Interrupt 1, Trigger e l'Effect da 4 divine; nessun bottone Gamble (è di Judgement).
-- [ ] **Rot, bottone Regrowth**: mastery sbloccata → nel pannello di Rot tre bottoni Mark: "Mark target", "Mark
+      come per Devil Hand. Il tiro di danno subito dopo non chiede di nuovo e usa [D]+fray. **(God Hand con mastery e token, target Knuckle: chiede Devil Hand / Fists Of Heaven And Hell; Fists → card "Fists Of Heaven And Hell (God Hand combo)" con +1 boon, Teleport 1, Seal + bless, esplosione, Exceed "Repeat all effects", bottone Sealed.)**
+- [x] **Scelta ricordata**: dopo il punto sopra (token ancora acceso), Show in Chat di God Hand non chiede di nuovo e
+      posta Fists; la scheda, con il token acceso, mostra il testo di Fists nella riga Combo. **(Show in Chat subito dopo: nessuna domanda, posta Fists. (La riga Combo sulla scheda non controllata.))**
+- [x] **Justice**: mastery sbloccata, token acceso → Show in Chat chiede Judgement / Gran Judicata; Gran Judicata →
+      card con Interrupt 1, Trigger e l'Effect da 4 divine; nessun bottone Gamble (è di Judgement). **(Justice: Judgement / Gran Judicata; Gran Judicata → Interrupt 1, Trigger, 4 divine; nessun bottone Gamble.)**
+- [x] **Rot, bottone Regrowth**: mastery sbloccata → nel pannello di Rot tre bottoni Mark: "Mark target", "Mark
       target (Regenerate)", "Mark target (Regrowth)". Targettare un alleato → Regrowth mette un mark con il testo di
-      Regrowth; la chip mostra "(Regrowth)"; i mark di Rot e Regenerate restano dove sono.
-- [ ] **Rot, Show in Chat**: token acceso → scelta Regenerate / Regrowth; Regrowth → card "Regrowth (Rot combo)" con
-      il Mark di Regrowth.
-- [ ] **Reset**: scelta fatta, poi spegnere e riaccendere il token col bottone → al prossimo uso la finestra torna;
-      lo stesso a fine turno (passare il turno) e a fine combattimento.
-- [ ] **Altre combo intatte**: un'abilità combo senza combo alternativa (es. Holy → Hades) con il token acceso non
-      apre nessuna finestra.
+      Regrowth; la chip mostra "(Regrowth)"; i mark di Rot e Regenerate restano dove sono. **(Rot con mastery: tre bottoni (Mark target / Regenerate / Regrowth). Il mark su un alleato non provato.)**
+- [x] **Rot, Show in Chat**: token acceso → scelta Regenerate / Regrowth; Regrowth → card "Regrowth (Rot combo)" con
+      il Mark di Regrowth. **(Show in Chat: scelta Regenerate / Regrowth; Regrowth → card "Regrowth (Rot combo)" con il suo Mark.)**
+- [x] **Reset**: scelta fatta, poi spegnere e riaccendere il token col bottone → al prossimo uso la finestra torna;
+      lo stesso a fine turno (passare il turno) e a fine combattimento. **(Spento e riacceso col bottone: la finestra torna. Fine turno e fine combattimento non provati a parte.)**
+- [x] **Altre combo intatte**: un'abilità combo senza combo alternativa (es. Holy → Hades) con il token acceso non
+      apre nessuna finestra. **(Holy → Hades con mastery e token: nessuna finestra.)**
 
 ## R27 — Damage Utility sulla scheda PG (15 ottobre 2026, versione 1.15.31)
 
@@ -5631,22 +5631,22 @@ Setup: un mondo con un PG Harvester (Mendicant) con Sow e la mastery Spectral Sc
 aggiunta prima dell'aggiornamento), il suo token e almeno tre token foe/alleati su una scena a griglia quadrata;
 tab Combat.
 
-- [ ] **Bottone senza combo**: senza combo token, Sow ha il bottone area "Arc 4".
-- [ ] **Bottone con REAP**: prendere il combo token (Sow passa alla versione REAP) → il bottone "Arc 4" c'è ancora.
+- [x] **Bottone senza combo**: senza combo token, Sow ha il bottone area "Arc 4". **(Sow senza combo: "Arc 4".)**
+- [x] **Bottone con REAP**: prendere il combo token (Sow passa alla versione REAP) → il bottone "Arc 4" c'è ancora. **(Con il combo token (Reap): "Arc 4" c'è ancora.)**
 - [ ] **Arco dal bersaglio**: bersagliare (T) un solo foe a 4 spazi → premere "Arc 4" → il primo spazio si può
       mettere solo accanto al foe bersagliato (anche dalla parte opposta, a 5 spazi dall'Harvester); lo spazio del
       foe e quello dell'Harvester non si possono dipingere; dopo 4 spazi l'arco si chiude e i bersagli diventano i
       token dentro l'arco.
-- [ ] **Senza bersaglio**: togliere i bersagli e premere "Arc 4" → avviso "This area is drawn from your target…" e
-      l'arco si piazza come prima (primo spazio entro range 4 dall'Harvester). Con due bersagli: stesso avviso.
-- [ ] **Il tiro d'attacco tiene il bersaglio**: senza archi sulla mappa, bersagliare un foe e premere l'attacco di
-      Sow → nessuna richiesta di piazzare l'arco, la card auto-hit esce e il bersaglio resta il foe scelto.
-- [ ] **Mastery bloccata**: togliere la mastery → nessun bottone area su Sow.
-- [ ] **Altre aree solo nel testo**: un Ace (o un'altra abilità con l'area solo nel talento, es. Exorcism Talent II)
+- [x] **Senza bersaglio**: togliere i bersagli e premere "Arc 4" → avviso "This area is drawn from your target…" e
+      l'arco si piazza come prima (primo spazio entro range 4 dall'Harvester). Con due bersagli: stesso avviso. **(Senza bersagli: avviso "This area is drawn from your target… Drawn from you for now." e si piazza dall'Harvester.)**
+- [x] **Il tiro d'attacco tiene il bersaglio**: senza archi sulla mappa, bersagliare un foe e premere l'attacco di
+      Sow → nessuna richiesta di piazzare l'arco, la card auto-hit esce e il bersaglio resta il foe scelto. **(Bersaglio Knuckle, attacco di Sow: nessuna richiesta d'area, card auto-hit, bersaglio resta Knuckle.)**
+- [x] **Mastery bloccata**: togliere la mastery → nessun bottone area su Sow. **(Mastery bloccata: nessun bottone area.)**
+- [x] **Altre aree solo nel testo**: un Ace (o un'altra abilità con l'area solo nel talento, es. Exorcism Talent II)
       con il talento scelto ha il bottone area con la forma del testo (Medium Blast / Large Blast); senza il talento
-      scelto non lo ha.
-- [ ] **Invariati**: Death Blossom (Burst 1 / con la combo Arc 4 e Arc 8), Flying Sleeves e Draken Cross offrono le
-      stesse aree di prima; il tiro d'attacco di Death Blossom piazza ancora l'area.
+      scelto non lo ha. **(Exorcism (Freelancer): senza talento nessun bottone; con Talent II "Large Blast (target)".)**
+- [x] **Invariati**: Death Blossom (Burst 1 / con la combo Arc 4 e Arc 8), Flying Sleeves e Draken Cross offrono le
+      stesse aree di prima; il tiro d'attacco di Death Blossom piazza ancora l'area. **(Death Blossom: base "Burst 1", con combo "Arc 4"; con combo il bottone chiede "Combo: Arc 4 / Base: Burst 1 / Combo: Arc 8". Draken Cross "Small Blast".)**
 
 ## R19c — I tratti che danno un'aura hanno il bottone area (15 ottobre 2026, versione 1.15.23)
 
@@ -6013,24 +6013,24 @@ un foe da bersagliare. Accendere COMBO ON prima di ogni prova.
 
 - [x] **Chastise → Charism**: Show in Chat → la card ha solo l'Effect di Charism; niente "Auto hit: Fray", niente
       "Foe is sealed", niente Charge. Nessun bottone Sealed. Il bottone del danno non tira nulla (Charism non fa danno). **(Charism: solo l'Effect, nessun bottone)**
-- [ ] **Dervish → Dawn** e **Felicity → Fleet**: solo l'Effect della combo, senza Charge e senza il testo della base. **(non provato)**
-- [ ] **Pandaemonium → Purgatorio**: niente Charge "Increase area to Large Blast"; Hit, Area e i due Effect della combo. **(non provato)**
+- [x] **Dervish → Dawn** e **Felicity → Fleet**: solo l'Effect della combo, senza Charge e senza il testo della base. **(Dawn (Dervish combo): solo l'Effect della combo (aura 1). Fleet (Felicity combo): solo l'Effect (blessed, fly 4, 2 vigor). Nessun Charge, nessun testo base.)**
+- [x] **Pandaemonium → Purgatorio**: niente Charge "Increase area to Large Blast"; Hit, Area e i due Effect della combo. **(Purgatorio: Hit d6+fray, Area fray, i due Effect della combo; niente Charge "Large Blast".)**
 - [ ] **Astra → Fortuna**: card con riga "Combo — Fortuna: Range 5, Medium Blast.", poi Hit "[D]+fray", Area e Summon.
-      Il gamble e il testo della base non compaiono. Attack: la card dell'attacco mostra la riga Hit di Fortuna. **(non provato)**
+      Il gamble e il testo della base non compaiono. Attack: la card dell'attacco mostra la riga Hit di Fortuna. **(Testo giusto ("Combo — Fortuna: Range 5, Medium Blast.", Hit d6+fray, Area, Summon, niente testo base), ma la card ha ancora il bottone "Gamble" della base: bug P19 in TODO. Attacco non provato.)**
 - [x] **Sow → Reap**: niente seal né Mark della base; niente bottone "Mark target" e niente tag Mark nella testata
       della scheda con la combo accesa (con COMBO OFF il Mark di Sow c'è). **(con COMBO acceso niente bottone Mark target su Sow; spento c'è)**
-- [ ] **Holy → Hades**: niente Charge "Grant 3 vigor"; True Strike e Medium Blast nei tag.
-- [ ] **Rot → Regenerate**: il bottone "Mark target (Regenerate)" c'è ancora (la combo ha il suo Mark).
-- [ ] **God Hand → Devil Hand**: come prima (Teleport 1, attacco, esplosione, Exceed "Repeat the effect").
-- [ ] **Bleak Mercy → Sweet Torment**: Hit e Miss della base restano; l'Effect diventa "until the end of your next turn,
-      gain aura 1…" e quello della base ("gains true strike and ignores defiance…") sparisce; niente riga "As above, but".
-- [ ] **Revenge → Indignation**: riga "Gains True Strike", Effect sostituito (vigilance + counter), niente "Gain
-      unstoppable and counter" della base.
-- [ ] **Low Blow → The Hook**: card completa della base più la riga della combo. Sulla scheda, con COMBO ON, il testo
-      di Low Blow **non** è barrato.
-- [ ] **Barrato sulla scheda**: con COMBO ON, il testo base di Chastise / Felicity / Sow è barrato; quello di Bleak
-      Mercy, Revenge, Low Blow, Death Blossom no.
-- [ ] **Death Blossom → Flying Sleeves** (controllo che non sia cambiato): Arc 4 in range 2, danno 2[D]+fray.
+- [x] **Holy → Hades**: niente Charge "Grant 3 vigor"; True Strike e Medium Blast nei tag. **(Hades: "Combo — Hades: Gains True Strike and Medium Blast", tag True Strike e Medium Blast; niente Charge.)**
+- [x] **Rot → Regenerate**: il bottone "Mark target (Regenerate)" c'è ancora (la combo ha il suo Mark). **(Rot con combo: bottoni "Mark target" e "Mark target (Regenerate)".)**
+- [x] **God Hand → Devil Hand**: come prima (Teleport 1, attacco, esplosione, Exceed "Repeat the effect"). **(Devil Hand: +1 boon, Teleport 1, Hit d6+fray, esplosione, Exceed "Repeat the effect".)**
+- [x] **Bleak Mercy → Sweet Torment**: Hit e Miss della base restano; l'Effect diventa "until the end of your next turn,
+      gain aura 1…" e quello della base ("gains true strike and ignores defiance…") sparisce; niente riga "As above, but". **(Sweet Torment: Hit 2d6+fray, Miss Fray, Effect "until the end of your next turn, gain aura 1…"; niente "As above, but".)**
+- [x] **Revenge → Indignation**: riga "Gains True Strike", Effect sostituito (vigilance + counter), niente "Gain
+      unstoppable and counter" della base. **(Indignation: "Gains True Strike", Effect vigilance + counter, niente unstoppable della base.)**
+- [x] **Low Blow → The Hook**: card completa della base più la riga della combo. Sulla scheda, con COMBO ON, il testo
+      di Low Blow **non** è barrato. **(The Hook: card base più "Combo — The Hook"; sulla scheda con COMBO ON nessun blocco barrato (0/7).)**
+- [x] **Barrato sulla scheda**: con COMBO ON, il testo base di Chastise / Felicity / Sow è barrato; quello di Bleak
+      Mercy, Revenge, Low Blow, Death Blossom no. **(Con COMBO ON: Chastise 6/6, Felicity 4/4, Sow 4/4 barrati; Bleak Mercy e Revenge solo il blocco sostituito (1/6, come da 1.15.139); Low Blow e Death Blossom niente.)**
+- [x] **Death Blossom → Flying Sleeves** (controllo che non sia cambiato): Arc 4 in range 2, danno 2[D]+fray. **(Flying Sleeves: Arc 4, range 2, Hit 2d6+fray.)**
 
 ## Esito playtest della 1.15.1 (13 ottobre 2026, Foundry locale, mondo "test", attori di prova poi cancellati)
 
