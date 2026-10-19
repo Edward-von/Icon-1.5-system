@@ -1793,12 +1793,15 @@ export function findAreaTemplates({ actorId, abilityKey } = {}) {
   });
 }
 
-/** Delete area templates (all of the scene's when no filter is given). */
-export async function deleteAreaTemplates({ actorId, abilityKey, scene } = {}) {
+/**
+ * Delete area templates (all of the scene's when no filter is given).
+ * `keep(doc)`: the ones it returns true for stay (End Encounter: the spaces that last until the end of the scene).
+ */
+export async function deleteAreaTemplates({ actorId, abilityKey, scene, keep = null } = {}) {
   const sc = scene ?? canvas?.scene;
   if (!sc) return 0;
   const docs = (sc === canvas?.scene ? findAreaTemplates({ actorId, abilityKey }) : sc.templates.filter(t => t.flags?.[FLAG_NS]?.cells))
-    .filter(t => t.isOwner || game.user.isGM);
+    .filter(t => (t.isOwner || game.user.isGM) && !keep?.(t));
   if (!docs.length) return 0;
   await sc.deleteEmbeddedDocuments("MeasuredTemplate", docs.map(d => d.id));
   return docs.length;

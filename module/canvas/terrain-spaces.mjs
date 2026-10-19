@@ -1470,11 +1470,21 @@ function flashStepButton(scene, actor, item, sp) {
 // Elden Rune (p.209): "The rune lasts until the end of the scene."
 const UNTIL_SCENE_END = /\blasts until the end of the scene\b/i;
 
+/**
+ * A space whose ability says it "lasts until the end of the scene" (Elden Rune, its Arkenrune and GREAT RUNE, p.209).
+ * End Encounter keeps these (IconCombat) and the GM card below offers to remove them; every other terrain effect ends
+ * with the combat ("When you go out of combat … anything created, such as terrain effects … end and disappear", p.86).
+ */
+export function lastsUntilSceneEnd(doc) {
+  const f = terrainFlag(doc);
+  return !!f && !!doc.flags?.[NS]?.cells?.length && !f.onCharacter && UNTIL_SCENE_END.test(itemOfSpace(doc)?.base ?? "");
+}
+
 /** Active GM, a combat deleted: a card offering to remove the spaces that last until the end of the scene. */
 async function spacesAtSceneEnd(combat) {
   const scene = combat?.scene ?? game.scenes?.get(combat?._source?.scene) ?? canvas?.scene;
   if (!scene) return;
-  const docs = terrainOn(scene).filter(x => !x.f.onCharacter && UNTIL_SCENE_END.test(itemOfSpace(x.doc)?.base ?? "")).map(x => x.doc);
+  const docs = scene.templates.filter(lastsUntilSceneEnd);
   if (!docs.length) return;
   const names = [...new Set(docs.map(d => d.flags[NS].abilityName).filter(Boolean))];
   await ChatMessage.create({

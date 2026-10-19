@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P20 — End Encounter lascia le rune che durano fino a fine scena (19 ottobre 2026, versione 1.15.250)
+
+Setup: solo codice (F5 basta). Un PG Enochian con Elden Rune (anche con la mastery ARKENRUNE e Infuse 3: GREAT RUNE),
+un combat avviato sulla scena; se possibile anche un altro terrain effect (es. un pit o un'area dangerous) e un'area
+normale (blast) sulla mappa.
+
+- [ ] Piazza un'Elden Rune (e un'Arkenrune / la GREAT RUNE) e l'altro terrain effect, poi "End Encounter" e conferma
+      → le rune restano sulla mappa; il blast e gli altri terrain effect (pit, dangerous…) spariscono.
+- [ ] Subito dopo arriva al GM (whisper) la card "End of the scene?" con le rune elencate e il bottone Remove /
+      Remove all.
+- [ ] Remove sulla card → le rune spariscono dalla mappa, il bottone si spegne.
+- [ ] Controllo: senza nessuna rune sulla mappa, End Encounter → mappa pulita e nessuna card "End of the scene?".
+
 ## Esito 18 ottobre, P18 — PHANTOM BLADE dura fino al turno dopo del Wright (19 ottobre 2026, versione 1.15.249)
 
 Setup: solo codice (F5 basta). Un PG Wright con Drifting Leaf e abbastanza Aether (≥ 3), due foe; un combat avviato

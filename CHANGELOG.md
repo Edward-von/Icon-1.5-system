@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — End Encounter lascia le rune che durano fino a fine scena (versione 1.15.250)
+
+### Esito del playtest del 18 ottobre, P20
+
+- **Rune cancellate a fine combattimento**: con Elden Rune, Arkenrune e GREAT RUNE sulla mappa, "End Encounter"
+  svuotava la mappa e la card del GM "End of the scene?" con il bottone Remove non arrivava mai → a fine
+  combattimento il sistema cancellava tutte le sue aree e i suoi spazi senza distinzione, e quando poi controllava
+  quali spazi durano "until the end of the scene" non ne trovava più → ora a fine combattimento restano sulla mappa
+  solo gli spazi la cui abilità dice "The rune lasts until the end of the scene" (Elden Rune, con le sue varianti
+  Arkenrune e GREAT RUNE, p.209), e la card del GM chiede se rimuoverli. Tutto il resto (aree, pit, mote, brand e
+  gli altri terrain effect) sparisce come prima: il manuale dice che uscendo dal combattimento "anything created,
+  such as terrain effects, objects or summons, end and disappear" (p.86); la p.96 dice solo che i terrain effect
+  non spariscono quando chi li ha creati è sconfitto. Per questo non ho tenuto tutti i terrain effect come
+  suggeriva la nota del TODO: decide il testo dell'abilità.
+
 ## 19 ottobre 2026 — PHANTOM BLADE dura fino al turno dopo del Wright (versione 1.15.249)
 
 ### Esito del playtest del 18 ottobre, P18

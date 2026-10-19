@@ -82,13 +82,14 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       della base (p.~148, "Area effect: Gamble"); `abilityGambles` legge il sistema base anche quando esce la combo
       (IconSheet `_getAbilityDetail`, `canGamble`). S.
       (FATTO il 19 ottobre 2026, versione 1.15.244)
-- [ ] **P20 (alta)** — "End Encounter" cancella tutti i template del sistema sulla scena, anche i terrain effect che
+- [x] **P20 (alta)** — "End Encounter" cancella tutti i template del sistema sulla scena, anche i terrain effect che
       devono restare (p.96): Elden Rune, Arkenrune, pit, mote, brand… `IconCombat` a fine combattimento chiama
       `deleteAreaTemplates({ scene })` senza filtro, e `deleteAreaTemplates` prende ogni template con `cells`. Di
       conseguenza l'hook `deleteCombat` → `spacesAtSceneEnd` non trova più le rune e la card GM "End of the scene?"
       con Remove non arriva mai (provato 19 ottobre: Elden Rune + Arkenrune + GREAT RUNE, End Encounter → mappa vuota,
       nessuna card). Escludere i template con `flags.icon-system.lasting` / terrain (e lasciare la decisione alla
       card), come fa già il cambio turno. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.250)
 - [ ] **P21 (media)** — Abilità trascinata su un riquadro pieno: non prende il posto di quella che c'era. I sei
       riquadri di `icon-combat.hbs` mostrano le prime sei abilità in ordine di `sort` (`context.abilityItems`);
       `#onDropAbilitySlot` scrive l'id in `system.combat.equippedAbilities[slot]`, ma quel campo non lo legge nessuno.

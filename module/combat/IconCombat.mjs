@@ -42,7 +42,7 @@ let _damageRelayQueue = Promise.resolve();
 import { turnRelicReminders } from "./relic-reminders.mjs";
 import { postRoundReminders } from "./round-reminders.mjs";
 import { growObjectsAtTurnStart, objectTurnBoundary } from "../canvas/map-objects.mjs";
-import { terrainTurnStart, terrainTurnEnd } from "../canvas/terrain-spaces.mjs";
+import { terrainTurnStart, terrainTurnEnd, lastsUntilSceneEnd } from "../canvas/terrain-spaces.mjs";
 import { areaTurnStart, areaTurnEnd, areaRoundEnd } from "../canvas/area-motion.mjs";
 import { waterspoutTurnStart, waterspoutTurnEnd } from "../canvas/waterspout.mjs";
 import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
@@ -651,8 +651,10 @@ export class IconCombat extends Combat {
       catch (err) { console.warn("[ICON | IconCombat] could not clear marks/hatred", err); }
     }
 
-    /* --- Blast / Line / Arc / Burst templates left on the map go with the encounter --- */
-    try { await deleteAreaTemplates({ scene: this.scene ?? canvas?.scene }); }   // the combat's scene, not the one being viewed
+    /* --- Blast / Line / Arc / Burst templates and terrain effects left on the map go with the encounter (p.86),
+     *     except the spaces that "last until the end of the scene" (Elden Rune, p.209): the deleteCombat hook's
+     *     GM card ("End of the scene?", terrain-spaces.mjs) offers to remove those (P20). --- */
+    try { await deleteAreaTemplates({ scene: this.scene ?? canvas?.scene, keep: lastsUntilSceneEnd }); }   // the combat's scene, not the one being viewed
     catch (err) { console.warn("[ICON | IconCombat] area template cleanup failed", err); }
   }
 
