@@ -4000,16 +4000,16 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Pandaemonium e DULCE PURGATORIO sbloccata, due o tre pit sulla scena lontani dal punto scelto, combo NON
+- [x] PG con Pandaemonium e DULCE PURGATORIO sbloccata, due o tre pit sulla scena lontani dal punto scelto, combo NON
       armata. Bottone dell'area → Medium Blast: un solo template che copre il blast e tutti i pit, nome "Medium Blast
-      + all pits", tra i bersagli anche i token sui pit.
+      + all pits", tra i bersagli anche i token sui pit. **(Tre pit sulla scena (uno sotto il Knuckle, uno sotto il Kelpie, uno libero), Pandaemonium con DULCE PURGATORIO, combo spenta: Medium Blast → un solo template "Medium Blast + all pits", "placed — Kelpie, Knuckle in the area".)**
 - [ ] Come sopra ma dal tiro d'attacco, senza area già sulla mappa: stesso risultato; chi sta su un pit dentro il
       blast compare una volta sola.
-- [ ] Charge (Large Blast): anche il blast grande prende tutti i pit.
+- [x] Charge (Large Blast): anche il blast grande prende tutti i pit. **(Charge: "Large Blast + all pits".)**
 - [ ] Senza pit sulla scena: area normale, nome senza "+ all pits".
-- [ ] Mastery non sbloccata: l'area non prende i pit fuori dal blast.
-- [ ] Combo armata (Purgatorio): l'area dell'attacco NON prende i pit; "Medium Blast (on pits)" fa ancora esplodere
-      tutti i pit.
+- [x] Mastery non sbloccata: l'area non prende i pit fuori dal blast. **(Mastery bloccata: l'area resta "Medium Blast" di 9 caselle.)**
+- [x] Combo armata (Purgatorio): l'area dell'attacco NON prende i pit; "Medium Blast (on pits)" fa ancora esplodere
+      tutti i pit. **(Combo armata con la mastery: l'area dell'attacco è "Medium Blast" (9 caselle, niente pit); "Combo: Medium Blast (on pits)" fa esplodere tutti i pit.)**
 - [ ] Altre abilità con Mastery sbloccata (es. Holy con MAGNASANCTI): nessun cambiamento.
 
 ## Emerso R48 — L'aura di Fulminate arriva da sola con il mark (17 ottobre 2026, versione 1.15.105)
@@ -4144,14 +4144,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] PG con Pandaemonium e Mastery DULCE PURGATORIO sbloccata, due o tre pit sulla scena, alcuni lontani dall'area:
-      "Medium Blast (on pits)" mette una Medium Blast su ognuno, e l'etichetta dice "× N" col numero giusto.
-- [ ] Stessa prova senza aver piazzato prima l'area di Pandaemonium: le esplosioni partono lo stesso, senza l'avviso
-      "place this ability's area first".
+- [x] PG con Pandaemonium e Mastery DULCE PURGATORIO sbloccata, due o tre pit sulla scena, alcuni lontani dall'area:
+      "Medium Blast (on pits)" mette una Medium Blast su ognuno, e l'etichetta dice "× N" col numero giusto. **(Combo armata, mastery: "Medium Blast (on pits) × 3 placed — Kelpie, Knuckle, Janissary, PT S3, TEST Knave in the area.")**
+- [x] Stessa prova senza aver piazzato prima l'area di Pandaemonium: le esplosioni partono lo stesso, senza l'avviso
+      "place this ability's area first". **(Senza aver piazzato l'area di Pandaemonium: le esplosioni partono lo stesso, nessun avviso.)**
 - [x] Nessun pit sulla scena, con la Mastery: avviso "No pit on the battlefield: nothing explodes." **(Pandaemonium con DULCE PURGATORIO e combo: "Combo: Medium Blast (on pits)" senza pit → "No pit on the battlefield: nothing explodes.")**
-- [ ] Mastery non sbloccata: esplodono solo i pit dentro l'area, e senza area compare ancora l'avviso di piazzarla
-      prima.
-- [ ] Holy (Talent I): continua a far esplodere solo i pit dentro l'area.
+- [x] Mastery non sbloccata: esplodono solo i pit dentro l'area, e senza area compare ancora l'avviso di piazzarla
+      prima. **(Mastery bloccata: senza area "place this ability's area first…"; con la Medium Blast sul pit del Kelpie esplode solo quello ("× 1").)**
+- [x] Holy (Talent I): continua a far esplodere solo i pit dentro l'area. **(Holy Talent I: esplodono solo i due pit dentro la sua area, non i tre di Pandaemonium.)**
 
 ## Emerso R41 — Il bersaglio d'attacco segue l'area, non solo il nome dell'azione (17 ottobre 2026, versione 1.15.95)
 
@@ -4186,19 +4186,19 @@ Setup: pack jobs cambiato (copia con Foundry chiuso), poi apri il mondo: la migr
 
 Setup: solo codice (F5 basta).
 
-- [ ] Personaggio con Holy e Talent I scelto, Hades armato: tira l'attacco (Medium Blast) e crea il pit sotto il
+- [x] Personaggio con Holy e Talent I scelto, Hades armato: tira l'attacco (Medium Blast) e crea il pit sotto il
       bersaglio con il chip "Pit"; mettine un altro a mano dentro l'area. Bottone dell'area → "Talent I: Medium Blast
       (on pits)": compare un solo template "Medium Blast (on pits) × 2" con una Medium Blast centrata su ciascun pit,
-      e l'area di Hades resta sulla mappa.
+      e l'area di Hades resta sulla mappa. **(Holy Talent I con Hades: due pit dentro l'area → "Talent I: Medium Blast (on pits)" fa un solo template "× 2" (14 caselle), "placed — Warrior in the area".)**
 - [ ] Un token che sta in tutte e due le esplosioni è bersagliato una volta sola; il messaggio "… placed — X, Y in the
       area" lo nomina una volta.
-- [ ] Un pit fuori dall'area di Hades non esplode.
-- [ ] Nessun pit dentro l'area: avviso "No pit inside this ability's area: nothing explodes." e nessun template.
+- [x] Un pit fuori dall'area di Hades non esplode. **(I pit fuori dall'area non esplodono.)**
+- [x] Nessun pit dentro l'area: avviso "No pit inside this ability's area: nothing explodes." e nessun template. **(Nessun pit nell'area: "No pit inside this ability's area: nothing explodes.", nessun template.)**
 - [x] Area dell'abilità non ancora sulla mappa: avviso "place this ability's area first…" e non succede nulla. **(Holy Talent I senza area: "place this ability's area first (its attack), then the pits' blasts.")**
-- [ ] Ripeti l'esplosione: quella vecchia viene sostituita, l'area dell'abilità e i pit restano.
-- [ ] Pandaemonium con la combo Purgatorio armata: stessa prova con "Combo: Medium Blast (on pits)".
-- [ ] Tiro d'attacco di Hades o di Purgatorio senza area sulla mappa: la scelta dell'area non propone "(on pits)" e
-      l'attacco piazza la sua Medium Blast come prima.
+- [x] Ripeti l'esplosione: quella vecchia viene sostituita, l'area dell'abilità e i pit restano. **(Rifatta l'esplosione: quella vecchia è sostituita, area e pit restano.)**
+- [x] Pandaemonium con la combo Purgatorio armata: stessa prova con "Combo: Medium Blast (on pits)". **(Pandaemonium con Purgatorio: "Combo: Medium Blast (on pits)" come sopra.)**
+- [x] Tiro d'attacco di Hades o di Purgatorio senza area sulla mappa: la scelta dell'area non propone "(on pits)" e
+      l'attacco piazza la sua Medium Blast come prima. **(Tiro d'attacco di Hades senza area: nessuna scelta "(on pits)", "Click to place the Medium Blast".)**
 - [ ] Al turno successivo dell'utente l'esplosione sparisce come un'area normale, e i pit restano.
 
 ## Emerso R38b — L'infusione si consuma con l'uso dell'abilità (17 ottobre 2026, versione 1.15.92)
