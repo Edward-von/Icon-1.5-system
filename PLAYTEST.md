@@ -324,9 +324,9 @@ token da accendere sulla scheda; un foe come bersaglio (es. il Knuckle).
 
 - [x] Combo token acceso → attacco con God Hand → scelta "Devil Hand": la card d'attacco "Devil Hand (God Hand
       combo)" NON ha il bottone Sealed nel riquadro Inflict. **(TEST Sealer con mastery: card "Devil Hand (God Hand combo)" senza nessun bottone Inflict)**
-- [ ] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…"). **(non provato: dopo la prima scelta il sistema ripropone Devil Hand senza chiedere di nuovo)**
+- [x] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…"). **(19 ottobre sera, TEST Sealer con la mastery accesa per la prova (poi rispenta): scelta Fists → status offerti Teleport 1 e Sealed; scelta Devil Hand → solo Teleport 1 (funzione della scheda che riempie il riquadro Inflict, scelta impostata dal flag invece che dal dialog))**
 - [x] Senza combo token: l'attacco di God Hand (base) offre Sealed, come prima. **(card "God Hand" con Sealed)**
-- [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato)**
+- [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato dal bottone; la card di Show in Chat usa la stessa funzione provata sopra (con Devil Hand niente Sealed))**
 - [x] Controllo che non sia cambiato altro: una mastery normale che infligge uno status (non una combo alternativa)
       lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185). **(19 ottobre sera, Growing Season dal compendio: con la mastery sbloccata gli status offerti sono Pacified (Effect) e Pacified+ (SOOTHING SPORE); senza, solo Pacified. Letto dalla funzione che costruisce il riquadro Inflict, non dalla card)**
 
