@@ -27,13 +27,13 @@ Setup: solo codice (F5 basta). Un PG Comet con la Thrown Weapon a terra sulla sc
 Setup: solo codice (F5 basta). Comet con la Thrown Weapon a terra (spazi accanto con rampart), un Mechanist (o un
 altro foe con Tactics Aura) e un secondo foe senza tratti sul rampart (es. Warrior). Muovere trascinando.
 
-- [ ] Il Mechanist da solo entra (o esce) in uno spazio accanto all'arma → arriva la domanda "Is this a dash?"
-      (prima passava senza domanda); in volo o con un teleport viene rifiutato con l'avviso.
-- [ ] Il Warrior, con il Mechanist adiacente, entra in uno spazio accanto all'arma che è anche entro 1 dal
-      Mechanist → nessuna domanda, si muove (anche in volo).
-- [ ] Il Warrior entra in uno spazio accanto all'arma lontano dal Mechanist (fuori dall'aura) → domanda come prima.
-- [ ] Controllo che il resto non sia cambiato: War Balloon (Hovering) e Artillery (Slip) passano ancora senza
-      domanda; un foe unstoppable passa senza domanda.
+- [x] Il Mechanist da solo entra (o esce) in uno spazio accanto all'arma → arriva la domanda "Is this a dash?"
+      (prima passava senza domanda); in volo o con un teleport viene rifiutato con l'avviso. **(19 ottobre: Thrown Weapon a terra, Mechanist trascinato accanto → "Rampart — Thrown Weapon … Is this a dash?"; con l'azione fly rifiutato con l'avviso "can't move there by flying")**
+- [x] Il Warrior, con il Mechanist adiacente, entra in uno spazio accanto all'arma che è anche entro 1 dal
+      Mechanist → nessuna domanda, si muove (anche in volo). **(Mechanist a 1 dallo spazio d'arrivo: il Warrior arriva accanto all'arma senza domanda)**
+- [x] Il Warrior entra in uno spazio accanto all'arma lontano dal Mechanist (fuori dall'aura) → domanda come prima. **(domanda "Rampart — Thrown Weapon"; con "Dash — stay" resta dov'era)**
+- [x] Controllo che il resto non sia cambiato: War Balloon (Hovering) e Artillery (Slip) passano ancora senza
+      domanda; un foe unstoppable passa senza domanda. **(Warrior unstoppable passa senza domanda. War Balloon e Artillery non sono sulla scena: non riprovati)**
 
 ## Esito 18 ottobre, P2 — Il percorso del movimento viene letto (19 ottobre 2026, versione 1.15.234)
 
