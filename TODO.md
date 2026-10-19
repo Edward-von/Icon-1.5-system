@@ -30,8 +30,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P4** — Comet "you cannot attack" non blocca l'attacco base della scheda (solo gli attacchi delle abilità). S. (FATTO il 19 ottobre 2026, versione 1.15.236)
 - [x] **P5** — Tsunami "Drag them with it": dopo il trascinamento arriva la domanda del dangerous (non deve), e un
       solo movimento produce tre card (fuori / dentro / dangerous). M. (FATTO il 19 ottobre 2026, versione 1.15.237)
-- [ ] **P6** — Inflict sulla card del danno: dopo uno "Show in Chat" la card del danno si aggancia ancora al vecchio
-      attacco della stessa abilità e mostra i suoi bottoni. S-M.
+- [x] **P6** — Inflict sulla card del danno: dopo uno "Show in Chat" la card del danno si aggancia ancora al vecchio
+      attacco della stessa abilità e mostra i suoi bottoni. S-M. (FATTO il 19 ottobre 2026, versione 1.15.238)
 - [ ] **P7** — Showdown: "2 unerring damage … twice" ma la finestra del danno propone Instances 1; e sull'Hit "2 flat"
       di Showdown e Warding Bolts la casella Unerring non si spunta (le chip di Other sì). S.
 - [ ] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)

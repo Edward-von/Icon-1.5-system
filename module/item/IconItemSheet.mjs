@@ -58,7 +58,9 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
         areaEffect:  await enrichHTML(system.areaEffect),
       };
       const content = await renderTemplate("systems/icon-system/templates/chat/foe-action-card.hbs", { a, foeName: actor?.name ?? "" });
-      await ChatMessage.create({ speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(), content });
+      // abilityCard: a use with no attack roll (damage.mjs#_inflictAttackCardId).
+      await ChatMessage.create({ speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(), content,
+        ...(actor ? { flags: { "icon-system": { abilityCard: { sourceActorUuid: actor.uuid, abilityName: item.name } } } } : {}) });
       return;
     }
     await postNpcTraitCard(actor, { name: item.name, description: system.description }, { label: system.jobName || actor?.name || "" });

@@ -1946,7 +1946,13 @@ export class IconSheet extends BaseActorSheet {
     await ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.document }),
       content,
-      ...(targeted?.length ? { flags: { "icon-system": { attack: attackFlags({ actor: this.document, abilityName: ab.name, targets: targeted }) } } } : {}),
+      // abilityCard: a use of this ability with no attack roll — the damage
+      // card rolled next must not take the Inflict buttons of an earlier
+      // attack (damage.mjs#_inflictAttackCardId).
+      flags: { "icon-system": {
+        abilityCard: { sourceActorUuid: this.document.uuid, abilityName: ab.name },
+        ...(targeted?.length ? { attack: attackFlags({ actor: this.document, abilityName: ab.name, targets: targeted }) } : {}),
+      } },
     });
     await noteInfusionStep(this.document, itemId, INFUSE_STEP.card);
 

@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Show in Chat apre un nuovo uso: niente Inflict del vecchio attacco (versione 1.15.238)
+
+### Esito del playtest del 18 ottobre, P6
+
+- **Inflict sulla card del danno dopo uno Show in Chat**: TEST Fool attaccava con Cavaliere, cliccava Dazed e tirava
+  il danno; poi faceva "Show in Chat" di Cavaliere e "Damage Roll", e la nuova card del danno mostrava di nuovo il
+  blocco Inflict con "✓ Dazed" del vecchio attacco → la card del danno cercava l'ultima card d'attacco della stessa
+  abilità saltando tutto il resto, e la card dello Show in Chat (senza bersagli) non diceva nemmeno di quale abilità
+  fosse → ora la card dello Show in Chat (PG, foe, legend, summon, anche dalla scheda dell'oggetto) ricorda chi
+  l'ha usata e quale abilità, e quando la ricerca la incontra prima di un attacco si ferma: niente blocco Inflict.
+  Lo stesso vale per una card del danno della stessa abilità già uscita dopo l'attacco con la stessa scritta (es. un
+  secondo "Cavaliere — Hit"): quella parte del danno era già stata tirata, quindi è un uso nuovo. Le due card di un
+  attacco d'area ("— Hit" e "— Area damage") hanno scritte diverse e restano entrambe collegate. Il resto della
+  1.15.231 non cambia. Solo codice; le card di Show in Chat postate prima di questa build non hanno il nuovo dato
+  (lì vale ancora il comportamento vecchio).
+
 ## 19 ottobre 2026 — Tsunami: chi viene trascinato resta dentro, niente dangerous (versione 1.15.237)
 
 ### Esito del playtest del 18 ottobre, P5

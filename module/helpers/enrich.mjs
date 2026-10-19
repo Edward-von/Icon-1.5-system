@@ -439,6 +439,15 @@ export function abilityCostLabel(cost) {
 }
 
 /**
+ * The `icon-system.abilityCard` flag of a Show in Chat card: a use of this
+ * ability with no attack roll, so the damage card rolled next does not take
+ * the Inflict buttons of an earlier attack (damage.mjs#_inflictAttackCardId).
+ */
+function _abilityCardFlags(actor, name) {
+  return actor ? { "icon-system": { abilityCard: { sourceActorUuid: actor.uuid, abilityName: String(name ?? "") } } } : {};
+}
+
+/**
  * Post a foe/legend action to chat (name, cost, tags, description,
  * hit/miss/area). Works for non-attack actions too — the card simply omits
  * the Hit/Miss lines when they are empty.
@@ -460,6 +469,7 @@ export async function postNpcActionCard(actor, action, { statusHtml = "" } = {})
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
+    flags: _abilityCardFlags(actor, a.name),
   });
 }
 
@@ -483,6 +493,7 @@ export async function postNpcRoundActionCard(actor, roundAction, { statusHtml = 
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
+    flags: _abilityCardFlags(actor, a.name),
   });
 }
 
@@ -506,5 +517,6 @@ export async function postNpcInterruptCard(actor, interrupt, { statusHtml = "" }
   await ChatMessage.create({
     speaker: actor ? ChatMessage.getSpeaker({ actor }) : ChatMessage.getSpeaker(),
     content,
+    flags: _abilityCardFlags(actor, a.name),
   });
 }

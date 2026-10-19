@@ -11,6 +11,25 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P6 — Show in Chat apre un nuovo uso, niente Inflict del vecchio attacco (19 ottobre 2026, versione 1.15.238)
+
+Setup: solo codice (F5 basta). TEST Fool con Cavaliere (o un PG con un attacco che infligge uno status), un foe
+come bersaglio (es. il Mechanist); per l'ultima casella un foe con un'azione d'attacco che infligge uno status.
+
+- [ ] Attacco con Cavaliere sul Mechanist, clic su Dazed, poi Damage Roll: la card del danno ha ancora il blocco
+      Inflict con "✓ Dazed" (come nella 1.15.231).
+- [ ] Subito dopo: "Show in Chat" di Cavaliere (senza bersaglio) e poi Damage Roll → la nuova card del danno NON ha
+      il blocco Inflict.
+- [ ] Come sopra ma con il Mechanist bersagliato al momento dello Show in Chat → la card del danno NON ha il blocco.
+- [ ] Nuovo attacco con Cavaliere dopo lo Show in Chat, poi Damage Roll → il blocco torna, con i bottoni del nuovo
+      attacco (Dazed di nuovo cliccabile).
+- [ ] Attacco, Damage Roll, e poi un secondo Damage Roll della stessa abilità senza nuovo attacco → la seconda card
+      del danno NON ha il blocco; la prima lo tiene.
+- [ ] Attacco d'area con bersaglio d'attacco (es. Blackstar): le due card del danno ("— Hit" e "— Area damage")
+      hanno entrambe il blocco Inflict.
+- [ ] Foe: attacco con un'azione che infligge uno status e danno (blocco presente); poi "Show in Chat" della stessa
+      azione e danno → niente blocco.
+
 ## Esito 18 ottobre, P5 — Tsunami: chi viene trascinato resta dentro (19 ottobre 2026, versione 1.15.237)
 
 Setup: solo codice (F5 basta). Un PG con Tsunami (meglio con Talent II, "+1 curse on saves") piazzata, un foe
