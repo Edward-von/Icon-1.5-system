@@ -32,38 +32,38 @@ token piazzati; per l'ultima casella un PG messo a mano a "Neutral".
 Setup: solo codice (F5 basta). Un PG Seer con Astra (es. Ann), il combo token da accendere sulla scheda; per
 l'ultima casella un'abilità che fa gamble senza combo (es. Chaos Tarot).
 
-- [ ] Astra senza combo token: l'anteprima ha il bottone "Gamble" e anche la card di Show in Chat (come prima).
-- [ ] Astra con il combo token acceso (Fortuna): l'anteprima NON ha il bottone "Gamble".
-- [ ] Show in Chat di Astra con il combo token: la card "Fortuna (Astra combo)" NON ha il bottone "Gamble".
+- [x] Astra senza combo token: l'anteprima ha il bottone "Gamble" e anche la card di Show in Chat (come prima). **(anteprima di Ann con "Gamble" e "Attack Roll")**
+- [x] Astra con il combo token acceso (Fortuna): l'anteprima NON ha il bottone "Gamble". **(solo "✦ Auto-Hit", niente Gamble)**
+- [x] Show in Chat di Astra con il combo token: la card "Fortuna (Astra combo)" NON ha il bottone "Gamble". **(card "Fortuna Astra combo" senza Gamble)**
 - [ ] Dopo aver speso il token con Show in Chat su Astra, l'anteprima di Astra resta senza "Gamble" finché la combo
-      è quella in uso; alla combo finita il bottone torna.
-- [ ] Controllo che non sia cambiato altro: Chaos Tarot (Area effect: Gamble…) ha ancora il bottone "Gamble" e il
-      tiro mostra la riga della tabella 1-6 come prima.
+      è quella in uso; alla combo finita il bottone torna. **(non provato)**
+- [x] Controllo che non sia cambiato altro: Chaos Tarot (Area effect: Gamble…) ha ancora il bottone "Gamble" e il
+      tiro mostra la riga della tabella 1-6 come prima. **(Show in Chat di Chaos Tarot ha ancora il bottone Gamble (il tiro non l'ho rifatto))**
 
 ## Esito 18 ottobre, P12 — Devil Hand non offre più Sealed (19 ottobre 2026, versione 1.15.243)
 
 Setup: solo codice (F5 basta). Un PG Sealer con God Hand e la mastery FISTS OF HEAVEN AND HELL sbloccata, il combo
 token da accendere sulla scheda; un foe come bersaglio (es. il Knuckle).
 
-- [ ] Combo token acceso → attacco con God Hand → scelta "Devil Hand": la card d'attacco "Devil Hand (God Hand
-      combo)" NON ha il bottone Sealed nel riquadro Inflict.
-- [ ] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…").
-- [ ] Senza combo token: l'attacco di God Hand (base) offre Sealed, come prima.
-- [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed.
+- [x] Combo token acceso → attacco con God Hand → scelta "Devil Hand": la card d'attacco "Devil Hand (God Hand
+      combo)" NON ha il bottone Sealed nel riquadro Inflict. **(TEST Sealer con mastery: card "Devil Hand (God Hand combo)" senza nessun bottone Inflict)**
+- [ ] Come sopra ma scelta "Fists Of Heaven And Hell": la card offre ancora Sealed ("Seal your foe, then bless…"). **(non provato: dopo la prima scelta il sistema ripropone Devil Hand senza chiedere di nuovo)**
+- [x] Senza combo token: l'attacco di God Hand (base) offre Sealed, come prima. **(card "God Hand" con Sealed)**
+- [ ] Show in Chat con il combo token e la scelta Devil Hand: anche questa card non offre Sealed. **(non provato)**
 - [ ] Controllo che non sia cambiato altro: una mastery normale che infligge uno status (non una combo alternativa)
-      lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185).
+      lo offre ancora sulla card quando è sbloccata (es. Growing Season con SOOTHING SPORE → Pacified+, p.185). **(non provato)**
 
 ## Esito 18 ottobre, P10 — Il bottone d'attacco segue la combo armata (19 ottobre 2026, versione 1.15.242)
 
 Setup: solo codice (F5 basta). Un PG Harvester con Sow, un Chanter con Holy, un Seer con Astra (es. Ann), il
 combo token da accendere sulla scheda; un foe come bersaglio.
 
-- [ ] Sow senza combo token: il bottone dell'anteprima dice "✦ Auto-Hit" e fa l'auto-hit (come prima).
-- [ ] Sow con il combo token acceso (REAP): il bottone dice "Attack Roll" e apre il tiro d'attacco vero.
-- [ ] Holy con il combo token (Hades): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token dice "Attack Roll".
-- [ ] Astra con il combo token (Fortuna): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token "Attack Roll".
+- [x] Sow senza combo token: il bottone dell'anteprima dice "✦ Auto-Hit" e fa l'auto-hit (come prima). **(19 ottobre, TEST Harvester e PT Testi: "✦ Auto-Hit")**
+- [x] Sow con il combo token acceso (REAP): il bottone dice "Attack Roll" e apre il tiro d'attacco vero. **("Attack Roll", il clic apre "Attack — Sow")**
+- [x] Holy con il combo token (Hades): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token dice "Attack Roll". **(TEST Chanter: con il token "✦ Auto-Hit", il clic posta la card "Holy Auto-hit" e avvia il piazzamento dell'area; senza token "Attack Roll")**
+- [x] Astra con il combo token (Fortuna): il bottone dice "✦ Auto-Hit" e fa l'auto-hit; senza token "Attack Roll". **(Ann: con il token "✦ Auto-Hit", senza token "Attack Roll")**
 - [ ] Dopo aver usato la combo (token speso con Show in Chat su quell'abilità) la scritta resta quella della combo
-      finché l'uso non è finito, come il clic.
+      finché l'uso non è finito, come il clic. **(non provato)**
 
 ## Esito 18 ottobre, P9 — Il capitolo delle abilità e dei tratti non torna più a 1 (19 ottobre 2026, versione 1.15.241)
 
