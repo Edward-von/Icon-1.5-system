@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Refresh Riposte solo per gli alleati adiacenti al Knave (versione 1.15.255)
+
+### Esito del playtest del 18 ottobre, P25
+
+- **Refresh Riposte**: sulla card del danno il bottone "Refresh Riposte" compariva sotto ogni alleato colpito, anche
+  lontano dal Knave → il sistema guardava solo se il colpito era un alleato, non dove fosse → ora sulla riga di un
+  alleato il bottone compare solo se quell'alleato è adiacente al Knave ("Refresh this stance when a foe damages you
+  or an adjacent ally with an ability", p.142-143); sulla riga del Knave stesso compare come prima. Se uno dei due non
+  ha un token sulla scena attuale il bottone non compare (non si può misurare). La distanza è quella della card
+  quando viene mostrata: se i token si muovono dopo, la card non si aggiorna da sola.
+
 ## 19 ottobre 2026 — Weakened si spunta da solo nella finestra del danno (versione 1.15.254)
 
 ### Esito del playtest del 18 ottobre, P24

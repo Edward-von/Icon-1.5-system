@@ -129,9 +129,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       "Ignores armor, weak, and vigor". Spuntarlo in automatico quando l'attaccante è weakened (non quando il danno è
       pierce), lasciandolo togliere a mano. S.
       (FATTO il 19 ottobre 2026, versione 1.15.254)
-- [ ] **P25 (dai Dubbi, deciso col manuale)** — Refresh Riposte: il bottone sulla card del danno compare anche quando
+- [x] **P25 (dai Dubbi, deciso col manuale)** — Refresh Riposte: il bottone sulla card del danno compare anche quando
       l'alleato colpito non è adiacente al Knave. Riposte p.142-143: "Refresh this stance when a foe damages you or an
       adjacent ally with an ability". Mostrare il bottone solo sulla riga del Knave o di un alleato adiacente a lui. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.255)
 - [ ] **P26 (dai Dubbi)** — Bottone interrupt dopo l'uso: sul client del GM "Grace of the Spirits · TEST Sealer" dopo
       il clic diventa "0/1" ma resta cliccabile finché non si preme Apply; sul giocatore si spegne subito. Spegnerlo
       anche sul GM appena le cariche sono 0. S.

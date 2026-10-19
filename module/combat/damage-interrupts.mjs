@@ -28,7 +28,7 @@ import { interruptBlockName, grantedInterrupt } from "../helpers/ability-blocks.
 import { resolveAbilityTags, resolveAbilityCost } from "../helpers/rule-tooltips.mjs";
 import { plainText, parseInflictedStatuses, statusBlockHtml } from "./ability-statuses.mjs";
 import { hasStatus } from "./statuses.mjs";
-import { tagKey } from "./defenses.mjs";
+import { tagKey, gridDistance, tokenOf } from "./defenses.mjs";
 import { addCardMods, cardModsFor } from "./damage-card-mods.mjs";
 import { marksBy, removeMark } from "./marks.mjs";
 
@@ -563,6 +563,10 @@ function _interruptsFor(target, { tokenId = null, attacker = null, scopeOf, soul
       if (o.self ? scope === "ally" : scope === "self") continue;
       // A mark's interrupt: "your ally" is the marked partner only (Heartfire).
       if (it.partners && !o.self && !it.partners.includes(target.uuid)) continue;
+      // A stance refreshed when "a foe damages you or an adjacent ally" (Riposte p.142-143): on an ally's row only
+      // while that ally is next to the owner (playtest 18 October, P25). No token to measure → not offered.
+      if (it.kind === "refresh" && !o.self && /\badjacent\b/i.test(plainText(it.trigger))
+          && gridDistance(tokenOf(o.actor, o.tokenId), tokenOf(target, tokenId)) > 1) continue;
       // "…by a foe's ability": a foe of the interrupt's owner, not a friend's area.
       if (/\bfoe/i.test(plainText(it.trigger)) && attackerSide && attackerSide === sideOf(o.actor, o.tokenId)) continue;
       out.push({ owner: o.actor, it, ...interruptLeft(o.actor, it) });

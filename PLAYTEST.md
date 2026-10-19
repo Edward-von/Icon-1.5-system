@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P25 — Refresh Riposte solo per gli alleati adiacenti al Knave (19 ottobre 2026, versione 1.15.255)
+
+Setup: solo codice (F5 basta). Un Knave in stance Riposte, due alleati (uno adiacente al Knave, uno lontano), un foe
+che fa un'abilità con danno su tutti e tre (o tre danni separati).
+
+- [ ] Sulla card del danno, riga del Knave → c'è "Refresh Riposte".
+- [ ] Riga dell'alleato adiacente al Knave (anche in diagonale) → c'è "Refresh Riposte".
+- [ ] Riga dell'alleato a 2 o più caselle dal Knave → niente "Refresh Riposte" (gli altri interrupt, es. Dire Parry,
+      restano come prima).
+- [ ] Il bottone sull'alleato adiacente funziona come prima (ridà l'uso di Dire Parry e posta la card di refresh).
+
 ## Esito 18 ottobre, P24 — Weakened si spunta da solo nella finestra del danno (19 ottobre 2026, versione 1.15.254)
 
 Setup: solo codice (F5 basta). Un PG con lo status Weakened e un foe bersagliato.
