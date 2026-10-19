@@ -74,8 +74,8 @@ Setup: solo codice (F5 basta). Un foe nel mondo (non creato dal Designer), una s
 - [x] Ferire la prima → la seconda e l'attore del mondo restano pieni. **(25/40, 40/40, attore 40)**
 - [x] Elite acceso, ×1 → pedina scollegata con 80 HP ed Elite; l'attore del mondo non è Elite. **(sì)**
 - [x] Con più combat sulla scena il deploy usa quello attivo. **(prima del fix aveva attivato un combat vecchio della scena; corretto e rimesso il combat principale)**
-- [ ] Casella spenta → comportamento di prima (copie in "Encounter: …"). **(non provato: codice invariato su quel ramo)**
-- [ ] Foe del mondo ×1, nessuna modifica, prototipo collegato → la pedina è collegata all'attore. **(non provato: il foe di prova ha il prototipo scollegato)**
+- [x] Casella spenta → comportamento di prima (copie in "Encounter: …"). **(19 ottobre sera: Warrior del mondo ×1, casella spenta → attore nuovo nella cartella "Encounter: PT Reuse2", pedina collegata a quello)**
+- [x] Foe del mondo ×1, nessuna modifica, prototipo collegato → la pedina è collegata all'attore. **(Warrior del mondo (prototipo collegato) ×1, casella accesa → pedina collegata all'attore del mondo, nessun attore nuovo; il deploy è andato nel combat che si stava guardando)**
 
 ## Emerso nei fix, P31 — Togliere le benedizioni funziona anche senza contatore (19 ottobre 2026, versione 1.15.263)
 
@@ -280,12 +280,12 @@ Setup: solo codice (F5 basta). Un PG Stormbender con Cryo e la mastery MAGNACRYO
 
 - [x] Infuse X MAGNACRYO con 3 Aether: la scelta dell'area dice "Infuse X (Mastery) (3 Aether): Line 6" (non Line 4)
       e il template piazzato è lungo 6. **(TEST Stormbender: dopo la correzione 5d8360c (il testo del pack dice "Increase line length", senza "the") la scelta dice "Infuse X (3 Aether): Line 6". Prima della correzione diceva ancora Line 4)**
-- [ ] Con 1 Aether: Line 4; con 2 Aether: Line 6; con 4 Aether: Line 8. Il dado bonus del danno resta come prima
-      (+1 con 2-3 Aether, +2 con 4-5). **(provato solo con 3 Aether)**
+- [x] Con 1 Aether: Line 4; con 2 Aether: Line 6; con 4 Aether: Line 8. Il dado bonus del danno resta come prima
+      (+1 con 2-3 Aether, +2 con 4-5). **(provato solo con 3 Aether)** **(19 ottobre sera, calcolo dell'area e del danno di MAGNACRYO sul Cryo di TEST Stormbender: 1 → Line 4 / +0 dadi, 2 e 3 → Line 6 / +1, 4 e 5 → Line 8 / +2 (funzioni del sistema, non dal piazzamento))**
 - [x] Show in Chat con MAGNACRYO armato a 3 Aether: l'intestazione dice "2 Actions" (evidenziato) e il tag dell'area
       "Line 6" (evidenziato, suggerimento "From MAGNACRYO"), non "1 Action" e "Line 8". **(intestazione "Cryo — MAGNACRYO … 2 Actions … Line 6")**
 - [ ] Non deve cambiare: Cryo senza infusione ha l'intestazione e l'area di sempre; con CRYOTIC (Infuse 3, che
-      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima. **(non provato)**
+      cambia solo l'area) l'intestazione resta quella della base e la scelta offre "Line 8" come prima. **(in parte: CRYOTIC con 3 Aether offre ancora "Line 8", come la base (tag line-8); l'intestazione non l'ho guardata)**
 - [ ] Un'altra versione completa: Bio con MAGNABIO armato → intestazione "2 Actions" e "Large Blast" della versione. **(non provato)**
 
 ## Esito 18 ottobre, P11 — I PG nascono dalla parte del party (19 ottobre 2026, versione 1.15.245)
@@ -298,7 +298,7 @@ token piazzati; per l'ultima casella un PG messo a mano a "Neutral".
 - [x] I loro token già piazzati sulle scene che erano "Hostile" ora sono "Friendly" (bordo verde, non rosso). **(token di PT Testi messo apposta Hostile: dopo F5 è Friendly (poi tolto))**
 - [x] Un PG nuovo creato dalla sidebar (Create Actor → tipo icon) ha il token prototipo "Friendly"; piazzato sulla
       scena, il token è "Friendly". **(Actor.create tipo icon: prototipo Friendly, token Friendly)**
-- [ ] Un PG creato col wizard di creazione personaggio: token "Friendly". **(non provato)**
+- [x] Un PG creato col wizard di creazione personaggio: token "Friendly". **(19 ottobre sera: il wizard lavora su un PG già creato (non crea l'attore); un PG nuovo creato senza disposizione nasce Friendly (1) e collegato)**
 - [x] Un foe importato dal compendio, o messo con l'Encounter Designer, resta "Hostile". **(foe importato: Hostile)**
 - [x] Il PG messo a "Neutral" prima dell'aggiornamento resta "Neutral". **("Actor (3)" messo a Neutral prima di F5: resta Neutral (poi rimesso Friendly))**
 - [ ] Rifare il caso del playtest: Symphony, un foe entra nella mote → Detonate: la card offre di benedire i PG,
