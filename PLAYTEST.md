@@ -666,26 +666,26 @@ importati di nuovo). Summons, Bonds, Bond Powers, Relics e Macros non sono cambi
 
 #### Foe, legend e summon (compendio)
 
-- [ ] **Assault Wave** (legend Master, p.312) — cosa controllare: tiro salvezza fallito → "How many minions…" (massimo 6), 3 piercing per istanza; riuscito → 1 piercing per minion; Pierce attivo [1.15.201, 202, 216]
-- [ ] **Bale Troll — Incredible Bulk** (foe, p.457) — cosa controllare: niente bottone Damage (il danno va a se stesso); Boulder Fist e Hurl Boulder invariati [1.15.143]
-- [ ] **Blocchi Effect dei foe** (Kelpie Savage Fang p.354, Knuckle / Tomb Guard Overpower, Azurian Weapon Flak Blast, Basic Mob Rabble p.449) — cosa controllare: il danno dell'Effect è una chip sotto Other; Hit / Miss invariati [1.15.145]
-- [ ] **Shotgun Trooper — Double Barrel** (foe, p.389) — cosa controllare: Instances parte da 1 e si ferma a 3 [1.15.144]
-- [ ] **Pistolero e simili** (Scout p.389, Razor Shot p.431, Collect Bounty p.369, Stutterslash p.328) — cosa controllare: nessun bottone "Gain Unerring" [1.15.130]
-- [ ] **Aura of Slaughter** (Battle / Armor / Gaping / Horn / Starving / Nail Demon, p.407) — cosa controllare: bottone "Aura 2" che si piazza senza chiedere la dimensione [1.15.114]
-- [ ] **Summon dei foe con elenchi** (Churn Baron: Crony, Blunderbuss, Arkentech Explosives p.375; Deep Snow Aesi: Icicle p.488; Keeper of the Eldflame: Everforge p.461; Violence Demon: Blade of Agony p.420) — cosa controllare: le voci "•" una per riga, sulla scheda del foe, in chat e sulla scheda del Summon trascinato [1.15.133, 179]
-- [ ] **Elenchi "•" nei testi dei foe** (testo; Imperial Spy p.390, Relict p.324, trappola Lowlander p.428, Warden of the Aeongate Eternal Star p.463, Silent One Possess p.330, Rider of the Primal Storm Static Charge p.459, Head Lopper God Waster p.442, Fetid Idol, Cannoneer nel compendio Foe Abilities) — cosa controllare: ogni voce su una riga, le parole uguali al libro; solo sui foe importati di nuovo [1.15.124]
-- [ ] **Tag grigi dei foe** (Warrior Bull rush e Night Troll Bale Curse p.290, Troll / Hag Cauldron Action p.452, Apex Might of the Wild p.360-361, Aurelian Tally p.373, Churn Baron 4 Assets p.375, Violence Demon Blade Consume p.420, Pale Man Gaze p.416, Falling Leaf Aesi Thievery p.485, Wyrm Path of Ruin p.362-363, Keeper Forge Action p.461, Summer Flame Aesi e Head Lopper Burst p.97, Dread Lords Range 4+ p.342) — cosa controllare: passando il mouse il tag ha la spiegazione con la pagina [1.15.122]
-- [ ] **Tag Sacrifice, Blast, Terrain Effect** (PG e foe, p.95-98, p.103) — cosa controllare: non più grigi, con tooltip [1.15.7]
-- [ ] **Tabelle 1-6 dei foe** (Troll Strange Brew p.452, Shopkeep Rummage p.371) — cosa controllare: una riga per risultato, sulla scheda e in chat [1.15.13]
-- [ ] **Aure a tempo dei foe** (Trooper Hold the Line! p.388) — cosa controllare: avviso in chat alla scadenza con Remove area [1.15.5]
-- [ ] **Pepperbox — Riddle** (foe, p.302) — cosa controllare: su Hit Instances ×3, su Miss 1 [1.15.28]
-- [ ] **Trooper — Blunderbuss e azioni d'area dei foe** (p.375) — cosa controllare: niente scelta "Hit (no damage)", solo Area [1.15.47]
-- [ ] **Interrupt di foe e legend** ("is damaged by an ability", Violence Demon "is targeted by an attack", p.292) — cosa controllare: caselle degli usi sulla scheda, bottoni sotto le card d'attacco e di danno, avviso se Stunned [1.15.149, 195, 203, 204]
-- [ ] **Promemoria di round dei foe** (Junk Mage / Sniper / Barkeep "At round 3+", Dread Lords Eternal Imperium) — cosa controllare: card "Round N" al GM, una riga per foe anche con più token [1.15.63]
-- [ ] **Plant** (summon, p.184) — cosa controllare: una Plant del compendio è riconosciuta da HARVEST MOON, una fatta a mano no [1.15.142]
-- [ ] **Salt Sprite** (summon, p.232) — cosa controllare: compare da solo nello spazio del geyser dopo l'Erupt [1.15.68]
-- [ ] **Wild Card** (testo; summon, p.200) — cosa controllare: Summon Effect e le due note solo sull'attore del compendio Summons [1.15.12]
-- [ ] **Summon con un'azione di danno** — cosa controllare: Damage apre la stessa finestra dei foe, con [D] e fray del summoner [1.15.115]
+- [x] **Assault Wave** (legend Master, p.312) — cosa controllare: tiro salvezza fallito → "How many minions…" (massimo 6), 3 piercing per istanza; riuscito → 1 piercing per minion; Pierce attivo [1.15.201, 202, 216] **(già provato nelle sezioni 1.15.201, 202, 216)**
+- [x] **Bale Troll — Incredible Bulk** (foe, p.457) — cosa controllare: niente bottone Damage (il danno va a se stesso); Boulder Fist e Hurl Boulder invariati [1.15.143] **(già provato nella sezione 1.15.143)**
+- [x] **Blocchi Effect dei foe** (Kelpie Savage Fang p.354, Knuckle / Tomb Guard Overpower, Azurian Weapon Flak Blast, Basic Mob Rabble p.449) — cosa controllare: il danno dell'Effect è una chip sotto Other; Hit / Miss invariati [1.15.145] **(già provato nella sezione 1.15.145: Kelpie "Effect 3", Knuckle Overpower, Azurian Flak Blast, Basic Mob "2 · up to ×3"; oggi Kelpie Savage Fang di nuovo con Hit invariato)**
+- [x] **Shotgun Trooper — Double Barrel** (foe, p.389) — cosa controllare: Instances parte da 1 e si ferma a 3 [1.15.144] **(già provato nella sezione 1.15.144)**
+- [x] **Pistolero e simili** (Scout p.389, Razor Shot p.431, Collect Bounty p.369, Stutterslash p.328) — cosa controllare: nessun bottone "Gain Unerring" [1.15.130] **(Scout importato dal compendio: Show in Chat di Pistolero senza "Gain Unerring". Gli altri foe non riprovati. Vedi P14: nella card i tag escono grezzi "attack", "range-4")**
+- [x] **Aura of Slaughter** (Battle / Armor / Gaping / Horn / Starving / Nail Demon, p.407) — cosa controllare: bottone "Aura 2" che si piazza senza chiedere la dimensione [1.15.114] **(già provato nella sezione 1.15.114)**
+- [x] **Summon dei foe con elenchi** (Churn Baron: Crony, Blunderbuss, Arkentech Explosives p.375; Deep Snow Aesi: Icicle p.488; Keeper of the Eldflame: Everforge p.461; Violence Demon: Blade of Agony p.420) — cosa controllare: le voci "•" una per riga, sulla scheda del foe, in chat e sulla scheda del Summon trascinato [1.15.133, 179] **(già provato nelle sezioni 1.15.133 e 179)**
+- [x] **Elenchi "•" nei testi dei foe** (testo; Imperial Spy p.390, Relict p.324, trappola Lowlander p.428, Warden of the Aeongate Eternal Star p.463, Silent One Possess p.330, Rider of the Primal Storm Static Charge p.459, Head Lopper God Waster p.442, Fetid Idol, Cannoneer nel compendio Foe Abilities) — cosa controllare: ogni voce su una riga, le parole uguali al libro; solo sui foe importati di nuovo [1.15.124] **(già provato nella sezione 1.15.124)**
+- [ ] **Tag grigi dei foe** (Warrior Bull rush e Night Troll Bale Curse p.290, Troll / Hag Cauldron Action p.452, Apex Might of the Wild p.360-361, Aurelian Tally p.373, Churn Baron 4 Assets p.375, Violence Demon Blade Consume p.420, Pale Man Gaze p.416, Falling Leaf Aesi Thievery p.485, Wyrm Path of Ruin p.362-363, Keeper Forge Action p.461, Summer Flame Aesi e Head Lopper Burst p.97, Dread Lords Range 4+ p.342) — cosa controllare: passando il mouse il tag ha la spiegazione con la pagina [1.15.122] **(foe a posto nella sezione 1.15.122; legend ancora grezze: bug P8)**
+- [x] **Tag Sacrifice, Blast, Terrain Effect** (PG e foe, p.95-98, p.103) — cosa controllare: non più grigi, con tooltip [1.15.7] **(tooltip visti oggi su Sacrifice (Dropkick), Medium Blast (Comet), Terrain Effect nei tag di Blood Grove / Polaris / Eclipse)**
+- [x] **Tabelle 1-6 dei foe** (Troll Strange Brew p.452, Shopkeep Rummage p.371) — cosa controllare: una riga per risultato, sulla scheda e in chat [1.15.13] **(già provato nella sezione 1.15.13)**
+- [x] **Aure a tempo dei foe** (Trooper Hold the Line! p.388) — cosa controllare: avviso in chat alla scadenza con Remove area [1.15.5] **(Trooper in combattimento: "Aura 2" di Hold the Line! con notifica "until the start of its next turn"; nessuna card a fine turno, card "ends" all'inizio del suo turno successivo)**
+- [x] **Pepperbox — Riddle** (foe, p.302) — cosa controllare: su Hit Instances ×3, su Miss 1 [1.15.28] **(già provato nella sezione 1.15.28)**
+- [x] **Trooper — Blunderbuss e azioni d'area dei foe** (p.375) — cosa controllare: niente scelta "Hit (no damage)", solo Area [1.15.47] **(già provato nella sezione 1.15.47)**
+- [x] **Interrupt di foe e legend** ("is damaged by an ability", Violence Demon "is targeted by an attack", p.292) — cosa controllare: caselle degli usi sulla scheda, bottoni sotto le card d'attacco e di danno, avviso se Stunned [1.15.149, 195, 203, 204] **(Violence Demon importato e attaccato da PT S3: sotto la card d'attacco il GM vede "Blade Parry · … 2/2"; sulla scheda della legend il fumetto posta la card e spende un uso; caselle e avviso Stunned già provati nelle sezioni 1.15.203 e 204)**
+- [x] **Promemoria di round dei foe** (Junk Mage / Sniper / Barkeep "At round 3+", Dread Lords Eternal Imperium) — cosa controllare: card "Round N" al GM, una riga per foe anche con più token [1.15.63] **(card "Round 3 · foes" con una riga per Junk Mage (due token) vista oggi)**
+- [x] **Plant** (summon, p.184) — cosa controllare: una Plant del compendio è riconosciuta da HARVEST MOON, una fatta a mano no [1.15.142] **(già provato nella sezione 1.15.142)**
+- [x] **Salt Sprite** (summon, p.232) — cosa controllare: compare da solo nello spazio del geyser dopo l'Erupt [1.15.68] **(già provato nella sezione 1.15.68, eruzione guidata)**
+- [x] **Wild Card** (testo; summon, p.200) — cosa controllare: Summon Effect e le due note solo sull'attore del compendio Summons [1.15.12] **(già provato nella sezione 1.15.12)**
+- [x] **Summon con un'azione di danno** — cosa controllare: Damage apre la stessa finestra dei foe, con [D] e fray del summoner [1.15.115] **(già provato nella sezione 1.15.115)**
 
 #### Altro
 
@@ -786,6 +786,9 @@ Da compilare durante il playtest.
   c'è (+1 ogni 2 Aether), ma la scelta dell'area dice "Infuse X (3 Aether): Line 4". Il testo (p.234) dice "Increase
   line length by 2 and attack deals bonus damage for every two aether spent", quindi Line 6. La card intanto dice
   "1 ACTION … Line 8" nella testata, presa dalla base.
+- **Sezione 3 (19 ottobre) — tag grezzi nella card delle azioni dei foe.** Scout, Show in Chat di Pistolero: nella card
+  i tag sono "attack" e "range-4" (slug, minuscolo, senza tooltip), mentre sulla scheda del foe sono "Attack" e
+  "Range 4".
 
 ### Dubbi
 

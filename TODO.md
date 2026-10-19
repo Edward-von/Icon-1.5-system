@@ -50,6 +50,8 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
       dall'Effect della base ("Seal your foe…"), che Devil Hand sostituisce (p.192). S.
 - [ ] **P13** — Cryo con MAGNACRYO: l'area resta "Line 4" qualunque sia l'Aether infuso; il testo (p.234) aggiunge +2 di
       lunghezza ogni 2 Aether (come fa già per il dado bonus). S.
+- [ ] **P14** — card in chat delle azioni dei foe (Show in Chat dalla scheda): i tag escono come slug ("attack",
+      "range-4"), sulla scheda invece "Attack", "Range 4". Parente di P8. S.
 - [ ] **Da decidere con Edoardo** (Dubbi in PLAYTEST.md): chip Weakened non spuntato in automatico; copertura data
       dall'Underway ai foe; Aethershard che dà copertura e pierce insieme; plant non scelta bersagliata da Harvest
       Moon; nomi sulle card delle aree (speaker); bottone interrupt "0/1" ancora cliccabile sul GM.
