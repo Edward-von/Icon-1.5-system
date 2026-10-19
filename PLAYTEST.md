@@ -2810,8 +2810,8 @@ Setup: solo codice (F5 basta).
 
 - [x] Implode con un personaggio nella casella centrale e un altro a 3 caselle: premi Shove sul secondo. Arriva
       accanto al centro e la card dice "collides with <nome> and stops (p.117)". **('Janissary collides with Knuckle and stops (p.117)')**
-- [ ] Shove contro un oggetto (Map Object) o un muro: la card dice "an object" o "a wall". **(non provato)**
-- [ ] Shove di un personaggio che arriva vicino al centro senza ostacoli (centro vuoto): nessuna riga di collisione. **(non provato)**
+- [x] Shove contro un oggetto (Map Object) o un muro: la card dice "an object" o "a wall". **(PT S3 dietro il Boulder: "shoved 0 spaces … collides with an object and stops (p.117)". Muri: la scena non ne ha.)**
+- [x] Shove di un personaggio che arriva vicino al centro senza ostacoli (centro vuoto): nessuna riga di collisione. **(Mechanist verso il centro vuoto: "shoved 1 space towards the centre." senza riga di collisione.)**
 - [x] Personaggio già adiacente al centro occupato: la card dice "shoved 0 spaces" con la collisione, non solo un
       avviso. **('shoved 0 spaces' con la collisione)**
 
@@ -2995,13 +2995,13 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Implode su uno spazio con 3 personaggi intorno a distanze diverse: a inizio turno, "Activate", poi nella card
-      c'è un "Shove <nome>" per ciascuno.
-- [ ] Cliccare prima quello più vicino, poi quello dietro di lui sulla stessa linea: il secondo si ferma accanto al
-      primo.
-- [ ] Un personaggio in diagonale rispetto al centro: si muove in diagonale e si ferma alla distanza minima.
+- [x] Implode su uno spazio con 3 personaggi intorno a distanze diverse: a inizio turno, "Activate", poi nella card
+      c'è un "Shove <nome>" per ciascuno. **(Shove TEST Knave / Janissary / PT S3 (o Mechanist), uno per personaggio.)**
+- [x] Cliccare prima quello più vicino, poi quello dietro di lui sulla stessa linea: il secondo si ferma accanto al
+      primo. **(Mechanist spinto per primo nel centro vuoto, poi il Knave dietro di lui: "shoved 0 spaces … collides with Mechanist".)**
+- [x] Un personaggio in diagonale rispetto al centro: si muove in diagonale e si ferma alla distanza minima. **(PT S3 in diagonale (2 caselle): va in diagonale e si ferma accanto al Knuckle.)**
 - [ ] Un muro fra un personaggio e il centro: lo shove si ferma davanti al muro.
-- [ ] Un personaggio già accanto al centro occupato: notifica "can't get any closer", nessun movimento.
+- [ ] Un personaggio già accanto al centro occupato: notifica "can't get any closer", nessun movimento. **(Knave già accanto al centro occupato: nessun movimento, ma invece della notifica "can't get any closer" esce la card "shoved 0 spaces towards the centre … collides with Knuckle". Probabilmente voluto dalla 1.15.209 (collisione segnalata): da confermare.)**
 - [x] Un giocatore (proprietario di chi ha usato Implode) clicca lo shove di un foe: notifica "ask the GM to click";
       il GM lo fa con lo stesso bottone. **(PT Player proprietario di TEST Enochian clicca "Shove Janissary": avviso "ask the GM to click"; il GM con lo stesso bottone sposta Janissary di 2 verso il centro)**
 
@@ -3168,7 +3168,7 @@ Setup: solo codice (F5 basta).
       "Discard"; il giocatore ha permesso Owner su tutte e tre. Mano con 2 carte, si avvia il combattimento: compare
       "Wheel of Fate — start of combat" con *Draw up to 5*; il giocatore clicca e la mano arriva a 5. Il bottone si
       spegne con la spunta e un secondo clic non pesca. **(da giocatore: la mano da 2 a 5, bottone spento, secondo clic niente)**
-- [ ] Mano già con 5 carte o più all'avvio: la card c'è ma senza bottone. **(non provato)**
+- [x] Mano già con 5 carte o più all'avvio: la card c'è ma senza bottone. **(Combattimento avviato con Ann a 5 carte in mano: "Wheel of Fate — start of combat … Ann hand: 5 cards." senza bottone.)**
 - [x] Inizio turno del Seer: card "Skein — start of turn", *Draw 1* pesca una carta. Il giocatore riceve la notifica
       con il nome della carta, la chat dice solo quante sono. **(Draw 1: notifica 'Ann drew: Nine of Clubs.' al giocatore, la chat dice solo il numero)**
 - [x] Fine turno del Seer: card "Skein — end of turn" con *Didn't attack: draw 1*; con 7 carte o più c'è anche
@@ -3177,7 +3177,7 @@ Setup: solo codice (F5 basta).
 - [x] Svuotare il mazzo (tutte le carte in mano o negli scarti), poi *Draw 1*: le carte degli scarti tornano nel mazzo
       mescolato, si pesca, e la chat scrive "The deck ran out…". **('The deck ran out: the discard pile (3 cards) was shuffled back…')**
 - [x] Un giocatore che non possiede il Seer clicca un bottone: avviso, niente pescato. **(19 ott, PT Player su una card Skein di PT S3 (non sua): bottone acceso, al clic "Only the Seer's owner can use this button.", niente pescato)**
-- [ ] Un PG che non è Seer: nessuna di queste card. **(non provato)**
+- [x] Un PG che non è Seer: nessuna di queste card. **(Enochian (non Seer) attivato in un combattimento di prova: nessuna card Skein / Wheel of Fate.)**
 - [x] Il giocatore senza permesso Owner sul mazzo: messaggio d'errore chiaro, nessun blocco. **(PT Player proprietario di Ann e della sua mano ma non del mazzo: "Draw 1" funziona lo stesso ("Ann drew: Queen of Clubs"), nessun errore)**
 
 ## Emerso R12 — Elenchi puntati nella scheda del Summon di un foe (17 ottobre 2026, versione 1.15.179)
@@ -3256,14 +3256,14 @@ Setup: solo codice (F5 basta).
 
 Setup: solo codice (F5 basta).
 
-- [ ] Due caselle Polaris; a fine turno di un altro personaggio esce la card (solo al proprietario e al GM). Gamble:
-      due Medium Blast unite, il danno è risultato +2, le caselle spariscono.
-- [ ] Tre caselle, di cui una su un personaggio (Talent I): Large Blast su tutte e tre; "Stun the centres" mette
-      Stunned; il mark sul personaggio finisce.
-- [ ] A fine turno del creatore non esce nessuna card Polaris.
+- [x] Due caselle Polaris; a fine turno di un altro personaggio esce la card (solo al proprietario e al GM). Gamble:
+      due Medium Blast unite, il danno è risultato +2, le caselle spariscono. **(Due caselle Polaris, fine turno del Knuckle: card a GM e proprietario ("To: Gamemaster, Giocatore") "2 spaces active … Medium Blasts, +2"; Gamble 5 → "Medium Blast × 2" (16 caselle), "7 damage to all", caselle tolte.)**
+- [x] Tre caselle, di cui una su un personaggio (Talent I): Large Blast su tutte e tre; "Stun the centres" mette
+      Stunned; il mark sul personaggio finisce. **(Due caselle + una sul Janissary (Talent I): "3 spaces active … Large Blasts, +4 … stunned"; gamble 1 → "Large Blast × 3", "5 damage to all (8)", "Stun the centres (1)" dà Stunned al Janissary; "The mark Polaris on Janissary ends.")**
+- [x] A fine turno del creatore non esce nessuna card Polaris. **(Una casella Polaris, fine turno di Ann: nessuna card Polaris (solo le card Skein).)**
 - [ ] Talent II: "difficult under the centres"; con risultato 4 o più compare anche "pits instead".
-- [ ] Implode su una casella: a inizio turno del creatore "Activate" fa la Large Blast, poi "Failed save: stun…" per
-      chi è al centro e il pit del Talent II. Con Waking Void su un personaggio non esce la card doppia.
+- [x] Implode su una casella: a inizio turno del creatore "Activate" fa la Large Blast, poi "Failed save: stun…" per
+      chi è al centro e il pit del Talent II. Con Waking Void su un personaggio non esce la card doppia. **(Implode sulla casella del Knuckle, combattimento di prova: a inizio turno dell'Enochian "Start of turn — Implode … Activate / Remove"; Activate → "Large Blast (around the space)", Shove per ciascuno e "Failed save: stun Knuckle". Talent II e Waking Void doppia non provati.)**
 
 ## R33b2 — Mote e mine esplodono con un clic (17 ottobre 2026, versione 1.15.172)
 
@@ -3457,7 +3457,7 @@ Setup: solo codice (F5 basta).
 - [x] Implode con WAKING VOID su un foe, fine turno: all'inizio del turno successivo del creatore arriva la card (solo
       al creatore e al GM); sulla mappa non compare niente finché non si clicca. **(la card arriva al GM (whisper) con 'Large Blast on Knuckle' e 'Done: end it')**
 - [x] "Large Blast on X": la blast è centrata sul token di X, poi tracker e spazio spariscono. **(Large Blast (target) da 13 caselle, il tracker finisce)**
-- [ ] Foe a 0 hp prima di quel turno: la card della sconfitta ha il bottone, e a inizio turno non esce un'altra card. **(non provato)**
+- [x] Foe a 0 hp prima di quel turno: la card della sconfitta ha il bottone, e a inizio turno non esce un'altra card. **(La card della sconfitta ha "Large Blast on Knuckle": large blast attorno a lui, il tracker finisce e arriva la card degli shove. L'assenza di una seconda card a inizio turno non provata.)**
 - [ ] Implode messo su uno spazio normale: nessuna di queste card. **(non provato)**
 
 ## R33d2 — Segno sul personaggio: controllo del range (17 ottobre 2026, versione 1.15.152)
@@ -4561,14 +4561,14 @@ Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
 - [x] **Chip che chiede**: Polaris con Talent I → clic su "Polaris · 1" → finestra "On a space / On a character" con la
       frase del talento. Con un foe targettato il secondo bottone dice "On <nome>". Senza Talent I nessuna domanda (come
       prima). Stessa cosa per "Mine · 1" con AMICO e "Implode · 1" con WAKING VOID. **(Polaris Talent I: 'On a space / On Knuckle'; Party Favor AMICO e Implode WAKING VOID uguali)**
-- [ ] **On a space**: sceglie lo spazio come in R33b (nessun cambiamento). **(non provato)**
+- [x] **On a space**: sceglie lo spazio come in R33b (nessun cambiamento). **(Implode senza bersaglio: "Implode — where?" → "On a space" → clic su una casella come in R33b.)**
 - [x] **On <foe>**: dal giocatore → il foe riceve "Marked — Polaris (<PG>)", sulle sue caselle appare lo spazio viola
       "Polaris (mark)" e una card con la regola, "Polaris spaces active: N" ed **End mark**. Senza target o con due target:
       avviso "target exactly one character", niente creato. **(da GM: mark 'Marked — Polaris (Ann)', spazio viola, card con 'spaces active: 1' ed End mark)**
 - [x] **Segue il token**: spostare il foe marcato → lo spazio si sposta con lui; nessuna domanda di dangerous terrain né
       card "enters". Token 2×2: lo spazio copre tutte e quattro le caselle. **(lo spazio segue, nessuna domanda; 2×2 non provato)**
-- [ ] **Conteggio Polaris**: un Polaris su uno spazio e uno sul foe → la card dice 2 spaces active. Rimettere Polaris sul
-      personaggio su un altro foe → il primo mark e il suo spazio spariscono (uno solo sul personaggio). **(non provato)**
+- [x] **Conteggio Polaris**: un Polaris su uno spazio e uno sul foe → la card dice 2 spaces active. Rimettere Polaris sul
+      personaggio su un altro foe → il primo mark e il suo spazio spariscono (uno solo sul personaggio). **(Polaris Talent I: mark sul Knuckle, poi Mark sul Janissary → resta un solo Polaris sul personaggio (quello del Knuckle e il suo spazio spariscono). Con due spazi + quello sul personaggio la card dice "3 spaces active".)**
 - [x] **Mark e spazio insieme**: ✕ sul chip del mark nella scheda del PG → lo spazio sparisce. Rimettere il mark, poi
       selezionare lo spazio sul layer dei template e Canc (GM) → il mark sul foe finisce ("The mark … ends"). End mark sulla
       card (dal giocatore) → spariscono tutti e due. Tasto destro sul chip "Polaris · 1" (GM) → tolti anche quelli sul foe. **(End mark sulla card: spariscono tutti e due; gli altri modi non provati)**
@@ -4582,9 +4582,9 @@ Implode (mastery WAKING VOID sbloccata). Solo JS: F5 dopo il deploy.
       sussurrata (solo GM e giocatore del Fool) con **Detonate** ed End mark. Detonate → finestra del gamble; chiusa senza
       tirare → niente. Tirato → card del gamble, Medium Blast centrata sul foe A (targetta chi c'è dentro), mark e spazio
       spariscono; il bottone si spegne. **(vedi 1.15.156)**
-- [ ] **WAKING VOID**: Implode sul foe B → card con la frase "doesn't stun the center character" → portare il foe B a 0 hp →
+- [x] **WAKING VOID**: Implode sul foe B → card con la frase "doesn't stun the center character" → portare il foe B a 0 hp →
       card "<foe B> is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode e
-      "Done: end it" (toglie lo spazio e il tracker). **(non provato)**
+      "Done: end it" (toglie lo spazio e il tracker). **(WAKING VOID: Implode sul Knuckle ("tracks Knuckle — Implode", "the implode follows Knuckle"); Knuckle a 0 hp → card "Knuckle is defeated. If that character is defeated, Implode immediately activates." con il testo di Implode, "Large Blast on Knuckle" e "Done: end it".)**
 - [ ] **Fine combat / token cancellato**: fine combat → i mark spariscono e con loro gli spazi. Cancellare il token di un foe
       marcato → il suo spazio sparisce. Nessun errore in console. **(non provato)**
 
