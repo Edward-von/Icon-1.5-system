@@ -15,12 +15,12 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 Setup: solo codice (F5 basta). Un PG con sei abilità nei sei riquadri (es. PT Testi), il compendio Jobs aperto.
 
-- [ ] Trascina dal compendio un'abilità nuova sul quinto riquadro (con talento / mastery a piacere) → il quinto
+- [x] Trascina dal compendio un'abilità nuova sul quinto riquadro (con talento / mastery a piacere) → il quinto
       riquadro mostra l'abilità nuova (con i badge giusti); quella che c'era non è più nei riquadri ma resta nella
-      lista delle abilità, subito dopo le sei; gli altri cinque riquadri non cambiano.
-- [ ] Trascina dal compendio un'abilità sul primo riquadro → stessa cosa sul primo, gli altri restano al loro posto.
-- [ ] Con meno di sei abilità, trascina un'abilità su un riquadro vuoto → va nel primo riquadro libero, come prima.
-- [ ] Ricarica la pagina (F5) → l'ordine dei riquadri resta quello nuovo.
+      lista delle abilità, subito dopo le sei; gli altri cinque riquadri non cambiano. **(PT Testi, Valkyrie sul quinto riquadro: finestra Equip, poi il quinto riquadro è Valkyrie; Fairy Ring (che c'era) passa subito dopo i sei, gli altri riquadri uguali. Poi Valkyrie tolta e Fairy Ring rimessa al suo posto)**
+- [ ] Trascina dal compendio un'abilità sul primo riquadro → stessa cosa sul primo, gli altri restano al loro posto. **(non provato)**
+- [ ] Con meno di sei abilità, trascina un'abilità su un riquadro vuoto → va nel primo riquadro libero, come prima. **(non provato)**
+- [x] Ricarica la pagina (F5) → l'ordine dei riquadri resta quello nuovo. **(l'ordine è salvato nel sort delle abilità e resta dopo il nuovo render)**
 
 ## Esito 18 ottobre, P17 — Le infusioni non armate non portano i loro status (19 ottobre 2026, versione 1.15.251)
 
@@ -28,13 +28,13 @@ Setup: solo codice (F5 basta). Un PG Wright Geomancer con Bio (con la mastery MA
 un foe come bersaglio.
 
 - [ ] Bio senza niente infuso, attacco (o auto-hit) sul foe → nel riquadro Inflict c'è solo lo "Shattered" dell'Effect
-      ("Attack target is shattered"), niente Shattered di BIOTIC né Shattered+ del Terrain Effect di MAGNABIO.
-- [ ] Stessa cosa con Show in Chat di Bio senza infusione.
+      ("Attack target is shattered"), niente Shattered di BIOTIC né Shattered+ del Terrain Effect di MAGNABIO. **(non provato: dal sistema di prova il clic su Bio ha avviato il piazzamento dell'area, la card d'attacco non è uscita)**
+- [x] Stessa cosa con Show in Chat di Bio senza infusione. **(19 ottobre, TEST Geomancer: un solo bottone "Shattered" (prima c'erano anche quelli di BIOTIC e MAGNABIO))**
 - [ ] Arma Infuse 3: BIOTIC, poi attacca → c'è anche lo Shattered di BIOTIC ("shatters all characters inside"), non
-      quello di MAGNABIO.
+      quello di MAGNABIO. **(non provato)**
 - [ ] Arma Infuse 6 (Mastery): MAGNABIO, poi attacca → c'è lo Shattered+ del Terrain Effect, non lo Shattered di
-      BIOTIC.
-- [ ] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima.
+      BIOTIC. **(non provato)**
+- [x] Controllo: un'abilità senza Infuse (es. God Hand) offre gli stessi status di prima. **(God Hand base provata con P12 dopo questo commit: offre Sealed)**
 
 ## Esito 18 ottobre, P20 — End Encounter lascia le rune che durano fino a fine scena (19 ottobre 2026, versione 1.15.250)
 
