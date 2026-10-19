@@ -16,8 +16,8 @@
         </select>
         <label>Chapter</label>
         <select name="system.chapter" {{#unless isEditable}}disabled{{/unless}}>
-          {{#each chapterChoices as |label key|}}
-            <option value="{{key}}" {{#icon-eq key ../system.chapter}}selected{{/icon-eq}}>{{label}}</option>
+          {{#each chapterChoices as |c|}}
+            <option value="{{c.value}}" {{#icon-eq c.value ../system.chapter}}selected{{/icon-eq}}>{{c.label}}</option>
           {{/each}}
         </select>
         <label>Cost</label>
@@ -296,8 +296,8 @@
         </select>
         <label>Chapter</label>
         <select name="system.chapter" {{#unless isEditable}}disabled{{/unless}}>
-          {{#each chapterChoices as |label key|}}
-            <option value="{{key}}" {{#icon-eq key ../system.chapter}}selected{{/icon-eq}}>{{label}}</option>
+          {{#each chapterChoices as |c|}}
+            <option value="{{c.value}}" {{#icon-eq c.value ../system.chapter}}selected{{/icon-eq}}>{{c.label}}</option>
           {{/each}}
         </select>
         <label>

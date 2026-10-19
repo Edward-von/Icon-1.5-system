@@ -38,9 +38,10 @@ Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18
 - [x] **P8** — schede Legend: i tag (might-of-the-wild, blade-consume-N, path-of-ruin, forge-action, thievery)
       escono come slug grezzi senza spiegazione; sui foe le spiegazioni della 1.15.122 ci sono. S.
       (FATTO il 19 ottobre 2026, versione 1.15.240)
-- [ ] **P9** — scheda di un'abilità / tratto: il menu Chapter non mostra il valore salvato (chiavi "2" contro il
+- [x] **P9** — scheda di un'abilità / tratto: il menu Chapter non mostra il valore salvato (chiavi "2" contro il
       numero 2 in `icon-eq`), quindi ogni salvataggio riporta il capitolo 2 o 3 a 1. Controllare anche le copie già
       rovinate nei mondi. S.
+      (FATTO il 19 ottobre 2026, versione 1.15.241)
 - [ ] **P10** — Sow con REAP armato: il bottone dice "✦ Auto-Hit" ma apre il tiro d'attacco vero; l'anteprima usa
       `isAutoHit` della versione base invece della combo. Al contrario su Holy con Hades e Astra con Fortuna: il
       bottone dice "Attack Roll" ma fa l'auto-hit. S.

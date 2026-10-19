@@ -1,5 +1,21 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 19 ottobre 2026 — Il capitolo delle abilità e dei tratti non torna più a 1 (versione 1.15.241)
+
+### Esito del playtest del 18 ottobre, P9
+
+- **Menu Chapter sulla scheda di un'abilità o di un tratto**: aprendo Eclipse o Raging Wolf (capitolo 2) e salvando
+  la scheda senza toccare niente, il capitolo diventava 1 → il menu confrontava "2" scritto come testo con il 2
+  salvato come numero, non li riconosceva uguali e quindi mostrava sempre "Chapter 1", che il salvataggio riscriveva
+  → ora il menu usa numeri e mostra il capitolo giusto (2 o 3), e salvare la scheda non lo cambia più. Controllati
+  gli altri menu delle schede (classe, costo, power die, capitoli di foe / Legend / job, orologi, fasi): nessun altro
+  aveva lo stesso difetto.
+- **Copie già rovinate nei mondi**: all'apertura del mondo una migrazione (schema 38) rimette il capitolo 2 o 3
+  alle abilità e ai tratti, sui personaggi e nella barra Items, che sono a capitolo 1 ma nel compendio Jobs hanno lo
+  stesso nome, lo stesso tipo e la stessa classe a capitolo 2 o 3 (i nomi lì sono unici). Non tocca le copie che
+  vengono da un altro compendio né le abilità inventate a mano. Se un'abilità creata a mano era stata messa a
+  capitolo 2 o 3 ed è tornata a 1, va corretta a mano: aprire la scheda, scegliere il capitolo, chiudere.
+
 ## 19 ottobre 2026 — Tag leggibili e spiegati sulle Legend e nelle card dei foe (versione 1.15.240)
 
 ### Esito del playtest del 18 ottobre, P8 e P14

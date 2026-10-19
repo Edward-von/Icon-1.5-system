@@ -11,6 +11,25 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Esito 18 ottobre, P9 — Il capitolo delle abilità e dei tratti non torna più a 1 (19 ottobre 2026, versione 1.15.241)
+
+Setup: solo codice (F5 basta). Al primo avvio la migrazione allo schema 38 gira da sola (console: "Migration 38").
+Servono Eclipse e Raging Wolf (abilità di capitolo 2) e un tratto di capitolo 3 (es. Umbral Soul o Deep Stealth),
+dal compendio Jobs.
+
+- [ ] Scheda di Eclipse aperta dal compendio Jobs (o una copia nella barra Items): il menu Chapter mostra
+      "Chapter 2", non "Chapter 1".
+- [ ] Copia di Raging Wolf su un personaggio: aprire la scheda dell'abilità, cambiare il nome di una lettera e
+      rimetterlo, chiudere → il capitolo resta 2 (riaprendo, il menu dice ancora "Chapter 2").
+- [ ] Tratto di capitolo 3 (Umbral Soul o Deep Stealth): la scheda mostra "Chapter 3" e salvarla non lo cambia.
+- [ ] Cambiare il capitolo dal menu (es. Eclipse da 2 a 3, poi di nuovo 2) → il valore scelto resta dopo la
+      chiusura e la riapertura della scheda.
+- [ ] Migrazione: una copia rovinata prima del fix (abilità del compendio di capitolo 2/3 rimasta a capitolo 1 su
+      un personaggio o nella barra Items) dopo l'aggiornamento torna al capitolo del compendio. Per prepararne una:
+      prima dell'aggiornamento, oppure rimettendo a mano `game.settings.set("icon-system","schemaVersion",37)` e
+      portando a 1 il capitolo di una copia, poi F5.
+- [ ] La migrazione non tocca un'abilità creata a mano (nome che non c'è nel compendio) lasciata a capitolo 1.
+
 ## Esito 18 ottobre, P8 e P14 — Tag leggibili e spiegati sulle Legend e nelle card dei foe (19 ottobre 2026, versione 1.15.240)
 
 Setup: solo codice (F5 basta). Le Legend già importate vanno bene (i tag sono gli stessi): Apex, Violence Demon,

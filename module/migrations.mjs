@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 37;
+export const CURRENT_SCHEMA_VERSION = 38;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1366,6 +1366,42 @@ const MIGRATIONS = {
       n++;
     }
     if (n) console.log(`ICON 1.5 | Migration 37: ${n} map object / foe summon actor(s) given an unlinked prototype token`);
+  },
+
+  /* 38 — The item sheet's Chapter select never showed chapter 2 or 3 (string
+   * keys against a stored number, playtest 18 October, P9), so saving the
+   * sheet of a chapter 2/3 ability or trait wrote chapter 1. Restore the
+   * chapter only where the right value is known: the copy is still at 1, the
+   * jobs pack has an ability/trait of the same type and name (names are
+   * unique there) and class at chapter 2 or 3, and the copy did not come from
+   * some other compendium. */
+  38: async () => {
+    const pack = game.packs.get("icon-system.jobs");
+    if (!pack) return;
+    const index = await pack.getIndex({ fields: ["system.chapter", "system.class"] });
+    const book = new Map();
+    for (const e of index) {
+      if (e.type !== "ability" && e.type !== "trait") continue;
+      const ch = Number(e.system?.chapter) || 1;
+      if (ch > 1) book.set(`${e.type}|${(e.name ?? "").trim()}`, { ch, cls: e.system?.class ?? "" });
+    }
+    if (!book.size) return;
+
+    let n = 0;
+    await migrateWorldDocuments({
+      item: (item) => {
+        if (item.type !== "ability" && item.type !== "trait") return null;
+        if (Number(item.system?.chapter) !== 1) return null;
+        const src = book.get(`${item.type}|${(item.name ?? "").trim()}`);
+        if (!src) return null;
+        if (src.cls && item.system?.class && item.system.class !== src.cls) return null;
+        const from = String(item._stats?.compendiumSource ?? item.flags?.core?.sourceId ?? "");
+        if (from.startsWith("Compendium.") && !from.startsWith("Compendium.icon-system.jobs.")) return null;
+        n++;
+        return { "system.chapter": src.ch };
+      },
+    });
+    if (n) console.log(`ICON 1.5 | Migration 38: ${n} ability/trait copy/copies given back their chapter 2/3 from the jobs pack`);
   },
 };
 

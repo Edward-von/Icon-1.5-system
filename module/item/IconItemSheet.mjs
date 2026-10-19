@@ -98,7 +98,10 @@ export class IconItemSheet extends HandlebarsApplicationMixin(DocumentSheetV2) {
       "interrupt-2":"Interrupt (2)",
       "interrupt-3":"Interrupt (3)",
     };
-    context.chapterChoices = { 1: "Chapter 1", 2: "Chapter 2", 3: "Chapter 3" };
+    // An array, not an object: object keys are always strings ("2"), and the
+    // strict icon-eq against the stored number (2) never matched, so the
+    // select showed Chapter 1 and every save wrote chapter 1 back.
+    context.chapterChoices = [1, 2, 3].map(value => ({ value, label: `Chapter ${value}` }));
     context.invokeChoices  = { attack: "Attack", gambit: "Gambit", round: "Round" };
     context.sourceChoices  = { job: "Job", class: "Class" };
     context.abilityTypeChoices = { action: "Action", interrupt: "Interrupt", trait: "Trait", "round-action": "Round Action" };
