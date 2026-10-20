@@ -21,12 +21,12 @@ Setup: solo codice (F5 basta).
 - [x] Diaga in chat → bottone Cure, niente note "Gains 4 vigor / Vigor surge"; Cure su un alleato bloodied puntato → vigor surge e save. **(sì: 0→10 vigor, Dazed e Weakened tolti al save)**
 - [x] Riconoscimento delle cure: "Cure yourself" → su di sé; "When you cure…", "cannot be cured", "range of all cure effects" → nessun bottone. **(sì, 7 frasi di prova)**
 - [x] Tour "Creating and Levelling Up": ogni passo indica il suo punto; il personaggio non cambia (oggetti, AP, livello, XP uguali). **(sì, Actor)**
-- [ ] Nel tour di creazione premere Finalize nel wizard e Confirm nel Level Up: compare "nothing was saved" e il personaggio non cambia.
+- [x] Nel tour di creazione premere Finalize nel wizard e Confirm nel Level Up: compare "nothing was saved" e il personaggio non cambia. **(sì, premuti dal codice: con il mouse non si arriva ai bottoni, il velo del tour copre tutto tranne la parte indicata; frase dell'introduzione corretta in 1.15.275. Le anteprime si chiudono all'uscita dal tour)**
 - [x] Tour della scheda: a fine tour propone il tour della classe del personaggio. **(Actor, Wright → "Class: Wright")**
 - [x] Tour "Out of Combat": Quick Guide aperta sulla scheda Narrative e indicata, clock board, compendio delle macro. **(sì; macro Camp, Interlude, Award Session XP presenti nel compendio)**
 - [x] Passi dei job: Knave → riquadro stance; Enochian e Wild Cards al centro. **(sì)**
-- [ ] Sealer: con un Sealer come primo Mendicant del mondo il passo indica il dado del mantra di Godly Smite (con Ann ripiega sulla tab).
-- [ ] Cure da un giocatore su un alleato che non possiede: passa dal GM, il giocatore proprietario risponde sui Blessed.
+- [x] Sealer: con un Sealer come primo Mendicant del mondo il passo indica il dado del mantra di Godly Smite (con Ann ripiega sulla tab). **(sì: PT Player con TEST Sealer e il tratto Godly Smite aggiunto per un momento; il passo indica "Power die d6")**
+- [x] Cure da un giocatore su un alleato che non possiede: passa dal GM, il giocatore proprietario risponde sui Blessed. **(PT Player con TEST Chanter + Diaga cura TEST Bastion del GM: passa dal GM, vigor 0→10, Dazed tolto al save. Domanda sui Blessed: con TEST Bastion del giocatore la domanda arriva a lui, "Yes" spende la blessing e dà +1 boon al save. Una card in più "is now Cure" veniva da un secondo client GM aperto con la build vecchia, non dal codice)**
 
 ## Guida, secondo giro — H4, un tour per classe (20 ottobre 2026, versione 1.15.273)
 

@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Playtest delle ultime tre prove di K1-K5 (versione 1.15.275)
+
+- **Tour "Creating and Levelling Up"**: l'introduzione diceva che nelle anteprime si poteva cliccare dappertutto,
+  anche su Finalize e Confirm → in realtà durante un tour Foundry copre la pagina e si può cliccare solo la parte
+  indicata dal passo → frase corretta ("ogni passo mostra una parte della finestra, niente viene salvato"). La
+  protezione resta: premuti dal codice, Finalize e Confirm mostrano "nothing was saved" e il personaggio non cambia.
+
 ## 20 ottobre 2026 — Automazioni di classe, Cure, tour di creazione e del gioco narrativo (versione 1.15.274)
 
 ### Blocco "Guida, terzo giro" (K1-K5)

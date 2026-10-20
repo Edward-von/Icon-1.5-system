@@ -9,7 +9,7 @@
       "id": "intro",
       "selector": "",
       "title": "Building a character",
-      "content": "Two windows do the paperwork for you: the <strong>Character Setup Wizard</strong> for a new character and <strong>Level Up</strong> when you reach 15 XP.\nThis tour opens both on your character <em>as a preview</em>: you can look and click around, but nothing is saved, even if you press Finalize or Confirm."
+      "content": "Two windows do the paperwork for you: the <strong>Character Setup Wizard</strong> for a new character and <strong>Level Up</strong> when you reach 15 XP.\nThis tour opens both on your character <em>as a preview</em>: each step shows one part of the window, and nothing is saved. To build or level up for real, open them from the sheet when the tour is over."
     },
     {
       "id": "wizard-button",
