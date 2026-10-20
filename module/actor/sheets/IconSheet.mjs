@@ -2026,6 +2026,14 @@ export class IconSheet extends BaseActorSheet {
       await this.document.update({ "system.combat.classResources.comboToken.value": 0 });
       await this.document.setFlag("icon-system", "comboSpentOnItem", itemId);
     }
+    // The base version of a combo ability gives the token: "When you use the
+    // base ability, gain a combo token … only one at once" (p.103).
+    else if (!comboMode && item?.system?.isCombo && String(item.system.comboEffect ?? "").trim()) {
+      if ((this.document.system.combat?.classResources?.comboToken?.value ?? 0) !== 1) {
+        await this.document.update({ "system.combat.classResources.comboToken.value": 1 });
+        ui.notifications.info(`${this.document.name} gains a combo token (p.103).`);
+      }
+    }
   }
 
   /**

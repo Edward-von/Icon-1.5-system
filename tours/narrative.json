@@ -1,0 +1,68 @@
+{
+  "title": "ICON 1.5 — Out of Combat",
+  "description": "Narrative play: action rolls, effort and strain, burdens and ambitions, clocks, camp and interlude.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Between the fights",
+      "content": "Outside combat ICON is a story game: you roll your narrative actions, spend effort, take strain, and the GM tracks clocks. This tour shows where each of these lives."
+    },
+    {
+      "id": "actions",
+      "selector": ".icon-actions-section",
+      "sheetTab": "narrative",
+      "tooltipDirection": "LEFT",
+      "title": "Action rolls",
+      "content": "Click an action's name to roll it: one d6 per dot, keep the highest. 1-3 fails, 4-5 succeeds with a cost, 6 succeeds (pp.16-17).\nThe window asks for boons and curses (never more than +2 or −2 in total) and offers <strong>Push Effort</strong>: spend 1 effort for one more die. The result goes to chat."
+    },
+    {
+      "id": "effort-strain",
+      "selector": ".icon-narrative-col--left",
+      "sheetTab": "narrative",
+      "tooltipDirection": "RIGHT",
+      "title": "Effort, strain, burdens, ambitions",
+      "content": "<strong>Effort</strong>: click a box to spend it; <em>Recover All</em> refills it. <strong>Strain</strong>: the harm you take to avoid worse; when it fills up you break and take a burden (pp.30-31).\n<strong>Burdens</strong> and <strong>Ambitions</strong> are clocks: add one with +, click a segment to fill it, pick its size."
+    },
+    {
+      "id": "aid",
+      "selector": "",
+      "title": "Aid and set up",
+      "content": "Helping each other is not a button. An ally who <strong>aids</strong> spends 1 effort and doesn't roll: you get +1 boon, and they share the consequences. A <strong>set up</strong> costs no effort: the helper rolls first, and if it succeeds you get +1 boon or a bigger effect. You can't have both on one roll (pp.19-20, 34-35). Add the boon in the roll window.\nThe Quick Guide explains the difference, next step."
+    },
+    {
+      "id": "guide",
+      "selector": "#icon-quick-guide",
+      "openApp": "quick-guide",
+      "guideTab": "narrative",
+      "tooltipDirection": "LEFT",
+      "title": "The Narrative tab of the Quick Guide",
+      "content": "The action roll, risk and effect, push, aid and set up, effort and strain on one page, with the page of the book for each. It is searchable, like the glossary and the FAQ."
+    },
+    {
+      "id": "clocks",
+      "selector": ".icon-clock-board",
+      "fallback": ".clock-sheet",
+      "actorType": "clock",
+      "tooltipDirection": "LEFT",
+      "title": "Clocks",
+      "content": "The GM keeps campaign clocks on a <strong>Clock Board</strong> actor (Create Actor → Clock Board): click the segments to fill them, post a clock to chat, hide it from the players, or drag it onto the map. Players see the clocks that aren't hidden."
+    },
+    {
+      "id": "macros",
+      "selector": "#compendium",
+      "sidebarTab": "compendium",
+      "tooltipDirection": "LEFT",
+      "title": "Camp, interlude, XP",
+      "content": "The <strong>ICON Macros</strong> compendium has the GM's tools for the end of a scene or a session. <strong>Camp</strong>: everyone back to full HP, strain and vigor cleared, effort refilled. <strong>Interlude</strong>: also wounds healed and burden segments cleared, with Dust for extra ones (p.42). <strong>Award Session XP</strong>: ticks the XP triggers for the characters you pick.\nDrag a macro to the hotbar to use it."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's it",
+      "content": "Bonds, bond powers and gear kits are in the <strong>Character Sheet</strong> tour; the optional Heroic and Routine rolls in the GM's <strong>House Rules</strong> tour."
+    }
+  ]
+}

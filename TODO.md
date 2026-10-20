@@ -74,6 +74,24 @@ sono automatizzate e dove si vede, più un tour breve per le meccaniche di class
 - [x] **H4 — Gli altri tour di classe** scelti in H2 (M ciascuno). Scelta di Edoardo: un tour per classe (Stalwart,
       Vagabond con il Fool, Mendicant, Wright). FATTO il 20 ottobre 2026, versione 1.15.273.
 
+## Guida, terzo giro: automazioni di classe e tour mancanti (deciso il 20 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.274)
+
+Emerso scrivendo i tour di classe. Edoardo: "fai tutte e 5".
+
+- [x] **K1 — Automazioni di classe** (M): +1 Vigilance a fine turno per Fortify (Stalwart, p.116); +1 Aether a inizio
+      turno (Wright, p.204); il gettone combo si accende da solo quando si usa la versione base di un'abilità combo
+      (p.103); un bottone Cure sulle card delle abilità che curano (4 vigor, vigor surge se bloodied, poi save contro
+      tutti gli status, p.85 / p.172). Poi aggiornare i tour di classe che oggi dicono "fallo a mano".
+- [x] **K2 — Tour del wizard di creazione e del Level Up** (M).
+- [x] **K3 — Il tour Character Sheet suggerisce il tour della classe del personaggio** (S).
+- [x] **K4 — Tour del gioco narrativo** (M): tiri narrativi, effort / strain, clock, Interlude, macro del compendio.
+- [x] **K5 — Controllo dei job** (M): dal CHANGELOG, i job con una meccanica che ha un'interfaccia propria (come il
+      mazzo del Seer); aggiungere un passo nel tour della classe dove serve.
+- [ ] **Emerso facendo K5 — Godly Smite (Sealer)** (S): l'interrupt aggiunge il dado del mantra al totale dell'attacco
+      e ripete il danno, ma la card dell'attacco non ha un bottone: oggi si fa a mano (il tour lo dice).
+- [ ] **Emerso facendo K5 — tratti di job dell'Harvester** (M): thrall che scattano a inizio turno e diventano piante,
+      piante come terreno pericoloso per i foe, Mark of Tsumi, due mark (Gardener of Kin): nessuna automazione.
+
 ## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare
 
 Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18 ottobre 2026". Un punto per volta.

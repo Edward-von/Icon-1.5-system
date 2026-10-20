@@ -17,7 +17,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "The combo token",
-      "content": "Combo abilities have a base version and a combo version. Using the base version gives you a combo token; with the token, the next combo ability uses its combo version and the token is spent. One token at most, lost at the end of combat (p.103).\nThe <strong>COMBO</strong> checkbox is your token: tick it when you gain one. When you use a combo ability with the token, the system uses the combo version and unticks it for you."
+      "content": "Combo abilities have a base version and a combo version. Using the base version gives you a combo token; with the token, the next combo ability uses its combo version and the token is spent. One token at most, lost at the end of combat (p.103).\nThe <strong>COMBO</strong> checkbox is your token, and the sheet keeps it for you: posting the base version of a combo ability with Show in Chat ticks it, posting a combo ability while it is ticked uses the combo version and unticks it. You can also click it yourself."
     },
     {
       "id": "combo-slots",

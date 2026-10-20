@@ -15,7 +15,7 @@
 import { ICON } from "../config.mjs";
 import { damageRoll } from "../dice/rolls.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
-import { getStatusCharges, setStatusCharges, hasStatus } from "./statuses.mjs";
+import { getStatusCharges, setStatusCharges, hasStatus, saveAgainstStatuses } from "./statuses.mjs";
 
 const TPLPATH = "systems/icon-system/templates/chat";
 
@@ -559,28 +559,45 @@ export async function clearVigor(actor) {
 /* ================================================== */
 
 /**
- * Execute the Recover basic action (2 actions):
- *   • Cure self: 4 vigor (or Vigor Surge if bloodied)
- *   • Then save vs all current statuses
+ * Execute the Recover basic action (2 actions): cure yourself (p.85).
  */
 export async function recoverAction(actor) {
-  const combat     = actor.system?.combat;
-  if (!combat)     return;
-  const bloodied   = combat.hp.value <= combat.hp.bloodied;
-  const surge      = bloodied;
-  const gain       = ICON.rules.recoverVigor;
-  await addVigor(actor, surge ? 0 : gain, surge);
+  if (!actor?.system?.combat) return;
+  await cureCharacter(actor, { verb: "Recovers" });
+}
 
-  const speaker = ChatMessage.getSpeaker({ actor });
+/** At or under half HP (p.94), for any actor type. */
+function isBloodied(actor) {
+  if (hasStatus(actor, "bloodied")) return true;
+  const hp = paths(actor).container?.hp;
+  if (!hp || hp.value == null || !hp.max) return false;
+  return hp.value <= (hp.bloodied ?? Math.ceil(hp.max / 2));
+}
+
+/**
+ * Cure a character: "they gain 4 vigor, or if they are bloodied, they gain a
+ * vigor surge. Then they may save against all statuses, ending them on a
+ * success" (Recover p.85; Diaga p.172). Run by the target's owner or the GM.
+ * @param {Actor} actor
+ * @param {object} [opts]
+ * @param {string} [opts.verb]         "Recovers", or "is cured"
+ * @param {string} [opts.abilityName]  the ability that cures, shown on the card
+ * @param {string} [opts.sourceName]   who cures
+ */
+export async function cureCharacter(actor, { verb = "is cured", abilityName = "", sourceName = "" } = {}) {
+  if (!paths(actor).container?.vigor) return;
+  const surge = isBloodied(actor);
+  const gain  = ICON.rules.recoverVigor;
+  await addVigor(actor, surge ? 0 : gain, surge);
+  const from = [abilityName, sourceName && sourceName !== actor.name ? `by ${sourceName}` : ""].filter(Boolean).join(" ");
   await ChatMessage.create({
-    speaker,
+    speaker: ChatMessage.getSpeaker({ actor }),
     content: `<div class="icon-chat-card">
-      <strong>${escapeHTML(actor.name)}</strong> Recovers.
-      ${surge ? "Vigor Surge (bloodied)!" : `Gains ${gain} Vigor.`}
+      <strong>${escapeHTML(actor.name)}</strong> ${escapeHTML(verb)}${from ? ` <small>(${escapeHTML(from)})</small>` : ""}:
+      ${surge ? "Vigor Surge (bloodied)!" : `gains ${gain} Vigor.`} Then a save against each status.
     </div>`,
   });
-
-  // Status saves handled externally by the save automation hook.
+  await saveAgainstStatuses(actor);
 }
 
 /* ================================================== */

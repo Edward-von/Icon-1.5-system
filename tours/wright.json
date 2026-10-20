@@ -17,7 +17,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "Aether",
-      "content": "Your Aether, from 0 to 6. You start each combat at 0 and gain 1 at the start of each of your turns: add it with + yourself, the sheet doesn't do it for you. Chain Reaction (once a round, damage two or more foes with one ability) gives 1 more.\nAll Aether disperses at the end of combat; the sheet empties it by itself."
+      "content": "Your Aether, from 0 to 6. You start each combat at 0 and gain 1 at the start of each of your turns: the sheet adds it by itself during combat. Chain Reaction (once a round, damage two or more foes with one ability) gives 1 more.\nAll Aether disperses at the end of combat; the sheet empties it by itself."
     },
     {
       "id": "infuse",
@@ -36,6 +36,12 @@
       "tooltipDirection": "UP",
       "title": "Infusing the Limit Break",
       "content": "Your Limit Break can be infused the same way, from its own Infuse buttons."
+    },
+    {
+      "id": "enochian",
+      "selector": "",
+      "title": "Enochian: Inner Furnace and Soulfire",
+      "content": "<em>Enochians only.</em> <strong>Inner Furnace</strong>: once a round, when you infuse, a window offers to sacrifice a quarter of your max hp to make the infusion cost 2 Aether less (p.208). Closing that window with its cross cancels the infusion. Pressing the armed Infuse button again gives back what you paid, hp included.\n<strong>Soulfire</strong>: the attack window lowers your crit and Exceed numbers by itself while you are bloodied or at 1 hp; the numbers are shown in it."
     },
     {
       "id": "trait",

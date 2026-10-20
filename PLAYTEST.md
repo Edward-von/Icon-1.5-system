@@ -11,6 +11,23 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Guida, terzo giro — K1-K5 (20 ottobre 2026, versione 1.15.274)
+
+Setup: solo codice (F5 basta).
+
+- [x] Combattimento con un Wright e uno Stalwart: inizio turno del Wright → Aether +1; fine turno dello Stalwart → Vigilance +1. **(20 ottobre: combattimento di prova con TEST Enochian 2→3 e TEST Bastion 1→2; valori poi rimessi)**
+- [x] Show in Chat di Sow (base) con il gettone spento → gettone acceso; di nuovo → card di Reap e gettone spento. **(sì, TEST Harvester)**
+- [x] Recover dalla scheda con due status → 4 vigor, poi un save per ciascuno. **(TEST Chanter: 0→4 vigor, save vs Dazed e Weakened)**
+- [x] Diaga in chat → bottone Cure, niente note "Gains 4 vigor / Vigor surge"; Cure su un alleato bloodied puntato → vigor surge e save. **(sì: 0→10 vigor, Dazed e Weakened tolti al save)**
+- [x] Riconoscimento delle cure: "Cure yourself" → su di sé; "When you cure…", "cannot be cured", "range of all cure effects" → nessun bottone. **(sì, 7 frasi di prova)**
+- [x] Tour "Creating and Levelling Up": ogni passo indica il suo punto; il personaggio non cambia (oggetti, AP, livello, XP uguali). **(sì, Actor)**
+- [ ] Nel tour di creazione premere Finalize nel wizard e Confirm nel Level Up: compare "nothing was saved" e il personaggio non cambia.
+- [x] Tour della scheda: a fine tour propone il tour della classe del personaggio. **(Actor, Wright → "Class: Wright")**
+- [x] Tour "Out of Combat": Quick Guide aperta sulla scheda Narrative e indicata, clock board, compendio delle macro. **(sì; macro Camp, Interlude, Award Session XP presenti nel compendio)**
+- [x] Passi dei job: Knave → riquadro stance; Enochian e Wild Cards al centro. **(sì)**
+- [ ] Sealer: con un Sealer come primo Mendicant del mondo il passo indica il dado del mantra di Godly Smite (con Ann ripiega sulla tab).
+- [ ] Cure da un giocatore su un alleato che non possiede: passa dal GM, il giocatore proprietario risponde sui Blessed.
+
 ## Guida, secondo giro — H4, un tour per classe (20 ottobre 2026, versione 1.15.273)
 
 Setup: solo file JSON e JS (F5 basta).

@@ -109,7 +109,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Equipped abilities",
-      "content": "Drag abilities into the slots (dropping on a full slot replaces it). Click one to open its panel below, double-click to open the item.\nThe <strong>COMBO</strong> checkbox is your combo token: while it is on, abilities marked as combos use their combo version.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
+      "content": "Drag abilities into the slots (dropping on a full slot replaces it). Click one to open its panel below, double-click to open the item.\nThe <strong>COMBO</strong> checkbox is your combo token: posting the base version of a combo ability ticks it, and while it is on, abilities marked as combos use their combo version.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
     },
     {
       "id": "ability-panel",

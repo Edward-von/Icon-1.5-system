@@ -49,6 +49,7 @@ import { followMarkTurnEnd } from "../canvas/follow-marks.mjs";
 import { wheelCombatStart, wheelTurnStart, wheelTurnEnd } from "./wheel-of-fate.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { expireInfusionAtTurnStart } from "../helpers/infuse.mjs";
+import { classTurnStart, classTurnEnd } from "./class-resources.mjs";
 
 /* ================================================== */
 /*  Constants                                          */
@@ -896,6 +897,9 @@ export function registerCombatHooks() {
           // Seer: Skein's extra card if they didn't attack, then discard down to 7 (p.199).
           try { await wheelTurnEnd(prev); }
           catch (err) { console.warn("[ICON | IconCombat] Wheel of Fate (end) failed", err); }
+          // Stalwart: Fortify gives Vigilance +1 at the end of the turn (p.116).
+          try { await classTurnEnd(prev.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] class resources (end) failed", err); }
           // Objects around them at the end of the turn: on a geyser, a foe by an underway, AETHERSHIFT (R33a4).
           try { await objectTurnBoundary(prev, "end"); }
           catch (err) { console.warn("[ICON | IconCombat] object turn reminders (end) failed", err); }
@@ -977,6 +981,9 @@ export function registerCombatHooks() {
           // Seer: Skein, draw a card at the start of the turn (p.199).
           try { await wheelTurnStart(current); }
           catch (err) { console.warn("[ICON | IconCombat] Wheel of Fate (start) failed", err); }
+          // Wright: +1 Aether at the start of the turn (p.204).
+          try { await classTurnStart(current.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] class resources (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

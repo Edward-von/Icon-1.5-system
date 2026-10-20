@@ -1,5 +1,29 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Automazioni di classe, Cure, tour di creazione e del gioco narrativo (versione 1.15.274)
+
+### Blocco "Guida, terzo giro" (K1-K5)
+
+- **K1 — Vigilance e Aether**: il +1 Vigilance di Fortify a fine turno (p.116) e il +1 Aether a inizio turno del
+  Wright (p.204) andavano segnati a mano → nessun codice li faceva → ora li aggiunge il combattimento da solo
+  (`module/combat/class-resources.mjs`, chiamato dall'hook di turno). Vale anche per chi ha il Wright Gambit.
+- **K1 — Gettone combo**: la versione base di un'abilità combo non accendeva il gettone (p.103) → il codice lo
+  spendeva soltanto → ora Show in Chat della versione base lo accende (con un avviso), la volta dopo la combo lo spende.
+- **K1 — Cure**: le cure (Diaga, Recover, ogni "cure a character / cure yourself") non avevano un bottone, e Recover
+  dava la vigor ma non faceva tirare i save contro gli status (il commento rimandava a un hook che non esiste) →
+  nuovo bottone **Cure** tra i Gain delle card (`ability-statuses.mjs`), che dà 4 vigor o una vigor surge se bloodied
+  e poi fa tirare un save per ogni status, chiedendo dei Blessed (`damage.mjs#cureCharacter`); Recover usa la stessa
+  funzione. Il ciclo dei save di fine turno è diventato `saveAgainstStatuses` in `statuses.mjs`, condiviso.
+- **K2 — Tour "Creating and Levelling Up"**: wizard di creazione passo per passo e finestra di Level Up (benefici,
+  scelte), più Refocus. Le finestre aperte dal tour sono un'anteprima: Finalize e Confirm non salvano niente
+  (opzione `iconTour`), e si chiudono a fine tour.
+- **K3 — Tour della scheda**: alla fine suggerisce il tour della classe del personaggio.
+- **K4 — Tour "Out of Combat"**: tiri narrativi, effort e strain, burden e ambition, aid e set up, scheda Narrative
+  della Quick Guide (i tour ora possono aprirla), clock board, macro Camp / Interlude / Award Session XP.
+- **K5 — Job con un'interfaccia propria**: passi nuovi nei tour di classe per il Knave (due stance, separatore |),
+  l'Enochian (Inner Furnace, Soulfire), il Sealer (dado del mantra di Godly Smite) e le Wild Cards del Seer.
+- `tours.mjs`: un passo il cui selettore indica la finestra stessa (la Quick Guide) la trova.
+
 ## 20 ottobre 2026 — Un tour per ogni classe (versione 1.15.273)
 
 ### Blocco "Guida, secondo giro", H4 (scelta di Edoardo: un tour per classe)

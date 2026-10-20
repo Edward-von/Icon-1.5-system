@@ -1,0 +1,127 @@
+{
+  "title": "ICON 1.5 — Creating and Levelling Up",
+  "description": "The Character Setup Wizard and the Level Up window, step by step. Opened from the tour they are previews: nothing is saved.",
+  "canBeResumed": true,
+  "display": true,
+  "suggestedNextTours": ["icon-system.character-sheet"],
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Building a character",
+      "content": "Two windows do the paperwork for you: the <strong>Character Setup Wizard</strong> for a new character and <strong>Level Up</strong> when you reach 15 XP.\nThis tour opens both on your character <em>as a preview</em>: you can look and click around, but nothing is saved, even if you press Finalize or Confirm."
+    },
+    {
+      "id": "wizard-button",
+      "selector": ".icon-setup-banner__btn",
+      "fallback": ".icon-sheet__header",
+      "sheetTab": "narrative",
+      "tooltipDirection": "DOWN",
+      "title": "Where the wizard is",
+      "content": "A new character (Create Actor → Player Character) shows a <strong>Character Setup Wizard</strong> button in the header until it has a job. The wand next to the XP reopens it while the character has no bond."
+    },
+    {
+      "id": "kin",
+      "selector": ".icon-wizard__step[data-step='kin']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "kin",
+      "tooltipDirection": "LEFT",
+      "title": "Kin and culture",
+      "content": "The wizard is one long page: the list on the side jumps to each step. First your kin and culture, which are for the story."
+    },
+    {
+      "id": "bond",
+      "selector": ".icon-wizard__step[data-step='bond']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "bond",
+      "tooltipDirection": "LEFT",
+      "title": "Bond and primary action",
+      "content": "Your <strong>Bond</strong> is who you are outside the fight. It gives +2 to one of its primary actions (you pick which, in the next step), your Effort, and the gear kits you can carry."
+    },
+    {
+      "id": "dots",
+      "selector": ".icon-wizard__step[data-step='dots']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "dots",
+      "tooltipDirection": "LEFT",
+      "title": "Extra dots",
+      "content": "Four more dots to spread over your narrative actions; at level 0 no action can go above 3. The counter tells you how many are left."
+    },
+    {
+      "id": "power",
+      "selector": ".icon-wizard__step[data-step='power']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "power",
+      "tooltipDirection": "LEFT",
+      "title": "Bond power and gear",
+      "content": "One power from your bond, and a look at the gear kits that come with it (the sheet keeps them on the Narrative tab)."
+    },
+    {
+      "id": "job",
+      "selector": ".icon-wizard__step[data-step='job']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "job",
+      "tooltipDirection": "LEFT",
+      "title": "Starting job",
+      "content": "Your <strong>job</strong> sets your class, your stats, your traits and your Limit Break. The class decides which class tour is yours (Settings → Tours)."
+    },
+    {
+      "id": "abilities",
+      "selector": ".icon-wizard__step[data-step='abilities']",
+      "fallback": ".character-creation-dialog",
+      "openApp": "character-creation",
+      "wizardStep": "abilities",
+      "tooltipDirection": "LEFT",
+      "title": "Starting abilities",
+      "content": "Exactly two chapter 1 abilities of your job. <strong>Finalize</strong> at the bottom writes everything on the sheet in one go (from this tour it saves nothing)."
+    },
+    {
+      "id": "xp",
+      "selector": ".icon-xp-section",
+      "sheetTab": "narrative",
+      "tooltipDirection": "UP",
+      "title": "XP and Level Up",
+      "content": "Track XP with the pips or − / +. At <strong>15 XP</strong> the <strong>Level Up</strong> button opens the level-up window; the Combat tab also shows <em>Level Up Now</em>. Levels 1 to 4 are chapter 1, 5 to 8 chapter 2, 9 to 12 chapter 3: the sheet sets the chapter for you."
+    },
+    {
+      "id": "levelup-benefits",
+      "selector": ".icon-grant-grid",
+      "fallback": ".level-up-dialog",
+      "openApp": "level-up",
+      "stage": 1,
+      "tooltipDirection": "LEFT",
+      "title": "What the new level gives",
+      "content": "The first page lists what you gain at the new level: ability points, a mastery point, the Limit Break, a relic (levels 2, 6 and 9), bond powers, action improvements.\nAt levels <strong>4 and 8</strong> you choose: a <strong>new job</strong> (its abilities open up to you) or one more mastery, and a bond power or +1 to two actions. <strong>Next</strong> goes to your picks."
+    },
+    {
+      "id": "levelup-picks",
+      "selector": ".icon-wizard__recap",
+      "fallback": ".level-up-dialog",
+      "openApp": "level-up",
+      "stage": 2,
+      "tooltipDirection": "LEFT",
+      "title": "Your picks",
+      "content": "The second page asks only for what this level gives: new abilities and talents (1 AP each), a mastery, a relic, a bond power, which actions to improve. Action improvements and bond powers must be picked now or they are lost.\n<strong>Confirm</strong> applies everything and resets your XP (from this tour it saves nothing)."
+    },
+    {
+      "id": "refocus",
+      "selector": ".icon-btn--refocus",
+      "fallback": ".icon-tab--notes",
+      "sheetTab": "notes",
+      "tooltipDirection": "UP",
+      "title": "Changing your mind",
+      "content": "On the Notes tab, <strong>Refocus</strong> rebuilds a character (p.113): keep your jobs and pick abilities again (4 Dust), reset the jobs too (8 Dust), or start over for free. It asks before doing anything. Next to it, the character management box warns you if you spent more AP or masteries than your levels give."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "Done",
+      "content": "The previews close now. The <strong>Character Sheet</strong> tour shows the rest of the sheet, and at the end suggests the tour of your class."
+    }
+  ]
+}

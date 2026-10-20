@@ -213,7 +213,19 @@ export async function rollEndOfTurnSaves(combatant) {
     await saveRoll({ statusLabel, ongoing: true, actor });
   }
 
-  for (const effect of saveableEffects) {
+  await saveAgainstStatuses(actor, saveableEffects);
+}
+
+/**
+ * One save against each status in `effects` (default: every status the actor
+ * can save against), ending it on a success (p.94). A character with Blessed
+ * charges is asked before each save whether to spend one for +1 boon. Used by
+ * the end-of-turn saves and by Cure (Recover, Diaga… p.85).
+ * @param {Actor} actor
+ * @param {ActiveEffect[]} [effects]
+ */
+export async function saveAgainstStatuses(actor, effects = saveableStatusEffects(actor)) {
+  for (const effect of effects) {
     const statusLabel = effect.name;
     // If the actor has Blessed charges, prompt before each save: spend one
     // for +1 boon? Re-read the count each loop because a previous save may
@@ -222,7 +234,7 @@ export async function rollEndOfTurnSaves(combatant) {
     let boonNote = "";
     const blessings = getStatusCharges(actor, "blessed");
     if (blessings > 0) {
-      // These saves are resolved on the GM's client (the combat hook is
+      // These saves are often resolved on the GM's client (the combat hook is
       // GM-only), but the Blessed charge belongs to the character: ask their
       // player first and only fall back to a local dialog when nobody owns
       // them, they're offline, or they don't answer.

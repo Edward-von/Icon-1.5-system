@@ -32,7 +32,7 @@
       "id": "cure",
       "selector": "",
       "title": "Diaga and Cure",
-      "content": "A cured character gains 4 vigor (a vigor surge if bloodied), then may save against all their statuses. Cure has no single button: give the vigor on the ally's sheet, and they roll their saves from their Conditions tab."
+      "content": "A cured character gains 4 vigor (a vigor surge if bloodied), then saves against each of their statuses (p.85). Diaga's card has a <strong>Cure</strong> button: target the ally and click it, and the system gives the vigor and rolls the saves, asking about Blessed charges. Recover on the sheet does the same for yourself."
     },
     {
       "id": "combo",
@@ -41,7 +41,16 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "Combos",
-      "content": "Many Mendicant abilities are combos. The <strong>COMBO</strong> checkbox is your combo token: the base version gives it, the combo version spends it (p.103)."
+      "content": "Many Mendicant abilities are combos. The <strong>COMBO</strong> checkbox is your combo token: posting the base version with Show in Chat gives it, the next combo ability spends it, all by itself (p.103)."
+    },
+    {
+      "id": "sealer",
+      "selector": ".icon-trait__quick.icon-power-die-widget",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Sealer: the mantra die",
+      "content": "<em>Sealers only.</em> Godly Smite's mantra is a power die on its trait: the sheet sets it out at the start of combat and ticks it up every round. Use − / + and roll it from here. When Godly Smite adds the die to an attack, add it by hand: the attack card has no button for it."
     },
     {
       "id": "outro",

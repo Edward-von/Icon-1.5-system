@@ -19,7 +19,7 @@ import { applyHatred, promptHatredTarget } from "./marks.mjs";
 import { expiryFromUntil } from "./status-expiry.mjs";
 import { gainPcVigilance } from "./tracker-statuses.mjs";
 import { saveRoll } from "../dice/rolls.mjs";
-import { postAbilityDamageCard } from "./damage.mjs";
+import { postAbilityDamageCard, cureCharacter } from "./damage.mjs";
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { askOwner, registerPromptResponder } from "./remote-prompt.mjs";
 
@@ -541,6 +541,11 @@ async function _apply({ target, source, statusId, ongoing, label, abilityName, s
 
 /** Apply on a client that owns the target (or the GM), with a chat note. */
 export async function applyStatusDirect({ target, statusId, ongoing = false, label = "", abilityName = "", sourceName = "", note = "", expiry = null, remove = 0 }) {
+  // Cure (the "Cure" Gain button, ability-statuses.mjs): vigor, then a save against each status (p.85).
+  if (statusId === "cure") {
+    await cureCharacter(target, { abilityName, sourceName });
+    return;
+  }
   // P28: an unlinked token (a mote of life, a plant) goes by its token's name, as the card's speaker does.
   const who = target?.token?.name || target?.name || "";
   // Blessings taken away (Symphony "Remove up to four blessings from characters anywhere", p.178): one charge each.

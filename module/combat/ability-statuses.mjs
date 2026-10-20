@@ -210,6 +210,13 @@ const ADJ_NOUN = "(?:foes?|characters?|character's|allies|ally|targets?|enemies|
 const ADJ_AFTER_RE = new RegExp(`^(?:\\+?\\s*(?:,|/|\\bor\\b|\\band\\b|,\\s*(?:or|and))\\s*(?:${STATUS_ALT})\\+?)*\\s+${ADJ_NOUN}\\b`, "i");
 const CHAIN_BETWEEN_RE = /^\+?(?:\s*,\s*|\s+(?:and|or)\s+|\s*,\s*(?:and|or)\s+)$/i;
 
+/** "Cure a character in range 4", "cure yourself", "they are cured": a cure that happens (p.85). */
+const CURE_RE = /\bcures?\s+(?:a|an|one|all|every|each|yourself|you|them|him|her|it|that|the|your|allies|another|up\s+to|\d+|adjacent|nearby|target(?:ed|s)?)\b|\b(?:is|are|be|gets?)\s+cured\b/i;
+/** Not a cure that happens: a trigger, a rule about cures, a refusal ("when you cure", "cannot be cured"). */
+const CURE_SKIP_BEFORE_RE = /\b(?:when|whenever|if|after|each\s+time|cannot|can't|can\s+not|unless)\b[^.;]*$/i;
+const CURE_SELF_RE = /\bcures?\s+(?:yourself|you)\b|\byou\s+(?:are|get|may\s+be)\s+cured\b/i;
+const CURE_OTHER_RE = /\bcures?\s+(?:a|an|one|all|every|each|them|him|her|it|that|the|allies|another|up\s+to|\d+|adjacent|nearby|target(?:ed|s)?)\b|\b(?:ally|allies|character|characters|they)\b[^.;]*\b(?:is|are|be|gets?)\s+cured\b/i;
+
 /** Words before a mention (in the same clause) that mean "not an infliction". */
 const SKIP_BEFORE_RE = /\b(?:if|while|whenever|against|already|immune|immunity|cannot|can't|can not|unless|instead of|for each|following|bonus damage to|damage to|damage against|cures?|cured|curing|remove[sd]?|removing|(?:ends?|ended|ending)(?!\s+(?:their|its|your|his|her|a|the)\s+turns?\b)|clears?|cleared|purged?|ignores?|ignoring|no longer|not|isn't|aren't|rather than|as if|counts? as|treated as|than|would be|being|were|was|had|has been|have been)\b/i;
 
@@ -550,6 +557,19 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         }
       }
 
+      // Cure (p.85, Diaga p.172): a "Cure" Gain button that gives the vigor and
+      // the saves (damage.mjs#cureCharacter), instead of the vigor reminder chips.
+      const raw = shown[si] ?? sentence;
+      const cure = CURE_RE.exec(raw);
+      if (cure && !CURE_SKIP_BEFORE_RE.test(raw.slice(0, cure.index)) && !blockEntries.some(e => e.kind === "gain" && e.id === "cure")) {
+        const self = CURE_SELF_RE.test(raw);
+        const other = CURE_OTHER_RE.test(raw);
+        for (const t of self && other ? ["self", "ally"] : [self ? "self" : "ally"]) {
+          blockEntries.push({ id: "cure", label: "Cure", ongoing: false, when: "always", section, key: outcomeKey(section),
+            sentence: raw, saveBoons: 0, saveCurses: 0, autoFailIf: "", skip: false, kind: "gain", target: t, until: "", _sentenceIndex: si, end: raw.length });
+        }
+      }
+
       // Damage tied to the save of this sentence ("must save or take 2[D]+fray,
       // or [D]+fray on a successful save"): rolled from the same button as the
       // status (one save), or from its own "Roll damage" button when there is none.
@@ -590,6 +610,15 @@ export function parseInflictedStatuses(text, { label = "", sourceName = "", spli
         }
       }
     });
+
+    // With a Cure button, the vigor of the sentence that explains the cure ("a
+    // character that's cured gains 4 vigor, or a vigor surge…") is in the button.
+    if (blockEntries.some(e => e.kind === "gain" && e.id === "cure")) {
+      for (let i = blockEntries.length - 1; i >= 0; i--) {
+        const e = blockEntries[i];
+        if (e.kind === "note" && /\bvigor\b/i.test(e.label) && /\bcured\b/i.test(e.sentence ?? "")) blockEntries.splice(i, 1);
+      }
+    }
 
     for (const e of blockEntries) {
       // Dedupe inside the block: same status, same gate.

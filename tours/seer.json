@@ -51,6 +51,12 @@
       "content": "When a Seer with cards in hand gambles, the gamble card has a <strong>Bend Fate</strong> button: pick cards to discard and roll +1d6 for each one. A new gamble card shows every die and the result."
     },
     {
+      "id": "wild-cards",
+      "selector": "",
+      "title": "Wild Cards",
+      "content": "Your Wild Cards are summons on the map (p.200). When you place an area that touches one, a <strong>Wild Card</strong> window asks whether to <em>Set it off</em> or <em>Leave them</em>; set-off cards can set off others in turn."
+    },
+    {
       "id": "outro",
       "selector": "",
       "title": "That's the Wheel",

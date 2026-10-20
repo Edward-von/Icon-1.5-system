@@ -429,6 +429,11 @@ export class CharacterCreationDialog extends HandlebarsApplicationMixin(Applicat
   /* -------------------------------------------------- */
 
   static async #onSubmit(event, form, formData) {
+    // Opened by a guided tour (tours.mjs, openApp): a preview, nothing is saved.
+    if (this.options.iconTour) {
+      ui.notifications.info("This window was opened by a guided tour: nothing was saved.");
+      return;
+    }
     const data   = formData.object;
     const dialog = this;
     const actor  = dialog.actor;
