@@ -47,6 +47,23 @@ ottobre (1.10-1.20): delle ~300 novità di ottobre quasi nessuna è spiegata. Te
       da sole"; in realtà a fine round arriva al GM la card "Reveal reserves & add to combat" e serve il suo clic. Il tour
       ora lo descrive così. Se si vuole che entrino da sole, è una modifica a `_nudgeReserves` (IconCombat.mjs).
 
+## Guida, secondo giro: abilità automatizzate e tour di classe (deciso il 20 ottobre 2026)
+
+Scelta di Edoardo: niente spiegazione abilità per abilità (troppo lavoro); basta dire una volta che molte abilità
+sono automatizzate e dove si vede, più un tour breve per le meccaniche di classe che hanno un'interfaccia propria.
+
+- [ ] **H1 — "Molte abilità sono automatizzate"** (S): un passo nel tour Character Sheet (dopo "The ability panel") e
+      una voce nelle FAQ della Quick Guide: quello che il sistema sa fare compare come bottone / chip nel pannello
+      dell'abilità e come card in chat al momento giusto (inizio turno, fine round, chi entra in un'area); quello che
+      non ha un bottone si fa a mano leggendo il testo. Testi in inglese come il resto della UI.
+- [ ] **H2 — Elenco delle meccaniche di classe con un'interfaccia propria** (S): leggere il CHANGELOG di ottobre e
+      decidere quali meritano un tour (sicuro il mazzo del Seer; da valutare Aether / Infuse del Wright, Stack Dice e
+      bombe del Fool, altre). Mostrare l'elenco a Edoardo prima di scrivere i tour.
+- [ ] **H3 — Tour del Seer** (M): mazzo del Great Wheel (Cards di Foundry): carte pescate a inizio combattimento,
+      Draw 1 del Skein, mano con ☸ Foretell, scarti nella pila del proprio Seer, card di fine turno. Il tour apre
+      davvero la mano. Il tour Character Sheet alla fine suggerisce il tour della classe del personaggio.
+- [ ] **H4 — Gli altri tour di classe** scelti in H2 (M ciascuno).
+
 ## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare
 
 Dettagli e passi per riprodurre in `PLAYTEST.md`, sezione "Esito playtest del 18 ottobre 2026". Un punto per volta.
