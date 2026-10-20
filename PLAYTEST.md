@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Guida, secondo giro — H4, un tour per classe (20 ottobre 2026, versione 1.15.273)
+
+Setup: solo file JSON e JS (F5 basta).
+
+- [x] Settings → Tours: compaiono "Class: Stalwart", "Class: Vagabond", "Class: Mendicant", "Class: Wright". **(20 ottobre: registrati, nell'ordine)**
+- [x] Ogni tour apre la scheda di un PG di quella classe (da GM: il primo del mondo). **(Stalwart → TEST Bastion, Vagabond → TEST Fool, Mendicant → Ann, Wright → Actor)**
+- [x] Stalwart: "Vigilance" e "Spending Vigilance" puntano al riquadro e al bottone Spend; "The same controls on Fortify" al tratto. **(sì; il tratto solo con i tratti di classe del wizard: i PG TEST non li hanno, provato aggiungendoli per un momento)**
+- [x] Vagabond: COMBO, Finishing Blow (regole di classe), Stacked Dice del Fool puntano al loro posto; "Combo abilities" e "The gamble window" ripiegano se non ci sono abilità combo / pannello chiuso. **(sì, TEST Fool)**
+- [x] Mendicant: "Blessing tokens" e "Bless" puntano al riquadro e al bottone Bless. **(sì, con i tratti di classe aggiunti per un momento ad Ann; visto a schermo)**
+- [x] Wright: Aether, Infuse, Limit Break e tratto di classe puntano al loro posto. **(sì, Actor)**
+- [ ] Un giocatore senza PG di quella classe avvia il tour: compare l'avviso e i passi della scheda stanno al centro.
+- [ ] Leggere i testi dei quattro tour a schermo: nessun emoji, frasi chiare.
+
 ## Niente emoji nei tour (20 ottobre 2026, versione 1.15.272)
 
 Setup: solo file JSON (F5 basta).

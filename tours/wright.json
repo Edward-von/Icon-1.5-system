@@ -1,0 +1,56 @@
+{
+  "title": "ICON 1.5 — Class: Wright",
+  "description": "Aether and Infuse: how a Wright powers up abilities on the sheet.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Playing a Wright",
+      "content": "Wrights are mages: they gather <strong>Aether</strong> during the fight and spend it to <strong>Infuse</strong> their abilities into stronger versions (p.204).\nThis tour opens the sheet of a Wright you own and shows the class tools."
+    },
+    {
+      "id": "aether",
+      "selector": ".icon-resource-block--wright",
+      "fallback": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Aether",
+      "content": "Your Aether, from 0 to 6. You start each combat at 0 and gain 1 at the start of each of your turns: add it with + yourself, the sheet doesn't do it for you. Chain Reaction (once a round, damage two or more foes with one ability) gives 1 more.\nAll Aether disperses at the end of combat; the sheet empties it by itself."
+    },
+    {
+      "id": "infuse",
+      "selector": ".icon-btn--infuse",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Infuse",
+      "content": "An ability with infused versions has an <strong>Infuse X</strong> button for each one in its panel (click the ability to open it). Click it <em>before</em> rolling: the Aether is spent and the button reads <em>armed</em>. Show in Chat, Attack and Damage then use the infused version.\nClick it again to disarm and get the Aether back. Only one infusion at a time. Once used, it counts for that turn only (a few last until your next turn, as their text says); armed and unused, it stays armed until you use it or the combat ends."
+    },
+    {
+      "id": "limit-break",
+      "selector": ".icon-section:has(.icon-limit-break)",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Infusing the Limit Break",
+      "content": "Your Limit Break can be infused the same way, from its own Infuse buttons."
+    },
+    {
+      "id": "trait",
+      "selector": ".icon-trait__quick--wright",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Aether on the class trait",
+      "content": "The class trait shows Aether and your power dice in its header too, so you can adjust them while reading the rule. Some job traits add their own button, like Aether Deflection's \"spend 2 Aether to regain it\"."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's the Wright",
+      "content": "Infused abilities count as the same ability and keep all their talents (p.204). Areas, runes and other things a Wright leaves on the map are in the <strong>On the Map</strong> tour."
+    }
+  ]
+}

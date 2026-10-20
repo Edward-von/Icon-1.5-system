@@ -1,0 +1,65 @@
+{
+  "title": "ICON 1.5 — Class: Vagabond",
+  "description": "Combo tokens, Finishing Blow, and the Fool's Stacked Dice and gamble window.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Playing a Vagabond",
+      "content": "Vagabonds are fast and deadly: Skirmisher, Dodge, Prowl, and abilities that hit harder against bloodied foes (Finishing Blow, p.145).\nThis tour opens the sheet of a Vagabond you own and shows the class tools."
+    },
+    {
+      "id": "combo",
+      "selector": ".icon-combo-checkbox",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "The combo token",
+      "content": "Combo abilities have a base version and a combo version. Using the base version gives you a combo token; with the token, the next combo ability uses its combo version and the token is spent. One token at most, lost at the end of combat (p.103).\nThe <strong>COMBO</strong> checkbox is your token: tick it when you gain one. When you use a combo ability with the token, the system uses the combo version and unticks it for you."
+    },
+    {
+      "id": "combo-slots",
+      "selector": ".icon-ability-slot__badge--combo",
+      "fallback": ".icon-combo-checkbox",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Combo abilities",
+      "content": "Combo abilities have a badge on their slot. With the token on, their panel highlights the combo text and strikes through what it replaces, and Attack, Damage and Show in Chat use the combo version.\nIf a mastery gives a second combo version, the first click asks which one you want."
+    },
+    {
+      "id": "finishing-blow",
+      "selector": ".icon-class-rules-collapsible",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Finishing Blow",
+      "content": "An ability with a <em>Finishing Blow</em> effect gains it when it targets at least one bloodied foe (p.145). The attack window names the bloodied targets and adds the Finishing Blow for you. This box opens the class rules."
+    },
+    {
+      "id": "stacked-dice",
+      "selector": ".icon-trait__quick--stackedDice",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Fool: Stacked Dice",
+      "content": "<em>Fools only.</em> Once a round, a finishing blow or slay gives you a Stacked Die (p.149). The Stack Dice trait shows it as pips: click to set them, <strong>Use</strong> spends one and makes a gamble a 6. With Death's Apprentice you can hold two. They are emptied at the end of combat."
+    },
+    {
+      "id": "gamble",
+      "selector": "[data-action='abilityGamble']",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "The gamble window",
+      "content": "An ability that gambles has a <strong>Gamble</strong> button in its panel. The window lets you add dice, spend Vigilance where the ability allows it, and choose the result: <em>Roll</em>, <em>Stacked Die</em> (a 6, spending the die) or <em>Set</em> a number when an effect lets you choose. The card in chat shows the matching row of the ability's table."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's the Vagabond",
+      "content": "Marks, bombs and other things on the map are in the <strong>On the Map</strong> tour; stealth, dodge and evasion are in the Quick Guide glossary."
+    }
+  ]
+}

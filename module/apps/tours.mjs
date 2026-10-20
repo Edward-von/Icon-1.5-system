@@ -40,20 +40,33 @@ const TOURS = [
   { id: "character-sheet", file: "character-sheet.json", requiresCharacter: true },
   { id: "combat",          file: "combat.json" },
   { id: "on-the-map",      file: "on-the-map.json" },
+  { id: "stalwart",        file: "stalwart.json",  actorClass: "stalwart" },
+  { id: "vagabond",        file: "vagabond.json",  actorClass: "vagabond" },
+  { id: "mendicant",       file: "mendicant.json", actorClass: "mendicant" },
   { id: "seer",            file: "seer.json" },
+  { id: "wright",          file: "wright.json",    actorClass: "wright" },
   { id: "house-rules",     file: "house-rules.json" },
   { id: "gm-tools",        file: "gm-tools.json" },
 ];
 
+/** Class of a PC's primary job ("stalwart", "vagabond", "mendicant", "wright"), or "". */
+function primaryClass(actor) {
+  const jobs = actor?.system?.combat?.jobs ?? [];
+  const primary = jobs.find(j => j.primary) ?? (jobs.length === 1 ? jobs[0] : null);
+  return String(primary?.class ?? "").toLowerCase();
+}
+
 /**
  * The PC the sheet tour walks through: the user's assigned character, else the
  * first player character they own (for the GM, the first one in the world).
+ * With `cls`, only a character whose primary job is of that class.
  * @returns {Actor|null}
  */
-function tourCharacter() {
+function tourCharacter(cls = null) {
+  const fits = a => a?.type === "icon" && a.isOwner && (!cls || primaryClass(a) === cls);
   const own = game.user.character;
-  if (own?.type === "icon" && own.isOwner) return own;
-  return game.actors.find(a => a.type === "icon" && a.isOwner) ?? null;
+  if (fits(own)) return own;
+  return game.actors.find(fits) ?? null;
 }
 
 /**
@@ -72,6 +85,9 @@ export class IconTour extends foundry.nue.Tour {
 
   /** Set on tours that need a player character (the sheet tour). */
   requiresCharacter = false;
+
+  /** Set on the class tours: their sheet steps open a character of this class. */
+  actorClass = null;
 
   /** The window the current step looks its selector up in (character sheet or settings). */
   #app = null;
@@ -94,6 +110,10 @@ export class IconTour extends foundry.nue.Tour {
     if (this.requiresCharacter && !tourCharacter()) {
       ui.notifications.warn("Create a player character first (Actors tab → Create Actor → Player Character), then start this tour again.");
       return;
+    }
+    if (this.actorClass && !tourCharacter(this.actorClass)) {
+      const cls = this.actorClass.charAt(0).toUpperCase() + this.actorClass.slice(1);
+      ui.notifications.info(`You have no ${cls} character, so the steps about the sheet are shown in the middle of the screen.`);
     }
     game.togglePause(false);
     return super.start();
@@ -130,7 +150,7 @@ export class IconTour extends foundry.nue.Tour {
       if (hand) this.#app = await this.#openOnTab(hand.sheet, null, null);
     }
     else if (step.sheetTab) {
-      const sheet = tourCharacter()?.sheet;
+      const sheet = tourCharacter(this.actorClass)?.sheet;
       if (sheet) this.#app = await this.#openOnTab(sheet, step.sheetTab, "primary");
     }
     else if (step.settingsTab) {
@@ -202,10 +222,11 @@ export class IconTour extends foundry.nue.Tour {
  * file is logged and skipped, it never blocks the others.
  */
 export async function registerIconTours() {
-  for (const { id, file, requiresCharacter } of TOURS) {
+  for (const { id, file, requiresCharacter, actorClass } of TOURS) {
     try {
       const tour = await IconTour.fromJSON(`systems/${NAMESPACE}/tours/${file}`);
       tour.requiresCharacter = !!requiresCharacter;
+      tour.actorClass = actorClass ?? null;
       game.tours.register(NAMESPACE, id, tour);
     } catch (err) {
       console.error(`ICON 1.5 | Tour "${id}" failed to register:`, err);
@@ -213,7 +234,7 @@ export async function registerIconTours() {
   }
 }
 
-/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "on-the-map", "seer", "house-rules", "gm-tools"). */
+/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "on-the-map", "stalwart", "vagabond", "mendicant", "seer", "wright", "house-rules", "gm-tools"). */
 export function startIconTour(id = "welcome") {
   const tour = game.tours.get(`${NAMESPACE}.${id}`);
   if (!tour) return ui.notifications.warn(`Tour "${id}" is not available.`);

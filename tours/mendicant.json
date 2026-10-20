@@ -1,0 +1,53 @@
+{
+  "title": "ICON 1.5 — Class: Mendicant",
+  "description": "Blessing tokens, Bless, Diaga and combos: the Mendicant's class tools.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Playing a Mendicant",
+      "content": "Mendicants heal and protect: Diaga cures, Bless hands out blessing tokens, and Succor lets you Rescue an ally up to range 4 (p.172).\nThis tour opens the sheet of a Mendicant you own and shows the class tools."
+    },
+    {
+      "id": "blessings",
+      "selector": ".icon-resource-block--blessings",
+      "fallback": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Blessing tokens",
+      "content": "The blessing tokens you hold. A character can spend one when making a save for +1 boon; each Mendicant job also has its own ways to spend them. They don't belong to anyone: a blessing from any Mendicant works for you. All are discarded at the end of combat, and the sheet empties the counter by itself (p.172)."
+    },
+    {
+      "id": "bless",
+      "selector": "[data-action='blessCharacter']",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Bless",
+      "content": "<strong>Bless</strong> (1 action, range 4) is on the class trait. It opens a window to pick who gets the blessing (targeted characters first, then the party) and gives them a Blessed charge.\nWhen a blessed character rolls a save, the save window offers to spend a charge for +1 boon."
+    },
+    {
+      "id": "cure",
+      "selector": "",
+      "title": "Diaga and Cure",
+      "content": "A cured character gains 4 vigor (a vigor surge if bloodied), then may save against all their statuses. Cure has no single button: give the vigor on the ally's sheet, and they roll their saves from their Conditions tab."
+    },
+    {
+      "id": "combo",
+      "selector": ".icon-combo-checkbox",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Combos",
+      "content": "Many Mendicant abilities are combos. The <strong>COMBO</strong> checkbox is your combo token: the base version gives it, the combo version spends it (p.103)."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's the Mendicant",
+      "content": "Playing a Seer? Its card deck has its own tour: <strong>The Seer's Great Wheel</strong>, in Settings → Tours."
+    }
+  ]
+}

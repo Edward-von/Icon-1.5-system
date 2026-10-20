@@ -47,7 +47,7 @@ ottobre (1.10-1.20): delle ~300 novità di ottobre quasi nessuna è spiegata. Te
       da sole"; in realtà a fine round arriva al GM la card "Reveal reserves & add to combat" e serve il suo clic. Il tour
       ora lo descrive così. Se si vuole che entrino da sole, è una modifica a `_nudgeReserves` (IconCombat.mjs).
 
-## Guida, secondo giro: abilità automatizzate e tour di classe (deciso il 20 ottobre 2026) — H1-H3 FATTI il 20 ottobre 2026 (versione 1.15.271)
+## Guida, secondo giro: abilità automatizzate e tour di classe (deciso il 20 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.273)
 
 Scelta di Edoardo: niente spiegazione abilità per abilità (troppo lavoro); basta dire una volta che molte abilità
 sono automatizzate e dove si vede, più un tour breve per le meccaniche di classe che hanno un'interfaccia propria.
@@ -67,11 +67,12 @@ sono automatizzate e dove si vede, più un tour breve per le meccaniche di class
       · Fool — Stacked Dice (pip + Use nel tratto) e finestra del Gamble (Roll / Stacked Die / Set): MEDIO.
       · Senza interfaccia da spiegare: Heroics dello Stalwart (solo testo), bombe del Fool (già in "On the Map"), power dice (già nel tour Scheda).
       Proposta: un tour del Wright (Aether + Infuse) e un solo tour "Class tools" con un passo per Vigilance, Blessing,
-      Stacked Dice e Gamble. In attesa della scelta di Edoardo.
+      Stacked Dice e Gamble. Edoardo ha scelto invece un tour per classe (H4).
 - [x] **H3 — Tour del Seer** (M): mazzo del Great Wheel (Cards di Foundry): carte pescate a inizio combattimento,
       Draw 1 del Skein, mano con ☸ Foretell, scarti nella pila del proprio Seer, card di fine turno. Il tour apre
       davvero la mano. Il tour Character Sheet alla fine suggerisce il tour della classe del personaggio.
-- [ ] **H4 — Gli altri tour di classe** scelti in H2 (M ciascuno).
+- [x] **H4 — Gli altri tour di classe** scelti in H2 (M ciascuno). Scelta di Edoardo: un tour per classe (Stalwart,
+      Vagabond con il Fool, Mendicant, Wright). FATTO il 20 ottobre 2026, versione 1.15.273.
 
 ## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare
 

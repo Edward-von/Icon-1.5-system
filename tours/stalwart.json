@@ -1,0 +1,56 @@
+{
+  "title": "ICON 1.5 — Class: Stalwart",
+  "description": "Vigilance, Rush and Heroics: what the sheet tracks for a Stalwart and what you do by hand.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Playing a Stalwart",
+      "content": "Stalwarts hold the line: Armor 2, Rampart on the spaces next to them and <strong>Vigilance</strong> to punish foes that move around them (p.116).\nThis tour opens the sheet of a Stalwart you own and shows the class tools."
+    },
+    {
+      "id": "vigilance",
+      "selector": ".icon-resource-block--vigilance",
+      "fallback": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Vigilance",
+      "content": "Your Vigilance charges, up to 6 (p.117). Click a pip to set how many you have. <strong>Fortify</strong> gives you +1 at the end of each of your turns: add it yourself, the sheet doesn't do it for you. Abilities that say \"gain vigilance\" add it from their card.\nAll charges are lost at the end of combat; the sheet empties them by itself."
+    },
+    {
+      "id": "spend",
+      "selector": ".icon-resource-block--vigilance [data-action='spendVigilance']",
+      "fallback": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "DOWN",
+      "title": "Spending Vigilance",
+      "content": "<strong>Spend</strong> opens a window: choose how many charges and what for. <em>Reduce</em>: an ally in range 2 is damaged by a foe's ability, and the damage goes down as if with armor. <em>Punish</em>: a foe breaks adjacency with you and takes the damage.\nYou roll 1d6 per charge and keep the highest (the dice don't add up); the charges are taken off and the result goes to chat. A gamble can also spend Vigilance from its own window."
+    },
+    {
+      "id": "trait",
+      "selector": ".icon-trait__quick--vigilance",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "The same controls on Fortify",
+      "content": "The class trait that gives Vigilance has the same pips and Spend button in its header, so you can use them while reading the rule."
+    },
+    {
+      "id": "heroics",
+      "selector": ".icon-class-rules-collapsible",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Rush and Heroics",
+      "content": "<strong>Rush X</strong>: move X spaces, unstoppable and immune to all damage during that move. <strong>Heroics</strong>: each job has its own way of performing one, and abilities with a <em>Heroic</em> effect gain it when you do (p.116).\nNeither has a counter: you decide when you performed a heroic. The ability panel shows the Heroic part, and the statuses it gives get their buttons on the card. This box opens the class rules."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's the Stalwart",
+      "content": "The other tours explain what every class shares: the ability panel and power dice (Character Sheet), damage cards (Combat), shoves and terrain (On the Map)."
+    }
+  ]
+}

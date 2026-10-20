@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Un tour per ogni classe (versione 1.15.273)
+
+### Blocco "Guida, secondo giro", H4 (scelta di Edoardo: un tour per classe)
+
+- **Cosa**: le meccaniche di classe con un'interfaccia propria non erano spiegate da nessun tour → quattro tour
+  nuovi in Settings → Tours, che aprono la scheda di un personaggio di quella classe:
+  - **Stalwart**: Vigilance (pip, Spend con la scelta riduci / punisci, i comandi sul tratto Fortify), Rush e Heroics.
+  - **Vagabond**: casella COMBO e abilità combo, Finishing Blow, e per il Fool Stacked Dice e la finestra del Gamble.
+  - **Mendicant**: Blessing tokens, Bless, Diaga e cure, combo; rimanda al tour del Seer.
+  - **Wright**: Aether, Infuse da armare (anche sul Limit Break), i comandi sul tratto di classe.
+- I tour dicono anche cosa **non** è automatico: il +1 Vigilance di Fortify e il +1 Aether a inizio turno si
+  segnano a mano; l'azzeramento a fine combattimento invece lo fa la scheda.
+- `tours.mjs`: i tour di classe scelgono il personaggio giusto (il proprio se è di quella classe, altrimenti il
+  primo di quella classe); se non ce n'è, un avviso dice che i passi della scheda compaiono al centro.
+
 ## 20 ottobre 2026 — Niente emoji nei tour (versione 1.15.272)
 
 - **Testi dei tour**: contenevano emoji e simboli usati come icone (cubo, dado, esplosione, bacchetta, fulmine, ruota,
