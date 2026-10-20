@@ -18,7 +18,7 @@
       "sheetTab": "narrative",
       "tooltipDirection": "DOWN",
       "title": "Header",
-      "content": "Name, portrait, jobs (the ★ primary job sets your class, base stats, traits and Limit Break), level and chapter.\nA brand-new character shows a <i class='fas fa-wand-magic-sparkles'></i> <strong>Character Setup Wizard</strong> button here until it has a job."
+      "content": "Name, portrait, jobs (the primary job sets your class, base stats, traits and Limit Break), level and chapter.\nA brand-new character shows a <i class='fas fa-wand-magic-sparkles'></i> <strong>Character Setup Wizard</strong> button here until it has a job."
     },
     {
       "id": "quick-guide",
@@ -60,7 +60,7 @@
       "sheetTab": "narrative",
       "tooltipDirection": "RIGHT",
       "title": "Gear kits",
-      "content": "The basic adventurer's kit is always with you; tick the one kit of your bond you carry on this expedition (p.35). Click an item to mark it used, or to spend one use when it counts uses (Shift+click sets how many it has).\n<strong>↻ New expedition</strong> restocks everything."
+      "content": "The basic adventurer's kit is always with you; tick the one kit of your bond you carry on this expedition (p.35). Click an item to mark it used, or to spend one use when it counts uses (Shift+click sets how many it has).\n<strong>New expedition</strong> restocks everything."
     },
     {
       "id": "narrative-actions",
@@ -76,7 +76,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "HP, Vigor and class resources",
-      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens or Aether.\nA Seer's Great Wheel deck lives in Foundry's Cards: chat cards remind you when to draw, and each card in your hand has a <strong>☸ Foretell</strong> button. The <strong>Seer's Great Wheel</strong> tour explains it."
+      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens or Aether.\nA Seer's Great Wheel deck lives in Foundry's Cards: chat cards remind you when to draw, and each card in your hand has a <strong>Foretell</strong> button. The <strong>Seer's Great Wheel</strong> tour explains it."
     },
     {
       "id": "power-dice",
@@ -85,7 +85,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Power dice",
-      "content": "Every class can hold power dice, since many abilities and relics give one. <strong>+ Die</strong> asks for a name, a size and a starting value; − / + tick it, <i class='fa-solid fa-dice-d20'></i> rolls it, ✕ discards it. They are all lost at the end of combat."
+      "content": "Every class can hold power dice, since many abilities and relics give one. <strong>+ Die</strong> asks for a name, a size and a starting value; − / + tick it, <i class='fa-solid fa-dice-d20'></i> rolls it, the cross discards it. They are all lost at the end of combat."
     },
     {
       "id": "basic-actions",
@@ -109,7 +109,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Equipped abilities",
-      "content": "Drag abilities into the slots (dropping on a full slot replaces it). Click one to open its panel below, double-click to open the item.\nThe <strong>COMBO</strong> checkbox is your combo token: while it is on, abilities marked ⚡ use their combo version.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
+      "content": "Drag abilities into the slots (dropping on a full slot replaces it). Click one to open its panel below, double-click to open the item.\nThe <strong>COMBO</strong> checkbox is your combo token: while it is on, abilities marked as combos use their combo version.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
     },
     {
       "id": "ability-panel",
@@ -118,7 +118,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "The ability panel",
-      "content": "The panel has a button for each thing the ability does: <strong>Attack Roll</strong> or <strong>Auto-Hit</strong>, <strong>Damage Roll</strong>, <strong>Show in Chat</strong>, and where they apply:\n<strong>the area</strong> (Small Blast, Line 5…) to place it on the map and target everyone inside · <strong>⌖ Mark target</strong> (one token targeted, range checked) and <strong>Track target</strong> (a reminder, not a mark) · <strong>☯ Take stance</strong> · <strong>🪄 Infuse X</strong> to arm an infused version with Aether before rolling · <strong>🎲 Gamble</strong> · chips to drag a <strong>summon</strong> or an <strong>object</strong> onto the map, or to place <strong>spaces</strong> (pit, dangerous, motes…).\nWith a combo token on and two combo versions, the first roll asks which one. Interrupts show their uses here (⚡ left/max), back at the start of your turn."
+      "content": "The panel has a button for each thing the ability does: <strong>Attack Roll</strong> or <strong>Auto-Hit</strong>, <strong>Damage Roll</strong>, <strong>Show in Chat</strong>, and where they apply:\n<strong>the area</strong> (Small Blast, Line 5…) to place it on the map and target everyone inside · <strong>Mark target</strong> (one token targeted, range checked) and <strong>Track target</strong> (a reminder, not a mark) · <strong>Take stance</strong> · <strong>Infuse X</strong> to arm an infused version with Aether before rolling · <strong>Gamble</strong> · chips to drag a <strong>summon</strong> or an <strong>object</strong> onto the map, or to place <strong>spaces</strong> (pit, dangerous, motes…).\nWith a combo token on and two combo versions, the first roll asks which one. Interrupts show their uses here (left/max), back at the start of your turn."
     },
     {
       "id": "automation",
@@ -142,7 +142,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Damage Utility",
-      "content": "At the bottom of the tab: <strong>💥 Damage Utility</strong> rolls damage that doesn't come from an ability's attack (a trait, a relic, an effect you are told to apply). Choose dice, fixed damage and modifiers, write the source, and the damage card has the usual Apply buttons."
+      "content": "At the bottom of the tab: <strong>Damage Utility</strong> rolls damage that doesn't come from an ability's attack (a trait, a relic, an effect you are told to apply). Choose dice, fixed damage and modifiers, write the source, and the damage card has the usual Apply buttons."
     },
     {
       "id": "conditions",
@@ -176,7 +176,7 @@
       "sheetTab": "notes",
       "tooltipDirection": "UP",
       "title": "Character Management",
-      "content": "AP, masteries and skill ranks spent against what your levels have earned, with a warning if you overspend. <strong>↻ Refocus</strong> refunds everything so you can rebuild; <strong><i class='fa-solid fa-circle-question'></i> Guide</strong> reopens the character building guide."
+      "content": "AP, masteries and skill ranks spent against what your levels have earned, with a warning if you overspend. <strong>Refocus</strong> refunds everything so you can rebuild; <strong><i class='fa-solid fa-circle-question'></i> Guide</strong> reopens the character building guide."
     }
   ]
 }

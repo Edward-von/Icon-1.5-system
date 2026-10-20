@@ -29,7 +29,7 @@
       "sheetTab": "main",
       "tooltipDirection": "DOWN",
       "title": "Templates",
-      "content": "Drag a faction, Great Culture, job or special template from the <strong>Foe Templates</strong> compendium onto the sheet: its traits and actions are added, and the chip here takes them away again with ✕.\nA <strong>Folk</strong> foe also takes the Great Culture of one of the six cultures (p.302): none of the compendium's Folk foes has it yet, so drag the culture's template (Yeokin, Islander…); the sheet reminds you until you do.\nSingle traits and actions come from the <strong>Foe Abilities</strong> compendium, or the + buttons."
+      "content": "Drag a faction, Great Culture, job or special template from the <strong>Foe Templates</strong> compendium onto the sheet: its traits and actions are added, and the chip here takes them away again with its cross.\nA <strong>Folk</strong> foe also takes the Great Culture of one of the six cultures (p.302): none of the compendium's Folk foes has it yet, so drag the culture's template (Yeokin, Islander…); the sheet reminds you until you do.\nSingle traits and actions come from the <strong>Foe Abilities</strong> compendium, or the + buttons."
     },
     {
       "id": "foe-actions",
@@ -49,7 +49,7 @@
       "sheetTab": "main",
       "tooltipDirection": "LEFT",
       "title": "Interrupts and their uses",
-      "content": "Each interrupt shows <strong>⚡ Uses N/M</strong> as pips: click a lit pip to spend, a dark one to give a use back. <i class='fa-solid fa-comment'></i> posts the interrupt and spends a use; it refuses at 0 uses or while the foe is Stunned (p.117).\nThe interrupt buttons on attack and damage cards spend from the same uses. They come back at the start of the foe's turn; a legend's come back at the start of each round."
+      "content": "Each interrupt shows <strong>Uses N/M</strong> as pips: click a lit pip to spend, a dark one to give a use back. <i class='fa-solid fa-comment'></i> posts the interrupt and spends a use; it refuses at 0 uses or while the foe is Stunned (p.117).\nThe interrupt buttons on attack and damage cards spend from the same uses. They come back at the start of the foe's turn; a legend's come back at the start of each round."
     },
     {
       "id": "foe-summons",
@@ -59,7 +59,7 @@
       "sheetTab": "main",
       "tooltipDirection": "LEFT",
       "title": "Summons & Objects",
-      "content": "Foes and legends that summon creatures or objects have this section at the bottom of the sheet. Drag a <strong>⤓</strong> chip onto the map: every drop is a new token with its own HP, kept in the <em>Foe Summons</em> folder, and it rolls with the foe's [D] and fray.\nOnly foes imported from the compendium after this update have it: re-import an older one to get it."
+      "content": "Foes and legends that summon creatures or objects have this section at the bottom of the sheet. Drag a chip onto the map: every drop is a new token with its own HP, kept in the <em>Foe Summons</em> folder, and it rolls with the foe's [D] and fray.\nOnly foes imported from the compendium after this update have it: re-import an older one to get it."
     },
     {
       "id": "foe-conditions",
@@ -114,7 +114,7 @@
       "actorType": "clock",
       "tooltipDirection": "LEFT",
       "title": "The clock board",
-      "content": "Campaign clocks, all on one actor (Create Actor → Clock Board). Click the segments to fill them, hide a clock from the players, post it to chat.\nDrag <strong>⤓ Map</strong> onto the scene to put the clock on the map: the token follows the board live."
+      "content": "Campaign clocks, all on one actor (Create Actor → Clock Board). Click the segments to fill them, hide a clock from the players, post it to chat.\nDrag <strong>Map</strong> onto the scene to put the clock on the map: the token follows the board live."
     },
     {
       "id": "end",

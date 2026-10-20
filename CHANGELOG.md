@@ -1,5 +1,11 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Niente emoji nei tour (versione 1.15.272)
+
+- **Testi dei tour**: contenevano emoji e simboli usati come icone (cubo, dado, esplosione, bacchetta, fulmine, ruota,
+  stella, croce…) → li avevo scritti io copiando le descrizioni dei bottoni, che nel sistema usano icone Font Awesome
+  → tolti tutti e sostituiti con parole. Restano solo le frecce dei percorsi ("Settings → Tours") e ½.
+
 ## 20 ottobre 2026 — "Molte abilità sono automatizzate" e tour del Seer (versione 1.15.271)
 
 ### Blocco "Guida, secondo giro", H1 e H3

@@ -11,6 +11,12 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Niente emoji nei tour (20 ottobre 2026, versione 1.15.272)
+
+Setup: solo file JSON (F5 basta).
+
+- [ ] Sfogliare tutti i tour (Settings → Tours): nessun emoji né simbolo-icona nel testo; le frasi si leggono bene senza.
+
 ## Guida, secondo giro — H1 e H3 (20 ottobre 2026, versione 1.15.271)
 
 Setup: solo file JSON e JS (F5 basta). Un Seer con mazzo, mano e pila (nel mondo di test: Ann, "Ann hand",

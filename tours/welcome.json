@@ -9,7 +9,7 @@
       "id": "intro",
       "selector": "",
       "title": "Welcome to ICON 1.5",
-      "content": "This short tour shows where the ICON tools are in Foundry.\nUse the arrows at the bottom (or the ← → keys) to move between steps, and the ✕ to leave at any time. You can replay every tour from <strong>Settings → Tours</strong>."
+      "content": "This short tour shows where the ICON tools are in Foundry.\nUse the arrows at the bottom (or the ← → keys) to move between steps, and the cross to leave at any time. You can replay every tour from <strong>Settings → Tours</strong>."
     },
     {
       "id": "reference",

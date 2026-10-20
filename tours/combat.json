@@ -72,7 +72,7 @@
       "sidebarTab": "chat",
       "tooltipDirection": "LEFT",
       "title": "The damage card",
-      "content": "Each target gets <strong>Apply</strong> and <strong>½</strong>: Armor, Vigor, Cover and Resistance are worked out on the spot (Pierce skips armor, Divine skips everything). Damage that hits several times shows <strong>Apply ×N</strong> and applies each hit separately.\nThe card repeats the <strong>Inflict</strong> buttons of the attack: a status applied on one card shows as used on the other.\nUnder each target, the <strong>Interrupt</strong> row has the interrupts this damage can trigger, with their uses left (⚡ <em>interrupt</em> · <em>owner</em> 1/1). They switch off at 0 uses or if the owner is Stunned."
+      "content": "Each target gets <strong>Apply</strong> and <strong>½</strong>: Armor, Vigor, Cover and Resistance are worked out on the spot (Pierce skips armor, Divine skips everything). Damage that hits several times shows <strong>Apply ×N</strong> and applies each hit separately.\nThe card repeats the <strong>Inflict</strong> buttons of the attack: a status applied on one card shows as used on the other.\nUnder each target, the <strong>Interrupt</strong> row has the interrupts this damage can trigger, with their uses left (<em>interrupt</em> · <em>owner</em> 1/1). They switch off at 0 uses or if the owner is Stunned."
     }
   ]
 }

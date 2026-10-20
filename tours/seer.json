@@ -42,7 +42,7 @@
       "openHand": true,
       "tooltipDirection": "LEFT",
       "title": "Foretell",
-      "content": "Target the allies first (hover a token and press T), then click <strong>☸ Foretell</strong> on a card: it goes to the discard pile and its effect is posted in chat, with <strong>Gain</strong> buttons for the targeted allies (Unstoppable, Blessed, Pierce, Defiance…). The Ewer adds a button to place its small blast on the ally.\nWith an empty hand, <strong>Foretell from the deck</strong> plays a random card from the deck."
+      "content": "Target the allies first (hover a token and press T), then click <strong>Foretell</strong> on a card: it goes to the discard pile and its effect is posted in chat, with <strong>Gain</strong> buttons for the targeted allies (Unstoppable, Blessed, Pierce, Defiance…). The Ewer adds a button to place its small blast on the ally.\nWith an empty hand, <strong>Foretell from the deck</strong> plays a random card from the deck."
     },
     {
       "id": "bend-fate",

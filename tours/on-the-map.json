@@ -17,7 +17,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Objects",
-      "content": "Drag the <strong>🧊 cube chip</strong> (Boulder · H1…) onto the map: every drop is a new object token. Objects are height 1-3, give obstruction and can be stacked up to height 3 (p.89).\nDouble-click an object to open its sheet: change its height, remove it, use its special buttons. The GM can <strong>Make destructible</strong> (10 HP, always hit, fails saves, p.89) and <strong>Add walls</strong> around it, which block movement but not sight."
+      "content": "Drag the <strong>object chip</strong> (Boulder · H1…) onto the map: every drop is a new object token. Objects are height 1-3, give obstruction and can be stacked up to height 3 (p.89).\nDouble-click an object to open its sheet: change its height, remove it, use its special buttons. The GM can <strong>Make destructible</strong> (10 HP, always hit, fails saves, p.89) and <strong>Add walls</strong> around it, which block movement but not sight."
     },
     {
       "id": "cover-climb",
@@ -56,7 +56,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Marks that follow a character",
-      "content": "Some marked spaces can go on a character instead of the floor (Polaris, Party Favor, Implode): target one token (T), click the space chip and choose <strong>On <em>target</em></strong>. The purple space then follows that token.\nEnding the mark removes the space and removing the space ends the mark: ✕ on the mark chip, <strong>End mark</strong> on the card, the creator defeated, or the end of combat (p.95)."
+      "content": "Some marked spaces can go on a character instead of the floor (Polaris, Party Favor, Implode): target one token (T), click the space chip and choose <strong>On <em>target</em></strong>. The purple space then follows that token.\nEnding the mark removes the space and removing the space ends the mark: the cross on the mark chip, <strong>End mark</strong> on the card, the creator defeated, or the end of combat (p.95)."
     },
     {
       "id": "summons",
