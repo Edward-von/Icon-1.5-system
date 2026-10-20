@@ -40,7 +40,7 @@ Setup: solo file JSON e JS (F5 basta). Un Seer con mazzo, mano e pila (nel mondo
 - [x] Settings → Tours: compare "ICON 1.5 — The Seer's Great Wheel". **(registrato dopo On the Map)**
 - [x] Tour del Seer con la mano vuota: "The hand" apre "Ann hand" e indica la lista, "Foretell" indica "Foretell from the deck". **(sì)**
 - [x] Tour del Seer con 2 carte in mano: "The hand" indica l'effetto della carta, "Foretell" il ☸ della prima carta. **(sì, visto a schermo; carte poi rimesse nel mazzo)**
-- [ ] Tour del Seer da giocatore proprietario di un Seer: apre la sua mano, non quella di un altro. **(NON provato: PT Player non possiede Seer. Da giocatore senza mano: "The hand" e "Foretell" al centro, nessun errore)**
+- [x] Tour del Seer da giocatore proprietario di un Seer: apre la sua mano, non quella di un altro. **(20 ottobre: PT Player reso Owner di Ann e delle sue carte per la prova → il tour apre "Ann hand"; anche il tour Mendicant apre Ann. Permessi poi rimessi com'erano)**
 - [ ] Tour del Seer in un mondo senza nessuna mano: i passi "The hand" e "Foretell" compaiono al centro.
 
 ## Emerso nel playtest — il tour punta al primo elemento visibile (20 ottobre 2026, versione 1.15.270)
