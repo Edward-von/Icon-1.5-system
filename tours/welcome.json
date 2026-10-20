@@ -3,7 +3,7 @@
   "description": "Where the ICON tools live: quick guide, characters, compendiums, combat and chat.",
   "canBeResumed": true,
   "display": true,
-  "suggestedNextTours": ["icon-system.character-sheet", "icon-system.combat"],
+  "suggestedNextTours": ["icon-system.character-sheet", "icon-system.combat", "icon-system.on-the-map"],
   "steps": [
     {
       "id": "intro",
@@ -44,7 +44,7 @@
       "sidebarTab": "compendium",
       "tooltipDirection": "LEFT",
       "title": "Compendiums",
-      "content": "Everything from the book is here, ready to drag: <strong>Jobs</strong>, Bonds and Bond Powers, Gear Kits, Relics, Foes, Legends, Summons, Foe Abilities and the system Macros.\nDrag a Job Template onto a character sheet to give it that job."
+      "content": "Everything from the book is here, ready to drag: <strong>Jobs</strong>, Bonds and Bond Powers, Gear Kits, Relics, Trophies, Foes, Legends, Summons, Foe Abilities, Foe Templates and the system Macros.\nDrag a Job Template onto a character sheet to give it that job."
     },
     {
       "id": "combat",
@@ -60,20 +60,20 @@
       "sidebarTab": "chat",
       "tooltipDirection": "LEFT",
       "title": "Chat Cards",
-      "content": "Rolls, abilities, traits and relics are posted here as cards.\nAttack and damage cards list your <strong>targeted</strong> tokens. A damage card has an <strong>Apply</strong> button per target that takes Armor, Vigor, Cover and Resistance into account for you."
+      "content": "Rolls, abilities, traits and relics are posted here as cards.\nAttack and damage cards list your <strong>targeted</strong> tokens. A damage card has <strong>Apply</strong> and <strong>½</strong> buttons per target that take Armor, Vigor, Cover and Resistance into account for you, the <strong>Inflict</strong> buttons of the statuses the ability causes, and under each target the <strong>interrupts</strong> that damage can trigger.\nThe <strong>Combat</strong> tour explains the cards in detail."
     },
     {
       "id": "house-rules",
       "selector": "",
       "restricted": true,
       "title": "House rules",
-      "content": "<strong>GM only.</strong> ICON 1.5 plays by the book by default. The optional rules (Dust to heal Burdens, Heroic / Routine rolls) are in Configure Settings → ICON 1.5; the <strong>House Rules</strong> tour walks you through them."
+      "content": "<strong>GM only.</strong> ICON 1.5 plays by the book by default. Configure Settings → ICON 1.5 has two book rules you can switch off (Party Resolve +1 per round, p.99; Dust to heal Burdens, p.42) and one optional house rule (Heroic / Routine rolls). The <strong>House Rules</strong> tour walks you through them."
     },
     {
       "id": "outro",
       "selector": "",
       "title": "Next steps",
-      "content": "That's the map. Next, take the <strong>Character Sheet</strong> tour (it needs a player character to exist) and the <strong>Combat</strong> tour.\nAll of them are in <strong>Settings → Tours</strong>, under ICON 1.5."
+      "content": "That's the map. Next, take the <strong>Character Sheet</strong> tour (it needs a player character to exist), the <strong>Combat</strong> tour and <strong>On the Map</strong> (objects, terrain, areas and summons).\nAll of them are in <strong>Settings → Tours</strong>, under ICON 1.5."
     }
   ]
 }

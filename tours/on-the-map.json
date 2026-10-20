@@ -1,0 +1,77 @@
+{
+  "title": "ICON 1.5 — On the Map",
+  "description": "Objects, terrain spaces, lasting areas, marks and summons: what you put on the map from the sheet, and what the system checks for you.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "Things on the map",
+      "content": "Many abilities leave something on the battlefield: an object, a pit, a cloud, a mark, a summon. This tour shows where to place each one and what the system then does by itself.\nThe buttons live in the panel of an equipped ability (Combat tab of the character sheet: click the ability). The tour points at them when your character has one; otherwise it explains them here."
+    },
+    {
+      "id": "objects",
+      "selector": ".icon-object-chip",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Objects",
+      "content": "Drag the <strong>🧊 cube chip</strong> (Boulder · H1…) onto the map: every drop is a new object token. Objects are height 1-3, give obstruction and can be stacked up to height 3 (p.89).\nDouble-click an object to open its sheet: change its height, remove it, use its special buttons. The GM can <strong>Make destructible</strong> (10 HP, always hit, fails saves, p.89) and <strong>Add walls</strong> around it, which block movement but not sight."
+    },
+    {
+      "id": "cover-climb",
+      "selector": "",
+      "title": "Cover and climbing",
+      "content": "<strong>Cover</strong> is worked out when you press Apply on a damage card: an object next to the target, at least 1 higher than the target and between it and the attacker halves the damage (p.92). If the attacker is adjacent or higher, there is no cover; Unerring ignores it. When the direction is unclear the card leaves a <em>Cover?</em> hint for the GM.\n<strong>Climbing</strong>: moving a token onto or off an object asks whether to climb up or step down, and reminds you of the cost (+1 movement per level, p.89). Characters on top rise and fall with the object."
+    },
+    {
+      "id": "spaces",
+      "selector": ".icon-space-chip",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Terrain spaces",
+      "content": "Click a coloured <strong>space chip</strong> (Pit · 2, Dangerous · 3, Mote · 4…), then click the spaces on the map: click again to take one back, <strong>Enter</strong> or right-click to finish, <strong>Esc</strong> to cancel. Brown is a pit, red dangerous, olive difficult, purple a named space (mote, mine, rune…).\nSpaces stay even if their creator is defeated (p.96). Remove them with a right-click on the chip, <strong>Remove all</strong> on the chat card, or Delete on the template layer."
+    },
+    {
+      "id": "space-checks",
+      "selector": "",
+      "title": "What spaces do by themselves",
+      "content": "When a token moves into or through a space, the system checks it:\n<strong>Dangerous</strong>: asks whether to take 2 damage, ignoring armor and vigor, once per turn (p.89).\n<strong>Difficult</strong>: reminds you that exiting costs +1 space of movement (p.89).\n<strong>Pit</strong>: counts one level lower for height boons and curses (p.89).\n<strong>Motes, mines, runes</strong>: post a reminder card with their button (Detonate…)."
+    },
+    {
+      "id": "areas",
+      "selector": ".icon-btn--area",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Areas that stay",
+      "content": "The area button (Small Blast, Line 5…) places the area and targets everyone inside. When the ability makes a <strong>terrain effect</strong> (p.96), the area stays on the map, with its dangerous or difficult terrain.\nWhoever enters it, or is inside when it appears, gets a card with the status button (Blind+…); leaving it offers to remove the status.\n<strong>Move</strong> it with Shift + arrow keys while the mouse is over it (or with the buttons on its card), <strong>resize an aura</strong> with + / −, <strong>grow</strong> it with the card buttons (Add 2 spaces…): the characters it now covers get the status offer too."
+    },
+    {
+      "id": "marks",
+      "selector": ".icon-mark-chip",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Marks that follow a character",
+      "content": "Some marked spaces can go on a character instead of the floor (Polaris, Party Favor, Implode): target one token (T), click the space chip and choose <strong>On <em>target</em></strong>. The purple space then follows that token.\nEnding the mark removes the space and removing the space ends the mark: ✕ on the mark chip, <strong>End mark</strong> on the card, the creator defeated, or the end of combat (p.95)."
+    },
+    {
+      "id": "summons",
+      "selector": ".icon-summon-list",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Summons",
+      "content": "Drag the <strong>summon chip</strong> (with its picture) from the ability panel onto the map. Every drag is a new summon with its own HP and statuses: each one is a character of its own (pp.95-96).\nThe <strong>Summons</strong> section of the sheet lists the ones on the scene with their HP: click one to select it and open its sheet."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "The GM's side",
+      "content": "A player's drop (summon or object) is placed by the GM's client, so the GM has to be connected.\nFoes have their own <strong>Summons &amp; Objects</strong> section: the <strong>Foes &amp; Encounters</strong> tour shows it."
+    }
+  ]
+}

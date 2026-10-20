@@ -42,6 +42,26 @@
       "content": "Target the characters first (hover a token and press T), then <strong><i class='fa-solid fa-hand-fist'></i> Attack</strong> rolls against each target's Defense and <strong><i class='fa-solid fa-burst'></i> Damage</strong> rolls the damage.\nWhere the action has them: <strong><i class='fa-solid fa-crosshairs'></i> Mark</strong> marks the one targeted token, <strong><i class='fa-solid fa-vector-square'></i></strong> places the action's area on the map and targets everyone inside, <strong><i class='fa-solid fa-comment'></i></strong> posts the text to chat."
     },
     {
+      "id": "foe-interrupts",
+      "selector": ".icon-tab--foe-main .icon-interrupt",
+      "fallback": ".icon-tab--foe-main",
+      "actorType": "foe",
+      "sheetTab": "main",
+      "tooltipDirection": "LEFT",
+      "title": "Interrupts and their uses",
+      "content": "Each interrupt shows <strong>⚡ Uses N/M</strong> as pips: click a lit pip to spend, a dark one to give a use back. <i class='fa-solid fa-comment'></i> posts the interrupt and spends a use; it refuses at 0 uses or while the foe is Stunned (p.117).\nThe interrupt buttons on attack and damage cards spend from the same uses. They come back at the start of the foe's turn; a legend's come back at the start of each round."
+    },
+    {
+      "id": "foe-summons",
+      "selector": ".icon-npc-summons",
+      "fallback": ".icon-tab--foe-main",
+      "actorType": "foe",
+      "sheetTab": "main",
+      "tooltipDirection": "LEFT",
+      "title": "Summons & Objects",
+      "content": "Foes and legends that summon creatures or objects have this section at the bottom of the sheet. Drag a <strong>⤓</strong> chip onto the map: every drop is a new token with its own HP, kept in the <em>Foe Summons</em> folder, and it rolls with the foe's [D] and fray.\nOnly foes imported from the compendium after this update have it: re-import an older one to get it."
+    },
+    {
       "id": "foe-conditions",
       "selector": ".icon-tab--conditions",
       "actorType": "foe",
@@ -76,7 +96,7 @@
       "openApp": "encounter-designer",
       "tooltipDirection": "LEFT",
       "title": "The roster",
-      "content": "The foes and legends to pick from: from the compendiums, from the world (the ones already imported) or both. Filter by faction, class or name and add the ones you want; <strong><i class='fa-solid fa-dice-d20'></i> Random fill</strong> fills what is left of the budget from the rows shown."
+      "content": "The foes and legends to pick from: from the compendiums, from the world (the ones already imported) or both. Filter by faction, class or name and add the ones you want; <strong><i class='fa-solid fa-dice-d20'></i> Random fill</strong> fills what is left of the budget from the rows shown.\nEach pick can be <strong>On map</strong> or a <strong>Reserve</strong> that enters at the end of round 2 or 3 (p.292)."
     },
     {
       "id": "encounter-deploy",
@@ -85,7 +105,7 @@
       "openApp": "encounter-designer",
       "tooltipDirection": "UP",
       "title": "Save and deploy",
-      "content": "Save the encounter under a name to use it later. <strong><i class='fa-solid fa-file-import'></i> Actors</strong> imports the foes into a folder; <strong><i class='fa-solid fa-map'></i> Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden."
+      "content": "Save the encounter under a name to use it later. <strong><i class='fa-solid fa-file-import'></i> Actors</strong> imports the foes into a folder; <strong><i class='fa-solid fa-map'></i> Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden.\n<strong>reuse world actors</strong> (shown when you picked foes from the World) uses those actors as they are instead of copying them into a new folder; <strong>+ party</strong> adds the player characters to the combat.\nWhen that round ends you get a whispered card: <strong>Reveal reserves &amp; add to combat</strong> shows their tokens and adds them to the fight."
     },
     {
       "id": "clock-board",

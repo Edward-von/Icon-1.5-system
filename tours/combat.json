@@ -3,6 +3,7 @@
   "description": "How a fight runs in the ICON combat tracker: alternating turns, activations, slow turns, Resolve and statuses.",
   "canBeResumed": true,
   "display": true,
+  "suggestedNextTours": ["icon-system.on-the-map"],
   "steps": [
     {
       "id": "intro",
@@ -52,12 +53,26 @@
       "content": "Select a token that has statuses and a panel opens at the top right, next to the sidebar, listing them in large type.\nOn tokens you own you can adjust stacks (Blessed, power dice, Vigilance, Elevation) with − / + and remove a status with ×."
     },
     {
+      "id": "attack",
+      "selector": "#chat",
+      "sidebarTab": "chat",
+      "tooltipDirection": "LEFT",
+      "title": "The attack card",
+      "content": "Target the enemies (hover a token and press T), then roll from the sheet. The attack card checks each target's Defense and reminds you of the ability's other parts (Effect, Collide, Charge, Area…).\n<strong>Inflict</strong>: one button per status the ability causes. Click it to apply the status; a <i class='fa-solid fa-dice-d20'></i> means the target saves first (10+).\n<strong>Interrupt · <em>name</em> targeted</strong>: under each target, the interrupts that being targeted can trigger (Aether Deflection, …). Clicking one spends a use and posts it to chat."
+    },
+    {
+      "id": "damage-dialog",
+      "selector": "",
+      "title": "The damage dialog",
+      "content": "<strong>Damage Roll</strong> opens a dialog. Pick the outcome: <strong>Hit</strong>, <strong>Crit</strong>, <strong>Miss</strong>, <strong>Area</strong> or <strong>Other</strong>. <em>Other</em> is for damage that is not the ability's attack: a talent, a mark, a combo or an Infuse, offered as quick-pick chips, or your own dice and fixed damage.\nThe <strong>Modifiers</strong> are ticked for you when they apply: Pierce (from the text or the Pierce tag), Divine, Unerring, True Strike, and Weakened −2 when you are weakened. A hint says where each one comes from; untick it if your table rules otherwise."
+    },
+    {
       "id": "damage",
       "selector": "#chat",
       "sidebarTab": "chat",
       "tooltipDirection": "LEFT",
-      "title": "Attack, damage, Apply",
-      "content": "Target the enemies, then roll from the sheet. The attack card checks each target's Defense; the damage card has <strong>Apply</strong> and <strong>half</strong> buttons for each target, with Armor, Vigor, Cover and Resistance worked out on the spot.\nStatuses an ability inflicts get their own buttons on the card."
+      "title": "The damage card",
+      "content": "Each target gets <strong>Apply</strong> and <strong>½</strong>: Armor, Vigor, Cover and Resistance are worked out on the spot (Pierce skips armor, Divine skips everything). Damage that hits several times shows <strong>Apply ×N</strong> and applies each hit separately.\nThe card repeats the <strong>Inflict</strong> buttons of the attack: a status applied on one card shows as used on the other.\nUnder each target, the <strong>Interrupt</strong> row has the interrupts this damage can trigger, with their uses left (⚡ <em>interrupt</em> · <em>owner</em> 1/1). They switch off at 0 uses or if the owner is Stunned."
     }
   ]
 }

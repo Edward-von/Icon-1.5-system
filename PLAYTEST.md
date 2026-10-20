@@ -11,6 +11,23 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## G1-G4 — Tour e glossario aggiornati (20 ottobre 2026, versione 1.15.268)
+
+Setup: solo file JSON e JS (F5 basta). Un PG con abilità che hanno area, mark, summon, oggetti o spazi (es. TEST
+Harvester, un Wright per Infuse), un foe con summon importato di recente, un combat con almeno un attacco e un danno
+in chat. Per ogni tour: ogni passo deve indicare il suo punto o comparire al centro, mai interrompere il tour.
+
+- [ ] Settings → Tours: compare "ICON 1.5 — On the Map", tra Combat e House Rules.
+- [ ] First Steps: passo "Chat Cards" cita Inflict e interrupt; passo "House rules" (da GM) dice "two book rules … and one optional house rule"; elenco compendi con Trophies e Foe Templates; alla fine suggerisce On the Map.
+- [ ] Combat: tre passi nuovi "The attack card", "The damage dialog" (al centro), "The damage card"; a fine tour suggerisce On the Map.
+- [ ] Scheda: passo "Tabs" dice "Relics & Trophies"; passi nuovi "Gear kits" (tab Narrative), "Power dice", "The ability panel", "Damage Utility" (tab Combat), "Trophies" (tab Relics & Trophies) puntano al loro riquadro.
+- [ ] Scheda, "The ability panel": con il pannello di un'abilità aperto prima di partire punta al pannello; con tutti chiusi punta al riquadro delle abilità.
+- [ ] GM: passi nuovi "Interrupts and their uses" e "Summons & Objects" sulla scheda del foe (senza summon → punta alla tab); i testi di roster e deploy parlano di riserve, "reuse world actors" e "+ party".
+- [ ] On the Map: con un PG che ha chip di oggetti / spazi / summon, i passi "Objects", "Terrain spaces", "Areas that stay", "Summons" puntano al chip (pannello aperto) o al riquadro delle abilità; i passi senza bersaglio stanno al centro.
+- [ ] On the Map da giocatore senza personaggio: il tour parte e i passi della scheda compaiono al centro.
+- [ ] Quick Guide → Glossary: cercare Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether, Object: ognuna ha la sua voce con la pagina.
+- [ ] Le parole del glossario nuove non cambiano i tooltip nelle schede (es. "recover", "object" nel testo delle abilità come prima).
+
 ## Seguito di P32 — Pierce segue la casella "Combo version" (19 ottobre 2026, versione 1.15.267)
 
 Setup: solo codice (F5 basta). TEST Harvester con Sow.

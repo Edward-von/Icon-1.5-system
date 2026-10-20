@@ -16,30 +16,36 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
-## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026, da fare il 20 ottobre)
+## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.268)
 
 Controllo fatto il 19 ottobre sera: i 5 tour girano e ogni passo trova il suo punto sullo schermo (solo "Statuses"
 del tour Combat va al centro senza un token selezionato, come previsto). Il contenuto però è fermo a inizio
 ottobre (1.10-1.20): delle ~300 novità di ottobre quasi nessuna è spiegata. Testi in inglese come il resto della UI.
 
-- [ ] **G1 — Cose sbagliate o vecchie** (S): tour First Steps, passo "House rules": chiama "opzionale" anche Dust to
+- [x] **G1 — Cose sbagliate o vecchie** (S): tour First Steps, passo "House rules": chiama "opzionale" anche Dust to
       heal Burdens, che è la regola del libro accesa di default (p.42, p.242; il tour House Rules lo dice giusto).
       Tour Scheda: la tab si chiama "Relics & Trophies", non "Relics", e i trofei non sono spiegati. Tour Combat e
       First Steps: la card del danno è descritta solo con Apply e ½ (mancano i bottoni Inflict, gli interrupt sotto le
       righe, l'esito Other della finestra del danno).
-- [ ] **G2 — Passi esistenti da aggiornare** (M): card del danno (Inflict, interrupt, Other, Pierce / Divine /
+- [x] **G2 — Passi esistenti da aggiornare** (M): card del danno (Inflict, interrupt, Other, Pierce / Divine /
       Unerring spuntati da soli); pannello dell'abilità (area, Mark / Track target, combo token e combo alternative,
       più stance, versioni Infuse da armare, chip di summon / oggetti / spazi, Gamble); tab Combat (Damage Utility,
       power die per tutte le classi, usi degli interrupt, gear kit con gli usi, mazzo del Seer); tour GM (sezione
       Summons & Objects del foe, usi degli interrupt di foe e legend, casella "reuse world actors" e riserve che si
       rivelano da sole nell'Encounter Designer).
-- [ ] **G3 — Tour nuovo "On the map"** (M): oggetti sulla mappa (chip, copertura, muri, pile, salire sopra), spazi
+- [x] **G3 — Tour nuovo "On the map"** (M): oggetti sulla mappa (chip, copertura, muri, pile, salire sopra), spazi
       di terreno (pit, dangerous, difficult, mote, rune), aree terrain effect che durano / si muovono / crescono e
       offrono gli status a chi sta dentro, mark che seguono il personaggio, summon (una pedina per copia, sezione
       Summons della scheda).
-- [ ] **G4 — Glossario della guida** (S): aggiungere le parole che il sistema spiega già nei tooltip ma non sono nel
+- [x] **G4 — Glossario della guida** (S): aggiungere le parole che il sistema spiega già nei tooltip ma non sono nel
       glossario: Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether, Object. Testo dal manuale
       con la pagina (grep su `ICON 1.5.txt`).
+- [ ] **Emerso facendo G4 — tooltip di Stack Dice** (S): `rule-tooltips.mjs` dice "save a d6 result to influence a future
+      gamble roll"; il libro (p.149) dice che lo Stacked Die rende **6** il risultato del gamble, uno solo alla volta,
+      perso a fine combattimento. Allineare il tooltip alla voce del glossario.
+- [ ] **Emerso facendo G2 — riserve dell'Encounter Designer** (decisione di Edoardo): il TODO diceva che "si rivelano
+      da sole"; in realtà a fine round arriva al GM la card "Reveal reserves & add to combat" e serve il suo clic. Il tour
+      ora lo descrive così. Se si vuole che entrino da sole, è una modifica a `_nudgeReserves` (IconCombat.mjs).
 
 ## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare
 

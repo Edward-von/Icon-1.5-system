@@ -1,5 +1,45 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Tour e glossario aggiornati alle novità di ottobre (versione 1.15.268)
+
+### G1 — Cose sbagliate o vecchie
+
+- **Tour First Steps, passo "House rules"**: chiamava "opzionale" anche Dust to heal Burdens → il testo era di
+  inizio ottobre, prima che diventasse la regola del libro accesa di default → ora dice che le regole del libro
+  spegnibili sono due (Party Resolve +1, p.99; Dust, p.42) e l'unica house rule è Heroic / Routine.
+- **Tour Scheda, tab Relics**: la tab si chiama "Relics & Trophies" e i trofei non erano spiegati → passo nuovo
+  "Trophies" (3 per personaggio, p.242; Use, Custom trophy, card che si sbriciola a 0 usi).
+- **Card del danno nei tour**: descritta solo con Apply e ½ → i passi della chat (First Steps, Combat) spiegano
+  anche i bottoni Inflict, gli interrupt sotto le righe dei bersagli e l'esito Other della finestra del danno.
+- **Tour First Steps, compendi**: mancavano Trophies e Foe Templates nell'elenco → aggiunti.
+
+### G2 — Passi esistenti aggiornati
+
+- **Tour Combat**: il vecchio passo "Attack, damage, Apply" diventa tre passi: card dell'attacco (Inflict e
+  interrupt "when targeted"), finestra del danno (Hit / Crit / Miss / Area / Other; Pierce, Divine, Unerring,
+  True Strike e Weakened spuntati da soli) e card del danno (Apply ×N, Inflict ripetuti, riga Interrupt con gli usi).
+- **Tour Scheda**: passi nuovi "Gear kits" (usi, New expedition), "Power dice" (per tutte le classi),
+  "The ability panel" (area, Mark / Track target, stance, Infuse da armare, Gamble, chip di summon / oggetti /
+  spazi, combo alternative, usi degli interrupt) e "Damage Utility"; il passo delle abilità spiega la casella
+  COMBO; quello degli HP cita il mazzo del Seer.
+- **Tour GM**: passi nuovi "Interrupts and their uses" e "Summons & Objects" sulla scheda del foe; il roster spiega
+  le riserve (fine round 2 o 3, p.292), il deploy spiega "reuse world actors", "+ party" e la card sussurrata
+  "Reveal reserves & add to combat". Nota: le riserve non si rivelano da sole, arriva la card e serve il clic del GM.
+
+### G3 — Tour nuovo "On the Map"
+
+- **Cosa**: delle novità sulla mappa di ottobre nessun tour parlava → tour nuovo (Settings → Tours, file
+  `tours/on-the-map.json`) in 9 passi: oggetti (chip, altezza, pile, destructible, muri), copertura e salire sopra,
+  spazi di terreno e i controlli automatici (dangerous, difficult, pit, mote), aree terrain effect che restano, si
+  muovono, crescono e offrono gli status, mark che seguono il personaggio, summon (una pedina per copia, sezione
+  Summons). First Steps e Combat lo suggeriscono alla fine.
+
+### G4 — Glossario della guida
+
+- **Cosa**: Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether e Object avevano il tooltip
+  nelle schede ma non una voce nel glossario della Quick Guide → aggiunte, col testo del manuale e la pagina
+  (p.35, 85, 89, 114, 145, 149, 204, 245).
+
 ## 19 ottobre 2026 — Pierce segue la casella "Combo version" (versione 1.15.267)
 
 ### Seguito di P32, scelta di Edoardo

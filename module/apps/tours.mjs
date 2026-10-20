@@ -34,6 +34,7 @@ const TOURS = [
   { id: "welcome",         file: "welcome.json" },
   { id: "character-sheet", file: "character-sheet.json", requiresCharacter: true },
   { id: "combat",          file: "combat.json" },
+  { id: "on-the-map",      file: "on-the-map.json" },
   { id: "house-rules",     file: "house-rules.json" },
   { id: "gm-tools",        file: "gm-tools.json" },
 ];
@@ -199,7 +200,7 @@ export async function registerIconTours() {
   }
 }
 
-/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "house-rules", "gm-tools"). */
+/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "on-the-map", "house-rules", "gm-tools"). */
 export function startIconTour(id = "welcome") {
   const tour = game.tours.get(`${NAMESPACE}.${id}`);
   if (!tour) return ui.notifications.warn(`Tour "${id}" is not available.`);

@@ -35,7 +35,7 @@
       "sheetTab": "narrative",
       "tooltipDirection": "DOWN",
       "title": "Tabs",
-      "content": "<strong>Narrative</strong> for life outside the fight, <strong>Combat</strong> for the tactical game, <strong>Conditions</strong> for statuses and saves, <strong>Relics</strong>, and <strong>Notes</strong> with the character management tools."
+      "content": "<strong>Narrative</strong> for life outside the fight, <strong>Combat</strong> for the tactical game, <strong>Conditions</strong> for statuses and saves, <strong>Relics &amp; Trophies</strong>, and <strong>Notes</strong> with the character management tools."
     },
     {
       "id": "xp",
@@ -51,7 +51,16 @@
       "sheetTab": "narrative",
       "tooltipDirection": "RIGHT",
       "title": "Bond, Burdens, Ambitions, Gear",
-      "content": "Your Bond and its powers, Burdens and Ambitions (click a clock segment to fill it), Gear Kit, Dust, Effort and Strain."
+      "content": "Your Bond and its powers, Burdens and Ambitions (click a clock segment to fill it), Dust, Effort and Strain."
+    },
+    {
+      "id": "gear",
+      "selector": ".icon-gear",
+      "fallback": ".icon-narrative-col--left",
+      "sheetTab": "narrative",
+      "tooltipDirection": "RIGHT",
+      "title": "Gear kits",
+      "content": "The basic adventurer's kit is always with you; tick the one kit of your bond you carry on this expedition (p.35). Click an item to mark it used, or to spend one use when it counts uses (Shift+click sets how many it has).\n<strong>↻ New expedition</strong> restocks everything."
     },
     {
       "id": "narrative-actions",
@@ -67,7 +76,16 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "HP, Vigor and class resources",
-      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens, Aether or power dice."
+      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens or Aether.\nA Seer's Great Wheel deck lives in Foundry's Cards: chat cards remind you when to draw, and each card in your hand has a <strong>☸ Foretell</strong> button."
+    },
+    {
+      "id": "power-dice",
+      "selector": ".icon-resource-block--power-dice",
+      "fallback": ".icon-section--hp",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Power dice",
+      "content": "Every class can hold power dice, since many abilities and relics give one. <strong>+ Die</strong> asks for a name, a size and a starting value; − / + tick it, <i class='fa-solid fa-dice-d20'></i> rolls it, ✕ discards it. They are all lost at the end of combat."
     },
     {
       "id": "basic-actions",
@@ -91,7 +109,16 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Equipped abilities",
-      "content": "Drag abilities into the slots. Click one to see its details, double-click to open it; the buttons on each slot roll the attack or the damage, or post it to chat.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
+      "content": "Drag abilities into the slots (dropping on a full slot replaces it). Click one to open its panel below, double-click to open the item.\nThe <strong>COMBO</strong> checkbox is your combo token: while it is on, abilities marked ⚡ use their combo version.\nThe <i class='fas fa-lock'></i> lock protects talents, masteries and the remove buttons from accidental clicks during play."
+    },
+    {
+      "id": "ability-panel",
+      "selector": ".icon-ability-preview:not([hidden])",
+      "fallback": ".icon-section:has([data-action='toggleAbilitiesLock'])",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "The ability panel",
+      "content": "The panel has a button for each thing the ability does: <strong>Attack Roll</strong> or <strong>Auto-Hit</strong>, <strong>Damage Roll</strong>, <strong>Show in Chat</strong>, and where they apply:\n<strong>the area</strong> (Small Blast, Line 5…) to place it on the map and target everyone inside · <strong>⌖ Mark target</strong> (one token targeted, range checked) and <strong>Track target</strong> (a reminder, not a mark) · <strong>☯ Take stance</strong> · <strong>🪄 Infuse X</strong> to arm an infused version with Aether before rolling · <strong>🎲 Gamble</strong> · chips to drag a <strong>summon</strong> or an <strong>object</strong> onto the map, or to place <strong>spaces</strong> (pit, dangerous, motes…).\nWith a combo token on and two combo versions, the first roll asks which one. Interrupts show their uses here (⚡ left/max), back at the start of your turn."
     },
     {
       "id": "limit-break",
@@ -101,6 +128,15 @@
       "tooltipDirection": "UP",
       "title": "Limit Break and Resolve",
       "content": "From level 2 your Limit Break lives here. <strong>Use Limit Break</strong> spends Resolve, any mix of your personal Resolve and the party pool (p.99) — the party pool is shared, so ask your team first."
+    },
+    {
+      "id": "damage-utility",
+      "selector": ".icon-damage-utility",
+      "fallback": ".icon-tab--combat",
+      "sheetTab": "combat",
+      "tooltipDirection": "UP",
+      "title": "Damage Utility",
+      "content": "At the bottom of the tab: <strong>💥 Damage Utility</strong> rolls damage that doesn't come from an ability's attack (a trait, a relic, an effect you are told to apply). Choose dice, fixed damage and modifiers, write the source, and the damage card has the usual Apply buttons."
     },
     {
       "id": "conditions",
@@ -117,6 +153,15 @@
       "tooltipDirection": "LEFT",
       "title": "Relics",
       "content": "Drag relics here from the Relics compendium. Each card shows its rank and lets you upgrade it with Dust."
+    },
+    {
+      "id": "trophies",
+      "selector": ".icon-trophies",
+      "fallback": ".icon-tab--relics",
+      "sheetTab": "relics",
+      "tooltipDirection": "UP",
+      "title": "Trophies",
+      "content": "Spoils taken from dungeons, factions and legends, with a limited number of uses; a character carries <strong>3</strong> at a time (p.242). Drag them from the Trophies compendium or make a <strong>+ Custom trophy</strong>.\n<strong>Use</strong> spends a use and posts the trophy to chat; the checkboxes remind you of trophies in effect this combat or expedition. With no uses left a trophy crumbles."
     },
     {
       "id": "management",
