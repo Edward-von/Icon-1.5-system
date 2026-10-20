@@ -11,6 +11,14 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Riserve automatiche e tooltip di Stack Dice (20 ottobre 2026, versione 1.15.269)
+
+Setup: solo codice (F5 basta). Encounter Designer con una riserva a round 2, Deploy.
+
+- [ ] Fine round 1 → nessuna card delle riserve; fine round 2 → la pedina della riserva diventa visibile, compare nel tracker, card sussurrata al GM "Reserves enter — end of round 2" senza bottone.
+- [ ] Riserva fatta entrare prima con "Reveal reserves" della card del deploy → a fine round 2 nessun doppione nel tracker e nessuna card.
+- [ ] Tooltip di "Stack Dice" su un Fool (tratto di classe) → dice che lo Stacked Die rende 6 il gamble (p.149).
+
 ## G1-G4 — Tour e glossario aggiornati (20 ottobre 2026, versione 1.15.268)
 
 Setup: solo file JSON e JS (F5 basta). Un PG con abilità che hanno area, mark, summon, oggetti o spazi (es. TEST

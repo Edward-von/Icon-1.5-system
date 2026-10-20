@@ -40,10 +40,10 @@ ottobre (1.10-1.20): delle ~300 novità di ottobre quasi nessuna è spiegata. Te
 - [x] **G4 — Glossario della guida** (S): aggiungere le parole che il sistema spiega già nei tooltip ma non sono nel
       glossario: Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether, Object. Testo dal manuale
       con la pagina (grep su `ICON 1.5.txt`).
-- [ ] **Emerso facendo G4 — tooltip di Stack Dice** (S): `rule-tooltips.mjs` dice "save a d6 result to influence a future
+- [x] **Emerso facendo G4 — tooltip di Stack Dice** (S) (FATTO il 20 ottobre 2026, versione 1.15.269): `rule-tooltips.mjs` dice "save a d6 result to influence a future
       gamble roll"; il libro (p.149) dice che lo Stacked Die rende **6** il risultato del gamble, uno solo alla volta,
       perso a fine combattimento. Allineare il tooltip alla voce del glossario.
-- [ ] **Emerso facendo G2 — riserve dell'Encounter Designer** (decisione di Edoardo): il TODO diceva che "si rivelano
+- [x] **Emerso facendo G2 — riserve dell'Encounter Designer** (decisione di Edoardo: entrano da sole; FATTO il 20 ottobre 2026, versione 1.15.269): il TODO diceva che "si rivelano
       da sole"; in realtà a fine round arriva al GM la card "Reveal reserves & add to combat" e serve il suo clic. Il tour
       ora lo descrive così. Se si vuole che entrino da sole, è una modifica a `_nudgeReserves` (IconCombat.mjs).
 

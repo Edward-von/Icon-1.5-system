@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Le riserve entrano da sole; tooltip di Stack Dice come il libro (versione 1.15.269)
+
+### Emersi facendo G2 e G4, scelta di Edoardo
+
+- **Riserve dell'Encounter Designer**: a fine round 2 o 3 arrivava al GM una card con "Reveal reserves & add to
+  combat" e le riserve restavano nascoste finché non la cliccava → la card offriva solo il bottone → ora a fine round
+  le pedine dovute vengono mostrate e aggiunte al combattimento da sole, e la card sussurrata al GM dice chi è entrato
+  e di spostarle al bordo della mappa (p.292). Il bottone sulla card del deploy resta, per farle entrare prima.
+- **Tooltip di Stack Dice**: diceva "save a d6 result to influence a future gamble roll" → testo scritto a memoria →
+  ora dice come il libro (p.149): una volta a round, con un finishing blow o uno slay, prendi uno Stacked Die che
+  rende **6** il risultato di un gamble; uno solo alla volta, perso a fine combattimento.
+
 ## 20 ottobre 2026 — Tour e glossario aggiornati alle novità di ottobre (versione 1.15.268)
 
 ### G1 — Cose sbagliate o vecchie

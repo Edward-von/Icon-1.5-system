@@ -105,7 +105,7 @@
       "openApp": "encounter-designer",
       "tooltipDirection": "UP",
       "title": "Save and deploy",
-      "content": "Save the encounter under a name to use it later. <strong><i class='fa-solid fa-file-import'></i> Actors</strong> imports the foes into a folder; <strong><i class='fa-solid fa-map'></i> Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden.\n<strong>reuse world actors</strong> (shown when you picked foes from the World) uses those actors as they are instead of copying them into a new folder; <strong>+ party</strong> adds the player characters to the combat.\nWhen that round ends you get a whispered card: <strong>Reveal reserves &amp; add to combat</strong> shows their tokens and adds them to the fight."
+      "content": "Save the encounter under a name to use it later. <strong><i class='fa-solid fa-file-import'></i> Actors</strong> imports the foes into a folder; <strong><i class='fa-solid fa-map'></i> Deploy</strong> also puts their tokens on the open scene and starts the combat, with the reserves hidden.\n<strong>reuse world actors</strong> (shown when you picked foes from the World) uses those actors as they are instead of copying them into a new folder; <strong>+ party</strong> adds the player characters to the combat.\nWhen that round ends, the reserves are shown and added to the combat by themselves, and you get a whispered card naming them: move them to the edge of the map. To bring them in earlier, use <strong>Reveal reserves</strong> on the deploy card."
     },
     {
       "id": "clock-board",

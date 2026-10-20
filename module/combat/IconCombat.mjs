@@ -1205,9 +1205,9 @@ async function _postRelicTurnReminders(actor, when, title) {
 
 /**
  * Encounter Designer reserves (p.292) "appear at the edge of the map at the
- * end of round 2 or 3": when the round advances, the GM gets a whispered
- * card with the "Reveal reserves" button for the hidden tokens that were due
- * at the end of the round that just finished (posted once per round).
+ * end of round 2 or 3": when the round advances, the hidden tokens that were
+ * due at the end of the round that just finished are shown and added to the
+ * combat, and the GM gets a whispered card saying who entered (once per round).
  */
 async function _nudgeReserves(combat) {
   try {
@@ -1220,6 +1220,11 @@ async function _nudgeReserves(combat) {
     const posted = combat.getFlag(FLAG_NS, "reserveNudge") ?? {};
     if (posted[ended]) return;
     await combat.setFlag(FLAG_NS, "reserveNudge", { ...posted, [ended]: true });
+    await scene.updateEmbeddedDocuments("Token", due.map(t => ({ _id: t.id, hidden: false, [`flags.${FLAG_NS}.encounterReserve`]: 0 })));
+    const toAdd = due
+      .filter(t => !combat.combatants.some(c => c.tokenId === t.id))
+      .map(t => ({ tokenId: t.id, sceneId: scene.id, actorId: t.actorId, hidden: false }));
+    if (toAdd.length) await combat.createEmbeddedDocuments("Combatant", toAdd);
     const esc = (v) => foundry.utils.escapeHTML(String(v ?? ""));
     const names = [...new Set(due.map(t => t.name))].map(esc).join(", ");
     await ChatMessage.create({
@@ -1227,10 +1232,9 @@ async function _nudgeReserves(combat) {
       whisper: ChatMessage.getWhisperRecipients("GM").map(u => u.id),
       flags: { [FLAG_NS]: { encounterCard: true } },
       content: `<div class="icon-macro-card icon-macro-combat icon-encounter-card">
-        <div class="icon-macro-header"><i class="fas fa-chess-knight"></i><h3>Reserves due — end of round ${ended}</h3></div>
+        <div class="icon-macro-header"><i class="fas fa-chess-knight"></i><h3>Reserves enter — end of round ${ended}</h3></div>
         <div class="icon-macro-body">
-          <p class="icon-macro-sub">${due.length} hidden token${due.length > 1 ? "s" : ""} (${names}) enter at the edge of the map now and act from this round (p.292).</p>
-          <button type="button" class="icon-btn icon-btn--add icon-encounter-card__reveal" data-action="revealReserves" data-scene-id="${esc(scene.id)}" data-token-ids="${esc(due.map(t => t.id).join(","))}"><i class='fa-solid fa-eye'></i> Reveal reserves &amp; add to combat</button>
+          <p class="icon-macro-sub">${due.length} reserve token${due.length > 1 ? "s" : ""} (${names}) revealed and added to the combat: move them to the edge of the map; they act from this round (p.292).</p>
         </div>
       </div>`,
     });

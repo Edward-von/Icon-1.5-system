@@ -21,7 +21,8 @@
  * Output: a whispered chat card (budget breakdown), world actors in an
  * "Encounter: <name>" folder, or a full deploy (actors + tokens on the current
  * scene + combatants). Reserves are placed as hidden tokens and are NOT added to
- * the combat; the chat card has a "Reveal reserves" button for that moment.
+ * the combat: they are revealed and added by themselves when their round ends
+ * (IconCombat _nudgeReserves); the chat card's "Reveal reserves" button brings them in early.
  */
 import { FOE_CLASS_LABELS } from "../data/actor/FoeData.mjs";
 

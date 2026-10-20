@@ -88,7 +88,7 @@ const RULES = {
   "curse":       (n) => `Curse${n && Number(n) > 1 ? ` ${n}` : ""}: the roll subtracts the highest of ${n || 1} d6 from the d20 (p.12). The dialog fills it in for you; boons and curses cancel 1 to 1.`,
   "sacrifice":   (n) => `Sacrifice${n ? ` ${n}` : " X"}: reduce your HP by ${n || "X"} as a cost, paid at the start of the ability. It can't be reduced, ignored, transferred or resisted, can't bring your HP below 1, and can be paid even without enough HP left (p.103).`,
   "power-die":   "Power Die: a d6 tracker tied to a specific ability that ticks up or down based on conditions. Each power die is unique to its ability. Discarded when ticked to 0.",
-  "stack-dice":  "Stack Dice (Fool): save a d6 result to influence a future gamble roll, including bomb summons.",
+  "stack-dice":  "Stack Dice (Fool): once a round, when you trigger a finishing blow or slay effect, gain a Stacked Die. Spend it when you gamble (bombs included) to make the result a 6. Hold only one; lost at the end of combat (p.149).",
   "stance":      "Stance: an ongoing positive effect. You can only have one stance at a time; taking a new stance drops the old one (or drop as a free action at start of your turn). Refreshes regain its effects.",
   "interact":    "Interact: 1-action ability to use an interactable object or terrain feature.",
   "recover":     "Recover: 2-action ability. Cure yourself (Vigor 4, or Vigor surge if Bloodied), then save against all active statuses.",
