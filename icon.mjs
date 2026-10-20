@@ -118,6 +118,7 @@ import { bindInflictButtons, inflictStatus, decorateInflictCard, onInflictUsedUp
 import { rollGamble, bendFate } from "./module/combat/gamble.mjs";
 import { damageMitigation, defenseChipsHtml, rollEvasion, defenseProfile } from "./module/combat/defenses.mjs";
 import { decorateDamageInterrupts, bindInterruptVigorButtons, decorateAttackInterrupts } from "./module/combat/damage-interrupts.mjs";
+import { decorateAttackRollInterrupts, bindSmiteDamageButtons, onSmiteCreated } from "./module/combat/attack-roll-interrupts.mjs";
 import { injectCardMods, cardModsFor } from "./module/combat/damage-card-mods.mjs";
 
 /* ================================================== */
@@ -958,6 +959,14 @@ Hooks.on("updateChatMessage", (message, changed) => onInflictUsedUpdate(message,
 Hooks.on("renderChatMessageHTML", (message, html /*, data */) => {
   try { decorateAttackInterrupts(message, html); }
   catch (err) { console.warn("ICON 1.5 | attack-card interrupts failed:", err); }
+  // Godly Smite (Sealer, p.191): changes the total of an attack roll (attack-roll-interrupts.mjs).
+  try { decorateAttackRollInterrupts(message, html); bindSmiteDamageButtons(message, html); }
+  catch (err) { console.warn("ICON 1.5 | Godly Smite buttons failed:", err); }
+});
+
+Hooks.on("createChatMessage", (message) => {
+  try { onSmiteCreated(message); }
+  catch (err) { console.warn("ICON 1.5 | Godly Smite redraw failed:", err); }
 });
 
 /**

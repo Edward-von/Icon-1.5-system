@@ -16,6 +16,17 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 
 ---
 
+## Rimasti dopo K1-K5 (chiesto da Edoardo il 20 ottobre 2026: "sistemali", "provali", "ogni summon separata")
+
+- [x] **L1 — Bottone Godly Smite (Sealer, p.191)** (S): sulla card di un tiro d'attacco proprio o di un alleato,
+      bottone "Godly Smite +N" che spende l'interrupt, somma il dado del mantra al totale (la card mostra il nuovo
+      risultato) e posta una card con il bottone del danno "again" per ogni bersaglio. (FATTO, versione 1.15.276)
+- [ ] **L2 — Tratti di job dell'Harvester** (M): thrall, piante come terreno pericoloso, Mark of Tsumi, due mark.
+- [ ] **L3 — Ogni summon posato ha i suoi HP** (M): tutti i summon del compendio scollegati, sezione Summons della
+      scheda del PG rifatta sui token in mappa.
+- [ ] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le
+      prove dei giri vecchi lasciate a metà).
+
 ## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.268)
 
 Controllo fatto il 19 ottobre sera: i 5 tour girano e ogni passo trova il suo punto sullo schermo (solo "Statuses"
@@ -87,9 +98,9 @@ Emerso scrivendo i tour di classe. Edoardo: "fai tutte e 5".
 - [x] **K4 — Tour del gioco narrativo** (M): tiri narrativi, effort / strain, clock, Interlude, macro del compendio.
 - [x] **K5 — Controllo dei job** (M): dal CHANGELOG, i job con una meccanica che ha un'interfaccia propria (come il
       mazzo del Seer); aggiungere un passo nel tour della classe dove serve.
-- [ ] **Emerso facendo K5 — Godly Smite (Sealer)** (S): l'interrupt aggiunge il dado del mantra al totale dell'attacco
+- [x] **Emerso facendo K5 — Godly Smite (Sealer)** (S) (spostato in L1): l'interrupt aggiunge il dado del mantra al totale dell'attacco
       e ripete il danno, ma la card dell'attacco non ha un bottone: oggi si fa a mano (il tour lo dice).
-- [ ] **Emerso facendo K5 — tratti di job dell'Harvester** (M): thrall che scattano a inizio turno e diventano piante,
+- [x] **Emerso facendo K5 — tratti di job dell'Harvester** (M) (spostato in L2): thrall che scattano a inizio turno e diventano piante,
       piante come terreno pericoloso per i foe, Mark of Tsumi, due mark (Gardener of Kin): nessuna automazione.
 
 ## Esito del playtest del 18 ottobre 2026 (build 1.15.232) — da sistemare

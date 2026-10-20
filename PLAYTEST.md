@@ -11,6 +11,17 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Godly Smite (20 ottobre 2026, versione 1.15.276)
+
+Setup: solo codice (F5 basta). Un Sealer con il tratto Godly Smite e il dado del mantra fuori, un alleato, un foe.
+
+- [x] Tiro d'attacco dell'alleato contro il foe → sulla card "Godly Smite +N · Sealer 1/1". **(20 ottobre, GM: TEST Bastion contro Warrior, +3)**
+- [x] Premerlo → totale vecchio barrato e nuovo totale; esito ricalcolato (11 → 14 contro DEF 14: MISS → HIT, card verde); bottone "used"; card Godly Smite con "3 damage · Warrior". **(sì)**
+- [x] "3 damage · Warrior" → danno con armatura (2 bloccati, 1 a HP), bottone spento. **(sì)**
+- [x] Dopo F5 la card d'attacco mostra ancora il nuovo totale. **(sì)**
+- [ ] Da giocatore: il suo Sealer usa Godly Smite sull'attacco di un PG di un altro utente; tutti vedono il nuovo totale.
+- [ ] Dado del mantra a 0 (fuori combattimento) → bottone spento con la spiegazione.
+
 ## Guida, terzo giro — K1-K5 (20 ottobre 2026, versione 1.15.274)
 
 Setup: solo codice (F5 basta).

@@ -50,7 +50,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "UP",
       "title": "Sealer: the mantra die",
-      "content": "<em>Sealers only.</em> Godly Smite's mantra is a power die on its trait: the sheet sets it out at the start of combat and ticks it up every round. Use − / + and roll it from here. When Godly Smite adds the die to an attack, add it by hand: the attack card has no button for it."
+      "content": "<em>Sealers only.</em> Godly Smite's mantra is a power die on its trait: the sheet sets it out at the start of combat and ticks it up every round. Use − / + and roll it from here. When you or an ally makes an attack roll, the attack card shows a <strong>Godly Smite +N</strong> button: it spends the interrupt, adds the die to the total (the card shows the new result) and posts a card with a button for the damage the target takes again."
     },
     {
       "id": "outro",

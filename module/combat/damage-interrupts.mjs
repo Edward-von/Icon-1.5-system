@@ -486,7 +486,7 @@ export async function bankInterruptsAtTurnStart(actor) {
 /* -------------------------------------------------- */
 
 /** "party" or "enemy": the token's disposition first, the actor type otherwise. */
-function sideOf(actor, tokenId = null) {
+export function sideOf(actor, tokenId = null) {
   const tok = (tokenId && canvas?.tokens?.get(tokenId)?.document) || actor?.token || actor?.getActiveTokens?.()[0]?.document;
   const disp = tok?.disposition ?? actor?.prototypeToken?.disposition;
   if (disp === 1) return "party";
@@ -495,13 +495,13 @@ function sideOf(actor, tokenId = null) {
 }
 
 /** The current user plays this character: a player their own, the GM the ones no player owns. */
-function userPlays(actor) {
+export function userPlays(actor) {
   if (!actor?.isOwner) return false;
   return !game.user.isGM || !actor.hasPlayerOwner;
 }
 
 /** Characters on the scene (one entry per actor; unlinked tokens are their own actor). */
-function sceneCharacters() {
+export function sceneCharacters() {
   const seen = new Map();
   for (const t of canvas?.tokens?.placeables ?? []) {
     const a = t.actor;

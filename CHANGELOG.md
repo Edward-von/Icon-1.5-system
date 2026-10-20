@@ -1,5 +1,16 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Bottone Godly Smite sulle card d'attacco (versione 1.15.276)
+
+- **Godly Smite (Sealer, p.191)**: l'interrupt somma il dado del mantra al tiro d'attacco tuo o di un alleato e fa
+  subire di nuovo quel numero come danno, ma andava fatto a mano → la card dell'attacco non aveva un bottone e non
+  salvava il suo risultato → ora la card salva totale, difesa e soglie, e mostra "Godly Smite +N" a chi gioca un Sealer
+  dalla stessa parte dell'attaccante. Il bottone spende l'uso, la card d'attacco mostra il nuovo totale (il vecchio
+  barrato) e il nuovo esito (HIT / MISS / EXCEED / CRITICAL), e la card di Godly Smite ha un bottone "N damage" per
+  ogni bersaglio (l'armatura vale). Spento se il dado non è fuori, se è già stato usato su quell'attacco, senza usi o
+  da Stunned. Funziona anche su card postate da un altro utente (`module/combat/attack-roll-interrupts.mjs`). Il
+  tour Mendicant lo spiega.
+
 ## 20 ottobre 2026 — Playtest delle ultime tre prove di K1-K5 (versione 1.15.275)
 
 - **Tour "Creating and Levelling Up"**: l'introduzione diceva che nelle anteprime si poteva cliccare dappertutto,

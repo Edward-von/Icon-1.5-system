@@ -340,7 +340,11 @@ export async function combatRoll({
     content,
     rolls,
     // Who was targeted: the "when targeted" interrupt buttons (damage-interrupts.mjs, R35).
-    flags: { "icon-system": { attack: attackFlags({ actor, abilityName, targets: attackTargets, roll: true }) } },
+    // `result`: what an interrupt that changes the total re-reads (Godly Smite, attack-roll-interrupts.mjs).
+    flags: { "icon-system": { attack: {
+      ...attackFlags({ actor, abilityName, targets: attackTargets, roll: true }),
+      result: { d20, modifier, total, defense: defense ?? null, critAt: critT, exceedAt: exceedT, forceExceed: !!forceExceed, evaded },
+    } } },
   });
 
   // Arenheir Aspect: each crit lowers the crit threshold of the next attacks.

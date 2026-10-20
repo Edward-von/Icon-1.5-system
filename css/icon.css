@@ -6273,3 +6273,6 @@ ol.chat-log .chat-message,
 .icon-btn.icon-btn--done { opacity: .55; cursor: default; }
 /* Bend Fate's extra dice (gamble-card.hbs): dashed, to tell them from the first roll. */
 .icon-chat-die--added { border-style: dashed; }
+
+/* Godly Smite (attack-roll-interrupts.mjs): the total before the mantra die was added */
+.icon-chat-card__total-old { opacity: 0.6; margin-right: 0.25em; text-decoration: line-through; font-size: 1.1em; }
