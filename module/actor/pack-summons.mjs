@@ -61,6 +61,12 @@ export async function placePackSummon(data, { requester = null } = {}) {
   const scene = data.sceneId ? game.scenes.get(data.sceneId) : canvas?.scene;
   if (!scene) return null;
   const summoner = data.summonerId ? game.actors.get(data.summonerId) : null;
+  // "You can have a maximum of six active thralls" (Harvester, p.184).
+  const { isThrallUuid, thrallsOf, MAX_THRALLS } = await import("../combat/harvester.mjs");
+  if (summoner && isThrallUuid(data.uuid) && thrallsOf(summoner, scene).length >= MAX_THRALLS) {
+    ui.notifications.warn(`${summoner.name} already has ${MAX_THRALLS} thralls: that is the most a Harvester can have active (p.184).`);
+    return null;
+  }
   if (!game.user.isGM) {
     if (summoner && !summoner.isOwner) { ui.notifications.warn("Only the GM, or a player who owns the summoner, can place its summons."); return null; }
     if (!game.users.activeGM) { ui.notifications.warn("No GM is connected — can't place the summon right now."); return null; }

@@ -1,5 +1,23 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Tratti dell'Harvester: thrall, piante, Mark of Tsumi, Gardener of Kin (versione 1.15.277)
+
+- **Thrall (p.184)**: a inizio turno i thrall scattano, colpiscono un foe adiacente per 1 piercing e diventano piante,
+  ma andava fatto a mano → nessun codice li seguiva → ora all'inizio del turno dell'Harvester arriva una card:
+  si muovono i thrall, poi "Strike and become plants" chiede quale foe adiacente colpisce ciascuno, applica il danno
+  (ignora armatura e vigor) e mette una Plant al posto di ogni thrall. Un settimo thrall viene rifiutato ("a maximum
+  of six active thralls").
+- **Piante (p.184)**: la casella di una pianta è terreno pericoloso solo per i foe e ha una blessing che un alleato
+  può prendere → non succedeva niente → ora un foe che entra, esce o passa da una pianta riceve la domanda del danno
+  da terreno pericoloso (una volta per turno, come le altre caselle); un alleato che ci entra può prendere la
+  blessing (+1 Blessed) e la pianta viene tolta. Un giocatore che non possiede la pianta la fa togliere al GM.
+- **Mark of Tsumi (p.184)**: a fine turno 2 piercing a tutti i foe marcati e una blessing a sé o agli alleati marcati
+  → era a mano → ora una card a fine turno con il bottone del danno e i due bottoni della blessing (se ne usa uno).
+- **Gardener of Kin (p.184)**: "You can stack 2 marks on characters" → il sistema teneva un solo mark dello stesso
+  personaggio su un altro → ora con questo tratto ne restano due; al terzo chiede quale sostituire. Il +1 al danno dei
+  summon contro i foe marcati vale per il colpo dei thrall.
+- Il tour Mendicant ha un passo sull'Harvester.
+
 ## 20 ottobre 2026 — Bottone Godly Smite sulle card d'attacco (versione 1.15.276)
 
 - **Godly Smite (Sealer, p.191)**: l'interrupt somma il dado del mantra al tiro d'attacco tuo o di un alleato e fa

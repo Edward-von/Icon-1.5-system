@@ -298,7 +298,7 @@ export function marksBy(actorId, abilityKey = null) {
  *                                   leaves the marker's marks on the target alone
  * @param {number} [opts.auraSize]   the "while marked" aura size the marker chose before a relay (follow-marks.mjs)
  */
-export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null, replaceChecked = false, targetTokenUuid = null }) {
+export async function applyMark({ source, target, abilityKey, abilityName, text = "", multi = false, stackText = null, track = false, auraSize = null, replaceChecked = false, targetTokenUuid = null, replaceUuid = null }) {
   if (!source || !target) return null;
   // The token the marker targeted: a linked character with tokens on several scenes has its mark's space and aura
   // put on that one (follow-marks.mjs), not on the first token found.
@@ -306,7 +306,9 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
   // p.95 "a character can only mark another character with one mark at a time, choosing which gets replaced if
   // they mark that character again": the marker picks, on their own client (a relayed mark carries the answer).
   if (!track && !replaceChecked) {
-    if (!(await _replaceChosen(source, target, abilityKey, abilityName))) return null;
+    const chosen = await _replaceChosen(source, target, abilityKey, abilityName);
+    if (chosen === null) return null;
+    replaceUuid = chosen || null;
     replaceChecked = true;
   }
   if (_needsRelay(target)) {
@@ -316,7 +318,7 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
       const { whileMarkedAuraSize } = await import("../canvas/follow-marks.mjs");
       auraSize = await whileMarkedAuraSize(source, target, abilityKey);
     }
-    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize, replaceChecked, targetTokenUuid });
+    _relay({ method: "applyMark", sourceUuid: source.uuid, targetUuid: target.uuid, abilityKey, abilityName, text, multi, stackText, track, auraSize, replaceChecked, targetTokenUuid, replaceUuid });
     ui.notifications.info(`${track ? "Tracker" : "Mark"} sent to the GM to place on "${target.name}".`);
     return null;
   }
@@ -349,7 +351,10 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
   }
   // One mark from this character on the target: an older one from another ability
   // is replaced. Trackers aren't marks: they don't replace, and aren't replaced.
+  // Gardener of Kin (p.184) stacks two: only the one picked in _replaceChosen goes.
+  const limit = markLimit(source);
   if (!track) for (const m of marksOn(target).filter(m => m.sourceActorId === source.id && !m.tracked)) {
+    if (limit > 1 && m.abilityKey !== abilityKey && m.uuid !== replaceUuid) continue;
     const eff = await fromUuid(m.uuid);
     if (eff) { await eff.delete(); _log(`${target.name}: mark ${m.abilityName} from ${source.name} replaced`); }
   }
@@ -373,13 +378,40 @@ export async function applyMark({ source, target, abilityKey, abilityName, text 
 }
 
 /**
+ * How many marks `source` can keep on one character: 1 (p.95), 2 with the Harvester's Gardener of Kin ("You can
+ * stack 2 marks on characters", p.184).
+ * @param {Actor} source
+ */
+export function markLimit(source) {
+  return source?.items?.some(i => i.type === "trait" && /^gardener of kin$/i.test(i.name ?? "")) ? 2 : 1;
+}
+
+/**
  * `source` marks `target` again with another ability while an older mark of theirs is on it (p.95): which stays?
- * True when the new mark goes on (the old one is then replaced by applyMark), false to keep the old one. No older
- * mark, or the same ability again (moved / refreshed / stacked): true without asking.
+ * Resolves "" when the new mark goes on with nothing to pick (no older mark, the same ability again, or room for one
+ * more with Gardener of Kin), the uuid of the mark it replaces when there is a choice to make, or null to keep the
+ * old one(s). With one mark allowed, applyMark replaces every older mark, as before.
  */
 async function _replaceChosen(source, target, abilityKey, abilityName) {
   const older = marksOn(target).filter(m => m.sourceActorId === source.id && !m.tracked && m.abilityKey !== abilityKey);
-  if (!older.length) return true;
+  const limit = markLimit(source);
+  if (older.length < limit) return "";
+  if (limit > 1) {
+    try {
+      const pick = await foundry.applications.api.DialogV2.wait({
+        window: { title: `Mark ${target.name} again — which goes?` },
+        content: `<p><strong>${escapeHTML(target.name)}</strong> already has ${limit} marks of <strong>${escapeHTML(source.name)}</strong>, the most Gardener of Kin allows (p.184). Which one does <strong>${escapeHTML(abilityName)}</strong> replace?</p>`,
+        buttons: [
+          ...older.map((m, k) => ({ action: `r${k}`, label: `Replace ${m.abilityName ?? m.name}`, default: k === 0 })),
+          { action: "old", label: "Keep them" },
+        ],
+        rejectClose: false,
+      });
+      const k = /^r(\d+)$/.exec(pick ?? "")?.[1];
+      if (k == null) { ui.notifications.info(`${target.name} keeps its marks: ${abilityName} is not placed.`); return null; }
+      return older[Number(k)].uuid;
+    } catch { return null; }
+  }
   const names = older.map(m => escapeHTML(m.abilityName ?? m.name)).join(", ");
   try {
     const pick = await foundry.applications.api.DialogV2.wait({
@@ -392,8 +424,8 @@ async function _replaceChosen(source, target, abilityKey, abilityName) {
       rejectClose: false,
     });
     if (pick === "old") ui.notifications.info(`${target.name} keeps ${older.map(m => m.abilityName ?? m.name).join(", ")}: ${abilityName} is not placed.`);
-    return pick === "new";
-  } catch { return false; }
+    return pick === "new" ? "" : null;
+  } catch { return null; }
 }
 
 /** Remove one mark by its effect uuid (works for the marker, the target's owner and the GM). */
@@ -456,7 +488,7 @@ export async function handleMarkSocket(data) {
     case "applyMark": {
       const source = await fromUuid(data.sourceUuid ?? "");
       const target = await fromUuid(data.targetUuid ?? "");
-      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null, replaceChecked: !!data.replaceChecked, targetTokenUuid: data.targetTokenUuid ?? null });
+      if (source && target) await applyMark({ source, target, abilityKey: data.abilityKey, abilityName: data.abilityName, text: data.text, multi: !!data.multi, stackText: data.stackText ?? null, track: !!data.track, auraSize: data.auraSize ?? null, replaceChecked: !!data.replaceChecked, targetTokenUuid: data.targetTokenUuid ?? null, replaceUuid: data.replaceUuid ?? null });
       break;
     }
     case "removeMark":

@@ -21,7 +21,9 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 - [x] **L1 — Bottone Godly Smite (Sealer, p.191)** (S): sulla card di un tiro d'attacco proprio o di un alleato,
       bottone "Godly Smite +N" che spende l'interrupt, somma il dado del mantra al totale (la card mostra il nuovo
       risultato) e posta una card con il bottone del danno "again" per ogni bersaglio. (FATTO, versione 1.15.276)
-- [ ] **L2 — Tratti di job dell'Harvester** (M): thrall, piante come terreno pericoloso, Mark of Tsumi, due mark.
+- [x] **L2 — Tratti di job dell'Harvester** (M): thrall, piante come terreno pericoloso, Mark of Tsumi, due mark.
+      (FATTO, versione 1.15.277. Il +1 di Gardener of Kin vale solo per il colpo dei thrall: gli altri danni dei summon
+      non sanno chi li ha evocati.)
 - [ ] **L3 — Ogni summon posato ha i suoi HP** (M): tutti i summon del compendio scollegati, sezione Summons della
       scheda del PG rifatta sui token in mappa.
 - [ ] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le

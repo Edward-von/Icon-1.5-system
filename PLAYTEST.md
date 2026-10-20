@@ -11,6 +11,20 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Tratti dell'Harvester (20 ottobre 2026, versione 1.15.277)
+
+Setup: solo codice (F5 basta). TEST Harvester con i tratti Mark of Tsumi e Gardener of Kin (aggiunti per la prova), un foe.
+
+- [x] Sette thrall dal chip: il settimo viene rifiutato con l'avviso dei sei. **(20 ottobre, GM: sei posati, il settimo no)**
+- [x] Inizio turno con due thrall accanto al Warrior marcato → card; "Strike and become plants" → finestra con il Warrior (2 piercing, Gardener of Kin) per ciascuno; conferma → Warrior 40 → 36, al posto dei thrall due Plant dell'Harvester. **(sì)**
+- [x] Due mark dell'Harvester sullo stesso Warrior restano tutti e due (Gardener of Kin). **(sì)**
+- [x] Mark of Tsumi a fine turno → card "2 piercing · Warrior" e "Bless TEST Harvester": Warrior 36 → 34 e blessing 1 → 2; i bottoni si spengono. **(sì)**
+- [x] Warrior spostato su una pianta → domanda del terreno pericoloso (Plant, Harvester) → 2 danni (34 → 32). **(sì)**
+- [x] TEST Bastion spostato su una pianta → "Pick up blessing" → +1 Blessed, la pianta sparisce. **(sì)**
+- [ ] Da giocatore: "Strike and become plants" del suo Harvester → le piante le mette il GM; un suo PG prende la blessing di una pianta che non possiede → la toglie il GM.
+- [ ] Terzo mark dell'Harvester (con Gardener of Kin) sullo stesso personaggio → chiede quale dei due sostituire.
+- [ ] Combattimento vero: le card dei thrall e di Mark of Tsumi arrivano da sole a inizio / fine turno dell'Harvester.
+
 ## Godly Smite (20 ottobre 2026, versione 1.15.276)
 
 Setup: solo codice (F5 basta). Un Sealer con il tratto Godly Smite e il dado del mantra fuori, un alleato, un foe.

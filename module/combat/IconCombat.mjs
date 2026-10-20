@@ -50,6 +50,7 @@ import { wheelCombatStart, wheelTurnStart, wheelTurnEnd } from "./wheel-of-fate.
 import { escapeHTML } from "../helpers/enrich.mjs";
 import { expireInfusionAtTurnStart } from "../helpers/infuse.mjs";
 import { classTurnStart, classTurnEnd } from "./class-resources.mjs";
+import { thrallsTurnStart, markOfTsumiTurnEnd } from "./harvester.mjs";
 
 /* ================================================== */
 /*  Constants                                          */
@@ -900,6 +901,9 @@ export function registerCombatHooks() {
           // Stalwart: Fortify gives Vigilance +1 at the end of the turn (p.116).
           try { await classTurnEnd(prev.actor); }
           catch (err) { console.warn("[ICON | IconCombat] class resources (end) failed", err); }
+          // Harvester: Mark of Tsumi at the end of the turn (p.184).
+          try { await markOfTsumiTurnEnd(prev.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] Mark of Tsumi failed", err); }
           // Objects around them at the end of the turn: on a geyser, a foe by an underway, AETHERSHIFT (R33a4).
           try { await objectTurnBoundary(prev, "end"); }
           catch (err) { console.warn("[ICON | IconCombat] object turn reminders (end) failed", err); }
@@ -984,6 +988,9 @@ export function registerCombatHooks() {
           // Wright: +1 Aether at the start of the turn (p.204).
           try { await classTurnStart(current.actor); }
           catch (err) { console.warn("[ICON | IconCombat] class resources (start) failed", err); }
+          // Harvester: the thralls' Summon Action at the start of the turn (p.184).
+          try { await thrallsTurnStart(current.actor); }
+          catch (err) { console.warn("[ICON | IconCombat] thralls (start) failed", err); }
         }
 
         /* The areas this character placed on its last turn have done their

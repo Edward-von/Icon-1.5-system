@@ -53,6 +53,12 @@
       "content": "<em>Sealers only.</em> Godly Smite's mantra is a power die on its trait: the sheet sets it out at the start of combat and ticks it up every round. Use − / + and roll it from here. When you or an ally makes an attack roll, the attack card shows a <strong>Godly Smite +N</strong> button: it spends the interrupt, adds the die to the total (the card shows the new result) and posts a card with a button for the damage the target takes again."
     },
     {
+      "id": "harvester",
+      "selector": "",
+      "title": "Harvester: thralls, plants, Mark of Tsumi",
+      "content": "<em>Harvesters only.</em> Thralls come from the chip of the ability that summons them (six at most). At the start of your turn a card asks you to move them, then <strong>Strike and become plants</strong> deals their 1 piercing damage to the adjacent foe you pick and turns each one into a plant.\nA foe entering or leaving a plant is asked about the dangerous terrain damage; an ally entering it can pick its blessing up, and the plant goes. With <strong>Mark of Tsumi</strong> a card at the end of your turn has the damage to your marked foes and the blessing; with <strong>Gardener of Kin</strong> your marks stack two on one character."
+    },
+    {
       "id": "outro",
       "selector": "",
       "title": "That's the Mendicant",

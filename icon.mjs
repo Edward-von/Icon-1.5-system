@@ -103,6 +103,7 @@ import { registerAreaTemplates, placeAreaTemplate, areaFromTags,
 import { registerMarkHooks, applyHatred, applyMark, removeMark } from "./module/combat/marks.mjs";
 import { registerFoeSummonHooks } from "./module/actor/foe-summons.mjs";
 import { registerPackSummonHooks } from "./module/actor/pack-summons.mjs";
+import { registerHarvesterHooks } from "./module/combat/harvester.mjs";
 import { registerSummonImageHook } from "./module/helpers/summon-images.mjs";
 import { loadSummonIndex } from "./module/helpers/summons.mjs";
 import { registerClockTokenHooks } from "./module/canvas/clock-tokens.mjs";
@@ -256,6 +257,7 @@ Hooks.once("init", () => {
   registerFoeSummonHooks();
   // ---- Summons-pack creatures dragged from a PC's ability / trait chip: one token each (P23) ----
   registerPackSummonHooks();
+  registerHarvesterHooks();
   registerSummonImageHook();
 
   // ---- Campaign clocks dragged from the clock board onto the canvas ----

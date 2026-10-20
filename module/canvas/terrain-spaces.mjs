@@ -28,6 +28,7 @@ import { terrainSpacesForItem, terrainLabel } from "../helpers/terrain-spaces.mj
 import { armedInfusion, clearInfusion } from "../helpers/infuse.mjs";
 import { tokenCells, sourceTokenFor } from "./area-templates.mjs";
 import { marksOn, removeMark } from "../combat/marks.mjs";
+import { isPlant as isPlantDoc } from "../combat/harvester.mjs";
 
 const _log = (...a) => console.debug("[ICON | TerrainSpaces]", ...a);
 const NS = "icon-system";
@@ -904,6 +905,11 @@ async function offerTerrainOnMove(td, prev, to, movement = null, { carriedBy = "
     // R33c2's statuses for who is inside: only a real enter / leave, not a space passed through.
     if (f.inside?.length && was !== now) inside.push({ doc, f, entered: now });
   }
+  // Harvester plants (p.184): dangerous terrain for foes only; an ally entering may pick the blessing up.
+  const { plantsOnMove, offerPlantBlessings } = await import("../combat/harvester.mjs");
+  const plants = plantsOnMove(td, before, after, mid);
+  if (hostile && plants.danger && !danger) danger = plants.danger;
+  if (!hostile && plants.entered.length) await offerPlantBlessings(td, plants.entered);
   if (inside.length) await offerInsideEffects(td, inside);
   if (reminders.length) {
     await ChatMessage.create({
@@ -1917,8 +1923,9 @@ export function registerTerrainSpaceHooks() {
   Hooks.on("updateToken", (tokenDoc, changed, options, userId) => {
     if (userId !== game.user.id || !options?.iconPrevPos) return;
     if (!("x" in changed || "y" in changed) || isMapObject(tokenDoc)) return;
-    // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet.
-    if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length) return;
+    // A marked character may set off DARKTIDE (R33b2) with no terrain on the scene yet; plants are tokens (harvester.mjs).
+    if (!tokenDoc.parent?.templates?.some(t => terrainFlag(t)) && !marksOn(tokenDoc.actor).length
+        && !tokenDoc.parent?.tokens?.some(t => isPlantDoc(t))) return;
     const to = { x: changed.x ?? tokenDoc.x, y: changed.y ?? tokenDoc.y };
     offerTerrainOnMove(tokenDoc, options.iconPrevPos, to, options._movement?.[tokenDoc.id] ?? null, { carriedBy: options.iconDragArea ?? "" }).catch(err => console.warn("[ICON | TerrainSpaces] movement check failed", err));
   });
