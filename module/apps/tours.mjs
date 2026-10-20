@@ -151,8 +151,10 @@ export class IconTour extends foundry.nue.Tour {
     const root = this.#app?.element ?? document;
     // getClientRects is empty for display:none (closed sidebar tabs), but not for fixed panels.
     const visible = el => !!el && el.getClientRects().length > 0;
-    let el = root.querySelector(selector);
-    if (!visible(el) && step.fallback) el = root.querySelector(step.fallback) ?? document.querySelector(step.fallback);
+    // First visible match: a chip inside a closed ability panel comes before the one in the open panel.
+    const firstVisible = (r, sel) => [...r.querySelectorAll(sel)].find(visible) ?? null;
+    let el = firstVisible(root, selector);
+    if (!el && step.fallback) el = firstVisible(root, step.fallback) ?? firstVisible(document, step.fallback);
     if (visible(el)) return el;
     _log(`step "${step.id}": no visible target for "${selector}", showing it centred`);
     this.#centred = true;

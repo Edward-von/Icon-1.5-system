@@ -11,13 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Emerso nel playtest — il tour punta al primo elemento visibile (20 ottobre 2026, versione 1.15.270)
+
+Setup: solo codice (F5 basta). PG con due abilità che hanno chip, la seconda col pannello aperto.
+
+- [x] On the Map / Scheda: con il pannello della seconda abilità aperto, il passo punta al chip del pannello aperto (non ripiega sul riquadro). **(20 ottobre: TEST Stormbender con il pannello di Geyser aperto (quarta abilità) → "Objects" punta al suo chip, "Areas" al bottone dell'area)**
+
 ## Riserve automatiche e tooltip di Stack Dice (20 ottobre 2026, versione 1.15.269)
 
 Setup: solo codice (F5 basta). Encounter Designer con una riserva a round 2, Deploy.
 
-- [ ] Fine round 1 → nessuna card delle riserve; fine round 2 → la pedina della riserva diventa visibile, compare nel tracker, card sussurrata al GM "Reserves enter — end of round 2" senza bottone.
-- [ ] Riserva fatta entrare prima con "Reveal reserves" della card del deploy → a fine round 2 nessun doppione nel tracker e nessuna card.
-- [ ] Tooltip di "Stack Dice" su un Fool (tratto di classe) → dice che lo Stacked Die rende 6 il gamble (p.149).
+- [x] Fine round 1 → nessuna card delle riserve; fine round 2 → la pedina della riserva diventa visibile, compare nel tracker, card sussurrata al GM "Reserves enter — end of round 2" senza bottone. **(20 ottobre: combattimento di prova a parte, riserva con flag round 1 → a fine round 1 pedina visibile, nel tracker, card "Reserves enter — end of round 1" senza bottone. Arrivava anche la card vecchia "Reserves due": veniva da un secondo client Gamemaster aperto con il codice di prima, non dal sistema)**
+- [x] Riserva fatta entrare prima con "Reveal reserves" della card del deploy → a fine round 2 nessun doppione nel tracker e nessuna card. **(sì: nessuna card riserve e nessun doppione al round dopo)**
+- [x] Tooltip di "Stack Dice" su un Fool (tratto di classe) → dice che lo Stacked Die rende 6 il gamble (p.149). **(explainTag('stack-dice') dà il testo nuovo con p.149)**
 
 ## G1-G4 — Tour e glossario aggiornati (20 ottobre 2026, versione 1.15.268)
 
@@ -25,16 +31,16 @@ Setup: solo file JSON e JS (F5 basta). Un PG con abilità che hanno area, mark, 
 Harvester, un Wright per Infuse), un foe con summon importato di recente, un combat con almeno un attacco e un danno
 in chat. Per ogni tour: ogni passo deve indicare il suo punto o comparire al centro, mai interrompere il tour.
 
-- [ ] Settings → Tours: compare "ICON 1.5 — On the Map", tra Combat e House Rules.
-- [ ] First Steps: passo "Chat Cards" cita Inflict e interrupt; passo "House rules" (da GM) dice "two book rules … and one optional house rule"; elenco compendi con Trophies e Foe Templates; alla fine suggerisce On the Map.
-- [ ] Combat: tre passi nuovi "The attack card", "The damage dialog" (al centro), "The damage card"; a fine tour suggerisce On the Map.
-- [ ] Scheda: passo "Tabs" dice "Relics & Trophies"; passi nuovi "Gear kits" (tab Narrative), "Power dice", "The ability panel", "Damage Utility" (tab Combat), "Trophies" (tab Relics & Trophies) puntano al loro riquadro.
-- [ ] Scheda, "The ability panel": con il pannello di un'abilità aperto prima di partire punta al pannello; con tutti chiusi punta al riquadro delle abilità.
-- [ ] GM: passi nuovi "Interrupts and their uses" e "Summons & Objects" sulla scheda del foe (senza summon → punta alla tab); i testi di roster e deploy parlano di riserve, "reuse world actors" e "+ party".
-- [ ] On the Map: con un PG che ha chip di oggetti / spazi / summon, i passi "Objects", "Terrain spaces", "Areas that stay", "Summons" puntano al chip (pannello aperto) o al riquadro delle abilità; i passi senza bersaglio stanno al centro.
+- [x] Settings → Tours: compare "ICON 1.5 — On the Map", tra Combat e House Rules. **(20 ottobre: registrato tra combat e house-rules)**
+- [x] First Steps: passo "Chat Cards" cita Inflict e interrupt; passo "House rules" (da GM) dice "two book rules … and one optional house rule"; elenco compendi con Trophies e Foe Templates; alla fine suggerisce On the Map. **(tutti i passi trovano il punto; Chat Cards visto a schermo)**
+- [x] Combat: tre passi nuovi "The attack card", "The damage dialog" (al centro), "The damage card"; a fine tour suggerisce On the Map. **(attack e damage su #chat, damage-dialog al centro)**
+- [x] Scheda: passo "Tabs" dice "Relics & Trophies"; passi nuovi "Gear kits" (tab Narrative), "Power dice", "The ability panel", "Damage Utility" (tab Combat), "Trophies" (tab Relics & Trophies) puntano al loro riquadro. **(gear, power-dice, damage-utility, trophies puntano al loro riquadro)**
+- [x] Scheda, "The ability panel": con il pannello di un'abilità aperto prima di partire punta al pannello; con tutti chiusi punta al riquadro delle abilità. **(pannello di Elden Rune aperto → punta al pannello, testo leggibile sopra; tutti chiusi → riquadro delle abilità)**
+- [x] GM: passi nuovi "Interrupts and their uses" e "Summons & Objects" sulla scheda del foe (senza summon → punta alla tab); i testi di roster e deploy parlano di riserve, "reuse world actors" e "+ party". **(Churn Baron aperto → .icon-interrupt e .icon-npc-summons; Arc Spectre senza → tab)**
+- [x] On the Map: con un PG che ha chip di oggetti / spazi / summon, i passi "Objects", "Terrain spaces", "Areas that stay", "Summons" puntano al chip (pannello aperto) o al riquadro delle abilità; i passi senza bersaglio stanno al centro. **(parziale: il PG di prova ha solo il chip spazi di Elden Rune → "Terrain spaces" punta al chip, gli altri al riquadro delle abilità. Durante la prova il tour sceglieva il primo chip anche se in un pannello chiuso: ora prende il primo visibile, 1.15.270)**
 - [ ] On the Map da giocatore senza personaggio: il tour parte e i passi della scheda compaiono al centro.
-- [ ] Quick Guide → Glossary: cercare Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether, Object: ognuna ha la sua voce con la pagina.
-- [ ] Le parole del glossario nuove non cambiano i tooltip nelle schede (es. "recover", "object" nel testo delle abilità come prima).
+- [x] Quick Guide → Glossary: cercare Gambit, Interact, Recover, Rescue, Finesse, Impassable, Stack Dice, Aether, Object: ognuna ha la sua voce con la pagina. **(tutte e 9 presenti con la pagina; ricerca "stack" vista a schermo)**
+- [x] Le parole del glossario nuove non cambiano i tooltip nelle schede (es. "recover", "object" nel testo delle abilità come prima). **(findRuleKeywords su un testo con recover/object/rescue/interact/gambit: solo "summon" come prima)**
 
 ## Seguito di P32 — Pierce segue la casella "Combo version" (19 ottobre 2026, versione 1.15.267)
 

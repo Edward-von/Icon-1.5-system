@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — I tour puntano al primo elemento visibile (versione 1.15.270)
+
+### Emerso nel playtest dei tour
+
+- **Passi sui chip del pannello abilità**: con il pannello di un'abilità aperto, il passo poteva ripiegare sul
+  riquadro delle abilità → il tour prendeva il primo elemento che corrispondeva, anche se stava nel pannello chiuso
+  di un'altra abilità → ora prende il primo elemento visibile (`tours.mjs`, `_getTargetElement`).
+
 ## 20 ottobre 2026 — Le riserve entrano da sole; tooltip di Stack Dice come il libro (versione 1.15.269)
 
 ### Emersi facendo G2 e G4, scelta di Edoardo
