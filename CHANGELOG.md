@@ -1,5 +1,11 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Prove rimaste e Boil di Bio (versione 1.15.279)
+
+- **Boil (Bio, Talent II, p.218)**: "take 2 piercing damage" e il piercing ignora armatura e vigor (p.183), ma il
+  bottone lasciava che il vigor assorbisse il danno → mancava l'opzione che salta il vigor → ora il danno di Boil
+  ignora anche il vigor, come il terreno pericoloso. Trovato nel giro di prove del 20 ottobre (PLAYTEST.md).
+
 ## 20 ottobre 2026 — Ogni summon ha i suoi HP, anche quelli fatti a mano (versione 1.15.278, schema 40)
 
 - **Summon creati a mano o trascinati dal compendio**: i summon posati dal chip della scheda erano già una pedina

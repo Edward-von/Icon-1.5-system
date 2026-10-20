@@ -748,7 +748,7 @@ async function workArea(actor, item, sp) {
     }) ?? false;
     if (!ok) return;
     const { applyDamageToActor } = await import("../combat/damage.mjs");
-    for (const t of hit) await applyDamageToActor(t.actor, amount, { chatConfirm: true });
+    for (const t of hit) await applyDamageToActor(t.actor, amount, { chatConfirm: true, ignoreVigor: true });   // piercing: no armor, no vigor (p.183)
     return;
   }
 

@@ -27,8 +27,16 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 - [x] **L3 — Ogni summon posato ha i suoi HP** (M): tutti i summon del compendio scollegati, sezione Summons della
       scheda del PG rifatta sui token in mappa. (Già fatto nella 1.15.262 per i summon del chip: P23. Restavano i
       summon creati a mano o importati: FATTO, versione 1.15.278, migrazione 40.)
-- [ ] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le
-      prove dei giri vecchi lasciate a metà).
+- [x] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le
+      prove dei giri vecchi lasciate a metà). (FATTO il 20 ottobre sera: 25 prove, esiti in PLAYTEST.md. Trovato e
+      corretto Boil di Bio, 1.15.279.)
+- [ ] **Emerso facendo L4 — range delle caselle** (S, da decidere con Edoardo): il chip di una casella con "in range"
+      (Implode "Choose a space in range", range 6) la mette anche a 8 spazi; il controllo "Anyway / Cancel" c'è solo
+      per "On a character". Il 17 ottobre era stato scelto di non controllare (lo dice la didascalia del chip).
+- [ ] **Emerso facendo L4 — prove ancora aperte dei giri vecchi** (S): Pandaemonium con DULCE PURGATORIO, il
+      Megamushroom che esplode come una pianta e resta, i talenti di God Hand sulla card, MAGNASANCTI di Holy, i mirini
+      dei target del giocatore visti dal GM. PLAYTEST.md ha in tutto circa 460 caselle aperte, quasi tutte di sezioni
+      vecchie già superate.
 
 ## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.268)
 
