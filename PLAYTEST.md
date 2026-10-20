@@ -21,14 +21,14 @@ Setup: solo file JSON e JS (F5 basta).
 - [x] Vagabond: COMBO, Finishing Blow (regole di classe), Stacked Dice del Fool puntano al loro posto; "Combo abilities" e "The gamble window" ripiegano se non ci sono abilità combo / pannello chiuso. **(sì, TEST Fool)**
 - [x] Mendicant: "Blessing tokens" e "Bless" puntano al riquadro e al bottone Bless. **(sì, con i tratti di classe aggiunti per un momento ad Ann; visto a schermo)**
 - [x] Wright: Aether, Infuse, Limit Break e tratto di classe puntano al loro posto. **(sì, Actor)**
-- [ ] Un giocatore senza PG di quella classe avvia il tour: compare l'avviso e i passi della scheda stanno al centro.
-- [ ] Leggere i testi dei quattro tour a schermo: nessun emoji, frasi chiare.
+- [x] Un giocatore senza PG di quella classe avvia il tour: compare l'avviso e i passi della scheda stanno al centro. **(20 ottobre, client PT Player, che oggi non possiede nessun PG: i quattro tour mostrano l'avviso "You have no <classe> character…" e tutti i passi stanno al centro)**
+- [x] Leggere i testi dei quattro tour a schermo: nessun emoji, frasi chiare. **(97 passi visibili al giocatore controllati via JS: nessun emoji; Infuse e The gamble window letti a schermo)**
 
 ## Niente emoji nei tour (20 ottobre 2026, versione 1.15.272)
 
 Setup: solo file JSON (F5 basta).
 
-- [ ] Sfogliare tutti i tour (Settings → Tours): nessun emoji né simbolo-icona nel testo; le frasi si leggono bene senza.
+- [x] Sfogliare tutti i tour (Settings → Tours): nessun emoji né simbolo-icona nel testo; le frasi si leggono bene senza. **(stesso controllo: nessun emoji nei passi visibili al giocatore; i tour GM controllati sui file)**
 
 ## Guida, secondo giro — H1 e H3 (20 ottobre 2026, versione 1.15.271)
 
@@ -40,7 +40,7 @@ Setup: solo file JSON e JS (F5 basta). Un Seer con mazzo, mano e pila (nel mondo
 - [x] Settings → Tours: compare "ICON 1.5 — The Seer's Great Wheel". **(registrato dopo On the Map)**
 - [x] Tour del Seer con la mano vuota: "The hand" apre "Ann hand" e indica la lista, "Foretell" indica "Foretell from the deck". **(sì)**
 - [x] Tour del Seer con 2 carte in mano: "The hand" indica l'effetto della carta, "Foretell" il ☸ della prima carta. **(sì, visto a schermo; carte poi rimesse nel mazzo)**
-- [ ] Tour del Seer da giocatore proprietario di un Seer: apre la sua mano, non quella di un altro.
+- [ ] Tour del Seer da giocatore proprietario di un Seer: apre la sua mano, non quella di un altro. **(NON provato: PT Player non possiede Seer. Da giocatore senza mano: "The hand" e "Foretell" al centro, nessun errore)**
 - [ ] Tour del Seer in un mondo senza nessuna mano: i passi "The hand" e "Foretell" compaiono al centro.
 
 ## Emerso nel playtest — il tour punta al primo elemento visibile (20 ottobre 2026, versione 1.15.270)
