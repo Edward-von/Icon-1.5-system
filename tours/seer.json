@@ -1,0 +1,60 @@
+{
+  "title": "ICON 1.5 — The Seer's Great Wheel",
+  "description": "The Seer's card deck in Foundry: setting it up, drawing, Foretell and Bend Fate.",
+  "canBeResumed": true,
+  "display": true,
+  "steps": [
+    {
+      "id": "intro",
+      "selector": "",
+      "title": "The Great Wheel",
+      "content": "A Seer plays with a deck of cards (Wheel of Fate, p.199). In Foundry the deck, the Seer's hand and the discard pile are Foundry <strong>Cards</strong>; the system reads them, reminds you when to draw and turns each card into its Great Wheel effect.\nThis tour shows the setup, the draw reminders, the hand and Foretell."
+    },
+    {
+      "id": "setup",
+      "selector": "#cards",
+      "sidebarTab": "cards",
+      "tooltipDirection": "LEFT",
+      "title": "Setting it up (GM)",
+      "content": "The system doesn't create the cards: the GM does it once, in the <strong>Cards</strong> tab.\n<strong>A deck</strong>: for example Create Cards → Poker Deck, using one 13-card suit per Seer (Ace to King).\n<strong>A hand</strong> named after the character (e.g. <em>Ann's hand</em>) and <strong>a discard pile</strong> named after the character, or a single pile called <em>Discard</em>.\nGive the Seer's player <strong>Owner</strong> permission on all three."
+    },
+    {
+      "id": "reminders",
+      "selector": "#chat",
+      "sidebarTab": "chat",
+      "tooltipDirection": "LEFT",
+      "title": "When to draw",
+      "content": "During combat the chat reminds the Seer's player at the right moments:\n<strong>Start of combat</strong>: <em>Draw up to 5</em>.\n<strong>Start of the Seer's turn</strong> (Skein): <em>Draw 1</em>.\n<strong>End of the turn</strong>: <em>Didn't attack: draw 1</em>, and <em>Discard down to 7</em> when the hand is too big.\nOnly the Seer's owner can click them, and each button works once."
+    },
+    {
+      "id": "hand",
+      "selector": ".icon-great-wheel",
+      "fallback": "ol[data-cards]",
+      "openHand": true,
+      "tooltipDirection": "LEFT",
+      "title": "The hand",
+      "content": "The Seer's hand opens like any Foundry card stack. Under each card the system writes its <strong>Great Wheel effect</strong> (rank, arcana and what it does, p.199), so you don't have to look it up.\nIf the tour can't find a hand it shows this step here: create one first (previous step)."
+    },
+    {
+      "id": "foretell",
+      "selector": ".icon-great-wheel__play",
+      "fallback": ".icon-great-wheel__deck",
+      "openHand": true,
+      "tooltipDirection": "LEFT",
+      "title": "Foretell",
+      "content": "Target the allies first (hover a token and press T), then click <strong>☸ Foretell</strong> on a card: it goes to the discard pile and its effect is posted in chat, with <strong>Gain</strong> buttons for the targeted allies (Unstoppable, Blessed, Pierce, Defiance…). The Ewer adds a button to place its small blast on the ally.\nWith an empty hand, <strong>Foretell from the deck</strong> plays a random card from the deck."
+    },
+    {
+      "id": "bend-fate",
+      "selector": "",
+      "title": "Bend Fate",
+      "content": "When a Seer with cards in hand gambles, the gamble card has a <strong>Bend Fate</strong> button: pick cards to discard and roll +1d6 for each one. A new gamble card shows every die and the result."
+    },
+    {
+      "id": "outro",
+      "selector": "",
+      "title": "That's the Wheel",
+      "content": "Everything the cards do that has no button is yours to apply by hand, as on paper. You can run this tour again from <strong>Settings → Tours</strong>."
+    }
+  ]
+}

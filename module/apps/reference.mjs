@@ -408,6 +408,8 @@ export const FAQ_SECTIONS = [
   { title: "Character sheet", items: [
     ["The sheet says I have 5 AP at level 2, but the book says 6!",
      "The sheet is right. The +1 AP at 7 XP starts at level 1 (p.15, Character Advancement), so there is none between level 0 and level 1. The Total AP column of the advancement table (p.115) counts it anyway, which puts every total one AP too high."],
+    ["Which abilities are automated? What do I still do by hand?",
+     "Many are, at least in part. What the system can do shows up as a <strong>button or chip in the ability's panel</strong> (Combat tab: click the ability) — areas, marks, stances, Infuse, summons, objects, terrain spaces — and as a <strong>chat card at the right moment</strong>: at the start or end of a turn, at the end of a round, when someone enters an area. Statuses, saves and damage come with their own buttons on the cards. Anything in the text that has no button or card is yours to do by hand, as on paper."],
   ] },
 ];
 

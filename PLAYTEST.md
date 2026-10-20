@@ -11,6 +11,19 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Guida, secondo giro — H1 e H3 (20 ottobre 2026, versione 1.15.271)
+
+Setup: solo file JSON e JS (F5 basta). Un Seer con mazzo, mano e pila (nel mondo di test: Ann, "Ann hand",
+"Ann discard", "Seer deck").
+
+- [x] Quick Guide → FAQ, cercare "automated": c'è la voce "Which abilities are automated?". **(20 ottobre: voce nella sezione Character sheet)**
+- [x] Tour Character Sheet: passo "Automated abilities" al centro, dopo "The ability panel"; il passo HP cita il tour del Seer. **(sì)**
+- [x] Settings → Tours: compare "ICON 1.5 — The Seer's Great Wheel". **(registrato dopo On the Map)**
+- [x] Tour del Seer con la mano vuota: "The hand" apre "Ann hand" e indica la lista, "Foretell" indica "Foretell from the deck". **(sì)**
+- [x] Tour del Seer con 2 carte in mano: "The hand" indica l'effetto della carta, "Foretell" il ☸ della prima carta. **(sì, visto a schermo; carte poi rimesse nel mazzo)**
+- [ ] Tour del Seer da giocatore proprietario di un Seer: apre la sua mano, non quella di un altro.
+- [ ] Tour del Seer in un mondo senza nessuna mano: i passi "The hand" e "Foretell" compaiono al centro.
+
 ## Emerso nel playtest — il tour punta al primo elemento visibile (20 ottobre 2026, versione 1.15.270)
 
 Setup: solo codice (F5 basta). PG con due abilità che hanno chip, la seconda col pannello aperto.

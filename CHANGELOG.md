@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — "Molte abilità sono automatizzate" e tour del Seer (versione 1.15.271)
+
+### Blocco "Guida, secondo giro", H1 e H3
+
+- **H1 — Abilità automatizzate**: da nessuna parte si diceva che molte abilità fanno parte del lavoro da sole →
+  la guida spiegava gli strumenti ma non il principio → passo nuovo "Automated abilities" nel tour Character Sheet
+  (dopo "The ability panel") e voce nuova nelle FAQ della Quick Guide: quello che il sistema sa fare compare come
+  bottone o chip nel pannello dell'abilità, o come card in chat al momento giusto; il resto si fa a mano.
+- **H3 — Tour del Seer**: il mazzo del Great Wheel vive fuori dalla scheda (Cards di Foundry) e nessun tour lo
+  spiegava → tour nuovo "The Seer's Great Wheel" (`tours/seer.json`, 7 passi): preparazione da parte del GM (mazzo,
+  mano e pila col nome del personaggio, permessi Owner), card che ricordano quando pescare, mano con l'effetto di
+  ogni carta, ☸ Foretell e Foretell from the deck, Bend Fate. I tour hanno una chiave nuova `openHand` che apre la
+  mano del Seer (`tours.mjs`). Il passo HP del tour Character Sheet rimanda a questo tour.
+
 ## 20 ottobre 2026 — I tour puntano al primo elemento visibile (versione 1.15.270)
 
 ### Emerso nel playtest dei tour

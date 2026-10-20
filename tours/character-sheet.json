@@ -76,7 +76,7 @@
       "sheetTab": "combat",
       "tooltipDirection": "DOWN",
       "title": "HP, Vigor and class resources",
-      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens or Aether.\nA Seer's Great Wheel deck lives in Foundry's Cards: chat cards remind you when to draw, and each card in your hand has a <strong>☸ Foretell</strong> button."
+      "content": "Hit points with wounds, Vigor (the temporary shield over HP) and the resources of your class, such as Vigilance, Blessing Tokens or Aether.\nA Seer's Great Wheel deck lives in Foundry's Cards: chat cards remind you when to draw, and each card in your hand has a <strong>☸ Foretell</strong> button. The <strong>Seer's Great Wheel</strong> tour explains it."
     },
     {
       "id": "power-dice",
@@ -119,6 +119,12 @@
       "tooltipDirection": "UP",
       "title": "The ability panel",
       "content": "The panel has a button for each thing the ability does: <strong>Attack Roll</strong> or <strong>Auto-Hit</strong>, <strong>Damage Roll</strong>, <strong>Show in Chat</strong>, and where they apply:\n<strong>the area</strong> (Small Blast, Line 5…) to place it on the map and target everyone inside · <strong>⌖ Mark target</strong> (one token targeted, range checked) and <strong>Track target</strong> (a reminder, not a mark) · <strong>☯ Take stance</strong> · <strong>🪄 Infuse X</strong> to arm an infused version with Aether before rolling · <strong>🎲 Gamble</strong> · chips to drag a <strong>summon</strong> or an <strong>object</strong> onto the map, or to place <strong>spaces</strong> (pit, dangerous, motes…).\nWith a combo token on and two combo versions, the first roll asks which one. Interrupts show their uses here (⚡ left/max), back at the start of your turn."
+    },
+    {
+      "id": "automation",
+      "selector": "",
+      "title": "Automated abilities",
+      "content": "Many abilities do part of the work for you. What the system can do appears as a <strong>button or chip</strong> in the ability's panel, or as a <strong>chat card</strong> at the right moment (start or end of a turn, end of a round, someone entering an area), with buttons for the statuses, saves and damage.\nAnything in the text with no button or card is yours to do by hand, as on paper. The Quick Guide FAQ has the same note."
     },
     {
       "id": "limit-break",

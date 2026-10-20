@@ -19,11 +19,16 @@
  *               then looked up inside it. No such actor → centred step
  *   openApp     open a system window ("encounter-designer"); `selector` is
  *               then looked up inside it
+ *   openHand    open the card hand of a Seer (the tour's character if it is
+ *               one), else the first hand the user owns; `selector` is then
+ *               looked up inside it. No hand → centred step
  *   fallback    selector to highlight when `selector` matches nothing (an
  *               empty combat, a character without a Limit Break, ...)
  * A step whose target is missing and has no usable fallback is shown centred
  * instead of aborting the tour.
  */
+
+import { isSeer, seerHand } from "../combat/wheel-of-fate.mjs";
 
 const _log = (...a) => console.debug("[ICON | Tours]", ...a);
 
@@ -35,6 +40,7 @@ const TOURS = [
   { id: "character-sheet", file: "character-sheet.json", requiresCharacter: true },
   { id: "combat",          file: "combat.json" },
   { id: "on-the-map",      file: "on-the-map.json" },
+  { id: "seer",            file: "seer.json" },
   { id: "house-rules",     file: "house-rules.json" },
   { id: "gm-tools",        file: "gm-tools.json" },
 ];
@@ -117,6 +123,11 @@ export class IconTour extends foundry.nue.Tour {
       // The designer loads the compendium roster before its first paint.
       for (let i = 0; app && !app.rendered && i < 40; i++) await new Promise(r => setTimeout(r, 100));
       this.#app = app ?? null;
+    }
+    else if (step.openHand) {
+      const seer = [tourCharacter(), ...game.actors].find(a => a && isSeer(a) && a.isOwner && seerHand(a));
+      const hand = seer ? seerHand(seer) : game.cards.find(c => c.type === "hand" && c.isOwner);
+      if (hand) this.#app = await this.#openOnTab(hand.sheet, null, null);
     }
     else if (step.sheetTab) {
       const sheet = tourCharacter()?.sheet;
@@ -202,7 +213,7 @@ export async function registerIconTours() {
   }
 }
 
-/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "on-the-map", "house-rules", "gm-tools"). */
+/** Start one of the system's tours by id ("welcome", "character-sheet", "combat", "on-the-map", "seer", "house-rules", "gm-tools"). */
 export function startIconTour(id = "welcome") {
   const tour = game.tours.get(`${NAMESPACE}.${id}`);
   if (!tour) return ui.notifications.warn(`Tour "${id}" is not available.`);
