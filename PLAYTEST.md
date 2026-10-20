@@ -11,6 +11,14 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Summon separati anche se fatti a mano (20 ottobre 2026, versione 1.15.278, schema 40)
+
+Setup: F5 nel mondo (parte la migrazione 40).
+
+- [x] Dopo la migrazione nessun attore summon del mondo ha il prototipo collegato. **(20 ottobre: "Bomb" era collegato, dopo nessuno su 15)**
+- [x] Create Actor → Summon: il prototipo nasce scollegato. **(sì, attore di prova poi cancellato)**
+- [ ] Trascinare due volte sulla mappa un summon fatto a mano con un summoner: due pedine con HP separati, tutte e due nella sezione Summons della scheda del summoner.
+
 ## Tratti dell'Harvester (20 ottobre 2026, versione 1.15.277)
 
 Setup: solo codice (F5 basta). TEST Harvester con i tratti Mark of Tsumi e Gardener of Kin (aggiunti per la prova), un foe.

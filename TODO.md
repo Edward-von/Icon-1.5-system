@@ -24,8 +24,9 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 - [x] **L2 — Tratti di job dell'Harvester** (M): thrall, piante come terreno pericoloso, Mark of Tsumi, due mark.
       (FATTO, versione 1.15.277. Il +1 di Gardener of Kin vale solo per il colpo dei thrall: gli altri danni dei summon
       non sanno chi li ha evocati.)
-- [ ] **L3 — Ogni summon posato ha i suoi HP** (M): tutti i summon del compendio scollegati, sezione Summons della
-      scheda del PG rifatta sui token in mappa.
+- [x] **L3 — Ogni summon posato ha i suoi HP** (M): tutti i summon del compendio scollegati, sezione Summons della
+      scheda del PG rifatta sui token in mappa. (Già fatto nella 1.15.262 per i summon del chip: P23. Restavano i
+      summon creati a mano o importati: FATTO, versione 1.15.278, migrazione 40.)
 - [ ] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le
       prove dei giri vecchi lasciate a metà).
 

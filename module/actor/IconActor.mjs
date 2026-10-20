@@ -28,7 +28,9 @@ export class IconActor extends Actor {
         && foundry.utils.getProperty(data, "prototypeToken.disposition") === undefined) {
       this.updateSource({ "prototypeToken.disposition": CONST.TOKEN_DISPOSITIONS.FRIENDLY });
     }
-    if (options?.iconUnlinked) {
+    // "Summons are characters" (p.95-96): every summon on the map has HP of its own, so a summon made by hand or
+    // dragged in from a compendium gets an unlinked prototype too, like the ones the sheet's chips place.
+    if (options?.iconUnlinked || this.type === "summon") {
       if (this.prototypeToken?.actorLink !== false) this.updateSource({ "prototypeToken.actorLink": false });
       return;
     }

@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 20 ottobre 2026 — Ogni summon ha i suoi HP, anche quelli fatti a mano (versione 1.15.278, schema 40)
+
+- **Summon creati a mano o trascinati dal compendio**: i summon posati dal chip della scheda erano già una pedina
+  separata ciascuno (1.15.262), ma un summon creato con Create Actor o importato dal compendio nella lista attori
+  nasceva "collegato", e tutte le sue copie sulla mappa condividevano HP e status → `IconActor._preCreate` collegava
+  ogni attore nuovo tranne quelli segnati → ora ogni attore di tipo summon nasce scollegato, e la migrazione 40
+  scollega quelli già nel mondo (le pedine già posate restano come sono: vanno tolte e rimesse).
+
 ## 20 ottobre 2026 — Tratti dell'Harvester: thrall, piante, Mark of Tsumi, Gardener of Kin (versione 1.15.277)
 
 - **Thrall (p.184)**: a inizio turno i thrall scattano, colpiscono un foe adiacente per 1 piercing e diventano piante,

@@ -28,7 +28,7 @@ const SETTING   = "schemaVersion";
 const MACRO_SETTING = "macroSyncVersion";
 
 /** Bump this when a schema change needs a data migration. */
-export const CURRENT_SCHEMA_VERSION = 39;
+export const CURRENT_SCHEMA_VERSION = 40;
 
 /**
  * Registry of migration steps, keyed by the version they migrate TO.
@@ -1432,6 +1432,21 @@ const MIGRATIONS = {
       }
     }
     if (fixed.size) console.log(`ICON 1.5 | Migration 39: ${fixed.size} player character(s) and ${t} placed token(s) turned from hostile to friendly`);
+  },
+
+  /* 40 — Every summon has HP of its own (p.95-96, Edoardo's choice of 20
+   * October 2026: "ogni summon separata"). IconActor._preCreate linked the
+   * prototype of a summon made by hand or dragged in from a compendium, so
+   * every copy dragged from it shared one actor. Unlink those prototypes;
+   * tokens already placed are left as they are (delete and place them again). */
+  40: async () => {
+    let n = 0;
+    for (const actor of game.actors) {
+      if (actor.type !== "summon" || actor.prototypeToken?.actorLink !== true) continue;
+      await actor.update({ "prototypeToken.actorLink": false });
+      n++;
+    }
+    if (n) console.log(`ICON 1.5 | Migration 40: ${n} summon actor(s) given an unlinked prototype token`);
   },
 };
 
