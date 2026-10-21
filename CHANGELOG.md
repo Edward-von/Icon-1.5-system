@@ -1,5 +1,11 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 21 ottobre 2026 — Release 1.16.1
+
+Prima release pubblicata dopo la 1.15.2. Contiene tutto quello che è descritto qui sotto, dalla voce "Le combo non
+ereditano più la versione base" (15 ottobre) fino a "Teleport di God Hand con Talent II": i numeri 1.15.3–1.15.280
+delle voci sono quelli delle build interne, mai pubblicate. Su GitHub si passa direttamente dalla 1.15.2 alla 1.16.1.
+
 ## 21 ottobre 2026 — Teleport di God Hand con Talent II (versione 1.15.280)
 
 - **Promemoria del teleport (God Hand, Talent II, p.192)**: con "Increase teleports to 2" la card dell'attacco
