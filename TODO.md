@@ -40,9 +40,9 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
       vecchie già superate. (21 ottobre 2026: provati Boil, Pandaemonium con DULCE PURGATORIO, Megamushroom, talenti di
       God Hand e MAGNASANCTI, tutti a posto. Resta solo il mirino dei target del giocatore visto dal GM: il client del
       giocatore non è riuscito a caricare.)
-- [ ] **Emerso il 21 ottobre — promemoria del teleport di God Hand** (S): con Talent II ("Increase teleports to 2",
+- [x] **Emerso il 21 ottobre — promemoria del teleport di God Hand** (S): con Talent II ("Increase teleports to 2",
       p.192) la card mostra bene la riga del talento, ma i promemoria in fondo ("Effects — apply by hand") dicono
-      ancora "Teleport 1".
+      ancora "Teleport 1". (FATTO, versione 1.15.280)
 
 ## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.268)
 

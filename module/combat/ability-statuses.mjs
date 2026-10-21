@@ -682,6 +682,16 @@ export function abilityStatusEntries(system, { comboMode = false, sourceName = "
   // p.218), so its statuses don't happen this use (P17; the caller strips the
   // unarmed Infuse blocks of the description the same way).
   if (s.masteryUnlocked && !masteryOff && !alternateCombo(s)) add(s.mastery, "Mastery");
+  // A talent that opens with "Increase teleports to 2" (God Hand Talent II, p.192) changes the move reminder of
+  // every block ("Teleport 1" → "Teleport 2"). Only the plain opening sentence: "Comeback: Increase teleport to 4"
+  // or "if …, increase this dash to 2" stay as written.
+  const raise = [talent === 1 ? s.talent1 : talent === 2 ? s.talent2 : "", s.masteryUnlocked && !masteryOff ? s.mastery : ""]
+    .map(t => /^\s*(?:[A-Z][A-Z' ]+:\s*)?increase (?:all |the |its )?(teleport|dash|fly|leap|jump|rush)(?:e?s)? to (\d+)\b/i.exec(String(t ?? "").replace(/<[^>]+>/g, " ")))
+    .find(Boolean);
+  if (raise) {
+    const re = new RegExp(`^(${raise[1]}\\s+(?:up\\s+to\\s+)?)\\d+`, "i");
+    for (const e of out) if (e.kind === "note" && re.test(e.label)) e.label = e.label.replace(re, `$1${raise[2]}`);
+  }
   return _dedupe(out);
 }
 

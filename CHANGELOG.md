@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 21 ottobre 2026 — Teleport di God Hand con Talent II (versione 1.15.280)
+
+- **Promemoria del teleport (God Hand, Talent II, p.192)**: con "Increase teleports to 2" la card dell'attacco
+  diceva ancora "Teleport 1" nei promemoria in fondo → i promemoria leggevano il testo base senza guardare il talento
+  → ora un talento (o una mastery) che comincia con "Increase teleports / dash / fly … to N" cambia il numero del
+  promemoria. Trovato nelle prove del 21 ottobre.
+
 ## 20 ottobre 2026 — Prove rimaste e Boil di Bio (versione 1.15.279)
 
 - **Boil (Bio, Talent II, p.218)**: "take 2 piercing damage" e il piercing ignora armatura e vigor (p.183), ma il

@@ -11,6 +11,13 @@ uno di un'altra classe), un Foe Heavy importato dal compendio (es. Warrior), l'A
 
 ---
 
+## Teleport di God Hand con Talent II (21 ottobre 2026, versione 1.15.280)
+
+Setup: solo codice (F5 basta).
+
+- [x] TEST Sealer, God Hand a Talent II, attacco su un foe: nei promemoria in fondo alla card "Teleport 2" (prima "Teleport 1"). **(21 ottobre: sì, "Effect Teleport 2")**
+- [ ] Stessa abilità a Talent I o senza talento: il promemoria resta "Teleport 1". **(21 ottobre: controllato solo sulla funzione che legge il testo, "Teleport 1"; card non guardata)**
+
 ## Boil di Bio (20 ottobre 2026, versione 1.15.279)
 
 Setup: solo codice (F5 basta).
