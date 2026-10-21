@@ -1662,7 +1662,7 @@ Prerequisito: scena con griglia quadrata, token del PG e 2-3 token nemici; il gi
 - [x] **Senza token / griglia**: PG senza token sulla scena → 📐 avvisa e non fa nulla; ⚔ tira normalmente.
       Scena gridless o esagonale → avviso "square grid". ✓ 9 set (giro esplorativo: scena senza griglia → avviso); il caso "PG senza token" non provato
 - [ ] **Secondo client**: il giocatore piazza un'area → il GM la vede identica (stesse caselle, colore,
-      testo) e vede i mirini dei target del giocatore. **(20 ottobre, sera: Large Blast (target) di Matsuri piazzata da PT Player: il GM vede le stesse 13 caselle e lo stesso colore. I mirini dei target non guardati)** **(21 ottobre: non provato: il client di PT Player su 127.0.0.1 si ferma al caricamento, tre tentativi)**
+      testo) e vede i mirini dei target del giocatore. **(20 ottobre, sera: Large Blast (target) di Matsuri piazzata da PT Player: il GM vede le stesse 13 caselle e lo stesso colore. I mirini dei target non guardati)** **(21 ottobre: non provato: il client di PT Player su 127.0.0.1 non carica il sistema, sei tentativi in due giri anche con la scheda in primo piano; i file si scaricano tutti. Dal codice: i bersagli dell'area sono messi con setTarget di Foundry, che li manda agli altri client da solo. Da provare con un secondo browser o un altro PC)**
 - [x] **Template core intatti**: gli strumenti Cerchio/Cono/Rettangolo/Raggio di Foundry funzionano come prima. **(20 ottobre, sera: cerchio, cono, rettangolo e raggio creati dal GM: disegnati con le forme di Foundry)**
 
 ## Sessione 7 (9 settembre 2026) — pulizia residui: tag override, varianti di area, Aura, larghezza Line
