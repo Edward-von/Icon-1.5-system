@@ -30,13 +30,19 @@ Legenda difficoltà: S = poche righe · M = mezza sessione · L = una sessione �
 - [x] **L4 — Prove rimaste aperte in PLAYTEST.md** (tour del Seer senza mani, On the Map da giocatore senza PG, le
       prove dei giri vecchi lasciate a metà). (FATTO il 20 ottobre sera: 25 prove, esiti in PLAYTEST.md. Trovato e
       corretto Boil di Bio, 1.15.279.)
-- [ ] **Emerso facendo L4 — range delle caselle** (S, da decidere con Edoardo): il chip di una casella con "in range"
+- [x] **Emerso facendo L4 — range delle caselle** (S, da decidere con Edoardo): il chip di una casella con "in range"
       (Implode "Choose a space in range", range 6) la mette anche a 8 spazi; il controllo "Anyway / Cancel" c'è solo
       per "On a character". Il 17 ottobre era stato scelto di non controllare (lo dice la didascalia del chip).
+      (DECISO il 21 ottobre 2026: Edoardo lo lascia com'è, nessun controllo del range sulle caselle.)
 - [ ] **Emerso facendo L4 — prove ancora aperte dei giri vecchi** (S): Pandaemonium con DULCE PURGATORIO, il
       Megamushroom che esplode come una pianta e resta, i talenti di God Hand sulla card, MAGNASANCTI di Holy, i mirini
       dei target del giocatore visti dal GM. PLAYTEST.md ha in tutto circa 460 caselle aperte, quasi tutte di sezioni
-      vecchie già superate.
+      vecchie già superate. (21 ottobre 2026: provati Boil, Pandaemonium con DULCE PURGATORIO, Megamushroom, talenti di
+      God Hand e MAGNASANCTI, tutti a posto. Resta solo il mirino dei target del giocatore visto dal GM: il client del
+      giocatore non è riuscito a caricare.)
+- [ ] **Emerso il 21 ottobre — promemoria del teleport di God Hand** (S): con Talent II ("Increase teleports to 2",
+      p.192) la card mostra bene la riga del talento, ma i promemoria in fondo ("Effects — apply by hand") dicono
+      ancora "Teleport 1".
 
 ## Quick Guide e tour da aggiornare (controllo del 19 ottobre 2026) — FATTA il 20 ottobre 2026 (versione 1.15.268)
 
