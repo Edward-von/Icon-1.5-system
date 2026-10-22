@@ -19,7 +19,7 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 Setup: solo CSS (F5 basta). Aprire l'Encounter planner.
 
 - [x] La ricerca del Roster è larga quanto il pannello e il segnaposto si legge per intero; sotto, le tre select e "Higher chapters" sulla stessa riga. **(22 ottobre: sì, provato dal vivo ricaricando il CSS: 469x28, select 114 px ciascuna)**
-- [ ] Scrivere nella ricerca e cambiare le select: il filtro funziona come prima.
+- [x] Scrivere nella ricerca e cambiare le select: il filtro funziona come prima. **(22 ottobre: sì: "abj" → solo Abjurer, Heavy → 98, di nuovo tutti 390)**
 
 ## Le blessing finiscono con il combattimento (22 ottobre 2026, versione 1.16.11)
 
@@ -105,27 +105,27 @@ Setup: solo codice (F5 basta). TEST Sealer con God Hand con la mastery sbloccata
 
 Setup: solo codice (F5 basta). TEST Spellblade con Sturmreiten a Talent II (senza mastery), un paio di foe vicino al token.
 
-- [ ] Bottone dell'area di Sturmreiten, clic per la prima Line 3: la Line resta colorata sulla mappa mentre compare la domanda "Sturmreiten — another Line 3?".
-- [ ] PG non bloodied: la domanda dice che il Comeback non vale ora e il default è "No extension"; scegliendo comunque "From the first space" si va avanti.
-- [ ] "From the first space": lo spazio dove si è cliccato (vicino al token) diventa più acceso, l'avviso dice "next to the first space", sono evidenziate le Line 3 possibili che partono accanto a lui (nessuna nella direzione della prima, nessuna sopra di lei).
-- [ ] Mouse su una casella qualunque di una Line evidenziata: si vede quella Line; clic → un solo template "Line 3 + Line 3", bersagli = chi sta in una delle due.
-- [ ] Clic su una casella non evidenziata: avviso "The extra Line 3 starts next to the first space … click one of the highlighted lines", il piazzamento continua.
-- [ ] Ripetere con "From the last space": lo spazio acceso è l'altra estremità e le Line evidenziate partono da lì.
-- [ ] Rotella e +/- durante la seconda Line non fanno nulla; tasto destro o Esc annullano: resta solo la prima Line 3, colorazione sparita.
-- [ ] Con MJÖLLNIR (Arc 5): il primo arco resta visibile mentre si dipinge il secondo dalle caselle evidenziate accanto all'estremità scelta.
+- [x] Bottone dell'area di Sturmreiten, clic per la prima Line 3: la Line resta colorata sulla mappa mentre compare la domanda "Sturmreiten — another Line 3?". **(22 ottobre: sì)**
+- [x] PG non bloodied: la domanda dice che il Comeback non vale ora e il default è "No extension"; scegliendo comunque "From the first space" si va avanti. **(22 ottobre: sì)**
+- [x] "From the first space": lo spazio dove si è cliccato (vicino al token) diventa più acceso, l'avviso dice "next to the first space", sono evidenziate le Line 3 possibili che partono accanto a lui (nessuna nella direzione della prima, nessuna sopra di lei). **(22 ottobre: sì: su, giù e sinistra (questa passa sul PG, come deciso))**
+- [x] Mouse su una casella qualunque di una Line evidenziata: si vede quella Line; clic → un solo template "Line 3 + Line 3", bersagli = chi sta in una delle due. **(22 ottobre: sì: clic sull'ultima casella della Line in basso, un template "Line 3 + Line 3")**
+- [x] Clic su una casella non evidenziata: avviso "The extra Line 3 starts next to the first space … click one of the highlighted lines", il piazzamento continua. **(22 ottobre: sì)**
+- [x] Ripetere con "From the last space": lo spazio acceso è l'altra estremità e le Line evidenziate partono da lì. **(22 ottobre: sì: solo su e giù, la Line che prosegue dritta è esclusa)**
+- [x] Rotella e +/- durante la seconda Line non fanno nulla; tasto destro o Esc annullano: resta solo la prima Line 3, colorazione sparita. **(22 ottobre: sì: la Line non cambia (la rotella fa solo lo zoom della mappa); tasto destro: resta la prima Line 3)**
+- [ ] Con MJÖLLNIR (Arc 5): il primo arco resta visibile mentre si dipinge il secondo dalle caselle evidenziate accanto all'estremità scelta. **(22 ottobre: non provato)**
 
 ## Combo token speso da Show in Chat (22 ottobre 2026, versione 1.16.2, R66)
 
 Setup: solo codice (F5 basta). TEST Chanter con Chastise, TEST Sealer con God Hand, un foe nel combat.
 
-- [ ] Chastise, COMBO ON: il pannello mostra CHARISM e nessun bottone "Attack Roll". Show in Chat → card "Chastise combo" (Charism), token OFF, il pannello torna subito alla base (Auto-Hit, niente barrature, niente badge "Combo — token spent").
-- [ ] Subito dopo, Show in Chat di nuovo su Chastise: card della base (non la combo) e il token torna ON (p.103).
+- [x] Chastise, COMBO ON: il pannello mostra CHARISM e nessun bottone "Attack Roll". Show in Chat → card "Chastise combo" (Charism), token OFF, il pannello torna subito alla base (Auto-Hit, niente barrature, niente badge "Combo — token spent"). **(22 ottobre: sì. A margine: la card di Charism ha ancora il tag "Attack" nell'intestazione (solo il pannello lo toglie))**
+- [x] Subito dopo, Show in Chat di nuovo su Chastise: card della base (non la combo) e il token torna ON (p.103). **(22 ottobre: sì)**
 - [x] God Hand, COMBO ON, Show in Chat → card Devil Hand, token OFF; il pannello resta sulla combo con il badge "Combo — token spent". **(22 ottobre: sì)**
 - [x] Poi Attack Roll → card dell'attacco di Devil Hand; Damage Roll → il dialogo ha "Combo version" spuntato; dopo il danno il pannello torna alla base e il badge sparisce. **(22 ottobre: sì)**
 - [x] God Hand, COMBO ON, Show in Chat, poi di nuovo Show in Chat senza tirare nulla: la seconda card è la base, il badge sparisce, il token torna ON. **(22 ottobre: sì)**
-- [ ] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base.
-- [ ] Felicity → FLEET (nessun attacco, nessun danno): dopo Show in Chat con il token il pannello torna subito alla base.
-- [ ] Con il token ON e senza Show in Chat, Attack Roll e Damage Roll usano ancora la combo come prima (Holy → HADES auto-hit).
+- [ ] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base. **(22 ottobre: non provato: serve far avanzare i turni)**
+- [x] Felicity → FLEET (nessun attacco, nessun danno): dopo Show in Chat con il token il pannello torna subito alla base. **(22 ottobre: sì)**
+- [x] Con il token ON e senza Show in Chat, Attack Roll e Damage Roll usano ancora la combo come prima (Holy → HADES auto-hit). **(22 ottobre: sì: Holy con Auto-Hit e Medium Blast, nel danno "Combo version" spuntato e True Strike)**
 
 ## Teleport di God Hand con Talent II (21 ottobre 2026, versione 1.15.280)
 

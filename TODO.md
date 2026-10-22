@@ -140,6 +140,9 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       Talent II (p.192) "Increase teleports to 2, and all versions of this ability gain Slay": la base mostra "Teleport 2"
       (1.15.280), ma le card di Devil Hand e di Fists of Heaven and Hell (Show in Chat e Attack Roll) hanno ancora
       "Effect Teleport 1" nei promemoria.
+- [ ] **Emerso dal playtest del 22 ottobre — la card di CHARISM ha ancora il tag Attack** (S, bug)
+      Con la 1.16.2 CHARISM (combo di Chastise) non è più un attacco sul pannello (niente Attack Roll), ma la card di Show
+      in Chat "Charism — Chastise combo" mostra ancora "Attack Range 5 Combo Autohit" nell'intestazione.
 
 ## Rimasti dopo K1-K5 (chiesto da Edoardo il 20 ottobre 2026: "sistemali", "provali", "ogni summon separata")
 
