@@ -14,84 +14,91 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Encounter planner: ricerca del roster su una riga sua (22 ottobre 2026, versione 1.16.12)
+
+Setup: solo CSS (F5 basta). Aprire l'Encounter planner.
+
+- [x] La ricerca del Roster è larga quanto il pannello e il segnaposto si legge per intero; sotto, le tre select e "Higher chapters" sulla stessa riga. **(22 ottobre: sì, provato dal vivo ricaricando il CSS: 469x28, select 114 px ciascuna)**
+- [ ] Scrivere nella ricerca e cambiare le select: il filtro funziona come prima.
+
 ## Le blessing finiscono con il combattimento (22 ottobre 2026, versione 1.16.11)
 
 Setup: solo codice (F5 basta). Un combattimento con un PG Mendicant, un altro PG e un foe.
 
-- [ ] Dare Blessed con 2 cariche all'altro PG e 1 al foe (HUD del token), alzare a 2 il contatore Blessing Tokens del Mendicant (che diventa Blessed anche lui).
-- [ ] End Encounter, "Yes": nessuno dei tre ha più l'icona Blessed sul token e sulla scheda, il contatore del Mendicant è a 0.
-- [ ] End Encounter, "No": tutto resta com'era.
+- [x] Dare Blessed con 2 cariche all'altro PG e 1 al foe (HUD del token), alzare a 2 il contatore Blessing Tokens del Mendicant (che diventa Blessed anche lui). **(22 ottobre: sì: Chanter (contatore 2 + Blessed 2), Knave 2, Mechanist 1, in un combattimento di prova)**
+- [x] End Encounter, "Yes": nessuno dei tre ha più l'icona Blessed sul token e sulla scheda, il contatore del Mendicant è a 0. **(22 ottobre: sì: nessuno dei tre Blessed, contatore del Chanter 0)**
+- [x] End Encounter, "No": tutto resta com'era. **(22 ottobre: sì)**
 
 ## Eye of the Storm: buco al centro (22 ottobre 2026, versione 1.16.10, R75)
 
 Setup: solo codice (F5 basta). Un PG Stormbender con Eye of the Storm, un token sulla scena, due foe vicini.
 
-- [ ] Bottone dell'area di Eye of the Storm: l'anteprima della Medium Blast segue il mouse con la casella centrale vuota.
-- [ ] Piazzata con un foe al centro e uno in un'altra casella dell'area: la sagoma sulla mappa ha il buco al centro, e l'avviso nomina solo il foe nell'area, non quello al centro.
-- [ ] Attack Roll senza area già sulla mappa: stessa sagoma col buco, il foe al centro non è tra i bersagli.
-- [ ] Con AEONCLOUD armata (Infuse 3), se offre la Large Blast: anche quella ha il buco al centro.
-- [ ] Shift + frecce sopra la sagoma (se si muove): il buco si sposta con lei.
-- [ ] Un'altra abilità con una blast normale (es. una Small/Medium Blast di un altro PG): la casella centrale c'è ancora.
+- [x] Bottone dell'area di Eye of the Storm: l'anteprima della Medium Blast segue il mouse con la casella centrale vuota. **(22 ottobre: sì, buco al centro visibile)**
+- [x] Piazzata con un foe al centro e uno in un'altra casella dell'area: la sagoma sulla mappa ha il buco al centro, e l'avviso nomina solo il foe nell'area, non quello al centro. **(22 ottobre: sì: Janissary al centro escluso, "Mechanist in the area")**
+- [x] Attack Roll senza area già sulla mappa: stessa sagoma col buco, il foe al centro non è tra i bersagli. **(22 ottobre: sì, bersaglio solo il Mechanist)**
+- [x] Con AEONCLOUD armata (Infuse 3), se offre la Large Blast: anche quella ha il buco al centro. **(22 ottobre: sì: "Infuse 3: Large Blast" offerta, 12 caselle senza il centro)**
+- [x] Shift + frecce sopra la sagoma (se si muove): il buco si sposta con lei. **(22 ottobre: non si muove: Eye of the Storm non resta sulla mappa, Shift + frecce vale solo per le aree che restano; giusto così)**
+- [x] Un'altra abilità con una blast normale (es. una Small/Medium Blast di un altro PG): la casella centrale c'è ancora. **(22 ottobre: sì: Heave-Ho, 9 caselle con il centro)**
 
 ## Encounter planner: tutti i controlli alla stessa misura (22 ottobre 2026, versione 1.16.9, R76)
 
 Setup: solo CSS (F5 basta). Aprire l'Encounter planner (bottone "Encounter" nella sidebar Actors), con almeno un PG e due foe scelti, uno con riserva.
 
-- [ ] Party: "On scene", "All" e i −/+ di Adjust sono alti come la select "Chapter cap"; la casella "One-fight rule" è più grande di prima e si spunta cliccandola.
-- [ ] Roster: ricerca, le tre select, "Random fill", "Clear" e "↻" stanno sulla stessa altezza; la casella "Higher chapters" è più grande.
-- [ ] Righe del roster: l'occhio e il "+" sono quadrati comodi da cliccare, l'occhio non è più minuscolo.
-- [ ] Righe dei foe scelti: −, quantità, +, Elite, Titan, select della riserva e ✕ hanno tutti la stessa altezza; la quantità a due cifre (es. 12) si legge per intero.
-- [ ] Footer: nome, select delle bozze, Load / Save / ✕ / New e le caselle "+ party" / "reuse world actors" (questa solo con foe dal World) allineati; Chat / Actors / Deploy invariati.
-- [ ] Stringere la finestra al minimo: le righe dei foe scelti vanno a capo sotto il nome senza sovrapposizioni e senza barra orizzontale.
+- [x] Party: "On scene", "All" e i −/+ di Adjust sono alti come la select "Chapter cap"; la casella "One-fight rule" è più grande di prima e si spunta cliccandola. **(22 ottobre: sì, tutto a 28 px, casella 18 px)**
+- [x] Roster: ricerca, le tre select, "Random fill", "Clear" e "↻" stanno sulla stessa altezza; la casella "Higher chapters" è più grande. **(22 ottobre: NO all'inizio: la ricerca era larga 35 px (schiacciata dalle select più grandi). Corretto nella 1.16.12: la ricerca ha una riga sua; ora 469x28)**
+- [x] Righe del roster: l'occhio e il "+" sono quadrati comodi da cliccare, l'occhio non è più minuscolo. **(22 ottobre: sì: occhio 36x28, + 30x28)**
+- [x] Righe dei foe scelti: −, quantità, +, Elite, Titan, select della riserva e ✕ hanno tutti la stessa altezza; la quantità a due cifre (es. 12) si legge per intero. **(22 ottobre: sì: tutto a 28 px, 12 si legge; a 940 px le righe vanno già su tre righe (Elite sotto, select a tutta larghezza))**
+- [x] Footer: nome, select delle bozze, Load / Save / ✕ / New e le caselle "+ party" / "reuse world actors" (questa solo con foe dal World) allineati; Chat / Actors / Deploy invariati. **(22 ottobre: sì: tutto a 28 px)**
+- [ ] Stringere la finestra al minimo: le righe dei foe scelti vanno a capo sotto il nome senza sovrapposizioni e senza barra orizzontale. **(22 ottobre: NO: senza larghezza minima, a 640 px il roster è tagliato a destra e i chip dei PG si sovrappongono, a 300 px si rompe tutto. Non è di R76 (layout a due colonne fisso): in TODO)**
 
 ## FAQ narrativa: knack, burden e strain, exhausted (22 ottobre 2026, versione 1.16.8, R73)
 
 Setup: solo codice (F5 basta). Aprire la Quick Guide, scheda FAQ.
 
-- [ ] Nella sezione Narrative, dopo "How does Second Wind work?", ci sono "What is a knack?", "When do you heal burdens? What about strain?" e "When am I exhausted?", con le pagine (p.35, pp.31/42, p.34).
-- [ ] La sezione Combat non è cambiata.
-- [ ] Scrivere "knack" nella ricerca della scheda FAQ: resta visibile la voce del knack.
-- [ ] Il grassetto di "Heal Burdens" nella risposta sui burden si vede come grassetto, non come tag scritti.
+- [x] Nella sezione Narrative, dopo "How does Second Wind work?", ci sono "What is a knack?", "When do you heal burdens? What about strain?" e "When am I exhausted?", con le pagine (p.35, pp.31/42, p.34). **(22 ottobre: sì)**
+- [x] La sezione Combat non è cambiata. **(22 ottobre: sì (il commit tocca solo le tre voci))**
+- [x] Scrivere "knack" nella ricerca della scheda FAQ: resta visibile la voce del knack. **(22 ottobre: sì)**
+- [x] Il grassetto di "Heal Burdens" nella risposta sui burden si vede come grassetto, non come tag scritti. **(22 ottobre: sì)**
 
 ## Symphony: i campi delle blessing dicono il limite (22 ottobre 2026, versione 1.16.7, R72)
 
 Setup: solo codice (F5 basta). Un PG con Symphony, tre personaggi con Blessed (es. 3, 2 e 1 cariche), una scena attiva.
 
-- [ ] Chip Mote di Symphony: la finestra dice "Up to 4 blessings in all"; accanto a ogni nome "has N; remove 0–M", con M = il minimo tra N e 4.
-- [ ] Le frecce del campo si fermano a M e non scendono sotto 0.
-- [ ] Scrivere a mano 9 nel campo di chi ha 3: avviso giallo "<nome> has only 3 — removing 3 (<nome> 3)"; si piazzano al massimo 3 mote.
-- [ ] Scrivere 3, 2 e 1 (6 in tutto): avviso giallo "only 4 blessings in all — removing 4 (…)" con chi perde cosa; si piazzano al massimo 4 mote e le cariche scendono di conseguenza.
-- [ ] Scrivere 2 e 2: nessun avviso, 4 mote, le cariche tolte come scritto.
-- [ ] Charge spuntato: le 2 mote in più restano, non contano nel limite di 4.
+- [x] Chip Mote di Symphony: la finestra dice "Up to 4 blessings in all"; accanto a ogni nome "has N; remove 0–M", con M = il minimo tra N e 4. **(22 ottobre: sì)**
+- [x] Le frecce del campo si fermano a M e non scendono sotto 0. **(22 ottobre: sì (min 0, max M sui campi))**
+- [x] Scrivere a mano 9 nel campo di chi ha 3: avviso giallo "<nome> has only 3 — removing 3 (<nome> 3)"; si piazzano al massimo 3 mote. **(22 ottobre: sì: avviso giusto, "Click up to 3 spaces")**
+- [x] Scrivere 3, 2 e 1 (6 in tutto): avviso giallo "only 4 blessings in all — removing 4 (…)" con chi perde cosa; si piazzano al massimo 4 mote e le cariche scendono di conseguenza. **(22 ottobre: sì: "only 4 blessings in all — removing 4 (TEST Harvester 1, TEST Knave 3)", "up to 4 spaces"; si tolgono tante blessing quante mote piazzate)**
+- [x] Scrivere 2 e 2: nessun avviso, 4 mote, le cariche tolte come scritto. **(22 ottobre: sì)**
+- [x] Charge spuntato: le 2 mote in più restano, non contano nel limite di 4. **(22 ottobre: sì: 4 blessing + 2 = 6 mote)**
 
 ## Blessing Tokens del Mendicant allineati allo status Blessed (22 ottobre 2026, versione 1.16.6, R71)
 
 Setup: solo codice (F5 basta). Un PG Mendicant (con il tratto Bless), un PG con Symphony, un combat attivo.
 
-- [ ] Scheda del Mendicant, tab Combat: + su Blessing Tokens due volte. Il contatore va a 2 e il PG ha lo status Blessed con 2 cariche (tab Conditions e HUD del token).
-- [ ] − una volta: contatore 1, Blessed a 1. Clear: contatore 0 e lo status Blessed sparisce.
-- [ ] Rialzare a 2, poi usare Symphony: il Mendicant compare tra chi ha blessing; togliendone 1 il contatore del tratto scende a 1 e Blessed a 1.
-- [ ] Con Blessed dal tratto, fare un tiro salvezza e spendere la blessing (+1 boon): il contatore del tratto scende di 1 insieme allo status.
-- [ ] Togliere Blessed dalla HUD del token (o tasto destro sulla carica nel tab Conditions): il contatore del tratto scende allo stesso modo.
-- [ ] Un alleato usa Bless sul Mendicant: Blessed sale di 1, il contatore del tratto resta com'era. Togliendo poi 3 blessing con Symphony da 3 cariche (2 del tratto + 1 dell'alleato), il contatore va a 0 senza andare sotto zero.
-- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione).
+- [x] Scheda del Mendicant, tab Combat: + su Blessing Tokens due volte. Il contatore va a 2 e il PG ha lo status Blessed con 2 cariche (tab Conditions e HUD del token). **(22 ottobre: sì (TEST Chanter))**
+- [x] − una volta: contatore 1, Blessed a 1. Clear: contatore 0 e lo status Blessed sparisce. **(22 ottobre: sì)**
+- [x] Rialzare a 2, poi usare Symphony: il Mendicant compare tra chi ha blessing; togliendone 1 il contatore del tratto scende a 1 e Blessed a 1. **(22 ottobre: sì)**
+- [x] Con Blessed dal tratto, fare un tiro salvezza e spendere la blessing (+1 boon): il contatore del tratto scende di 1 insieme allo status. **(22 ottobre: sì: contatore e Blessed a 0)**
+- [x] Togliere Blessed dalla HUD del token (o tasto destro sulla carica nel tab Conditions): il contatore del tratto scende allo stesso modo. **(22 ottobre: sì (tasto destro nel tab Conditions))**
+- [x] Un alleato usa Bless sul Mendicant: Blessed sale di 1, il contatore del tratto resta com'era. Togliendo poi 3 blessing con Symphony da 3 cariche (2 del tratto + 1 dell'alleato), il contatore va a 0 senza andare sotto zero. **(22 ottobre: sì: Blessed 3 e contatore 2, poi Symphony 3: contatore 0)**
+- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione). **(22 ottobre: non provato: serve un secondo client)**
 
 ## Frecce delle aree in fila (22 ottobre 2026, versione 1.16.5, R70)
 
 Setup: solo codice (F5 basta). Un PG con Tsunami e la versione infusa STORMLASH disponibile, un combat attivo.
 
-- [ ] Piazzare Tsunami: nella card "Tsunami placed" i quattro bottoni freccia di STORMLASH stanno sulla stessa riga, larghi e leggibili, non uno sotto l'altro.
-- [ ] Cliccare una freccia: le tsunami si muovono di 2 nella direzione come prima.
-- [ ] Se compare la scelta del bordo ("No edge chosen yet"), i quattro bottoni Top/Bottom/Left/Right edge sono in fila (a capo solo se la chat è stretta).
-- [ ] Un'area con la mossa libera di 1 spazio a inizio turno: le frecce della card di inizio turno sono in fila.
+- [x] Piazzare Tsunami: nella card "Tsunami placed" i quattro bottoni freccia di STORMLASH stanno sulla stessa riga, larghi e leggibili, non uno sotto l'altro. **(22 ottobre: sì)**
+- [x] Cliccare una freccia: le tsunami si muovono di 2 nella direzione come prima. **(22 ottobre: sì)**
+- [x] Se compare la scelta del bordo ("No edge chosen yet"), i quattro bottoni Top/Bottom/Left/Right edge sono in fila (a capo solo se la chat è stretta). **(22 ottobre: sì: tre per riga, il quarto va a capo con la chat alla larghezza standard)**
+- [ ] Un'area con la mossa libera di 1 spazio a inizio turno: le frecce della card di inizio turno sono in fila. **(22 ottobre: non provato: serve far avanzare i turni)**
 
 ## Combo della mastery senza riga Mastery in chat (22 ottobre 2026, versione 1.16.4, R68)
 
 Setup: solo codice (F5 basta). TEST Sealer con God Hand con la mastery sbloccata, un foe nel combat.
 
-- [ ] God Hand, COMBO ON, Show in Chat, scegliere "Fists of Heaven and Hell": la card mostra la combo e non c'è la riga "★ Mastery" sotto.
-- [ ] God Hand, COMBO ON, Show in Chat, scegliere "Devil Hand": la card ha ancora la riga "★ Mastery" (FISTS OF HEAVEN AND HELL) in fondo.
-- [ ] God Hand senza token, Show in Chat: card della base con la riga "★ Mastery" come prima.
+- [x] God Hand, COMBO ON, Show in Chat, scegliere "Fists of Heaven and Hell": la card mostra la combo e non c'è la riga "★ Mastery" sotto. **(22 ottobre: sì. A margine: nei promemoria "Teleport 1" anche con Talent II (in TODO))**
+- [x] God Hand, COMBO ON, Show in Chat, scegliere "Devil Hand": la card ha ancora la riga "★ Mastery" (FISTS OF HEAVEN AND HELL) in fondo. **(22 ottobre: sì)**
+- [x] God Hand senza token, Show in Chat: card della base con la riga "★ Mastery" come prima. **(22 ottobre: sì)**
 - [ ] Stessa prova con un'altra mastery a combo alternata (Felicity → FANTASIA, Rot → REGROWTH o Justice → GRAN JUDICATA): con la combo della mastery niente riga Mastery.
 
 ## Seconda Line 3 di Sturmreiten (22 ottobre 2026, versione 1.16.3, R67)
@@ -113,9 +120,9 @@ Setup: solo codice (F5 basta). TEST Chanter con Chastise, TEST Sealer con God Ha
 
 - [ ] Chastise, COMBO ON: il pannello mostra CHARISM e nessun bottone "Attack Roll". Show in Chat → card "Chastise combo" (Charism), token OFF, il pannello torna subito alla base (Auto-Hit, niente barrature, niente badge "Combo — token spent").
 - [ ] Subito dopo, Show in Chat di nuovo su Chastise: card della base (non la combo) e il token torna ON (p.103).
-- [ ] God Hand, COMBO ON, Show in Chat → card Devil Hand, token OFF; il pannello resta sulla combo con il badge "Combo — token spent".
-- [ ] Poi Attack Roll → card dell'attacco di Devil Hand; Damage Roll → il dialogo ha "Combo version" spuntato; dopo il danno il pannello torna alla base e il badge sparisce.
-- [ ] God Hand, COMBO ON, Show in Chat, poi di nuovo Show in Chat senza tirare nulla: la seconda card è la base, il badge sparisce, il token torna ON.
+- [x] God Hand, COMBO ON, Show in Chat → card Devil Hand, token OFF; il pannello resta sulla combo con il badge "Combo — token spent". **(22 ottobre: sì)**
+- [x] Poi Attack Roll → card dell'attacco di Devil Hand; Damage Roll → il dialogo ha "Combo version" spuntato; dopo il danno il pannello torna alla base e il badge sparisce. **(22 ottobre: sì)**
+- [x] God Hand, COMBO ON, Show in Chat, poi di nuovo Show in Chat senza tirare nulla: la seconda card è la base, il badge sparisce, il token torna ON. **(22 ottobre: sì)**
 - [ ] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base.
 - [ ] Felicity → FLEET (nessun attacco, nessun danno): dopo Show in Chat con il token il pannello torna subito alla base.
 - [ ] Con il token ON e senza Show in Chat, Attack Roll e Damage Roll usano ancora la combo come prima (Holy → HADES auto-hit).

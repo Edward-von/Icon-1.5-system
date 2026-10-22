@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Encounter planner: la ricerca del roster torna leggibile (versione 1.16.12)
+
+- **Ricerca del Roster (dal playtest di R76)**: il campo "Search name, faction, trait…" era largo 35 px e non si leggeva
+  → con i controlli a 28 px della 1.16.9 le tre select e la casella "Higher chapters" riempivano la riga e la ricerca,
+  che prende lo spazio rimasto, si era ristretta → ora la ricerca ha una riga sua, larga quanto il pannello, e sotto
+  stanno le tre select (di uguale larghezza) e la casella. Solo CSS.
+
 ## 22 ottobre 2026 — Le blessing finiscono con il combattimento (versione 1.16.11)
 
 - **Status Blessed a fine combattimento**: dopo "End Encounter" PG, foe e summon restavano Blessed con le loro

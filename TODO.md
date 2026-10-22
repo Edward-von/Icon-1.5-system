@@ -130,6 +130,16 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       `#cleanupAfterCombat`) azzera il contatore Blessing Tokens del tratto ma non tocca lo status Blessed né le sue
       cariche (`statusCharges.blessed`), su PG, foe e summon. Andrebbe messo a 0 con `setStatusCharges` per tutti i
       combattenti.
+- [ ] **Emerso dal playtest del 22 ottobre — Encounter planner stretto** (M, bug di layout)
+      Il planner non ha una larghezza minima e il layout a due colonne non si adatta: a 640 px il roster è tagliato a
+      destra (il "+" delle righe e "Random fill" spariscono) e i chip dei PG si sovrappongono; a 300 px si rompe tutto.
+      Non dipende da R76. Anche a 940 px (la misura standard) le righe dei foe scelti vanno su tre righe e il riquadro
+      Encounter ne mostra una sola alla volta. Da decidere: larghezza minima della finestra o colonna unica sotto una
+      certa misura.
+- [ ] **Emerso dal playtest del 22 ottobre — God Hand Talent II: "Teleport 1" sulle card delle combo** (S, bug)
+      Talent II (p.192) "Increase teleports to 2, and all versions of this ability gain Slay": la base mostra "Teleport 2"
+      (1.15.280), ma le card di Devil Hand e di Fists of Heaven and Hell (Show in Chat e Attack Roll) hanno ancora
+      "Effect Teleport 1" nei promemoria.
 
 ## Rimasti dopo K1-K5 (chiesto da Edoardo il 20 ottobre 2026: "sistemali", "provali", "ogni summon separata")
 
