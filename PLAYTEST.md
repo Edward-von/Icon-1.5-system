@@ -14,6 +14,13 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Encounter planner: larghezza minima (22 ottobre 2026, versione 1.16.15)
+
+Setup: solo CSS (F5 basta). Encounter planner con due foe scelti.
+
+- [x] Stringere la finestra al massimo: si ferma a 740 px; niente tagliato a destra, chip dei PG senza sovrapposizioni. **(22 ottobre: sì, nessun controllo fuori dalla finestra; le select del roster si accorciano ("All fact…"))**
+- [x] A 940 px ogni foe scelto sta su due righe (nome e quantità; Elite, select, punti e ✕ sotto). **(22 ottobre: sì, select 99 px invece di 355)**
+
 ## CHARISM senza tag Attack (22 ottobre 2026, versione 1.16.14)
 
 Setup: solo codice (F5 basta). TEST Chanter con Chastise.
@@ -65,7 +72,7 @@ Setup: solo CSS (F5 basta). Aprire l'Encounter planner (bottone "Encounter" nell
 - [x] Righe del roster: l'occhio e il "+" sono quadrati comodi da cliccare, l'occhio non è più minuscolo. **(22 ottobre: sì: occhio 36x28, + 30x28)**
 - [x] Righe dei foe scelti: −, quantità, +, Elite, Titan, select della riserva e ✕ hanno tutti la stessa altezza; la quantità a due cifre (es. 12) si legge per intero. **(22 ottobre: sì: tutto a 28 px, 12 si legge; a 940 px le righe vanno già su tre righe (Elite sotto, select a tutta larghezza))**
 - [x] Footer: nome, select delle bozze, Load / Save / ✕ / New e le caselle "+ party" / "reuse world actors" (questa solo con foe dal World) allineati; Chat / Actors / Deploy invariati. **(22 ottobre: sì: tutto a 28 px)**
-- [ ] Stringere la finestra al minimo: le righe dei foe scelti vanno a capo sotto il nome senza sovrapposizioni e senza barra orizzontale. **(22 ottobre: NO: senza larghezza minima, a 640 px il roster è tagliato a destra e i chip dei PG si sovrappongono, a 300 px si rompe tutto. Non è di R76 (layout a due colonne fisso): in TODO)**
+- [x] Stringere la finestra al minimo: le righe dei foe scelti vanno a capo sotto il nome senza sovrapposizioni e senza barra orizzontale. **(22 ottobre: NO, poi corretto nella 1.16.15 e riprovato: sì. Prima: senza larghezza minima, a 640 px il roster è tagliato a destra e i chip dei PG si sovrappongono, a 300 px si rompe tutto. Non è di R76 (layout a due colonne fisso): in TODO)**
 
 ## FAQ narrativa: knack, burden e strain, exhausted (22 ottobre 2026, versione 1.16.8, R73)
 

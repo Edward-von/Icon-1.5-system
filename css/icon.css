@@ -5776,6 +5776,9 @@ ol.chat-log .chat-message,
    the left, the roster on the right, sticky footer with the outputs.
    Reuses the .icon-wizard chrome (hero band, step cards, counters).
    ================================================================== */
+/* The two columns need 360 + 340px (+ gaps and margins): narrower, the roster was cut off on the right and the
+   party chips overlapped. Foundry's resize honours min-width / min-height (ApplicationV2#_updatePosition). */
+.icon.encounter-designer { min-width: 740px; min-height: 560px; }
 .icon.encounter-designer .window-content {
   padding: 0; height: 100%; overflow: hidden;
   display: grid; gap: 0 10px;
@@ -5901,7 +5904,7 @@ ol.chat-log .chat-message,
 .icon-encounter__elite:hover:not(:disabled) { color: var(--ic-text-bright); border-color: var(--ic-gold); }
 .icon-encounter__elite--on { background: var(--ic-gold); color: #1a1408; border-color: var(--ic-gold); }
 .icon-encounter__elite:disabled { cursor: not-allowed; opacity: .55; }
-.icon-encounter__pick select { height: 24px; font-size: .78em; }
+.icon-encounter__pick select { height: 24px; font-size: .78em; flex: 0 0 auto; width: auto; }   /* not a full line of its own */
 
 /* Footer */
 .icon-encounter__footer { flex-wrap: wrap; gap: 8px 10px; }

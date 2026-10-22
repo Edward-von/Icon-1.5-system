@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Encounter planner: larghezza minima e righe dei foe più compatte (versione 1.16.15)
+
+- **Planner stretto (dal playtest)**: stringendo la finestra il roster veniva tagliato a destra (spariva il "+" delle
+  righe) e i chip dei PG si sovrapponevano → le due colonne hanno una larghezza minima (360 e 340 px), la finestra
+  no → ora la finestra non si stringe sotto 740 x 560 px. In più la select On map / Reserve di ogni foe scelto non
+  occupa più una riga intera: a 940 px ogni foe sta su due righe invece di tre. Solo CSS.
+
 ## 22 ottobre 2026 — CHARISM non mostra più "Attack" sulla card (versione 1.16.14)
 
 - **Tag della card di CHARISM (dal playtest)**: la card "Charism — Chastise combo" mostrava ancora "Attack" e "Autohit"

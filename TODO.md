@@ -130,7 +130,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       `#cleanupAfterCombat`) azzera il contatore Blessing Tokens del tratto ma non tocca lo status Blessed né le sue
       cariche (`statusCharges.blessed`), su PG, foe e summon. Andrebbe messo a 0 con `setStatusCharges` per tutti i
       combattenti.
-- [ ] **Emerso dal playtest del 22 ottobre — Encounter planner stretto** (M, bug di layout)
+- [x] **Emerso dal playtest del 22 ottobre — Encounter planner stretto** (M, bug di layout) (FATTO il 22 ottobre 2026, versione 1.16.15: larghezza minima 740 px, select dei foe scelti non più a tutta riga)
       Il planner non ha una larghezza minima e il layout a due colonne non si adatta: a 640 px il roster è tagliato a
       destra (il "+" delle righe e "Random fill" spariscono) e i chip dei PG si sovrappongono; a 300 px si rompe tutto.
       Non dipende da R76. Anche a 940 px (la misura standard) le righe dei foe scelti vanno su tre righe e il riquadro
