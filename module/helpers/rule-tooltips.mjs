@@ -382,6 +382,12 @@ export function resolveAbilityTags(system, { comboMode = false } = {}) {
   if (comboMode && comboReplacesBase(s.comboEffect, s) && !/\bMark:/.test(_plainText(s.comboEffect))) {
     current = current.filter(t => String(t).toLowerCase() !== "mark");
   }
+  // Nor is it an attack unless it writes one: Chastise's CHARISM (p.179) is only an Effect, but kept Chastise's
+  // "Attack" and "Autohit" chips (the same test parseComboAbilityDamage uses for isAttack, R66).
+  if (comboMode && !String(s.comboTags ?? "").trim() && comboReplacesBase(s.comboEffect, s)
+      && !/\battack\b|\bauto[-\s]?hit\b|\bon\s+hit\b/i.test(_plainText(s.comboEffect).replace(/^[^—]*—/, ""))) {
+    current = current.filter(t => !/^(?:attack|auto-?hit)$/i.test(String(t).trim()));
+  }
   // "Instead of the mark, gain Effect: …" (Succubus, p.164): no mark either.
   if (comboMode && !masteryGainsBothEffects(s) && parseComboText(s.comboEffect).drops.includes("mark")) {
     current = current.filter(t => String(t).toLowerCase() !== "mark");

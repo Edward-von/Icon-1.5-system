@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — CHARISM non mostra più "Attack" sulla card (versione 1.16.14)
+
+- **Tag della card di CHARISM (dal playtest)**: la card "Charism — Chastise combo" mostrava ancora "Attack" e "Autohit"
+  nell'intestazione, anche se dalla 1.16.2 il pannello non la tratta più come un attacco → una combo che sostituisce
+  tutta l'abilità ("CHARISM — Effect: …", p.179) e non ha tag suoi ereditava quelli della base → ora, se il suo testo
+  non scrive un attacco (Attack, Auto-hit, On hit), perde i tag Attack e Autohit, come già perdeva "mark" quando non
+  lo scrive. Le altre combo intere che sono attacchi (REAP, PURGATORIO, FORTUNA, CENTER THE TEMPLE) non cambiano.
+
 ## 22 ottobre 2026 — God Hand: Talent II vale anche per Fists of Heaven and Hell (versione 1.16.13)
 
 - **Promemoria del teleport sulla combo della mastery (dal playtest)**: con Talent II ("Increase teleports to 2",

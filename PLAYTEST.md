@@ -14,6 +14,14 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## CHARISM senza tag Attack (22 ottobre 2026, versione 1.16.14)
+
+Setup: solo codice (F5 basta). TEST Chanter con Chastise.
+
+- [x] COMBO ON, Show in Chat: la card "Charism" ha "Range 5 Combo", senza Attack né Autohit. **(22 ottobre: sì)**
+- [x] Show in Chat della base: "Attack Range 5 Combo Autohit" come prima. **(22 ottobre: sì)**
+- [x] Le altre combo che sostituiscono la base e sono attacchi tengono Attack. **(22 ottobre: sì, controllate tutte quelle del mondo e dei compendi: Astra, Open the Gates, Holy, Pandaemonium, God Hand; Sow/REAP perde solo "autohit", e già prima, perché REAP ha un tiro)**
+
 ## God Hand: Talent II sulla combo della mastery (22 ottobre 2026, versione 1.16.13)
 
 Setup: solo codice (F5 basta). TEST Sealer, God Hand a Talent II con la mastery sbloccata.
