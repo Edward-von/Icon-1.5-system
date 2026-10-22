@@ -122,7 +122,7 @@ Setup: solo codice (F5 basta). TEST Sealer con God Hand con la mastery sbloccata
 - [x] God Hand, COMBO ON, Show in Chat, scegliere "Fists of Heaven and Hell": la card mostra la combo e non c'è la riga "★ Mastery" sotto. **(22 ottobre: sì. A margine: nei promemoria "Teleport 1" anche con Talent II (in TODO))**
 - [x] God Hand, COMBO ON, Show in Chat, scegliere "Devil Hand": la card ha ancora la riga "★ Mastery" (FISTS OF HEAVEN AND HELL) in fondo. **(22 ottobre: sì)**
 - [x] God Hand senza token, Show in Chat: card della base con la riga "★ Mastery" come prima. **(22 ottobre: sì)**
-- [ ] Stessa prova con un'altra mastery a combo alternata (Felicity → FANTASIA, Rot → REGROWTH o Justice → GRAN JUDICATA): con la combo della mastery niente riga Mastery.
+- [x] Stessa prova con un'altra mastery a combo alternata (Felicity → FANTASIA, Rot → REGROWTH o Justice → GRAN JUDICATA): con la combo della mastery niente riga Mastery. **(22 ottobre: sì, Felicity → FANTASIA: card "Fantasia" senza riga Mastery)**
 
 ## Seconda Line 3 di Sturmreiten (22 ottobre 2026, versione 1.16.3, R67)
 
