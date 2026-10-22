@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Symphony: i campi delle blessing dicono il limite (versione 1.16.7)
+
+- **Campi delle blessing di Symphony (R72, Symphony p.178)**: nella finestra "whose blessings?" si poteva scrivere
+  qualsiasi numero, ma ne venivano tolte al massimo 4 (e non più di quante il personaggio ne aveva) con solo un
+  avviso discreto o nessun avviso → il limite "Remove up to four blessings from characters anywhere" è giusto ed è in
+  totale, ma i campi non lo dicevano: il massimo di ogni campo era solo quanto aveva il personaggio → ogni campo ora
+  va da 0 al minimo tra quanto ha il personaggio e 4, l'etichetta dice "has N; remove 0–M", il testo in cima dice
+  "Up to 4 blessings in all", e se si scrive di più il valore viene ridotto con un avviso che dice quante ne toglie
+  davvero e a chi.
+
 ## 22 ottobre 2026 — Le blessing del tratto del Mendicant sono anche lo status Blessed (versione 1.16.6)
 
 - **Blessing Tokens del Mendicant e Symphony (R71, Bless p.172, Symphony p.178)**: un Mendicant che si alzava le

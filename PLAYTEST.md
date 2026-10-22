@@ -14,6 +14,17 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Symphony: i campi delle blessing dicono il limite (22 ottobre 2026, versione 1.16.7, R72)
+
+Setup: solo codice (F5 basta). Un PG con Symphony, tre personaggi con Blessed (es. 3, 2 e 1 cariche), una scena attiva.
+
+- [ ] Chip Mote di Symphony: la finestra dice "Up to 4 blessings in all"; accanto a ogni nome "has N; remove 0–M", con M = il minimo tra N e 4.
+- [ ] Le frecce del campo si fermano a M e non scendono sotto 0.
+- [ ] Scrivere a mano 9 nel campo di chi ha 3: avviso giallo "<nome> has only 3 — removing 3 (<nome> 3)"; si piazzano al massimo 3 mote.
+- [ ] Scrivere 3, 2 e 1 (6 in tutto): avviso giallo "only 4 blessings in all — removing 4 (…)" con chi perde cosa; si piazzano al massimo 4 mote e le cariche scendono di conseguenza.
+- [ ] Scrivere 2 e 2: nessun avviso, 4 mote, le cariche tolte come scritto.
+- [ ] Charge spuntato: le 2 mote in più restano, non contano nel limite di 4.
+
 ## Blessing Tokens del Mendicant allineati allo status Blessed (22 ottobre 2026, versione 1.16.6, R71)
 
 Setup: solo codice (F5 basta). Un PG Mendicant (con il tratto Bless), un PG con Symphony, un combat attivo.

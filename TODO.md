@@ -87,7 +87,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
 
 ### Richieste
 
-- [ ] **R72. Symphony: il campo delle blessing da togliere arriva solo a 4** (S, richiesta)
+- [x] **R72. Symphony: il campo delle blessing da togliere arriva solo a 4** (S, richiesta) (FATTO il 22 ottobre 2026, versione 1.16.7: ogni campo va da 0 al minimo tra le blessing del personaggio e 4 e lo dice nell'etichetta, il testo dice "Up to 4 blessings in all" (il limite è in totale, p.178), e un numero oltre il limite viene ridotto con un avviso che dice cosa si toglie)
       "While the field for entering blessing removals allow for any number to be entered, system will only remove four
       blessings (max). Not really a bug, but there could probably be some cleaner UI there." Il libro dice "Remove up to
       four blessings" (Symphony), quindi il limite è corretto. Basta che il campo vada da 0 a 4 e lo dica.

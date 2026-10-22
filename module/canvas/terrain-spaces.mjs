@@ -303,7 +303,11 @@ async function askBlessingsToTake(scene, item, sp, actor) {
   const charge = chargeExtraSpaces(item);
   if (!list.length && !charge) { ui.notifications.warn(`${item.name}: no character has a blessing to remove, so no mote can be created.`); return null; }
   const max = sp.count || 4;
-  const rows = list.map((x, k) => `<div class="form-group"><label>${esc(x.actor.name)} <small>(${x.has})</small></label><input type="number" name="b${k}" value="0" min="0" max="${x.has}" step="1"></div>`).join("");
+  // R72: each field goes from 0 to what that character has, never past the limit in all.
+  const rows = list.map((x, k) => {
+    const top = Math.min(x.has, max);
+    return `<div class="form-group"><label>${esc(x.actor.name)} <small>(has ${x.has}; remove 0–${top})</small></label><input type="number" name="b${k}" value="0" min="0" max="${top}" step="1"></div>`;
+  }).join("");
   const chargeRow = charge
     ? `<div class="form-group"><label><input type="checkbox" name="charge"${onSlowTurn(actor) ? " checked" : ""}> Charge: +${charge.extra} more mote${charge.extra === 1 ? "" : "s"}, no blessing for ${charge.extra === 1 ? "it" : "them"}</label></div><p><small>Charge: ${esc(charge.rule)} Ticked on your slow turn; tick it by hand when Songweave or Blessing of Faith triggers the charge effects.</small></p>`
     : "";
@@ -311,11 +315,14 @@ async function askBlessingsToTake(scene, item, sp, actor) {
   try {
     picked = await foundry.applications.api.DialogV2.wait({
       window: { title: `${item.name} — whose blessings?` },
-      content: `<p><small>${esc(sp.rules)}</small></p><p>Up to ${max} in all: one mote for each blessing removed. Characters you don't own lose theirs through the GM.</p>${rows}${list.length ? "" : "<p>No character has a blessing to remove.</p>"}${chargeRow}`,
+      content: `<p><small>${esc(sp.rules)}</small></p><p><strong>Up to ${max} blessings in all</strong> (0–${max}, added across every character): one mote for each blessing removed. Characters you don't own lose theirs through the GM.</p>${rows}${list.length ? "" : "<p>No character has a blessing to remove.</p>"}${chargeRow}`,
       buttons: [{ action: "ok", label: "Remove and place the motes", default: true, callback: (_ev, button) => {
         const form = button.form;
         return {
-          list: list.map((x, k) => ({ actor: x.actor, count: Math.max(0, Math.min(x.has, Math.floor(Number(form.elements[`b${k}`]?.value) || 0))) })),
+          list: list.map((x, k) => {
+            const asked = Math.max(0, Math.floor(Number(form.elements[`b${k}`]?.value) || 0));
+            return { actor: x.actor, asked, count: Math.min(x.has, asked) };
+          }),
           extra: charge && form.elements.charge?.checked ? charge.extra : 0,
         };
       } }, { action: "cancel", label: "Cancel" }],
@@ -329,8 +336,11 @@ async function askBlessingsToTake(scene, item, sp, actor) {
     const n = Math.min(x.count, left);
     if (n > 0) { out.push({ actor: x.actor, count: n }); left -= n; }
   }
+  // R72: a number typed past a field's limit is cut down, and said so instead of being dropped silently.
+  const over = picked.list.filter(x => x.asked > x.count).map(x => `${x.actor.name} has only ${x.count}`);
+  if (picked.list.reduce((n, x) => n + x.count, 0) > max) over.push(`only ${max} blessings in all`);
+  if (over.length) ui.notifications.warn(`${item.name}: ${over.join("; ")} — removing ${max - left} (${out.map(x => `${x.actor.name} ${x.count}`).join(", ") || "none"}).`);
   if (!out.length && !picked.extra) { ui.notifications.info(`${item.name}: no blessing chosen, no mote created.`); return null; }
-  if (picked.list.reduce((n, x) => n + x.count, 0) > max) ui.notifications.info(`${item.name}: only ${max} blessings in all — the extra ones were left.`);
   return { taking: out, extra: picked.extra };
 }
 
