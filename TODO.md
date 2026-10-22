@@ -59,7 +59,9 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       to you", come se la seconda Line dovesse partire dal personaggio. Alla fine c'è una sola "Line 3 · Sturmreiten",
       lontana dal token, con "Line 3 placed — no one in the area". Fatto in R47b (1.15.73) e mai provato in un
       playtest.
-- [ ] **R68. FISTS OF HEAVEN AND HELL: Show in Chat ripete la mastery** (S, bug)
+- [x] **R68. FISTS OF HEAVEN AND HELL: Show in Chat ripete la mastery** (S, bug) (FATTO il 22 ottobre 2026,
+      versione 1.16.4: la card della combo alternata della mastery non stampa più la riga Mastery; vale per tutte e
+      quattro: God Hand, Felicity, Rot, Justice)
       God Hand (Sealer, p.192): "When printing the alternate combo action to chat (FISTS OF HEAVEN AND HELL), the mastery
       card is still printed out, despite it just repeating the alternate combo action." Quando si sceglie la combo
       della mastery (R28), la card dovrebbe togliere il blocco Mastery, che ripete quella combo. Forse vale anche per

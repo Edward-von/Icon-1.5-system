@@ -14,6 +14,15 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Combo della mastery senza riga Mastery in chat (22 ottobre 2026, versione 1.16.4, R68)
+
+Setup: solo codice (F5 basta). TEST Sealer con God Hand con la mastery sbloccata, un foe nel combat.
+
+- [ ] God Hand, COMBO ON, Show in Chat, scegliere "Fists of Heaven and Hell": la card mostra la combo e non c'è la riga "★ Mastery" sotto.
+- [ ] God Hand, COMBO ON, Show in Chat, scegliere "Devil Hand": la card ha ancora la riga "★ Mastery" (FISTS OF HEAVEN AND HELL) in fondo.
+- [ ] God Hand senza token, Show in Chat: card della base con la riga "★ Mastery" come prima.
+- [ ] Stessa prova con un'altra mastery a combo alternata (Felicity → FANTASIA, Rot → REGROWTH o Justice → GRAN JUDICATA): con la combo della mastery niente riga Mastery.
+
 ## Seconda Line 3 di Sturmreiten (22 ottobre 2026, versione 1.16.3, R67)
 
 Setup: solo codice (F5 basta). TEST Spellblade con Sturmreiten a Talent II (senza mastery), un paio di foe vicino al token.

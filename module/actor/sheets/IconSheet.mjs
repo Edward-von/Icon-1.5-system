@@ -2011,6 +2011,9 @@ export class IconSheet extends BaseActorSheet {
           name:    both ? [ab.name, comboDisplayName(sys.comboEffect)].filter(Boolean).join(" + ")
                         : comboDisplayName(sys.comboEffect) || ab.name,
           comboOf: !both && comboDisplayName(sys.comboEffect) ? ab.name : "",
+          // The mastery's alternate combo in use (FISTS OF HEAVEN AND HELL, God Hand p.192):
+          // the card already prints it as the combo, the Mastery line would only repeat it (R68).
+          hasMastery: sys === item.system && ab.hasMastery,
           blocks: await buildAbilityBlocks(sys, {
             sections: parseAbilitySections(sys.description).sections,
             enrich:   t => this._enrichAbility(t),

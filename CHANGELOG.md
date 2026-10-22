@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — La combo della mastery non ripete la mastery in chat (versione 1.16.4)
+
+- **Show in Chat della combo alternata (R68, God Hand p.192, Felicity p.177, Rot p.186, Justice p.194)**: scelta
+  la combo data dalla mastery (FISTS OF HEAVEN AND HELL, FANTASIA, REGROWTH, GRAN JUDICATA), la card stampava la
+  combo e sotto, di nuovo, la riga "Mastery" con lo stesso testo → la card della combo mostra sempre la mastery
+  sbloccata come upgrade permanente, ma qui la mastery non è altro che quella combo → quando la combo scelta è
+  quella della mastery la riga Mastery non viene stampata; con la combo normale (Devil Hand, Fleet…) e con la
+  versione base resta com'era. Solo codice.
+
 ## 22 ottobre 2026 — Sturmreiten: la seconda Line 3 del Talent II si piazza davvero (versione 1.16.3)
 
 - **Seconda Line 3 di Sturmreiten (R67, Talent II, p.227: "Comeback: You may extend Sturmreiten's area by another
