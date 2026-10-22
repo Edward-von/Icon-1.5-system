@@ -115,9 +115,12 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       bottoni di `EncounterDesigner`. Edoardo (22 ottobre 2026): se Maar non ha tolto la frase, gli altri non sono
       stati sistemati. Rivedere tutti i bottoni del planner (anche le icone piccole nelle righe) e portarli alla
       stessa misura di quelli già ingranditi.
-- [ ] **R75. Eye of the Storm: sagoma con il buco al centro** (S/M, richiesta, da decidere)
+- [x] **R75. Eye of the Storm: sagoma con il buco al centro** (S/M, richiesta) (FATTO il 22 ottobre 2026, versione
+      1.16.10: Edoardo "falla"; quando il testo dice che la casella centrale è libera, anteprima e sagoma hanno il buco
+      e chi sta al centro non è bersaglio dell'area)
       "Having the template have a hole in the center would be cool but not really needed." Solo grafica dell'area.
-- [ ] **Emerso lavorando su R67 — la seconda Line di Sturmreiten può passare sul proprio token** (S, da decidere)
+- [x] **Emerso lavorando su R67 — la seconda Line di Sturmreiten può passare sul proprio token** (S) (DECISO il 22
+      ottobre 2026, niente da fare: Edoardo "no se il libro non lo vieta"; la Line opposta resta tra le direzioni)
       Con "From the first space" (lo spazio accanto al PG) tra le direzioni offerte c'è anche quella opposta alla
       prima Line, che parte dalla casella del PG e lo attraversa. "Drawn in a different direction" (p.227) non lo
       vieta, ma il PG poi si teletrasporta all'end space. Domanda per Edoardo: togliere le Line che passano sul PG?

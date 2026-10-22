@@ -1,5 +1,13 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Eye of the Storm: l'area ha il buco al centro (versione 1.16.10)
+
+- **Eye of the Storm (R75)**: la sagoma della Medium Blast (e della Large Blast di AEONCLOUD) copriva anche la casella
+  centrale, e chi ci stava diventava bersaglio → l'area non sapeva che il libro dice "the attack space is clear and
+  exempt from this area" (p.236) → ora quando il testo dell'abilità dice che la casella centrale è libera, l'anteprima
+  e la sagoma piazzata hanno un buco al centro, e chi sta lì non viene preso come bersaglio dell'area. Vale sia dal
+  bottone dell'area sia dall'Attack Roll.
+
 ## 22 ottobre 2026 — Encounter planner: tutti i controlli alla stessa misura (versione 1.16.9)
 
 - **Controlli dell'Encounter planner (R76)**: Maar riporta ancora "some of the buttons are slightly small" → nella

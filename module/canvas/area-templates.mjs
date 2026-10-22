@@ -395,6 +395,18 @@ export function lineExtensionInText(text) {
 }
 
 /**
+ * R75: a blast whose centre is not part of it. Eye of the Storm (Stormbender, p.236): "This attack has no attack
+ * space. Instead, the attack space is clear and exempt from this area", and AEONCLOUD's large blast: "The center
+ * space is still clear". The template is drawn with a hole there and no one in it is a target.
+ * @param {string} text
+ * @returns {boolean}
+ */
+export function areaHollowInText(text) {
+  const plain = String(text ?? "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+  return /\b(?:attack|cent(?:er|re)) space is (?:still )?clear\b/i.test(plain);
+}
+
+/**
  * A line that bounces off an object: PATH TO ERENHELION (Bifröst's mastery, p.226) "Bifröst bounces if its end
  * space lands in the space of an object, creating a second line 3 area that extends the total area effect and
  * terrain effect area". The book doesn't say which way it bounces: the player picks (Edoardo's ruling).
@@ -529,7 +541,10 @@ export function tokenCells(tokenDoc) {
 export function shapeCells(area, center, { dir = { di: 0, dj: 1 }, flip = false } = {}) {
   const out = [];
   if (area.kind === "blast") {
-    for (const o of BLAST_SHAPES[area.size] ?? BLAST_SHAPES.m) out.push({ i: center.i + o.di, j: center.j + o.dj });
+    for (const o of BLAST_SHAPES[area.size] ?? BLAST_SHAPES.m) {
+      if (area.hollow && !o.di && !o.dj) continue;   // R75: the centre is clear (Eye of the Storm, p.236)
+      out.push({ i: center.i + o.di, j: center.j + o.dj });
+    }
   } else if (area.kind === "burst" || area.kind === "aura") {
     // An aura around a space (a terrain effect's, Rampant Nail p.227) covers what a burst of its size would.
     const r = Math.max(0, area.size);
@@ -938,7 +953,7 @@ export const isPlacingArea = () => AreaPlacement.active;
  * @param {object|null} [opts.extension] R47b: a second line the user may add (lineExtensionInText, plus `source`)
  * @param {object|null} [opts.bounce]    a second line from the end space when it is on an object (lineBounceInText)
  */
-export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false, extendsOld = null, bounce = null }) {
+export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, replace = true, lasting = false, text = "", terrain = null, stack = 1, stackRule = "", extension = null, allPits = false, extendsOld = null, bounce = null, hollow = false }) {
   if (!canvas?.ready || !canvas.scene) { ui.notifications.warn("No active scene to place the area on."); return null; }
   if (canvas.grid.type !== CONST.GRID_TYPES.SQUARE) { ui.notifications.warn("Area templates need a square grid (ICON is played on squares, p.85)."); return null; }
   const token = sourceTokenFor(actor);
@@ -1005,6 +1020,8 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
   }
 
   area = { ...area };
+  // R75: a blast with its centre space clear (Eye of the Storm, p.236): the preview and the template have a hole.
+  if (hollow && area.kind === "blast" && !area.centeredOn) area.hollow = true;
   // Elden Rune (p.209): "While standing on an Elden Rune space, the range of all abilities with a listed range is
   // increased by +3" (an ally in an ARKENRUNE too). Not an area drawn from the target, which has no range of its own.
   if (!area.fromTarget && !area.mapEdge) {
@@ -1170,7 +1187,7 @@ export async function placeAreaTemplate({ actor, area, abilityName, abilityKey, 
     t: "rect", x: origin.x, y: origin.y, distance: 1, direction: 0, width: 0,
     fillColor: color, borderColor: color, hidden: false,
     flags: { [FLAG_NS]: {
-      cells, area: { kind: area.kind, size: area.size, self: !!area.self, width: area.width ?? 1, label: area.label, ...(limits ?? {}) },
+      cells, area: { kind: area.kind, size: area.size, self: !!area.self, ...(area.hollow ? { hollow: true } : {}), width: area.width ?? 1, label: area.label, ...(limits ?? {}) },
       actorId: actor.id, actorUuid: actor.uuid, tokenId: token.id, abilityKey, abilityName: abilityName ?? "",
       lasting: !!lasting || isAura || atSpace,
       // Auras move with their token (updateToken hook in registerAreaTemplates)
@@ -1865,7 +1882,7 @@ export async function deleteAreaTemplates({ actorId, abilityKey, scene, keep = n
  * result, `null` when the user cancelled the placement, or `undefined` when
  * the ability has no area / the placement was impossible (roll goes on).
  */
-export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null, allPits = false, bounce = null }) {
+export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, lasting = false, area: chosen = null, terrain = null, extension = null, allPits = false, bounce = null, hollow = false }) {
   // `area`: the shape picked from the ability's variants (IconSheet), else the tags' one.
   const area = chosen ?? areaFromTags(tags);
   if (!area || area.kind === "aura") return undefined;      // an aura is not the attack's area
@@ -1874,7 +1891,7 @@ export async function ensureAreaTargets({ actor, tags, abilityName, abilityKey, 
   // player has nothing targeted, otherwise their own selection wins.
   if (existing) return retargetFromTemplate(existing, { retarget: !game.user?.targets?.size });
   if (!canvas?.ready || !sourceTokenFor(actor)) return undefined;
-  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null, allPits, bounce: area.kind === "line" ? bounce : null });
+  return placeAreaTemplate({ actor, area, abilityName, abilityKey, lasting, terrain, extension: area.kind === "line" || area.kind === "arc" ? extension : null, allPits, bounce: area.kind === "line" ? bounce : null, hollow });
 }
 
 /**

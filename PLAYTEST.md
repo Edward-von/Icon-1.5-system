@@ -14,6 +14,17 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Eye of the Storm: buco al centro (22 ottobre 2026, versione 1.16.10, R75)
+
+Setup: solo codice (F5 basta). Un PG Stormbender con Eye of the Storm, un token sulla scena, due foe vicini.
+
+- [ ] Bottone dell'area di Eye of the Storm: l'anteprima della Medium Blast segue il mouse con la casella centrale vuota.
+- [ ] Piazzata con un foe al centro e uno in un'altra casella dell'area: la sagoma sulla mappa ha il buco al centro, e l'avviso nomina solo il foe nell'area, non quello al centro.
+- [ ] Attack Roll senza area già sulla mappa: stessa sagoma col buco, il foe al centro non è tra i bersagli.
+- [ ] Con AEONCLOUD armata (Infuse 3), se offre la Large Blast: anche quella ha il buco al centro.
+- [ ] Shift + frecce sopra la sagoma (se si muove): il buco si sposta con lei.
+- [ ] Un'altra abilità con una blast normale (es. una Small/Medium Blast di un altro PG): la casella centrale c'è ancora.
+
 ## Encounter planner: tutti i controlli alla stessa misura (22 ottobre 2026, versione 1.16.9, R76)
 
 Setup: solo CSS (F5 basta). Aprire l'Encounter planner (bottone "Encounter" nella sidebar Actors), con almeno un PG e due foe scelti, uno con riserva.
