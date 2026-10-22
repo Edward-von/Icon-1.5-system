@@ -14,6 +14,19 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Combo token speso da Show in Chat (22 ottobre 2026, versione 1.16.2, R66)
+
+Setup: solo codice (F5 basta). TEST Chanter con Chastise, TEST Sealer con God Hand, un foe nel combat.
+
+- [ ] Chastise, COMBO ON: il pannello mostra CHARISM e nessun bottone "Attack Roll". Show in Chat → card "Chastise combo" (Charism), token OFF, il pannello torna subito alla base (Auto-Hit, niente barrature, niente badge "Combo — token spent").
+- [ ] Subito dopo, Show in Chat di nuovo su Chastise: card della base (non la combo) e il token torna ON (p.103).
+- [ ] God Hand, COMBO ON, Show in Chat → card Devil Hand, token OFF; il pannello resta sulla combo con il badge "Combo — token spent".
+- [ ] Poi Attack Roll → card dell'attacco di Devil Hand; Damage Roll → il dialogo ha "Combo version" spuntato; dopo il danno il pannello torna alla base e il badge sparisce.
+- [ ] God Hand, COMBO ON, Show in Chat, poi di nuovo Show in Chat senza tirare nulla: la seconda card è la base, il badge sparisce, il token torna ON.
+- [ ] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base.
+- [ ] Felicity → FLEET (nessun attacco, nessun danno): dopo Show in Chat con il token il pannello torna subito alla base.
+- [ ] Con il token ON e senza Show in Chat, Attack Roll e Damage Roll usano ancora la combo come prima (Holy → HADES auto-hit).
+
 ## Teleport di God Hand con Talent II (21 ottobre 2026, versione 1.15.280)
 
 Setup: solo codice (F5 basta).

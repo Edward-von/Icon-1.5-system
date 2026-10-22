@@ -629,7 +629,7 @@
     {{!-- Preview panels — one per equipped ability, hidden by default.
          Clicking a slot above toggles the matching panel. --}}
     {{#each abilityDetails as |ab|}}
-      <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ../comboActive ab.comboWhole)}}icon-ability-preview--combo-active{{/if}}"
+      <div class="icon-ability-preview icon-class--{{ab.class}} {{#if (icon-and ab.comboArmed ab.comboWhole)}}icon-ability-preview--combo-active{{/if}}"
            data-ability-id="{{ab.id}}" data-toggle-key="ability-{{ab.id}}" hidden>
         {{#if ../isEditable}}{{#unless ../abilitiesLocked}}
           <button type="button" class="icon-btn icon-btn--remove icon-btn--inline icon-btn--corner icon-btn--corner-lg"
@@ -647,6 +647,11 @@
           {{#if ab.masteryUnlocked}}
             <span class="icon-badge icon-badge--primary">★ Mastered</span>
           {{/if}}
+          {{!-- Token spent by Show in Chat, attack / damage still to roll (R66) --}}
+          {{#if ab.comboArmed}}{{#unless @root.comboActive}}
+            <span class="icon-badge icon-badge--primary"
+                  data-tooltip="The combo token was spent on this use by Show in Chat: Attack Roll and Damage Roll still use the combo version. It ends with the damage roll (or the attack, if there is no damage), at the end of your turn, or with the next Show in Chat, which is a new use.">Combo — token spent</span>
+          {{/unless}}{{/if}}
           {{#each ab.tags as |tag|}}
             <span class="icon-tag icon-tag--small icon-tag--rule {{#if tag.upgraded}}icon-tag--upgraded{{/if}}"
                   {{#if tag.tooltip}}data-tooltip="{{tag.tooltip}}"{{/if}}>{{tag.label}}</span>
@@ -840,7 +845,7 @@
              Stance, Mark…) and Charge / Heroic / …, reordered by system.blockOrder
              for the abilities the book prints in a different sequence. --}}
         {{#each ab.blocks as |b|}}
-          <p class="{{#if b.fromText}}icon-ability-section{{/if}}{{#if (icon-and @root.comboActive b.comboReplaced)}} icon-ability-preview__block--combo-replaced{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong>{{#if b.interruptChat}} <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityInterruptToChat" data-item-id="{{ab.id}}" data-label="{{b.label}}" title="Post only this interrupt to chat"><i class="fa-solid fa-comment"></i></button>{{/if}} <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
+          <p class="{{#if b.fromText}}icon-ability-section{{/if}}{{#if (icon-and ab.comboArmed b.comboReplaced)}} icon-ability-preview__block--combo-replaced{{/if}}"><strong{{#if b.tooltip}} class="icon-kw-label" data-tooltip="{{b.tooltip}}"{{/if}}>{{b.label}}:</strong>{{#if b.interruptChat}} <button type="button" class="icon-btn icon-btn--inline icon-btn--part-chat" data-action="abilityInterruptToChat" data-item-id="{{ab.id}}" data-label="{{b.label}}" title="Post only this interrupt to chat"><i class="fa-solid fa-comment"></i></button>{{/if}} <span class="icon-ability-preview__effect">{{{b.text}}}</span></p>
         {{/each}}
         {{!-- Chat button beside the selected talent / unlocked mastery: posts that
              text alone (Symphony's mote, Spirit Shrine's interrupt trigger). --}}
@@ -855,7 +860,7 @@
 
         {{!-- Combo block — shown when ability has combo content --}}
         {{#if ab.hasCombo}}
-          <div class="icon-ability-preview__combo {{#if ../comboActive}}icon-ability-preview__combo--active{{/if}}">
+          <div class="icon-ability-preview__combo {{#if ab.comboArmed}}icon-ability-preview__combo--active{{/if}}">
             <p class="icon-ability-preview__combo-label"><i class="fa-solid fa-bolt"></i> COMBO:</p>
             <div class="icon-ability-preview__combo-text">{{{ab.comboEffect}}}</div>
           </div>

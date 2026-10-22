@@ -334,7 +334,11 @@ export function parseComboAbilityDamage(itemSystem) {
   // Area Effect line): nothing is inherited from the base version.
   // Same for a complete combo ability written under a name in capitals
   // ("PURGATORIO — Attack: …", see comboReplacesBase).
-  if (/\btrigger\s*:/i.test(text) || comboReplacesBase(s.comboEffect)) return combo;
+  // It is an attack only if it writes one: Chastise's CHARISM (p.179) is just
+  // an Effect, so no attack roll is waited for after its card (R66).
+  if (/\btrigger\s*:/i.test(text) || comboReplacesBase(s.comboEffect)) {
+    return { ...combo, isAttack: combo.isAttack && /\battack\b|\bauto[-\s]?hit\b|\bon\s+hit\b/i.test(text) };
+  }
   // No labelled chunk at all but damage-shaped prose: parseAbilityDamage put it in `hit`.
   const anyLabel = rewrites.hit || rewrites.miss || rewrites.area;
   const deals = (c) => c.mult > 0 || c.flat > 0 || c.fray;

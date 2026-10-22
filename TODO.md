@@ -36,7 +36,10 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
 
 ### Bug
 
-- [ ] **R66. Il combo token speso da Show in Chat non aggiorna il pannello dell'abilità** (S/M, bug, alta priorità)
+- [x] **R66. Il combo token speso da Show in Chat non aggiorna il pannello dell'abilità** (S/M, bug, alta priorità)
+      (FATTO il 22 ottobre 2026, versione 1.16.2: Show in Chat senza token è un nuovo uso con la base; la combo "in
+      uso" finisce dopo l'ultimo tiro che resta da fare, o subito se non ce ne sono; il pannello mostra il badge
+      "Combo — token spent" finché attacco e danno della combo sono da tirare; CHARISM non è più un attacco.)
       "Whenever a Combo token is removed automatically with the 'show in chat' button, the ability's card does not
       update and still assumes there is a combo token." Nota: "Every combo ability has this bug". Nella GIF (Chastise,
       Chanter): token acceso, il pannello sulla scheda barra la base e mostra i bottoni della combo ("Small Blast

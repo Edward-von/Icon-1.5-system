@@ -1,5 +1,19 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Il combo token speso da Show in Chat (versione 1.16.2)
+
+- **Combo dopo Show in Chat (R66, tutte le abilità combo)**: Show in Chat spendeva il token (COMBO OFF), ma il
+  pannello dell'abilità restava sulla combo e un secondo Show in Chat postava di nuovo la combo, senza token →
+  il sistema ricordava su quale abilità era stato speso il token (per l'Attack Roll e il Damage Roll che vengono
+  dopo) e lo dimenticava solo con il tiro del danno o a fine turno: con una combo senza danno (Chastise → CHARISM)
+  restava lì per tutto il turno → ora Show in Chat senza token è un nuovo uso, quindi la versione base (e ridà il
+  token, p.103); la combo "in uso" finisce anche dopo l'attacco se non c'è danno da tirare, e subito se la combo
+  non ha né attacco né danno. Mentre l'attacco o il danno della combo sono ancora da tirare, il pannello lo dice
+  (badge "Combo — token spent") e resta tutto sulla combo, barrature comprese, invece di metà base e metà combo.
+- **CHARISM (Chastise, p.179)**: la combo è solo un Effect, ma ereditava "Attack" dalla base e il pannello
+  mostrava "Attack Roll" → una combo che riscrive tutta l'abilità è un attacco solo se il suo testo ne scrive uno
+  → con il token acceso Chastise non mostra più Attack Roll.
+
 ## 21 ottobre 2026 — Release 1.16.1
 
 Prima release pubblicata dopo la 1.15.2. Contiene tutto quello che è descritto qui sotto, dalla voce "Le combo non

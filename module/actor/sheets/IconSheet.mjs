@@ -90,6 +90,11 @@ function _areaText(s, comboArmed) {
     .filter(t => typeof t === "string" && t).join(" ");
 }
 
+/** Whether the Damage Roll button has something to roll for this ability detail (_getAbilityDetail). */
+function _hasDamageRoll(ab) {
+  return !!(ab?.dealsDamage || ab?.parsedCombo?.dealsDamage || ab?.parsed?.extras?.length);
+}
+
 /** The blocks an attack sets off, in the book's order (p.98-99), with the text the area choice reads. */
 const TRIGGERED_BLOCKS = [
   ["Exceed", "exceedEffect"], ["Crit", "critEffect"], ["Collide", "collideEffect"],
@@ -1716,6 +1721,17 @@ export class IconSheet extends BaseActorSheet {
   }
 
   /**
+   * The combo use that Show in Chat paid for is over (R66): forget which
+   * ability the token was spent on, so the panel and the next Show in Chat /
+   * attack / damage go back to the base version.
+   */
+  async _endComboUse(itemId) {
+    if (this.document.getFlag("icon-system", "comboSpentOnItem") !== itemId) return;
+    _log(`endComboUse — ${itemId}`);
+    await this.document.update({ "flags.icon-system.-=comboSpentOnItem": null, "flags.icon-system.-=comboChoice": null });
+  }
+
+  /**
    * The ability's data with the combo version chosen for this use: the mastery's
    * alternate combo (Fantasia, Regrowth, Fists of Heaven and Hell, Gran Judicata)
    * in comboEffect / comboTags once it was picked in _pickCombo, the item's own
@@ -1935,6 +1951,9 @@ export class IconSheet extends BaseActorSheet {
     event.stopPropagation();
     const itemId = target.dataset.itemId;
     const item = this.document.items.get(itemId);
+    // Token already spent on this ability by an earlier Show in Chat: this card
+    // is a new use, and without a token it is the base version (p.103, R66).
+    if ((this.document.system.combat?.classResources?.comboToken?.value ?? 0) !== 1) await this._endComboUse(itemId);
     if (!(await this._pickCombo(item))) return;
     // A second card for an infusion already used is the next use: base version (p.204).
     await startInfusionStep(this.document, itemId, INFUSE_STEP.card);
@@ -2023,8 +2042,19 @@ export class IconSheet extends BaseActorSheet {
       // damage roll comes as a separate click afterwards, and by then the
       // token reads 0 — the stash lets the damage dialog default to the
       // combo version anyway.
-      await this.document.update({ "system.combat.classResources.comboToken.value": 0 });
-      await this.document.setFlag("icon-system", "comboSpentOnItem", itemId);
+      // A combo version with no attack and no damage (Chastise's CHARISM) ends
+      // with this card: nothing is stashed, so the panel goes back to the base (R66).
+      if (ab.isAttack || ab.dealsDamage) {
+        await this.document.update({
+          "system.combat.classResources.comboToken.value": 0,
+          "flags.icon-system.comboSpentOnItem": itemId,
+        });
+      } else {
+        await this.document.update({
+          "system.combat.classResources.comboToken.value": 0,
+          "flags.icon-system.-=comboChoice": null,
+        });
+      }
     }
     // The base version of a combo ability gives the token: "When you use the
     // base ability, gain a combo token … only one at once" (p.103).
@@ -2891,6 +2921,8 @@ export class IconSheet extends BaseActorSheet {
       if (ab.dealsDamage) {
         await IconSheet.#onAbilityDamageRoll.call(this, event, target);
       }
+      // No damage to roll after it: the combo use paid by Show in Chat ends here (R66).
+      else if (!_hasDamageRoll(ab)) await this._endComboUse(itemId);
       return;
     }
 
@@ -3037,6 +3069,8 @@ export class IconSheet extends BaseActorSheet {
       evasionOverride: mods.evasion,
       actor:        this.document,
     });
+    // No damage to roll after it: the combo use paid by Show in Chat ends here (R66).
+    if (!_hasDamageRoll(ab)) await this._endComboUse(itemId);
   }
 
   /**
@@ -3063,7 +3097,7 @@ export class IconSheet extends BaseActorSheet {
     const combat = this.document.system.combat;
     _log(`abilityDamageRoll — "${ab.name}" | parsed:`, ab.parsed, "| parsedCombo:", ab.parsedCombo);
 
-    if (!ab.dealsDamage && !ab.parsedCombo?.dealsDamage && !ab.parsed?.extras?.length) {
+    if (!_hasDamageRoll(ab)) {
       ui.notifications.warn(`"${ab.name}" does not deal damage.`);
       return;
     }
