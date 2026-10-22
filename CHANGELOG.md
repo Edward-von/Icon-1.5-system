@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Release 1.16.15
+
+Prima release pubblicata dopo la 1.16.1. Contiene tutto quello che è descritto qui sotto, da "Il combo token speso da
+Show in Chat" (1.16.2) fino a "Encounter planner: larghezza minima" (1.16.15): il round di debug del 22 ottobre
+(R66-R76) e le correzioni emerse dal playtest dello stesso giorno. Le versioni 1.16.2–1.16.14 sono build interne, mai
+pubblicate: su GitHub si passa direttamente dalla 1.16.1 alla 1.16.15.
+
 ## 22 ottobre 2026 — Encounter planner: larghezza minima e righe dei foe più compatte (versione 1.16.15)
 
 - **Planner stretto (dal playtest)**: stringendo la finestra il roster veniva tagliato a destra (spariva il "+" delle
