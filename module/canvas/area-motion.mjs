@@ -301,22 +301,25 @@ function motionButtons(doc, rules, round) {
   const btn = (dir, steps, label, extra = "", title = "") =>
     `<button type="button" class="icon-btn icon-btn--sm" data-action="iconAreaMove" data-scene-id="${esc(scene.id)}" data-template-id="${esc(doc.id)}" data-dir="${dir}" data-steps="${steps}" ${extra} title="${esc(title)}"><i class="fa-solid ${DIRS[dir].icon}"></i>${label ? ` ${esc(label)}` : ""}</button>`;
   const arrows = (steps, extra = "", group = "") => Object.keys(DIRS).map(k => btn(k, steps, "", `${extra} data-group="${group}"`, `Move ${steps} ${DIRS[k].word}`)).join(" ");
+  // R70: a plain <div> stacked the buttons one per line (core styles chat buttons as blocks); the shared
+  // button row lays them side by side.
+  const row = `<div class="icon-chat-card__buttons">`;
   const out = [];
   if (m.edge) {
     const legendary = m.range && (Number(round) || 0) >= m.range.round;
     if (dirKey && DIRS[dirKey]) {
-      out.push(`<p>${esc(m.edge.rule)}</p><div>${legendary
+      out.push(`<p>${esc(m.edge.rule)}</p>${row}${legendary
         ? Array.from({ length: m.range.max - m.range.min + 1 }, (_, k) => btn(dirKey, m.range.min + k, `${m.range.min + k}`, `data-edge="1" data-group="edge-${doc.id}"`, `Move ${m.range.min + k} toward ${DIRS[dirKey].edge}`)).join(" ")
         : btn(dirKey, m.edge.steps, `Move ${m.edge.steps} toward ${DIRS[dirKey].edge}`, `data-edge="1" data-group="edge-${doc.id}"`)}</div>`);
       if (legendary) out.push(`<p><small>${esc(m.range.source)}: ${esc(m.range.rule)}</small></p>`);
     } else {
-      out.push(`<p>${esc(m.edge.rule)} No edge chosen yet: pick it.</p><div>${Object.keys(DIRS).map(k => btn(k, m.edge.steps, DIRS[k].edge.replace(/^the /, ""), `data-edge="1" data-set-dir="1" data-group="edge-${doc.id}"`)).join(" ")}</div>`);
+      out.push(`<p>${esc(m.edge.rule)} No edge chosen yet: pick it.</p>${row}${Object.keys(DIRS).map(k => btn(k, m.edge.steps, DIRS[k].edge.replace(/^the /, ""), `data-edge="1" data-set-dir="1" data-group="edge-${doc.id}"`)).join(" ")}</div>`);
     }
   }
-  if (m.lash) out.push(`<p><strong>${esc(m.lash.source)}</strong>: ${esc(m.lash.rule)}</p><div>${arrows(m.lash.steps, `data-all="1"`)}</div>`);
+  if (m.lash) out.push(`<p><strong>${esc(m.lash.source)}</strong>: ${esc(m.lash.rule)}</p>${row}${arrows(m.lash.steps, `data-all="1"`)}</div>`);
   if (m.free) {
-    out.push(`<p>${esc(m.free.source ? `${m.free.source}: ` : "")}${esc(m.free.rule)}</p><div>${arrows(m.free.steps, "", `free-${doc.id}`)}</div>`);
-    if (m.freeAlt) out.push(`<p><small>${esc(m.freeAlt.source)}: ${esc(m.freeAlt.rule)}</small></p><div>${arrows(m.freeAlt.steps, "", `free-${doc.id}`)}</div>`);
+    out.push(`<p>${esc(m.free.source ? `${m.free.source}: ` : "")}${esc(m.free.rule)}</p>${row}${arrows(m.free.steps, "", `free-${doc.id}`)}</div>`);
+    if (m.freeAlt) out.push(`<p><small>${esc(m.freeAlt.source)}: ${esc(m.freeAlt.rule)}</small></p>${row}${arrows(m.freeAlt.steps, "", `free-${doc.id}`)}</div>`);
   }
   return out.join("");
 }

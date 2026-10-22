@@ -14,6 +14,15 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Frecce delle aree in fila (22 ottobre 2026, versione 1.16.5, R70)
+
+Setup: solo codice (F5 basta). Un PG con Tsunami e la versione infusa STORMLASH disponibile, un combat attivo.
+
+- [ ] Piazzare Tsunami: nella card "Tsunami placed" i quattro bottoni freccia di STORMLASH stanno sulla stessa riga, larghi e leggibili, non uno sotto l'altro.
+- [ ] Cliccare una freccia: le tsunami si muovono di 2 nella direzione come prima.
+- [ ] Se compare la scelta del bordo ("No edge chosen yet"), i quattro bottoni Top/Bottom/Left/Right edge sono in fila (a capo solo se la chat è stretta).
+- [ ] Un'area con la mossa libera di 1 spazio a inizio turno: le frecce della card di inizio turno sono in fila.
+
 ## Combo della mastery senza riga Mastery in chat (22 ottobre 2026, versione 1.16.4, R68)
 
 Setup: solo codice (F5 basta). TEST Sealer con God Hand con la mastery sbloccata, un foe nel combat.

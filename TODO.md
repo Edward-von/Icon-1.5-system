@@ -73,7 +73,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       testo danno un'aura, e citava proprio Paradiso e High Prophecy. Quindi o il bottone non compare più, o
       piazza un'area e non l'aura su di sé. Stessa causa per entrambi, quindi un punto solo. Da vedere prima sulla
       1.16.1.
-- [ ] **R70. Tsunami: frecce della card una sotto l'altra** (S, bug, CSS)
+- [x] **R70. Tsunami: frecce della card una sotto l'altra** (S, bug, CSS) (FATTO il 22 ottobre 2026, versione 1.16.5: i bottoni di movimento delle aree (frecce di STORMLASH, scelta del bordo, mossa libera) stanno in fila nella card invece che uno per riga)
       "The arrows are currently formatted strangely." Nell'immagine, la card "Tsunami placed" mostra i quattro bottoni
       di STORMLASH (su, giù, sinistra, destra) incolonnati, uno per riga e stretti. Andrebbero a croce o in fila.
 - [ ] **R71. Symphony non toglie le blessing del tratto del Mendicant** (M, bug)

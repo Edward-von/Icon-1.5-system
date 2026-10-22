@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Le frecce delle aree che si muovono stanno in fila (versione 1.16.5)
+
+- **Card "Tsunami placed" e simili (R70)**: i quattro bottoni freccia di STORMLASH (su, giù, sinistra, destra)
+  uscivano incolonnati, uno per riga, stretti → in chat Foundry disegna ogni bottone come un blocco a sé, e qui
+  stavano in un contenitore semplice senza regole di disposizione → i bottoni di movimento delle aree (frecce di
+  STORMLASH, frecce della mossa libera di 1 spazio, scelta del bordo, numeri della mossa a gittata variabile) ora
+  stanno nella stessa fila di bottoni già usata dalle altre card (Bend Fate, Wheel of Fate): uno accanto all'altro,
+  a capo solo se non c'è posto. Solo codice.
+
 ## 22 ottobre 2026 — La combo della mastery non ripete la mastery in chat (versione 1.16.4)
 
 - **Show in Chat della combo alternata (R68, God Hand p.192, Felicity p.177, Rot p.186, Justice p.194)**: scelta
