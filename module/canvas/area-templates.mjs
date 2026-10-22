@@ -52,6 +52,8 @@ const escapeHTML = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "
 const FLAG_NS    = "icon-system";
 const HL_PREVIEW = "icon-area-preview";
 const HL_RANGE   = "icon-area-range";
+// R67: the first area, kept on the map while its extension is asked for and placed
+const HL_PLACED  = "icon-area-placed";
 
 /** Template colours per pattern (hex strings for the document, ints for PIXI). */
 export const AREA_COLORS = { blast: "#e07a2f", burst: "#c8402f", line: "#3d7fd6", arc: "#8a4fc4", aura: "#c4a64f" };
@@ -643,10 +645,15 @@ class AreaPlacement {
   /** Is a placement running? (The aura + / − keys stay out of its way.) */
   static get active() { return !!AreaPlacement.#active; }
 
-  constructor({ area, sourceCells, rangeCells, originInRange = false, check = null }) {
+  constructor({ area, sourceCells, rangeCells, originInRange = false, check = null, snap = null, snapWarning = "" }) {
     this.area = area;
     // Extra rule on the placed shape (R47b, a second line): (cells, origin, dir) => warning text or "".
     this.check = check;
+    // R67: a Line that can only go in a few given places (the second line of Sturmreiten Talent II):
+    // cell => { start, dir, cells } of the one it belongs to, or null. Hovering any space of one shows it,
+    // a click places it; no rotating or widening. `snapWarning` is the warning for a click outside them.
+    this.snap = area.kind === "line" ? snap : null;
+    this.snapWarning = snapWarning;
     // The clicked space itself must be in range, not just one space of the
     // area: a terrain effect's aura goes around "a space in range" (Rampant Nail).
     this.originInRange = originInRange;
@@ -676,7 +683,7 @@ class AreaPlacement {
       if (this.rangeCells) {
         for (const c of this.rangeCells) {
           const p = canvas.grid.getTopLeftPoint(c);
-          grid.highlightPosition(HL_RANGE, { x: p.x, y: p.y, color: 0x3d7fd6, border: 0x3d7fd6, alpha: 0.10 });
+          grid.highlightPosition(HL_RANGE, { x: p.x, y: p.y, color: 0x3d7fd6, border: 0x3d7fd6, alpha: this.snap ? 0.2 : 0.10 });
         }
       }
       this.handlers = {
@@ -698,6 +705,7 @@ class AreaPlacement {
       const free = this.rangeKeys ? " Hold Alt to place it outside the usual range (an Infuse that extends the range, a GM ruling)." : "";
       const hint = this.area.kind === "arc"
         ? `Paint the ${this.area.label} one space at a time (${this.area.size} spaces, orthogonal steps). Enter or right-click finishes early, Esc cancels.${free}`
+        : this.snap ? `Click one of the highlighted lines to place the ${this.area.label}. Right-click or Esc cancels.`
         : `Click to place the ${this.area.label}. ${this.area.kind === "line" ? "Mouse wheel rotates it; + and − change its width (an Enochian ability that widens the line). " : ""}Right-click or Esc cancels.${free}`;
       ui.notifications.info(hint);
     });
@@ -737,6 +745,7 @@ class AreaPlacement {
   /** Cells the current mouse position would produce (blast / burst / line). */
   #previewCells() {
     if (!this.mouseCell) return [];
+    if (this.snap) return this.snap(this.mouseCell)?.cells ?? [];
     if (this.area.kind === "line") return shapeCells(this.area, this.mouseCell, { dir: this.#autoDirection(this.mouseCell), flip: this.flip });
     return shapeCells(this.area, this.mouseCell);
   }
@@ -751,6 +760,7 @@ class AreaPlacement {
   }
 
   #inRange(cells) {
+    if (this.snap) return !!this.snap(this.mouseCell);
     if (!this.rangeKeys || this.freePlacement) return true;
     if (this.originInRange) return !!this.mouseCell && this.rangeKeys.has(cellKey(this.mouseCell));
     return cells.some(c => this.rangeKeys.has(cellKey(c)));
@@ -804,6 +814,12 @@ class AreaPlacement {
       return;
     }
     const cells = this.#previewCells();
+    if (this.snap) {
+      const pick = this.snap(this.mouseCell);
+      if (!pick) { ui.notifications.warn(this.snapWarning || `Click one of the highlighted lines to place the ${this.area.label}.`); return; }
+      this.#finish({ cells: pick.cells, origin: pick.start, dir: pick.dir });
+      return;
+    }
     if (!cells.length) return;
     if (!this.#inRange(cells)) {
       ui.notifications.warn(this.originInRange
@@ -858,7 +874,7 @@ class AreaPlacement {
 
   #onKey(ev) {
     if (ev.key === "Alt") this.#setFreePlacement(true);
-    if (this.area.kind === "line" && ["+", "=", "-", "_"].includes(ev.key)) {
+    if (this.area.kind === "line" && !this.snap && ["+", "=", "-", "_"].includes(ev.key)) {
       ev.preventDefault(); ev.stopImmediatePropagation();
       this.#setLineWidth(ev.key === "+" || ev.key === "=" ? 1 : -1);
       return;
@@ -870,7 +886,7 @@ class AreaPlacement {
   }
 
   #onWheel(ev) {
-    if (this.area.kind !== "line") return;
+    if (this.area.kind !== "line" || this.snap) return;
     ev.preventDefault(); ev.stopImmediatePropagation();
     if (ev.shiftKey) this.flip = !this.flip;                       // Shift + wheel: swap the wide side
     else this.rotation = (this.rotation + (ev.deltaY > 0 ? 1 : 3)) % 4;
@@ -1253,6 +1269,30 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
   second.label = label;
   const shape = isArc ? "arc" : "line";
   const notBloodied = extension.comeback && actor?.isBloodied === false;
+  // R67: the first area stays painted while the extension is asked for and placed (its template is only created
+  // afterwards, with both): without it the map looked as if the first line were still being placed, and its first
+  // and last spaces could not be told apart. The chosen end space is painted stronger.
+  const grid = canvas.interface.grid;
+  const color = Number(foundry.utils.Color.from(AREA_COLORS[area.kind] ?? "#c4a64f"));
+  const paintPlaced = (endCell = null) => {
+    grid.clearHighlightLayer(HL_PLACED);
+    for (const c of cells) {
+      const p = canvas.grid.getTopLeftPoint(c);
+      const strong = endCell && cellKey(c) === cellKey(endCell);
+      grid.highlightPosition(HL_PLACED, { x: p.x, y: p.y, color, border: color, alpha: strong ? 0.7 : 0.35 });
+    }
+  };
+  grid.addHighlightLayer(HL_PLACED);
+  paintPlaced();
+  try {
+    return await extendLineSteps({ actor, area, origin, dir, cells, extension, abilityName, blocked, isArc, second, label, shape, notBloodied, paintPlaced });
+  } finally {
+    grid.destroyHighlightLayer(HL_PLACED);
+  }
+}
+
+/** extendLine's question and placement, with the first area painted on the map (HL_PLACED). */
+async function extendLineSteps({ area, origin, dir, cells, extension, abilityName, blocked, isArc, second, label, shape, notBloodied, paintPlaced }) {
   let from = null;
   try {
     from = await foundry.applications.api.DialogV2.wait({
@@ -1290,18 +1330,29 @@ async function extendLine({ actor, area, origin, dir, cells, extension, abilityN
     ? !taken.has(cellKey({ i: end.i + d.di, j: end.j + d.dj })) && !blockedKeys.has(cellKey({ i: end.i + d.di, j: end.j + d.dj }))
     : !shapeCells(second, { i: end.i + d.di, j: end.j + d.dj }, { dir: d }).some(c => taken.has(cellKey(c)))));
   if (!allowed.length) { ui.notifications.warn(`No free direction for another ${label} from that space.`); return null; }
-  const starts = allowed.map(d => ({ i: end.i + d.di, j: end.j + d.dj }));
-  const check = isArc ? null : (newCells, start, d) => {
-    if (!start || !d) return "";
-    const step = { di: start.i - end.i, dj: start.j - end.j };
-    if (!sameDir(step, d) || !allowed.some(a => sameDir(a, d)))
-      return `The extra ${label} goes away from the ${from} space of the first line, in a different direction (mouse wheel rotates it).`;
-    return "";
-  };
-  ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first ${shape}.`);
-  // An arc is painted space by space: the first arc and the user's spaces are off limits (sourceCells).
-  const sourceCells = isArc ? [...cells, ...blocked] : [end];
-  const placed = await new AreaPlacement({ area: second, sourceCells, rangeCells: starts, originInRange: true, check }).run();
+  paintPlaced(end);
+  if (isArc) {
+    const starts = allowed.map(d => ({ i: end.i + d.di, j: end.j + d.dj }));
+    ui.notifications.info(`Extra ${label}: click one of the highlighted spaces next to the ${from} space of the first ${shape}.`);
+    // An arc is painted space by space: the first arc and the user's spaces are off limits (sourceCells).
+    const placed = await new AreaPlacement({ area: second, sourceCells: [...cells, ...blocked], rangeCells: starts, originInRange: true }).run();
+    return placed?.cells ? { cells: placed.cells, label } : null;
+  }
+  // R67: a line has only these few places (one per free direction from the space next to the end): all of them
+  // are highlighted whole, hovering any of their spaces shows that line and a click places it. Before, only the
+  // start spaces were highlighted (faintly) and a click anywhere else said "must be adjacent to you".
+  const options = allowed.map(d => {
+    const start = { i: end.i + d.di, j: end.j + d.dj };
+    return { start, dir: d, cells: shapeCells(second, start, { dir: d }) };
+  });
+  const byCell = new Map();
+  for (const o of options) for (const c of o.cells) byCell.set(cellKey(c), o);
+  ui.notifications.info(`Extra ${label}: click one of the highlighted lines next to the ${from} space of the first ${shape} (the brighter space).`);
+  const placed = await new AreaPlacement({
+    area: second, sourceCells: [end], rangeCells: options.flatMap(o => o.cells), originInRange: true,
+    snap: (cell) => cell ? byCell.get(cellKey(cell)) ?? null : null,
+    snapWarning: `The extra ${label} starts next to the ${from} space of the first ${shape} (the brighter space): click one of the highlighted lines.`,
+  }).run();
   return placed?.cells ? { cells: placed.cells, label } : null;
 }
 

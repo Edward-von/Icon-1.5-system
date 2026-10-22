@@ -1,5 +1,20 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Sturmreiten: la seconda Line 3 del Talent II si piazza davvero (versione 1.16.3)
+
+- **Seconda Line 3 di Sturmreiten (R67, Talent II, p.227: "Comeback: You may extend Sturmreiten's area by another
+  line 3 area, drawn in a different direction")**: dopo il clic sulla prima Line la domanda "another Line 3?"
+  compariva con la mappa vuota, come se la prima Line fosse ancora da piazzare; poi i clic davano "The centre space
+  of the Line 3 must be adjacent to you" e alla fine restava una sola Line 3 → la prima Line spariva dalla mappa
+  (il template si crea solo alla fine, con tutte e due), quindi non si vedeva quale fosse il primo e quale l'ultimo
+  spazio; per la seconda erano evidenziate, quasi trasparenti, solo le caselle di partenza, e ogni clic fuori da
+  quelle dava un avviso sbagliato ("adjacent to you") → ora la prima Line resta colorata sulla mappa durante la
+  domanda e durante il piazzamento, con lo spazio scelto (primo o ultimo) più acceso; della seconda sono evidenziate
+  per intero le Line possibili (una per ogni direzione libera, mai quella della prima né sopra di lei), passando col
+  mouse su una qualunque delle loro caselle si vede quella Line e il clic la piazza; il clic fuori dice di cliccare
+  una delle Line evidenziate. La scelta di estendere anche se il PG non è bloodied resta possibile. Con MJÖLLNIR
+  (Arc 5) cambia solo che il primo arco resta visibile mentre si dipinge il secondo. Solo codice.
+
 ## 22 ottobre 2026 — Il combo token speso da Show in Chat (versione 1.16.2)
 
 - **Combo dopo Show in Chat (R66, tutte le abilità combo)**: Show in Chat spendeva il token (COMBO OFF), ma il

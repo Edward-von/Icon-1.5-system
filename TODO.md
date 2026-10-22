@@ -48,7 +48,10 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       della combo, anche con il token spento. Sembra che il pannello (o lo stato "combo scelta" di R28) non si
       ricalcoli quando il token viene spento da Show in Chat. Controllare anche Attack Roll e Damage Roll dopo lo
       spegnimento.
-- [ ] **R67. Sturmreiten Talent II: piazzare la seconda Line 3 non funziona** (S/M, bug)
+- [x] **R67. Sturmreiten Talent II: piazzare la seconda Line 3 non funziona** (S/M, bug)
+      (FATTO il 22 ottobre 2026, versione 1.16.3: la prima Line resta colorata sulla mappa durante la domanda e il
+      piazzamento, con l'estremità scelta più accesa; della seconda sono evidenziate per intero le Line possibili e
+      un clic su una loro casella la piazza; l'avviso "adjacent to you" non compare più.)
       "Talent 2 Line extension placement is very buggy. Video below." Nella GIF (TEST con Sturmreiten a Talent II, non
       bloodied): la domanda "Sturmreiten — another Line 3?" compare mentre si sta ancora piazzando la prima Line. Viene
       scelto "From the first space", ma l'avviso dice "click one of the highlighted spaces next to the *last* space of
@@ -110,6 +113,10 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       stessa misura di quelli già ingranditi.
 - [ ] **R75. Eye of the Storm: sagoma con il buco al centro** (S/M, richiesta, da decidere)
       "Having the template have a hole in the center would be cool but not really needed." Solo grafica dell'area.
+- [ ] **Emerso lavorando su R67 — la seconda Line di Sturmreiten può passare sul proprio token** (S, da decidere)
+      Con "From the first space" (lo spazio accanto al PG) tra le direzioni offerte c'è anche quella opposta alla
+      prima Line, che parte dalla casella del PG e lo attraversa. "Drawn in a different direction" (p.227) non lo
+      vieta, ma il PG poi si teletrasporta all'end space. Domanda per Edoardo: togliere le Line che passano sul PG?
 
 ## Rimasti dopo K1-K5 (chiesto da Edoardo il 20 ottobre 2026: "sistemali", "provali", "ogni summon separata")
 

@@ -14,6 +14,19 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Seconda Line 3 di Sturmreiten (22 ottobre 2026, versione 1.16.3, R67)
+
+Setup: solo codice (F5 basta). TEST Spellblade con Sturmreiten a Talent II (senza mastery), un paio di foe vicino al token.
+
+- [ ] Bottone dell'area di Sturmreiten, clic per la prima Line 3: la Line resta colorata sulla mappa mentre compare la domanda "Sturmreiten — another Line 3?".
+- [ ] PG non bloodied: la domanda dice che il Comeback non vale ora e il default è "No extension"; scegliendo comunque "From the first space" si va avanti.
+- [ ] "From the first space": lo spazio dove si è cliccato (vicino al token) diventa più acceso, l'avviso dice "next to the first space", sono evidenziate le Line 3 possibili che partono accanto a lui (nessuna nella direzione della prima, nessuna sopra di lei).
+- [ ] Mouse su una casella qualunque di una Line evidenziata: si vede quella Line; clic → un solo template "Line 3 + Line 3", bersagli = chi sta in una delle due.
+- [ ] Clic su una casella non evidenziata: avviso "The extra Line 3 starts next to the first space … click one of the highlighted lines", il piazzamento continua.
+- [ ] Ripetere con "From the last space": lo spazio acceso è l'altra estremità e le Line evidenziate partono da lì.
+- [ ] Rotella e +/- durante la seconda Line non fanno nulla; tasto destro o Esc annullano: resta solo la prima Line 3, colorazione sparita.
+- [ ] Con MJÖLLNIR (Arc 5): il primo arco resta visibile mentre si dipinge il secondo dalle caselle evidenziate accanto all'estremità scelta.
+
 ## Combo token speso da Show in Chat (22 ottobre 2026, versione 1.16.2, R66)
 
 Setup: solo codice (F5 basta). TEST Chanter con Chastise, TEST Sealer con God Hand, un foe nel combat.
