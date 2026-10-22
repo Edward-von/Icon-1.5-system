@@ -22,14 +22,13 @@ Nuova versione del documento del 16 ottobre: Maar ha tolto tutte le voci vecchie
 nuove. Le sezioni Narrative e Combat delle FAQ ora hanno del contenuto. Due GIF e un'immagine. I commenti sono di
 Turz Ven. La numerazione continua da R66, così i nomi non si confondono con R1-R65 dei round precedenti.
 Build di Maar non scritta. Le GIF mostrano però "Track target" (R30) e la domanda "another Line 3?" di R47b
-(1.15.73), quindi è una build interna del 17 ottobre o successiva, non la 1.15.2 pubblica. Prima di dire "già fatto"
-su una voce, chiedere se aveva la 1.16.1.
+(1.15.73), quindi è una build interna del 17 ottobre o successiva, non la 1.15.2 pubblica. Edoardo (22 ottobre): Maar
+non aveva la versione aggiornata, quindi R69 e R74 sono già fatti e restano solo da far verificare.
 
 Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
 - Save automatici doppi con più GM (priorità media): fatto nella 1.16.5 (dentro la 1.15.1 pubblica), vedi round del 15
   ottobre. Commenti: "Will test this out sometime soon- not often this comes up LOL" e "still haven't gotten the
   chance to run this again, but its probably fixed".
-- Bottoni dell'Encounter planner "slightly small": fatto nella 1.15.0 (Sessione A).
 - Skin/temi per fazione "ala the LANCER skin themes in comp/con": scartata da Edoardo il 9 ottobre (commento: "low
   priority request").
 - Feedback positivi: planner, automazione di effetti e save ("singlehandedly convinced someone to run ICON 1.5"),
@@ -59,7 +58,8 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       card is still printed out, despite it just repeating the alternate combo action." Quando si sceglie la combo
       della mastery (R28), la card dovrebbe togliere il blocco Mastery, che ripete quella combo. Forse vale anche per
       le altre combo date dalla mastery (Felicity, Justice, Rot): da controllare.
-- [ ] **R69. Limit Break con aura: niente bottone per darsela** (S, bug, da verificare)
+- [x] **R69. Limit Break con aura: niente bottone per darsela** (S, bug) (NIENTE DA FARE, 22 ottobre 2026: Maar non
+      aveva la versione aggiornata; il bottone c'è dalla 1.15.38, R38. Da far verificare a Maar sulla 1.16.1.)
       High Prophecy (Seer): "Has no button to give aura to self." Paradiso (Freelancer, p.~155): "No way to give yourself
       aura 2 with this ability." R38 (1.15.38) aveva aggiunto al riquadro Limit Break il bottone dell'area quando tag o
       testo danno un'aura, e citava proprio Paradiso e High Prophecy. Quindi o il bottone non compare più, o
@@ -74,7 +74,8 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       counter would be useful." Oggi esistono due contatori: quello del tratto di classe (Blessing Tokens / "Bless…") e lo
       status Blessed con le sue cariche (`statusCharges.blessed`, che è quello letto da `removeBlessings`). La proposta di
       Maar è di unirli: alzare il contatore del tratto dà lo status, e togliere lo status abbassa il contatore.
-      Domanda per Edoardo: un solo contatore (lo status) oppure tenerli in sincronia?
+      Risposta di Edoardo (22 ottobre 2026): "da entrambi". Si tengono tutti e due i contatori: Symphony toglie le
+      blessing da entrambi, e alzare il contatore del tratto dà anche lo status (come chiede Maar).
 
 ### Richieste
 
@@ -92,11 +93,18 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       - "When am I exhausted?" — "When you have expended all effort." (p.34)
       La guida ha già le righe su effort e strain (`reference.mjs`, ~336-348): controllare che i testi non si ripetano.
       Pagine da ricontrollare su `ICON 1.5.txt`. La sezione Combat delle FAQ nel documento è ancora vuota.
-- [ ] **R74. Seer: un sistema per la mano** (M/L, richiesta, da decidere)
+- [x] **R74. Seer: un sistema per la mano** (M/L, richiesta) (NIENTE DA FARE, 22 ottobre 2026: Maar non aveva la
+      versione aggiornata; mazzi, mano e Foretell ci sono da R36a-c, 1.15.146-148. Da far verificare a Maar sulla 1.16.1.)
       "AFAIK there is no hand system in the system right now." R36a-c (1.15.146-148) hanno fatto deck, mano e scarti
       con i Cards di Foundry, il testo delle carte e il Foretell in chat. Forse Maar non lo trova (non è sulla scheda,
       per sua scelta del 15 ottobre) o non lo ha nella sua build. Prima di fare qualcosa, chiedere a Maar se ha
       provato i mazzi della 1.16.1 e cosa manca.
+- [ ] **R76. Bottoni dell'Encounter planner ancora piccoli** (S, richiesta)
+      "Every GM I have shown the encounter planner to has said that it is both incredibly useful, and pretty easy to
+      use. Some of the buttons are slightly small." Nella 1.15.0 (Sessione A) erano stati ingranditi solo alcuni
+      bottoni di `EncounterDesigner`. Edoardo (22 ottobre 2026): se Maar non ha tolto la frase, gli altri non sono
+      stati sistemati. Rivedere tutti i bottoni del planner (anche le icone piccole nelle righe) e portarli alla
+      stessa misura di quelli già ingranditi.
 - [ ] **R75. Eye of the Storm: sagoma con il buco al centro** (S/M, richiesta, da decidere)
       "Having the template have a hole in the center would be cool but not really needed." Solo grafica dell'area.
 
