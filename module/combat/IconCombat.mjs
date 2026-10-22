@@ -26,7 +26,7 @@
  */
 
 import { setOutCombatPowerDice, tickRoundPowerDice } from "../data/item/power-die.mjs";
-import { rollEndOfTurnSaves, applyEndOfTurnEffects } from "./statuses.mjs";
+import { rollEndOfTurnSaves, applyEndOfTurnEffects, hasStatus, getStatusCharges, setStatusCharges } from "./statuses.mjs";
 import { tickStatusExpiry } from "./status-expiry.mjs";
 import { clearCombo } from "./foe-combo.mjs";
 import { deleteAreaTemplates, clearExpiredAreaTemplates, tickAuraExpiry } from "../canvas/area-templates.mjs";
@@ -651,6 +651,12 @@ export class IconCombat extends Combat {
       catch (err) { console.warn("[ICON | IconCombat] could not reset the combo sequence", err); }
       try { await clearCombatEffects(combatant.actor); }
       catch (err) { console.warn("[ICON | IconCombat] could not clear marks/hatred", err); }
+      // "All blessings are discarded at the end of combat" (p.172): the Blessed status and its charges, on PCs,
+      // foes and summons alike (the Mendicant's Blessing Tokens counter is reset above).
+      if (hasStatus(combatant.actor, "blessed") || getStatusCharges(combatant.actor, "blessed") > 0) {
+        try { await setStatusCharges(combatant.actor, "blessed", 0); }
+        catch (err) { console.warn("[ICON | IconCombat] could not discard the blessings", err); }
+      }
     }
 
     /* --- Blast / Line / Arc / Burst templates and terrain effects left on the map go with the encounter (p.86),

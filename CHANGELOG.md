@@ -1,5 +1,12 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Le blessing finiscono con il combattimento (versione 1.16.11)
+
+- **Status Blessed a fine combattimento**: dopo "End Encounter" PG, foe e summon restavano Blessed con le loro
+  cariche → la chiusura del combattimento azzerava solo il contatore Blessing Tokens del Mendicant, non lo status →
+  ora "End Encounter" toglie lo status Blessed e le sue cariche a tutti i combattenti, come dice il libro: "All
+  blessings are discarded at the end of combat" (p.172).
+
 ## 22 ottobre 2026 — Eye of the Storm: l'area ha il buco al centro (versione 1.16.10)
 
 - **Eye of the Storm (R75)**: la sagoma della Medium Blast (e della Large Blast di AEONCLOUD) copriva anche la casella

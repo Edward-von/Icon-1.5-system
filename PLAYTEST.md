@@ -14,6 +14,14 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Le blessing finiscono con il combattimento (22 ottobre 2026, versione 1.16.11)
+
+Setup: solo codice (F5 basta). Un combattimento con un PG Mendicant, un altro PG e un foe.
+
+- [ ] Dare Blessed con 2 cariche all'altro PG e 1 al foe (HUD del token), alzare a 2 il contatore Blessing Tokens del Mendicant (che diventa Blessed anche lui).
+- [ ] End Encounter, "Yes": nessuno dei tre ha più l'icona Blessed sul token e sulla scheda, il contatore del Mendicant è a 0.
+- [ ] End Encounter, "No": tutto resta com'era.
+
 ## Eye of the Storm: buco al centro (22 ottobre 2026, versione 1.16.10, R75)
 
 Setup: solo codice (F5 basta). Un PG Stormbender con Eye of the Storm, un token sulla scena, due foe vicini.

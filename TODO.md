@@ -124,7 +124,8 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       Con "From the first space" (lo spazio accanto al PG) tra le direzioni offerte c'è anche quella opposta alla
       prima Line, che parte dalla casella del PG e lo attraversa. "Drawn in a different direction" (p.227) non lo
       vieta, ma il PG poi si teletrasporta all'end space. Domanda per Edoardo: togliere le Line che passano sul PG?
-- [ ] **Emerso lavorando su R71 — lo status Blessed resta dopo la fine del combattimento** (S, bug)
+- [x] **Emerso lavorando su R71 — lo status Blessed resta dopo la fine del combattimento** (S, bug) (FATTO il 22
+      ottobre 2026, versione 1.16.11: End Encounter toglie lo status e le cariche a tutti i combattenti)
       "All blessings are discarded at the end of combat" (p.172): la chiusura del combattimento (`IconCombat`,
       `#cleanupAfterCombat`) azzera il contatore Blessing Tokens del tratto ma non tocca lo status Blessed né le sue
       cariche (`statusCharges.blessed`), su PG, foe e summon. Andrebbe messo a 0 con `setStatusCharges` per tutti i
