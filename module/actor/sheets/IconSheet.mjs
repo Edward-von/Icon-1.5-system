@@ -41,7 +41,7 @@ import { groupStatusesForUI } from "../../combat/status-modifiers.mjs";
 import { visibleStatuses } from "../../combat/tracker-statuses.mjs";
 import { applyStatus, removeStatus, hasStatus,
          STACKABLE_STATUSES,
-         setStatusCharges, adjustStatusCharges } from "../../combat/statuses.mjs";
+         setStatusCharges, adjustStatusCharges, adjustBlessingTokens } from "../../combat/statuses.mjs";
 import { PROTOTYPE_TOKEN_CONTROL, onConfigurePrototypeToken, filterPrototypeTokenControl } from "./_prototype-token-control.mjs";
 import { BaseActorSheet } from "./BaseActorSheet.mjs";
 import { promptNarrativeRoll, promptAttackMods,
@@ -4159,13 +4159,15 @@ export class IconSheet extends BaseActorSheet {
     summon?.sheet.render(true);
   }
 
-  /** Mendicant — +/- blessing tokens (clamped to ≥ 0). */
+  /**
+   * Mendicant — +/- blessing tokens (clamped to ≥ 0). The Blessed charges move
+   * with them (R71): Symphony and saves read the status, not this counter.
+   */
   static async #onAdjustBlessings(event, target) {
     const delta   = Number(target.dataset.delta) || 0;
     const current = this.document.system.combat.classResources.blessingTokens.value ?? 0;
-    const next    = Math.max(0, current + delta);
+    const next    = await adjustBlessingTokens(this.document, delta);
     _log(`adjustBlessings — actor: "${this.document.name}" | ${current} → ${next}`);
-    await this.document.update({ "system.combat.classResources.blessingTokens.value": next });
   }
 
   /**
@@ -4210,7 +4212,8 @@ export class IconSheet extends BaseActorSheet {
   /** Mendicant — clear blessing tokens to 0. */
   static async #onClearBlessings(event, target) {
     _log(`clearBlessings — actor: "${this.document.name}"`);
-    await this.document.update({ "system.combat.classResources.blessingTokens.value": 0 });
+    // Takes the counted tokens off the Blessed charges too (R71).
+    await adjustBlessingTokens(this.document, -(this.document.system.combat.classResources.blessingTokens.value ?? 0));
   }
 
   /** Wright — +/- aether, clamped to 0..6 (Aether is tracked on a d6 power die, p.204). */

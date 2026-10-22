@@ -419,11 +419,23 @@ export function setStatusCharges(actor, statusId, count) {
   return _withStatusLock(actor, () => _setStatusCharges(actor, statusId, count));
 }
 
-async function _setStatusCharges(actor, statusId, count) {
+/** The Mendicant's own Blessing Tokens counter (class trait, combat tab). */
+const BLESSING_TOKENS = "system.combat.classResources.blessingTokens.value";
+
+async function _setStatusCharges(actor, statusId, count, extra = {}) {
+  const prev = getStatusCharges(actor, statusId);
   const next = Math.max(0, count);
   const charges = foundry.utils.deepClone(actor.getFlag("icon-system", "statusCharges") ?? {});
   charges[statusId] = next;
-  await actor.setFlag("icon-system", "statusCharges", charges);
+  const update = { "flags.icon-system.statusCharges": charges, ...extra };
+  // R71: blessings taken away (Symphony, spent on a save, the HUD) come off the
+  // Mendicant's Blessing Tokens counter too, as many as were taken. Written in
+  // the same update, never from a hook, so the two counters can't bounce.
+  if (statusId === "blessed" && next < prev && !(BLESSING_TOKENS in extra)) {
+    const tokens = actor.system?.combat?.classResources?.blessingTokens?.value ?? 0;
+    if (tokens > 0) update[BLESSING_TOKENS] = Math.max(0, tokens - (prev - next));
+  }
+  await actor.update(update);
 
   if (next > 0 && !hasStatus(actor, statusId)) {
     await _applyStatus(actor, statusId);
@@ -441,6 +453,24 @@ async function _setStatusCharges(actor, statusId, count) {
 export function adjustStatusCharges(actor, statusId, delta) {
   return _withStatusLock(actor, () =>
     _setStatusCharges(actor, statusId, getStatusCharges(actor, statusId) + delta));
+}
+
+/**
+ * Mendicant — move the Blessing Tokens counter of the class trait by ±delta
+ * and the Blessed charges with it (R71, Maar): a token added there is also one
+ * more Blessed charge (so Symphony and saves can take it), a token removed
+ * there takes one charge away. Lowering never goes below 0 tokens; if the
+ * status has fewer charges than that (a counter raised before 1.16.6), the
+ * charges stop at 0. Returns the new token count.
+ */
+export function adjustBlessingTokens(actor, delta) {
+  return _withStatusLock(actor, async () => {
+    const tokens = actor.system?.combat?.classResources?.blessingTokens?.value ?? 0;
+    const step = delta >= 0 ? delta : -Math.min(-delta, tokens);
+    if (!step) return tokens;
+    await _setStatusCharges(actor, "blessed", getStatusCharges(actor, "blessed") + step, { [BLESSING_TOKENS]: tokens + step });
+    return tokens + step;
+  });
 }
 
 /**

@@ -14,6 +14,18 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Blessing Tokens del Mendicant allineati allo status Blessed (22 ottobre 2026, versione 1.16.6, R71)
+
+Setup: solo codice (F5 basta). Un PG Mendicant (con il tratto Bless), un PG con Symphony, un combat attivo.
+
+- [ ] Scheda del Mendicant, tab Combat: + su Blessing Tokens due volte. Il contatore va a 2 e il PG ha lo status Blessed con 2 cariche (tab Conditions e HUD del token).
+- [ ] − una volta: contatore 1, Blessed a 1. Clear: contatore 0 e lo status Blessed sparisce.
+- [ ] Rialzare a 2, poi usare Symphony: il Mendicant compare tra chi ha blessing; togliendone 1 il contatore del tratto scende a 1 e Blessed a 1.
+- [ ] Con Blessed dal tratto, fare un tiro salvezza e spendere la blessing (+1 boon): il contatore del tratto scende di 1 insieme allo status.
+- [ ] Togliere Blessed dalla HUD del token (o tasto destro sulla carica nel tab Conditions): il contatore del tratto scende allo stesso modo.
+- [ ] Un alleato usa Bless sul Mendicant: Blessed sale di 1, il contatore del tratto resta com'era. Togliendo poi 3 blessing con Symphony da 3 cariche (2 del tratto + 1 dell'alleato), il contatore va a 0 senza andare sotto zero.
+- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione).
+
 ## Frecce delle aree in fila (22 ottobre 2026, versione 1.16.5, R70)
 
 Setup: solo codice (F5 basta). Un PG con Tsunami e la versione infusa STORMLASH disponibile, un combat attivo.

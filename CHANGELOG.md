@@ -1,5 +1,17 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Le blessing del tratto del Mendicant sono anche lo status Blessed (versione 1.16.6)
+
+- **Blessing Tokens del Mendicant e Symphony (R71, Bless p.172, Symphony p.178)**: un Mendicant che si alzava le
+  blessing col contatore del tratto (Blessing Tokens, + / −) non compariva tra chi ha blessing da togliere con
+  Symphony, e non poteva spenderle sui tiri salvezza → c'erano due contatori separati: quello del tratto (solo un
+  numero sulla scheda) e le cariche dello status Blessed, l'unico letto da Symphony, dai tiri salvezza, dalla HUD →
+  restano tutti e due, ma allineati: il + del tratto aggiunge anche una carica di Blessed (e lo status se manca), il −
+  e Clear le tolgono; ogni blessing tolta dallo status (Symphony, spesa su un tiro salvezza, HUD, tab Conditions)
+  abbassa anche il contatore del tratto, finché ce n'è. Le blessing ricevute da altri (Bless di un alleato) alzano
+  solo lo status, non il contatore del tratto. Tutto in un solo aggiornamento dell'attore, niente hook che si
+  rincorrono. Un contatore alzato prima di questa versione non ha la carica: va abbassato e rialzato. Solo codice.
+
 ## 22 ottobre 2026 — Le frecce delle aree che si muovono stanno in fila (versione 1.16.5)
 
 - **Card "Tsunami placed" e simili (R70)**: i quattro bottoni freccia di STORMLASH (su, giù, sinistra, destra)

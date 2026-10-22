@@ -76,7 +76,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
 - [x] **R70. Tsunami: frecce della card una sotto l'altra** (S, bug, CSS) (FATTO il 22 ottobre 2026, versione 1.16.5: i bottoni di movimento delle aree (frecce di STORMLASH, scelta del bordo, mossa libera) stanno in fila nella card invece che uno per riga)
       "The arrows are currently formatted strangely." Nell'immagine, la card "Tsunami placed" mostra i quattro bottoni
       di STORMLASH (su, giù, sinistra, destra) incolonnati, uno per riga e stretti. Andrebbero a croce o in fila.
-- [ ] **R71. Symphony non toglie le blessing del tratto del Mendicant** (M, bug)
+- [x] **R71. Symphony non toglie le blessing del tratto del Mendicant** (M, bug) (FATTO il 22 ottobre 2026, versione 1.16.6: il + / − / Clear di Blessing Tokens muove anche le cariche di Blessed, e ogni blessing tolta dallo status abbassa anche il contatore del tratto)
       "Currently cannot remove blessings from mendicants who have their own blessing trait incremented, only those who
       have the blessing buff. Making the trait on mendicants automatically grant the buff while incrementing the
       counter would be useful." Oggi esistono due contatori: quello del tratto di classe (Blessing Tokens / "Bless…") e lo
@@ -119,6 +119,11 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       Con "From the first space" (lo spazio accanto al PG) tra le direzioni offerte c'è anche quella opposta alla
       prima Line, che parte dalla casella del PG e lo attraversa. "Drawn in a different direction" (p.227) non lo
       vieta, ma il PG poi si teletrasporta all'end space. Domanda per Edoardo: togliere le Line che passano sul PG?
+- [ ] **Emerso lavorando su R71 — lo status Blessed resta dopo la fine del combattimento** (S, bug)
+      "All blessings are discarded at the end of combat" (p.172): la chiusura del combattimento (`IconCombat`,
+      `#cleanupAfterCombat`) azzera il contatore Blessing Tokens del tratto ma non tocca lo status Blessed né le sue
+      cariche (`statusCharges.blessed`), su PG, foe e summon. Andrebbe messo a 0 con `setStatusCharges` per tutti i
+      combattenti.
 
 ## Rimasti dopo K1-K5 (chiesto da Edoardo il 20 ottobre 2026: "sistemali", "provali", "ogni summon separata")
 
