@@ -91,7 +91,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       "While the field for entering blessing removals allow for any number to be entered, system will only remove four
       blessings (max). Not really a bug, but there could probably be some cleaner UI there." Il libro dice "Remove up to
       four blessings" (Symphony), quindi il limite è corretto. Basta che il campo vada da 0 a 4 e lo dica.
-- [ ] **R73. FAQ narrativa: knack, burden e strain, exhausted** (S, richiesta)
+- [x] **R73. FAQ narrativa: knack, burden e strain, exhausted** (S, richiesta) (FATTO il 22 ottobre 2026, versione 1.16.8: tre voci nuove nella FAQ Narrative della guida, knack p.35, guarire burden e strain pp.31 e 42, exhausted p.34; l'aiuto a un altro personaggio segue il libro: si rinuncia alla propria guarigione, non serve essere senza burden)
       Testi proposti da Maar, con le pagine:
       - "What is a knack?" — "A knack is a skill or area of expertise or knowledge, usually specific. When you can apply
         your knack to a roll, get +1 Boon on the roll." (p.35)

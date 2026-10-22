@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — FAQ narrativa: knack, burden e strain, exhausted (versione 1.16.8)
+
+- **FAQ della guida, sezione Narrative (R73)**: mancavano tre domande frequenti al tavolo (cos'è un knack, quando si
+  curano burden e strain, quando si è exhausted) → la FAQ aveva solo le voci raccolte finora → tre voci nuove, sui
+  testi di Maar ricontrollati sul manuale: knack +1 boon (p.35); strain tutta al camp o a fine interlude (p.31),
+  burden solo nel passo Heal Burdens dell'interlude, 3 segmenti, aiuto a un altro personaggio (+1 segmento, una volta
+  per personaggio), 2 dust per segmento in più (p.42); exhausted = tutta l'effort spesa (p.34). Una correzione rispetto
+  al testo proposto: per aiutare un altro non serve essere senza burden, si rinuncia alla propria guarigione (p.42).
+  Le voci compaiono anche nella ricerca della guida. Solo codice.
+
 ## 22 ottobre 2026 — Symphony: i campi delle blessing dicono il limite (versione 1.16.7)
 
 - **Campi delle blessing di Symphony (R72, Symphony p.178)**: nella finestra "whose blessings?" si poteva scrivere

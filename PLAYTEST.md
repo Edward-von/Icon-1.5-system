@@ -14,6 +14,15 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## FAQ narrativa: knack, burden e strain, exhausted (22 ottobre 2026, versione 1.16.8, R73)
+
+Setup: solo codice (F5 basta). Aprire la Quick Guide, scheda FAQ.
+
+- [ ] Nella sezione Narrative, dopo "How does Second Wind work?", ci sono "What is a knack?", "When do you heal burdens? What about strain?" e "When am I exhausted?", con le pagine (p.35, pp.31/42, p.34).
+- [ ] La sezione Combat non è cambiata.
+- [ ] Scrivere "knack" nella ricerca della scheda FAQ: resta visibile la voce del knack.
+- [ ] Il grassetto di "Heal Burdens" nella risposta sui burden si vede come grassetto, non come tag scritti.
+
 ## Symphony: i campi delle blessing dicono il limite (22 ottobre 2026, versione 1.16.7, R72)
 
 Setup: solo codice (F5 basta). Un PG con Symphony, tre personaggi con Blessed (es. 3, 2 e 1 cariche), una scena attiva.
