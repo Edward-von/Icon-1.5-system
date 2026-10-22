@@ -104,7 +104,7 @@ Setup: solo codice (F5 basta). Un PG Mendicant (con il tratto Bless), un PG con 
 - [x] Con Blessed dal tratto, fare un tiro salvezza e spendere la blessing (+1 boon): il contatore del tratto scende di 1 insieme allo status. **(22 ottobre: sì: contatore e Blessed a 0)**
 - [x] Togliere Blessed dalla HUD del token (o tasto destro sulla carica nel tab Conditions): il contatore del tratto scende allo stesso modo. **(22 ottobre: sì (tasto destro nel tab Conditions))**
 - [x] Un alleato usa Bless sul Mendicant: Blessed sale di 1, il contatore del tratto resta com'era. Togliendo poi 3 blessing con Symphony da 3 cariche (2 del tratto + 1 dell'alleato), il contatore va a 0 senza andare sotto zero. **(22 ottobre: sì: Blessed 3 e contatore 2, poi Symphony 3: contatore 0)**
-- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione). **(22 ottobre: non provato: serve un secondo client)**
+- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione). **(22 ottobre: non provato: il client del giocatore (PT Player su [::1]) non finisce di caricare, tre tentativi)**
 
 ## Frecce delle aree in fila (22 ottobre 2026, versione 1.16.5, R70)
 
@@ -113,7 +113,7 @@ Setup: solo codice (F5 basta). Un PG con Tsunami e la versione infusa STORMLASH 
 - [x] Piazzare Tsunami: nella card "Tsunami placed" i quattro bottoni freccia di STORMLASH stanno sulla stessa riga, larghi e leggibili, non uno sotto l'altro. **(22 ottobre: sì)**
 - [x] Cliccare una freccia: le tsunami si muovono di 2 nella direzione come prima. **(22 ottobre: sì)**
 - [x] Se compare la scelta del bordo ("No edge chosen yet"), i quattro bottoni Top/Bottom/Left/Right edge sono in fila (a capo solo se la chat è stretta). **(22 ottobre: sì: tre per riga, il quarto va a capo con la chat alla larghezza standard)**
-- [ ] Un'area con la mossa libera di 1 spazio a inizio turno: le frecce della card di inizio turno sono in fila. **(22 ottobre: non provato: serve far avanzare i turni)**
+- [x] Un'area con la mossa libera di 1 spazio a inizio turno: le frecce della card di inizio turno sono in fila. **(22 ottobre: sì, Waterspout a Talent II: le due file di frecce (mossa 1 e mossa 3) stanno in riga)**
 
 ## Combo della mastery senza riga Mastery in chat (22 ottobre 2026, versione 1.16.4, R68)
 
@@ -135,7 +135,7 @@ Setup: solo codice (F5 basta). TEST Spellblade con Sturmreiten a Talent II (senz
 - [x] Clic su una casella non evidenziata: avviso "The extra Line 3 starts next to the first space … click one of the highlighted lines", il piazzamento continua. **(22 ottobre: sì)**
 - [x] Ripetere con "From the last space": lo spazio acceso è l'altra estremità e le Line evidenziate partono da lì. **(22 ottobre: sì: solo su e giù, la Line che prosegue dritta è esclusa)**
 - [x] Rotella e +/- durante la seconda Line non fanno nulla; tasto destro o Esc annullano: resta solo la prima Line 3, colorazione sparita. **(22 ottobre: sì: la Line non cambia (la rotella fa solo lo zoom della mappa); tasto destro: resta la prima Line 3)**
-- [ ] Con MJÖLLNIR (Arc 5): il primo arco resta visibile mentre si dipinge il secondo dalle caselle evidenziate accanto all'estremità scelta. **(22 ottobre: non provato)**
+- [x] Con MJÖLLNIR (Arc 5): il primo arco resta visibile mentre si dipinge il secondo dalle caselle evidenziate accanto all'estremità scelta. **(22 ottobre: sì: primo arco visibile, estremità scelta accesa, caselle accanto evidenziate, un template "Arc 5 + Arc 5")**
 
 ## Combo token speso da Show in Chat (22 ottobre 2026, versione 1.16.2, R66)
 
@@ -146,7 +146,7 @@ Setup: solo codice (F5 basta). TEST Chanter con Chastise, TEST Sealer con God Ha
 - [x] God Hand, COMBO ON, Show in Chat → card Devil Hand, token OFF; il pannello resta sulla combo con il badge "Combo — token spent". **(22 ottobre: sì)**
 - [x] Poi Attack Roll → card dell'attacco di Devil Hand; Damage Roll → il dialogo ha "Combo version" spuntato; dopo il danno il pannello torna alla base e il badge sparisce. **(22 ottobre: sì)**
 - [x] God Hand, COMBO ON, Show in Chat, poi di nuovo Show in Chat senza tirare nulla: la seconda card è la base, il badge sparisce, il token torna ON. **(22 ottobre: sì)**
-- [ ] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base. **(22 ottobre: non provato: serve far avanzare i turni)**
+- [x] God Hand, COMBO ON, Show in Chat, poi fine turno: il pannello torna alla base. **(22 ottobre: sì, in un combattimento di prova: a fine turno del Sealer la combo spesa su God Hand viene dimenticata)**
 - [x] Felicity → FLEET (nessun attacco, nessun danno): dopo Show in Chat con il token il pannello torna subito alla base. **(22 ottobre: sì)**
 - [x] Con il token ON e senza Show in Chat, Attack Roll e Damage Roll usano ancora la combo come prima (Holy → HADES auto-hit). **(22 ottobre: sì: Holy con Auto-Hit e Medium Blast, nel danno "Combo version" spuntato e True Strike)**
 
