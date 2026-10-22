@@ -104,7 +104,7 @@ Setup: solo codice (F5 basta). Un PG Mendicant (con il tratto Bless), un PG con 
 - [x] Con Blessed dal tratto, fare un tiro salvezza e spendere la blessing (+1 boon): il contatore del tratto scende di 1 insieme allo status. **(22 ottobre: sì: contatore e Blessed a 0)**
 - [x] Togliere Blessed dalla HUD del token (o tasto destro sulla carica nel tab Conditions): il contatore del tratto scende allo stesso modo. **(22 ottobre: sì (tasto destro nel tab Conditions))**
 - [x] Un alleato usa Bless sul Mendicant: Blessed sale di 1, il contatore del tratto resta com'era. Togliendo poi 3 blessing con Symphony da 3 cariche (2 del tratto + 1 dell'alleato), il contatore va a 0 senza andare sotto zero. **(22 ottobre: sì: Blessed 3 e contatore 2, poi Symphony 3: contatore 0)**
-- [ ] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione). **(22 ottobre: non provato: il client del giocatore (PT Player su [::1]) non finisce di caricare, tre tentativi)**
+- [x] Con giocatore e GM collegati, il giocatore preme + sul suo Mendicant: lo status arriva una volta sola (una carica per clic, nessun doppione). **(22 ottobre: sì, con Edoardo come PT Player in incognito e il GM collegato: due clic su +, contatore e Blessed 1 poi 2, un solo aggiornamento per clic, un solo effetto Blessed, nessun messaggio doppio)**
 
 ## Frecce delle aree in fila (22 ottobre 2026, versione 1.16.5, R70)
 
