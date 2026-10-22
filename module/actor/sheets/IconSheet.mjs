@@ -9,7 +9,7 @@ import { showWelcomeGuide } from "../../apps/welcome.mjs";
 import { showReferenceGuide, REFERENCE_CONTROL } from "../../apps/reference.mjs";
 import { enrichHTML, escapeHTML, parseAbilitySections, abilityCostLabel, enrichLimitBreakText } from "../../helpers/enrich.mjs";
 import { resolveAbilityTags, resolveAbilityCost, traitAuraTag } from "../../helpers/rule-tooltips.mjs";
-import { ABILITY_BLOCK_FIELDS, buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, comboReplacedBlocks, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo } from "../../helpers/ability-blocks.mjs";
+import { ABILITY_BLOCK_FIELDS, buildAbilityBlocks, interruptBlockName, grantedInterrupt, comboDisplayName, comboTitle, comboReplacesBase, comboReplacedBlocks, masteryGainsBothEffects, talentAttackBlocks, alternateCombo, withActiveCombo, plainSystem } from "../../helpers/ability-blocks.mjs";
 import { powerDieView, fillJobTraitPowerDice } from "../../data/item/power-die.mjs";
 import { ensureAreaTargets, placeAreaTemplate, areaFromTags, areaSummaryHtml,
          areaVariants, chooseAreaVariant, abilityArea, areaColor, areaLasts, findAreaTemplates,
@@ -1754,7 +1754,7 @@ export class IconSheet extends BaseActorSheet {
     const f = armedInfusion(this.document);
     const armed = f && f.itemId === item?.id ? String(f.label ?? "") : "";
     const fromMastery = masteryInfusion(sys)[0]?.label ?? "";
-    return abilityStatusEntries({ ...sys, description: withoutUnarmedInfusions(sys.description, { armed }) },
+    return abilityStatusEntries({ ...plainSystem(sys), description: withoutUnarmedInfusions(sys.description, { armed }) },
       { comboMode, sourceName: this.document.name, masteryOff: !!fromMastery && armed !== fromMastery });
   }
 
@@ -2665,7 +2665,7 @@ export class IconSheet extends BaseActorSheet {
       infusedAreas(i.text, spent, ownArea).map(area => ({ source: i.cost === null ? `${i.costLabel} (${spent} Aether)` : i.costLabel, area })));
     // A mastery that is a bigger infusion (MAGNARIME: Infuse X — … becomes
     // Arc 4) only changes the area while that infusion is armed (lead above).
-    const masteryIsInfusion = masteryInfusion({ ...s, masteryUnlocked: true }).length > 0;
+    const masteryIsInfusion = masteryInfusion({ ...plainSystem(s), masteryUnlocked: true }).length > 0;
     const variants = areaVariants({
       tags: ab.tags,
       tagSource,

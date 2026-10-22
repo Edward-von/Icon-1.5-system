@@ -14,6 +14,14 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## God Hand: Talent II sulla combo della mastery (22 ottobre 2026, versione 1.16.13)
+
+Setup: solo codice (F5 basta). TEST Sealer, God Hand a Talent II con la mastery sbloccata.
+
+- [x] COMBO ON, Show in Chat, "Fists of Heaven and Hell": nei promemoria "Teleport 2". **(22 ottobre: sì; il "Teleport 1" che resta è il testo del libro stampato nella card)**
+- [x] COMBO ON, Show in Chat, "Devil Hand": "Teleport 2". **(22 ottobre: sì)**
+- [x] Senza token, card della base: "Teleport 2". **(22 ottobre: sì)**
+
 ## Encounter planner: ricerca del roster su una riga sua (22 ottobre 2026, versione 1.16.12)
 
 Setup: solo CSS (F5 basta). Aprire l'Encounter planner.

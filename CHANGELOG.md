@@ -1,5 +1,14 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — God Hand: Talent II vale anche per Fists of Heaven and Hell (versione 1.16.13)
+
+- **Promemoria del teleport sulla combo della mastery (dal playtest)**: con Talent II ("Increase teleports to 2",
+  p.192) la card di Fists of Heaven and Hell diceva ancora "Teleport 1" nei promemoria → la combo alternativa della
+  mastery è una copia a strati dei dati dell'abilità, e copiandola con `{ ...dati }` restava solo il testo della
+  combo, senza talento scelto, talenti e mastery → ora i dati vengono copiati per intero, strato sotto compreso: la
+  card dice "Teleport 2", come la base e Devil Hand. La stessa copia serviva a riconoscere una mastery che è un
+  Infuse: sistemata allo stesso modo.
+
 ## 22 ottobre 2026 — Encounter planner: la ricerca del roster torna leggibile (versione 1.16.12)
 
 - **Ricerca del Roster (dal playtest di R76)**: il campo "Search name, faction, trait…" era largo 35 px e non si leggeva

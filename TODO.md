@@ -136,7 +136,7 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       Non dipende da R76. Anche a 940 px (la misura standard) le righe dei foe scelti vanno su tre righe e il riquadro
       Encounter ne mostra una sola alla volta. Da decidere: larghezza minima della finestra o colonna unica sotto una
       certa misura.
-- [ ] **Emerso dal playtest del 22 ottobre — God Hand Talent II: "Teleport 1" sulle card delle combo** (S, bug)
+- [x] **Emerso dal playtest del 22 ottobre — God Hand Talent II: "Teleport 1" sulle card delle combo** (S, bug) (FATTO il 22 ottobre 2026, versione 1.16.13: sbagliava solo Fists of Heaven and Hell, la combo della mastery, che perdeva talento e mastery nella copia dei dati; il "Teleport 1" visto su Devil Hand era il testo stampato)
       Talent II (p.192) "Increase teleports to 2, and all versions of this ability gain Slay": la base mostra "Teleport 2"
       (1.15.280), ma le card di Devil Hand e di Fists of Heaven and Hell (Show in Chat e Attack Roll) hanno ancora
       "Effect Teleport 1" nei promemoria.

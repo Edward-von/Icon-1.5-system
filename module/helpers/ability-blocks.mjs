@@ -265,6 +265,20 @@ export function alternateCombo(system) {
  * reader of comboEffect (card, attack, damage, statuses, tags) then follows
  * the choice without knowing about it.
  */
+/**
+ * A plain copy of an ability's system data that also carries the fields withActiveCombo leaves on the prototype.
+ * `{ ...s }` copies own properties only: on the alternate combo (God Hand's FISTS OF HEAVEN AND HELL) it kept
+ * comboEffect / comboTags and dropped everything else (talentSelected, talents, mastery…), so Talent II's
+ * "Increase teleports to 2" (p.192) never reached that combo's reminders.
+ * @param {object} system
+ * @returns {object}
+ */
+export function plainSystem(system) {
+  const out = {};
+  for (const k in system ?? {}) out[k] = system[k];
+  return out;
+}
+
 export function withActiveCombo(system, useAlternate) {
   const alt = useAlternate ? alternateCombo(system) : null;
   if (!alt) return system;
