@@ -1,5 +1,15 @@
 # Changelog — ICON 1.5 (sistema Foundry VTT)
 
+## 22 ottobre 2026 — Encounter planner: tutti i controlli alla stessa misura (versione 1.16.9)
+
+- **Controlli dell'Encounter planner (R76)**: Maar riporta ancora "some of the buttons are slightly small" → nella
+  1.15.0 erano stati ingranditi solo i bottoni, mentre i campi accanto (quantità del foe, select della riserva,
+  filtri del roster, capitolo, bozze, nome) erano rimasti alti 24-26 px con il testo piccolo, le caselle (One-fight rule,
+  Higher chapters, + party, reuse world actors) alla misura minima del browser e le icone nei bottoni (occhio, dado) minuscole
+  → ora ogni controllo del planner sta su una riga di 28 px: bottoni piccoli 28 px di altezza e almeno 30 di larghezza
+  con testo più grande, Elite / Titan 28 px, campi e select 28 px con testo più leggibile, quantità più larga,
+  caselle da 18 px, icone nei bottoni un po' più grandi. Solo CSS.
+
 ## 22 ottobre 2026 — FAQ narrativa: knack, burden e strain, exhausted (versione 1.16.8)
 
 - **FAQ della guida, sezione Narrative (R73)**: mancavano tre domande frequenti al tavolo (cos'è un knack, quando si

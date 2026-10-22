@@ -5865,10 +5865,24 @@ ol.chat-log .chat-message,
    small"). The shared .icon-btn--sm (.74em, 1px padding) is sized for dense sheets; here
    the +/−/✕ steppers and row buttons are clicked constantly while building a fight. */
 .icon.encounter-designer .icon-btn--sm {
-  min-height: 26px; min-width: 28px; padding: 3px 9px; font-size: .86em; line-height: 1.1;
+  min-height: 28px; min-width: 30px; padding: 3px 10px; font-size: .9em; line-height: 1.1;
 }
+.icon.encounter-designer .icon-btn--sm i { font-size: 1.05em; }   /* eye / dice glyphs read as tiny next to text */
 .icon.encounter-designer .icon-btn:not(.icon-btn--sm) { min-height: 32px; padding: 5px 14px; font-size: .92em; }
-.icon.encounter-designer .icon-encounter__elite { padding: 4px 10px; font-size: .76em; min-height: 26px; }
+.icon.encounter-designer .icon-encounter__elite { padding: 4px 10px; font-size: .8em; min-height: 28px; }
+/* Second pass (Maar, 22 Oct: "some of the buttons are slightly small" again): the fields and
+   ticks sitting next to those buttons were still 24-26px tall with .78em text and the
+   browser-size checkbox, so every control in the planner now shares the 28px line. */
+.icon.encounter-designer .icon-encounter__field select,
+.icon.encounter-designer .icon-encounter__filters select,
+.icon.encounter-designer .icon-encounter__filters input,
+.icon.encounter-designer .icon-encounter__pick select,
+.icon.encounter-designer .icon-encounter__drafts select,
+.icon.encounter-designer .icon-encounter__namefield input,
+.icon.encounter-designer input.icon-encounter__pc-search { height: 28px; font-size: .88em; }
+.icon.encounter-designer .icon-encounter__stepper input[type="number"] { width: 44px; height: 28px; font-size: .95em; }
+.icon.encounter-designer .icon-encounter__check { font-size: .88em; }
+.icon.encounter-designer .icon-encounter__check input[type="checkbox"] { --checkbox-size: 18px; width: 18px; height: 18px; flex: 0 0 auto; }
 
 /* Picks */
 /* The pick row carries many controls (qty, Elite, reserve, cost, ✕): let them wrap

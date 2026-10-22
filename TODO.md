@@ -107,7 +107,9 @@ Già fatti o già decisi (nessun punto nuovo, solo da far verificare a Maar):
       con i Cards di Foundry, il testo delle carte e il Foretell in chat. Forse Maar non lo trova (non è sulla scheda,
       per sua scelta del 15 ottobre) o non lo ha nella sua build. Prima di fare qualcosa, chiedere a Maar se ha
       provato i mazzi della 1.16.1 e cosa manca.
-- [ ] **R76. Bottoni dell'Encounter planner ancora piccoli** (S, richiesta)
+- [x] **R76. Bottoni dell'Encounter planner ancora piccoli** (S, richiesta) (FATTO il 22 ottobre 2026, versione 1.16.9:
+      tutti i controlli del planner su 28 px: bottoni piccoli, Elite/Titan, campi e select, quantità più larga, caselle
+      da 18 px, icone nei bottoni più grandi; solo CSS)
       "Every GM I have shown the encounter planner to has said that it is both incredibly useful, and pretty easy to
       use. Some of the buttons are slightly small." Nella 1.15.0 (Sessione A) erano stati ingranditi solo alcuni
       bottoni di `EncounterDesigner`. Edoardo (22 ottobre 2026): se Maar non ha tolto la frase, gli altri non sono

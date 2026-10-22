@@ -14,6 +14,17 @@ spuntate d'ufficio, senza provarle. Da qui si riparte da zero: contano solo le s
 
 ---
 
+## Encounter planner: tutti i controlli alla stessa misura (22 ottobre 2026, versione 1.16.9, R76)
+
+Setup: solo CSS (F5 basta). Aprire l'Encounter planner (bottone "Encounter" nella sidebar Actors), con almeno un PG e due foe scelti, uno con riserva.
+
+- [ ] Party: "On scene", "All" e i −/+ di Adjust sono alti come la select "Chapter cap"; la casella "One-fight rule" è più grande di prima e si spunta cliccandola.
+- [ ] Roster: ricerca, le tre select, "Random fill", "Clear" e "↻" stanno sulla stessa altezza; la casella "Higher chapters" è più grande.
+- [ ] Righe del roster: l'occhio e il "+" sono quadrati comodi da cliccare, l'occhio non è più minuscolo.
+- [ ] Righe dei foe scelti: −, quantità, +, Elite, Titan, select della riserva e ✕ hanno tutti la stessa altezza; la quantità a due cifre (es. 12) si legge per intero.
+- [ ] Footer: nome, select delle bozze, Load / Save / ✕ / New e le caselle "+ party" / "reuse world actors" (questa solo con foe dal World) allineati; Chat / Actors / Deploy invariati.
+- [ ] Stringere la finestra al minimo: le righe dei foe scelti vanno a capo sotto il nome senza sovrapposizioni e senza barra orizzontale.
+
 ## FAQ narrativa: knack, burden e strain, exhausted (22 ottobre 2026, versione 1.16.8, R73)
 
 Setup: solo codice (F5 basta). Aprire la Quick Guide, scheda FAQ.
